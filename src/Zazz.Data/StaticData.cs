@@ -25,5 +25,14 @@ namespace Zazz.Data
             yield return new Major { Id = 7, Name = "Getting Krunk" };
             yield return new Major { Id = 8, Name = "Chugging beer" };
         }
+
+        public IEnumerable<School> GetSchools()
+        {
+            yield return new School { Id = 1, Name = "University of Victoria" };
+            yield return new School { Id = 1, Name = "University of British Columbia" };
+            yield return new School { Id = 1, Name = "Concordia University" };
+            yield return new School { Id = 1, Name = "McGill University" };
+            yield return new School { Id = 1, Name = "University of Montreal" };
+        }
     }
 }
