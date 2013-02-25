@@ -255,6 +255,50 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(result);
         }
 
+        [Test]
+        public void ReturnFalseWhenUserNotExists_OnExistsByEmail()
+        {
+            //Arrange
+            //Act
+            var result = _repo.ExistsByEmailAsync("notExists@test.com").Result;
 
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ReturnTrueAndIgnoreCase_OnExistsByUsername_WhenUserExists([Values("username",
+                                                                "USERname",
+                                                                "USERNAME")] string username)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.UserName = "username";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.ExistsByUsernameAsync(username).Result;
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ReturnFalseWhenUserNotExists_OnExistsByUsername()
+        {
+            //Arrange
+            //Act
+            var result = _repo.ExistsByUsernameAsync("notExists").Result;
+
+            //Assert
+            Assert.IsFalse(result);
+        }
     }
 }
