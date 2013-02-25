@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Data\City.cs" />
+    <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ImageEntityBase.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
