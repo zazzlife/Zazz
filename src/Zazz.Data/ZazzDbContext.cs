@@ -9,7 +9,7 @@ namespace Zazz.Data
         public IDbSet<Major> Majors { get; set; }
 
         public IDbSet<User> Users { get; set; }
-        public IDbSet<UserInfo> UserInfos { get; set; }
+        public IDbSet<UserDetail> UserInfos { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<UserImage> UserImages { get; set; }
@@ -51,7 +51,7 @@ namespace Zazz.Data
                         .WithRequired();
 
             modelBuilder.Entity<User>()
-                        .HasOptional(u => u.MoreInfo)
+                        .HasOptional(u => u.MoreDetail)
                         .WithRequired();
 
             modelBuilder.Entity<UserEventComment>()

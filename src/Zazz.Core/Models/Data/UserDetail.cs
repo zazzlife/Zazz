@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserInfo : BaseEntity
+    public class UserDetail : BaseEntity
     {
         [MaxLength(50)]
         public string SchoolName { get; set; }

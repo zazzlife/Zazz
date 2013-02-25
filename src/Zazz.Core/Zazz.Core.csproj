@@ -70,7 +70,7 @@
     <Compile Include="Models\Data\UserFollow.cs" />
     <Compile Include="Models\Data\UserFollowRequest.cs" />
     <Compile Include="Models\Data\UserImage.cs" />
-    <Compile Include="Models\Data\UserInfo.cs" />
+    <Compile Include="Models\Data\UserDetail.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

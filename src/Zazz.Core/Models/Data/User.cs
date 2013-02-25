@@ -28,7 +28,7 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 
-        public UserInfo MoreInfo { get; set; }
+        public UserDetail MoreDetail { get; set; }
 
         public virtual ICollection<UserImage> UploadedImages { get; set; }
 
