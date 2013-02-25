@@ -1,4 +1,4 @@
-﻿namespace Zazz.Core.Models
+﻿namespace Zazz.Core.Models.Data
 {
     public enum OAuthProvider : byte
     {
