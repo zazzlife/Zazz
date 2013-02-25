@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zazz.Core.Models.Data
 {
-    public class User
+    public class User : EntityBase
     {
-        public int Id { get; set; }
-
         [MaxLength(20), MinLength(3), Required]
         public string UserName { get; set; }
 

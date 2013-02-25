@@ -2,10 +2,8 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class ClubAdmin
+    public class ClubAdmin : EntityBase
     {
-        public int Id { get; set; }
-
         [ForeignKey("UserId")]
         public User User { get; set; }
 
