@@ -5,8 +5,10 @@ namespace Zazz.Core.Models.Data
 {
     public class UserDetail : BaseEntity
     {
-        [MaxLength(50)]
-        public string SchoolName { get; set; }
+        [ForeignKey("SchoolId")]
+        public School School { get; set; }
+
+        public short SchoolId { get; set; }
 
         [ForeignKey("MajorId")]
         public Major Major { get; set; }

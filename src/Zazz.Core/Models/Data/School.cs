@@ -4,7 +4,7 @@ namespace Zazz.Core.Models.Data
 {
     public class School
     {
-        public byte Id { get; set; }
+        public short Id { get; set; }
 
         [MaxLength(35)]
         public string Name { get; set; }
