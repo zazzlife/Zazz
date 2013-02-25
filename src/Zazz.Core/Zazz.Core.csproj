@@ -52,11 +52,9 @@
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ClubAdmin.cs" />
-    <Compile Include="Models\Data\ClubEvent.cs" />
     <Compile Include="Models\Data\ClubFollow.cs" />
     <Compile Include="Models\Data\ClubImage.cs" />
     <Compile Include="Models\Data\ClubPost.cs" />
-    <Compile Include="Models\Data\BaseClubPost.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
     <Compile Include="Models\Data\BaseImageEntity.cs" />
     <Compile Include="Models\Data\Major.cs" />
