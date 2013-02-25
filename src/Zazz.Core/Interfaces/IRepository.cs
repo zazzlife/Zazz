@@ -13,7 +13,7 @@ namespace Zazz.Core.Interfaces
 
         Task<bool> ExistsAsync(int id);
 
-        void Delete(int id);
+        Task DeleteAsync(int id);
 
         void Delete(T item);
     }

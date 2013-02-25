@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -23,32 +25,58 @@ namespace Zazz.Data.Repositories
 
         public void InsertGraph(T item)
         {
-            throw new System.NotImplementedException();
+            DbSet.Add(item);
         }
 
-        public void InsertOrUpdate(T item)
+        public virtual async void InsertOrUpdate(T item)
         {
-            throw new System.NotImplementedException();
+            if (item.Id == default (int))
+            {
+                var itemId = await GetItemIdAsync(item);
+                if (itemId == default (int))
+                {
+                    DbContext.Entry(item).State = EntityState.Added;
+                }
+                else
+                {
+                    item.Id = itemId;
+                    DbContext.Entry(item).State = EntityState.Modified;
+                }
+            }
+            else
+            {
+                DbContext.Entry(item).State = EntityState.Modified;
+            }
         }
 
         public Task<T> GetByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return Task.Run(() => DbSet.Find(id));
         }
+
+        protected abstract Task<int> GetItemIdAsync(T item);
 
         public Task<bool> ExistsAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return Task.Run(() => DbSet.Any(i => i.Id == id));
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new System.NotImplementedException();
+            if (id == default (int))
+                throw new ArgumentException("Id was 0", "id");
+
+            var item = await GetByIdAsync(id);
+            if (item != null)
+                DbSet.Remove(item);
         }
 
         public void Delete(T item)
         {
-            throw new System.NotImplementedException();
+            if (item == null || item.Id == default (int))
+                throw new ArgumentException("item was not valid", "item");
+
+            DbSet.Remove(item);
         }
     }
 }
