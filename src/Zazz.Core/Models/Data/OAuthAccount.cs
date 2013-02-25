@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
@@ -14,5 +15,11 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(1000)]
         public string AccessToken { get; set; }
+
+        public DateTime TokenExpirationDate { get; set; }
+
+        public OAuthProvider OAuthProvider { get; set; }
+
+        public OAuthVersion OAuthVersion { get; set; }
     }
 }
