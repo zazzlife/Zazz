@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Data\User.cs" />
+    <Compile Include="Models\Data\OAuthAccount.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

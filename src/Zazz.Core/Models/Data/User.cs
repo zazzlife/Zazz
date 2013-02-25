@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Zazz.Core.Models.Data
@@ -26,5 +27,7 @@ namespace Zazz.Core.Models.Data
         public bool IsConfirmed { get; set; }
 
         public ValidationToken ValidationToken { get; set; }
+
+        public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
     }
 }
