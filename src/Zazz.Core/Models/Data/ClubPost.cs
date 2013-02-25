@@ -25,8 +25,10 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedDate { get; set; }
 
+        public bool IsEvent { get; set; }
+
         [MaxLength(50)]
-        public string FacebookItemId { get; set; }
+        public string FacebookObjectId { get; set; }
 
         public DateTime StartDate { get; set; }
 
