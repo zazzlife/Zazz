@@ -47,6 +47,20 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsProvided()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.Id = 12;
+
+            //Act
+            _repo.InsertOrUpdate(user);
+
+            //Assert
+            Assert.AreEqual(EntityState.Modified, _zazzDbContext.Entry(user).State);
+        }
+
+        [Test]
         public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
         {
             //Arrange
@@ -68,7 +82,41 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(EntityState.Modified, _zazzDbContext.Entry(user2).State);
+        }
 
+        [Test]
+        public void ShouldReturnNull_OnGetByEmail_WhenUserNotExists()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetByEmailAsync("notExists@test.com").Result;
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void NotBeCaseSensitive_OnGetByEmail([Values("email@test.com",
+                                                            "EMAIL@TEST.COM",
+                                                            "EmaIL@TesT.CoM")] string email)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.Email = "email@test.com";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetByEmailAsync(email).Result;
+
+            //Assert
+            Assert.IsNotNull(result);
         }
 
 
