@@ -300,5 +300,71 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void ShouldReturnUser_OnGetById_WhenUserExists()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetByIdAsync(user.Id).Result;
+
+            //Assert
+            Assert.IsTrue(user.Id > 0);
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void ShouldReturnNull_OnGetById_WhenUserNotExists()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetByIdAsync(123).Result;
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ShouldRetrunTrue_OnExists_WhenUserExist()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.ExistsAsync(user.Id).Result;
+
+            //Assert
+            Assert.IsTrue(user.Id > 0);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ShouldRetrunFalse_OnExists_WhenUserNotExist()
+        {
+            //Act
+            var result = _repo.ExistsAsync(1234).Result;
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
     }
 }
