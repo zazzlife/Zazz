@@ -366,5 +366,54 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsFalse(result);
         }
 
+        [Test]
+        public void ShouldDelete_OnDeleteById()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            _repo.DeleteAsync(user.Id).Wait();
+            _zazzDbContext.SaveChanges();
+
+            var result = _repo.GetByIdAsync(user.Id).Result;
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ShouldDelete_OnDelete()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            _repo.Delete(user);
+            _zazzDbContext.SaveChanges();
+
+            var result = _repo.GetByIdAsync(user.Id).Result;
+         
+            //Assert
+            Assert.IsNull(result);
+        }
+
+
     }
 }

@@ -82,7 +82,7 @@ namespace Zazz.Data.Repositories
             if (item == null || item.Id == default (int))
                 throw new ArgumentException("item was not valid", "item");
 
-            DbSet.Remove(item);
+            DbContext.Entry(item).State = EntityState.Deleted;
         }
     }
 }
