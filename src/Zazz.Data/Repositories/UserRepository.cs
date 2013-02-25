@@ -13,9 +13,9 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemIdAsync(User item)
+        protected override int GetItemId(User item)
         {
-            return GetIdByUsernameAsync(item.UserName);
+            return GetIdByUsername(item.UserName);
         }
 
         public Task<User> GetByEmailAsync(string email)
@@ -35,7 +35,7 @@ namespace Zazz.Data.Repositories
                                        .SingleOrDefault());
         }
 
-        public int GetIdByUsernameAsync(string username)
+        public int GetIdByUsername(string username)
         {
             return DbSet.Where(u => u.UserName.Equals(username, StringComparison.InvariantCultureIgnoreCase))
                         .Select(u => u.Id)

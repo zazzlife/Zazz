@@ -34,7 +34,7 @@ namespace Zazz.Data.Repositories
             {
                 if (item.Id == default (int))
                 {
-                    var itemId = GetItemIdAsync(item);
+                    var itemId = GetItemId(item);
                     if (itemId == default (int))
                     {
                         DbContext.Entry(item).State = EntityState.Added;
@@ -60,7 +60,7 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Find(id));
         }
 
-        protected abstract int GetItemIdAsync(T item);
+        protected abstract int GetItemId(T item);
 
         public async Task<bool> ExistsAsync(int id)
         {
