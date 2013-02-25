@@ -9,6 +9,10 @@ namespace Zazz.Core.Interfaces
 
         Task<User> GetByUsernameAsync(string username);
 
+        Task<int> GetIdByEmailAsync(string email);
+
+        Task<int> GetIdByUsernameAsync(string username);
+            
         Task<bool> ExistsByEmailAsync(string email);
 
         Task<bool> ExistsByUsernameAsync(string username);
