@@ -119,6 +119,43 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void ReturnNull_OnGetByUsername_WhenUserNotExists()
+        {
+            //Arrange
+            
+
+            //Act
+            var result = _repo.GetByUsernameAsync("not_exists").Result;
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void NotBeCaseSensitive_OnGetByUsername([Values("username",
+                                                                "USERname",
+                                                                "USERNAME")] string username)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.UserName = "username";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetByUsernameAsync(username).Result;
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
+
 
 
     }
