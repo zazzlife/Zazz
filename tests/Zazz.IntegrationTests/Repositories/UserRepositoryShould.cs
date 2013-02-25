@@ -23,8 +23,6 @@ namespace Zazz.IntegrationTests.Repositories
         public void SetEntityStateAsAdded_OnInsertGraph()
         {
             //Arrange
-            //var zazzDbContext = new ZazzDbContext(true);
-            //var repo = new UserRepository(zazzDbContext);
 
             var user = new User();
 
@@ -38,9 +36,7 @@ namespace Zazz.IntegrationTests.Repositories
         [Test]
         public void SetEntityStateAsAdded_OnInsertOrUpdate_WhenUserDoesntExists()
         {
-            //Arrange
-            //var zazzDbContext = new ZazzDbContext(true);
-            //var repo = new UserRepository(zazzDbContext);
+            //Arrange;
             var user = Mother.GetUser();
 
             //Act
@@ -49,6 +45,33 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(EntityState.Added, _zazzDbContext.Entry(user).State);
         }
+
+        [Test]
+        public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
+        {
+            //Arrange
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                var user = Mother.GetUser();
+
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            var user2 = Mother.GetUser();
+
+            //Act
+            _repo.InsertOrUpdate(user2);
+
+            //Assert
+            Assert.AreEqual(EntityState.Modified, _zazzDbContext.Entry(user2).State);
+
+        }
+
+
 
     }
 }
