@@ -28,24 +28,30 @@ namespace Zazz.Data.Repositories
             DbSet.Add(item);
         }
 
-        public virtual async void InsertOrUpdate(T item)
+        public virtual void InsertOrUpdate(T item)
         {
-            if (item.Id == default (int))
+            try
             {
-                var itemId = await GetItemIdAsync(item);
-                if (itemId == default (int))
+                if (item.Id == default (int))
                 {
-                    DbContext.Entry(item).State = EntityState.Added;
+                    var itemId = GetItemIdAsync(item);
+                    if (itemId == default (int))
+                    {
+                        DbContext.Entry(item).State = EntityState.Added;
+                    }
+                    else
+                    {
+                        item.Id = itemId;
+                        DbContext.Entry(item).State = EntityState.Modified;
+                    }
                 }
                 else
                 {
-                    item.Id = itemId;
                     DbContext.Entry(item).State = EntityState.Modified;
                 }
             }
-            else
+            catch (Exception e)
             {
-                DbContext.Entry(item).State = EntityState.Modified;
             }
         }
 
@@ -54,11 +60,11 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Find(id));
         }
 
-        protected abstract Task<int> GetItemIdAsync(T item);
+        protected abstract int GetItemIdAsync(T item);
 
-        public Task<bool> ExistsAsync(int id)
+        public async Task<bool> ExistsAsync(int id)
         {
-            return Task.Run(() => DbSet.Any(i => i.Id == id));
+            return await Task.Run(() => DbSet.Any(i => i.Id == id));
         }
 
         public async Task DeleteAsync(int id)

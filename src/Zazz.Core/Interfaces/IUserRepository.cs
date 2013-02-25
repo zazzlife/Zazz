@@ -11,7 +11,7 @@ namespace Zazz.Core.Interfaces
 
         Task<int> GetIdByEmailAsync(string email);
 
-        Task<int> GetIdByUsernameAsync(string username);
+        int GetIdByUsernameAsync(string username);
             
         Task<bool> ExistsByEmailAsync(string email);
 
