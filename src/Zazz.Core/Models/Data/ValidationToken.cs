@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class ValidationToken
+    public class ValidationToken : BaseEntity
     {
         public int Token { get; set; }
 

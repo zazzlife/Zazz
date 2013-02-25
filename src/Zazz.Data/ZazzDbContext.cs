@@ -43,5 +43,23 @@ namespace Zazz.Data
         {
         }
 #endif
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                        .HasOptional(u => u.ValidationToken)
+                        .WithRequired();
+
+            modelBuilder.Entity<User>()
+                        .HasOptional(u => u.MoreInfo)
+                        .WithRequired();
+
+            modelBuilder.Entity<UserEventComment>()
+                .HasRequired(e => e.From)
+                .WithMany(u => u.UserEventComments)
+                .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
