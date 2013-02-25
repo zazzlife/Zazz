@@ -38,5 +38,9 @@ namespace Zazz.Core.Models.Data
         public virtual ICollection<UserEventComment> UserEventComments { get; set; }
 
         public virtual ICollection<ClubPostComment> ClubPostComments { get; set; }
+
+        public virtual ICollection<UserFollow> FollowingUsers { get; set; }
+
+        public virtual ICollection<UserFollowRequest> SentFollowRequests { get; set; }
     }
 }

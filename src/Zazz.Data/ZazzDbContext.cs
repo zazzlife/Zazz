@@ -59,6 +59,16 @@ namespace Zazz.Data
                 .WithMany(u => u.UserEventComments)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<UserFollow>()
+                .HasRequired(e => e.User)
+                .WithMany(u => u.FollowingUsers)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserFollowRequest>()
+                .HasRequired(e => e.User)
+                .WithMany(u => u.SentFollowRequests)
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
     }
