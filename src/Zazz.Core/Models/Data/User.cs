@@ -33,5 +33,8 @@ namespace Zazz.Core.Models.Data
         public UserInfo MoreInfo { get; set; }
 
         public virtual ICollection<UserImage> UploadedImages { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public int CoverPhotoId { get; set; }
     }
 }
