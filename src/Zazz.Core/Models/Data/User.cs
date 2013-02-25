@@ -29,5 +29,9 @@ namespace Zazz.Core.Models.Data
         public ValidationToken ValidationToken { get; set; }
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
+
+        public UserInfo MoreInfo { get; set; }
+
+        public virtual ICollection<UserImage> UploadedImages { get; set; }
     }
 }

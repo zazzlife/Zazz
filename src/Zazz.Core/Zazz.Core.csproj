@@ -50,11 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Data\City.cs" />
+    <Compile Include="Models\Data\ImageEntityBase.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\OAuthProvider.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
+    <Compile Include="Models\Data\UserImage.cs" />
     <Compile Include="Models\Data\UserInfo.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
