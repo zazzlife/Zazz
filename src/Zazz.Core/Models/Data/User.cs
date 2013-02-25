@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
@@ -17,10 +16,15 @@ namespace Zazz.Core.Models.Data
         [MaxLength(40), Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required, Column("JoinedDate", TypeName = "date"), Display(AutoGenerateField = false)]
+        [Required, DataType(DataType.Date), Display(AutoGenerateField = false)]
         public DateTime JoinedDate { get; set; }
 
         [Required, Display(AutoGenerateField = false)]
         public DateTime LastActivity { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public bool IsConfirmed { get; set; }
+
+        public ValidationToken ValidationToken { get; set; }
     }
 }
