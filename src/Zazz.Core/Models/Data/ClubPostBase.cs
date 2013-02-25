@@ -24,5 +24,8 @@ namespace Zazz.Core.Models.Data
         public string VideoLink { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        [MaxLength(50)]
+        public string FacebookItemId { get; set; }
     }
 }
