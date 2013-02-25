@@ -46,9 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="StaticData.cs" />
     <Compile Include="ZazzDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
