@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ClubAdmin.cs" />
