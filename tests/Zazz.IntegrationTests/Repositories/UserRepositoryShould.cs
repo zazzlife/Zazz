@@ -156,7 +156,75 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void Return_0_WhenUserNotExists_OnGetIdByUsername()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetIdByUsername("notExists");
 
+            //Assert
+            Assert.AreEqual(0, result);
+
+        }
+
+        [Test]
+        public void ReturnIdWhenUserExists_OnGetIdByUsername()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetIdByUsername(user.UserName);
+
+            //Assert
+            Assert.IsTrue(user.Id > 0);
+            Assert.AreEqual(user.Id, result);
+
+        }
+
+        [Test]
+        public void Return_0_WhenUserNotExists_OnGetIdByEmail()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetIdByEmailAsync("notExists").Result;
+
+            //Assert
+            Assert.AreEqual(0, result);
+
+        }
+
+        [Test]
+        public void ReturnIdWhenUserExists_OnGetIdByEmail()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetIdByEmailAsync(user.Email).Result;
+
+            //Assert
+            Assert.IsTrue(user.Id > 0);
+            Assert.AreEqual(user.Id, result);
+
+        }
 
     }
 }
