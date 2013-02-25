@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class ClubImage : ImageEntityBase
+    public class ClubImage : BaseImageEntity
     {
         [ForeignKey("ClubId")]
         public Club Club { get; set; }

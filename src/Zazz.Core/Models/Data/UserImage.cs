@@ -1,6 +1,6 @@
 ﻿namespace Zazz.Core.Models.Data
 {
-    public class UserImage : ImageEntityBase
+    public class UserImage : BaseImageEntity
     {    
     }
 }

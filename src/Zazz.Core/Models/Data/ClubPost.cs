@@ -1,6 +1,6 @@
 ﻿namespace Zazz.Core.Models.Data
 {
-    public class ClubPost : ClubPostBase
+    public class ClubPost : BaseClubPost
     {
          
     }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zazz.Core.Models.Data
 {
-    public class ClubEventEntity : ClubPostBase
+    public class ClubEventEntity : BaseClubPost
     {
         public DateTime StartDate { get; set; }
 

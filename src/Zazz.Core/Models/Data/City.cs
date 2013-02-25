@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class City : EntityBase
+    public class City : BaseEntity
     {
         [MaxLength(30)]
         public string Name { get; set; }

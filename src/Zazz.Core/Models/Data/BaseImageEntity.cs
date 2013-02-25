@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public abstract class ImageEntityBase : EntityBase
+    public abstract class BaseImageEntity : BaseEntity
     {
         [ForeignKey("UploaderId")]
         public User Uploader { get; set; }

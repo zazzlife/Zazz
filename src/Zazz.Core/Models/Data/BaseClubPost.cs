@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public abstract class ClubPostBase : EntityBase
+    public abstract class BaseClubPost : BaseEntity
     {
         [ForeignKey("ClubId")]
         public Club Club { get; set; }

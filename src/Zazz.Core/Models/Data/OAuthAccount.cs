@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class OAuthAccount : EntityBase
+    public class OAuthAccount : BaseEntity
     {
         [ForeignKey("UserId")]
         public User User { get; set; }

@@ -55,9 +55,9 @@
     <Compile Include="Models\Data\ClubEventEntity.cs" />
     <Compile Include="Models\Data\ClubImage.cs" />
     <Compile Include="Models\Data\ClubPost.cs" />
-    <Compile Include="Models\Data\ClubPostBase.cs" />
-    <Compile Include="Models\Data\EntityBase.cs" />
-    <Compile Include="Models\Data\ImageEntityBase.cs" />
+    <Compile Include="Models\Data\BaseClubPost.cs" />
+    <Compile Include="Models\Data\BaseEntity.cs" />
+    <Compile Include="Models\Data\BaseImageEntity.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\OAuthProvider.cs" />

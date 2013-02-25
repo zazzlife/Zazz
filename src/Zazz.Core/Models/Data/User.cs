@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zazz.Core.Models.Data
 {
-    public class User : EntityBase
+    public class User : BaseEntity
     {
         [MaxLength(20), MinLength(3), Required]
         public string UserName { get; set; }
