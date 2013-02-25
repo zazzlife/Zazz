@@ -169,10 +169,13 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnIdWhenUserExists_OnGetIdByUsername()
+        public void ReturnIdWhenUserExists_OnGetIdByUsername([Values("username",
+                                                                "USERname",
+                                                                "USERNAME")] string username)
         {
             //Arrange
             var user = Mother.GetUser();
+            user.UserName = "username";
 
             using (var ctx = new ZazzDbContext())
             {
@@ -183,7 +186,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetIdByUsername(user.UserName);
+            var result = _repo.GetIdByUsername(username);
 
             //Assert
             Assert.IsTrue(user.Id > 0);
@@ -204,10 +207,13 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnIdWhenUserExists_OnGetIdByEmail()
+        public void ReturnIdWhenUserExists_OnGetIdByEmail([Values("email@test.com",
+                                                            "EMAIL@TEST.COM",
+                                                            "EmaIL@TesT.CoM")] string email)
         {
             //Arrange
             var user = Mother.GetUser();
+            user.Email = "email@test.com";
 
             using (var ctx = new ZazzDbContext())
             {
@@ -218,13 +224,37 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetIdByEmailAsync(user.Email).Result;
+            var result = _repo.GetIdByEmailAsync(email).Result;
 
             //Assert
             Assert.IsTrue(user.Id > 0);
             Assert.AreEqual(user.Id, result);
-
         }
+
+        [Test]
+        public void ReturnTrueAndIgnoreCase_OnExistsByEmail_WhenUserExists([Values("email@test.com",
+                                                            "EMAIL@TEST.COM",
+                                                            "EmaIL@TesT.CoM")] string email)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.Email = "email@test.com";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.ExistsByEmailAsync(email).Result;
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
 
     }
 }
