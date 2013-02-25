@@ -9,7 +9,9 @@ namespace Zazz.Core.Interfaces
 
         void InsertOrUpdate(T item);
 
-        Task<T> GetById(int id);
+        Task<T> GetByIdAsync(int id);
+
+        Task<bool> ExistsAsync(int id);
 
         void Delete(int id);
 
