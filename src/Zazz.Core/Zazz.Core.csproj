@@ -64,6 +64,7 @@
     <Compile Include="Models\Data\OAuthProvider.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
+    <Compile Include="Models\Data\UserFollow.cs" />
     <Compile Include="Models\Data\UserImage.cs" />
     <Compile Include="Models\Data\UserInfo.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
