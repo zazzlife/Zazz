@@ -53,6 +53,7 @@
     <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ClubAdmin.cs" />
     <Compile Include="Models\Data\ClubEventEntity.cs" />
+    <Compile Include="Models\Data\ClubFollow.cs" />
     <Compile Include="Models\Data\ClubImage.cs" />
     <Compile Include="Models\Data\ClubPost.cs" />
     <Compile Include="Models\Data\BaseClubPost.cs" />
