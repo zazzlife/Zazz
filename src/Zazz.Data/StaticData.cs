@@ -3,9 +3,9 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data
 {
-    public class StaticData
+    public static class StaticData
     {
-        public IEnumerable<City> GetCities()
+        public static IEnumerable<City> GetCities()
         {
             yield return new City { Id = 1, Name = "Test city 1" };
             yield return new City { Id = 2, Name = "Test city 2" };
@@ -14,7 +14,7 @@ namespace Zazz.Data
             yield return new City { Id = 5, Name = "Test city 5" };
         }
 
-        public IEnumerable<Major> GetMajors()
+        public static IEnumerable<Major> GetMajors()
         {
             yield return new Major { Id = 1, Name = "Getting Blackout" };
             yield return new Major { Id = 2, Name = "Beer Pong" };
@@ -26,7 +26,7 @@ namespace Zazz.Data
             yield return new Major { Id = 8, Name = "Chugging beer" };
         }
 
-        public IEnumerable<School> GetSchools()
+        public static IEnumerable<School> GetSchools()
         {
             yield return new School { Id = 1, Name = "University of Victoria" };
             yield return new School { Id = 1, Name = "University of British Columbia" };

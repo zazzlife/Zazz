@@ -2,7 +2,7 @@
 
 namespace Zazz.Data
 {
-    public class DropCreateDatabaseAlwaysWithSeed : DropCreateDatabaseAlways<ZazzDbContext>
+    public class DropCreateDatabaseIfModelChangesWithSeed : DropCreateDatabaseIfModelChanges<ZazzDbContext>
     {
         protected override void Seed(ZazzDbContext context)
         {

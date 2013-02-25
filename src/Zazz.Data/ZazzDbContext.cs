@@ -7,6 +7,7 @@ namespace Zazz.Data
     {
         public IDbSet<City> Cities { get; set; }
         public IDbSet<Major> Majors { get; set; }
+        public IDbSet<School> Schools { get; set; }
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<UserDetail> UserInfos { get; set; }
@@ -31,9 +32,9 @@ namespace Zazz.Data
             : base("DevConnectionString")
         {
             if (dropDbOnInit)
-                Database.SetInitializer(new DropCreateDatabaseAlways<ZazzDbContext>());
+                Database.SetInitializer(new DropCreateDatabaseAlwaysWithSeed());
             else
-                Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ZazzDbContext>());
+                Database.SetInitializer(new DropCreateDatabaseIfModelChangesWithSeed());
 
             Database.Initialize(true);
         }
