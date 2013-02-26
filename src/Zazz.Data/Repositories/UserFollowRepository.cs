@@ -43,7 +43,7 @@ namespace Zazz.Data.Repositories
                                        .Any());
         }
 
-        public async Task DeleteAsync(int fromUserId, int toUserId)
+        public async Task RemoveAsync(int fromUserId, int toUserId)
         {
             var item = await Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId)
                                                  .Where(f => f.ToUserId == toUserId)

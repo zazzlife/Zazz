@@ -127,6 +127,42 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void Remove_OnRemoveAsync()
+        {
+            //Arrange
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(userA);
+                ctx.Users.Add(userB);
+
+                ctx.SaveChanges();
+
+                var requestB = new UserFollowRequest
+                {
+                    FromUserId = userA.Id,
+                    ToUserId = userB.Id,
+                    RequestDate = DateTime.Now
+                };
+
+                ctx.UserFollowRequests.Add(requestB);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            _repo.RemoveAsync(userA.Id, userB.Id).Wait();
+            _context.SaveChanges();
+
+            var check = _repo.ExistsAsync(userA.Id, userB.Id).Result;
+
+            //Assert
+            Assert.IsFalse(check);
+        }
+
+        [Test]
         public void ReturnTrue_OnExists_WhenRequestExists()
         {
             //Arrange (user A sends a request to user B)

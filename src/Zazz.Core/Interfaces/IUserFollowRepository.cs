@@ -21,6 +21,6 @@ namespace Zazz.Core.Interfaces
 
         Task<bool> ExistsAsync(int fromUserId, int toUserId);
 
-        Task DeleteAsync(int fromUserId, int toUserId);
+        Task RemoveAsync(int fromUserId, int toUserId);
     }
 }
