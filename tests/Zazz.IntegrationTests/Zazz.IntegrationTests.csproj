@@ -59,6 +59,7 @@
     <Compile Include="Mother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\UserRepositoryShould.cs" />
+    <Compile Include="Repositories\ValidationTokenRepositoryShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -30,28 +30,22 @@ namespace Zazz.Data.Repositories
 
         public virtual void InsertOrUpdate(T item)
         {
-            try
+            if (item.Id == default(int))
             {
-                if (item.Id == default (int))
+                var itemId = GetItemId(item);
+                if (itemId == default(int))
                 {
-                    var itemId = GetItemId(item);
-                    if (itemId == default (int))
-                    {
-                        DbContext.Entry(item).State = EntityState.Added;
-                    }
-                    else
-                    {
-                        item.Id = itemId;
-                        DbContext.Entry(item).State = EntityState.Modified;
-                    }
+                    DbContext.Entry(item).State = EntityState.Added;
                 }
                 else
                 {
+                    item.Id = itemId;
                     DbContext.Entry(item).State = EntityState.Modified;
                 }
             }
-            catch (Exception e)
+            else
             {
+                DbContext.Entry(item).State = EntityState.Modified;
             }
         }
 
@@ -69,7 +63,7 @@ namespace Zazz.Data.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            if (id == default (int))
+            if (id == default(int))
                 throw new ArgumentException("Id was 0", "id");
 
             var item = await GetByIdAsync(id);
@@ -79,7 +73,7 @@ namespace Zazz.Data.Repositories
 
         public void Delete(T item)
         {
-            if (item == null || item.Id == default (int))
+            if (item == null || item.Id == default(int))
                 throw new ArgumentException("item was not valid", "item");
 
             DbContext.Entry(item).State = EntityState.Deleted;
