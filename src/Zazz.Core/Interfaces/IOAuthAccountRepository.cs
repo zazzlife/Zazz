@@ -6,10 +6,10 @@ namespace Zazz.Core.Interfaces
 {
     public interface IOAuthAccountRepository : IRepository<OAuthAccount>
     {
-        Task<OAuthAccount> GetUserAccount(int userId, OAuthProvider provider);
+        Task<OAuthAccount> GetUserAccountAsync(int userId, OAuthProvider provider);
 
-        Task<IEnumerable<OAuthAccount>> GetUserAccounts(int userId);
+        Task<IEnumerable<OAuthAccount>> GetUserAccountsAsync(int userId);
 
-        void Remove(int userId, OAuthProvider provider);
+        Task RemoveAsync(int userId, OAuthProvider provider);
     }
 }
