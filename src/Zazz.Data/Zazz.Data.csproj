@@ -53,6 +53,7 @@
     <Compile Include="Repositories\ClubAdminRepository.cs" />
     <Compile Include="Repositories\ClubFollowRepository.cs" />
     <Compile Include="Repositories\ClubImageRepository.cs" />
+    <Compile Include="Repositories\ClubPostRepository.cs" />
     <Compile Include="Repositories\ClubRepository.cs" />
     <Compile Include="Repositories\OAuthAccountRepository.cs" />
     <Compile Include="Repositories\UserEventCommentRepository.cs" />
