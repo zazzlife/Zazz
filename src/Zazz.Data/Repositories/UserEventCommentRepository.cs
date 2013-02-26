@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,20 +18,9 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the comment, if it's new then use insert graph."); //a user can have multiple comments on a single event.
         }
 
-        public Task<IEnumerable<UserEventComment>> GetEventCommentsAsync(int eventId, int take = 0, int skip = 0)
+        public Task<IQueryable<UserEventComment>> GetEventCommentsAsync(int eventId)
         {
-            return Task.Run(() =>
-                                {
-                                    var query = DbSet.Where(c => c.UserEventId == eventId);
-
-                                    if (skip != 0)
-                                        query = query.Skip(skip);
-
-                                    if (take != 0)
-                                        query = query.OrderBy(c => c.Date).Take(take);
-
-                                    return query.AsEnumerable();
-                                });
+            return Task.Run(() => DbSet.Where(c => c.UserEventId == eventId));
         }
     }
 }
