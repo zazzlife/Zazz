@@ -89,7 +89,6 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.IsTrue(result);
-
         }
 
         [Test]
@@ -101,6 +100,19 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void RemoveCorrectly_OnRemoveAsync()
+        {
+            //Arrange
+            //Act
+            _repo.RemoveAsync(_userA.Id, _userB.Id).Wait();
+            _context.SaveChanges();
+
+            var check = _repo.ExistsAsync(_userA.Id, _userB.Id).Result;
+            //Assert
+            Assert.IsFalse(check);
         }
     }
 }
