@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -14,22 +17,36 @@ namespace Zazz.Data.Repositories
 
         protected override int GetItemId(UserFollowRequest item)
         {
-            throw new System.NotImplementedException();
+            if (item.UserId == default (int) || item.FollowId == default (int))
+                throw new ArgumentException("From user id and to user id must be supplied");
+
+            return DbSet.Where(r => r.UserId == item.UserId)
+                        .Where(r => r.FollowId == item.FollowId)
+                        .Select(r => r.Id)
+                        .SingleOrDefault();
         }
 
-        public Task<IList<UserFollowRequest>> GetReceivedRequests(int userId)
+        public Task<List<UserFollowRequest>> GetReceivedRequestsAsync(int userId)
         {
-            throw new System.NotImplementedException();
+            return Task.Run(() => DbSet.Where(r => r.FollowId == userId).ToList());
         }
 
-        public Task<IList<UserFollowRequest>> GetSentRequests(int userId)
+        public Task<List<UserFollowRequest>> GetSentRequestsAsync(int userId)
         {
-            throw new System.NotImplementedException();
+            return Task.Run(() => DbSet.Where(r => r.UserId == userId).ToList());
         }
 
-        public Task Remove(int fromUserId, int toUserId)
+        public async Task RemoveAsync(int fromUserId, int toUserId)
         {
-            throw new System.NotImplementedException();
+            var item = await Task.Run(() => DbSet
+                                                .Where(r => r.UserId == fromUserId)
+                                                .Where(r => r.FollowId == toUserId)
+                                                .SingleOrDefault());
+
+            if (item == null)
+                return;
+
+            DbContext.Entry(item).State = EntityState.Deleted;
         }
     }
 }
