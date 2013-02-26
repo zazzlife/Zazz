@@ -5,6 +5,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserEventRepository : IRepository<UserEvent>
     {
-        Task<bool> IsAuthorizedToUpdate(int eventId, int userId);
+        Task<int> GetOwnerIdAsync(int eventId);
     }
 }
