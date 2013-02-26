@@ -126,6 +126,70 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(2, result.Count);
         }
 
+        [Test]
+        public void ReturnTrue_OnExists_WhenRequestExists()
+        {
+            //Arrange (user A sends a request to user B)
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
 
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(userA);
+                ctx.Users.Add(userB);
+
+                ctx.SaveChanges();
+
+                var requestB = new UserFollowRequest
+                {
+                    FromUserId = userA.Id,
+                    ToUserId = userB.Id,
+                    RequestDate = DateTime.Now
+                };
+
+                ctx.UserFollowRequests.Add(requestB);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.ExistsAsync(userA.Id, userB.Id).Result;
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ReturnFalse_OnExists_WhenNotRequestExists()
+        {
+            //Arrange (user A sends a request to user B, but we use the user B as sender id)
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(userA);
+                ctx.Users.Add(userB);
+
+                ctx.SaveChanges();
+
+                var requestB = new UserFollowRequest
+                {
+                    FromUserId = userA.Id,
+                    ToUserId = userB.Id,
+                    RequestDate = DateTime.Now
+                };
+
+                ctx.UserFollowRequests.Add(requestB);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.ExistsAsync(userB.Id, userA.Id).Result;
+
+            //Assert
+            Assert.IsFalse(result);
+        }
     }
 }
