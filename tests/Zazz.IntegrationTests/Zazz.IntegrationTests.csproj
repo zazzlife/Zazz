@@ -59,6 +59,7 @@
     <Compile Include="Mother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ClubAdminRepositoryShould.cs" />
+    <Compile Include="Repositories\ClubFollowRepositoryShould.cs" />
     <Compile Include="Repositories\OAuthAccountRepositoryShould.cs" />
     <Compile Include="Repositories\UserEventCommentRepositoryShould.cs" />
     <Compile Include="Repositories\UserEventRepositoryShould.cs" />
