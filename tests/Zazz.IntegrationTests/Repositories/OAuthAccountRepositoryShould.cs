@@ -150,6 +150,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = AddUserWithOAuthAccounts();
             var oauthAccount = user.LinkedAccounts.First();
+
             //Act
             _repo.RemoveAsync(user.Id, oauthAccount.OAuthProvider).Wait();
             _context.SaveChanges();
