@@ -121,7 +121,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Act
             var result = _repo.GetSentRequestsAsync(userA.Id).Result;
-
+            
             //Assert
             Assert.AreEqual(2, result.Count);
         }

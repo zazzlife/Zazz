@@ -11,5 +11,7 @@ namespace Zazz.Core.Interfaces
         Task<List<UserFollowRequest>> GetSentRequestsAsync(int userId);
 
         Task RemoveAsync(int fromUserId, int toUserId);
+
+        Task<bool> ExistsAsync(int fromUserId, int toUserId);
     }
 }

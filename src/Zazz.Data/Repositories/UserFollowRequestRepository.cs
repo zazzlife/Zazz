@@ -48,5 +48,12 @@ namespace Zazz.Data.Repositories
 
             DbContext.Entry(item).State = EntityState.Deleted;
         }
+
+        public Task<bool> ExistsAsync(int fromUserId, int toUserId)
+        {
+            return Task.Run(() => DbSet.Where(r => r.FromUserId == fromUserId)
+                                       .Where(r => r.ToUserId == toUserId)
+                                       .Any());
+        }
     }
 }
