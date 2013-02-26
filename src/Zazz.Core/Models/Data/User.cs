@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
@@ -24,11 +25,27 @@ namespace Zazz.Core.Models.Data
         [Display(AutoGenerateField = false)]
         public bool IsConfirmed { get; set; }
 
-        public ValidationToken ValidationToken { get; set; }
+        [ForeignKey("SchoolId")]
+        public School School { get; set; }
+
+        public short? SchoolId { get; set; }
+
+        [ForeignKey("MajorId")]
+        public Major Major { get; set; }
+
+        public byte? MajorId { get; set; }
+
+        [ForeignKey("CityId")]
+        public City City { get; set; }
+
+        public int? CityId { get; set; }
+
+        [MaxLength(60), DataType(DataType.EmailAddress)]
+        public string PublicEmail { get; set; }
+
+        public virtual ValidationToken ValidationToken { get; set; }
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
-
-        public UserDetail MoreDetail { get; set; }
 
         public virtual ICollection<UserImage> UploadedImages { get; set; }
 

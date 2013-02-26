@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -123,7 +124,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void ReturnNull_OnGetByUsername_WhenUserNotExists()
         {
             //Arrange
-            
+
 
             //Act
             var result = _repo.GetByUsernameAsync("not_exists").Result;
@@ -409,7 +410,7 @@ namespace Zazz.IntegrationTests.Repositories
             _zazzDbContext.SaveChanges();
 
             var result = _repo.GetByIdAsync(user.Id).Result;
-         
+
             //Assert
             Assert.IsNull(result);
         }
