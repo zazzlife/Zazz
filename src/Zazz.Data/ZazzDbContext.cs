@@ -56,12 +56,12 @@ namespace Zazz.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserFollow>()
-                .HasRequired(e => e.User)
+                .HasRequired(e => e.FromUser)
                 .WithMany(u => u.FollowingUsers)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserFollowRequest>()
-                .HasRequired(e => e.User)
+                .HasRequired(e => e.FromUser)
                 .WithMany(u => u.SentFollowRequests)
                 .WillCascadeOnDelete(false);
 

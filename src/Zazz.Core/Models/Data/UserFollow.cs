@@ -7,23 +7,23 @@ namespace Zazz.Core.Models.Data
         /// <summary>
         /// This is the user that follows another user
         /// </summary>
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("FromUserId")]
+        public User FromUser { get; set; }
 
         /// <summary>
         /// This is the user that follows another user
         /// </summary>
-        public int UserId { get; set; }
+        public int FromUserId { get; set; }
 
         /// <summary>
         /// This is the user that is being followed
         /// </summary>
-        [ForeignKey("FollowId")]
-        public User Follow { get; set; }
+        [ForeignKey("ToUserId")]
+        public User ToUser { get; set; }
 
         /// <summary>
         /// This is the user that is being followed
         /// </summary>
-        public int FollowId { get; set; }
+        public int ToUserId { get; set; }
     }
 }
