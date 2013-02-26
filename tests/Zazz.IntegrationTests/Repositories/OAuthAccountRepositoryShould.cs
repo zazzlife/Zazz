@@ -135,6 +135,32 @@ namespace Zazz.IntegrationTests.Repositories
         public void ReturnAllAccounts_OnGetUserAccounts()
         {
             //Arrange
+            var user = AddUserWithOAuthAccounts();
+
+            //Act
+            var result = _repo.GetUserAccountsAsync(user.Id).Result;
+
+            //Assert
+            Assert.AreEqual(user.LinkedAccounts.Count, result.Count());
+        }
+
+        [Test]
+        public void SetAccountStateAsDeleted_OnRemove()
+        {
+            //Arrange
+            var user = AddUserWithOAuthAccounts();
+            var oauthAccount = user.LinkedAccounts.First();
+            //Act
+            _repo.RemoveAsync(user.Id, oauthAccount.OAuthProvider).Wait();
+            _context.SaveChanges();
+
+            //Assert
+            var check = _repo.GetUserAccountAsync(user.Id, oauthAccount.OAuthProvider).Result;
+            Assert.IsNull(check);
+        }
+
+        private static User AddUserWithOAuthAccounts()
+        {
             var user = Mother.GetUser();
             user.LinkedAccounts = new List<OAuthAccount>
                                       {
@@ -164,13 +190,8 @@ namespace Zazz.IntegrationTests.Repositories
                 context.SaveChanges();
             }
 
-            //Act
-            var result = _repo.GetUserAccountsAsync(user.Id).Result;
-
-            //Assert
-            Assert.AreEqual(user.LinkedAccounts.Count, result.Count());
+            return user;
         }
-
 
 
         private User AddUser()
