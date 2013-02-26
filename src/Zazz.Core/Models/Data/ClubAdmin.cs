@@ -14,5 +14,9 @@ namespace Zazz.Core.Models.Data
 
         public int ClubId { get; set; }
 
+        /// <summary>
+        /// User id of the person that has made this admin. There is no foreign key associated with this property.
+        /// </summary>
+        public int AssignedByUserId { get; set; }
     }
 }
