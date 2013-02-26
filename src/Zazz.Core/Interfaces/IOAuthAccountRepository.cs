@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IOAuthAccountRepository
+    public interface IOAuthAccountRepository : IRepository<OAuthAccount>
     {
         Task<OAuthAccount> GetUserAccount(int userId, OAuthProvider provider);
 

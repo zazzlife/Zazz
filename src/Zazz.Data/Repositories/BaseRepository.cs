@@ -61,7 +61,7 @@ namespace Zazz.Data.Repositories
             return await Task.Run(() => DbSet.Any(i => i.Id == id));
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task RemoveAsync(int id)
         {
             if (id == default(int))
                 throw new ArgumentException("Id was 0", "id");
@@ -71,7 +71,7 @@ namespace Zazz.Data.Repositories
                 DbSet.Remove(item);
         }
 
-        public void Delete(T item)
+        public void Remove(T item)
         {
             if (item == null || item.Id == default(int))
                 throw new ArgumentException("item was not valid", "item");

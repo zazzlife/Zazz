@@ -382,7 +382,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            _repo.DeleteAsync(user.Id).Wait();
+            _repo.RemoveAsync(user.Id).Wait();
             _zazzDbContext.SaveChanges();
 
             var result = _repo.GetByIdAsync(user.Id).Result;
@@ -406,7 +406,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            _repo.Delete(user);
+            _repo.Remove(user);
             _zazzDbContext.SaveChanges();
 
             var result = _repo.GetByIdAsync(user.Id).Result;

@@ -63,7 +63,7 @@ namespace Zazz.IntegrationTests.Repositories
             var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = 333 };
 
             //Act
-            _repo.Delete(token);
+            _repo.Remove(token);
 
             //Assert
             Assert.AreEqual(EntityState.Deleted, _context.Entry(token).State);
@@ -81,7 +81,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            _repo.DeleteAsync(token.Id).Wait();
+            _repo.RemoveAsync(token.Id).Wait();
 
             //Assert
             Assert.AreEqual(EntityState.Deleted, _context.Entry(token).State);
