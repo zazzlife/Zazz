@@ -1,0 +1,11 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Zazz.Core.Models.Data;
+
+namespace Zazz.Core.Interfaces
+{
+    public interface IUserEventCommentRepository : IRepository<UserEventComment>
+    {
+        Task<IEnumerable<UserEventComment>> GetEventCommentsAsync(int eventId, int take = 0, int skip = 0);
+    }
+}

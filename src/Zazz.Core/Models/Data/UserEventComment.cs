@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
@@ -16,6 +17,8 @@ namespace Zazz.Core.Models.Data
         public int UserEventId { get; set; }
 
         [MaxLength(1000)]
-        public string Message { get; set; } 
+        public string Message { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }
