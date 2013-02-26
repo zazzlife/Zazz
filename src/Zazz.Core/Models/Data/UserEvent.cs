@@ -29,9 +29,9 @@ namespace Zazz.Core.Models.Data
         [MaxLength(50)]
         public string FacebookItemId { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [MaxLength(100)]
         public string Location { get; set; }
