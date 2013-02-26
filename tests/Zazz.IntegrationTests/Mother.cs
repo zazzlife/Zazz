@@ -28,5 +28,14 @@ namespace Zazz.IntegrationTests
                            Title = "Title"
                        };
         }
+
+        public static Club GetClub()
+        {
+            return new Club
+                       {
+                           CreatedDate = DateTime.Now,
+                           Name = "Club name"
+                       };
+        }
     }
 }

@@ -14,21 +14,21 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("CityId")]
         public City City { get; set; }
 
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
 
         [DataType(DataType.Date), Display(AutoGenerateField = false)]
         public DateTime CreatedDate { get; set; }
+        
+        [Display(AutoGenerateField = false)]
+        public int CreatedByUserId { get; set; }
 
         [Display(AutoGenerateField = false)]
-        public int CreatedBy { get; set; }
-
-        [Display(AutoGenerateField = false)]
-        public int FacebookAccountId { get; set; }
+        public int? FacebookAccountId { get; set; }
 
         [MaxLength(1000), Display(AutoGenerateField = false)]
         public string FacebookAccessToken { get; set; }
 
         [Display(AutoGenerateField = false)]
-        public DateTime FacebookTokenExpirationDate { get; set; }
+        public DateTime? FacebookTokenExpirationDate { get; set; }
     }
 }
