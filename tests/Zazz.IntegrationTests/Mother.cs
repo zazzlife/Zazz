@@ -16,5 +16,17 @@ namespace Zazz.IntegrationTests
                             Password = "password",
                         };
          }
+
+        public static UserEvent GetUserEvent()
+        {
+            return new UserEvent
+                       {
+                           Message = "some text",
+                           StartDate = DateTime.Now,
+                           EndDate = DateTime.Now.AddDays(1),
+                           CreatedDate = DateTime.Now,
+                           Title = "Title"
+                       };
+        }
     }
 }
