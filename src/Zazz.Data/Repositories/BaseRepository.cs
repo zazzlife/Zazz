@@ -23,7 +23,7 @@ namespace Zazz.Data.Repositories
             DbSet = DbContext.Set<T>();
         }
 
-        public void InsertGraph(T item)
+        public virtual void InsertGraph(T item)
         {
             DbSet.Add(item);
         }
@@ -49,19 +49,19 @@ namespace Zazz.Data.Repositories
             }
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public virtual Task<T> GetByIdAsync(int id)
         {
             return Task.Run(() => DbSet.Find(id));
         }
 
         protected abstract int GetItemId(T item);
 
-        public async Task<bool> ExistsAsync(int id)
+        public virtual async Task<bool> ExistsAsync(int id)
         {
             return await Task.Run(() => DbSet.Any(i => i.Id == id));
         }
 
-        public async Task RemoveAsync(int id)
+        public virtual async Task RemoveAsync(int id)
         {
             if (id == default(int))
                 throw new ArgumentException("Id was 0", "id");
@@ -71,7 +71,7 @@ namespace Zazz.Data.Repositories
                 DbSet.Remove(item);
         }
 
-        public void Remove(T item)
+        public virtual void Remove(T item)
         {
             if (item == null || item.Id == default(int))
                 throw new ArgumentException("item was not valid", "item");
