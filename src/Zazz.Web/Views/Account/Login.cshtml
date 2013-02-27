@@ -20,13 +20,13 @@
                 <legend>Login</legend>
 
                 <div class="row">
-                    <div class="span7">
+                    <div class="span8">
                         <div class="control-group">
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.Username, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.EditorFor(model => model.Username)
+                                @Html.TextBoxFor(model => model.Username, new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.Username, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                                 @Html.LabelFor(model => model.Password, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.EditorFor(model => model.Password)
+                                @Html.TextBoxFor(model => model.Password, new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
                             </div>
                         </div>

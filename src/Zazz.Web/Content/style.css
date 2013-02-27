@@ -40,6 +40,10 @@
     background-color: #fafafa;
 }
 
+.field-validation-error {
+    margin-bottom: 10px;
+}
+
 /***************************************
         Landing page
 ***************************************/
