@@ -4,16 +4,18 @@ namespace Zazz.Web.Models
 {
     public class RegisterViewModel
     {
-        [MaxLength(20), MinLength(2), Required]
+        [Required]
+        [Display(Name = "Username")]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {2} and {1} characters.")]
         public string UserName { get; set; }
 
-        [MaxLength(60), Required, DataType(DataType.EmailAddress)]
+        [MaxLength(40), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [MaxLength(40), Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [MaxLength(40), Required, DataType(DataType.Password), Compare("Password")]
+        [Required, DataType(DataType.Password), Compare("Password")]
         public string ConfirmPassword { get; set; }
 
         [MaxLength(30), Display(Name = "Full name")]

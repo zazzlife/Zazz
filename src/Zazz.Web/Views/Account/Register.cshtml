@@ -11,80 +11,92 @@
     </div>
 
     <div class="well" style="margin-top: 50px;">
-    
-        @using (Html.BeginForm()) {
+
+        @using (Html.BeginForm())
+        {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
             <fieldset>
                 <legend>Register</legend>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.UserName)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.UserName)
-                    @Html.ValidationMessageFor(model => model.UserName)
-                </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Email)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.Email)
-                    @Html.ValidationMessageFor(model => model.Email)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.UserName)
+                        @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
+                    </div>
                 </div>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Password)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password)
-                </div>
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+                    </div>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.ConfirmPassword)
                 </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.ConfirmPassword)
-                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
-                </div>
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.Password)
+                        @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
+                    </div>
 
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.FullName)
                 </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.FullName)
-                    @Html.ValidationMessageFor(model => model.FullName)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.ConfirmPassword)
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
+                    </div>
                 </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.SchoolId)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.FullName)
+                        @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
+                    </div>
                 </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.SchoolId)
-                    @Html.ValidationMessageFor(model => model.SchoolId)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.SchoolId)
+                        @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
+                    </div>
                 </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.CityId)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.CityId)
+                        @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
+                    </div>
                 </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.CityId)
-                    @Html.ValidationMessageFor(model => model.CityId)
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(model => model.MajorId)
+                        @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                    </div>
                 </div>
-
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.MajorId)
-                </div>
-                <div class="editor-field">
-                    @Html.EditorFor(model => model.MajorId)
-                    @Html.ValidationMessageFor(model => model.MajorId)
-                </div>
-
                 <p>
-                    <input type="submit" value="Create" />
+                    <input type="submit" value="Register" class="btn btn-primary" />
                 </p>
             </fieldset>
         }
