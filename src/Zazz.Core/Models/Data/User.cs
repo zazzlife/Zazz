@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Data
 {
     public class User : BaseEntity
     {
-        [MaxLength(20), MinLength(2), Required]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {1} and {2} characters.")]
         public string UserName { get; set; }
 
         [MaxLength(60), Required, DataType(DataType.EmailAddress)]
@@ -24,6 +24,9 @@ namespace Zazz.Core.Models.Data
 
         [Display(AutoGenerateField = false)]
         public bool IsConfirmed { get; set; }
+
+        [MaxLength(30), Display(Name = "Full name")]
+        public string FullName { get; set; }
 
         [ForeignKey("SchoolId")]
         public School School { get; set; }

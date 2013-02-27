@@ -11,17 +11,28 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
-        [HttpGet, AllowAnonymous]
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
 
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel login)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Register(RegisterViewModel login)
         {
             return View();
         }
