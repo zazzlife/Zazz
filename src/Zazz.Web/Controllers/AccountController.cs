@@ -14,8 +14,14 @@ namespace Zazz.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        [HttpGet]
+        [HttpGet, AllowAnonymous]
         public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public ActionResult Login(LoginViewModel login)
         {
             return View();
         }

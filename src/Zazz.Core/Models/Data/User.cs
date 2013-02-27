@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Data
 {
     public class User : BaseEntity
     {
-        [MaxLength(20), MinLength(3), Required]
+        [MaxLength(20), MinLength(2), Required]
         public string UserName { get; set; }
 
         [MaxLength(60), Required, DataType(DataType.EmailAddress)]

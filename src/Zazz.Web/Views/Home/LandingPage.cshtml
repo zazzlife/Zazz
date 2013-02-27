@@ -16,6 +16,7 @@
 
             <div class="pull-right">
                 <form class="form-inline login-form" action="~/account/login" method="POST">
+                    @Html.AntiForgeryToken()
                     <input type="text" class="input-small" placeholder="Email">
                     <input type="password" class="input-small" placeholder="Password">
                     <button type="submit" class="btn btn-primary">log in</button>
