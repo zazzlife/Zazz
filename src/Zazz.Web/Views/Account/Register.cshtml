@@ -42,8 +42,8 @@
                                 @Html.TextBoxFor(model => model.Email, new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
                             </div>
-
                         </div>
+
                         <div class="control-group">
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.Password, new { @class = "control-label required" })
@@ -63,6 +63,8 @@
                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
+                        <hr style="margin-top: 0;"/>
                         <div class="control-group">
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
@@ -72,6 +74,17 @@
                                 @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.PublicEmail, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.PublicEmail, new { @class = "span4" })
+                                @Html.ValidationMessageFor(model => model.PublicEmail, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
                         <div class="control-group">
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })

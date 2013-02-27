@@ -43,7 +43,7 @@ namespace Zazz.Core.Models.Data
 
         public int? CityId { get; set; }
 
-        [MaxLength(60), DataType(DataType.EmailAddress)]
+        [MaxLength(40), DataType(DataType.EmailAddress)]
         public string PublicEmail { get; set; }
 
         public virtual ValidationToken ValidationToken { get; set; }
