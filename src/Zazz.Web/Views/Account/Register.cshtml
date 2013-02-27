@@ -22,7 +22,7 @@
 
                 <div class="control-group">
                     <div class="editor-label">
-                        @Html.LabelFor(model => model.UserName, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.UserName, new { @class = "control-label required" })
                     </div>
                     <div class="editor-field">
                         @Html.EditorFor(model => model.UserName)
@@ -32,7 +32,7 @@
 
                 <div class="control-group">
                     <div class="editor-label">
-                        @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
                     </div>
                     <div class="editor-field">
                         @Html.EditorFor(model => model.Email)
@@ -42,7 +42,7 @@
                 </div>
                 <div class="control-group">
                     <div class="editor-label">
-                        @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.Password, new { @class = "control-label required" })
                     </div>
                     <div class="editor-field">
                         @Html.EditorFor(model => model.Password)
@@ -52,7 +52,7 @@
                 </div>
                 <div class="control-group">
                     <div class="editor-label">
-                        @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
+                        @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label required" })
                     </div>
                     <div class="editor-field">
                         @Html.EditorFor(model => model.ConfirmPassword)

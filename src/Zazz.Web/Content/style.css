@@ -23,6 +23,11 @@
         Global
 ***************************************/
 
+.required:after {
+    content : " *";
+    color   : red;
+}
+
 .font-light {
     font-weight: 300 !important;
 }

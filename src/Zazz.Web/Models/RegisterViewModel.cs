@@ -15,6 +15,7 @@ namespace Zazz.Web.Models
         [MaxLength(40), Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Display(Name = "Confirm Password")]
         [Required, DataType(DataType.Password), Compare("Password")]
         public string ConfirmPassword { get; set; }
 
