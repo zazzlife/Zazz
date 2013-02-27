@@ -1,6 +1,6 @@
 ﻿namespace Zazz.Core
 {
-    public sealed class Keys
+    public static class Keys
     {
         //Base64: BKZDhXECuJ4=
 
