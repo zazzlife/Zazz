@@ -10,42 +10,50 @@
         <h1>Zazz</h1>
     </div>
 
-    <div style="margin-top: 50px;">
-
+    <div class="well" style="margin-top: 50px;">
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-
+                    
             <fieldset>
                 <legend>Login</legend>
 
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                <div class="row">
+                    <div class="span7">
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.Username)
+                                @Html.ValidationMessageFor(model => model.Username, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <a href="~/account/recover" style="float: left; margin-bottom: 15px;" class="forgot-password">Forgot password?</a>
+                        <div class="clearfix"></div>
+                        <p>
+                            <input type="submit" value="Login" class="btn btn-primary" />
+                        </p>
                     </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.Username)
-                        @Html.ValidationMessageFor(model => model.Username, null, new { @class="help-inline" })
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Password, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.Password)
-                        @Html.ValidationMessageFor(model => model.Password, null, new { @class="help-inline" })
+                    <div class="span3">
+                        <a href="~/account/oauth/facebook" class="btn-auth btn-facebook large">Login with facebook</a>
                     </div>
                 </div>
 
-                <a style="float: left;" class="forgot-password">Forgot password?</a>
-                <div class="clearfix"></div>
 
-                <p>
-                    <input type="submit" value="Login" class="btn btn-primary" />
-                </p>
+
             </fieldset>
         }
 
