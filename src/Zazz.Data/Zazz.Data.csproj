@@ -65,6 +65,7 @@
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
     <Compile Include="StaticData.cs" />
+    <Compile Include="UoW.cs" />
     <Compile Include="ZazzDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
