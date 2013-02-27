@@ -4,13 +4,15 @@
 <html>
 <head>
     <title>TODO: Add title and description</title>
-    
+
     @Styles.Render("~/Content/css")
 </head>
 <body>
     <div>
         <div class="container">
-            <div class="pull-left"><h1>Zazz</h1></div>
+            <div class="pull-left">
+                <h1>Zazz</h1>
+            </div>
 
             <div class="pull-right">
                 <form class="form-inline login-form" action="~/account/login" method="POST">
@@ -21,28 +23,60 @@
                 <a class="forgot-password" href="~/account/recover">Forgot password?</a>
             </div>
             <div class="clearfix"></div>
-            
-            <div class="text-center welcome-text"><h2>"Taking college partying to a whole new level"</h2></div>
+
+            <div class="text-center welcome-text">
+                <h2>"Taking college partying to a whole new level"</h2>
+            </div>
 
         </div>
-        
+
         <div class="hero-unit" style="height: 200px"></div>
-        
+
         <div class="text-center">
             <button class="btn btn-extralarge btn-primary">Join the party</button>
         </div>
         
         <div class="uni-showcase">
+
             <div class="uni-item">
-                <img class="uni-item-image" src="~/Images/placeholder.gif"/>
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
                 <div class="uni-item-text">
-                    University<br/>
-                    of<br/>
+                    University<br />
+                    of<br />
                     Victoria
 
                 </div>
             </div>
+            
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text">
+                    University<br />
+                    of<br />
+                    British Columbia
+
+                </div>
+            </div>
+            
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text">
+                    Concordia<br/>
+                    University
+                </div>
+            </div>
+            
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text">
+                    McGill<br/>
+                    University
+                </div>
+            </div>
+
         </div>
+        
+        <div class="clearfix"></div>
 
     </div>
 </body>

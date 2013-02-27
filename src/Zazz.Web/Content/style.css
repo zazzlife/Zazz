@@ -31,16 +31,17 @@
 }
 
 .uni-showcase {
-    padding: 50px 100px 200px 100px;
+    padding: 50px 0 200px 100px;
 }
 
 .uni-item {
     float: left;
+    margin-right: 88px;
 }
 
 .uni-item-image {
     width: 120px;
-    height: 120px;
+    height: 110px;
     float: left;
 }
 
@@ -48,4 +49,7 @@
     float: left;
     padding: 10px;
     text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 28px;
 }
