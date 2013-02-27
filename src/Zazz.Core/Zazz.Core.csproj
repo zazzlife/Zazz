@@ -57,6 +57,7 @@
     <Compile Include="Interfaces\IClubRepository.cs" />
     <Compile Include="Interfaces\IOAuthAccountRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\IStaticDataRepository.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\IUserEventCommentRepository.cs" />
     <Compile Include="Interfaces\IUserEventRepository.cs" />

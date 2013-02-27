@@ -20,85 +20,98 @@
             <fieldset>
                 <legend>Register</legend>
 
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.UserName, new { @class = "control-label required" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.UserName)
-                        @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
-                    </div>
-                </div>
 
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                <div class="row">
+                    <div class="span7">
+
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.UserName, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.UserName)
+                                @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.Email)
+                                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+                            </div>
+
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Password, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
+                            </div>
+
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.ConfirmPassword)
+                                @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.EditorFor(model => model.FullName)
+                                @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School")
+                                @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City")
+                                @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Select Major")
+                                @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+                        <p>
+                            <input type="submit" value="Register" class="btn btn-primary" />
+                        </p>
+
                     </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.Email)
-                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+
+                    <div class="span3">
+                        <a href="~/account/oauth/facebook" class="btn-auth btn-facebook large">Register with facebook</a>
                     </div>
 
                 </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Password, new { @class = "control-label required" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.Password)
-                        @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
-                    </div>
-
-                </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label required" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.ConfirmPassword)
-                        @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.FullName)
-                        @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.SchoolId)
-                        @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.CityId)
-                        @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.EditorFor(model => model.MajorId)
-                        @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-                <p>
-                    <input type="submit" value="Register" class="btn btn-primary" />
-                </p>
             </fieldset>
+            
         }
     </div>
 </div>

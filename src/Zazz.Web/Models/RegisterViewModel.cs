@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
@@ -19,7 +22,7 @@ namespace Zazz.Web.Models
         [Required, DataType(DataType.Password), Compare("Password")]
         public string ConfirmPassword { get; set; }
 
-        [MaxLength(30), Display(Name = "Full name")]
+        [StringLength(30), Display(Name = "Full name")]
         public string FullName { get; set; }
 
         [Display(Name = "School")]
@@ -30,5 +33,14 @@ namespace Zazz.Web.Models
 
         [Display(Name = "Major")]
         public byte? MajorId { get; set; }
+
+        [ReadOnly(true)]
+        public IEnumerable<School> Schools { get; set; }
+
+        [ReadOnly(true)]
+        public IEnumerable<City> Cities { get; set; }
+
+        [ReadOnly(true)]
+        public IEnumerable<Major> Majors { get; set; }
     }
 }

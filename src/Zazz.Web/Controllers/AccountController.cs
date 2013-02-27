@@ -7,12 +7,21 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
+using Zazz.Core.Interfaces;
+using Zazz.Data;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
     public class AccountController : BaseController
     {
+        private readonly IStaticDataRepository _staticData;
+
+        public AccountController(IStaticDataRepository staticData)
+        {
+            _staticData = staticData;
+        }
+
         [HttpGet]
         public ActionResult Login()
         {
@@ -28,7 +37,14 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult Register()
         {
-            return View();
+            var vm = new RegisterViewModel
+                         {
+                             Schools = _staticData.GetSchools(),
+                             Cities = _staticData.GetCities(),
+                             Majors = _staticData.GetMajors()
+                         };
+
+            return View(vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

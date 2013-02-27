@@ -17,6 +17,9 @@
 
 
 using StructureMap;
+using Zazz.Core.Interfaces;
+using Zazz.Data;
+
 namespace Zazz.Web.DependencyResolution 
 {
     public static class IoC
@@ -30,7 +33,8 @@ namespace Zazz.Web.DependencyResolution
                                         scan.TheCallingAssembly();
                                         scan.WithDefaultConventions();
                                     });
-                            //              x.For<IExample>().Use<Example>();
+
+                            x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                         });
             return ObjectFactory.Container;
         }
