@@ -1,107 +1,90 @@
-﻿@{Layout = null;}
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js">
-<!--<![endif]-->
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>TODO: Add title and description</title>
+﻿@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+    ViewBag.PageTitle = "TODO: Add page title and description.";
+}
 
-    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
-    @Styles.Render("~/Content/css")
-</head>
-<body class="light-background">
-    <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
-    <div>
-        <div class="container">
-            <div class="pull-left">
-                <h1>Zazz</h1>
-            </div>
-
-            <div class="pull-right">
-                <form class="form-inline login-form" action="~/account/login" method="POST">
-                    @Html.AntiForgeryToken()
-                    <input type="text" class="input-small" placeholder="Email">
-                    <input type="password" class="input-small" placeholder="Password">
-                    <button type="submit" class="btn btn-primary">log in</button>
-                </form>
-                <a class="forgot-password" href="~/account/recover">Forgot password?</a>
-            </div>
-            <div class="clearfix"></div>
-
-            <div class="text-center welcome-text">
-                <h2 class="font-light">"Taking college partying to a whole new level"</h2>
-            </div>
-
+<div>
+    <div class="container">
+        <div class="pull-left">
+            <h1>Zazz</h1>
         </div>
 
-        <div class="hero-unit" style="height: 200px"></div>
-
-        <div class="text-center">
-            <a class="btn btn-extralarge btn-primary" href="~/account/register">Join the party</a>
+        <div class="pull-right">
+            <form class="form-inline login-form" action="~/account/login" method="POST">
+                @Html.AntiForgeryToken()
+                <input type="text" class="input-small" placeholder="Email">
+                <input type="password" class="input-small" placeholder="Password">
+                <button type="submit" class="btn btn-primary">log in</button>
+            </form>
+            <a class="forgot-password" href="~/account/recover">Forgot password?</a>
         </div>
-
-        <div class="container">
-
-            <div class="uni-showcase">
-
-                <div class="uni-item">
-                    <img class="uni-item-image" src="~/Images/placeholder.gif" />
-                    <div class="uni-item-text">
-                        University<br />
-                        of<br />
-                        Victoria
-
-                    </div>
-                </div>
-
-                <div class="uni-item">
-                    <img class="uni-item-image" src="~/Images/placeholder.gif" />
-                    <div class="uni-item-text">
-                        University<br />
-                        of<br />
-                        British Columbia
-
-                    </div>
-                </div>
-
-                <div class="uni-item">
-                    <img class="uni-item-image" src="~/Images/placeholder.gif" />
-                    <div class="uni-item-text" style="margin-top: 10px;">
-                        Concordia<br />
-                        University
-                    </div>
-                </div>
-
-                <div class="uni-item">
-                    <img class="uni-item-image" src="~/Images/placeholder.gif" />
-                    <div class="uni-item-text" style="margin-top: 10px;">
-                        McGill<br />
-                        University
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
         <div class="clearfix"></div>
 
-        <div class="landingpage-footer font-light">
-            <table>
-                <tr>
-                    <td>What is Zazz?</td>
-                    <td class="divider">Our goal</td>
-                    <td>Contact us</td>
-                </tr>
-            </table>
+        <div class="text-center welcome-text">
+            <h2 class="font-light">"Taking college partying to a whole new level"</h2>
         </div>
 
     </div>
-</body>
-</html>
+
+    <div class="hero-unit" style="height: 200px"></div>
+
+    <div class="text-center">
+        <a class="btn btn-extralarge btn-primary" href="~/account/register">Join the party</a>
+    </div>
+
+    <div class="container">
+
+        <div class="uni-showcase">
+
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text">
+                    University<br />
+                    of<br />
+                    Victoria
+
+                </div>
+            </div>
+
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text">
+                    University<br />
+                    of<br />
+                    British Columbia
+
+                </div>
+            </div>
+
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text" style="margin-top: 10px;">
+                    Concordia<br />
+                    University
+                </div>
+            </div>
+
+            <div class="uni-item">
+                <img class="uni-item-image" src="~/Images/placeholder.gif" />
+                <div class="uni-item-text" style="margin-top: 10px;">
+                    McGill<br />
+                    University
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="landingpage-footer font-light">
+        <table>
+            <tr>
+                <td>What is Zazz?</td>
+                <td class="divider">Our goal</td>
+                <td>Contact us</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
