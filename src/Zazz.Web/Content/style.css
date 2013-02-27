@@ -1,0 +1,14 @@
+﻿/***************************************
+        Landing page
+***************************************/
+
+.login-form {
+    margin: 0;
+    margin-top: 20px;
+}
+.welcome-text {
+    padding-top: 20px;
+}
+.small-font {
+    font-size: 12px;
+}
