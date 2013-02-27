@@ -140,7 +140,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            user.UserName = "username";
+            user.Username = "username";
 
             using (var ctx = new ZazzDbContext())
             {
@@ -176,7 +176,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            user.UserName = "username";
+            user.Username = "username";
 
             using (var ctx = new ZazzDbContext())
             {
@@ -274,7 +274,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            user.UserName = "username";
+            user.Username = "username";
 
             using (var ctx = new ZazzDbContext())
             {

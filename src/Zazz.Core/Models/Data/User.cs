@@ -8,7 +8,7 @@ namespace Zazz.Core.Models.Data
     public class User : BaseEntity
     {
         [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {1} and {2} characters.")]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [MaxLength(60), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }

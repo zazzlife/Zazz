@@ -12,7 +12,7 @@ namespace Zazz.IntegrationTests
                             Email = "test@test.com",
                             JoinedDate = DateTime.UtcNow,
                             LastActivity = DateTime.UtcNow,
-                            UserName = "username",
+                            Username = "username",
                             Password = "password",
                         };
          }

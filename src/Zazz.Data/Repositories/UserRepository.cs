@@ -15,7 +15,7 @@ namespace Zazz.Data.Repositories
 
         protected override int GetItemId(User item)
         {
-            return GetIdByUsername(item.UserName);
+            return GetIdByUsername(item.Username);
         }
 
         public Task<User> GetByEmailAsync(string email)
@@ -25,7 +25,7 @@ namespace Zazz.Data.Repositories
 
         public Task<User> GetByUsernameAsync(string username)
         {
-            return Task.Run(() => DbSet.SingleOrDefault(u => u.UserName.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
+            return Task.Run(() => DbSet.SingleOrDefault(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public Task<int> GetIdByEmailAsync(string email)
@@ -37,7 +37,7 @@ namespace Zazz.Data.Repositories
 
         public int GetIdByUsername(string username)
         {
-            return DbSet.Where(u => u.UserName.Equals(username, StringComparison.InvariantCultureIgnoreCase))
+            return DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
                         .Select(u => u.Id)
                         .SingleOrDefault();
         }
@@ -49,7 +49,7 @@ namespace Zazz.Data.Repositories
 
         public Task<bool> ExistsByUsernameAsync(string username)
         {
-            return Task.Run(() => DbSet.Any(u => u.UserName.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
+            return Task.Run(() => DbSet.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
         }
     }
 }
