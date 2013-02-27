@@ -24,6 +24,9 @@ namespace Zazz.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
             JsonConfig.Configure(GlobalConfiguration.Configuration);
+
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine());
         }
     }
 }
