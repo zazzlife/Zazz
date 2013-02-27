@@ -66,6 +66,7 @@
     <Compile Include="Interfaces\IUserImageRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ClubAdmin.cs" />
