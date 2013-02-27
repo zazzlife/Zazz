@@ -15,6 +15,18 @@
   margin-top: 4px;
 }
 
+.container {
+    width: 1000px;
+}
+
+/***************************************
+        Global
+***************************************/
+
+.font-light {
+    font-weight: 300 !important;
+}
+
 /***************************************
         Landing page
 ***************************************/
@@ -40,7 +52,7 @@
 
 .uni-item {
     float: left;
-    margin-right: 65px;
+    margin-right: 80px;
 }
 
 .uni-item-image {
@@ -65,7 +77,6 @@
     background-color: #1570a6;
     color: white;
     font-size: 28px;
-    font-weight: 300;
     border-top-style: solid;
     border-top-width: 4px;
     border-top-color: #1549a6;
