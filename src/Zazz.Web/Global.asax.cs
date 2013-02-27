@@ -23,6 +23,7 @@ namespace Zazz.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            JsonConfig.Configure(GlobalConfiguration.Configuration);
         }
     }
 }
