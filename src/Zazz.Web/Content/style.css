@@ -27,6 +27,14 @@
     font-weight: 300 !important;
 }
 
+.gray-background {
+    background-color: #eee;
+}
+
+.light-background {
+    background-color: #fafafa;
+}
+
 /***************************************
         Landing page
 ***************************************/
