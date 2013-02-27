@@ -11,7 +11,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         [HttpGet]
         public ActionResult Login()
