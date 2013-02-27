@@ -39,18 +39,23 @@
         Landing page
 ***************************************/
 
-.login-form {
+#landing-page #login-form {
     margin: 0;
     margin-top: 20px;
 }
+
+#landing-page #login-form button[type="submit"] {
+    margin-left: 10px;
+    width: 71px;
+}
+
 .welcome-text {
     padding-top: 20px;
 }
 .forgot-password {
     font-size: 12px;
     float: right; 
-    margin-right: 72px; 
-    margin-top: 3px; 
+    margin-right: 20px; 
     font-style: italic;
     margin-bottom: 5px;
 }

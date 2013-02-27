@@ -3,20 +3,23 @@
     ViewBag.Title = "TODO: Add page title and description.";
 }
 
-<div>
+<div id="landing-page">
     <div class="container">
         <div class="pull-left">
             <h1>Zazz</h1>
         </div>
 
         <div class="pull-right">
-            <form class="form-inline login-form" action="~/account/login" method="POST">
+            <form class="form-inline" id="login-form" action="~/account/login" method="POST">
                 @Html.AntiForgeryToken()
                 <input type="text" class="input-small" placeholder="Email">
                 <input type="password" class="input-small" placeholder="Password">
                 <button type="submit" class="btn btn-primary">log in</button>
             </form>
-            <a class="forgot-password" href="~/account/recover">Forgot password?</a>
+            <div style="margin-top: 10px;">
+                <a class="pull-right" href="~/account/oauth/facebook/"><img src="~/Images/fb-login-btn.jpg"/></a>
+                <a class="forgot-password" href="~/account/recover">Forgot password?</a>    
+            </div>
         </div>
         <div class="clearfix"></div>
 
