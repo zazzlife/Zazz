@@ -29,3 +29,23 @@
     margin-top: 3px; 
     font-style: italic;
 }
+
+.uni-showcase {
+    padding: 50px 100px 200px 100px;
+}
+
+.uni-item {
+    float: left;
+}
+
+.uni-item-image {
+    width: 120px;
+    height: 120px;
+    float: left;
+}
+
+.uni-item-text {
+    float: left;
+    padding: 10px;
+    text-align: center;
+}
