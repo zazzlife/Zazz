@@ -16,10 +16,12 @@ namespace Zazz.Web.Controllers
     public class AccountController : BaseController
     {
         private readonly IStaticDataRepository _staticData;
+        private readonly IAuthService _authService;
 
-        public AccountController(IStaticDataRepository staticData)
+        public AccountController(IStaticDataRepository staticData, IAuthService authService)
         {
             _staticData = staticData;
+            _authService = authService;
         }
 
         [HttpGet]

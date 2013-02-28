@@ -19,6 +19,7 @@
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
+using Zazz.Infrastructure.Services;
 
 namespace Zazz.Web.DependencyResolution 
 {
@@ -35,6 +36,8 @@ namespace Zazz.Web.DependencyResolution
                                     });
 
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
+                            x.For<IUoW>().Use<UoW>();
+                            x.For<IAuthService>().Use<AuthService>();
                         });
             return ObjectFactory.Container;
         }
