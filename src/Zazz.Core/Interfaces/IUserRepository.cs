@@ -16,5 +16,7 @@ namespace Zazz.Core.Interfaces
         Task<bool> ExistsByEmailAsync(string email);
 
         Task<bool> ExistsByUsernameAsync(string username);
+
+        Task<string> GetUserPassword(string username);
     }
 }

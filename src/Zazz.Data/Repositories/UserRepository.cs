@@ -51,5 +51,12 @@ namespace Zazz.Data.Repositories
         {
             return Task.Run(() => DbSet.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
         }
+
+        public Task<string> GetUserPassword(string username)
+        {
+            return Task.Run(() => DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
+                                      .Select(u => u.Password)
+                                      .SingleOrDefault());
+        }
     }
 }
