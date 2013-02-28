@@ -1,6 +1,10 @@
-﻿using Moq;
+﻿using System;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -18,6 +22,122 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock = new Mock<IUoW>();
             _cryptoMock = new Mock<ICryptoService>();
             _sut = new AuthService(_uowMock.Object, _cryptoMock.Object);
+
+            _uowMock.Setup(x => x.SaveAsync())
+                    .Returns(Task.Run(() => { }));
         }
+
+        [Test]
+        public void GetHashOfPassword_OnLogin()
+        {
+            //Arrange
+            var pass = "password";
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
+                    .Returns(() => Task.Run(() => new User { Password = pass }));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                       .Returns(pass);
+
+
+            //Act
+            _sut.LoginAsync("user", pass).Wait();
+
+            //Assert
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(pass), Times.Once());
+        }
+
+        [Test]
+        public void GetUserPasswordFromDB_OnLogin()
+        {
+            //Arrange
+            var username = "username";
+            var pass = "pass";
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(username))
+                    .Returns(() => Task.Run(() => new User { Password = pass }));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                       .Returns(pass);
+            //Act
+            _sut.LoginAsync(username, pass).Wait();
+
+            //Assert
+            _uowMock.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+        }
+
+        [Test]
+        public async Task ThrowUserNotExist_WhenUserNotExists()
+        {
+            //Arrange
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
+                    .Returns(() => Task.Factory.StartNew<User>(() => null));
+
+            //Act
+            try
+            {
+                await _sut.LoginAsync("user", "pass");
+            }
+            catch (UserNotExistsException e)
+            {
+                //Assert
+                Assert.IsInstanceOf<UserNotExistsException>(e);
+            }
+        }
+
+        [Test]
+        public async Task ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
+        {
+            //Arrange
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
+                    .Returns(() => Task.Run(() => new User { Password = "password" }));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                       .Returns("invalidPass");
+            //Act
+            try
+            {
+                await _sut.LoginAsync("user", "invalidPassword");
+            }
+            catch (InvalidPasswordException e)
+            {
+                // Assert
+                Assert.IsInstanceOf<InvalidPasswordException>(e);
+            }
+        }
+
+        [Test]
+        public void UpdateLastActivity_WhenEverythingIsOk_OnLogin()
+        {
+            //Arrange
+            var pass = "pass";
+            var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
+                    .Returns(() => Task.Run(() => user));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                       .Returns(pass);
+
+            //Act
+            _sut.LoginAsync("user", pass).Wait();
+
+            //Assert
+            Assert.IsTrue(user.LastActivity <= DateTime.UtcNow);
+        }
+
+        [Test]
+        public void CallSaveChanges_WhenEverythingIsOk_OnLogin()
+        {
+            //Arrange
+            var pass = "pass";
+            var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
+            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
+                    .Returns(() => Task.Run(() => user));
+
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                       .Returns(pass);
+
+            //Act
+            _sut.LoginAsync("user", pass).Wait();
+
+            //Assert
+            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+
     }
 }

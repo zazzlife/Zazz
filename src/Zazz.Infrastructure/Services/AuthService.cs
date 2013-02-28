@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -16,9 +17,19 @@ namespace Zazz.Infrastructure.Services
             _cryptoService = cryptoService;
         }
 
-        public Task LoginAsync(string username, string password)
+        public async Task LoginAsync(string username, string password)
         {
-            throw new NotImplementedException();
+            var passwordHash = _cryptoService.GeneratePasswordHash(password);
+            var user = await _uoW.UserRepository.GetByUsernameAsync(username);
+
+            if (user == null)
+                throw new UserNotExistsException();
+
+            if (passwordHash != user.Password)
+                throw new InvalidPasswordException();
+
+            user.LastActivity = DateTime.UtcNow;
+            await _uoW.SaveAsync();
         }
 
         public Task RegisterAsync(User user)

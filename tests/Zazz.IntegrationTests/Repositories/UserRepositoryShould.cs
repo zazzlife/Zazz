@@ -415,36 +415,36 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsNull(result);
         }
 
-        [Test]
-        public void ReturnNull_OnGetPassword_WhenUserNotExists()
-        {
-            //Arrange
-            //Act
+        //[Test]
+        //public void ReturnNull_OnGetPassword_WhenUserNotExists()
+        //{
+        //    //Arrange
+        //    //Act
 
-            var result = _repo.GetUserPassword("notExists").Result;
+        //    var result = _repo.GetUserPassword("notExists").Result;
 
-            //Assert
-            Assert.IsNull(result);
-        }
+        //    //Assert
+        //    Assert.IsNull(result);
+        //}
 
-        [TestCase("testuser")]
-        [TestCase("testUser")]
-        [TestCase("TESTUSER")]
-        [TestCase("TestUser")]
-        public void NotBeCaseSensetive( string username)
-        {
-            //Arrange
-            var user = Mother.GetUser();
-            user.Username = "TestUser";
-            _repo.InsertGraph(user);
-            _zazzDbContext.SaveChanges();
+        //[TestCase("testuser")]
+        //[TestCase("testUser")]
+        //[TestCase("TESTUSER")]
+        //[TestCase("TestUser")]
+        //public void NotBeCaseSensetive( string username)
+        //{
+        //    //Arrange
+        //    var user = Mother.GetUser();
+        //    user.Username = "TestUser";
+        //    _repo.InsertGraph(user);
+        //    _zazzDbContext.SaveChanges();
 
-            //Act
-            var pass = _repo.GetUserPassword(username).Result;
+        //    //Act
+        //    var pass = _repo.GetUserPassword(username).Result;
 
-            //Assert
-            Assert.AreEqual(user.Password, pass);
-        }
+        //    //Assert
+        //    Assert.AreEqual(user.Password, pass);
+        //}
 
 
     }
