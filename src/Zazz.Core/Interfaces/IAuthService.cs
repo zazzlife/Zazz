@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
@@ -11,9 +12,9 @@ namespace Zazz.Core.Interfaces
 
         Task GenerateResetPasswordTokenAsync(string email);
 
-        Task<bool> IsTokenValidAsync(int userId, int token, string tokenHash);
+        Task<bool> IsTokenValidAsync(int userId, Guid token);
 
-        Task ResetPasswordAsync(int userId, int token, string tokenHash, string newPassword);
+        Task ResetPasswordAsync(int userId, Guid token, string newPassword);
         
         Task ChangePasswordAsync(int userId, string currentPassword, string newPassword);
     }
