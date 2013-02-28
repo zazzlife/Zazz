@@ -33,7 +33,7 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public async Task RegisterAsync(User user)
+        public async Task<User> RegisterAsync(User user, bool createToken)
         {
             var usernameExists = await _uoW.UserRepository.ExistsByUsernameAsync(user.Username);
             if (usernameExists)
@@ -48,9 +48,20 @@ namespace Zazz.Infrastructure.Services
 
             user.JoinedDate = DateTime.UtcNow;
 
+            if (createToken)
+            {
+                user.ValidationToken = new ValidationToken
+                                           {
+                                               ExpirationDate = DateTime.UtcNow.AddYears(1),
+                                               Token = Guid.NewGuid()
+                                           };
+            }
+
             _uoW.UserRepository.InsertGraph(user);
 
             await _uoW.SaveAsync();
+
+            return user;
         }
 
         public Task GenerateResetPasswordTokenAsync(string email)

@@ -151,7 +151,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => Task.Run(() => false));
 
             //Act
-            _sut.RegisterAsync(user).Wait();
+            _sut.RegisterAsync(user, false).Wait();
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.ExistsByUsernameAsync(user.Username), Times.Once());
@@ -170,7 +170,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RegisterAsync(user);
+                await _sut.RegisterAsync(user, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (UsernameExistsException e)
@@ -191,7 +191,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => Task.Run(() => false));
 
             //Act
-            _sut.RegisterAsync(user).Wait();
+            _sut.RegisterAsync(user, false).Wait();
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.ExistsByEmailAsync(user.Email), Times.Once());
@@ -211,7 +211,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RegisterAsync(user);
+                await _sut.RegisterAsync(user, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (EmailExistsException e)
@@ -238,7 +238,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(hashedPass);
 
             //Act
-            _sut.RegisterAsync(user).Wait();
+            _sut.RegisterAsync(user, false).Wait();
 
             //Assert
             _cryptoMock.Verify(x=>x.GeneratePasswordHash(clearPass), Times.Once());
@@ -258,11 +258,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(user.Password);
             
             //Act
-            _sut.RegisterAsync(user).Wait();
+            _sut.RegisterAsync(user, false).Wait();
 
             //Assert
             Assert.IsTrue(user.JoinedDate <= DateTime.UtcNow);
         }
+
+        [Test]
+        public void GenerateValidationTokenIfRequested_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
+                       .Returns(user.Password);
+
+
+            //Act
+            _sut.RegisterAsync(user, true).Wait();
+
+            //Assert
+            Assert.IsNotNull(user.ValidationToken);
+            Assert.AreEqual(DateTime.UtcNow.AddYears(1).Date, user.ValidationToken.ExpirationDate.Date);
+            Assert.IsNotNull(user.ValidationToken.Token);
+        }
+
+
 
         [Test]
         public void SaveUserWhenEverythingIsOk_OnRegister()
@@ -277,7 +301,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(user.Password);
 
             //Act
-            _sut.RegisterAsync(user).Wait();
+            _sut.RegisterAsync(user, false).Wait();
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());

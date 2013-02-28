@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
     {
         Task LoginAsync(string username, string password);
 
-        Task RegisterAsync(User user);
+        Task<User> RegisterAsync(User user, bool createToken);
 
         Task GenerateResetPasswordTokenAsync(string email);
 
