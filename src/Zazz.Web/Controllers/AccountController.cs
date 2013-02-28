@@ -123,6 +123,45 @@ namespace Zazz.Web.Controllers
             return View(registerVm);
         }
 
+        internal class OAuthLoginResult : ActionResult
+        {
+            public OAuthLoginResult(string provider, string returnUrl)
+            {
+                Provider = provider;
+                ReturnUrl = returnUrl;
+            }
+
+            public string Provider { get; private set; }
+            public string ReturnUrl { get; private set; }
+
+            public override void ExecuteResult(ControllerContext context)
+            {
+                OAuthWebSecurity.RequestAuthentication(Provider, ReturnUrl);
+            }
+        }
+
+        public ActionResult OAuth(string id)
+        {
+            return new OAuthLoginResult(id, "/account/oauthcallback");
+        }
+
+        public async Task<ActionResult> OAuthCallback()
+        {
+            var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
+            if (!result.IsSuccessful)
+            {
+                ShowAlert("Operation was not successful. Please try again later.", AlertType.Warning);
+                return View("Login");
+            }   
+
+            var id = result.ExtraData["id"];
+            var name = result.ExtraData["name"];
+            var email = result.ExtraData["email"];
+            var accessToken = result.ExtraData["accesstoken"];
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public ActionResult SignOut()
         {
             if (User.Identity.IsAuthenticated)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
 using Zazz.Web.Models;
+using Zazz.Web.OAuthClients;
 
 namespace Zazz.Web
 {
@@ -27,6 +28,13 @@ namespace Zazz.Web
             //    appSecret: "");
 
             //OAuthWebSecurity.RegisterGoogleClient();
+
+            OAuthWebSecurity.RegisterClient(
+                new CustomFacebookClient(
+                    appId: "433721150040606",
+                    appSecret: "56e97d3e73d03ac9be75d79d0d5e820d"),
+                "facebook", null
+            );
         }
     }
 }
