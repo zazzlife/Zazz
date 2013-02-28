@@ -65,6 +65,9 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult Register()
         {
+            if (User.Identity.IsAuthenticated)
+                RedirectToAction("Index", "Home");
+
             var vm = new RegisterViewModel
                          {
                              Schools = _staticData.GetSchools(),
