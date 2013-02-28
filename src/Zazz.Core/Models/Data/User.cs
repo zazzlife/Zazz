@@ -13,7 +13,7 @@ namespace Zazz.Core.Models.Data
         [MaxLength(40), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [MaxLength(28), Required, DataType(DataType.Password)]
+        [MaxLength(28), Required, DataType("char")]
         public string Password { get; set; }
 
         [Required, DataType(DataType.Date), Display(AutoGenerateField = false)]
