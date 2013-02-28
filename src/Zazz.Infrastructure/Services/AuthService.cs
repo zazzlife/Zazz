@@ -87,9 +87,16 @@ namespace Zazz.Infrastructure.Services
             return token;
         }
 
-        public Task<bool> IsTokenValidAsync(int userId, Guid token)
+        public async Task<bool> IsTokenValidAsync(int userId, Guid token)
         {
-            throw new NotImplementedException();
+            var userToken = await _uoW.ValidationTokenRepository.GetByIdAsync(userId);
+            if (userToken == null)
+                return false;
+
+            if (userToken.ExpirationDate < DateTime.UtcNow)
+                throw new TokenExpiredException();
+
+            return token.Equals(userToken.Token);
         }
 
         public Task ResetPasswordAsync(int userId, Guid token, string newPassword)

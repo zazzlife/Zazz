@@ -231,8 +231,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var clearPass = "pass";
             var hashedPass = "hashedPassword";
 
-            var user = new User { Email = "email", Username = "username", Password = clearPass};
-            
+            var user = new User { Email = "email", Username = "username", Password = clearPass };
+
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -244,7 +244,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RegisterAsync(user, false).Wait();
 
             //Assert
-            _cryptoMock.Verify(x=>x.GeneratePasswordHash(clearPass), Times.Once());
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(clearPass), Times.Once());
             Assert.AreEqual(user.Password, hashedPass);
         }
 
@@ -259,7 +259,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => Task.Run(() => false));
             _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
                        .Returns(user.Password);
-            
+
             //Act
             _sut.RegisterAsync(user, false).Wait();
 
@@ -328,7 +328,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.GenerateResetPasswordTokenAsync(email).Wait();
 
             //Assert
-            _uowMock.Verify(x=>x.UserRepository.GetIdByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetIdByEmailAsync(email), Times.Once());
         }
 
         [Test]
@@ -432,8 +432,67 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
 
             //Assert
-            _uowMock.Verify(x=>x.ValidationTokenRepository.InsertGraph(result));
+            _uowMock.Verify(x => x.ValidationTokenRepository.InsertGraph(result));
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        #endregion
+
+        #region Is Token Valid
+
+        [Test]
+        public void RetrunTrueWhenTokenIsValid_OnIsTokenValid()
+        {
+            //Arrange
+            var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1)};
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => token));
+
+            //Act
+            var result = _sut.IsTokenValidAsync(token.Id, token.Token).Result;
+
+            //Assert
+            Assert.IsTrue(result);
+            _uowMock.Verify(x => x.ValidationTokenRepository.GetByIdAsync(token.Id), Times.Once());
+        }
+
+        [Test]
+        public void RetrunFalseWhenTokenIsNotValid_OnIsTokenValid()
+        {
+            //Arrange
+            var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => token));
+
+            //Act
+            var result = _sut.IsTokenValidAsync(token.Id, Guid.NewGuid()).Result;
+
+            //Assert
+            Assert.IsFalse(result);
+            _uowMock.Verify(x => x.ValidationTokenRepository.GetByIdAsync(token.Id), Times.Once());
+
+        }
+
+        [Test]
+        public async Task ThrowExpiredExceptionWhenTokenIsExpired_OnIsTokenValid()
+        {
+            //Arrange
+            var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(-1) };
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => token));
+
+            //Act
+            try
+            {
+                var result = await _sut.IsTokenValidAsync(token.Id, token.Token);
+                Assert.Fail("Expected Exception wasn't thrown");
+            }
+            catch (TokenExpiredException e)
+            {
+                //Assert
+                _uowMock.Verify(x => x.ValidationTokenRepository.GetByIdAsync(token.Id), Times.Once());
+                Assert.IsInstanceOf<TokenExpiredException>(e);
+            }
         }
 
         #endregion
