@@ -8,10 +8,12 @@ namespace Zazz.Infrastructure.Services
     public class AuthService : IAuthService
     {
         private readonly IUoW _uoW;
+        private readonly ICryptoService _cryptoService;
 
-        public AuthService(IUoW uoW)
+        public AuthService(IUoW uoW, ICryptoService cryptoService)
         {
             _uoW = uoW;
+            _cryptoService = cryptoService;
         }
 
         public Task LoginAsync(string username, string password)

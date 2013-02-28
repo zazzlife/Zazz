@@ -9,13 +9,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
     public class AuthServiceShould
     {
         private Mock<IUoW> _uowMock;
+        private Mock<ICryptoService> _cryptoMock;
         private AuthService _sut;
 
         [SetUp]
         public void Init()
         {
             _uowMock = new Mock<IUoW>();
-            _sut = new AuthService(_uowMock.Object);
+            _cryptoMock = new Mock<ICryptoService>();
+            _sut = new AuthService(_uowMock.Object, _cryptoMock.Object);
         }
     }
 }
