@@ -280,6 +280,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RegisterAsync(user).Wait();
 
             //Assert
+            _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
         }
 

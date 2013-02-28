@@ -29,6 +29,7 @@ namespace Zazz.Infrastructure.Services
                 throw new InvalidPasswordException();
 
             user.LastActivity = DateTime.UtcNow;
+
             await _uoW.SaveAsync();
         }
 
@@ -47,7 +48,9 @@ namespace Zazz.Infrastructure.Services
 
             user.JoinedDate = DateTime.UtcNow;
 
-            _uoW.SaveAsync();
+            _uoW.UserRepository.InsertGraph(user);
+
+            await _uoW.SaveAsync();
         }
 
         public Task GenerateResetPasswordTokenAsync(string email)
