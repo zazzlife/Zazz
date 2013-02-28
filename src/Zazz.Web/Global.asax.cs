@@ -27,6 +27,10 @@ namespace Zazz.Web
 
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+
+#if DEBUG
+            new Zazz.Data.ZazzDbContext();
+#endif
         }
     }
 }
