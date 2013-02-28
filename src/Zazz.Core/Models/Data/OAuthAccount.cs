@@ -11,6 +11,8 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
+        public long ProviderUserId { get; set; }
+
         [MaxLength(1000)]
         public string AccessToken { get; set; }
 
