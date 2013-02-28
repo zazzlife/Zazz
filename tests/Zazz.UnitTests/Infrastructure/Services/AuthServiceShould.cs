@@ -532,7 +532,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(() => newPassHash);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(token.Id))
                     .Returns(() => Task.Run(() => token));
-
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => new User()));
 
             //Act
             await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
@@ -565,7 +566,126 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
         }
 
+        #endregion
 
+        #region Change Password
+
+        [Test]
+        public async Task HashTheCurrentPasswordBeforeComparing_OnChangePassword()
+        {
+            //Arrange
+            var userId = 12;
+            var newPassword = "newPass";
+            var newPassHash = "hashpass";
+            var oldPassHash = "oldHash";
+            var oldPass = "oldPass";
+            var user = new User { Password = oldPassHash };
+
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Run(() => user));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
+                       .Returns(newPassHash);
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
+                       .Returns(oldPassHash);
+
+            //Act
+            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+
+            //Assert
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
+        }
+
+        [Test]
+        public async Task ThrowInvalidPasswordIfCurrentPasswordIsNotCorrect_OnChangePassword()
+        {
+            //Arrange
+            var userId = 12;
+            var newPassword = "newPass";
+            var newPassHash = "hashpass";
+            var oldPassHash = "oldHash";
+            var oldPass = "oldPass";
+            var invalidPass = "invalid pass";
+            var invalidPassHash = "invalid pass hash";
+
+            var user = new User { Password = oldPassHash };
+
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Run(() => user));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
+                       .Returns(newPassHash);
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(invalidPass))
+                       .Returns(invalidPassHash);
+
+            //Act
+            try
+            {
+                await _sut.ChangePasswordAsync(userId, invalidPass, newPassword);
+                Assert.Fail("Expected Exception Wasn't thrown");
+            }
+            catch (InvalidPasswordException e)
+            {
+                //Assert
+                Assert.IsInstanceOf<InvalidPasswordException>(e);
+                _uowMock.Verify(x => x.UserRepository.GetByIdAsync(userId), Times.Once());
+                _cryptoMock.Verify(x => x.GeneratePasswordHash(invalidPass), Times.Once());
+            }
+        }
+
+        [Test]
+        public async Task HashTheNewPasswordIfEverythingIsFine_OnChangePassword()
+        {
+            //Arrange
+            var userId = 12;
+            var newPassword = "newPass";
+            var newPassHash = "hashpass";
+            var oldPassHash = "oldHash";
+            var oldPass = "oldPass";
+            var user = new User { Password = oldPassHash };
+
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Run(() => user));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
+                       .Returns(newPassHash);
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
+                       .Returns(oldPassHash);
+
+            //Act
+            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+
+            //Assert
+            _uowMock.Verify(x => x.UserRepository.GetByIdAsync(userId), Times.Once());
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(newPassword), Times.Once());
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
+        }
+
+        [Test] public async Task SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
+        {
+            //Arrange
+            var userId = 12;
+            var newPassword = "newPass";
+            var newPassHash = "hashpass";
+            var oldPassHash = "oldHash";
+            var oldPass = "oldPass";
+            var user = new User { Password = oldPassHash };
+
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Run(() => user));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
+                       .Returns(newPassHash);
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
+                       .Returns(oldPassHash);
+
+            //Act
+            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+
+            //Assert
+            
+            Assert.AreEqual(newPassHash, user.Password);
+            _uowMock.Verify(x => x.SaveAsync());
+            _uowMock.Verify(x => x.UserRepository.GetByIdAsync(userId), Times.Once());
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(newPassword), Times.Once());
+            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
+        }
 
         #endregion
     }

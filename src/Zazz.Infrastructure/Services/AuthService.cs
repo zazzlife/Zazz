@@ -113,9 +113,19 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = await _uoW.UserRepository.GetByIdAsync(userId);
+
+            var currentPassHash = _cryptoService.GeneratePasswordHash(currentPassword);
+            if (currentPassHash != user.Password)
+                throw new InvalidPasswordException();
+
+            var newPasshash = _cryptoService.GeneratePasswordHash(newPassword);
+
+            user.Password = newPasshash;
+
+            await _uoW.SaveAsync();
         }
 
         public void Dispose()
