@@ -99,9 +99,18 @@ namespace Zazz.Infrastructure.Services
             return token.Equals(userToken.Token);
         }
 
-        public Task ResetPasswordAsync(int userId, Guid token, string newPassword)
+        public async Task ResetPasswordAsync(int userId, Guid token, string newPassword)
         {
-            throw new NotImplementedException();
+            var isTokenValid = await IsTokenValidAsync(userId, token);
+            if (!isTokenValid)
+                throw new InvalidTokenException();
+
+            var user = await _uoW.UserRepository.GetByIdAsync(userId);
+            var newPassHash = _cryptoService.GeneratePasswordHash(newPassword);
+
+            user.Password = newPassHash;
+
+            await _uoW.SaveAsync();
         }
 
         public Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
