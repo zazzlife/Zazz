@@ -13,7 +13,7 @@ namespace Zazz.Core.Models.Data
 
         public long ProviderUserId { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(255)]
         public string AccessToken { get; set; }
 
         public DateTime TokenExpirationDate { get; set; }
