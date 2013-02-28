@@ -10,6 +10,7 @@ using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Data;
 using Zazz.Web.Models;
 
@@ -50,7 +51,7 @@ namespace Zazz.Web.Controllers
                 }
                 catch (InvalidPasswordException)
                 {
-                    ShowAlert("Invalid login information.", AlertType.Error);
+                    ShowAlert("Invalid login information.", AlertType.Warning);
                 }
                 catch (UserNotExistsException)
                 {
@@ -75,12 +76,51 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterViewModel login)
+        public async Task<ActionResult> Register(RegisterViewModel registerVm)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                               {
+                                   CityId = registerVm.CityId,
+                                   Email = registerVm.Email,
+                                   JoinedDate = DateTime.UtcNow,
+                                   IsConfirmed = false,
+                                   LastActivity = DateTime.UtcNow,
+                                   FullName = registerVm.FullName,
+                                   MajorId = registerVm.MajorId,
+                                   Password = registerVm.Password,
+                                   PublicEmail = registerVm.PublicEmail,
+                                   SchoolId = registerVm.SchoolId,
+                                   Username = registerVm.UserName
+                               };
+
+                try
+                {
+                    await _authService.RegisterAsync(user, true);
+
+                    //TODO: send welcome email.
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (UsernameExistsException)
+                {
+                    ShowAlert("Username is already exists.", AlertType.Warning);
+                }
+                catch (EmailExistsException)
+                {
+                    ShowAlert("This email address has registered before. Please login.", AlertType.Warning);
+                }
+            }
+
+            registerVm.Schools = _staticData.GetSchools();
+            registerVm.Cities = _staticData.GetCities();
+            registerVm.Majors = _staticData.GetMajors();
+
+            return View(registerVm);
         }
 
-        public ActionResult Signout()
+        public ActionResult SignOut()
         {
             if (User.Identity.IsAuthenticated)
                 FormsAuthentication.SignOut();

@@ -38,13 +38,10 @@ namespace Zazz.Web.Models
         [Display(Name = "Major")]
         public byte? MajorId { get; set; }
 
-        [ReadOnly(true)]
         public IEnumerable<School> Schools { get; set; }
 
-        [ReadOnly(true)]
         public IEnumerable<City> Cities { get; set; }
 
-        [ReadOnly(true)]
         public IEnumerable<Major> Majors { get; set; }
     }
 }

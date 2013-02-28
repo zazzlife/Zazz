@@ -19,7 +19,13 @@
 
             <fieldset>
                 <legend>Register</legend>
-
+                @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                {
+                    <div class="alert alert-block @TempData["alertClass"]">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>@TempData["alertMessage"]</p>
+                    </div>
+                }
 
                 <div class="row">
                     <div class="span8">
