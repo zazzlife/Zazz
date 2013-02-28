@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IAuthService
+    public interface IAuthService : IDisposable
     {
         Task LoginAsync(string username, string password);
 

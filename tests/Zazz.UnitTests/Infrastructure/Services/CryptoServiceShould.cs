@@ -24,7 +24,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var randomBytes = new RNGCryptoServiceProvider();
             var rnd = new Random();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 500; i++)
             {
                 var randomData = new byte[rnd.Next(20, 500)];
                 randomBytes.GetBytes(randomData);

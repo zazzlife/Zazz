@@ -56,5 +56,10 @@ namespace Zazz.Infrastructure.Services
         {
             throw new NotImplementedException();
         }
+
+        public void Dispose()
+        {
+            _uoW.Dispose();
+        }
     }
 }
