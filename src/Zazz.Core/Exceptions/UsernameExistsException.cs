@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Zazz.Core.Exceptions
 {
     [Serializable]
-    public class UserExistsException : Exception
+    public class UsernameExistsException : Exception
     {
         //
         // For guidelines regarding the creation of new exception types, see
@@ -13,19 +13,19 @@ namespace Zazz.Core.Exceptions
         //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
         //
 
-        public UserExistsException()
+        public UsernameExistsException()
         {
         }
 
-        public UserExistsException(string message) : base(message)
+        public UsernameExistsException(string message) : base(message)
         {
         }
 
-        public UserExistsException(string message, Exception inner) : base(message, inner)
+        public UsernameExistsException(string message, Exception inner) : base(message, inner)
         {
         }
 
-        protected UserExistsException(
+        protected UsernameExistsException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)
         {

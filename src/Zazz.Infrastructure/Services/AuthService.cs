@@ -32,9 +32,22 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public Task RegisterAsync(User user)
+        public async Task RegisterAsync(User user)
         {
-            throw new NotImplementedException();
+            var usernameExists = await _uoW.UserRepository.ExistsByUsernameAsync(user.Username);
+            if (usernameExists)
+                throw new UsernameExistsException();
+
+            var emailExists = await _uoW.UserRepository.ExistsByEmailAsync(user.Email);
+            if (emailExists)
+                throw new EmailExistsException();
+
+            var hashedPassword = _cryptoService.GeneratePasswordHash(user.Password);
+            user.Password = hashedPassword;
+
+            user.JoinedDate = DateTime.UtcNow;
+
+            _uoW.SaveAsync();
         }
 
         public Task GenerateResetPasswordTokenAsync(string email)

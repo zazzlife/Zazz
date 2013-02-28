@@ -73,6 +73,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             try
             {
                 await _sut.LoginAsync("user", "pass");
+                Assert.Fail("Expected exception wasn't thrown");
             }
             catch (UserNotExistsException e)
             {
@@ -93,6 +94,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             try
             {
                 await _sut.LoginAsync("user", "invalidPassword");
+                Assert.Fail("Expected exception wasn't thrown");
             }
             catch (InvalidPasswordException e)
             {
@@ -133,6 +135,149 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
             _sut.LoginAsync("user", pass).Wait();
+
+            //Assert
+            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        [Test]
+        public void CheckForExistingUser_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+
+            //Act
+            _sut.RegisterAsync(user).Wait();
+
+            //Assert
+            _uowMock.Verify(x => x.UserRepository.ExistsByUsernameAsync(user.Username), Times.Once());
+        }
+
+        [Test]
+        public async Task ThrowIfUsernameExists_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => true));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+
+            //Act
+            try
+            {
+                await _sut.RegisterAsync(user);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (UsernameExistsException e)
+            {
+                //Assert
+                Assert.IsInstanceOf<UsernameExistsException>(e);
+            }
+        }
+
+        [Test]
+        public void CheckForExistingEmail_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+
+            //Act
+            _sut.RegisterAsync(user).Wait();
+
+            //Assert
+            _uowMock.Verify(x => x.UserRepository.ExistsByEmailAsync(user.Email), Times.Once());
+
+        }
+
+        [Test]
+        public async Task ThrowIfEmailExists_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => true));
+
+            //Act
+            try
+            {
+                await _sut.RegisterAsync(user);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (EmailExistsException e)
+            {
+                //Assert
+                Assert.IsInstanceOf<EmailExistsException>(e);
+            }
+        }
+
+        [Test]
+        public void HashThePassword_OnRegister()
+        {
+            //Arrange
+            var clearPass = "pass";
+            var hashedPass = "hashedPassword";
+
+            var user = new User { Email = "email", Username = "username", Password = clearPass};
+            
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
+                       .Returns(hashedPass);
+
+            //Act
+            _sut.RegisterAsync(user).Wait();
+
+            //Assert
+            _cryptoMock.Verify(x=>x.GeneratePasswordHash(clearPass), Times.Once());
+            Assert.AreEqual(user.Password, hashedPass);
+        }
+
+        [Test]
+        public void AssignUTCDateTimeAsRegiterDate_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
+                       .Returns(user.Password);
+            
+            //Act
+            _sut.RegisterAsync(user).Wait();
+
+            //Assert
+            Assert.IsTrue(user.JoinedDate <= DateTime.UtcNow);
+        }
+
+        [Test]
+        public void SaveUserWhenEverythingIsOk_OnRegister()
+        {
+            //Arrange
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
+                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
+                    .Returns(() => Task.Run(() => false));
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
+                       .Returns(user.Password);
+
+            //Act
+            _sut.RegisterAsync(user).Wait();
 
             //Assert
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
