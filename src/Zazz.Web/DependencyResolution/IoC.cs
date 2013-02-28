@@ -38,6 +38,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             x.For<IUoW>().Use<UoW>();
                             x.For<IAuthService>().Use<AuthService>();
+                            x.For<ICryptoService>().Use<CryptoService>();
                         });
             return ObjectFactory.Container;
         }
