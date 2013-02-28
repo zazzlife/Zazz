@@ -10,7 +10,7 @@ namespace Zazz.Core.Interfaces
 
         Task<User> RegisterAsync(User user, bool createToken);
 
-        Task GenerateResetPasswordTokenAsync(string email);
+        Task<ValidationToken> GenerateResetPasswordTokenAsync(string email);
 
         Task<bool> IsTokenValidAsync(int userId, Guid token);
 

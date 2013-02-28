@@ -27,6 +27,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(Task.Run(() => { }));
         }
 
+        #region Login
         [Test]
         public void GetHashOfPassword_OnLogin()
         {
@@ -63,7 +64,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowUserNotExist_WhenUserNotExists()
+        public async Task ThrowUserNotExist_WhenUserNotExists_OnLogin()
         {
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
@@ -139,7 +140,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
         }
+        #endregion
 
+        #region Register
         [Test]
         public void CheckForExistingUser_OnRegister()
         {
@@ -307,7 +310,132 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
         }
+        #endregion
 
+        #region Generate Reset Password Token
 
+        [Test]
+        public void GetUserIdByEmail_OnGenerateResetToken()
+        {
+            //Arrange
+            var email = "email";
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => 12));
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(It.IsAny<int>()))
+                    .Returns(() => Task.Factory.StartNew<ValidationToken>(() => null));
+
+            //Act
+            _sut.GenerateResetPasswordTokenAsync(email).Wait();
+
+            //Assert
+            _uowMock.Verify(x=>x.UserRepository.GetIdByEmailAsync(email), Times.Once());
+        }
+
+        [Test]
+        public async Task ThrowEmailNotExists_WhenEmailNotExists_OnGenerateResetToken()
+        {
+            //Arrange
+            var email = "email";
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => 0));
+
+            try
+            {
+                //Act
+                await _sut.GenerateResetPasswordTokenAsync(email);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (EmailNotExistsException e)
+            {
+                //Assert
+                Assert.IsInstanceOf<EmailNotExistsException>(e);
+            }
+        }
+
+        [Test]
+        public void GenerateValidToken_OnGenerateResetToken()
+        {
+            //Arrange
+            var userId = 12;
+            var email = "email";
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Factory.StartNew<ValidationToken>(() => null));
+
+            //Act
+            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+
+            //Assert
+            Assert.AreEqual(DateTime.UtcNow.AddDays(1).Date, result.ExpirationDate.Date);
+            Assert.IsNotNull(result.Token);
+            Assert.AreEqual(userId, result.Id);
+        }
+
+        [Test]
+        public void DeleteOldTokenRecordIfExists_OnGenerateResetToken()
+        {
+            //Arrange
+            var email = "email";
+            var userId = 1;
+            var token = new ValidationToken();
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Run(() => token));
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
+
+            //Act
+            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+
+            //Assert
+            _uowMock.Verify(x => x.ValidationTokenRepository.GetByIdAsync(userId), Times.Once());
+            _uowMock.Verify(x => x.ValidationTokenRepository.Remove(token), Times.Once());
+
+        }
+
+        [Test]
+        public void NotCallRemoveWhenOldTokenNotExists_OnGenerateResetToken()
+        {
+            //Arrange
+            var email = "email";
+            var userId = 1;
+            var token = new ValidationToken();
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Factory.StartNew<ValidationToken>(() => null));
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
+
+            //Act
+            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+
+            //Assert
+            _uowMock.Verify(x => x.ValidationTokenRepository.GetByIdAsync(userId), Times.Once());
+            _uowMock.Verify(x => x.ValidationTokenRepository.Remove(token), Times.Never());
+        }
+
+        [Test]
+        public void SaveWhenEverythingIsOk_OnGenerateResetToken()
+        {
+            //Arrange
+            var email = "email";
+            var userId = 1;
+            var token = new ValidationToken();
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
+                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(userId))
+                    .Returns(() => Task.Factory.StartNew<ValidationToken>(() => null));
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
+
+            //Act
+            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+
+            //Assert
+            _uowMock.Verify(x=>x.ValidationTokenRepository.InsertGraph(result));
+            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        #endregion
     }
 }

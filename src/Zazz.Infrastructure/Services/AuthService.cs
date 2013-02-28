@@ -64,9 +64,27 @@ namespace Zazz.Infrastructure.Services
             return user;
         }
 
-        public Task GenerateResetPasswordTokenAsync(string email)
+        public async Task<ValidationToken> GenerateResetPasswordTokenAsync(string email)
         {
-            throw new NotImplementedException();
+            var userId = await _uoW.UserRepository.GetIdByEmailAsync(email);
+            if (userId == 0)
+                throw new EmailNotExistsException();
+
+            var token = new ValidationToken
+                            {
+                                ExpirationDate = DateTime.UtcNow.AddDays(1),
+                                Id = userId,
+                                Token = Guid.NewGuid(),
+                            };
+
+            var oldToken = await _uoW.ValidationTokenRepository.GetByIdAsync(userId);
+            if (oldToken != null)
+                _uoW.ValidationTokenRepository.Remove(oldToken);
+
+            _uoW.ValidationTokenRepository.InsertGraph(token);
+            await _uoW.SaveAsync();
+
+            return token;
         }
 
         public Task<bool> IsTokenValidAsync(int userId, Guid token)
