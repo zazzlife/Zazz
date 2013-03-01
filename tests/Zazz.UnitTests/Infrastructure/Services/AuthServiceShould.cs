@@ -658,7 +658,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
         }
 
-        [Test] public async Task SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
+        [Test]
+        public async Task SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
         {
             //Arrange
             var userId = 12;
@@ -679,7 +680,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
 
             //Assert
-            
+
             Assert.AreEqual(newPassHash, user.Password);
             _uowMock.Verify(x => x.SaveAsync());
             _uowMock.Verify(x => x.UserRepository.GetByIdAsync(userId), Times.Once());
@@ -692,36 +693,100 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Get OAuth User
 
         [Test]
-        public async Task CheckForUserByEmailFirst_OnGetOAuthUser()
+        public async Task CheckForOAuthAccountFirstAndNotLookForEmailIfExists_OnGetOAuthUserAsync()
         {
             //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
             var email = "email";
-            var oauthId = 123L;
-            var user = new User();
+            var user = new User {Email = email};
+            var oauthAccount = new OAuthAccount {ProviderUserId = providerId, Provider = provider};
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => Task.Run(() => oauthAccount));
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Run(() => user));
 
             //Act
-            var u = await _sut.GetOAuthUserAsync(oauthId, email);
+            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task CheckForUserWithEmailIFOAuthAccountNotExists_OnGetOAuthUserAsync()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+            var email = "email";
+            var user = new User { Email = email };
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
+                    .Returns(() => Task.Run(() => user));
+
+            //Act
+            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+
+            //Assert
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
         }
 
         [Test]
-        public async Task GetOAuthUserByIdWhenUserWithEmailNotExists_OnGetOAuthUser()
+        public async Task AddOAuthAccountIfUserExistsAndOAuthAccountIsNot_OnGetOAuthUserAsync()
         {
             //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
             var email = "email";
-            var oauthId = 123L;
+            var user = new User { Email = email, Id = 23};
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
+                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.OAuthAccountRepository.InsertGraph(oauthAccount));
+
+            //Act
+            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+
+            //Assert
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
+            Assert.AreEqual(user.Id, oauthAccount.UserId);
+            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        [Test]
+        public async Task ReturnNullIfNotUserNorOAuthAccountExists_OnGetOAuthUserAsync()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+            var email = "email";
+            var user = new User { Email = email };
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Factory.StartNew<User>(() => null));
 
             //Act
-            var u = await _sut.GetOAuthUserAsync(oauthId, email);
+            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
-            Assert.Fail();
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+            Assert.IsNull(result);
         }
 
         #endregion

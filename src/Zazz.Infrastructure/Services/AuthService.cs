@@ -128,11 +128,25 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public async Task<User> GetOAuthUserAsync(long oauthId, string email)
+        public async Task<User> GetOAuthUserAsync(OAuthAccount oAuthAccount, string email)
         {
-            var user = await _uoW.UserRepository.GetByEmailAsync(email);
+            var existingOAuthAccount = await _uoW.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
+                                                                        oAuthAccount.Provider);
+            if (existingOAuthAccount != null)
+                return existingOAuthAccount.User; // user and OAuth account exist
 
-            return user;
+            var user = await _uoW.UserRepository.GetByEmailAsync(email);
+            if (user != null)
+            {
+                oAuthAccount.UserId = user.Id;
+                _uoW.OAuthAccountRepository.InsertGraph(oAuthAccount);
+
+                await _uoW.SaveAsync();
+
+                return user;
+            }
+
+            return null;
         }
 
         public void Dispose()

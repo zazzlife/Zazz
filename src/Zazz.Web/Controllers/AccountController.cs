@@ -142,11 +142,15 @@ namespace Zazz.Web.Controllers
 
         public ActionResult OAuth(string id)
         {
-            return new OAuthLoginResult(id, "/account/oauthcallback");
+            return new OAuthLoginResult(id, "/account/oauthcallback/" + id);
         }
 
-        public async Task<ActionResult> OAuthCallback()
+        public async Task<ActionResult> OAuthCallback(string id)
         {
+            OAuthProvider provider;
+            if (!OAuthProvider.TryParse(id, true, out provider))
+                throw new Exception("Unable to verify the provider");
+
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
             {
@@ -154,12 +158,21 @@ namespace Zazz.Web.Controllers
                 return View("Login");
             }
 
-            var id = result.ExtraData["id"];
+            var oauthVersion = OAuthVersion.Two; //TODO : assign the correct version.
+            var providerId = result.ExtraData["id"];
             var name = result.ExtraData["name"];
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
-            var user = await _authService.GetOAuthUserAsync(long.Parse(id), email);
+            var oauthAccount = new Zazz.Core.Models.Data.OAuthAccount
+                                   {
+                                       AccessToken = accessToken,
+                                       OAuthVersion = oauthVersion,
+                                       Provider = provider,
+                                       ProviderUserId = long.Parse(providerId)
+                                   };
+
+            var user = await _authService.GetOAuthUserAsync(oauthAccount, email);
             if (user != null)
             {
                 //user exists
