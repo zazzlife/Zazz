@@ -13,5 +13,7 @@ namespace Zazz.Web.Models
         public string AccessToken { get; set; }
 
         public OAuthProvider Provider { get; set; }
+
+        public OAuthVersion OAuthVersion { get; set; }
     }
 }

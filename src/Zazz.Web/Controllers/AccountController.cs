@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web;
@@ -14,6 +15,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
 using Zazz.Web.Models;
+using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;
 
 namespace Zazz.Web.Controllers
 {
@@ -107,6 +109,8 @@ namespace Zazz.Web.Controllers
 
                     //TODO: send welcome email.
 
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+
                     return RedirectToAction("Index", "Home");
                 }
                 catch (UsernameExistsException)
@@ -190,7 +194,8 @@ namespace Zazz.Web.Controllers
                                         Email = email,
                                         Name = name,
                                         Provider = provider,
-                                        ProviderUserId = long.Parse(providerId)
+                                        ProviderUserId = long.Parse(providerId),
+                                        OAuthVersion = oauthVersion
                                     };
 
                 TempData["oauthData"] = oauthData;
@@ -221,12 +226,66 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult OAuthRegister(OAuthRegisterViewModel registerViewModel)
+        public async Task<ActionResult> OAuthRegister(OAuthRegisterViewModel registerVm)
         {
-            registerViewModel.Cities = _staticData.GetCities();
-            registerViewModel.Schools = _staticData.GetSchools();
-            registerViewModel.Majors = _staticData.GetMajors();
-            return View(registerViewModel);
+            if (ModelState.IsValid)
+            {
+                var oauthDataSignature = _cryptoService.GenerateTextSignature(registerVm.OAuthProvidedData);
+                if (oauthDataSignature != registerVm.ProvidedDataSignature)
+                    throw new SecurityException("Unable to verify data integrity.");
+
+                var oauthData = JsonConvert.DeserializeObject<OAuthLoginResponse>(registerVm.OAuthProvidedData);
+
+                var user = new User
+                {
+                    CityId = registerVm.CityId,
+                    Email = oauthData.Email,
+                    JoinedDate = DateTime.UtcNow,
+                    IsConfirmed = false,
+                    LastActivity = DateTime.UtcNow,
+                    FullName = registerVm.FullName,
+                    MajorId = registerVm.MajorId,
+                    Password = registerVm.Password,
+                    PublicEmail = registerVm.PublicEmail,
+                    SchoolId = registerVm.SchoolId,
+                    Username = registerVm.UserName
+                };
+                user.LinkedAccounts = new List<OAuthAccount>
+                                          {
+                                              new OAuthAccount
+                                                  {
+                                                      AccessToken = oauthData.AccessToken,
+                                                      OAuthVersion = oauthData.OAuthVersion,
+                                                      Provider = oauthData.Provider,
+                                                      ProviderUserId = oauthData.ProviderUserId
+                                                  }
+                                          };
+                try
+                {
+                    await _authService.RegisterAsync(user, false);
+
+                    //TODO: send welcome email.
+
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (UsernameExistsException)
+                {
+                    ShowAlert("Username is already exists.", AlertType.Warning);
+                }
+                catch (EmailExistsException)
+                {
+                    ShowAlert("Sorry we're unable to register you at this moment. Please contact us.", AlertType.Warning);
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            registerVm.Cities = _staticData.GetCities();
+            registerVm.Schools = _staticData.GetSchools();
+            registerVm.Majors = _staticData.GetMajors();
+
+            return View(registerVm);
         }
 
         public ActionResult SignOut()
