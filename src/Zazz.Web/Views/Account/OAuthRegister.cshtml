@@ -1,4 +1,4 @@
-﻿@model Zazz.Web.Models.RegisterViewModel
+﻿@model Zazz.Web.Models.OAuthRegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -17,6 +17,9 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
+            @Html.HiddenFor(m => m.OAuthProvidedData)
+            @Html.HiddenFor(m => m.ProvidedDataSignature)
+            
             <fieldset>
                 <legend>Almost done!</legend>
                 @if (TempData["alert"] != null && ((bool)TempData["alert"]))

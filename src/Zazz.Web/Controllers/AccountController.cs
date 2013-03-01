@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
+using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -20,11 +21,13 @@ namespace Zazz.Web.Controllers
     {
         private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
+        private readonly ICryptoService _cryptoService;
 
-        public AccountController(IStaticDataRepository staticData, IAuthService authService)
+        public AccountController(IStaticDataRepository staticData, IAuthService authService, ICryptoService cryptoService)
         {
             _staticData = staticData;
             _authService = authService;
+            _cryptoService = cryptoService;
         }
 
         [HttpGet]
@@ -180,7 +183,25 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                throw new NotImplementedException("Redirect user to register page and hold the oauth info.");
+                var oauthData = new OAuthLoginResponse
+                                    {
+                                        AccessToken = accessToken,
+                                        Email = email,
+                                        Name = name,
+                                        Provider = provider,
+                                        ProviderUserId = long.Parse(providerId)
+                                    };
+
+                var jsonData = JsonConvert.SerializeObject(oauthData, Formatting.None);
+                var jsonSign = _cryptoService.GenerateTextSignature(jsonData);
+
+                var registerPageVM = new OAuthRegisterViewModel
+                                         {
+                                             OAuthProvidedData = jsonData,
+                                             ProvidedDataSignature = jsonData
+                                         };
+
+                return View("OAuthRegister", registerPageVM);
             }
 
             return RedirectToAction("Index", "Home");

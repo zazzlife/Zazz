@@ -214,6 +214,8 @@
     </Compile>
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\OAuthLoginResponse.cs" />
+    <Compile Include="Models\OAuthRegisterViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
