@@ -32,15 +32,26 @@ namespace Zazz.Web.Controllers
             _cryptoService = cryptoService;
         }
 
+        public ActionResult Index()
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpGet]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel login, string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             if (ModelState.IsValid)
             {
                 try
@@ -71,6 +82,9 @@ namespace Zazz.Web.Controllers
         public ActionResult Register()
         {
             if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            if (User.Identity.IsAuthenticated)
                 RedirectToAction("Index", "Home");
 
             var vm = new RegisterViewModel
@@ -86,6 +100,9 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel registerVm)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             if (ModelState.IsValid)
             {
                 var user = new User
@@ -133,12 +150,18 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult Recover()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Recover(string email)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             if (ModelState.IsValid)
             {
                 try
@@ -166,6 +189,9 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> ResetPassword(int? id, Guid? token)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             if (!id.HasValue || !token.HasValue)
                 throw new HttpException(404, "Requested url is not valid");
 
@@ -184,9 +210,12 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(int id, Guid token, ResetPasswordModel resetPasswordModel)
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             if (ModelState.IsValid)
             {
                 await _authService.ResetPasswordAsync(id, token, resetPasswordModel.NewPassword);
@@ -276,6 +305,9 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult OAuthRegister()
         {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
             var oAuthResponse = TempData["oauthData"] as OAuthLoginResponse;
 
             var jsonData = JsonConvert.SerializeObject(oAuthResponse, Formatting.None);
