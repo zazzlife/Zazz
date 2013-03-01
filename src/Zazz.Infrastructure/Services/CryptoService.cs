@@ -28,14 +28,26 @@ namespace Zazz.Infrastructure.Services
             if (String.IsNullOrEmpty(password))
                 throw new ArgumentNullException("password");
 
-            var hmacsha1 = new HMACSHA1(PasswordHashSecret);
-            var passBytes = Encoding.UTF8.GetBytes(password);
+            return ComputeHash(PasswordHashSecret, password);
+        }
 
-            var hash = hmacsha1.ComputeHash(passBytes);
+        public string GenerateTextSignature(string clearText)
+        {
+            if (String.IsNullOrEmpty(clearText))
+                throw new ArgumentNullException("clearText");
+
+            return ComputeHash(RandomSignHashSecret, clearText);
+        }
+
+        private string ComputeHash(byte[] secretKey, string clearText)
+        {
+            var hmacsha1 = new HMACSHA1(secretKey);
+            var textBytes = Encoding.UTF8.GetBytes(clearText);
+
+            var hash = hmacsha1.ComputeHash(textBytes);
 
             return Convert.ToBase64String(hash);
         }
-
 
 
         /*KEYS FOR LATER USE
@@ -47,6 +59,7 @@ namespace Zazz.Infrastructure.Services
          * 64 bit
          * eQCCZ7vEAwE=
          * {121, 0, 130, 103, 187, 196, 3, 1}
+         
          */
     }
 }
