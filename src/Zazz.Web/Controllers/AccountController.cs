@@ -145,15 +145,11 @@ namespace Zazz.Web.Controllers
 
         public ActionResult OAuth(string id)
         {
-            return new OAuthLoginResult(id, "/account/oauthcallback/" + id);
+            return new OAuthLoginResult(id, "/account/oauthcallback");
         }
 
-        public async Task<ActionResult> OAuthCallback(string id)
+        public async Task<ActionResult> OAuthCallback()
         {
-            OAuthProvider provider;
-            if (!OAuthProvider.TryParse(id, true, out provider))
-                throw new Exception("Unable to verify the provider");
-
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
             {
@@ -162,8 +158,13 @@ namespace Zazz.Web.Controllers
             }
 
             var oauthVersion = OAuthVersion.Two; //TODO : assign the correct version.
-            var providerId = result.ExtraData["id"];
-            var name = result.ExtraData["name"];
+            
+            OAuthProvider provider;
+            if (!OAuthProvider.TryParse(result.Provider, true, out provider))
+                throw new Exception("Unable to validate the provider");
+
+            var providerId = result.ProviderUserId;
+            var name = result.UserName;
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
@@ -198,7 +199,10 @@ namespace Zazz.Web.Controllers
                 var registerPageVM = new OAuthRegisterViewModel
                                          {
                                              OAuthProvidedData = jsonData,
-                                             ProvidedDataSignature = jsonData
+                                             ProvidedDataSignature = jsonSign,
+                                             Cities = _staticData.GetCities(),
+                                             Majors = _staticData.GetMajors(),
+                                             Schools = _staticData.GetSchools()
                                          };
 
                 return View("OAuthRegister", registerPageVM);
