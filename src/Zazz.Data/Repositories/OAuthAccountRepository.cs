@@ -38,6 +38,20 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Where(o => o.UserId == userId).AsEnumerable());
         }
 
+        public Task<OAuthAccount> GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
+        {
+            return Task.Run(() => DbSet.Where(o => o.OAuthProvider == provider)
+                                       .Where(o => o.ProviderUserId == providerUserId)
+                                       .SingleOrDefault());
+        }
+
+        public Task<bool> OAuthAccountExistsAsync(long providerUserId, OAuthProvider provider)
+        {
+            return Task.Run(() => DbSet.Where(o => o.ProviderUserId == providerUserId)
+                                       .Where(o => o.OAuthProvider == provider)
+                                       .Any());
+        }
+
         public async Task RemoveAsync(int userId, OAuthProvider provider)
         {
             var item = await GetUserAccountAsync(userId, provider);

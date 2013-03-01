@@ -688,5 +688,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         #endregion
+
+        #region Get OAuth User
+
+        [Test]
+        public async Task CheckForUserByEmailFirst_OnGetOAuthUser()
+        {
+            //Arrange
+            var email = "email";
+            var oauthId = 123L;
+            var user = new User();
+            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
+                    .Returns(() => Task.Run(() => user));
+
+            //Act
+            var u = await _sut.GetOAuthUserAsync(oauthId, email);
+
+            //Assert
+            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+        }
+
+        [Test]
+        public async Task GetOAuthUserByIdWhenUserWithEmailNotExists_OnGetOAuthUser()
+        {
+            //Arrange
+            var email = "email";
+            var oauthId = 123L;
+            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
+                    .Returns(() => Task.Factory.StartNew<User>(() => null));
+
+            //Act
+            var u = await _sut.GetOAuthUserAsync(oauthId, email);
+
+            //Assert
+            Assert.Fail();
+        }
+
+        #endregion
     }
 }

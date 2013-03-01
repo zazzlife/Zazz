@@ -159,7 +159,7 @@ namespace Zazz.Web.Controllers
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
-            var user = await _authService.GetOAuthUser(long.Parse(id), email);
+            var user = await _authService.GetOAuthUserAsync(long.Parse(id), email);
             if (user != null)
             {
                 //user exists

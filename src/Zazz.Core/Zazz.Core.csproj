@@ -53,6 +53,7 @@
     <Compile Include="Exceptions\EmailNotExistsException.cs" />
     <Compile Include="Exceptions\InvalidPasswordException.cs" />
     <Compile Include="Exceptions\InvalidTokenException.cs" />
+    <Compile Include="Exceptions\OAuthAccountAlreadyExistsException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />

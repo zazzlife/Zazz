@@ -128,6 +128,13 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
+        public async Task<User> GetOAuthUserAsync(long oauthId, string email)
+        {
+            var user = await _uoW.UserRepository.GetByEmailAsync(email);
+
+            return user;
+        }
+
         public void Dispose()
         {
             _uoW.Dispose();
