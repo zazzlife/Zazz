@@ -21,7 +21,7 @@
             @Html.HiddenFor(m => m.ProvidedDataSignature)
             
             <fieldset>
-                <legend>Almost done!</legend>
+                <legend>Choose a username and password.</legend>
                 @if (TempData["alert"] != null && ((bool)TempData["alert"]))
                 {
                     <div class="alert alert-block @TempData["alertClass"]">
@@ -114,6 +114,7 @@
                                 @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        <hr/>
                         <p>
                             <input type="submit" value="Register" class="btn btn-primary" style="margin-top: 25px;"/>
                         </p>

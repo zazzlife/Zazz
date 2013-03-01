@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Data
     public class OAuthAccount : BaseEntity
     {
         [ForeignKey("UserId")]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         public int UserId { get; set; }
 
@@ -15,8 +15,6 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(255)]
         public string AccessToken { get; set; }
-
-        public DateTime TokenExpirationDate { get; set; }
 
         public OAuthProvider Provider { get; set; }
 

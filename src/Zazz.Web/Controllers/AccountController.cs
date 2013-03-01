@@ -243,14 +243,14 @@ namespace Zazz.Web.Controllers
                     CityId = registerVm.CityId,
                     Email = oauthData.Email,
                     JoinedDate = DateTime.UtcNow,
-                    IsConfirmed = false,
+                    IsConfirmed = true,
                     LastActivity = DateTime.UtcNow,
                     FullName = registerVm.FullName,
                     MajorId = registerVm.MajorId,
                     Password = registerVm.Password,
                     PublicEmail = registerVm.PublicEmail,
                     SchoolId = registerVm.SchoolId,
-                    Username = registerVm.UserName
+                    Username = registerVm.UserName,
                 };
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {

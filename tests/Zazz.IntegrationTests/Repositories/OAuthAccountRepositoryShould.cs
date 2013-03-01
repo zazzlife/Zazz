@@ -34,7 +34,6 @@ namespace Zazz.IntegrationTests.Repositories
                                        AccessToken = Guid.NewGuid().ToString(),
                                        Provider = OAuthProvider.Facebook,
                                        OAuthVersion = OAuthVersion.Two,
-                                       TokenExpirationDate = DateTime.Now.AddDays(1),
                                        UserId = user.Id
                                    };
 
@@ -56,7 +55,6 @@ namespace Zazz.IntegrationTests.Repositories
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
-                TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
             };
 
@@ -85,7 +83,6 @@ namespace Zazz.IntegrationTests.Repositories
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
-                TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
             };
 
@@ -114,7 +111,6 @@ namespace Zazz.IntegrationTests.Repositories
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
-                TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
             };
 
@@ -170,7 +166,6 @@ namespace Zazz.IntegrationTests.Repositories
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Facebook,
                                                   OAuthVersion = OAuthVersion.Two,
-                                                  TokenExpirationDate = DateTime.Now.AddDays(1),
                                                   UserId = user.Id
                                               },
                                           new OAuthAccount
@@ -178,7 +173,6 @@ namespace Zazz.IntegrationTests.Repositories
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Microsoft,
                                                   OAuthVersion = OAuthVersion.Two,
-                                                  TokenExpirationDate = DateTime.Now.AddDays(1),
                                                   UserId = user.Id
                                               }
                                       };
@@ -219,7 +213,6 @@ namespace Zazz.IntegrationTests.Repositories
                                        OAuthVersion = OAuthVersion.Two,
                                        Provider = OAuthProvider.Facebook,
                                        ProviderUserId = providerUserId,
-                                       TokenExpirationDate = DateTime.Now,
                                        UserId = user.Id
                                    };
 
@@ -261,7 +254,6 @@ namespace Zazz.IntegrationTests.Repositories
                 OAuthVersion = OAuthVersion.Two,
                 Provider = OAuthProvider.Facebook,
                 ProviderUserId = providerUserId,
-                TokenExpirationDate = DateTime.Now,
                 UserId = user.Id
             };
 
