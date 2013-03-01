@@ -109,7 +109,7 @@ namespace Zazz.Infrastructure.Services
             var newPassHash = _cryptoService.GeneratePasswordHash(newPassword);
 
             user.Password = newPassHash;
-
+            await _uoW.ValidationTokenRepository.RemoveAsync(user.Id);
             await _uoW.SaveAsync();
         }
 

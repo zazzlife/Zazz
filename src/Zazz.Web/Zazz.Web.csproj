@@ -213,6 +213,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AlertType.cs" />
+    <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\OAuthLoginResponse.cs" />
     <Compile Include="Models\OAuthRegisterViewModel.cs" />
@@ -337,6 +338,7 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\OAuthRegister.cshtml" />
     <Content Include="Views\Account\Recover.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

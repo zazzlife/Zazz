@@ -527,6 +527,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var newPass = "newpass";
             var newPassHash = "hash";
+            var user = new User { Password = "pass" };
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
             _cryptoMock.Setup(x => x.GeneratePasswordHash(newPass))
                        .Returns(() => newPassHash);
@@ -534,6 +535,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => Task.Run(() => token));
             _uowMock.Setup(x => x.UserRepository.GetByIdAsync(token.Id))
                     .Returns(() => Task.Run(() => new User()));
+            _uowMock.Setup(x => x.ValidationTokenRepository.RemoveAsync(user.Id))
+                    .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
@@ -558,12 +561,43 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.UserRepository.GetByIdAsync(token.Id))
                     .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.ValidationTokenRepository.RemoveAsync(user.Id))
+                    .Returns(() => Task.Run(() => { }));
             //Act
             await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
 
             //Assert
             Assert.AreEqual(newPassHash, user.Password);
             _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        [Test]
+        public async Task RemoveTokenOnSuccessfulReset_OnResetPassword()
+        {
+            //Arrange
+            var newPass = "newpass";
+            var newPassHash = "hash";
+            var user = new User { Password = "pass" };
+            var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
+
+            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPass))
+                       .Returns(() => newPassHash);
+            _uowMock.Setup(x => x.ValidationTokenRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => token));
+
+            _uowMock.Setup(x => x.UserRepository.GetByIdAsync(token.Id))
+                    .Returns(() => Task.Run(() => user));
+
+            _uowMock.Setup(x => x.ValidationTokenRepository.RemoveAsync(user.Id))
+                    .Returns(() => Task.Run(() => { }));
+            
+            //Act
+            await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
+
+            //Assert
+            Assert.AreEqual(newPassHash, user.Password);
+            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.ValidationTokenRepository.RemoveAsync(user.Id));
         }
 
         #endregion

@@ -136,7 +136,7 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> Recover(string email)
         {
             if (ModelState.IsValid)
@@ -158,6 +158,41 @@ namespace Zazz.Web.Controllers
                 {
                     ShowAlert("Email not found", AlertType.Warning);
                 }
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ResetPassword(int? id, Guid? token)
+        {
+            if (!id.HasValue || !token.HasValue)
+                throw new HttpException(404, "Requested url is not valid");
+
+            try
+            {
+                var isTokenValid = await _authService.IsTokenValidAsync(id.Value, token.Value);
+                if (!isTokenValid)
+                    throw new HttpException(404, "Requested url is not valid");
+            }
+            catch (TokenExpiredException)
+            {
+                ShowAlert("This token has been expired. Please request a new one.", AlertType.Warning);
+                return RedirectToAction("Recover");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(int id, Guid token, ResetPasswordModel resetPasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _authService.ResetPasswordAsync(id, token, resetPasswordModel.NewPassword);
+                ShowAlert("Your password has been successfully changed.", AlertType.Success);
+
+                return RedirectToAction("Login");
             }
 
             return View();
