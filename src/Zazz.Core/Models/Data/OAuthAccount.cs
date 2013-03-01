@@ -18,7 +18,7 @@ namespace Zazz.Core.Models.Data
 
         public DateTime TokenExpirationDate { get; set; }
 
-        public OAuthProvider OAuthProvider { get; set; }
+        public OAuthProvider Provider { get; set; }
 
         public OAuthVersion OAuthVersion { get; set; }
     }

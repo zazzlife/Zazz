@@ -21,7 +21,8 @@ namespace Zazz.Data.Repositories
                 throw new ArgumentException("User id cannot be 0");
 
             return DbSet.Where(o => o.UserId == item.UserId)
-                        .Where(o => o.OAuthProvider == item.OAuthProvider)
+                        .Where(o => o.Provider == item.Provider)
+                        .Where(o => o.ProviderUserId == item.ProviderUserId)
                         .Select(o => o.Id)
                         .SingleOrDefault();
         }
@@ -29,7 +30,7 @@ namespace Zazz.Data.Repositories
         public Task<OAuthAccount> GetUserAccountAsync(int userId, OAuthProvider provider)
         {
             return Task.Run(() => DbSet.Where(o => o.UserId == userId)
-                                       .Where(o => o.OAuthProvider == provider)
+                                       .Where(o => o.Provider == provider)
                                        .SingleOrDefault());
         }
 
@@ -40,7 +41,7 @@ namespace Zazz.Data.Repositories
 
         public Task<OAuthAccount> GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
         {
-            return Task.Run(() => DbSet.Where(o => o.OAuthProvider == provider)
+            return Task.Run(() => DbSet.Where(o => o.Provider == provider)
                                        .Where(o => o.ProviderUserId == providerUserId)
                                        .SingleOrDefault());
         }
@@ -48,7 +49,7 @@ namespace Zazz.Data.Repositories
         public Task<bool> OAuthAccountExistsAsync(long providerUserId, OAuthProvider provider)
         {
             return Task.Run(() => DbSet.Where(o => o.ProviderUserId == providerUserId)
-                                       .Where(o => o.OAuthProvider == provider)
+                                       .Where(o => o.Provider == provider)
                                        .Any());
         }
 

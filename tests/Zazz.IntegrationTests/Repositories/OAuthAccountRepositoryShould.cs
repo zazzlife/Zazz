@@ -32,7 +32,7 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
                                    {
                                        AccessToken = Guid.NewGuid().ToString(),
-                                       OAuthProvider = OAuthProvider.Facebook,
+                                       Provider = OAuthProvider.Facebook,
                                        OAuthVersion = OAuthVersion.Two,
                                        TokenExpirationDate = DateTime.Now.AddDays(1),
                                        UserId = user.Id
@@ -54,7 +54,7 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
-                OAuthProvider = OAuthProvider.Facebook,
+                Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
                 TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
@@ -83,7 +83,7 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
-                OAuthProvider = OAuthProvider.Facebook,
+                Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
                 TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
@@ -112,7 +112,7 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
-                OAuthProvider = OAuthProvider.Facebook,
+                Provider = OAuthProvider.Facebook,
                 OAuthVersion = OAuthVersion.Two,
                 TokenExpirationDate = DateTime.Now.AddDays(1),
                 UserId = user.Id
@@ -152,11 +152,11 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = user.LinkedAccounts.First();
 
             //Act
-            _repo.RemoveAsync(user.Id, oauthAccount.OAuthProvider).Wait();
+            _repo.RemoveAsync(user.Id, oauthAccount.Provider).Wait();
             _context.SaveChanges();
 
             //Assert
-            var check = _repo.GetUserAccountAsync(user.Id, oauthAccount.OAuthProvider).Result;
+            var check = _repo.GetUserAccountAsync(user.Id, oauthAccount.Provider).Result;
             Assert.IsNull(check);
         }
 
@@ -168,7 +168,7 @@ namespace Zazz.IntegrationTests.Repositories
                                           new OAuthAccount
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
-                                                  OAuthProvider = OAuthProvider.Facebook,
+                                                  Provider = OAuthProvider.Facebook,
                                                   OAuthVersion = OAuthVersion.Two,
                                                   TokenExpirationDate = DateTime.Now.AddDays(1),
                                                   UserId = user.Id
@@ -176,7 +176,7 @@ namespace Zazz.IntegrationTests.Repositories
                                           new OAuthAccount
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
-                                                  OAuthProvider = OAuthProvider.Microsoft,
+                                                  Provider = OAuthProvider.Microsoft,
                                                   OAuthVersion = OAuthVersion.Two,
                                                   TokenExpirationDate = DateTime.Now.AddDays(1),
                                                   UserId = user.Id
@@ -194,6 +194,89 @@ namespace Zazz.IntegrationTests.Repositories
             return user;
         }
 
+        [Test]
+        public void ReturnFalseWhenOAuthAccountNotExists_OnOAuthAccountExists()
+        {
+            //Arrange
+            var user = AddUser();
+
+            //Act
+            var result = _repo.OAuthAccountExistsAsync(1234L, OAuthProvider.Facebook).Result;
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ReturnTrueWhenOAuthAccountExists_OnOAuthAccountExists()
+        {
+            //Arrange
+            var providerUserId = 123L;
+            var user = AddUser();
+            var oauthAccount = new OAuthAccount
+                                   {
+                                       AccessToken = "token",
+                                       OAuthVersion = OAuthVersion.Two,
+                                       Provider = OAuthProvider.Facebook,
+                                       ProviderUserId = providerUserId,
+                                       TokenExpirationDate = DateTime.Now,
+                                       UserId = user.Id
+                                   };
+
+            using (var context = new ZazzDbContext())
+            {
+                context.OAuthAccounts.Add(oauthAccount);
+                context.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.OAuthAccountExistsAsync(providerUserId, OAuthProvider.Facebook).Result;
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ReturnNullWhenAccountNotExists_OnGetOAuthAccountByProviderId()
+        {
+            //Arrange
+            var user = AddUser();
+
+            //Act
+            var result = _repo.GetOAuthAccountByProviderId(1234L, OAuthProvider.Facebook).Result;
+
+            //Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ReturnOAuthAccountWhenExists_OnGetOAuthAccountByProviderId()
+        {
+            //Arrange
+            var providerUserId = 123L;
+            var user = AddUser();
+            var oauthAccount = new OAuthAccount
+            {
+                AccessToken = "token",
+                OAuthVersion = OAuthVersion.Two,
+                Provider = OAuthProvider.Facebook,
+                ProviderUserId = providerUserId,
+                TokenExpirationDate = DateTime.Now,
+                UserId = user.Id
+            };
+
+            using (var context = new ZazzDbContext())
+            {
+                context.OAuthAccounts.Add(oauthAccount);
+                context.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetOAuthAccountByProviderId(providerUserId, OAuthProvider.Facebook).Result;
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
 
         private User AddUser()
         {
@@ -207,5 +290,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             return user;
         }
+
+
     }
 }
