@@ -1,4 +1,11 @@
-﻿/***************************************
+﻿@font-face {
+  font-family: 'Alfa Slab One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Alfa Slab One'), local('AlfaSlabOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/alfaslabone/v2/Qx6FPcitRwTC_k88tLPc-fn8qdNnd5eCmWXua5W-n7c.woff) format('woff');
+}
+
+/***************************************
     Bootstrap overrides and additions
 ***************************************/
 
@@ -22,6 +29,15 @@
 /***************************************
         Global
 ***************************************/
+.alfa-slab-font {
+    font-family: 'Alfa Slab One';
+    font-size: 28px;
+}
+
+.textSeperator {
+    margin: 0 10px;
+    font-size: 40px;
+}
 
 .required:after {
     content : " *";
@@ -48,6 +64,11 @@
     text-transform: capitalize;
 }
 
+hr.dark-line {
+    height: 1px;
+    background-color: #666666;
+}
+
 .field-validation-error {
     margin-bottom: 10px;
 }
@@ -61,6 +82,10 @@
     margin-top: 12px;
     margin-left: 10px;
     font-size: 16px;
+}
+
+#mainContent {
+    padding-top: 50px;
 }
 /***************************************
         Landing page
