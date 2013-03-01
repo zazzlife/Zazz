@@ -16,7 +16,7 @@
 }
 
 .container {
-    width: 1000px;
+    width: 1000px !important;
 }
 
 /***************************************
@@ -40,10 +40,28 @@
     background-color: #fafafa;
 }
 
+.uppercase {
+    text-transform: uppercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
 .field-validation-error {
     margin-bottom: 10px;
 }
 
+#navbarSearch {
+    padding-left: 30px;
+}
+
+#searchIcon {
+    position: absolute;
+    margin-top: 12px;
+    margin-left: 10px;
+    font-size: 16px;
+}
 /***************************************
         Landing page
 ***************************************/

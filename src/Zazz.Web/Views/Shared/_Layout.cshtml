@@ -24,13 +24,26 @@
                 <a class="brand" href="#">ZaZZ</a>
                 <div class="pull-left">
                     <!--LEFT ITEMS-->
+                    <form class="navbar-form" style="margin-left: 230px;">
+                        <i class="icon-search" id="searchIcon"></i>
+                        <input id="navbarSearch" class="span3" type="search" placeholder="Search"/>    
+                    </form>
+                    
                 </div>
                 <div class="pull-right">
                     <!--RIGHT ITEMS-->
                     <ul class="nav">
-                        <li><a href="#">Link1</a></li>
-                        <li><a href="#">Link2</a></li>
-                        <li><a href="#">Link3</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">My Zazz Life</a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i><i class="icon-caret-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Edit Profile</a></li>
+                                <li><a href="#">Change Password</a></li>
+                                <li class="divider"></li>
+                                <li><a href="~/account/signout">Sign Out</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>
