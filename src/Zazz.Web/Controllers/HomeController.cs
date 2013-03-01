@@ -10,7 +10,14 @@ namespace Zazz.Web.Controllers
     {
         public ActionResult Index()
         {
-            return View("LandingPage");
+            if (User.Identity.IsAuthenticated)
+            {
+                return View("UserHome");
+            }
+            else
+            {
+                return View("LandingPage");    
+            }
         }
 
         public ActionResult About()

@@ -339,6 +339,7 @@
     <Content Include="Views\Account\OAuthRegister.cshtml" />
     <Content Include="Views\Account\Recover.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Home\UserHome.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
