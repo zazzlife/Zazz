@@ -209,6 +209,7 @@ namespace Zazz.Web.Controllers
 
             var registerPageVM = new OAuthRegisterViewModel
             {
+                FullName = oAuthResponse.Name,
                 OAuthProvidedData = jsonData,
                 ProvidedDataSignature = jsonSign,
                 Cities = _staticData.GetCities(),
@@ -222,6 +223,9 @@ namespace Zazz.Web.Controllers
         [HttpPost]
         public ActionResult OAuthRegister(OAuthRegisterViewModel registerViewModel)
         {
+            registerViewModel.Cities = _staticData.GetCities();
+            registerViewModel.Schools = _staticData.GetSchools();
+            registerViewModel.Majors = _staticData.GetMajors();
             return View(registerViewModel);
         }
 
