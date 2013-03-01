@@ -152,12 +152,23 @@ namespace Zazz.Web.Controllers
             {
                 ShowAlert("Operation was not successful. Please try again later.", AlertType.Warning);
                 return View("Login");
-            }   
+            }
 
             var id = result.ExtraData["id"];
             var name = result.ExtraData["name"];
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
+
+            var user = await _authService.GetOAuthUser(long.Parse(id), email);
+            if (user != null)
+            {
+                //user exists
+                FormsAuthentication.SetAuthCookie(user.Username, true);
+            }
+            else
+            {
+                throw new NotImplementedException("Redirect user to register page and hold the oauth info.");
+            }
 
             return RedirectToAction("Index", "Home");
         }

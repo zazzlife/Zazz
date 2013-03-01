@@ -17,5 +17,7 @@ namespace Zazz.Core.Interfaces
         Task ResetPasswordAsync(int userId, Guid token, string newPassword);
         
         Task ChangePasswordAsync(int userId, string currentPassword, string newPassword);
+        
+        Task<User> GetOAuthUser(long oauthId, string email);
     }
 }
