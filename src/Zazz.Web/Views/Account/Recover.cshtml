@@ -1,0 +1,52 @@
+﻿@model Zazz.Web.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Recover Account";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="container">
+    <div>
+        <h1>Zazz</h1>
+    </div>
+
+    <div class="well" style="margin-top: 50px;">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>@ViewBag.Title</legend>
+                @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                {
+                    <div class="alert alert-block @TempData["alertClass"]">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>@TempData["alertMessage"]</p>
+                    </div>
+                }
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "span4"})
+                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <hr />
+                <p>
+                    <input type="submit" value="Submit" class="btn btn-primary" style="margin-top: 25px;" />
+                </p>
+            </fieldset>
+            
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/js")
+}

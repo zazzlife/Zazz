@@ -130,6 +130,39 @@ namespace Zazz.Web.Controllers
             return View(registerVm);
         }
 
+        [HttpGet]
+        public ActionResult Recover()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Recover(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var token = await _authService.GenerateResetPasswordTokenAsync(email);
+
+                    //TODO: send email
+                    var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, token.Token.ToString());
+                    var message = String.Format(
+                        "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", email,
+                        Environment.NewLine, "test: " + resetLink);
+                    
+                    ShowAlert(message, AlertType.Success);
+
+                }
+                catch (EmailNotExistsException)
+                {
+                    ShowAlert("Email not found", AlertType.Warning);
+                }
+            }
+
+            return View();
+        }
+
         internal class OAuthLoginResult : ActionResult
         {
             public OAuthLoginResult(string provider, string returnUrl)
