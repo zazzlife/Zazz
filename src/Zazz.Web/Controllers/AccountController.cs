@@ -193,22 +193,36 @@ namespace Zazz.Web.Controllers
                                         ProviderUserId = long.Parse(providerId)
                                     };
 
-                var jsonData = JsonConvert.SerializeObject(oauthData, Formatting.None);
-                var jsonSign = _cryptoService.GenerateTextSignature(jsonData);
-
-                var registerPageVM = new OAuthRegisterViewModel
-                                         {
-                                             OAuthProvidedData = jsonData,
-                                             ProvidedDataSignature = jsonSign,
-                                             Cities = _staticData.GetCities(),
-                                             Majors = _staticData.GetMajors(),
-                                             Schools = _staticData.GetSchools()
-                                         };
-
-                return View("OAuthRegister", registerPageVM);
+                TempData["oauthData"] = oauthData;
+                return RedirectToAction("OAuthRegister");
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult OAuthRegister()
+        {
+            var oAuthResponse = TempData["oauthData"] as OAuthLoginResponse;
+
+            var jsonData = JsonConvert.SerializeObject(oAuthResponse, Formatting.None);
+            var jsonSign = _cryptoService.GenerateTextSignature(jsonData);
+
+            var registerPageVM = new OAuthRegisterViewModel
+            {
+                OAuthProvidedData = jsonData,
+                ProvidedDataSignature = jsonSign,
+                Cities = _staticData.GetCities(),
+                Majors = _staticData.GetMajors(),
+                Schools = _staticData.GetSchools()
+            };
+
+            return View("OAuthRegister", registerPageVM);
+        }
+
+        [HttpPost]
+        public ActionResult OAuthRegister(OAuthRegisterViewModel registerViewModel)
+        {
+            return View(registerViewModel);
         }
 
         public ActionResult SignOut()
