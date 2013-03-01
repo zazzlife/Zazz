@@ -205,6 +205,7 @@ namespace Zazz.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
         public ActionResult OAuthRegister()
         {
             var oAuthResponse = TempData["oauthData"] as OAuthLoginResponse;
@@ -214,6 +215,7 @@ namespace Zazz.Web.Controllers
 
             var registerPageVM = new OAuthRegisterViewModel
             {
+                Email = oAuthResponse.Email,
                 FullName = oAuthResponse.Name,
                 OAuthProvidedData = jsonData,
                 ProvidedDataSignature = jsonSign,

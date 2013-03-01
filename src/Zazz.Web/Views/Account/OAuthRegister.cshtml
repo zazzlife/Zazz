@@ -42,6 +42,8 @@
                                 @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        
+                        @Html.HiddenFor(m => m.Email)
 
                         <div class="control-group">
                             <div class="editor-label">
