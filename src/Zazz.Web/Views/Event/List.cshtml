@@ -30,3 +30,59 @@
     
     <div class="clearfix"></div>
 </div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+
+            function flip(elem, rotateX, duration, callback) {
+                $(elem).transition({
+                    perspective: '1000px',
+                    rotateX: rotateX + 'deg',
+                    duration: duration,
+                    complete: callback
+                });
+            }
+
+            function flipToBack(eventElem) {
+                var front = $(eventElem).children('.event-front');
+                var back = $(eventElem).children('.event-back');
+
+                flip(back, '90', 0);
+                flip(front, '90', 250, function () {
+                    front.hide();
+                    back.show();
+                    flip(back, '0', 250);
+                });
+
+                $(eventElem).data('side', 'back');
+            }
+
+            function flipToFront(eventElem) {
+                var front = $(eventElem).children('.event-front');
+                var back = $(eventElem).children('.event-back');
+
+                flip(front, '-90', 0);
+                flip(back, '-90', 250, function () {
+                    front.show();
+                    back.hide();
+                    flip(front, '0', 250);
+                });
+                
+                $(eventElem).data('side', 'front');
+            }
+
+            $('.event').click(function() {
+                var side = $(this).data('side');
+                if (side == "front") {
+                    flipToBack(this);
+                } else {
+                    flipToFront(this);
+                }
+
+            });
+        });
+    </script>  
+}

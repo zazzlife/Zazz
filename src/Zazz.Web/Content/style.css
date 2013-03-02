@@ -200,6 +200,10 @@ hr.dark-line {
     padding: 6px;
 }
 
+.event:hover {
+    cursor: pointer;
+}
+
 .event-img {
     float: left;
     margin-right: 20px;
@@ -207,4 +211,12 @@ hr.dark-line {
 
 .event .loading-indicator {
     float: right;
+}
+
+.event-front {
+    
+}
+
+.event-back {
+    display: none;
 }
