@@ -103,6 +103,10 @@ hr.dark-line {
     width: 450px;
     margin-left: 20px;
 }
+
+.hidden {
+    display: none !important;
+}
 /***************************************
         Landing page
 ***************************************/
