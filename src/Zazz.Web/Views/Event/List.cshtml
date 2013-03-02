@@ -37,6 +37,8 @@
     <script type="text/javascript">
         $(function () {
 
+            var flipDuration = 250;
+            
             function flip(elem, rotateX, duration, callback) {
                 $(elem).transition({
                     perspective: '1000px',
@@ -46,7 +48,46 @@
                 });
             }
 
-            var flipDuration = 250;
+
+            function flipToBack(elem, front, back) {
+                
+                $(elem).transition({
+                    perspective: '1000px',
+                    rotateX: '90deg',
+                    duration: flipDuration,
+                    complete: function() {
+                        front.hide();
+                        back.show();
+                    }
+                }).transition({
+                    perspective: '1000px',
+                    rotateX: '0deg',
+                    duration: flipDuration,
+                    complete: function () {
+                        $(elem).data('side', 'back');
+                    }
+                });
+            }
+            
+            function flipToFront(elem, front, back) {
+
+                $(elem).transition({
+                    perspective: '1000px',
+                    rotateX: '-90deg',
+                    duration: flipDuration,
+                    complete: function () {
+                        front.show();
+                        back.hide();
+                    }
+                }).transition({
+                    perspective: '1000px',
+                    rotateX: '0deg',
+                    duration: flipDuration,
+                    complete: function () {
+                        $(elem).data('side', 'front');
+                    }
+                });
+            }
 
             $('.event').click(function () {
                 var self = this;
@@ -56,22 +97,24 @@
                 var back = $(self).children('.event-back');
                 
                 if (side == "front") {
-                    flip(self, '90', flipDuration, function () {
-                        front.hide();
-                        back.show();
+                    flipToBack(self, front, back);
+                    //flip(self, '90', flipDuration, function () {
+                    //    front.hide();
+                    //    back.show();
 
-                        flip(self, '0', flipDuration);
-                        $(self).data('side', 'back');
-                    });
+                    //    flip(self, '0', flipDuration);
+                    //    $(self).data('side', 'back');
+                    //});
 
                 } else {
-                    flip(self, '-90', flipDuration, function () {
-                        front.show();
-                        back.hide();
+                    flipToFront(self, front, back);
+                    //flip(self, '-90', flipDuration, function () {
+                    //    front.show();
+                    //    back.hide();
 
-                        flip(self, '0', flipDuration);
-                        $(self).data('side', 'front');
-                    });
+                    //    flip(self, '0', flipDuration);
+                    //    $(self).data('side', 'front');
+                    //});
                 }
 
             });
