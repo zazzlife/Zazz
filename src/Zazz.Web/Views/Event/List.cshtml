@@ -46,40 +46,34 @@
                 });
             }
 
-            function flipToBack(eventElem) {
-                var front = $(eventElem).children('.event-front');
-                var back = $(eventElem).children('.event-back');
+            var flipDuration = 250;
 
-                flip(back, '90', 0);
-                flip(front, '90', 250, function () {
-                    front.hide();
-                    back.show();
-                    flip(back, '0', 250);
-                });
+            $('.event').click(function () {
+                var self = this;
 
-                $(eventElem).data('side', 'back');
-            }
-
-            function flipToFront(eventElem) {
-                var front = $(eventElem).children('.event-front');
-                var back = $(eventElem).children('.event-back');
-
-                flip(front, '-90', 0);
-                flip(back, '-90', 250, function () {
-                    front.show();
-                    back.hide();
-                    flip(front, '0', 250);
-                });
+                var side = $(self).data('side');
+                var front = $(self).children('.event-front');
+                var back = $(self).children('.event-back');
                 
-                $(eventElem).data('side', 'front');
-            }
-
-            $('.event').click(function() {
-                var side = $(this).data('side');
                 if (side == "front") {
-                    flipToBack(this);
+                    flip(self, '90', flipDuration, function () {
+                        front.hide();
+                        back.show();
+
+                        flip(self, '0', flipDuration);
+                        $(self).data('side', 'back', function() {
+  
+                        });
+                    });
+
                 } else {
-                    flipToFront(this);
+                    flip(self, '-90', flipDuration, function () {
+                        front.show();
+                        back.hide();
+
+                        flip(self, '0', flipDuration);
+                        $(self).data('side', 'front');
+                    });
                 }
 
             });
