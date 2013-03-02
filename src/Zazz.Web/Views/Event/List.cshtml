@@ -35,10 +35,10 @@
 @section Scripts
 {
     <script type="text/javascript">
-        $(function () {
+        $(function() {
 
             var flipDuration = 250;
-            
+
             function flip(elem, rotateX, duration, callback) {
                 $(elem).transition({
                     perspective: '1000px',
@@ -50,7 +50,7 @@
 
 
             function flipToBack(elem, front, back) {
-                
+
                 $(elem).transition({
                     perspective: '1000px',
                     rotateX: '90deg',
@@ -61,41 +61,49 @@
                     }
                 }).transition({
                     perspective: '1000px',
+                    rotateX: '-90deg',
+                    duration: 0
+                }).transition({
+                    perspective: '1000px',
                     rotateX: '0deg',
                     duration: flipDuration,
-                    complete: function () {
+                    complete: function() {
                         $(elem).data('side', 'back');
                     }
                 });
             }
-            
+
             function flipToFront(elem, front, back) {
 
                 $(elem).transition({
                     perspective: '1000px',
                     rotateX: '-90deg',
                     duration: flipDuration,
-                    complete: function () {
+                    complete: function() {
                         front.show();
                         back.hide();
                     }
                 }).transition({
                     perspective: '1000px',
+                    rotateX: '90deg',
+                    duration: 0
+                }).transition({
+                    perspective: '1000px',
                     rotateX: '0deg',
                     duration: flipDuration,
-                    complete: function () {
+                    complete: function() {
                         $(elem).data('side', 'front');
                     }
                 });
             }
 
-            $('.event').click(function () {
+            $('.event').click(function() {
                 var self = this;
 
                 var side = $(self).data('side');
                 var front = $(self).children('.event-front');
                 var back = $(self).children('.event-back');
-                
+
                 if (side == "front") {
                     flipToBack(self, front, back);
                     //flip(self, '90', flipDuration, function () {
