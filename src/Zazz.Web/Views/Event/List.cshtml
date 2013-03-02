@@ -20,12 +20,19 @@
     
     @* LEFT ITEMS *@
     <div class="left-part">
-        @Html.Partial("_EventPartial")
+        @for (int i = 0; i < 5; i++)
+        {
+            @Html.Partial("_EventPartial")
+        }
+        
     </div>
     
     @* RIGHT ITEMS *@
     <div class="right-part">
-        @Html.Partial("_EventPartial")
+        @for (int i = 0; i < 5; i++)
+        {
+            @Html.Partial("_EventPartial")
+        }
     </div>
     
     <div class="clearfix"></div>
