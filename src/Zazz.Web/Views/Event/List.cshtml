@@ -39,16 +39,6 @@
 
             var flipDuration = 250;
 
-            function flip(elem, rotateX, duration, callback) {
-                $(elem).transition({
-                    perspective: '1000px',
-                    rotateX: rotateX + 'deg',
-                    duration: duration,
-                    complete: callback
-                });
-            }
-
-
             function flipToBack(elem, front, back) {
 
                 $(elem).transition({
@@ -106,23 +96,9 @@
 
                 if (side == "front") {
                     flipToBack(self, front, back);
-                    //flip(self, '90', flipDuration, function () {
-                    //    front.hide();
-                    //    back.show();
-
-                    //    flip(self, '0', flipDuration);
-                    //    $(self).data('side', 'back');
-                    //});
 
                 } else {
                     flipToFront(self, front, back);
-                    //flip(self, '-90', flipDuration, function () {
-                    //    front.show();
-                    //    back.hide();
-
-                    //    flip(self, '0', flipDuration);
-                    //    $(self).data('side', 'front');
-                    //});
                 }
 
             });
