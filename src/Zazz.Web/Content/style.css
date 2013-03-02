@@ -197,6 +197,8 @@ hr.dark-line {
 }
 
 .event {
+    -webkit-backface-visibility: hidden;
+    -webkit-transition: translate3d(0,0,0);
     padding: 6px;
 }
 
