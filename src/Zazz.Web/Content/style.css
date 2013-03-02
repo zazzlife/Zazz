@@ -87,6 +87,22 @@ hr.dark-line {
 #mainContent {
     padding-top: 50px;
 }
+
+.split-two {
+    
+}
+
+.split-two .left-part {
+    float: left;
+    width: 500px;
+    padding: 0 25px;
+}
+
+.split-two .right-part {
+    float: right;
+    width: 500px;
+    padding: 0 25px;
+}
 /***************************************
         Landing page
 ***************************************/
@@ -164,4 +180,18 @@ hr.dark-line {
     border-left-style: solid;
     border-left-width: 1px;
 
+}
+
+/***************************************
+        Events
+***************************************/
+.event-city-name {
+    position: relative;
+    top: 5px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.event {
+    
 }
