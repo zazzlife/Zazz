@@ -303,6 +303,7 @@
     <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\auth-icons.png" />
+    <Content Include="Images\cover-image.gif" />
     <Content Include="Images\fb-login-btn.jpg" />
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
@@ -351,6 +352,7 @@
     <Content Include="Views\Home\UserHome.cshtml" />
     <Content Include="Views\Event\List.cshtml" />
     <Content Include="Views\Event\_EventPartial.cshtml" />
+    <Content Include="Views\User\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

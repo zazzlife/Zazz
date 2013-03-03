@@ -15,7 +15,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Me()
         {
-            return View();
+            return View("Profile");
         }
     }
 }
