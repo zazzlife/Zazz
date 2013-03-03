@@ -253,6 +253,10 @@ hr.dark-line {
     width: 420px;
 }
 
+#profileTabs {
+    margin-bottom: 50px;
+}
+
 #leftMenu {
     width: 180px;
     height: 100%;

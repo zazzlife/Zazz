@@ -2,7 +2,7 @@
     ViewBag.Title = "Profile";
 }
 
-<div class="container">
+    <div class="container">
     @*COVET IMAGE*@
     <img id="coverImg" class="img-polaroid" src="~/Images/cover-image.gif" />
 
@@ -31,33 +31,55 @@
         </div>
     </div>
 
-    <div class="clearfix"></div>
-    <hr />
-    
-    @* LEFT MENU *@
-    <div id="leftMenu" class="well light-background">
-        <div class="menu-title"><strong>MY CLUBS</strong></div>
-        <ul>
-            <li><a href="#">Club A</a></li>
-            <li><a href="#">Club B</a></li>
-            <li><a href="#">Club C</a></li>
-            <li><a href="#">Club D</a></li>
-        </ul>
-        <a href="#">more...</a>
+        <div class="clearfix"></div>
+        <hr />
         
-        <div class="menu-title" style="margin-top: 25px;"><strong>PEOPLE TO PARTY WITH</strong></div>
-        <ul>
-            <li><a href="#">Person A</a></li>
-            <li><a href="#">Person B</a></li>
-            <li><a href="#">Person C</a></li>
-            <li><a href="#">Person D</a></li>
-        </ul>
-        <a href="#">more...</a>
-    </div>
-    
-    @* FEEDS *@
-    
-    <div id="feedContent" class="well light-background"></div>
+        @* TABS *@
+        <div id="profileTabs">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab1" data-toggle="tab">Action 1</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Action 2</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1">
+                        <p>Post something?</p>
+                    </div>
+                    <div class="tab-pane" id="tab2">
+                        <p>Show something?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-</div>
+        @* LEFT MENU *@
+        <div id="leftMenu" class="well light-background">
+            <div class="menu-title"><strong>MY CLUBS</strong></div>
+            <ul>
+                <li><a href="#">Club A</a></li>
+                <li><a href="#">Club B</a></li>
+                <li><a href="#">Club C</a></li>
+                <li><a href="#">Club D</a></li>
+            </ul>
+            <a href="#">more...</a>
+
+            <div class="menu-title" style="margin-top: 25px;"><strong>PEOPLE TO PARTY WITH</strong></div>
+            <ul>
+                <li><a href="#">Person A</a></li>
+                <li><a href="#">Person B</a></li>
+                <li><a href="#">Person C</a></li>
+                <li><a href="#">Person D</a></li>
+            </ul>
+            <a href="#">more...</a>
+        </div>
+
+        @* FEEDS *@
+
+        <div id="feedContent" class="well light-background">
+            
+
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
 
