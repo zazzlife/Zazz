@@ -3,5 +3,30 @@
 }
 
 <div class="container">
-    <img class="img-polaroid" src="~/Images/cover-image.gif"/>
+    @*COVET IMAGE*@
+    <img id="coverImg" class="img-polaroid" src="~/Images/cover-image.gif"/>
+    
+    <div>
+        @*PROFILE PICTURE*@
+        <img id="profilePic" class="img-polaroid" src="~/Images/placeholder.gif"/>
+        
+
+        @*LEFT ITEMS*@
+        <div class="pull-left">
+            <h3>Major: Getting Backout</h3>
+            <h4>Concordia University</h4>
+            <h5 class="uppercase">Montreal</h5>
+        </div>
+        
+        @*RIGHT ITEMS*@
+        <div class="pull-right">
+            <h3 class="pull-right" style="margin-left: 5px;">95</h3>
+            <h3 class="pull-right">PARTY WEB:</h3>
+            <br/>
+            <button class="btn btn-large pull-right">Join Party Web</button>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
 </div>

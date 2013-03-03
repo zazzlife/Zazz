@@ -228,3 +228,18 @@ hr.dark-line {
     right: 10px;
     bottom: 5px;
 }
+
+/***************************************
+        Profile Page
+***************************************/
+#coverImg {
+    margin-bottom: 25px;
+}
+
+#profilePic {
+    width: 128px;
+    height: 128px;
+    margin-top: -75px;
+    position: absolute;
+    left: 46%;
+}
