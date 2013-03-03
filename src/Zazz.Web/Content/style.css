@@ -232,6 +232,7 @@ hr.dark-line {
 /***************************************
         Profile Page
 ***************************************/
+
 #coverImg {
     margin-bottom: 25px;
     width: 100%;
@@ -250,4 +251,29 @@ hr.dark-line {
     margin-left: 290px;
     margin-top: -75px;
     width: 420px;
+}
+
+#leftMenu {
+    width: 180px;
+    height: 100%;
+    float: left;
+}
+
+#leftMenu .menu-title {
+    text-align: center;
+}
+
+#leftMenu ul {
+    margin: 10px 0;
+    list-style: none;
+}
+
+#leftMenu li {
+    margin-top: 5px;
+}
+
+#feedContent {
+    float: left;
+    margin-left: 25px;
+    width: 715px;
 }

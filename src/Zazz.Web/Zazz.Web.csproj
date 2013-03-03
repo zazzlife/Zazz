@@ -354,6 +354,8 @@
     <Content Include="Views\Event\List.cshtml" />
     <Content Include="Views\Event\_EventPartial.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_PicturePostFeedItem.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_EventFeedItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
