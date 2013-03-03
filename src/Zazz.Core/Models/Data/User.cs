@@ -55,6 +55,8 @@ namespace Zazz.Core.Models.Data
         [Display(AutoGenerateField = false)]
         public int CoverPhotoId { get; set; }
 
+        public int ProfilePhotoId { get; set; }
+
         public virtual ICollection<UserEventComment> UserEventComments { get; set; }
 
         public virtual ICollection<ClubPostComment> ClubPostComments { get; set; }
