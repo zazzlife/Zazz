@@ -5,7 +5,7 @@ using System.Web.Mvc.Html;
 
 namespace Zazz.Web.HtmlHelpers
 {
-    public static class MenuItem
+    public static class MenuHelpers
     {
         public static MvcHtmlString MenuLink(
             this HtmlHelper htmlHelper,

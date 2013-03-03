@@ -214,7 +214,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HtmlHelpers\MenuItem.cs" />
+    <Compile Include="HtmlHelpers\MenuHelpers.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
