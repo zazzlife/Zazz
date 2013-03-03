@@ -6,17 +6,16 @@ using System.Web.Mvc;
 
 namespace Zazz.Web.Controllers
 {
-    public class EventController : BaseController
+    public class UserController : BaseController
     {
         public ActionResult Index()
         {
-            return RedirectToAction("List");
+            return Me();
         }
 
-        public ActionResult List()
+        public ActionResult Me()
         {
             return View();
         }
-
     }
 }
