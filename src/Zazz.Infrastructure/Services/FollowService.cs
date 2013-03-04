@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -35,6 +36,16 @@ namespace Zazz.Infrastructure.Services
         }
 
         public Task RejectFollowRequestAsync(int requestId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<int> GetFollowRequestsCount(int userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<UserFollowRequest>> GetFollowRequests(int userId)
         {
             throw new System.NotImplementedException();
         }
