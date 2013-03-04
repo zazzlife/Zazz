@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -25,9 +26,21 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public Task SendFollowRequestAsync(int fromUserId, int toUserId)
+        public async Task SendFollowRequestAsync(int fromUserId, int toUserId)
         {
-            throw new System.NotImplementedException();
+            var exists = await _uow.UserFollowRequestRepository.ExistsAsync(fromUserId, toUserId);
+            if (exists)
+                return;
+
+            var request = new UserFollowRequest
+                              {
+                                  FromUserId = fromUserId,
+                                  ToUserId = toUserId,
+                                  RequestDate = DateTime.UtcNow
+                              };
+
+            _uow.UserFollowRequestRepository.InsertGraph(request);
+            await _uow.SaveAsync();
         }
 
         public Task AcceptFollowRequestAsync(int requestId)
@@ -40,12 +53,12 @@ namespace Zazz.Infrastructure.Services
             throw new System.NotImplementedException();
         }
 
-        public Task<int> GetFollowRequestsCount(int userId)
+        public Task<int> GetFollowRequestsCountAsync(int userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<IEnumerable<UserFollowRequest>> GetFollowRequests(int userId)
+        public Task<IEnumerable<UserFollowRequest>> GetFollowRequestsAsync(int userId)
         {
             throw new System.NotImplementedException();
         }
