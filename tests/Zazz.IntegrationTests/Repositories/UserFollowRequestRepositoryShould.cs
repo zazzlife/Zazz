@@ -41,6 +41,49 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void ReturnCorrectNumberOfReceivedRequests_OnGetReceivedRequestsCount()
+        {
+            //Arrange (user B and C will send a request to user A)
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
+            var userC = Mother.GetUser();
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(userA);
+                ctx.Users.Add(userB);
+                ctx.Users.Add(userC);
+
+                ctx.SaveChanges();
+
+                var requestB = new UserFollowRequest
+                {
+                    FromUserId = userB.Id,
+                    ToUserId = userA.Id,
+                    RequestDate = DateTime.Now
+                };
+
+                var requestC = new UserFollowRequest
+                {
+                    FromUserId = userC.Id,
+                    ToUserId = userA.Id,
+                    RequestDate = DateTime.Now
+                };
+
+                ctx.UserFollowRequests.Add(requestB);
+                ctx.UserFollowRequests.Add(requestC);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetReceivedRequestsCountAsync(userA.Id).Result;
+
+            //Assert
+            Assert.AreEqual(2, result);
+        }
+
+        [Test]
         public void GetUserReceivedFollowRequests_OnGetReceivedRequestsAsync()
         {
             //Arrange (user B and C will send a request to user A)

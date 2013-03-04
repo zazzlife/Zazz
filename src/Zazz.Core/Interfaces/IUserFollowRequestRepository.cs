@@ -6,6 +6,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserFollowRequestRepository : IRepository<UserFollowRequest>
     {
+        Task<int> GetReceivedRequestsCountAsync(int userId);
+
         Task<List<UserFollowRequest>> GetReceivedRequestsAsync(int userId);
 
         Task<List<UserFollowRequest>> GetSentRequestsAsync(int userId);

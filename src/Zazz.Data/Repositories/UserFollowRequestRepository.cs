@@ -26,6 +26,11 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public Task<int> GetReceivedRequestsCountAsync(int userId)
+        {
+            return Task.Run(() => DbSet.Count(r => r.ToUserId == userId));
+        }
+
         public Task<List<UserFollowRequest>> GetReceivedRequestsAsync(int userId)
         {
             return Task.Run(() => DbSet.Where(r => r.ToUserId == userId).ToList());
