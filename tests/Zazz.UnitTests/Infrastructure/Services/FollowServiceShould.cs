@@ -169,5 +169,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserFollowRequestRepository.Remove(It.IsAny<UserFollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
+
+        [Test]
+        public async Task ReturnCorrectNumber_OnGetFollowRequestsCount()
+        {
+            //Arrange
+            var count = 42;
+            _uow.Setup(x => x.UserFollowRequestRepository.GetReceivedRequestsCountAsync(_userAId))
+                .Returns(() => Task.Run(() => count));
+
+            //Act
+            var result = await _sut.GetFollowRequestsCountAsync(_userAId);
+
+            //Assert
+            _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsCountAsync(_userAId), Times.Once());
+            Assert.AreEqual(count, result);
+        }
     }
 }
