@@ -131,5 +131,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserFollowRequestRepository.InsertGraph(It.IsAny<UserFollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
+
+        [Test]
+        public async Task ShouldAddNewUserFollowAndDeleteRequest_OnAcceptFollowRequest()
+        {
+            //Arrange
+            var followRequestId = 555;
+            _uow.Setup(x => x.UserFollowRequestRepository.GetByIdAsync(followRequestId))
+                .Returns(() => Task.Run(() => _userFollowRequest));
+            _uow.Setup(x => x.UserFollowRepository.InsertGraph(It.IsAny<UserFollow>()));
+            _uow.Setup(x => x.UserFollowRequestRepository.Remove(It.IsAny<UserFollowRequest>()));
+                
+            //Act
+            await _sut.AcceptFollowRequestAsync(followRequestId);
+
+            //Assert
+            _uow.Verify(x => x.UserFollowRepository.InsertGraph(It.IsAny<UserFollow>()), Times.Once());
+            _uow.Verify(x => x.UserFollowRequestRepository.Remove(It.IsAny<UserFollowRequest>()), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
     }
 }

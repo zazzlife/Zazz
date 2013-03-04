@@ -43,9 +43,17 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public Task AcceptFollowRequestAsync(int requestId)
+        public async Task AcceptFollowRequestAsync(int requestId)
         {
-            throw new System.NotImplementedException();
+            var followRequest = await _uow.UserFollowRequestRepository.GetByIdAsync(requestId);
+            if (followRequest == null)
+                return;
+
+            var userFollow = new UserFollow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
+            _uow.UserFollowRepository.InsertGraph(userFollow);
+            _uow.UserFollowRequestRepository.Remove(followRequest);
+
+            await _uow.SaveAsync();
         }
 
         public Task RejectFollowRequestAsync(int requestId)
