@@ -20,7 +20,7 @@
             <h3 class="pull-right" style="margin-left: 5px;">95</h3>
             <h3 class="pull-right">PARTY WEB:</h3>
             <br />
-            <button class="btn btn-large pull-right btn-info">Join Party Web</button>
+            <button class="btn btn-large pull-right btn-info">Join Other Party Webs</button>
             <div class="clearfix"></div>
         </div>
 
@@ -75,8 +75,24 @@
 
         @* FEEDS *@
 
-        <div id="feedContent" class="well light-background">
+        <div id="feedContent">
+
+            <div class="well">
+                <strong><a href="#">Club A</a> has created a new <a href="#">event</a><br />
+                </strong>
+                <p><strong>MONTREAL - IN 10 DAYS (THURSDAY, MARCH 14, 2013)</strong></p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer bibendum quam ut odio ultricies vitae elementum turpis vulputate.
+                </p>
+
+                <span class="pull-right">5 MINUTES AGO</span>
+                <div class="clearfix"></div>
+            </div>
+
+
+            @Html.Partial("FeedItems/_EventFeedItem")
             
+            @Html.Partial("FeedItems/_PicturePostFeedItem")
 
         </div>
 
