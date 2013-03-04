@@ -56,9 +56,14 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public Task RejectFollowRequestAsync(int requestId)
+        public async Task RejectFollowRequestAsync(int requestId)
         {
-            throw new System.NotImplementedException();
+            var request = await _uow.UserFollowRequestRepository.GetByIdAsync(requestId);
+            if (request == null)
+                return;
+
+            _uow.UserFollowRequestRepository.Remove(request);
+            await _uow.SaveAsync();
         }
 
         public Task<int> GetFollowRequestsCountAsync(int userId)
