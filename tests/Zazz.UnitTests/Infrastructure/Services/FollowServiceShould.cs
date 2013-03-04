@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -185,5 +186,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsCountAsync(_userAId), Times.Once());
             Assert.AreEqual(count, result);
         }
+
+        [Test]
+        public async Task ReturnReceivedRequests_OnGetReceivedRequests()
+        {
+            //Arrange
+            var receivedRequests = new List<UserFollowRequest>();
+            _uow.Setup(x => x.UserFollowRequestRepository.GetReceivedRequestsAsync(_userAId))
+                .Returns(() => Task.Run(() => receivedRequests));
+
+            //Act
+            var result = await _sut.GetFollowRequestsAsync(_userAId);
+
+            //Assert
+            _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsAsync(_userAId), Times.Once());
+            Assert.AreSame(receivedRequests, result);
+
+        }
+
+
     }
 }
