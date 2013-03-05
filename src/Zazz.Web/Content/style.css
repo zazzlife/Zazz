@@ -198,25 +198,35 @@ hr.dark-line {
 ***************************************/
 
 .left-nav {
-    width: 160px;
-    border-right-style: solid;
-    border-right-width: 1px;
+    width: 220px;
     font-size: 12.69px;
+
+  border-right: 1px solid #dcdcdc;
+  -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
 }
 
-.left-nav ul {
-    list-style: none;
-    margin: 5px 0 10px 5px;
+.left-nav .nav-list {
+    padding: 0;
 }
-
-.left-nav li {
-    margin-bottom: 5px;
+.left-nav .nav-list > li > a {
+    margin: 0;
 }
 
 .left-nav .badge {
     float: right;
-    margin-right: 5px;
-    margin-top: 2px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.left-nav .user {
+    margin-bottom: 20px;
+}
+
+.left-nav .user .username {
+    margin-left: 5px;
+    font-weight: 600;
 }
 
 /***************************************
