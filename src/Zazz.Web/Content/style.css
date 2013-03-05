@@ -215,9 +215,8 @@ hr.dark-line {
 }
 
 .left-nav .badge {
-    float: right;
-    margin-right: 10px;
-    margin-top: 5px;
+    margin-left: 10px;
+    background-color: #7e7e7e;
 }
 
 .left-nav .user {
