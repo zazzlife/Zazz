@@ -253,23 +253,27 @@ hr.dark-line {
 .middle-panel {
     float: left;
     min-height: 600px;
-    padding-left: 10px;
-    padding-right: 10px;
     width: 555px;
     border-right: 1px solid #dcdcdc;
     border-left: 1px solid #dcdcdc;
+    margin-top: -50px;
+    padding: 56px 10px 0 10px;
 }
 
 .feed-item {
-    border-top: solid 1px #dcdcdc;
+    /*border-top: solid 1px #dcdcdc;
     margin-bottom: 25px;
-    padding-top: 15px;
+    padding: 15px 10px 0 10px;*/
 }
 
     .feed-item .feed-user-img {
         width: 50px;
         height: 50px;
         margin-right: 5px;
+    }
+
+    .feed-item .feed-content {
+        margin-left: 48px;
     }
 
 .feed-item a {
