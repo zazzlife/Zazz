@@ -113,6 +113,14 @@ hr.dark-line {
     padding-left: 6px;
 }
 
+.font-small {
+    font-size: 12px;
+}
+
+.font-verysmall {
+    font-size: 10px;
+}
+
 /***************************************
         Landing page
 ***************************************/
@@ -246,6 +254,13 @@ hr.dark-line {
     border-left: 1px solid #dcdcdc;
 }
 
+.feed-item {
+    
+}
+
+.feed-item a {
+    font-weight: 600;
+}
 /**********RIGHT PANEL***********/
 
 .right-panel {
