@@ -296,6 +296,7 @@ hr.dark-line {
 .event {
     -webkit-backface-visibility: hidden;
     padding: 6px;
+    min-height: 100px;
 }
     
     .event .event-title {
