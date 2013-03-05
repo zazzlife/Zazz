@@ -309,6 +309,7 @@
     <Content Include="Images\fb-login-btn.jpg" />
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\app\flip.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />

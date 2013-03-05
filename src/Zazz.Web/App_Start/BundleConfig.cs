@@ -12,7 +12,7 @@ namespace Zazz.Web
             css.IncludeDirectory("~/Content/", "*.css", false);
 
             var js = new ScriptBundle("~/js");
-            js.IncludeDirectory("~/Scripts/", "*.js", false);
+            js.IncludeDirectory("~/Scripts/", "*.js", true);
 
             bundles.Add(css);
             bundles.Add(js);
