@@ -121,6 +121,14 @@ hr.dark-line {
     font-size: 10px;
 }
 
+.no-padding {
+    padding: 0;
+}
+
+.no-margin {
+    margin: 0;
+}
+
 /***************************************
         Landing page
 ***************************************/
@@ -230,7 +238,6 @@ hr.dark-line {
 
     .left-panel .badge {
         margin-left: 10px;
-        background-color: #7e7e7e;
     }
 
     .left-panel .user {
@@ -283,6 +290,13 @@ hr.dark-line {
     -webkit-backface-visibility: hidden;
     padding: 6px;
 }
+    
+    .event .event-title {
+        margin: 0;
+        padding: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
 
     .event:hover {
         cursor: pointer;
@@ -291,6 +305,8 @@ hr.dark-line {
 .event-img {
     float: left;
     margin-right: 20px;
+    height: 100px;
+    width: 100px;
 }
 
 .event .loading-indicator {

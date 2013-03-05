@@ -50,7 +50,9 @@
         });
     }
 
-    $('.flippable').click(function () {
+    $('.flippable').click(function (e) {
+        
+
         var self = this;
 
         var side = $(self).data('current-side');
@@ -64,5 +66,9 @@
             flipToFront(self, front, back);
         }
 
+    });
+
+    $('.flippable a').click(function(e) {
+        e.stopPropagation();
     });
 });
