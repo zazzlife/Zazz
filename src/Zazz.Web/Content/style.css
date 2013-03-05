@@ -107,6 +107,13 @@ hr.dark-line {
 .hidden {
     display: none !important;
 }
+
+.badge-small {
+    font-size: 10.69px;
+    padding-right: 6px;
+    padding-left: 6px;
+}
+
 /***************************************
         Landing page
 ***************************************/
@@ -184,6 +191,32 @@ hr.dark-line {
     border-left-style: solid;
     border-left-width: 1px;
 
+}
+
+/***************************************
+        HOME PAGE
+***************************************/
+
+.left-nav {
+    width: 160px;
+    border-right-style: solid;
+    border-right-width: 1px;
+    font-size: 12.69px;
+}
+
+.left-nav ul {
+    list-style: none;
+    margin: 5px 0 10px 5px;
+}
+
+.left-nav li {
+    margin-bottom: 5px;
+}
+
+.left-nav .badge {
+    float: right;
+    margin-right: 5px;
+    margin-top: 2px;
 }
 
 /***************************************
