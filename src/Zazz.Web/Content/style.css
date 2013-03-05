@@ -196,14 +196,12 @@ hr.dark-line {
         HOME PAGE
 ***************************************/
 
+/**********LEFT PANEL***********/
 .left-panel {
     width: 220px;
     font-size: 12.69px;
-    border-right: 1px solid #dcdcdc;
-    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
-    box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.05);
     float: left;
+    height: 100%;
 }
 
     .left-panel a {
@@ -231,6 +229,24 @@ hr.dark-line {
             margin-left: 5px;
             font-weight: 600;
         }
+
+/**********MIDDLE PANEL***********/
+
+.middle-panel {
+    float: left;
+    min-height: 600px;
+    width: 575px;
+     border-right: 1px solid #dcdcdc;
+     border-left: 1px solid #dcdcdc;
+}
+
+/**********RIGHT PANEL***********/
+
+.right-panel {
+    float: right;
+    width: 190px;
+    padding-left: 10px;
+}
 
 /***************************************
         Events
