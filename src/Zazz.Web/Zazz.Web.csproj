@@ -351,11 +351,13 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Home\UserHome.cshtml" />
     <Content Include="Views\Event\List.cshtml" />
-    <Content Include="Views\Shared\_EventPartial.cshtml" />
+    <Content Include="Views\Shared\_EventPartialGray.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PicturePostFeedItem.cshtml" />
     <Content Include="Views\Shared\FeedItems\_EventFeedItem.cshtml" />
     <Content Include="Views\Home\Unknown.cshtml" />
+    <Content Include="Views\Shared\_EventContent.cshtml" />
+    <Content Include="Views\Shared\_EventPartialLight.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
