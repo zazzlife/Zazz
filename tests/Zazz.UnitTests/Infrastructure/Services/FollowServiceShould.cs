@@ -201,9 +201,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsAsync(_userAId), Times.Once());
             Assert.AreSame(receivedRequests, result);
-
         }
-
-
     }
 }

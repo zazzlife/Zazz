@@ -26,8 +26,7 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedDate { get; set; }
 
-        [MaxLength(50)]
-        public string FacebookItemId { get; set; }
+        public long FacebookItemId { get; set; }
 
         public DateTime? StartDate { get; set; }
 
