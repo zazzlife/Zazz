@@ -128,7 +128,6 @@ hr.dark-line {
 .no-margin {
     margin: 0;
 }
-
 /***************************************
         Landing page
 ***************************************/
@@ -262,8 +261,16 @@ hr.dark-line {
 }
 
 .feed-item {
-    
+    border-top: solid 1px #dcdcdc;
+    margin-bottom: 25px;
+    padding-top: 15px;
 }
+
+    .feed-item .feed-user-img {
+        width: 50px;
+        height: 50px;
+        margin-right: 5px;
+    }
 
 .feed-item a {
     font-weight: 600;
