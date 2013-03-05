@@ -216,6 +216,10 @@ hr.dark-line {
             margin: 0;
         }
 
+            .left-panel .nav-list > li > a > i {
+                margin-right: 7px;
+            }
+
     .left-panel .badge {
         margin-left: 10px;
         background-color: #7e7e7e;
@@ -235,9 +239,11 @@ hr.dark-line {
 .middle-panel {
     float: left;
     min-height: 600px;
-    width: 575px;
-     border-right: 1px solid #dcdcdc;
-     border-left: 1px solid #dcdcdc;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 555px;
+    border-right: 1px solid #dcdcdc;
+    border-left: 1px solid #dcdcdc;
 }
 
 /**********RIGHT PANEL***********/
