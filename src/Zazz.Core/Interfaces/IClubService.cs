@@ -10,6 +10,6 @@ namespace Zazz.Core.Interfaces
 
         Task<bool> IsUserAuthorized(int userId, int clubId);
 
-        Task UpdateClubAsync(Club club);
+        Task UpdateClubAsync(Club club, int currentUserId);
     }
 }

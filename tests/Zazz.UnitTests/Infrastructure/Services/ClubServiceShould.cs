@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -21,7 +23,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow = new Mock<IUoW>();
             _sut = new ClubService(_uow.Object);
 
-            _club = new Club();
+            _club = new Club {Id = 15};
             _userId = 12;
 
             _uow.Setup(x => x.SaveAsync())
@@ -40,7 +42,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.ClubRepository.InsertGraph(_club), Times.Once());
-            _uow.Verify(x => x.SaveAsync());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
 
         }
 
@@ -48,7 +50,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ReturnTrueIfUserIsClubAdmin_OnIsAuthorized()
         {
             //Arrange
-            _club.Id = 15;
             _uow.Setup(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id))
                 .Returns(() => Task.Run(() => true));
 
@@ -57,14 +58,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.IsTrue(result);
-            _uow.Verify(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id));
+            _uow.Verify(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id), Times.Once());
         }
 
         [Test]
         public async Task ReturnFalseIfUserIsNotClubAdmin_OnIsAuthorized()
         {
             //Arrange
-            _club.Id = 15;
             _uow.Setup(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id))
                 .Returns(() => Task.Run(() => false));
 
@@ -73,7 +73,64 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.IsFalse(result);
-            _uow.Verify(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id));
+            _uow.Verify(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task ThrowIfClubIdIs0_OnUpdateClub()
+        {
+            //Arrange
+            _club.Id = 0;
+
+            //Act
+            try
+            {
+                await _sut.UpdateClubAsync(_club, _userId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            //Assert
+        }
+
+        [Test]
+        public async Task ThrowIfUserIsNotAuthorized_OnUpdateClub()
+        {
+            //Arrange
+            _uow.Setup(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id))
+                .Returns(() => Task.Run(() => false));
+
+            //Act
+            try
+            {
+                await _sut.UpdateClubAsync(_club, _userId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task UpdateTheClub_OnUpdateClub()
+        {
+            //Arrange
+            _uow.Setup(x => x.ClubAdminRepository.ExistsAsync(_userId, _club.Id))
+                .Returns(() => Task.Run(() => true));
+            _uow.Setup(x => x.ClubRepository.InsertOrUpdate(_club));
+
+            //Act
+            await _sut.UpdateClubAsync(_club, _userId);
+
+            //Assert
+            _uow.Verify(x => x.ClubRepository.InsertOrUpdate(_club), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+
         }
 
 
