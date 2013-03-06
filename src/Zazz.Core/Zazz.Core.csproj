@@ -64,6 +64,7 @@
     <Compile Include="Interfaces\IClubPostCommentRepository.cs" />
     <Compile Include="Interfaces\IClubPostRepository.cs" />
     <Compile Include="Interfaces\IClubRepository.cs" />
+    <Compile Include="Interfaces\IClubService.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
     <Compile Include="Interfaces\IFollowService.cs" />
     <Compile Include="Interfaces\IOAuthAccountRepository.cs" />

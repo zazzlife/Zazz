@@ -48,7 +48,6 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             var club = Mother.GetClub();
-            club.CreatedByUserId = user.Id;
             _context.Clubs.Add(club);
             _context.SaveChanges();
 
@@ -74,7 +73,6 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             var club = Mother.GetClub();
-            club.CreatedByUserId = userA.Id;
             _context.Clubs.Add(club);
             _context.SaveChanges();
 
@@ -98,7 +96,6 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             var club = Mother.GetClub();
-            club.CreatedByUserId = user.Id;
             _context.Clubs.Add(club);
             _context.SaveChanges();
 

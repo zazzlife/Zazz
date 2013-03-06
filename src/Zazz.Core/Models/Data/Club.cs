@@ -17,20 +17,11 @@ namespace Zazz.Core.Models.Data
 
         public int? CityId { get; set; }
 
-        [DataType(DataType.Date), Display(AutoGenerateField = false)]
-        public DateTime CreatedDate { get; set; }
-        
-        [Display(AutoGenerateField = false)]
-        public int CreatedByUserId { get; set; }
-
         [Display(AutoGenerateField = false)]
         public int? FacebookAccountId { get; set; }
 
         [MaxLength(1000), Display(AutoGenerateField = false)]
         public string FacebookAccessToken { get; set; }
-
-        [Display(AutoGenerateField = false)]
-        public DateTime? FacebookTokenExpirationDate { get; set; }
 
         public virtual ICollection<ClubImage> Images { get; set; }
     }

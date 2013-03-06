@@ -33,7 +33,6 @@ namespace Zazz.IntegrationTests
         {
             return new Club
                        {
-                           CreatedDate = DateTime.Now,
                            Name = "Club name"
                        };
         }
