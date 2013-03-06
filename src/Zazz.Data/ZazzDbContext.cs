@@ -22,6 +22,7 @@ namespace Zazz.Data
 
         public IDbSet<Club> Clubs { get; set; }
         public IDbSet<ClubAdmin> ClubAdmins { get; set; }
+        public IDbSet<ClubAlbum> ClubAlbums { get; set; }
         public IDbSet<ClubImage> ClubImages { get; set; }
         public IDbSet<ClubPost> ClubPosts { get; set; }
         public IDbSet<ClubPostComment> ClubPostComments { get; set; }
@@ -70,6 +71,11 @@ namespace Zazz.Data
             modelBuilder.Entity<UserImage>()
                 .HasRequired(i => i.Uploader)
                 .WithMany(u => u.UploadedImages)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ClubImage>()
+                .HasRequired(i => i.Club)
+                .WithMany(c => c.Images)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

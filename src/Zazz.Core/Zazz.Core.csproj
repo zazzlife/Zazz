@@ -80,11 +80,11 @@
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\Club.cs" />
     <Compile Include="Models\Data\ClubAdmin.cs" />
+    <Compile Include="Models\Data\ClubAlbum.cs" />
     <Compile Include="Models\Data\ClubFollow.cs" />
     <Compile Include="Models\Data\ClubImage.cs" />
     <Compile Include="Models\Data\ClubPost.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
-    <Compile Include="Models\Data\BaseImageEntity.cs" />
     <Compile Include="Models\Data\ClubPostComment.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\Gender.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,5 +31,7 @@ namespace Zazz.Core.Models.Data
 
         [Display(AutoGenerateField = false)]
         public DateTime? FacebookTokenExpirationDate { get; set; }
+
+        public virtual ICollection<ClubImage> Images { get; set; }
     }
 }
