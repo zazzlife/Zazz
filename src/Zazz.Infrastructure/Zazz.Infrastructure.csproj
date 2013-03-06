@@ -43,6 +43,7 @@
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\FollowService.cs" />
+    <Compile Include="Services\UserEventService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zazz.Core\Zazz.Core.csproj">

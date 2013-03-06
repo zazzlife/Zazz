@@ -72,6 +72,7 @@
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\IUserEventCommentRepository.cs" />
     <Compile Include="Interfaces\IUserEventRepository.cs" />
+    <Compile Include="Interfaces\IUserEventService.cs" />
     <Compile Include="Interfaces\IUserFeedRepository.cs" />
     <Compile Include="Interfaces\IUserFollowRepository.cs" />
     <Compile Include="Interfaces\IUserFollowRequestRepository.cs" />
