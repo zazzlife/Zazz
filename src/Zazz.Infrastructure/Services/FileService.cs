@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 
@@ -6,19 +7,50 @@ namespace Zazz.Infrastructure.Services
 {
     public class FileService : IFileService
     {
-        public Task CreateDirIfNotExistsAsync(string path)
+        public string RemoveFileNameFromPath(string path)
         {
-            throw new System.NotImplementedException();
+            return Path.GetDirectoryName(path);
         }
 
-        public Task SaveFileAsync(string path, Stream data)
+        public void CreateDirIfNotExists(string path)
         {
-            throw new System.NotImplementedException();
+            if (Directory.Exists(path))
+                return;
+
+            Directory.CreateDirectory(path);
         }
 
-        public Task SaveFileAsync(string path, byte[] data)
+        public async Task SaveFileAsync(string path, Stream data)
         {
-            throw new System.NotImplementedException();
+            if (File.Exists(path))
+                File.Delete(path);
+
+            using (var fileStream = File.Create(path))
+            {
+                data.Seek(0, SeekOrigin.Begin);
+                fileStream.Seek(0, SeekOrigin.Begin);
+
+                try
+                {
+                    await data.CopyToAsync(fileStream);
+                }
+                catch (Exception e)
+                {
+                }
+                
+            }
+        }
+
+        public async Task SaveFileAsync(string path, byte[] data)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+
+            using (var fileStream = File.Create(path))
+            {
+                fileStream.Seek(0, SeekOrigin.Begin);
+                await fileStream.WriteAsync(data, 0, data.Length);
+            }
         }
     }
 }

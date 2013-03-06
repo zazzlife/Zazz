@@ -5,7 +5,9 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFileService
     {
-        Task CreateDirIfNotExistsAsync(string path);
+        string RemoveFileNameFromPath(string path);
+
+        void CreateDirIfNotExists(string path);
 
         Task SaveFileAsync(string path, Stream data);
 
