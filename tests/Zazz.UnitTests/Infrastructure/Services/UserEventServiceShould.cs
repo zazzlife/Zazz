@@ -116,6 +116,68 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         }
 
+        [Test]
+        public async Task ShouldThrowIfEventIdIs0_OnDelete()
+        {
+            //Arrange
+            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() => 123));
+
+            //Act
+            try
+            {
+                await _sut.DeleteEventAsync(0, _userEvent.UserId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            //Assert
+
+        }
+
+        [Test]
+        public async Task ThrowIfUserIdDoesntMatchTheOwnerId_OnDelete()
+        {
+            //Arrange
+            _userEvent.Id = 444;
+            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() => 123));
+
+            //Act
+
+            try
+            {
+                await _sut.DeleteEventAsync(_userEvent.Id, _userEvent.UserId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task Delete_OnDelete()
+        {
+            //Arrange
+            _userEvent.Id = 444;
+            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() =>_userEvent.UserId));
+            _uow.Setup(x => x.UserEventRepository.RemoveAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.DeleteEventAsync(_userEvent.Id, _userId);
+
+            //Assert
+            _uow.Verify(x => x.UserEventRepository.RemoveAsync(_userEvent.Id), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
 
     }
 }

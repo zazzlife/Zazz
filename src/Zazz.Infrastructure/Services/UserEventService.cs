@@ -39,9 +39,17 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public Task DeleteEventAsync(int userEventId, int currentUserId)
+        public async Task DeleteEventAsync(int userEventId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (userEventId == 0)
+                throw new ArgumentException();
+
+            var ownerId = await _uow.UserEventRepository.GetOwnerIdAsync(userEventId);
+            if (ownerId != currentUserId)
+                throw new SecurityException();
+
+            await _uow.UserEventRepository.RemoveAsync(userEventId);
+            await _uow.SaveAsync();
         }
 
         public void Dispose()
