@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserEventService
+    public interface IUserEventService : IDisposable
     {
         Task CreateEventAsync(UserEvent userEvent);
 
