@@ -30,14 +30,7 @@ namespace Zazz.Infrastructure.Services
                 data.Seek(0, SeekOrigin.Begin);
                 fileStream.Seek(0, SeekOrigin.Begin);
 
-                try
-                {
-                    await data.CopyToAsync(fileStream);
-                }
-                catch (Exception e)
-                {
-                }
-                
+                await data.CopyToAsync(fileStream);
             }
         }
 
