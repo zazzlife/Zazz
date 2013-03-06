@@ -17,6 +17,7 @@ namespace Zazz.Data
         public IDbSet<UserEventComment> UserEventComments { get; set; }
         public IDbSet<UserFollow> UserFollows { get; set; }
         public IDbSet<UserFollowRequest> UserFollowRequests { get; set; }
+        public IDbSet<UserFeed> UserFeeds { get; set; }
 
         public IDbSet<Club> Clubs { get; set; }
         public IDbSet<ClubAdmin> ClubAdmins { get; set; }

@@ -16,6 +16,8 @@ namespace Zazz.Core.Models.Data
         [MaxLength(28), Required, DataType("char")]
         public string Password { get; set; }
 
+        public Gender? Gender { get; set; }
+
         [Required, DataType(DataType.Date), Display(AutoGenerateField = false)]
         public DateTime JoinedDate { get; set; }
 
