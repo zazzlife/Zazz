@@ -8,6 +8,8 @@ namespace Zazz.Core.Interfaces
     {
         Task CreateClubAsync(Club club);
 
+        Task<bool> IsUserAuthorized(int userId, int clubId);
+
         Task UpdateClubAsync(Club club);
     }
 }

@@ -13,14 +13,19 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public Task CreateClubAsync(Club club)
+        public async Task CreateClubAsync(Club club)
         {
-            throw new System.NotImplementedException();
+            _uow.ClubRepository.InsertGraph(club);
+            await _uow.SaveAsync();
         }
 
-        public Task UpdateClubAsync(Club club)
+        public Task<bool> IsUserAuthorized(int userId, int clubId)
         {
-            throw new System.NotImplementedException();
+            return _uow.ClubAdminRepository.ExistsAsync(userId, clubId);
+        }
+
+        public async Task UpdateClubAsync(Club club)
+        {
         }
 
         public void Dispose()
