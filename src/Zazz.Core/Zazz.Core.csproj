@@ -94,6 +94,7 @@
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
+    <Compile Include="Models\Data\UserAlbum.cs" />
     <Compile Include="Models\Data\UserEvent.cs" />
     <Compile Include="Models\Data\UserEventComment.cs" />
     <Compile Include="Models\Data\UserFeed.cs" />

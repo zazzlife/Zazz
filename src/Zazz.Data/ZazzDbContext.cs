@@ -12,6 +12,7 @@ namespace Zazz.Data
         public IDbSet<User> Users { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
+        public IDbSet<UserAlbum> UserAlbums { get; set; }
         public IDbSet<UserImage> UserImages { get; set; }
         public IDbSet<UserEvent> UserEvents { get; set; }
         public IDbSet<UserEventComment> UserEventComments { get; set; }
@@ -64,6 +65,11 @@ namespace Zazz.Data
             modelBuilder.Entity<UserFollowRequest>()
                 .HasRequired(e => e.FromUser)
                 .WithMany(u => u.SentFollowRequests)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserImage>()
+                .HasRequired(i => i.Uploader)
+                .WithMany(u => u.UploadedImages)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);
