@@ -59,6 +59,7 @@
     <Compile Include="Repositories\OAuthAccountRepository.cs" />
     <Compile Include="Repositories\UserEventCommentRepository.cs" />
     <Compile Include="Repositories\UserEventRepository.cs" />
+    <Compile Include="Repositories\UserFeedRepository.cs" />
     <Compile Include="Repositories\UserFollowRepository.cs" />
     <Compile Include="Repositories\UserFollowRequestRepository.cs" />
     <Compile Include="Repositories\UserImageRepository.cs" />
