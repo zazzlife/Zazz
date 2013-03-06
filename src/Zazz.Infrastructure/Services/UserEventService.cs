@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -24,9 +25,18 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public Task UpdateEventAsync(UserEvent userEvent, int currentUserId)
+        public async Task UpdateEventAsync(UserEvent userEvent, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (userEvent.Id == 0)
+                throw new ArgumentException();
+
+            var currentOwner = await _uow.UserEventRepository.GetOwnerIdAsync(userEvent.Id);
+            if (currentOwner != currentUserId)
+                throw new SecurityException();
+
+            // if you want to set update datetime later, the place would be here!
+            _uow.UserEventRepository.InsertOrUpdate(userEvent);
+            await _uow.SaveAsync();
         }
 
         public Task DeleteEventAsync(int userEventId, int currentUserId)

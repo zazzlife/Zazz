@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -57,6 +58,62 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.UserEventRepository.InsertGraph(_userEvent), Times.Once());
             _uow.Verify(x => x.SaveAsync());
+        }
+
+        [Test]
+        public async Task ThrownIfEventIdIs0_OnUpdateEvent()
+        {
+            //Arrange
+            //Act
+            try
+            {
+                await _sut.UpdateEventAsync(_userEvent, _userId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+        }
+
+        [Test]
+        public async Task ThrowIfCurrentUserDoesntMatchTheOwner_OnUpdateEvent()
+        {
+            //Arrange
+            _userEvent.Id = 444;
+            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() => 123));
+
+            //Act
+
+            try
+            {
+                await _sut.UpdateEventAsync(_userEvent, _userId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task SaveUpdatedEvent_OnUpdateEvent()
+        {
+            //Arrange
+            _userEvent.Id = 444;
+            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_userEvent.Id))
+                .Returns(() => Task.Run(() => _userEvent.UserId));
+
+            //Act
+            await _sut.UpdateEventAsync(_userEvent, _userId);
+
+            //Assert
+            _uow.Verify(x => x.UserEventRepository.InsertOrUpdate(_userEvent), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+
         }
 
 
