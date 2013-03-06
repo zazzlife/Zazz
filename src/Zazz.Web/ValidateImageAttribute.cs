@@ -15,7 +15,7 @@ namespace Zazz.Web
                 return false;
             }
 
-            if (file.ContentLength > 2 * 1024 * 1024)
+            if (file.ContentLength > 3 * 1024 * 1024)
             {
                 return false;
             }
@@ -24,8 +24,7 @@ namespace Zazz.Web
             {
                 using (var img = Image.FromStream(file.InputStream))
                 {
-                    //return img.RawFormat.Equals(ImageFormat.Png);
-                    return true;
+                    return img.RawFormat.Equals(ImageFormat.Jpeg);
                 }
             }
             catch { }
