@@ -13,9 +13,11 @@ namespace Zazz.Infrastructure.Services
             _uoW = uoW;
         }
 
-        public Task CreateAlbumAsync(Album album)
+        public async Task CreateAlbumAsync(Album album)
         {
-            throw new System.NotImplementedException();
+            _uoW.AlbumRepository.InsertGraph(album);
+
+            await _uoW.SaveAsync();
         }
 
         public Task UpdateAlbumAsync(Album album, int currentUserId)
