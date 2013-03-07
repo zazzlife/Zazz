@@ -4,8 +4,8 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserEventCommentRepository : IRepository<UserEventComment>
+    public interface IUserEventCommentRepository : IRepository<Comment>
     {
-        Task<IQueryable<UserEventComment>> GetEventCommentsAsync(int eventId);
+        Task<IQueryable<Comment>> GetEventCommentsAsync(int eventId);
     }
 }

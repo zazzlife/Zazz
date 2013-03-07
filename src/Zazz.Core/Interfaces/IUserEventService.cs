@@ -6,15 +6,15 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserEventService : IDisposable
     {
-        Task CreateEventAsync(UserEvent userEvent);
+        Task CreateEventAsync(Post post);
 
         /// <summary>
         /// Updates an event.
         /// </summary>
-        /// <param name="userEvent">The event to update. (Id is required)</param>
+        /// <param name="post">The event to update. (Id is required)</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task UpdateEventAsync(UserEvent userEvent, int currentUserId);
+        Task UpdateEventAsync(Post post, int currentUserId);
 
         /// <summary>
         /// Deletes an event

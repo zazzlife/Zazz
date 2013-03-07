@@ -24,7 +24,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void ThrowException_OnInsertOrUpdate_WhenFromUserIdIs0()
         {
             //Arrange
-            var followRequest = new UserFollowRequest { ToUserId = 21, RequestDate = DateTime.Now };
+            var followRequest = new FollowRequest { ToUserId = 21, RequestDate = DateTime.Now };
 
             //Act & Assert
             Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(followRequest));
@@ -34,7 +34,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void ThrowException_OnInsertOrUpdate_WhenToUserIdIs0()
         {
             //Arrange
-            var followRequest = new UserFollowRequest { FromUserId = 21, RequestDate = DateTime.Now };
+            var followRequest = new FollowRequest { FromUserId = 21, RequestDate = DateTime.Now };
 
             //Act & Assert
             Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(followRequest));
@@ -56,22 +56,22 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                 {
                     FromUserId = userB.Id,
                     ToUserId = userA.Id,
                     RequestDate = DateTime.Now
                 };
 
-                var requestC = new UserFollowRequest
+                var requestC = new FollowRequest
                 {
                     FromUserId = userC.Id,
                     ToUserId = userA.Id,
                     RequestDate = DateTime.Now
                 };
 
-                ctx.UserFollowRequests.Add(requestB);
-                ctx.UserFollowRequests.Add(requestC);
+                ctx.FollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestC);
 
                 ctx.SaveChanges();
             }
@@ -99,22 +99,22 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                                    {
                                        FromUserId = userB.Id,
                                        ToUserId = userA.Id,
                                        RequestDate = DateTime.Now
                                    };
 
-                var requestC = new UserFollowRequest
+                var requestC = new FollowRequest
                                    {
                                        FromUserId = userC.Id,
                                        ToUserId = userA.Id,
                                        RequestDate = DateTime.Now
                                    };
 
-                ctx.UserFollowRequests.Add(requestB);
-                ctx.UserFollowRequests.Add(requestC);
+                ctx.FollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestC);
 
                 ctx.SaveChanges();
             }
@@ -142,22 +142,22 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                 {
                     FromUserId = userA.Id,
                     ToUserId = userB.Id,
                     RequestDate = DateTime.Now
                 };
 
-                var requestC = new UserFollowRequest
+                var requestC = new FollowRequest
                 {
                     FromUserId = userA.Id,
                     ToUserId = userC.Id,
                     RequestDate = DateTime.Now
                 };
 
-                ctx.UserFollowRequests.Add(requestB);
-                ctx.UserFollowRequests.Add(requestC);
+                ctx.FollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestC);
 
                 ctx.SaveChanges();
             }
@@ -183,14 +183,14 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                 {
                     FromUserId = userA.Id,
                     ToUserId = userB.Id,
                     RequestDate = DateTime.Now
                 };
 
-                ctx.UserFollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestB);
 
                 ctx.SaveChanges();
             }
@@ -219,14 +219,14 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                 {
                     FromUserId = userA.Id,
                     ToUserId = userB.Id,
                     RequestDate = DateTime.Now
                 };
 
-                ctx.UserFollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestB);
 
                 ctx.SaveChanges();
             }
@@ -252,14 +252,14 @@ namespace Zazz.IntegrationTests.Repositories
 
                 ctx.SaveChanges();
 
-                var requestB = new UserFollowRequest
+                var requestB = new FollowRequest
                 {
                     FromUserId = userA.Id,
                     ToUserId = userB.Id,
                     RequestDate = DateTime.Now
                 };
 
-                ctx.UserFollowRequests.Add(requestB);
+                ctx.FollowRequests.Add(requestB);
 
                 ctx.SaveChanges();
             }

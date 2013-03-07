@@ -14,7 +14,7 @@ namespace Zazz.IntegrationTests.Repositories
         private UserFollowRepository _repo;
         private User _userA;
         private User _userB;
-        private UserFollow _userFollow;
+        private Follow _follow;
 
         [SetUp]
         public void Init()
@@ -30,8 +30,8 @@ namespace Zazz.IntegrationTests.Repositories
 
             _context.SaveChanges();
 
-            _userFollow = new UserFollow {FromUserId = _userA.Id, ToUserId = _userB.Id};
-            _context.UserFollows.Add(_userFollow);
+            _follow = new Follow {FromUserId = _userA.Id, ToUserId = _userB.Id};
+            _context.Follows.Add(_follow);
 
             _context.SaveChanges();
         }
@@ -40,22 +40,22 @@ namespace Zazz.IntegrationTests.Repositories
         public void ThrowException_OnInsertOrUpdate_WhenFromUserIdIsNotProvided()
         {
             //Arrange
-            _userFollow.Id = 0;
-            _userFollow.FromUserId = 0;
+            _follow.Id = 0;
+            _follow.FromUserId = 0;
 
             //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_userFollow));
+            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_follow));
         }
 
         [Test]
         public void ThrowException_OnInsertOrUpdate_WhenToUserIdIsNotProvided()
         {
             //Arrange
-            _userFollow.Id = 0;
-            _userFollow.ToUserId = 0;
+            _follow.Id = 0;
+            _follow.ToUserId = 0;
 
             //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_userFollow));
+            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_follow));
         }
 
         [Test]

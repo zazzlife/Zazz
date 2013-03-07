@@ -9,13 +9,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserFollowRepository : BaseRepository<UserFollow>, IUserFollowRepository
+    public class UserFollowRepository : BaseRepository<Follow>, IUserFollowRepository
     {
         public UserFollowRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(UserFollow item)
+        protected override int GetItemId(Follow item)
         {
             if (item.FromUserId == default (int) || item.ToUserId == default (int))
                 throw new ArgumentException("FromUserId or ToUserId cannot be 0");
@@ -26,12 +26,12 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<IEnumerable<UserFollow>> GetUserFollowersAsync(int toUserId)
+        public Task<IEnumerable<Follow>> GetUserFollowersAsync(int toUserId)
         {
             return Task.Run(() => DbSet.Where(f => f.ToUserId == toUserId).AsEnumerable());
         }
 
-        public Task<IEnumerable<UserFollow>> GetUserFollowsAsync(int fromUserId)
+        public Task<IEnumerable<Follow>> GetUserFollowsAsync(int fromUserId)
         {
             return Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable());
         }

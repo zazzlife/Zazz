@@ -17,9 +17,9 @@ namespace Zazz.IntegrationTests
                         };
          }
 
-        public static UserEvent GetUserEvent()
+        public static Post GetPost()
         {
-            return new UserEvent
+            return new Post
                        {
                            Message = "some text",
                            StartDate = DateTime.Now,

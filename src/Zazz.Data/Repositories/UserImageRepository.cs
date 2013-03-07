@@ -5,13 +5,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserImageRepository : BaseRepository<UserImage>, IUserImageRepository
+    public class UserImageRepository : BaseRepository<Photo>, IUserImageRepository
     {
         public UserImageRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(UserImage item)
+        protected override int GetItemId(Photo item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the image, if it's new then use insert graph.");
         }

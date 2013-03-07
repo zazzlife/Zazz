@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserFollowRequest : BaseEntity
+    public class FollowRequest : BaseEntity
     {
         /// <summary>
         /// This is the user that follows another user

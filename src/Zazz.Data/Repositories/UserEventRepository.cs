@@ -7,13 +7,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserEventRepository : BaseRepository<UserEvent>, IUserEventRepository
+    public class UserEventRepository : BaseRepository<Post>, IUserEventRepository
     {
         public UserEventRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(UserEvent item)
+        protected override int GetItemId(Post item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the event, if it's new then use insert graph.");
         }

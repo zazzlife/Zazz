@@ -84,13 +84,14 @@
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
-    <Compile Include="Models\Data\UserAlbum.cs" />
-    <Compile Include="Models\Data\UserEvent.cs" />
-    <Compile Include="Models\Data\UserEventComment.cs" />
+    <Compile Include="Models\Data\Album.cs" />
+    <Compile Include="Models\Data\Post.cs" />
+    <Compile Include="Models\Data\Comment.cs" />
     <Compile Include="Models\Data\UserFeed.cs" />
-    <Compile Include="Models\Data\UserFollow.cs" />
-    <Compile Include="Models\Data\UserFollowRequest.cs" />
-    <Compile Include="Models\Data\UserImage.cs" />
+    <Compile Include="Models\Data\Follow.cs" />
+    <Compile Include="Models\Data\FollowRequest.cs" />
+    <Compile Include="Models\Data\Photo.cs" />
+    <Compile Include="Models\Data\UserType.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

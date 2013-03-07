@@ -21,7 +21,7 @@ namespace Zazz.Infrastructure.Services
             if (exists)
                 return;
 
-            var request = new UserFollowRequest
+            var request = new FollowRequest
                               {
                                   FromUserId = fromUserId,
                                   ToUserId = toUserId,
@@ -38,7 +38,7 @@ namespace Zazz.Infrastructure.Services
             if (followRequest == null)
                 return;
 
-            var userFollow = new UserFollow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
+            var userFollow = new Follow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
             _uow.UserFollowRepository.InsertGraph(userFollow);
             _uow.UserFollowRequestRepository.Remove(followRequest);
 
@@ -60,7 +60,7 @@ namespace Zazz.Infrastructure.Services
             return _uow.UserFollowRequestRepository.GetReceivedRequestsCountAsync(userId);
         }
 
-        public Task<List<UserFollowRequest>> GetFollowRequestsAsync(int userId)
+        public Task<List<FollowRequest>> GetFollowRequestsAsync(int userId)
         {
             return _uow.UserFollowRequestRepository.GetReceivedRequestsAsync(userId);
         }

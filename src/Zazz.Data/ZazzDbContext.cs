@@ -12,12 +12,12 @@ namespace Zazz.Data
         public IDbSet<User> Users { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
-        public IDbSet<UserAlbum> UserAlbums { get; set; }
-        public IDbSet<UserImage> UserImages { get; set; }
-        public IDbSet<UserEvent> UserEvents { get; set; }
-        public IDbSet<UserEventComment> UserEventComments { get; set; }
-        public IDbSet<UserFollow> UserFollows { get; set; }
-        public IDbSet<UserFollowRequest> UserFollowRequests { get; set; }
+        public IDbSet<Album> Albums { get; set; }
+        public IDbSet<Photo> Photos { get; set; }
+        public IDbSet<Post> Posts { get; set; }
+        public IDbSet<Comment> Comments { get; set; }
+        public IDbSet<Follow> Follows { get; set; }
+        public IDbSet<FollowRequest> FollowRequests { get; set; }
         public IDbSet<UserFeed> UserFeeds { get; set; }
 
 
@@ -45,24 +45,24 @@ namespace Zazz.Data
                         .HasOptional(u => u.ValidationToken)
                         .WithRequired();
           
-            modelBuilder.Entity<UserEventComment>()
+            modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.From)
-                .WithMany(u => u.UserEventComments)
+                .WithMany(u => u.Comments)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<UserFollow>()
+            modelBuilder.Entity<Follow>()
                 .HasRequired(e => e.FromUser)
                 .WithMany(u => u.FollowingUsers)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<UserFollowRequest>()
+            modelBuilder.Entity<FollowRequest>()
                 .HasRequired(e => e.FromUser)
                 .WithMany(u => u.SentFollowRequests)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<UserImage>()
+            modelBuilder.Entity<Photo>()
                 .HasRequired(i => i.Uploader)
-                .WithMany(u => u.UploadedImages)
+                .WithMany(u => u.UploadedPhotos)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

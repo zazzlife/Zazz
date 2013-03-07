@@ -15,6 +15,6 @@ namespace Zazz.Core.Interfaces
 
         Task<int> GetFollowRequestsCountAsync(int userId);
 
-        Task<List<UserFollowRequest>> GetFollowRequestsAsync(int userId);
+        Task<List<FollowRequest>> GetFollowRequestsAsync(int userId);
     }
 }

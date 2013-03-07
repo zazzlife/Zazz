@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserFollow : BaseEntity
+    public class Follow : BaseEntity
     {
         /// <summary>
         /// This is the user that follows another user

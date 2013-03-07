@@ -15,27 +15,27 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public async Task CreateEventAsync(UserEvent userEvent)
+        public async Task CreateEventAsync(Post post)
         {
-            if (userEvent.UserId == 0)
+            if (post.UserId == 0)
                 throw new ArgumentException("User id cannot be 0");
 
-            userEvent.CreatedDate = DateTime.UtcNow;
-            _uow.UserEventRepository.InsertGraph(userEvent);
+            post.CreatedDate = DateTime.UtcNow;
+            _uow.UserEventRepository.InsertGraph(post);
             await _uow.SaveAsync();
         }
 
-        public async Task UpdateEventAsync(UserEvent userEvent, int currentUserId)
+        public async Task UpdateEventAsync(Post post, int currentUserId)
         {
-            if (userEvent.Id == 0)
+            if (post.Id == 0)
                 throw new ArgumentException();
 
-            var currentOwner = await _uow.UserEventRepository.GetOwnerIdAsync(userEvent.Id);
+            var currentOwner = await _uow.UserEventRepository.GetOwnerIdAsync(post.Id);
             if (currentOwner != currentUserId)
                 throw new SecurityException();
 
             // if you want to set update datetime later, the place would be here!
-            _uow.UserEventRepository.InsertOrUpdate(userEvent);
+            _uow.UserEventRepository.InsertOrUpdate(post);
             await _uow.SaveAsync();
         }
 

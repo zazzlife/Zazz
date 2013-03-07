@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserAlbum : BaseEntity
+    public class Album : BaseEntity
     {
         [MaxLength(50)]
         public string Name { get; set; }
@@ -14,6 +14,6 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
-        public virtual ICollection<UserImage> Images { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
     }
 }

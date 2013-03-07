@@ -12,8 +12,8 @@ namespace Zazz.IntegrationTests.Repositories
     {
         private ZazzDbContext _context;
         private UserEventCommentRepository _repo;
-        private UserEvent _event1;
-        private UserEvent _event2;
+        private Post _event1;
+        private Post _event2;
         private User _user;
 
         [SetUp]
@@ -26,14 +26,14 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(_user);
             _context.SaveChanges();
 
-            _event1 = Mother.GetUserEvent();
+            _event1 = Mother.GetPost();
             _event1.UserId = _user.Id;
 
-            _event2 = Mother.GetUserEvent();
+            _event2 = Mother.GetPost();
             _event2.UserId = _user.Id;
 
-            _context.UserEvents.Add(_event1);
-            _context.UserEvents.Add(_event2);
+            _context.Posts.Add(_event1);
+            _context.Posts.Add(_event2);
             _context.SaveChanges();
         }
 
@@ -41,27 +41,27 @@ namespace Zazz.IntegrationTests.Repositories
         public void GetEventCommentsCorrectly()
         {
             //Arrange
-            var e1Comment1 = new UserEventComment
+            var e1Comment1 = new Comment
                                  {
                                      Date = DateTime.Now,
                                      FromId = _user.Id,
                                      Message = "m",
-                                     UserEventId = _event1.Id
+                                     PostId = _event1.Id
                                  };
-            var e1Comment2 = new UserEventComment
+            var e1Comment2 = new Comment
             {
                 Date = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
-                UserEventId = _event1.Id
+                PostId = _event1.Id
             };
 
-            var e2Comment1 = new UserEventComment
+            var e2Comment1 = new Comment
             {
                 Date = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
-                UserEventId = _event2.Id
+                PostId = _event2.Id
             };
 
             _repo.InsertGraph(e1Comment1);

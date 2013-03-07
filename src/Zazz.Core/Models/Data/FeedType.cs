@@ -2,8 +2,9 @@
 {
     public enum FeedType : byte
     {
-        UesrEvent,
-        UserEventComment,
-        UserPicture
+        Post,
+        Event,
+        Comment,
+        Picture
     }
 }

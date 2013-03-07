@@ -4,21 +4,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserEventComment : BaseEntity
+    public class Comment : BaseEntity
     {
         [ForeignKey("FromId")]
         public User From { get; set; }
 
         public int FromId { get; set; }
 
-        [ForeignKey("UserEventId")]
-        public UserEvent UserEvent { get; set; }
+        [ForeignKey("PostId")]
+        public Post Post { get; set; }
 
-        public int UserEventId { get; set; }
+        public int PostId { get; set; }
 
         [MaxLength(1000)]
         public string Message { get; set; }
 
         public DateTime Date { get; set; }
+
+        public int? ParentId { get; set; }
     }
 }

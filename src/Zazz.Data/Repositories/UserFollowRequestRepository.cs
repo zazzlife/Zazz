@@ -9,13 +9,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserFollowRequestRepository : BaseRepository<UserFollowRequest>, IUserFollowRequestRepository
+    public class UserFollowRequestRepository : BaseRepository<FollowRequest>, IUserFollowRequestRepository
     {
         public UserFollowRequestRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(UserFollowRequest item)
+        protected override int GetItemId(FollowRequest item)
         {
             if (item.FromUserId == default (int) || item.ToUserId == default (int))
                 throw new ArgumentException("From user id and to user id must be supplied");
@@ -31,12 +31,12 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Count(r => r.ToUserId == userId));
         }
 
-        public Task<List<UserFollowRequest>> GetReceivedRequestsAsync(int userId)
+        public Task<List<FollowRequest>> GetReceivedRequestsAsync(int userId)
         {
             return Task.Run(() => DbSet.Where(r => r.ToUserId == userId).ToList());
         }
 
-        public Task<List<UserFollowRequest>> GetSentRequestsAsync(int userId)
+        public Task<List<FollowRequest>> GetSentRequestsAsync(int userId)
         {
             return Task.Run(() => DbSet.Where(r => r.FromUserId == userId).ToList());
         }

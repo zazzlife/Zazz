@@ -12,7 +12,7 @@ namespace Zazz.IntegrationTests.Repositories
         private ZazzDbContext _context;
         private UserEventRepository _repo;
         private User _user;
-        private UserEvent _userEvent;
+        private Post _post;
 
         [SetUp]
         public void Init()
@@ -25,10 +25,10 @@ namespace Zazz.IntegrationTests.Repositories
 
             _context.SaveChanges();
 
-            _userEvent = Mother.GetUserEvent();
-            _userEvent.UserId = _user.Id;
+            _post = Mother.GetPost();
+            _post.UserId = _user.Id;
 
-            _context.UserEvents.Add(_userEvent);
+            _context.Posts.Add(_post);
 
             _context.SaveChanges();
         }
@@ -38,7 +38,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetOwnerIdAsync(_userEvent.Id).Result;
+            var result = _repo.GetOwnerIdAsync(_post.Id).Result;
 
             //Assert
             Assert.AreEqual(_user.Id, result);

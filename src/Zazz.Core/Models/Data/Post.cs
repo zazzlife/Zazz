@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserEvent : BaseEntity
+    public class Post : BaseEntity
     {
         [ForeignKey("UserId")]
         public User User { get; set; }
@@ -35,6 +35,6 @@ namespace Zazz.Core.Models.Data
         [MaxLength(100)]
         public string Location { get; set; }
 
-        public virtual ICollection<UserEventComment> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

@@ -9,10 +9,10 @@ namespace Zazz.Core.Models.Data
 
         public int? UserId { get; set; }
 
-        [ForeignKey("UserEventId")]
-        public UserEvent UserEvent { get; set; }
+        [ForeignKey("PostId")]
+        public Post Post { get; set; }
 
-        public int? UserEventId { get; set; }
+        public int? PostId { get; set; }
 
         public FeedType FeedType { get; set; }
     }

@@ -52,17 +52,17 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 
-        public virtual ICollection<UserImage> UploadedImages { get; set; }
+        public virtual ICollection<Photo> UploadedPhotos { get; set; }
 
         [Display(AutoGenerateField = false)]
         public int CoverPhotoId { get; set; }
 
         public int ProfilePhotoId { get; set; }
 
-        public virtual ICollection<UserEventComment> UserEventComments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
 
-        public virtual ICollection<UserFollow> FollowingUsers { get; set; }
+        public virtual ICollection<Follow> FollowingUsers { get; set; }
 
-        public virtual ICollection<UserFollowRequest> SentFollowRequests { get; set; }
+        public virtual ICollection<FollowRequest> SentFollowRequests { get; set; }
     }
 }

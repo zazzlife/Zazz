@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserImage : BaseEntity
+    public class Photo : BaseEntity
     {
         [ForeignKey("UploaderId")]
         public User Uploader { get; set; }
@@ -15,7 +15,7 @@ namespace Zazz.Core.Models.Data
         public string Description { get; set; }
 
         [ForeignKey("AlbumId")]
-        public UserAlbum Album { get; set; }
+        public Album Album { get; set; }
 
         public int AlbumId { get; set; }
 
