@@ -45,6 +45,7 @@
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\FollowService.cs" />
+    <Compile Include="Services\PhotoService.cs" />
     <Compile Include="Services\PostService.cs" />
   </ItemGroup>
   <ItemGroup>
