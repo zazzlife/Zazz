@@ -15,6 +15,18 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
+        public async Task FollowClubAdminAsync(int fromUserId, int clubAdminUserId)
+        {
+            var exists = await _uow.FollowRepository.ExistsAsync(fromUserId, clubAdminUserId);
+            if (exists)
+                return;
+
+            var follow = new Follow { FromUserId = fromUserId, ToUserId = clubAdminUserId };
+            _uow.FollowRepository.InsertGraph(follow);
+
+            await _uow.SaveAsync();
+        }
+
         public async Task SendFollowRequestAsync(int fromUserId, int toUserId)
         {
             var exists = await _uow.FollowRequestRepository.ExistsAsync(fromUserId, toUserId);
@@ -53,6 +65,11 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FollowRequestRepository.Remove(request);
             await _uow.SaveAsync();
+        }
+
+        public Task RemoveFollowAsync(int fromUserId, int toUserId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<int> GetFollowRequestsCountAsync(int userId)

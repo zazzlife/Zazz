@@ -7,11 +7,15 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFollowService : IDisposable
     {
+        Task FollowClubAdminAsync(int fromUserId, int clubAdminUserId);
+
         Task SendFollowRequestAsync(int fromUserId, int toUserId);
 
         Task AcceptFollowRequestAsync(int requestId);
 
         Task RejectFollowRequestAsync(int requestId);
+
+        Task RemoveFollowAsync(int fromUserId, int toUserId);
 
         Task<int> GetFollowRequestsCountAsync(int userId);
 

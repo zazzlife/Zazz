@@ -35,6 +35,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public async Task NotCreateFollowIfExists_OnFollowClubAdmin()
+        {
+            //Arrange
+            _uow.Setup(x => x.FollowRepository.ExistsAsync(_userAId, _userBId))
+                .Returns(() => Task.Run(() => true));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+
+            //Act
+            await _sut.FollowClubAdminAsync(_userAId, _userBId);
+
+            //Assert
+            _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+        }
+
+        [Test]
+        public async Task CreateFollowIfNotExists_OnFollowClubAdmin()
+        {
+            //Arrange
+            _uow.Setup(x => x.FollowRepository.ExistsAsync(_userAId, _userBId))
+                .Returns(() => Task.Run(() => false));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+
+            //Act
+            await _sut.FollowClubAdminAsync(_userAId, _userBId);
+
+            //Assert
+            _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+        [Test]
         public async Task CheckIfRecordExists_OnSendFollowRequest()
         {
             //Arrange
@@ -47,6 +81,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Never());
         }
 
         [Test]
