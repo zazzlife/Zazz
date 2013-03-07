@@ -37,7 +37,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.CreateEventAsync(_post);
+                await _sut.CreatePostAsync(_post);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException e)
@@ -53,7 +53,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
 
             //Act
-            await _sut.CreateEventAsync(_post);
+            await _sut.CreatePostAsync(_post);
 
             //Assert
             _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
@@ -67,7 +67,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UpdateEventAsync(_post, _userId);
+                await _sut.UpdatePostAsync(_post, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -88,7 +88,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             try
             {
-                await _sut.UpdateEventAsync(_post, _userId);
+                await _sut.UpdatePostAsync(_post, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -108,7 +108,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() => _post.UserId));
 
             //Act
-            await _sut.UpdateEventAsync(_post, _userId);
+            await _sut.UpdatePostAsync(_post, _userId);
 
             //Assert
             _uow.Verify(x => x.PostRepository.InsertOrUpdate(_post), Times.Once());
@@ -126,7 +126,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.DeleteEventAsync(0, _post.UserId);
+                await _sut.DeletePostAsync(0, _post.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -149,7 +149,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             try
             {
-                await _sut.DeleteEventAsync(_post.Id, _post.UserId);
+                await _sut.DeletePostAsync(_post.Id, _post.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -171,7 +171,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() => { }));
 
             //Act
-            await _sut.DeleteEventAsync(_post.Id, _userId);
+            await _sut.DeletePostAsync(_post.Id, _userId);
 
             //Assert
             _uow.Verify(x => x.PostRepository.RemoveAsync(_post.Id), Times.Once());

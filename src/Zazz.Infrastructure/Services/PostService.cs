@@ -15,7 +15,7 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public async Task CreateEventAsync(Post post)
+        public async Task CreatePostAsync(Post post)
         {
             if (post.UserId == 0)
                 throw new ArgumentException("User id cannot be 0");
@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public async Task UpdateEventAsync(Post post, int currentUserId)
+        public async Task UpdatePostAsync(Post post, int currentUserId)
         {
             if (post.Id == 0)
                 throw new ArgumentException();
@@ -39,7 +39,7 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public async Task DeleteEventAsync(int postId, int currentUserId)
+        public async Task DeletePostAsync(int postId, int currentUserId)
         {
             if (postId == 0)
                 throw new ArgumentException();

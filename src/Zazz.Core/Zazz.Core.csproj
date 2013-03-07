@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\IFollowService.cs" />
     <Compile Include="Interfaces\IOAuthAccountRepository.cs" />
+    <Compile Include="Interfaces\IAlbumService.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
