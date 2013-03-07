@@ -31,12 +31,17 @@ namespace Zazz.Infrastructure.Services
 
         public Task<string> GetPhotoDescriptionAsync(int photoId)
         {
-            throw new System.NotImplementedException();
+            return _uoW.PhotoRepository.GetDescriptionAsync(photoId);
         }
 
-        public Task SavePhotoAsync(Photo photo, Stream data)
+        public async Task SavePhotoAsync(Photo photo, Stream data)
         {
-            throw new System.NotImplementedException();
+            photo.UploadDate = DateTime.UtcNow;
+            _uoW.PhotoRepository.InsertGraph(photo);
+            await _uoW.SaveAsync();
+
+            var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            await _fileService.SaveFileAsync(path, data);
         }
 
         public Task RemovePhotoAsync(int photoId, int currentUserId)

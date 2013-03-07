@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -22,6 +24,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs = new Mock<IFileService>();
             _tempRootPath = Path.GetTempPath();
             _sut = new PhotoService(_uow.Object, _fs.Object, _tempRootPath);
+            _uow.Setup(x => x.SaveAsync())
+                .Returns(() => Task.Run(() => { }));
         }
 
         [TestCase("/picture/user/12/2/333.jpg", 12, 2, 333)]
@@ -50,6 +54,51 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public async Task CallGetDescriptionFromRepo_OnGetPhotoDescriptionAsync()
+        {
+            //Arrange
+            var id = 123;
+            _uow.Setup(x => x.PhotoRepository.GetDescriptionAsync(id))
+                .Returns(() => Task.Run(() => "description"));
+
+            //Act
+            var result = await _sut.GetPhotoDescriptionAsync(id);
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetDescriptionAsync(id), Times.Once());
+        }
+
+        [Test]
+        public async Task SavePhotoToDiskAndDB_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+                            {
+                                Id = 1234,
+                                AlbumId = 12,
+                                Description = "desc",
+                                UploaderId = 17
+                            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            using (var ms = new MemoryStream())
+            {
+                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                   .Returns(() => Task.Run(() => { }));
+
+                //Act
+
+                await _sut.SavePhotoAsync(photo, ms);
+
+                //Assert
+                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+                _uow.Verify(x => x.SaveAsync());
+                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            }
         }
 
 
