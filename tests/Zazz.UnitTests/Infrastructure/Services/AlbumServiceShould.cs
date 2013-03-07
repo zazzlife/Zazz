@@ -95,6 +95,57 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uoW.Verify(x => x.SaveAsync(), Times.Once());
         }
 
+        [Test]
+        public async Task ThrowIfAlbumIdIs0_OnDeleteAlbum()
+        {
+            //Arrange
+            //Act
+            try
+            {
+                await _sut.DeleteAlbumAsync(0, _userId);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (ArgumentException)
+            {
+            }
+        }
 
+        [Test]
+        public async Task CheckForOwnerIdAndThrowIfDoesntMatch_OnDeleteAlbum()
+        {
+            //Arrange
+            _album.Id = 123;
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => 155));
+
+            //Act & Assert
+            try
+            {
+                await _sut.DeleteAlbumAsync(_album.Id, _userId);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task DeleteAndSave_OnDeleteAlbum()
+        {
+            //Arrange
+            _album.Id = 123;
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _userId));
+            _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
+                .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.DeleteAlbumAsync(_album.Id, _userId);
+
+            //Assert
+            _uoW.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
+            _uoW.Verify(x => x.SaveAsync(), Times.Once());
+        }
     }
 }

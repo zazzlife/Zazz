@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure.Services
         public async Task UpdateAlbumAsync(Album album, int currentUserId)
         {
             if (album.Id == 0)
-                throw new ArgumentException();
+                throw new ArgumentException("Album id cannot be 0");
 
             var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(album.Id);
             if (ownerId != currentUserId)
@@ -35,9 +35,17 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public Task DeleteAlbumAsync(int albumId, int currentUserId)
+        public async Task DeleteAlbumAsync(int albumId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (albumId == 0)
+                throw new ArgumentException("Album Id cannot be 0", "albumId");
+
+            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(albumId);
+            if (ownerId != currentUserId)
+                throw new SecurityException();
+
+            await _uoW.AlbumRepository.RemoveAsync(albumId);
+            await _uoW.SaveAsync();
         }
 
         public void Dispose()
