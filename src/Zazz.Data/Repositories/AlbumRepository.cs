@@ -18,7 +18,7 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the album, if it's new then use insert graph.");
         }
 
-        public Task<int> GetOwnerId(int albumId)
+        public Task<int> GetOwnerIdAsync(int albumId)
         {
             return Task.Run(() => DbSet.Where(a => a.Id == albumId)
                                              .Select(a => a.UserId)

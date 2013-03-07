@@ -37,7 +37,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = await _repo.GetOwnerId(album.Id);
+            var result = await _repo.GetOwnerIdAsync(album.Id);
 
             //Assert
             Assert.AreEqual(user.Id, result);

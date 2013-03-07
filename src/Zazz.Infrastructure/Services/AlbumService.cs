@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -25,6 +26,13 @@ namespace Zazz.Infrastructure.Services
         {
             if (album.Id == 0)
                 throw new ArgumentException();
+
+            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(album.Id);
+            if (ownerId != currentUserId)
+                throw new SecurityException();
+
+            _uoW.AlbumRepository.InsertOrUpdate(album);
+            await _uoW.SaveAsync();
         }
 
         public Task DeleteAlbumAsync(int albumId, int currentUserId)

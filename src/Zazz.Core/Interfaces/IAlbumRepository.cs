@@ -5,6 +5,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumRepository : IRepository<Album>
     {
-        Task<int> GetOwnerId(int albumId);
+        Task<int> GetOwnerIdAsync(int albumId);
     }
 }

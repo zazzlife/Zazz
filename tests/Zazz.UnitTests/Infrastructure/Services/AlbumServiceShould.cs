@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -43,7 +44,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ShouldThrowIfAlbumIdIs0_OnUpdateAlbum()
+        public async Task ThrowIfAlbumIdIs0_OnUpdateAlbum()
         {
             //Arrange
             //Act
@@ -55,6 +56,43 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (ArgumentException)
             {
             }
+        }
+
+        [Test]
+        public async Task CheckForOwnerIdAndThrowIfDoesntMatch_OnUpdateAlbum()
+        {
+            //Arrange
+            _album.Id = 144;
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => 155));
+
+            //Act & Assert
+            try
+            {
+                await _sut.UpdateAlbumAsync(_album, _userId);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task UpdateAndSave_OnUpdateAlbum()
+        {
+            //Arrange
+            _album.Id = 144;
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _userId));
+            _uoW.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
+
+            //Act
+            await _sut.UpdateAlbumAsync(_album, _userId);
+
+            //Assert
+            _uoW.Verify(x => x.AlbumRepository.InsertOrUpdate(_album), Times.Once());
+            _uoW.Verify(x => x.SaveAsync(), Times.Once());
         }
 
 
