@@ -15,6 +15,7 @@ namespace Zazz.Data
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
         public IDbSet<Post> Posts { get; set; }
+        public IDbSet<Link> Links { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
@@ -43,7 +44,7 @@ namespace Zazz.Data
         {
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.ValidationToken)
-                        .WithRequired();
+                        .WithRequired(v => v.User);
           
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.From)
@@ -64,6 +65,10 @@ namespace Zazz.Data
                 .HasRequired(i => i.Uploader)
                 .WithMany(u => u.UploadedPhotos)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Post>()
+                        .HasOptional(p => p.EventDetail)
+                        .WithRequired(e => e.Post);
 
             base.OnModelCreating(modelBuilder);
         }

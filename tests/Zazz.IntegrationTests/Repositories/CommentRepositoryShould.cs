@@ -38,7 +38,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void GetEventCommentsCorrectly()
+        public void GetCommentsCorrectly()
         {
             //Arrange
             var e1Comment1 = new Comment

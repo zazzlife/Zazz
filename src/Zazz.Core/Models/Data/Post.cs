@@ -18,22 +18,15 @@ namespace Zazz.Core.Models.Data
         [Required]
         public string Message { get; set; }
 
-        [MaxLength(255)]
-        public string PictureLink { get; set; }
-
-        [MaxLength(255)]
-        public string VideoLink { get; set; }
+        public virtual ICollection<Link> Links { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public long FacebookItemId { get; set; }
+        public long? FacebookItemId { get; set; }
 
-        public DateTime? StartDate { get; set; }
+        public bool IsEvent { get; set; }
 
-        public DateTime? EndDate { get; set; }
-
-        [MaxLength(100)]
-        public string Location { get; set; }
+        public virtual EventDetail EventDetail { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
     }

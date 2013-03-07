@@ -22,8 +22,6 @@ namespace Zazz.IntegrationTests
             return new Post
                        {
                            Message = "some text",
-                           StartDate = DateTime.Now,
-                           EndDate = DateTime.Now.AddDays(1),
                            CreatedDate = DateTime.Now,
                            Title = "Title"
                        };

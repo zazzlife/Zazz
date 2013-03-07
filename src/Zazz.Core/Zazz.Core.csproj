@@ -76,8 +76,11 @@
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
+    <Compile Include="Models\Data\EventDetail.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\Gender.cs" />
+    <Compile Include="Models\Data\Link.cs" />
+    <Compile Include="Models\Data\LinkType.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\OAuthProvider.cs" />
