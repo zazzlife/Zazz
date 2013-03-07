@@ -4,9 +4,6 @@
     {
         UesrEvent,
         UserEventComment,
-        UserPicture,
-        ClubEvent,
-        ClubEventComment,
-        ClubPicture
+        UserPicture
     }
 }

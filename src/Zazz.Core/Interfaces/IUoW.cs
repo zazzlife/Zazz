@@ -5,13 +5,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUoW : IDisposable
     {
-        IClubAdminRepository ClubAdminRepository { get; }
-        IClubFollowRepository ClubFollowRepository { get; }
-        IClubImageRepository ClubImageRepository { get; }
-        IClubPostCommentRepository ClubPostCommentRepository { get; }
-        IClubPostRepository ClubPostRepository { get; }
-        IClubRepository ClubRepository { get; }
-
         IOAuthAccountRepository OAuthAccountRepository { get; }
         IUserEventCommentRepository UserEventCommentRepository { get; }
         IUserEventRepository UserEventRepository { get; }

@@ -28,24 +28,5 @@ namespace Zazz.IntegrationTests
                            Title = "Title"
                        };
         }
-
-        public static Club GetClub()
-        {
-            return new Club
-                       {
-                           Name = "Club name"
-                       };
-        }
-
-        public static ClubPost GetClubPost()
-        {
-            return new ClubPost
-                       {
-                           CreatedDate = DateTime.Now,
-                           IsEvent = false,
-                           Message = "text",
-                           Title = "Title"
-                       };
-        }
     }
 }

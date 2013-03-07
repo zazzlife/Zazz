@@ -15,7 +15,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private FollowService _sut;
         private int _userAId;
         private int _clubId;
-        private ClubFollow _clubFollow;
         private int _userBId;
         private UserFollowRequest _userFollowRequest;
 
@@ -28,61 +27,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _userAId = 12;
             _userBId = 15;
             _clubId = 13;
-            _clubFollow = new ClubFollow { ClubId = _clubId, UserId = _userAId };
             _userFollowRequest = new UserFollowRequest {FromUserId = _userAId, ToUserId = _userBId};
 
 
             _uow.Setup(x => x.SaveAsync())
                     .Returns(Task.Run(() => { }));
-        }
-
-        [Test]
-        public async Task CheckBeforeAddingNewFollow_OnFollowClubAsync()
-        {
-            //Arrange
-            _uow.Setup(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId))
-                .Returns(() => Task.Run(() => true));
-            _uow.Setup(x => x.ClubFollowRepository.InsertGraph(_clubFollow));
-
-            //Act
-            await _sut.FollowClubAsync(_userAId, _clubId);
-
-            //Assert
-            _uow.Verify(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId), Times.Once());
-
-        }
-
-        [Test]
-        public async Task NotInsertNewRecordIfFollowExists_OnFollowClubAsync()
-        {
-            //Arrange
-            _uow.Setup(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId))
-                .Returns(() => Task.Run(() => true));
-            _uow.Setup(x => x.ClubFollowRepository.InsertGraph(_clubFollow));
-
-            //Act
-            await _sut.FollowClubAsync(_userAId, _clubId);
-
-            //Assert
-            _uow.Verify(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId), Times.Once());
-            _uow.Verify(x => x.ClubFollowRepository.InsertGraph(It.IsAny<ClubFollow>()), Times.Never());
-        }
-
-        [Test]
-        public async Task InsertAndSaveWhenRecordIsNotExists_OnFollowClubAsync()
-        {
-            //Arrange
-            _uow.Setup(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId))
-                .Returns(() => Task.Run(() => false));
-            _uow.Setup(x => x.ClubFollowRepository.InsertGraph(_clubFollow));
-
-            //Act
-            await _sut.FollowClubAsync(_userAId, _clubId);
-
-            //Assert
-            _uow.Verify(x => x.ClubFollowRepository.ExistsAsync(_userAId, _clubId), Times.Once());
-            _uow.Verify(x => x.ClubFollowRepository.InsertGraph(It.IsAny<ClubFollow>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
         [Test]

@@ -20,14 +20,6 @@ namespace Zazz.Data
         public IDbSet<UserFollowRequest> UserFollowRequests { get; set; }
         public IDbSet<UserFeed> UserFeeds { get; set; }
 
-        public IDbSet<Club> Clubs { get; set; }
-        public IDbSet<ClubAdmin> ClubAdmins { get; set; }
-        public IDbSet<ClubAlbum> ClubAlbums { get; set; }
-        public IDbSet<ClubImage> ClubImages { get; set; }
-        public IDbSet<ClubPost> ClubPosts { get; set; }
-        public IDbSet<ClubPostComment> ClubPostComments { get; set; }
-        public IDbSet<ClubFollow> ClubFollows { get; set; }
-
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -71,11 +63,6 @@ namespace Zazz.Data
             modelBuilder.Entity<UserImage>()
                 .HasRequired(i => i.Uploader)
                 .WithMany(u => u.UploadedImages)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ClubImage>()
-                .HasRequired(i => i.Club)
-                .WithMany(c => c.Images)
                 .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);

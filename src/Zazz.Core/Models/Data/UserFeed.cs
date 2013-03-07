@@ -14,16 +14,6 @@ namespace Zazz.Core.Models.Data
 
         public int? UserEventId { get; set; }
 
-        [ForeignKey("ClubId")]
-        public Club Club { get; set; }
-
-        public int? ClubId { get; set; }
-
-        [ForeignKey("ClubPostId")]
-        public ClubPost ClubPost { get; set; }
-
-        public int? ClubPostId { get; set; }
-
         public FeedType FeedType { get; set; }
     }
 }

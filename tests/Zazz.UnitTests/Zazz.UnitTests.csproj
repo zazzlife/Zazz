@@ -55,7 +55,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
-    <Compile Include="Infrastructure\Services\ClubServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CryptoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FileServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FollowServiceShould.cs" />
