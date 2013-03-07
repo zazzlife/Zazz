@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -20,9 +21,10 @@ namespace Zazz.Infrastructure.Services
             await _uoW.SaveAsync();
         }
 
-        public Task UpdateAlbumAsync(Album album, int currentUserId)
+        public async Task UpdateAlbumAsync(Album album, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (album.Id == 0)
+                throw new ArgumentException();
         }
 
         public Task DeleteAlbumAsync(int albumId, int currentUserId)
