@@ -44,7 +44,7 @@
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\FollowService.cs" />
-    <Compile Include="Services\UserEventService.cs" />
+    <Compile Include="Services\PostService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zazz.Core\Zazz.Core.csproj">

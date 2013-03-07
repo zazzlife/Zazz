@@ -8,16 +8,16 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class UserFollowRequestRepositoryShould
+    public class FollowRequestRepositoryShould
     {
         private ZazzDbContext _context;
-        private UserFollowRequestRepository _repo;
+        private FollowRequestRepository _repo;
 
         [SetUp]
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new UserFollowRequestRepository(_context);
+            _repo = new FollowRequestRepository(_context);
         }
 
         [Test]

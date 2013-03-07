@@ -5,13 +5,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserFeedRepository : BaseRepository<UserFeed>, IUserFeedRepository
+    public class FeedRepository : BaseRepository<Feed>, IFeedRepository
     {
-        public UserFeedRepository(DbContext dbContext) : base(dbContext)
+        public FeedRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(UserFeed item)
+        protected override int GetItemId(Feed item)
         {
             throw new InvalidOperationException("You need to provide the id for updating this record, Use InsertGraph for inserting new record");
         }

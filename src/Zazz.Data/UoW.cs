@@ -15,34 +15,34 @@ namespace Zazz.Data
             get { return _oAuthAccountRepository ?? (_oAuthAccountRepository = new OAuthAccountRepository(_dbContext)); }
         }
 
-        private IUserEventCommentRepository _userEventCommentRepository;
-        public IUserEventCommentRepository UserEventCommentRepository
+        private ICommentRepository _commentRepository;
+        public ICommentRepository CommentRepository
         {
-            get { return _userEventCommentRepository ?? (_userEventCommentRepository = new UserEventCommentRepository(_dbContext)); }
+            get { return _commentRepository ?? (_commentRepository = new CommentRepository(_dbContext)); }
         }
 
-        private IUserEventRepository _userEventRepository;
-        public IUserEventRepository UserEventRepository
+        private IPostRepository _postRepository;
+        public IPostRepository PostRepository
         {
-            get { return _userEventRepository ?? (_userEventRepository = new UserEventRepository(_dbContext)); }
+            get { return _postRepository ?? (_postRepository = new PostRepository(_dbContext)); }
         }
 
-        private IUserFollowRepository _userFollowRepository;
-        public IUserFollowRepository UserFollowRepository
+        private IFollowRepository _followRepository;
+        public IFollowRepository FollowRepository
         {
-            get { return _userFollowRepository ?? (_userFollowRepository = new UserFollowRepository(_dbContext)); }
+            get { return _followRepository ?? (_followRepository = new FollowRepository(_dbContext)); }
         }
 
-        private IUserFollowRequestRepository _userFollowRequestRepository;
-        public IUserFollowRequestRepository UserFollowRequestRepository
+        private IFollowRequestRepository _followRequestRepository;
+        public IFollowRequestRepository FollowRequestRepository
         {
-            get { return _userFollowRequestRepository ?? (_userFollowRequestRepository = new UserFollowRequestRepository(_dbContext)); }
+            get { return _followRequestRepository ?? (_followRequestRepository = new FollowRequestRepository(_dbContext)); }
         }
 
-        private IUserImageRepository _userImageRepository;
-        public IUserImageRepository UserImageRepository
+        private IPhotoRepository _photoRepository;
+        public IPhotoRepository PhotoRepository
         {
-            get { return _userImageRepository ?? (_userImageRepository = new UserImageRepository(_dbContext)); }
+            get { return _photoRepository ?? (_photoRepository = new PhotoRepository(_dbContext)); }
         }
 
         private IUserRepository _userRepository;

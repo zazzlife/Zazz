@@ -38,47 +38,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task CheckIfRecordExists_OnSendFollowRequest()
         {
             //Arrange
-            _uow.Setup(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId))
+            _uow.Setup(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId))
                 .Returns(() => Task.Run(() => true));
-            _uow.Setup(x => x.UserFollowRequestRepository.InsertGraph(_followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
             await _sut.SendFollowRequestAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
         }
 
         [Test]
         public async Task NotInsertIfRecordExists_OnSendFollowRequest()
         {
             //Arrange
-            _uow.Setup(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId))
+            _uow.Setup(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId))
                 .Returns(() => Task.Run(() => true));
-            _uow.Setup(x => x.UserFollowRequestRepository.InsertGraph(_followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
             await _sut.SendFollowRequestAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.UserFollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Never());
+            _uow.Verify(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Never());
         }
 
         [Test]
         public async Task InsertAndSaveCorrectlyWhenNotExists_OnSendFollowRequest()
         {
             //Arrange
-            _uow.Setup(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId))
+            _uow.Setup(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId))
                 .Returns(() => Task.Run(() => false));
-            _uow.Setup(x => x.UserFollowRequestRepository.InsertGraph(_followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
             await _sut.SendFollowRequestAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.UserFollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
@@ -87,17 +87,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.UserFollowRequestRepository.GetByIdAsync(followRequestId))
+            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
                 .Returns(() => Task.Run(() => _followRequest));
-            _uow.Setup(x => x.UserFollowRepository.InsertGraph(It.IsAny<Follow>()));
-            _uow.Setup(x => x.UserFollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
                 
             //Act
             await _sut.AcceptFollowRequestAsync(followRequestId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
-            _uow.Verify(x => x.UserFollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
@@ -106,17 +106,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.UserFollowRequestRepository.GetByIdAsync(followRequestId))
+            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
                 .Returns(() => Task.Run(() => _followRequest));
-            _uow.Setup(x => x.UserFollowRepository.InsertGraph(It.IsAny<Follow>()));
-            _uow.Setup(x => x.UserFollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
             //Act
             await _sut.RejectFollowRequestAsync(followRequestId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.UserFollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
+            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
@@ -125,14 +125,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var count = 42;
-            _uow.Setup(x => x.UserFollowRequestRepository.GetReceivedRequestsCountAsync(_userAId))
+            _uow.Setup(x => x.FollowRequestRepository.GetReceivedRequestsCountAsync(_userAId))
                 .Returns(() => Task.Run(() => count));
 
             //Act
             var result = await _sut.GetFollowRequestsCountAsync(_userAId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsCountAsync(_userAId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequestsCountAsync(_userAId), Times.Once());
             Assert.AreEqual(count, result);
         }
 
@@ -141,14 +141,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var receivedRequests = new List<FollowRequest>();
-            _uow.Setup(x => x.UserFollowRequestRepository.GetReceivedRequestsAsync(_userAId))
+            _uow.Setup(x => x.FollowRequestRepository.GetReceivedRequestsAsync(_userAId))
                 .Returns(() => Task.Run(() => receivedRequests));
 
             //Act
             var result = await _sut.GetFollowRequestsAsync(_userAId);
 
             //Assert
-            _uow.Verify(x => x.UserFollowRequestRepository.GetReceivedRequestsAsync(_userAId), Times.Once());
+            _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequestsAsync(_userAId), Times.Once());
             Assert.AreSame(receivedRequests, result);
         }
     }

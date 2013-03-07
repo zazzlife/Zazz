@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserFollowRequestRepository : IRepository<FollowRequest>
+    public interface IFollowRequestRepository : IRepository<FollowRequest>
     {
         Task<int> GetReceivedRequestsCountAsync(int userId);
 

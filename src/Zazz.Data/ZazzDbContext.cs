@@ -18,7 +18,7 @@ namespace Zazz.Data
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
-        public IDbSet<UserFeed> UserFeeds { get; set; }
+        public IDbSet<Feed> Feeds { get; set; }
 
 
 #if DEBUG

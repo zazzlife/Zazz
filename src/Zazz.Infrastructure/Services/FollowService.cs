@@ -17,7 +17,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task SendFollowRequestAsync(int fromUserId, int toUserId)
         {
-            var exists = await _uow.UserFollowRequestRepository.ExistsAsync(fromUserId, toUserId);
+            var exists = await _uow.FollowRequestRepository.ExistsAsync(fromUserId, toUserId);
             if (exists)
                 return;
 
@@ -28,41 +28,41 @@ namespace Zazz.Infrastructure.Services
                                   RequestDate = DateTime.UtcNow
                               };
 
-            _uow.UserFollowRequestRepository.InsertGraph(request);
+            _uow.FollowRequestRepository.InsertGraph(request);
             await _uow.SaveAsync();
         }
 
         public async Task AcceptFollowRequestAsync(int requestId)
         {
-            var followRequest = await _uow.UserFollowRequestRepository.GetByIdAsync(requestId);
+            var followRequest = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
             if (followRequest == null)
                 return;
 
             var userFollow = new Follow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
-            _uow.UserFollowRepository.InsertGraph(userFollow);
-            _uow.UserFollowRequestRepository.Remove(followRequest);
+            _uow.FollowRepository.InsertGraph(userFollow);
+            _uow.FollowRequestRepository.Remove(followRequest);
 
             await _uow.SaveAsync();
         }
 
         public async Task RejectFollowRequestAsync(int requestId)
         {
-            var request = await _uow.UserFollowRequestRepository.GetByIdAsync(requestId);
+            var request = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
             if (request == null)
                 return;
 
-            _uow.UserFollowRequestRepository.Remove(request);
+            _uow.FollowRequestRepository.Remove(request);
             await _uow.SaveAsync();
         }
 
         public Task<int> GetFollowRequestsCountAsync(int userId)
         {
-            return _uow.UserFollowRequestRepository.GetReceivedRequestsCountAsync(userId);
+            return _uow.FollowRequestRepository.GetReceivedRequestsCountAsync(userId);
         }
 
         public Task<List<FollowRequest>> GetFollowRequestsAsync(int userId)
         {
-            return _uow.UserFollowRequestRepository.GetReceivedRequestsAsync(userId);
+            return _uow.FollowRequestRepository.GetReceivedRequestsAsync(userId);
         }
 
         public void Dispose()

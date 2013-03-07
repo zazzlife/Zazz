@@ -4,14 +4,14 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserEventService : IDisposable
+    public interface IPostService : IDisposable
     {
         Task CreateEventAsync(Post post);
 
         /// <summary>
         /// Updates an event.
         /// </summary>
-        /// <param name="post">The event to update. (Id is required)</param>
+        /// <param name="post">The post to update. (Id is required)</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
         Task UpdateEventAsync(Post post, int currentUserId);
@@ -19,9 +19,9 @@ namespace Zazz.Core.Interfaces
         /// <summary>
         /// Deletes an event
         /// </summary>
-        /// <param name="userEventId">Id of the event to delete.</param>
+        /// <param name="postId">Id of the post to delete.</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task DeleteEventAsync(int userEventId, int currentUserId);
+        Task DeleteEventAsync(int postId, int currentUserId);
     }
 }

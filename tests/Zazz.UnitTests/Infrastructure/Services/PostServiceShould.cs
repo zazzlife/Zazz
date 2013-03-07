@@ -10,10 +10,10 @@ using Zazz.Infrastructure.Services;
 namespace Zazz.UnitTests.Infrastructure.Services
 {
     [TestFixture]
-    public class UserEventServiceShould
+    public class PostServiceShould
     {
         private Mock<IUoW> _uow;
-        private UserEventService _sut;
+        private PostService _sut;
         private int _userId;
         private Post _post;
 
@@ -21,7 +21,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void Init()
         {
             _uow = new Mock<IUoW>();
-            _sut = new UserEventService(_uow.Object);
+            _sut = new PostService(_uow.Object);
             _userId = 21;
             _post = new Post {UserId = _userId};
 
@@ -50,13 +50,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task InsertAndSave_OnCreateEvent()
         {
             //Arrange
-            _uow.Setup(x => x.UserEventRepository.InsertGraph(_post));
+            _uow.Setup(x => x.PostRepository.InsertGraph(_post));
 
             //Act
             await _sut.CreateEventAsync(_post);
 
             //Assert
-            _uow.Verify(x => x.UserEventRepository.InsertGraph(_post), Times.Once());
+            _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
             _uow.Verify(x => x.SaveAsync());
         }
 
@@ -81,7 +81,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _post.Id = 444;
-            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
@@ -96,7 +96,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetOwnerIdAsync(_post.Id), Times.Once());
         }
 
         [Test]
@@ -104,14 +104,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _post.Id = 444;
-            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
                 .Returns(() => Task.Run(() => _post.UserId));
 
             //Act
             await _sut.UpdateEventAsync(_post, _userId);
 
             //Assert
-            _uow.Verify(x => x.UserEventRepository.InsertOrUpdate(_post), Times.Once());
+            _uow.Verify(x => x.PostRepository.InsertOrUpdate(_post), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
 
         }
@@ -120,7 +120,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ShouldThrowIfEventIdIs0_OnDelete()
         {
             //Arrange
-            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
@@ -142,7 +142,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _post.Id = 444;
-            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
@@ -157,7 +157,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetOwnerIdAsync(_post.Id), Times.Once());
         }
 
         [Test]
@@ -165,16 +165,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _post.Id = 444;
-            _uow.Setup(x => x.UserEventRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
                 .Returns(() => Task.Run(() =>_post.UserId));
-            _uow.Setup(x => x.UserEventRepository.RemoveAsync(_post.Id))
+            _uow.Setup(x => x.PostRepository.RemoveAsync(_post.Id))
                 .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.DeleteEventAsync(_post.Id, _userId);
 
             //Assert
-            _uow.Verify(x => x.UserEventRepository.RemoveAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.RemoveAsync(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 

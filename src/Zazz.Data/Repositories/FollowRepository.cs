@@ -9,9 +9,9 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserFollowRepository : BaseRepository<Follow>, IUserFollowRepository
+    public class FollowRepository : BaseRepository<Follow>, IFollowRepository
     {
-        public UserFollowRepository(DbContext dbContext) : base(dbContext)
+        public FollowRepository(DbContext dbContext) : base(dbContext)
         {
         }
 

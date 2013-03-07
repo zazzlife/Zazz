@@ -8,10 +8,10 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class UserFollowRepositoryShould
+    public class FollowRepositoryShould
     {
         private ZazzDbContext _context;
-        private UserFollowRepository _repo;
+        private FollowRepository _repo;
         private User _userA;
         private User _userB;
         private Follow _follow;
@@ -20,7 +20,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new UserFollowRepository(_context);
+            _repo = new FollowRepository(_context);
 
             _userA = Mother.GetUser();
             _userB = Mother.GetUser();

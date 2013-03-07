@@ -8,10 +8,10 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class UserEventCommentRepositoryShould
+    public class CommentRepositoryShould
     {
         private ZazzDbContext _context;
-        private UserEventCommentRepository _repo;
+        private CommentRepository _repo;
         private Post _event1;
         private Post _event2;
         private User _user;
@@ -20,7 +20,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new UserEventCommentRepository(_context);
+            _repo = new CommentRepository(_context);
 
             _user = Mother.GetUser();
             _context.Users.Add(_user);
@@ -71,7 +71,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetEventCommentsAsync(_event1.Id).Result;
+            var result = _repo.GetCommentsAsync(_event1.Id).Result;
 
             //Assert
             Assert.AreEqual(2, result.Count());

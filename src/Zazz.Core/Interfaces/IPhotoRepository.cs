@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserImageRepository : IRepository<Photo>
+    public interface IPhotoRepository : IRepository<Photo>
     {
          
     }

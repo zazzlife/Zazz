@@ -5,9 +5,9 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserImageRepository : BaseRepository<Photo>, IUserImageRepository
+    public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
     {
-        public UserImageRepository(DbContext dbContext) : base(dbContext)
+        public PhotoRepository(DbContext dbContext) : base(dbContext)
         {
         }
 

@@ -58,7 +58,7 @@
     <Compile Include="Infrastructure\Services\CryptoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FileServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FollowServiceShould.cs" />
-    <Compile Include="Infrastructure\Services\UserEventServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\PostServiceShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

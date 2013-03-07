@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserFollowRepository : IRepository<Follow>
+    public interface IFollowRepository : IRepository<Follow>
     {
         /// <summary>
         /// Returns a list of users that follow the user

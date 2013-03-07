@@ -7,9 +7,9 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserEventRepository : BaseRepository<Post>, IUserEventRepository
+    public class PostRepository : BaseRepository<Post>, IPostRepository
     {
-        public UserEventRepository(DbContext dbContext) : base(dbContext)
+        public PostRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
@@ -18,9 +18,9 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the event, if it's new then use insert graph.");
         }
 
-        public Task<int> GetOwnerIdAsync(int eventId)
+        public Task<int> GetOwnerIdAsync(int postId)
         {
-            return Task.Run(() => DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault());
+            return Task.Run(() => DbSet.Where(e => e.Id == postId).Select(e => e.UserId).SingleOrDefault());
         }
     }
 }

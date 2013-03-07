@@ -7,9 +7,9 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserEventCommentRepository : BaseRepository<Comment>, IUserEventCommentRepository
+    public class CommentRepository : BaseRepository<Comment>, ICommentRepository
     {
-        public UserEventCommentRepository(DbContext dbContext) : base(dbContext)
+        public CommentRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
@@ -18,9 +18,9 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the comment, if it's new then use insert graph."); //a user can have multiple comments on a single event.
         }
 
-        public Task<IQueryable<Comment>> GetEventCommentsAsync(int eventId)
+        public Task<IQueryable<Comment>> GetCommentsAsync(int postId)
         {
-            return Task.Run(() => DbSet.Where(c => c.PostId == eventId));
+            return Task.Run(() => DbSet.Where(c => c.PostId == postId));
         }
     }
 }

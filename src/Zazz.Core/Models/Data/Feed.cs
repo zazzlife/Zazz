@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserFeed : BaseEntity
+    public class Feed : BaseEntity
     {
         [ForeignKey("UserId")]
         public User User { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserFeedRepository : IRepository<UserFeed>
+    public interface IFeedRepository : IRepository<Feed>
     {
          
     }

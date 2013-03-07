@@ -7,10 +7,10 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class UserEventRepositoryShould
+    public class PostRepositoryShould
     {
         private ZazzDbContext _context;
-        private UserEventRepository _repo;
+        private PostRepository _repo;
         private User _user;
         private Post _post;
 
@@ -18,7 +18,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new UserEventRepository(_context);
+            _repo = new PostRepository(_context);
 
             _user = Mother.GetUser();
             _context.Users.Add(_user);

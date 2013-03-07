@@ -6,11 +6,11 @@ namespace Zazz.Core.Interfaces
     public interface IUoW : IDisposable
     {
         IOAuthAccountRepository OAuthAccountRepository { get; }
-        IUserEventCommentRepository UserEventCommentRepository { get; }
-        IUserEventRepository UserEventRepository { get; }
-        IUserFollowRepository UserFollowRepository { get; }
-        IUserFollowRequestRepository UserFollowRequestRepository { get; }
-        IUserImageRepository UserImageRepository { get; }
+        ICommentRepository CommentRepository { get; }
+        IPostRepository PostRepository { get; }
+        IFollowRepository FollowRepository { get; }
+        IFollowRequestRepository FollowRequestRepository { get; }
+        IPhotoRepository PhotoRepository { get; }
         IUserRepository UserRepository { get; }
         IValidationTokenRepository ValidationTokenRepository { get; }
 
