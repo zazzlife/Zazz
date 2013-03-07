@@ -156,6 +156,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public async Task RemoveFollow_OnRemoveFollow()
+        {
+            //Arrange
+            _uow.Setup(x => x.FollowRepository.RemoveAsync(_userAId, _userBId))
+                .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.RemoveFollowAsync(_userAId, _userBId);
+
+            //Assert
+            _uow.Verify(x => x.FollowRepository.RemoveAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+
+
+        [Test]
         public async Task ReturnCorrectNumber_OnGetFollowRequestsCount()
         {
             //Arrange
