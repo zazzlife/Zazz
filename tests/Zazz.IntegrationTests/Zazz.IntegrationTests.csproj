@@ -61,6 +61,7 @@
     <Compile Include="Repositories\AlbumRepositoryShould.cs" />
     <Compile Include="Repositories\OAuthAccountRepositoryShould.cs" />
     <Compile Include="Repositories\CommentRepositoryShould.cs" />
+    <Compile Include="Repositories\PhotoRepositoryShould.cs" />
     <Compile Include="Repositories\PostRepositoryShould.cs" />
     <Compile Include="Repositories\FollowRepositoryShould.cs" />
     <Compile Include="Repositories\FollowRequestRepositoryShould.cs" />
