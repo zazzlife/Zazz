@@ -9,7 +9,6 @@ namespace Zazz.Data
         private readonly ZazzDbContext _dbContext;
 
         private IOAuthAccountRepository _oAuthAccountRepository;
-
         public IOAuthAccountRepository OAuthAccountRepository
         {
             get { return _oAuthAccountRepository ?? (_oAuthAccountRepository = new OAuthAccountRepository(_dbContext)); }
@@ -37,6 +36,12 @@ namespace Zazz.Data
         public IFollowRequestRepository FollowRequestRepository
         {
             get { return _followRequestRepository ?? (_followRequestRepository = new FollowRequestRepository(_dbContext)); }
+        }
+
+        private IAlbumRepository _albumRepository;
+        public IAlbumRepository AlbumRepository
+        {
+            get { return _albumRepository ?? (_albumRepository = new AlbumRepository(_dbContext)); }
         }
 
         private IPhotoRepository _photoRepository;

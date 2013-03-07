@@ -57,6 +57,7 @@
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />
+    <Compile Include="Interfaces\IAlbumRepository.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
     <Compile Include="Interfaces\IFileService.cs" />

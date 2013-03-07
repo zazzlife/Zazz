@@ -10,6 +10,7 @@ namespace Zazz.Core.Interfaces
         IPostRepository PostRepository { get; }
         IFollowRepository FollowRepository { get; }
         IFollowRequestRepository FollowRequestRepository { get; }
+        IAlbumRepository AlbumRepository { get; }
         IPhotoRepository PhotoRepository { get; }
         IUserRepository UserRepository { get; }
         IValidationTokenRepository ValidationTokenRepository { get; }

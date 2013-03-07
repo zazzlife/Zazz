@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IAlbumService
+    public interface IAlbumService : IDisposable
     {
         Task CreateAlbumAsync(Album album);
 
