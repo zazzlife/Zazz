@@ -79,7 +79,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = await _repo.GetOwnerId(photo.Id);
+            var result = await _repo.GetOwnerIdAsync(photo.Id);
 
             //Assert
             Assert.AreEqual(user.Id, result);

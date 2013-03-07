@@ -58,9 +58,17 @@ namespace Zazz.Infrastructure.Services
             _fileService.RemoveFile(filePath);
         }
 
-        public Task UpdatePhotoAsync(Photo photo, int currentUserId)
+        public async Task UpdatePhotoAsync(Photo photo, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (photo.Id == 0)
+                throw new ArgumentException();
+
+            var ownerId = await _uoW.PhotoRepository.GetOwnerIdAsync(photo.Id);
+            if (ownerId != currentUserId)
+                throw new SecurityException();
+
+            _uoW.PhotoRepository.InsertOrUpdate(photo);
+            await _uoW.SaveAsync();
         }
 
         public void Dispose()

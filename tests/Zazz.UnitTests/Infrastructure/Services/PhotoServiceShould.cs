@@ -152,7 +152,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
                 .Returns(() => Task.Run(() => userId));
             _uow.Setup(x => x.PhotoRepository.RemoveAsync(photoId))
                 .Returns(() => Task.Run(() => { }));
@@ -166,5 +166,95 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveAsync(), Times.Once());
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
         }
+
+        [Test]
+        public async Task ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
+        {
+            //Arrange
+
+            var photo = new Photo
+            {
+                Id = 0,
+                UploaderId = 124,
+                AlbumId = 123
+            };
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
+                .Returns(() => Task.Run(() => photo.UploaderId));
+
+            //Act
+            try
+            {
+                await _sut.UpdatePhotoAsync(photo, 1234);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Never());
+        }
+
+        [Test]
+        public async Task ThrowIfUserIdIsNotSameAsOwnerId_OnUpdatePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UploaderId = 890
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
+                .Returns(() => Task.Run(() => photo.UploaderId));
+
+            //Act
+            try
+            {
+                await _sut.UpdatePhotoAsync(photo, userId);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task UpdateAndSave_OnUpdatePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UploaderId = userId
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
+                .Returns(() => Task.Run(() => photo.UploaderId));
+            _uow.Setup(x => x.PhotoRepository.InsertOrUpdate(photo));
+
+            //Act
+            await _sut.UpdatePhotoAsync(photo, userId);
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.InsertOrUpdate(photo), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
+
+
     }
 }

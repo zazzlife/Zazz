@@ -7,6 +7,6 @@ namespace Zazz.Core.Interfaces
     {
         Task<string> GetDescriptionAsync(int photoId);
 
-        Task<int> GetOwnerId(int photoId);
+        Task<int> GetOwnerIdAsync(int photoId);
     }
 }

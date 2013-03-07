@@ -25,7 +25,7 @@ namespace Zazz.Data.Repositories
                                        .SingleOrDefault());
         }
 
-        public Task<int> GetOwnerId(int photoId)
+        public Task<int> GetOwnerIdAsync(int photoId)
         {
             return Task.Run(() => DbSet.Where(p => p.Id == photoId)
                                        .Select(p => p.UploaderId)
