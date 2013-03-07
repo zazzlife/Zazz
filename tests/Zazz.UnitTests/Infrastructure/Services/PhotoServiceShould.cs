@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -101,6 +102,69 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
         }
 
+        [Test]
+        public async Task ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var photo = new Photo
+                            {
+                                Id = photoId,
+                                AlbumId = 123,
+                                UploaderId = 999
+                            };
 
+            _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
+                .Returns(() => Task.Run(() => photo));
+
+            //Act
+            try
+            {
+                await _sut.RemovePhotoAsync(photoId, userId);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetByIdAsync(photoId), Times.Once());
+        }
+
+        [Test]
+        public async Task RemoveFileAndDbRecord_OnRemovePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+
+            var photo = new Photo
+                            {
+                                Id = photoId,
+                                AlbumId = albumId,
+                                UploaderId = userId
+                            };
+            
+            _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
+                .Returns(() => Task.Run(() => photo));
+
+            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.RemoveAsync(photoId))
+                .Returns(() => Task.Run(() => { }));
+            _fs.Setup(x => x.RemoveFile(filePath));
+
+            //Act
+            await _sut.RemovePhotoAsync(photoId, userId);
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+        }
     }
 }

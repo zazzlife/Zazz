@@ -45,5 +45,11 @@ namespace Zazz.Infrastructure.Services
                 await fileStream.WriteAsync(data, 0, data.Length);
             }
         }
+
+        public void RemoveFile(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
     }
 }

@@ -24,5 +24,12 @@ namespace Zazz.Data.Repositories
                                        .Select(p => p.Description)
                                        .SingleOrDefault());
         }
+
+        public Task<int> GetOwnerId(int photoId)
+        {
+            return Task.Run(() => DbSet.Where(p => p.Id == photoId)
+                                       .Select(p => p.UploaderId)
+                                       .SingleOrDefault());
+        }
     }
 }

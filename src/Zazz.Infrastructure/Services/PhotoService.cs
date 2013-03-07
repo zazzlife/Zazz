@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -44,9 +45,17 @@ namespace Zazz.Infrastructure.Services
             await _fileService.SaveFileAsync(path, data);
         }
 
-        public Task RemovePhotoAsync(int photoId, int currentUserId)
+        public async Task RemovePhotoAsync(int photoId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            var photo = await _uoW.PhotoRepository.GetByIdAsync(photoId);
+            if (photo.UploaderId != currentUserId)
+                throw new SecurityException();
+
+            _uoW.PhotoRepository.Remove(photo);
+            await _uoW.SaveAsync();
+
+            var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            _fileService.RemoveFile(filePath);
         }
 
         public Task UpdatePhotoAsync(Photo photo, int currentUserId)

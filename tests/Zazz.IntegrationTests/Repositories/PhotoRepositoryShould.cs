@@ -53,6 +53,36 @@ namespace Zazz.IntegrationTests.Repositories
 
         }
 
+        [Test]
+        public async Task ReturnCorrectOwnerId()
+        {
+            //Arrange
+            var description = "test";
+            var user = Mother.GetUser();
+            var album = new Album { Name = "name" };
+            var photo = new Photo { Description = description, UploadDate = DateTime.UtcNow };
 
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+
+                album.UserId = user.Id;
+                photo.UploaderId = user.Id;
+
+                ctx.Albums.Add(album);
+                ctx.SaveChanges();
+
+                photo.AlbumId = album.Id;
+                ctx.Photos.Add(photo);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = await _repo.GetOwnerId(photo.Id);
+
+            //Assert
+            Assert.AreEqual(user.Id, result);
+        }
     }
 }

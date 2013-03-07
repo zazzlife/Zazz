@@ -163,6 +163,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
         }
 
+        [Test]
+        public void ShouldRemoveFile_OnRemoveFile()
+        {
+            //Arrange
+            var fileName = "sample";
+            var fullFilePath = _tempPath + @"\" + fileName;
+
+            using (var file = File.Create(fullFilePath))
+            { }
+
+            Assert.IsTrue(File.Exists(fullFilePath));
+
+            //Act
+            _sut.RemoveFile(fullFilePath);
+
+            //Assert
+            Assert.IsFalse(File.Exists(fullFilePath));
+        }
+
+
+        [Test]
+        public void NotThrowWhenFileNotExists_OnRemoveFile()
+        {
+            //Arrange
+            var fileName = "sample";
+            var fullFilePath = _tempPath + @"\" + fileName;
+
+            Assert.IsFalse(File.Exists(fullFilePath));
+
+            //Act
+            _sut.RemoveFile(fullFilePath);
+
+            //Assert
+            Assert.IsFalse(File.Exists(fullFilePath));
+        }
+
         [TearDown]
         public void Cleanup()
         {
