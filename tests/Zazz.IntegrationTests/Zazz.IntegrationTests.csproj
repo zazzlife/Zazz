@@ -67,6 +67,7 @@
     <Compile Include="Repositories\FollowRequestRepositoryShould.cs" />
     <Compile Include="Repositories\UserRepositoryShould.cs" />
     <Compile Include="Repositories\ValidationTokenRepositoryShould.cs" />
+    <Compile Include="WebServices\FacebookHelperShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,6 +82,10 @@
     <ProjectReference Include="..\..\src\Zazz.Data\Zazz.Data.csproj">
       <Project>{0c41e54b-be21-40fb-b478-d1521dea1cf4}</Project>
       <Name>Zazz.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Zazz.Infrastructure\Zazz.Infrastructure.csproj">
+      <Project>{C86D475A-5D4B-4D53-8067-7F534F18319F}</Project>
+      <Name>Zazz.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

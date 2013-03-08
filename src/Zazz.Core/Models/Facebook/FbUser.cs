@@ -14,6 +14,9 @@ namespace Zazz.Core.Models.Facebook
         [DataMember(Name = "email")]
         public string Email { get; set; }
 
+        [DataMember(Name = "username")]
+        public string Username { get; set; }
+
         [DataMember(Name = "gender")]
         public string Gender { get; set; }
     }
