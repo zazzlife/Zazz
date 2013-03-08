@@ -10,6 +10,6 @@ namespace Zazz.Core.Interfaces
         /// Gets 50 records that are the oldest
         /// </summary>
         /// <returns></returns>
-        Task<List<FacebookSyncRetry>> GetEligibleRetries();
+        Task<List<FacebookSyncRetry>> GetEligibleRetriesAsync();
     }
 }
