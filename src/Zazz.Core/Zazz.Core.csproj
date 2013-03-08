@@ -42,6 +42,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,12 +100,17 @@
     <Compile Include="Models\Data\Photo.cs" />
     <Compile Include="Models\Data\UserType.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
+    <Compile Include="Models\Facebook\FbComment.cs" />
+    <Compile Include="Models\Facebook\FbEvent.cs" />
+    <Compile Include="Models\Facebook\FbUser.cs" />
+    <Compile Include="Models\Facebook\FbVenue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
