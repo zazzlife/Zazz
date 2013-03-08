@@ -62,6 +62,7 @@
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
     <Compile Include="Interfaces\IFacebookHelper.cs" />
+    <Compile Include="Interfaces\IFacebookSyncRetryRepository.cs" />
     <Compile Include="Interfaces\IFacebookService.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\IFollowService.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
     <Compile Include="Models\Data\EventDetail.cs" />
+    <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\Gender.cs" />
     <Compile Include="Models\Data\Link.cs" />

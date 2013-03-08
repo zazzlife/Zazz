@@ -21,6 +21,7 @@ namespace Zazz.Data
         public IDbSet<FollowRequest> FollowRequests { get; set; }
         public IDbSet<Feed> Feeds { get; set; }
 
+        public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
