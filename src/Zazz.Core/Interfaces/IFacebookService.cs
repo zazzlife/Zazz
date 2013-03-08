@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Core.Interfaces
