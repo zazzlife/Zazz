@@ -1,6 +1,8 @@
-﻿using Moq;
+﻿using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -17,7 +19,5 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper = new Mock<IFacebookHelper>();
             _sut = new FacebookService(_fbHelper.Object);
         }
-
-
     }
 }

@@ -20,6 +20,11 @@ namespace Zazz.Infrastructure
             _client.AccessToken = accessToken;
         }
 
+        public void SetAccessToken(string token)
+        {
+            _client.AccessToken = token;
+        }
+
         public Task<T> GetAsync<T>(string path) where T : class
         {
             return _client.GetTaskAsync<T>(path);
