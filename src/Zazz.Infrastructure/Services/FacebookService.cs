@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Facebook;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Facebook;
 
@@ -15,7 +17,27 @@ namespace Zazz.Infrastructure.Services
 
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                _facebookHelper.SetAccessToken(accessToken);
+                return _facebookHelper.GetAsync<FbUser>(id, "email");
+            }
+            catch (FacebookOAuthException)
+            {
+                throw new NotImplementedException();
+            }
+            catch (FacebookApiLimitException)
+            {
+                throw new NotImplementedException();
+            }
+            catch (FacebookApiException)
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public Task<FbEvent> GetEventAsync(string id, string accessToken = null)
