@@ -102,6 +102,8 @@
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Models\Facebook\FbComment.cs" />
     <Compile Include="Models\Facebook\FbEvent.cs" />
+    <Compile Include="Models\Facebook\FbImage.cs" />
+    <Compile Include="Models\Facebook\FbPhoto.cs" />
     <Compile Include="Models\Facebook\FbUser.cs" />
     <Compile Include="Models\Facebook\FbVenue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
