@@ -167,3 +167,6 @@ SubmissionInfo
 
 # WinRT Packages
 AppPackages
+
+# Log files
+*.log

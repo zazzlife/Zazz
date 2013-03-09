@@ -64,5 +64,7 @@ namespace Zazz.Core.Models.Data
         public virtual ICollection<Follow> FollowingUsers { get; set; }
 
         public virtual ICollection<FollowRequest> SentFollowRequests { get; set; }
+
+        public virtual UserDetail UserDetail { get; set; }
     }
 }

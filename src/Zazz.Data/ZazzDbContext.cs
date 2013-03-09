@@ -10,6 +10,7 @@ namespace Zazz.Data
         public IDbSet<School> Schools { get; set; }
 
         public IDbSet<User> Users { get; set; }
+        public IDbSet<UserDetail> UserDetails { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
@@ -46,7 +47,11 @@ namespace Zazz.Data
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.ValidationToken)
                         .WithRequired(v => v.User);
-          
+
+            modelBuilder.Entity<User>()
+                        .HasOptional(u => u.UserDetail)
+                        .WithRequired(d => d.User);
+
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.From)
                 .WithMany(u => u.Comments)
