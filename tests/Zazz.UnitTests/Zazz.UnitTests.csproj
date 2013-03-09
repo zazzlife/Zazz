@@ -54,6 +54,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Infrastructure\ErrorHandlerShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CryptoServiceShould.cs" />
