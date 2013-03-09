@@ -100,6 +100,7 @@ namespace Zazz.UnitTests.Infrastructure
             await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
+            Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
             Assert.AreNotEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LasySyncErrorEmailSent.Value.Date);
             _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
@@ -122,6 +123,7 @@ namespace Zazz.UnitTests.Infrastructure
             await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
+            Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
             _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
@@ -140,6 +142,23 @@ namespace Zazz.UnitTests.Infrastructure
 
             //Assert
             _logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+        }
+
+        [Test]
+        public async Task LogAndAddRecordForRetry_OnHandleApiLimit()
+        {
+            //Arrange
+            _uow.Setup(x => x.FacebookSyncRetryRepository.InsertGraph(It.IsAny<FacebookSyncRetry>()));
+            _logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()));
+
+
+            //Act
+            await _sut.HandleFacebookApiLimitReachedAsync("1234", "", "");
+
+            //Assert
+            _logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            _uow.Verify(x => x.FacebookSyncRetryRepository.InsertGraph(It.IsAny<FacebookSyncRetry>()), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
 

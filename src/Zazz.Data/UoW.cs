@@ -62,6 +62,15 @@ namespace Zazz.Data
             get { return _validationTokenRepository ?? (_validationTokenRepository = new ValidationTokenRepository(_dbContext)); }
         }
 
+        private IFacebookSyncRetryRepository _facebookSyncRetryRepository;
+        public IFacebookSyncRetryRepository FacebookSyncRetryRepository
+        {
+            get
+            {
+                return _facebookSyncRetryRepository ?? (_facebookSyncRetryRepository = new FacebookSyncRetryRepository(_dbContext));
+            }
+        }
+
         public UoW()
         {
             _dbContext = new ZazzDbContext();

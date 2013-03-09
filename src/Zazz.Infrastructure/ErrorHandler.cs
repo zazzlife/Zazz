@@ -50,9 +50,21 @@ namespace Zazz.Infrastructure
             await _uoW.SaveAsync();
         }
 
-        public Task HandleFacebookApiLimitAsync(string fbUserId, string path, string fields)
+        public async Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields)
         {
-            throw new NotImplementedException();
+            var logMessage = String.Format("API limit reached: [FB user id: {0}] [Path: {1}] [Fields: {2}]",
+                                           fbUserId, path, fields);
+            _logger.LogError("ErrorHandler", logMessage);
+
+            var fbSyncRetry = new FacebookSyncRetry
+                                  {
+                                      FacebookUserId = long.Parse(fbUserId),
+                                      Fields = fields,
+                                      Path = path,
+                                      LastTry = DateTime.UtcNow
+                                  };
+            _uoW.FacebookSyncRetryRepository.InsertGraph(fbSyncRetry);
+            await _uoW.SaveAsync();
         }
 
         public Task HandleFacebookApiErrorAsync(string fbUserId, string methodName, Exception exception)

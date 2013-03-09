@@ -14,6 +14,7 @@ namespace Zazz.Core.Interfaces
         IPhotoRepository PhotoRepository { get; }
         IUserRepository UserRepository { get; }
         IValidationTokenRepository ValidationTokenRepository { get; }
+        IFacebookSyncRetryRepository FacebookSyncRetryRepository { get; }
 
         Task SaveAsync();
     }

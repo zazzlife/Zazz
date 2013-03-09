@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
     {
         Task HandleAccessTokenExpiredAsync(string fbUserId, OAuthProvider provider);
 
-        Task HandleFacebookApiLimitAsync(string fbUserId, string path, string fields);
+        Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields);
 
         Task HandleFacebookApiErrorAsync(string fbUserId, string methodName, Exception exception);
     }
