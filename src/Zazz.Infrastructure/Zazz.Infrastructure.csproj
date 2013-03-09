@@ -51,6 +51,7 @@
     <Compile Include="FacebookHelper.cs" />
     <Compile Include="FakeEMailService.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="EmailMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AlbumService.cs" />
     <Compile Include="Services\AuthService.cs" />

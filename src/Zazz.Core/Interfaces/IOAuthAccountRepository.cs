@@ -27,7 +27,7 @@ namespace Zazz.Core.Interfaces
         /// <param name="providerUserId">OAuth Provider's User ID</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        Task<OAuthAccount> GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider);
+        Task<OAuthAccount> GetOAuthAccountByProviderIdAsync(long providerUserId, OAuthProvider provider);
 
         /// <summary>
         /// Checks if the third party account exists

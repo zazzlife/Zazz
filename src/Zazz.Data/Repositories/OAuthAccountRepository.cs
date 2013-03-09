@@ -39,7 +39,7 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Where(o => o.UserId == userId).AsEnumerable());
         }
 
-        public Task<OAuthAccount> GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
+        public Task<OAuthAccount> GetOAuthAccountByProviderIdAsync(long providerUserId, OAuthProvider provider)
         {
             return Task.Run(() => DbSet.Where(o => o.Provider == provider)
                                        .Where(o => o.ProviderUserId == providerUserId)

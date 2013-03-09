@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IErrorHandler
+    public interface IErrorHandler : IDisposable
     {
-        Task HandleAccessTokenExpiredAsync(string fbUserId);
+        Task HandleAccessTokenExpiredAsync(string fbUserId, OAuthProvider provider);
 
         Task HandleFacebookApiLimitAsync(string fbUserId, string path, string fields);
 

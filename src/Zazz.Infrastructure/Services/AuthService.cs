@@ -130,7 +130,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task<User> GetOAuthUserAsync(OAuthAccount oAuthAccount, string email)
         {
-            var existingOAuthAccount = await _uoW.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
+            var existingOAuthAccount = await _uoW.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(oAuthAccount.ProviderUserId,
                                                                         oAuthAccount.Provider);
             if (existingOAuthAccount != null)
                 return existingOAuthAccount.User; // user and OAuth account exist
