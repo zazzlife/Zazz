@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using log4net;
 
 namespace Zazz.Web
 {
@@ -31,6 +32,13 @@ namespace Zazz.Web
 #if DEBUG
             new Zazz.Data.ZazzDbContext();
 #endif
+            log4net.Config.XmlConfigurator.Configure();
+
+            var log = LogManager.GetLogger("Global.asax");
+            log.Info("=========================");
+            log.Info("Starting Application");
+            log.Info("=========================");
+
         }
     }
 }
