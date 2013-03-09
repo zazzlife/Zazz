@@ -61,6 +61,7 @@
     <Compile Include="Interfaces\IAlbumRepository.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IFacebookHelper.cs" />
     <Compile Include="Interfaces\IFacebookSyncRetryRepository.cs" />
     <Compile Include="Interfaces\IFacebookService.cs" />
