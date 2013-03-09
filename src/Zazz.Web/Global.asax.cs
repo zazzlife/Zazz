@@ -36,7 +36,7 @@ namespace Zazz.Web
 
             var log = LogManager.GetLogger("Global.asax");
             log.Info("=========================");
-            log.Info("Starting Application");
+            log.Info("Application Started");
             log.Info("=========================");
 
         }
