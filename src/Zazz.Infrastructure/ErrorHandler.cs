@@ -67,11 +67,9 @@ namespace Zazz.Infrastructure
             await _uoW.SaveAsync();
         }
 
-        public void HandleFacebookApiError(string fbUserId, string methodName, Exception exception)
+        public void LogException(string message, string nameSpace, Exception exception)
         {
-            var logMessage = String.Format("Facebook API Error: [Facebook User Id: {0}], [Calling Method: {1}]",
-                                           fbUserId, methodName);
-            _logger.LogFatal("ErrorHandler", logMessage, exception);
+            _logger.LogFatal(nameSpace, message, exception);
         }
 
         public void Dispose()
