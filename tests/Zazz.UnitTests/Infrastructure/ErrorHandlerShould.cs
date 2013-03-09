@@ -161,6 +161,19 @@ namespace Zazz.UnitTests.Infrastructure
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
+        [Test]
+        public void LogTheFbError_OnHandleFbApiError()
+        {
+            //Arrange
+            _logger.Setup(x => x.LogFatal(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
+
+            //Act
+            _sut.HandleFacebookApiError("1234", "", new Exception());
+
+            //Assert
+            _logger.Verify(x => x.LogFatal(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
+        }
+
 
     }
 }

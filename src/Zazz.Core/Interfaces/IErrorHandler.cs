@@ -10,6 +10,6 @@ namespace Zazz.Core.Interfaces
 
         Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields);
 
-        Task HandleFacebookApiErrorAsync(string fbUserId, string methodName, Exception exception);
+        void HandleFacebookApiError(string fbUserId, string methodName, Exception exception);
     }
 }

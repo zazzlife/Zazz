@@ -52,7 +52,7 @@ namespace Zazz.Infrastructure
 
         public async Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields)
         {
-            var logMessage = String.Format("API limit reached: [FB user id: {0}] [Path: {1}] [Fields: {2}]",
+            var logMessage = String.Format("Facebook API limit reached: [FB user id: {0}] [Path: {1}] [Fields: {2}]",
                                            fbUserId, path, fields);
             _logger.LogError("ErrorHandler", logMessage);
 
@@ -67,9 +67,11 @@ namespace Zazz.Infrastructure
             await _uoW.SaveAsync();
         }
 
-        public Task HandleFacebookApiErrorAsync(string fbUserId, string methodName, Exception exception)
+        public void HandleFacebookApiError(string fbUserId, string methodName, Exception exception)
         {
-            throw new NotImplementedException();
+            var logMessage = String.Format("Facebook API Error: [Facebook User Id: {0}], [Calling Method: {1}]",
+                                           fbUserId, methodName);
+            _logger.LogFatal("ErrorHandler", logMessage, exception);
         }
 
         public void Dispose()
