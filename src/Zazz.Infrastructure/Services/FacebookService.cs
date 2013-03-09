@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Facebook;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Infrastructure.Services
@@ -9,10 +10,12 @@ namespace Zazz.Infrastructure.Services
     public class FacebookService : IFacebookService
     {
         private readonly IFacebookHelper _facebookHelper;
+        private readonly IErrorHandler _errorHandler;
 
-        public FacebookService(IFacebookHelper facebookHelper)
+        public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler)
         {
             _facebookHelper = facebookHelper;
+            _errorHandler = errorHandler;
         }
 
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)
@@ -24,19 +27,18 @@ namespace Zazz.Infrastructure.Services
             }
             catch (FacebookOAuthException)
             {
-                throw new NotImplementedException();
+                _errorHandler.HandleAccessTokenExpiredAsync(id, OAuthProvider.Facebook).Wait();
+                throw;
             }
             catch (FacebookApiLimitException)
             {
-                throw new NotImplementedException();
+                _errorHandler.HandleFacebookApiLimitReachedAsync(id, "", "").Wait();
+                throw;
             }
-            catch (FacebookApiException)
+            catch (Exception e)
             {
-                throw new NotImplementedException();
-            }
-            catch (Exception)
-            {
-                throw new NotImplementedException();
+                _errorHandler.LogException("Fb user id: " + id, "FacebookService.GetUserAsync", e);
+                throw;
             }
         }
 
