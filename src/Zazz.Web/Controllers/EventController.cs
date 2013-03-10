@@ -98,7 +98,8 @@ namespace Zazz.Web.Controllers
                                  Name = post.Title,
                                  Price = post.EventDetail.Price,
                                  StartTime = post.EventDetail.StartTime,
-                                 Street = post.EventDetail.Street
+                                 Street = post.EventDetail.Street,
+                                 FacebookLink = post.FacebookLink
                              };
 
                 ViewData.Model = vm;

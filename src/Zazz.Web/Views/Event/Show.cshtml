@@ -5,3 +5,39 @@
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
+@section MiddlePanel
+{
+    <div>
+        <div class="page-header">
+            <h3>@Model.Name</h3>
+        </div>
+
+        <div class="margin-ten">
+            <strong class="pull-right">@Model.StartTime</strong>
+
+            <img src="~/Images/placeholder.gif" width="128" height="128" />
+
+            <p class="event-detail">@Model.Detail</p>
+            @if (Model.Price.HasValue)
+            {
+                <p class="event-price"><strong>@Model.Price.Value.ToString("C")</strong></p>    
+            }
+
+            <address>
+                <strong>@Model.Location</strong><br />
+                @Model.Street, @Model.City
+
+            </address>
+        </div>
+    </div>
+}
+
+@section RightPanel
+{
+    <ul class="nav nav-list">
+        @if (!String.IsNullOrEmpty(Model.FacebookLink))
+        {
+            <li class="disabled"><a href="@Model.FacebookLink" class="disabled"><i class="icon-facebook"></i> Facebook Link</a></li>
+        }
+    </ul>
+}

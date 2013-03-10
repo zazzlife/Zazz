@@ -261,19 +261,32 @@ hr.dark-line {
     border-right: 1px solid #dcdcdc;
     border-left: 1px solid #dcdcdc;
     margin-top: -50px;
-    padding-top: 70px;
+    padding-top: 30px;
+}
+
+.middle-panel .page-header {
+    margin-bottom: 15px;
+    padding-left: 8px;
 }
 
 .middle-panel .margin-ten {
     margin: 0 10px 0 10px;
 }
 
+.middle-panel .event-detail {
+    margin-top: 20px;
+    white-space: pre-line;
+}
+
+.middle-panel .event-price {
+    margin: 20px 0;
+}
+
 /**********RIGHT PANEL***********/
 
 .right-panel {
     float: right;
-    width: 190px;
-    padding-left: 10px;
+    width: 215px;
 }
 
 .right-panel a {
