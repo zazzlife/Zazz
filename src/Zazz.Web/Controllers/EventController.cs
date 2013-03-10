@@ -76,5 +76,35 @@ namespace Zazz.Web.Controllers
 
             return View();
         }
+
+        [HttpGet, Authorize]
+        public async Task<ActionResult> Show(int id)
+        {
+            using (_userService)
+            using (_postService)
+            {
+                var post = await _postService.GetPostAsync(id);
+                if (post == null)
+                    throw new HttpException(404, "The requested entry was not found");
+
+                var vm = new EventViewModel
+                             {
+                                 City = post.EventDetail.City,
+                                 Country = post.EventDetail.Country,
+                                 CreatedDate = post.CreatedDate,
+                                 Detail = post.Message,
+                                 EndTime = post.EventDetail.EndTime,
+                                 Location = post.EventDetail.Location,
+                                 Name = post.Title,
+                                 Price = post.EventDetail.Price,
+                                 StartTime = post.EventDetail.StartTime,
+                                 Street = post.EventDetail.Street
+                             };
+
+                ViewData.Model = vm;
+            }
+
+            return View();
+        }
     }
 }

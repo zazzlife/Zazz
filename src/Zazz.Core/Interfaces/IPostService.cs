@@ -6,6 +6,11 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPostService : IDisposable
     {
+        /// <summary>
+        /// Creates an event or post.
+        /// </summary>
+        /// <param name="post"></param>
+        /// <returns></returns>
         Task CreatePostAsync(Post post);
 
         /// <summary>
@@ -15,6 +20,13 @@ namespace Zazz.Core.Interfaces
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
         Task UpdatePostAsync(Post post, int currentUserId);
+
+        /// <summary>
+        /// Gets an entry
+        /// </summary>
+        /// <param name="id">Event or post id</param>
+        /// <returns></returns>
+        Task<Post> GetPostAsync(int id);
 
         /// <summary>
         /// Deletes an event

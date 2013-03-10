@@ -14,7 +14,7 @@ namespace Zazz.Web.Models
         [Required, Display(Name = "Start Time")]
         public DateTime StartTime { get; set; }
 
-        [Required, Display(Name = "End Time")]
+        [Display(Name = "End Time")]
         public DateTime? EndTime { get; set; }
 
         [StringLength(80)]
@@ -31,5 +31,8 @@ namespace Zazz.Web.Models
 
         [DataType(DataType.Currency)]
         public float? Price { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public DateTime CreatedDate { get; set; }
     }
 }
