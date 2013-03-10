@@ -9,11 +9,30 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Id")]
         public virtual Post Post { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime StartTime { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndTime { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(80)]
         public string Location { get; set; }
+
+        [MaxLength(80)]
+        public string Street { get; set; }
+
+        [MaxLength(50)]
+        public string City { get; set; }
+
+        [MaxLength(50)]
+        public string State { get; set; }
+
+        [MaxLength(50)]
+        public string Country { get; set; }
+
+        public float Latitude { get; set; }
+
+        public float Longitude { get; set; }
+
+        [DataType(DataType.Currency)]
+        public float Price { get; set; }
     }
 }

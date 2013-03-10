@@ -12,7 +12,7 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
-        [MaxLength(150)]
+        [Required, MaxLength(150)]
         public string Title { get; set; }
 
         [Required]
@@ -22,7 +22,16 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedDate { get; set; }
 
-        public long? FacebookItemId { get; set; }
+        [MaxLength(100), DataType("varchar")]
+        public string FacebookItemId { get; set; }
+
+        [MaxLength(300), DataType(DataType.Url)]
+        public string FacebookLink { get; set; }
+
+        [MaxLength(300), DataType(DataType.ImageUrl)]
+        public string FacebookPhotoLink { get; set; }
+
+        public int? PhotoId { get; set; }
 
         public bool IsEvent { get; set; }
 
