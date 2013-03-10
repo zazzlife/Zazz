@@ -5,6 +5,9 @@ namespace Zazz.Web.Models
 {
     public class EventViewModel
     {
+        [Display(AutoGenerateField = false)]
+        public int Id { get; set; }
+
         [Required, StringLength(150)]
         public string Name { get; set; }
 
@@ -34,5 +37,8 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public string FacebookLink { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public bool IsOwner { get; set; }
     }
 }

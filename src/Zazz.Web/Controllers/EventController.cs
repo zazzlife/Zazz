@@ -82,12 +82,15 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_postService)
             {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                
                 var post = await _postService.GetPostAsync(id);
                 if (post == null)
                     throw new HttpException(404, "The requested entry was not found");
 
                 var vm = new EventViewModel
                              {
+                                 Id = post.Id,
                                  City = post.EventDetail.City,
                                  Country = post.EventDetail.Country,
                                  CreatedDate = post.CreatedDate,
@@ -97,7 +100,8 @@ namespace Zazz.Web.Controllers
                                  Price = post.EventDetail.Price,
                                  StartTime = post.EventDetail.StartTime,
                                  Street = post.EventDetail.Street,
-                                 FacebookLink = post.FacebookLink
+                                 FacebookLink = post.FacebookLink,
+                                 IsOwner = post.UserId == userId
                              };
 
                 ViewData.Model = vm;

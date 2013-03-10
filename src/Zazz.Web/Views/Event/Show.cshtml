@@ -35,6 +35,12 @@
 @section RightPanel
 {
     <ul class="nav nav-list">
+        
+        @if (Model.IsOwner)
+        {
+            <li><a href="~/event/edit/@Model.Id"><i class="icon-pencil"></i> Edit Event</a></li>
+        }
+
         @if (!String.IsNullOrEmpty(Model.FacebookLink))
         {
             <li class="disabled"><a href="@Model.FacebookLink" class="disabled"><i class="icon-facebook"></i> Facebook Link</a></li>
