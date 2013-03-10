@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
@@ -16,6 +17,18 @@ namespace Zazz.Web.Controllers
         public ActionResult Me()
         {
             return View("Profile");
+        }
+
+        [HttpGet, Authorize]
+        public ActionResult Edit()
+        {
+            return View();
+        }
+
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public ActionResult Edit(EditProfileViewModel vm)
+        {
+            return View();
         }
     }
 }
