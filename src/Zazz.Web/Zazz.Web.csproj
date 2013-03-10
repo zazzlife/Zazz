@@ -362,6 +362,7 @@
     <Content Include="Views\Shared\FeedItems\_EventFeedItem.cshtml" />
     <Content Include="Views\Home\Unknown.cshtml" />
     <Content Include="Views\Event\Create.cshtml" />
+    <Content Include="Views\Shared\_UserPageLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
