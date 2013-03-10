@@ -5,97 +5,94 @@
     ViewBag.Title = ViewBag.FormAction + " Event";
 }
 
-@section MiddlePanel
-{
-    <div>
-        <div class="page-header">
-            <h3>@ViewBag.FormAction Event</h3>
-        </div>
+<div>
+    <div class="page-header">
+        <h3>@ViewBag.FormAction Event</h3>
+    </div>
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
             
-            @Html.HiddenFor(m => m.CreatedDate)
+        @Html.HiddenFor(m => m.CreatedDate)
             
-            <div class="margin-ten">
+        <div class="margin-ten">
 
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Name, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.Name, null, new { @class = "help-inline" })
-                    </div>
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })
                 </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Detail, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextAreaFor(model => model.Detail, new { @class = "span4", @style="height: 180px;" })
-                        @Html.ValidationMessageFor(model => model.Detail, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.StartTime, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.StartTime, new { @class = "span4 datepicker" })
-                        @Html.ValidationMessageFor(model => model.StartTime, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Location, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Location, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.Location, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Street, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Street, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.Street, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.City, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.City, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.City, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Price, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Price, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.Price, null, new { @class = "help-inline" })
-                    </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Name, new { @class = "span4" })
+                    @Html.ValidationMessageFor(model => model.Name, null, new { @class = "help-inline" })
                 </div>
             </div>
 
-            <p class="form-actions">
-                <input type="submit" value="Submit" class="btn btn-primary" />
-            </p>
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Detail, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Detail, new { @class = "span4", @style = "height: 180px;" })
+                    @Html.ValidationMessageFor(model => model.Detail, null, new { @class = "help-inline" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.StartTime, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.StartTime, new { @class = "span4 datepicker" })
+                    @Html.ValidationMessageFor(model => model.StartTime, null, new { @class = "help-inline" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Location, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Location, new { @class = "span4" })
+                    @Html.ValidationMessageFor(model => model.Location, null, new { @class = "help-inline" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Street, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Street, new { @class = "span4" })
+                    @Html.ValidationMessageFor(model => model.Street, null, new { @class = "help-inline" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.City, new { @class = "span4" })
+                    @Html.ValidationMessageFor(model => model.City, null, new { @class = "help-inline" })
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Price, new { @class = "control-label" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Price, new { @class = "span4" })
+                    @Html.ValidationMessageFor(model => model.Price, null, new { @class = "help-inline" })
+                </div>
+            </div>
+        </div>
+
+        <p class="form-actions">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </p>
         
-        }
-    </div>
-}
+    }
+</div>

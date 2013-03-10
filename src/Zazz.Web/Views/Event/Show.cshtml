@@ -5,45 +5,43 @@
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
-@section MiddlePanel
-{
-    <div>
-        <div class="page-header">
-            <h3>@Model.Name</h3>
-        </div>
 
-        <div class="margin-ten">
-            <strong class="pull-right">@Model.StartTime</strong>
-
-            <img src="~/Images/placeholder.gif" width="128" height="128" />
-
-            <p class="event-detail">@Model.Detail</p>
-            @if (Model.Price.HasValue)
-            {
-                <p class="event-price"><strong>@Model.Price.Value.ToString("C")</strong></p>    
-            }
-
-            <address>
-                <strong>@Model.Location</strong><br />
-                @Model.Street, @Model.City
-
-            </address>
-        </div>
+<div>
+    <div class="page-header">
+        <h3>@Model.Name</h3>
     </div>
 
-    <div class="modal hide fade" id="remove-event-modal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Are you sure?</h3>
-        </div>
-        
-        <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn">No</a>
-            <a href="~/event/remove/@Model.Id" class="btn btn-primary">Yes</a>
-        </div>
+    <div class="margin-ten">
+        <strong class="pull-right">@Model.StartTime</strong>
+
+        <img src="~/Images/placeholder.gif" width="128" height="128" />
+
+        <p class="event-detail">@Model.Detail</p>
+        @if (Model.Price.HasValue)
+        {
+            <p class="event-price"><strong>@Model.Price.Value.ToString("C")</strong></p>    
+        }
+
+        <address>
+            <strong>@Model.Location</strong><br />
+            @Model.Street, @Model.City
+
+        </address>
+    </div>
+</div>
+
+<div class="modal hide fade" id="remove-event-modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Are you sure?</h3>
     </div>
 
-}
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">No</a>
+        <a href="~/event/remove/@Model.Id" class="btn btn-primary">Yes</a>
+    </div>
+</div>
+
 
 @section RightPanel
 {

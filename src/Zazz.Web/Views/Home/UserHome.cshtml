@@ -2,18 +2,16 @@
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
-@section MiddlePanel
-            {
-    <div style="height: 200px; margin-left: 10px;">
-        <strong>reserving space for later use</strong>
-    </div>
 
-    <div class="margin-ten">
-        @Html.Partial("FeedItems/_EventFeedItem")
+<div style="height: 200px; margin-left: 10px;">
+    <strong>reserving space for later use</strong>
+</div>
 
-        @Html.Partial("FeedItems/_PicturePostFeedItem")
-    </div>
-}
+<div class="margin-ten">
+    @Html.Partial("FeedItems/_EventFeedItem")
+
+    @Html.Partial("FeedItems/_PicturePostFeedItem")
+</div>
 
 @section RightPanel
 {
