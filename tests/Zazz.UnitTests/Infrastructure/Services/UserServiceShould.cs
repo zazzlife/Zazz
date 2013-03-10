@@ -1,6 +1,8 @@
-﻿using Moq;
+﻿using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -33,6 +35,25 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(id, result);
             _uow.Verify(x => x.UserRepository.GetIdByUsername(username), Times.Once());
+        }
+
+        [Test]
+        public async Task CallGetByUsername_OnGetUser()
+        {
+            //Arrange
+            var username = "soroush";
+            var user = new User();
+            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
+                .Returns(() => Task.Run(() => user));
+
+
+            //Act
+            var result = await _sut.GetUserAsync(username);
+
+            //Assert
+            Assert.AreSame(user, result);
+            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+
         }
 
 

@@ -1,4 +1,6 @@
-﻿using Zazz.Core.Interfaces;
+﻿using System.Threading.Tasks;
+using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -14,6 +16,11 @@ namespace Zazz.Infrastructure.Services
         public int GetUserId(string username)
         {
             return _uoW.UserRepository.GetIdByUsername(username);
+        }
+
+        public Task<User> GetUserAsync(string username)
+        {
+            return _uoW.UserRepository.GetByUsernameAsync(username);
         }
 
         public void Dispose()

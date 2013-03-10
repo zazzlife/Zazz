@@ -10,5 +10,104 @@
         <h3>Edit Profile</h3>
     </div>
 
-    <div></div>
+    <div class="margin-ten">
+
+        @using (Html.BeginForm())
+        {
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#aboutTab" data-toggle="tab">About</a></li>
+                    <li><a href="#profilePicTab" data-toggle="tab">Profile Pictures</a></li>
+                    <li><a href="#fbSyncTab" data-toggle="tab">Facebook Sync</a></li>
+                    <li><a href="#notificationsTab" data-toggle="tab">Notifications</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="aboutTab">
+                        <a href="~/account/changepassword">Change Password</a>
+                        <p style="margin-top: 30px;">
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.TextBoxFor(model => model.FullName, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.CityId, Model.Cities, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.SchoolId, Model.Schools, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.MajorId, Model.Majors, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="profilePicTab">
+                        <p></p>
+                    </div>
+                    <div class="tab-pane" id="fbSyncTab">
+                        <p>
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbEvents) Sync Facebook Events
+                                </label>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
+                                </label>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
+                                </label>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="notificationsTab">
+                        <p>
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SendFbErrorNotification) Send Facebook Sync Error Notifications
+                                </label>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </p>
+        }
+
+    </div>
 </div>
