@@ -24,9 +24,9 @@
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-
-         
-         
+            
+            @Html.HiddenFor(m => m.CreatedDate)
+            
             <div class="margin-ten">
 
                 <div class="control-group">
@@ -86,16 +86,6 @@
                     <div class="editor-field">
                         @Html.TextBoxFor(model => model.City, new { @class = "span4" })
                         @Html.ValidationMessageFor(model => model.City, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Country, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Country, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.Country, null, new { @class = "help-inline" })
                     </div>
                 </div>
 

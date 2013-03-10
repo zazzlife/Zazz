@@ -49,25 +49,10 @@ namespace Zazz.Web.Controllers
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
                     if (userId == 0)
-                        throw new SecurityException();
+                        throw new HttpException(401, "Unauthorized");
 
-                    var post = new Post
-                                   {
-                                       UserId = userId,
-                                       Title = vm.Name,
-                                       Message = vm.Detail,
-                                       IsEvent = true,
-                                       CreatedDate = DateTime.UtcNow,
-                                       EventDetail = new EventDetail
-                                                         {
-                                                             City = vm.City,
-                                                             Country = vm.Country,
-                                                             Location = vm.Location,
-                                                             Price = vm.Price,
-                                                             StartTime = vm.StartTime,
-                                                             Street = vm.Street
-                                                         }
-                                   };
+                    var post = EventViewModelToPost(vm, userId);
+                    post.CreatedDate = DateTime.UtcNow;
 
                     await _postService.CreatePostAsync(post);
                     return Redirect("~/event/show/" + post.Id);
@@ -81,35 +66,93 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public async Task<ActionResult> Show(int id)
         {
+            var vm = await GetEventAsync(id, false);
+            return View(vm);
+        }
+
+        [HttpGet, Authorize]
+        public async Task<ActionResult> Edit(int id)
+        {
+            var vm = await GetEventAsync(id, true);
+            ViewBag.FormAction = "Edit";
+
+            return View("EditForm", vm);
+        }
+
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(int id, EventViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                using (_userService)
+                using (_postService)
+                {
+                    var userId = _userService.GetUserId(User.Identity.Name);
+                    var post = EventViewModelToPost(vm, userId);
+                    post.Id = id;
+                    post.EventDetail.Id = id;
+                    post.CreatedDate = vm.CreatedDate.Value;
+
+                    await _postService.UpdatePostAsync(post, userId);
+                }
+
+                return Redirect("~/event/show/" + id);
+            }
+
+            return View("EditForm", vm);
+        }
+
+        private static Post EventViewModelToPost(EventViewModel vm, int userId)
+        {
+            var post = new Post
+                           {
+                               Title = vm.Name,
+                               Message = vm.Detail,
+                               IsEvent = true,
+                               UserId = userId,
+                               EventDetail = new EventDetail
+                                                 {
+                                                     City = vm.City,
+                                                     Location = vm.Location,
+                                                     Price = vm.Price,
+                                                     StartTime = vm.StartTime,
+                                                     Street = vm.Street
+                                                 }
+                           };
+            return post;
+        }
+
+        public async Task<EventViewModel> GetEventAsync(int id, bool ownerOnly)
+        {
             using (_userService)
             using (_postService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                
+
                 var post = await _postService.GetPostAsync(id);
                 if (post == null)
                     throw new HttpException(404, "The requested entry was not found");
 
+                if (ownerOnly && userId != post.UserId)
+                    throw new HttpException(401, "Unauthorized");
+
                 var vm = new EventViewModel
-                             {
-                                 Id = post.Id,
-                                 City = post.EventDetail.City,
-                                 Country = post.EventDetail.Country,
-                                 CreatedDate = post.CreatedDate,
-                                 Detail = post.Message,
-                                 Location = post.EventDetail.Location,
-                                 Name = post.Title,
-                                 Price = post.EventDetail.Price,
-                                 StartTime = post.EventDetail.StartTime,
-                                 Street = post.EventDetail.Street,
-                                 FacebookLink = post.FacebookLink,
-                                 IsOwner = post.UserId == userId
-                             };
+                {
+                    Id = post.Id,
+                    City = post.EventDetail.City,
+                    CreatedDate = post.CreatedDate,
+                    Detail = post.Message,
+                    Location = post.EventDetail.Location,
+                    Name = post.Title,
+                    Price = post.EventDetail.Price,
+                    StartTime = post.EventDetail.StartTime,
+                    Street = post.EventDetail.Street,
+                    FacebookLink = post.FacebookLink,
+                    IsOwner = post.UserId == userId
+                };
 
-                ViewData.Model = vm;
+                return vm;
             }
-
-            return View();
         }
     }
 }

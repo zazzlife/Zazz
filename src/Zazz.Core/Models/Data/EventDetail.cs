@@ -11,8 +11,6 @@ namespace Zazz.Core.Models.Data
 
         public DateTime StartTime { get; set; }
 
-        public DateTime? EndTime { get; set; }
-
         [MaxLength(80)]
         public string Location { get; set; }
 
@@ -21,9 +19,6 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(50)]
         public string City { get; set; }
-
-        [MaxLength(50)]
-        public string Country { get; set; }
 
         public float Latitude { get; set; }
 
