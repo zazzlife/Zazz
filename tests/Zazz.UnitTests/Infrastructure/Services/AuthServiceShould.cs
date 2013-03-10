@@ -143,11 +143,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #endregion
 
         #region Register
+
+        [Test]
+        public async Task ThrowWhenUserDetailIsNull_OnRegister()
+        {
+            //Arrange
+            var user = new User();
+
+            //Act
+            try
+            {
+                await _sut.RegisterAsync(user, false);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (ArgumentNullException)
+            {
+            }
+
+            //Assert
+        }
+
         [Test]
         public void CheckForExistingUser_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -164,7 +184,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowIfUsernameExists_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => true));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -187,7 +207,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void CheckForExistingEmail_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -205,7 +225,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowIfEmailExists_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass" };
+            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -231,7 +251,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var clearPass = "pass";
             var hashedPass = "hashedPassword";
 
-            var user = new User { Email = "email", Username = "username", Password = clearPass };
+            var user = new User { Email = "email", Username = "username", Password = clearPass, UserDetail = new UserDetail() };
 
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
@@ -252,7 +272,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void AssignUTCDateTimeAsRegiterDate_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail()};
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -271,7 +291,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void GenerateValidationTokenIfRequested_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -295,7 +315,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void SaveUserWhenEverythingIsOk_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue };
+            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail() };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
