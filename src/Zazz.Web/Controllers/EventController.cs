@@ -35,7 +35,8 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Create()
         {
-            return View();
+            ViewBag.FormAction = "Create";
+            return View("EditForm");
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
@@ -73,7 +74,8 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            return View();
+            ViewBag.FormAction = "Create";
+            return View("EditForm");
         }
 
         [HttpGet, Authorize]

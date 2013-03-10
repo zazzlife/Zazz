@@ -364,7 +364,7 @@
     <Content Include="Views\Shared\FeedItems\_PicturePostFeedItem.cshtml" />
     <Content Include="Views\Shared\FeedItems\_EventFeedItem.cshtml" />
     <Content Include="Views\Home\Unknown.cshtml" />
-    <Content Include="Views\Event\Create.cshtml" />
+    <Content Include="Views\Event\EditForm.cshtml" />
     <Content Include="Views\Shared\_UserPageLayout.cshtml" />
     <Content Include="Views\Event\Show.cshtml" />
   </ItemGroup>

@@ -2,14 +2,14 @@
 
 @{
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
-    ViewBag.Title = "Create Event";
+    ViewBag.Title = ViewBag.FormAction + " Event";
 }
 
 @section MiddlePanel
 {
     <div>
         <div class="page-header">
-            <h3>Create Event</h3>
+            <h3>@ViewBag.FormAction Event</h3>
         </div>
         @if (TempData["alert"] != null && ((bool)TempData["alert"]))
         {
@@ -111,7 +111,7 @@
             </div>
 
             <p class="form-actions">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Submit" class="btn btn-primary" />
             </p>
         
         }
