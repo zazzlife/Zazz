@@ -19,6 +19,7 @@
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.Web.DependencyResolution 
@@ -37,8 +38,28 @@ namespace Zazz.Web.DependencyResolution
 
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             x.For<IUoW>().Use<UoW>();
+                            
+                            // Services
+                            x.For<IAlbumService>().Use<AlbumService>();
                             x.For<IAuthService>().Use<AuthService>();
                             x.For<ICryptoService>().Use<CryptoService>();
+                            x.For<IFacebookService>().Use<FacebookService>();
+                            x.For<IFileService>().Use<FileService>();
+                            x.For<IFollowService>().Use<FollowService>();
+                            x.For<IPhotoService>().Use<PhotoService>();
+                            x.For<IPostService>().Use<PostService>();
+                            x.For<IUserService>().Use<UserService>();
+
+                            // Helpers
+                            x.For<IErrorHandler>().Use<ErrorHandler>();
+                            x.For<IFacebookHelper>().Use<FacebookHelper>();
+                            x.For<ILogger>().Use<Logger>();
+
+#if DEBUG
+                            x.For<IEmailService>().Use<FakeEmailService>();
+#else
+#endif
+
                         });
             return ObjectFactory.Container;
         }

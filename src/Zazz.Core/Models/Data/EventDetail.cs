@@ -23,9 +23,6 @@ namespace Zazz.Core.Models.Data
         public string City { get; set; }
 
         [MaxLength(50)]
-        public string State { get; set; }
-
-        [MaxLength(50)]
         public string Country { get; set; }
 
         public float Latitude { get; set; }
