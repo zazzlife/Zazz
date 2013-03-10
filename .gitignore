@@ -170,3 +170,6 @@ AppPackages
 
 # Log files
 *.log
+
+# Data Files
+App_Data/
