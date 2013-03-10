@@ -237,6 +237,7 @@
     <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
@@ -254,12 +255,14 @@
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\app\flip.js" />
+    <Content Include="Scripts\app\global.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Scripts\css-transit.js" />
+    <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

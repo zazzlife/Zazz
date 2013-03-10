@@ -61,7 +61,6 @@ namespace Zazz.Web.Controllers
                                                          {
                                                              City = vm.City,
                                                              Country = vm.Country,
-                                                             EndTime = vm.EndTime,
                                                              Location = vm.Location,
                                                              Price = vm.Price,
                                                              StartTime = vm.StartTime,
@@ -93,7 +92,6 @@ namespace Zazz.Web.Controllers
                                  Country = post.EventDetail.Country,
                                  CreatedDate = post.CreatedDate,
                                  Detail = post.Message,
-                                 EndTime = post.EventDetail.EndTime,
                                  Location = post.EventDetail.Location,
                                  Name = post.Title,
                                  Price = post.EventDetail.Price,

@@ -11,11 +11,8 @@ namespace Zazz.Web.Models
         [Required, DataType(DataType.MultilineText)]
         public string Detail { get; set; }
 
-        [Required, Display(Name = "Start Time")]
+        [Required, Display(Name = "Time")]
         public DateTime StartTime { get; set; }
-
-        [Display(Name = "End Time")]
-        public DateTime? EndTime { get; set; }
 
         [StringLength(80)]
         public string Location { get; set; }

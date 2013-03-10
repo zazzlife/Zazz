@@ -54,18 +54,8 @@
                         @Html.LabelFor(model => model.StartTime, new { @class = "control-label" })
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(model => model.StartTime, new { @class = "span4" })
+                        @Html.TextBoxFor(model => model.StartTime, new { @class = "span4 datepicker" })
                         @Html.ValidationMessageFor(model => model.StartTime, null, new { @class = "help-inline" })
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.EndTime, new { @class = "control-label" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.EndTime, new { @class = "span4" })
-                        @Html.ValidationMessageFor(model => model.EndTime, null, new { @class = "help-inline" })
                     </div>
                 </div>
 
