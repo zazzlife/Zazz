@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Zazz.Web.Models
 {
-    public class CreateEventViewModel
+    public class EventViewModel
     {
         [Required, StringLength(150)]
         public string Name { get; set; }

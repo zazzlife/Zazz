@@ -220,7 +220,7 @@
     </Compile>
     <Compile Include="HtmlHelpers\MenuHelpers.cs" />
     <Compile Include="Models\AlertType.cs" />
-    <Compile Include="Models\CreateEventViewModel.cs" />
+    <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\OAuthLoginResponse.cs" />

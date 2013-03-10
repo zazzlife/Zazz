@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
-        public async Task<ActionResult> Create(CreateEventViewModel vm)
+        public async Task<ActionResult> Create(EventViewModel vm)
         {
             if (ModelState.IsValid)
             {
