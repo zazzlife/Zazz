@@ -219,6 +219,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\MenuHelpers.cs" />
+    <Compile Include="HtmlHelpers\RadioButtonHelpers.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />

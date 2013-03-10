@@ -64,6 +64,16 @@
                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        
+                       <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Gender, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.RadioButtonForEnum(model => model.Gender)
+                                @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
 
                         <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
                         <hr style="margin-top: 0;"/>

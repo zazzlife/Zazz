@@ -22,6 +22,9 @@ namespace Zazz.Web.Models
         [Required, DataType(DataType.Password), Compare("Password")]
         public string ConfirmPassword { get; set; }
 
+        [Required]
+        public Gender Gender { get; set; }
+
         [StringLength(30), Display(Name = "Full name")]
         public string FullName { get; set; }
 
