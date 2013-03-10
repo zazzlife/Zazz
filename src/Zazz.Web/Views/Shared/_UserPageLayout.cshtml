@@ -34,6 +34,15 @@
         @* MIDDLE PANEL *@
 
         <section class="middle-panel">
+
+             @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                {
+                    <div class="alert alert-block @TempData["alertClass"] margin-ten" style="margin-bottom: 30px;">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>@TempData["alertMessage"]</p>
+                    </div>
+                }
+
             @RenderSection("MiddlePanel", false)
         </section>
 

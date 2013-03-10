@@ -102,6 +102,20 @@ namespace Zazz.Web.Controllers
             return View("EditForm", vm);
         }
 
+        [Authorize]
+        public async Task<ActionResult> Remove(int id)
+        {
+            using (_userService)
+            using (_postService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                await _postService.DeletePostAsync(id, userId);
+            }
+
+            ShowAlert("The event has been deleted.", AlertType.Success);
+            return Redirect("~/");
+        }
+
         private static Post EventViewModelToPost(EventViewModel vm, int userId)
         {
             var post = new Post
