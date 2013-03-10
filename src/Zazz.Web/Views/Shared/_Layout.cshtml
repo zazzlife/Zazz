@@ -12,7 +12,7 @@
     <meta name="description" content="@ViewBag.Description">
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     
-    <link href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+    @Styles.Render("~/Content/themes/base/css")
     @Styles.Render("~/Content/css")
     <script type="text/javascript" src="~/Content/modernizr-2.6.2.js"></script>
 </head>
@@ -57,7 +57,7 @@
     <article>
         @RenderBody()
     </article>
-    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+    @*<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>*@
     @Scripts.Render("~/js")
     @RenderSection("Scripts", false)
 </body>
