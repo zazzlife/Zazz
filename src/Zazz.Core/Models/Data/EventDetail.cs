@@ -33,6 +33,6 @@ namespace Zazz.Core.Models.Data
         public float Longitude { get; set; }
 
         [DataType(DataType.Currency)]
-        public float Price { get; set; }
+        public float? Price { get; set; }
     }
 }
