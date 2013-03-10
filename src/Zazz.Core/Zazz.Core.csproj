@@ -83,6 +83,7 @@
     <Compile Include="Interfaces\IFollowRequestRepository.cs" />
     <Compile Include="Interfaces\IPhotoRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />

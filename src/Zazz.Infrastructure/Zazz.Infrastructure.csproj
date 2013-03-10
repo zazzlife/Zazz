@@ -61,6 +61,7 @@
     <Compile Include="Services\FollowService.cs" />
     <Compile Include="Services\PhotoService.cs" />
     <Compile Include="Services\PostService.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zazz.Core\Zazz.Core.csproj">

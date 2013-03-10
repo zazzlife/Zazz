@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -19,15 +21,20 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult Create()
         {
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create(CreateEventViewModel vm)
+        [HttpPost, ValidateAntiForgeryToken, Authorize]
+        public async Task<ActionResult> Create(CreateEventViewModel vm)
         {
+            if (ModelState.IsValid)
+            {
+                
+            }
+
             return View();
         }
     }
