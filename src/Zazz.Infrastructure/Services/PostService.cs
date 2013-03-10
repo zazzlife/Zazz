@@ -41,7 +41,7 @@ namespace Zazz.Infrastructure.Services
 
         public Task<Post> GetPostAsync(int id)
         {
-            throw new NotImplementedException();
+            return _uow.PostRepository.GetByIdAsync(id);
         }
 
         public async Task DeletePostAsync(int postId, int currentUserId)

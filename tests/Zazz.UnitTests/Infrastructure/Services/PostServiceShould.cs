@@ -61,6 +61,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public async Task CallGetById_OnGetPost()
+        {
+            //Arrange
+            var id = 123;
+            var post = new Post();
+            _uow.Setup(x => x.PostRepository.GetByIdAsync(id))
+                .Returns(() => Task.Run(() => post));
+
+            //Act
+            var result = await _sut.GetPostAsync(id);
+
+            //Assert
+            Assert.AreSame(post, result);
+            _uow.Verify(x => x.PostRepository.GetByIdAsync(id), Times.Once());
+        }
+
+        [Test]
         public async Task ThrownIfEventIdIs0_OnUpdateEvent()
         {
             //Arrange
