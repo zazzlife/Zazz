@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
     public class EditProfileViewModel
     {
+        public Gender Gender { get; set; }
+
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 

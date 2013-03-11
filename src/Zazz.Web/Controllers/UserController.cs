@@ -39,6 +39,7 @@ namespace Zazz.Web.Controllers
 
                 var vm = new EditProfileViewModel
                 {
+                    Gender = user.Gender,
                     FullName = user.FullName,
                     Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", user.CityId),
                     Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", user.SchoolId),

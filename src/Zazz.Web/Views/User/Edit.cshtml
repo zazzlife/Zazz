@@ -10,7 +10,7 @@
         <h3>Edit Profile</h3>
     </div>
 
-    <div class="margin-ten">
+    <div>
 
         @using (Html.BeginForm())
         {
@@ -21,11 +21,21 @@
                     <li><a href="#fbSyncTab" data-toggle="tab">Facebook Sync</a></li>
                     <li><a href="#notificationsTab" data-toggle="tab">Notifications</a></li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content margin-ten">
                     <div class="tab-pane active" id="aboutTab">
                         <a href="~/account/changepassword">Change Password</a>
                         <p style="margin-top: 30px;">
-                            
+
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.RadioButtonForEnum(model => model.Gender)
+                                    @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+
                             <div class="control-group">
                                 <div class="editor-label">
                                     @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
@@ -35,7 +45,7 @@
                                     @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
                                 </div>
                             </div>
-                            
+
                             <div class="control-group">
                                 <div class="editor-label">
                                     @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
@@ -45,7 +55,7 @@
                                     @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
                                 </div>
                             </div>
-                            
+
                             <div class="control-group">
                                 <div class="editor-label">
                                     @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
@@ -55,7 +65,7 @@
                                     @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
                                 </div>
                             </div>
-                            
+
                             <div class="control-group">
                                 <div class="editor-label">
                                     @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
@@ -78,13 +88,13 @@
                                     @Html.EditorFor(model => model.SyncFbEvents) Sync Facebook Events
                                 </label>
                             </div>
-                            
+
                             <div class="control-group">
                                 <label class="checkbox">
                                     @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
                                 </label>
                             </div>
-                            
+
                             <div class="control-group">
                                 <label class="checkbox">
                                     @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
@@ -105,6 +115,7 @@
             </div>
             
             <p class="form-actions">
+                <a href="~/" class="btn">Cancel</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </p>
         }
