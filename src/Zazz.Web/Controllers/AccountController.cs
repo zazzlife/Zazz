@@ -117,7 +117,13 @@ namespace Zazz.Web.Controllers
                                    Password = registerVm.Password,
                                    PublicEmail = registerVm.PublicEmail,
                                    SchoolId = registerVm.SchoolId,
-                                   Username = registerVm.UserName
+                                   Username = registerVm.UserName,
+                                   Gender = registerVm.Gender,
+                                   UserDetail = new UserDetail
+                                   {
+                                       SendSyncErrorNotifications = true,
+                                       SyncFbEvents = true
+                                   }
                                };
 
                 try
@@ -351,6 +357,12 @@ namespace Zazz.Web.Controllers
                     PublicEmail = registerVm.PublicEmail,
                     SchoolId = registerVm.SchoolId,
                     Username = registerVm.UserName,
+                    Gender = registerVm.Gender,
+                    UserDetail = new UserDetail
+                    {
+                        SendSyncErrorNotifications = true,
+                        SyncFbEvents = true
+                    }
                 };
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {

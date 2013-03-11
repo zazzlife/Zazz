@@ -36,7 +36,7 @@ namespace Zazz.Infrastructure.Services
         public async Task<User> RegisterAsync(User user, bool createToken)
         {
             if (user.UserDetail == null)
-                throw new ArgumentNullException("User Detail cannot be null");
+                throw new ArgumentNullException();
 
             var usernameExists = await _uoW.UserRepository.ExistsByUsernameAsync(user.Username);
             if (usernameExists)
