@@ -41,6 +41,11 @@ namespace Zazz.Web.Models
         [Display(Name = "Major")]
         public byte? MajorId { get; set; }
 
+        public AccountType AccountType { get; set; }
+
+        [StringLength(30), Display(Name = "Club Name")]
+        public string ClubName { get; set; }
+
         public IEnumerable<School> Schools { get; set; }
 
         public IEnumerable<City> Cities { get; set; }

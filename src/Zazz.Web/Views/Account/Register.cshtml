@@ -79,6 +79,29 @@
                                 @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
                             </div>
                         </div>
+                        
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.AccountType, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                <label class="radio" for="_AccountType_User">
+                                    <input id="_AccountType_User" checked="checked" data-val="true" data-val-required="The AccountType field is required." name="AccountType" type="radio" value="User" />  User
+                                </label>                                <label class="radio" for="_AccountType_ClubAdmin">
+                                    <input id="_AccountType_ClubAdmin" name="AccountType" type="radio" value="ClubAdmin" />  Club Admin
+                                </label>                            </div>
+                        </div>
+                        
+                        <div id="clubDetails" class="control-group hide">
+                            <hr/>
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubName, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.ClubName, new { @class = "span4" })
+                                @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
 
                         <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
                         <hr style="margin-top: 0;"/>
