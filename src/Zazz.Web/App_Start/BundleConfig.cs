@@ -24,6 +24,14 @@ namespace Zazz.Web
                     "~/Content/themes/base/jquery.ui.datepicker.css",
                     "~/Content/themes/base/jquery.ui.theme.css");
 
+
+            var jqueryFileUploadOrder = new BundleFileSetOrdering("jqueryFileUploadOrder");
+            jqueryFileUploadOrder.Files.Add("jquery.fileupload.js");
+            jqueryFileUploadOrder.Files.Add("jquery.fileupload-fp.js");
+            jqueryFileUploadOrder.Files.Add("jquery.fileupload-ui.js");
+
+            bundles.FileSetOrderList.Add(jqueryFileUploadOrder);
+
             bundles.Add(css);
             bundles.Add(jqueryUiCss);
             bundles.Add(js);
