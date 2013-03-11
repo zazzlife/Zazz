@@ -18,16 +18,16 @@ namespace Zazz.Core.Models.Data
 
         public Gender Gender { get; set; }
 
-        [Required, DataType(DataType.Date), Display(AutoGenerateField = false)]
+        public AccountType AccountType { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime JoinedDate { get; set; }
 
-        [Required, Display(AutoGenerateField = false)]
         public DateTime LastActivity { get; set; }
 
-        [Display(AutoGenerateField = false)]
         public bool IsConfirmed { get; set; }
 
-        [MaxLength(30), Display(Name = "Full name")]
+        [MaxLength(30)]
         public string FullName { get; set; }
 
         [ForeignKey("SchoolId")]
@@ -54,7 +54,6 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<Photo> UploadedPhotos { get; set; }
 
-        [Display(AutoGenerateField = false)]
         public int CoverPhotoId { get; set; }
 
         public int ProfilePhotoId { get; set; }
@@ -66,5 +65,7 @@ namespace Zazz.Core.Models.Data
         public virtual ICollection<FollowRequest> SentFollowRequests { get; set; }
 
         public virtual UserDetail UserDetail { get; set; }
+
+        public virtual ClubDetail ClubDetail { get; set; }
     }
 }

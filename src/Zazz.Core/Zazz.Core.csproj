@@ -85,8 +85,10 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
+    <Compile Include="Models\Data\AccountType.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
+    <Compile Include="Models\Data\ClubDetail.cs" />
     <Compile Include="Models\Data\EventDetail.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedType.cs" />

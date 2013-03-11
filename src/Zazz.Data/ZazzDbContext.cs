@@ -11,6 +11,7 @@ namespace Zazz.Data
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<UserDetail> UserDetails { get; set; }
+        public IDbSet<ClubDetail> ClubDetails { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
@@ -52,6 +53,10 @@ namespace Zazz.Data
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.UserDetail)
                         .WithRequired(d => d.User);
+
+            modelBuilder.Entity<User>()
+                        .HasOptional(u => u.ClubDetail)
+                        .WithRequired(c => c.User);
 
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.From)
