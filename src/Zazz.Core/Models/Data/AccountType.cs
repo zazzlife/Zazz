@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public enum AccountType
+    public enum AccountType : byte
     {
         [Display(Name = "User")]
         User,

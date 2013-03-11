@@ -7,6 +7,6 @@ namespace Zazz.Core.Models.Data
         Male,
         Female,
         [Display(Name = "Prefer to not say")]
-        Unspecified
+        NotSpecified
     }
 }
