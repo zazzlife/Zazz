@@ -327,6 +327,14 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Scripts\css-transit.js" />
+    <Content Include="Scripts\jquery-file-upload\cors\jquery.postmessage-transport.js" />
+    <Content Include="Scripts\jquery-file-upload\cors\jquery.xdr-transport.js" />
+    <Content Include="Scripts\jquery-file-upload\jquery.fileupload-fp.js" />
+    <Content Include="Scripts\jquery-file-upload\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\jquery-file-upload\jquery.fileupload.js" />
+    <Content Include="Scripts\jquery-file-upload\jquery.iframe-transport.js" />
+    <Content Include="Scripts\jquery-file-upload\main.js" />
+    <Content Include="Scripts\jquery-file-upload\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
