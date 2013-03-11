@@ -240,6 +240,8 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\jquery.fileupload-ui-noscript.css" />
+    <Content Include="Content\jquery.fileupload-ui.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
@@ -321,6 +323,7 @@
     <Content Include="Scripts\app\flip.js" />
     <Content Include="Scripts\app\global.js" />
     <Content Include="Scripts\app\register.js" />
+    <Content Include="Scripts\app\upload.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -333,7 +336,6 @@
     <Content Include="Scripts\jquery-file-upload\jquery.fileupload-ui.js" />
     <Content Include="Scripts\jquery-file-upload\jquery.fileupload.js" />
     <Content Include="Scripts\jquery-file-upload\jquery.iframe-transport.js" />
-    <Content Include="Scripts\jquery-file-upload\main.js" />
     <Content Include="Scripts\jquery-file-upload\vendor\jquery.ui.widget.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
