@@ -119,12 +119,16 @@ namespace Zazz.Web.Controllers
                                    SchoolId = registerVm.SchoolId,
                                    Username = registerVm.UserName,
                                    Gender = registerVm.Gender,
+                                   AccountType = registerVm.AccountType,
                                    UserDetail = new UserDetail
                                    {
                                        SendSyncErrorNotifications = true,
                                        SyncFbEvents = true
                                    }
                                };
+
+                if (registerVm.AccountType == AccountType.ClubAdmin)
+                    user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
 
                 try
                 {
@@ -179,7 +183,7 @@ namespace Zazz.Web.Controllers
                     var message = String.Format(
                         "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", email,
                         Environment.NewLine, "test: " + resetLink);
-                    
+
                     ShowAlert(message, AlertType.Success);
 
                 }
@@ -265,7 +269,7 @@ namespace Zazz.Web.Controllers
             }
 
             var oauthVersion = OAuthVersion.Two; //TODO : assign the correct version.
-            
+
             OAuthProvider provider;
             if (!OAuthProvider.TryParse(result.Provider, true, out provider))
                 throw new Exception("Unable to validate the provider");
@@ -358,6 +362,7 @@ namespace Zazz.Web.Controllers
                     SchoolId = registerVm.SchoolId,
                     Username = registerVm.UserName,
                     Gender = registerVm.Gender,
+                    AccountType = registerVm.AccountType,
                     UserDetail = new UserDetail
                     {
                         SendSyncErrorNotifications = true,
@@ -374,6 +379,9 @@ namespace Zazz.Web.Controllers
                                                       ProviderUserId = oauthData.ProviderUserId
                                                   }
                                           };
+
+                if (registerVm.AccountType == AccountType.ClubAdmin)
+                    user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
                 try
                 {
                     await _authService.RegisterAsync(user, false);
