@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Models.Data;
 
@@ -34,5 +35,9 @@ namespace Zazz.Web.Models
 
         [Display(Name = "Email Facebook Errors Notification")]
         public bool SendFbErrorNotification { get; set; }
+
+        public HttpPostedFileBase ProfileImage { get; set; }
+
+        public HttpPostedFileBase ProfileCoverImage { get; set; }
     }
 }

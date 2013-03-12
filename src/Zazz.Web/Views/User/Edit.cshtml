@@ -12,8 +12,9 @@
 
     <div>
 
-        @using (Html.BeginForm())
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
         {
+            @Html.AntiForgeryToken()
             <div class="tabbable">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#aboutTab" data-toggle="tab">About</a></li>
@@ -79,7 +80,25 @@
                         </p>
                     </div>
                     <div class="tab-pane" id="profilePicTab">
-                        <p></p>
+                        <p>
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    <label for="ProfileImage" class="control-label">Profile Picture</label>
+                                </div>
+                                <div class="editor-field">
+                                    <input type="file" name="ProfileImage" accept="image/jpeg" />
+                                </div>
+                            </div>
+                            
+                            <div class="control-group" style="margin-top: 40px;">
+                                <div class="editor-label">
+                                    <label for="ProfileCoverImage" class="control-label">Profile Cover Picture</label>
+                                </div>
+                                <div class="editor-field">
+                                    <input type="file" name="ProfileCoverImage" accept="image/jpeg" />
+                                </div>
+                            </div>
+                        </p>
                     </div>
                     <div class="tab-pane" id="fbSyncTab">
                         <p>

@@ -12,12 +12,12 @@ namespace Zazz.Web.Controllers
     public class UserController : BaseController
     {
         private readonly IStaticDataRepository _staticDataRepo;
-        private readonly IUserService _userService;
+        private readonly IUoW _uow;
 
-        public UserController(IStaticDataRepository staticDataRepo, IUserService userService)
+        public UserController(IStaticDataRepository staticDataRepo, IUoW uow)
         {
             _staticDataRepo = staticDataRepo;
-            _userService = userService;
+            _uow = uow;
         }
 
         public ActionResult Index()
@@ -33,9 +33,9 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public async Task<ActionResult> Edit()
         {
-            using (_userService)
+            using (_uow)
             {
-                var user = await _userService.GetUserAsync(User.Identity.Name);
+                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
 
                 var vm = new EditProfileViewModel
                 {
@@ -55,9 +55,42 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public ActionResult Edit(EditProfileViewModel vm)
+        public async Task<ActionResult> Edit(EditProfileViewModel vm)
         {
-            return View();
+            vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", vm.CityId);
+            vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", vm.SchoolId);
+            vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", vm.MajorId);
+
+            if (ModelState.IsValid)
+            {
+                using (_uow)
+                {
+                    var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);   
+
+                    string message;
+                    if (vm.ProfileImage != null)
+                    {
+                        if (!ImageValidator.IsValid(vm.ProfileImage, out message))
+                        {
+                            ShowAlert(message, AlertType.Error);
+                            return View(vm);
+                        }
+
+                        var photo = new w
+                    }
+
+                    if (vm.ProfileCoverImage != null)
+                    {
+                        if (!ImageValidator.IsValid(vm.ProfileCoverImage, out message))
+                        {
+                            ShowAlert(message, AlertType.Error);
+                            return View(vm);
+                        }
+                    }
+                }
+            }
+
+            return View(vm);
         }
     }
 }
