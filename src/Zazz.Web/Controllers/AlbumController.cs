@@ -6,11 +6,12 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class AlbumController : Controller
+    public class AlbumController : BaseController
     {
         private readonly IAlbumService _albumService;
         private readonly IUserService _userService;
@@ -88,9 +89,30 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public ActionResult CreateAlbum(string albumName)
+        public async Task<ActionResult> CreateAlbum(string albumName)
         {
-            return RedirectToAction("List");
+            if (albumName.Length > 50)
+            {
+                ShowAlert("Album name cannot be longer than 50 characters", AlertType.Error);
+            }
+            else
+            {
+                using (_photoService)
+                using (_albumService)
+                using (_userService)
+                {
+                    var userId = _userService.GetUserId(User.Identity.Name);
+                    var album = new Album
+                    {
+                        Name = albumName,
+                        UserId = userId
+                    };
+
+                    await _albumService.CreateAlbumAsync(album);
+                }
+            }
+
+            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
         public ActionResult Remove(int id, string returnUrl)

@@ -12,7 +12,7 @@
 
     <div class="margin-ten">
 
-        <p><strong>Create new album</strong></p>
+        <p><strong>Create a new album</strong></p>
         @using (Html.BeginForm("CreateAlbum", "Album", FormMethod.Post, new { @class = "form-inline" }))
         {
             @Html.ValidationMessageFor(model => model.AlbumName, null, new { @class = "help-inline" })
