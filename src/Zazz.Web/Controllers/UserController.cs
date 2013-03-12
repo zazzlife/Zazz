@@ -14,11 +14,13 @@ namespace Zazz.Web.Controllers
     {
         private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
+        private readonly IPhotoService _photoService;
 
-        public UserController(IStaticDataRepository staticDataRepo, IUoW uow)
+        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
+            _photoService = photoService;
         }
 
         public ActionResult Index()
@@ -73,28 +75,58 @@ namespace Zazz.Web.Controllers
                     string message;
                     if (vm.ProfileImage != null)
                     {
-                        if (!ImageValidator.IsValid(vm.ProfileImage, out message))
+                        using (vm.ProfileImage.InputStream)
                         {
-                            ShowAlert(message, AlertType.Error);
-                            return View(vm);
-                        }
+                            if (!ImageValidator.IsValid(vm.ProfileImage, out message))
+                            {
+                                ShowAlert(message, AlertType.Error);
+                                return View(vm);
+                            }
 
-                        var photo = new Photo
-                                        {
-                                            AlbumId = vm.AlbumId,
-                                            UploadDate = DateTime.UtcNow,
-                                            UploaderId = user.Id
-                                        };
+                            var photo = new Photo
+                            {
+                                AlbumId = vm.AlbumId,
+                                UploaderId = user.Id
+                            };
+
+                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileImage.InputStream);
+                            user.UserDetail.ProfilePhotoId = photoId;
+                        }
                     }
 
                     if (vm.ProfileCoverImage != null)
                     {
-                        if (!ImageValidator.IsValid(vm.ProfileCoverImage, out message))
+                        using (vm.ProfileCoverImage.InputStream)
                         {
-                            ShowAlert(message, AlertType.Error);
-                            return View(vm);
+                            if (!ImageValidator.IsValid(vm.ProfileCoverImage, out message))
+                            {
+                                ShowAlert(message, AlertType.Error);
+                                return View(vm);
+                            }
+
+                            var photo = new Photo
+                            {
+                                AlbumId = vm.AlbumId,
+                                UploaderId = user.Id
+                            };
+
+                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileCoverImage.InputStream);
+                            user.UserDetail.CoverPhotoId = photoId;
                         }
                     }
+
+                    user.UserDetail.Gender = vm.Gender;
+                    user.UserDetail.FullName = vm.FullName;
+                    user.UserDetail.SchoolId = (short)vm.SchoolId;
+                    user.UserDetail.CityId = (short) vm.CityId;
+                    user.UserDetail.MajorId = (byte) vm.MajorId;
+                    user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
+                    user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
+                    user.UserDetail.SyncFbImages = vm.SyncFbImages;
+                    user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
+
+                    await _uow.SaveAsync();
+                    ShowAlert("Your preferences has been updated.", AlertType.Success);
                 }
             }
 

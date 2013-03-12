@@ -173,3 +173,6 @@ AppPackages
 
 # Data Files
 App_Data/
+
+# Uploaded Pictures
+/src/Zazz.Web/picture/

@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Web.Hosting;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
@@ -28,6 +29,8 @@ namespace Zazz.Web.DependencyResolution
     {
         public static IContainer Initialize()
         {
+            var rootDirectory = HostingEnvironment.MapPath("/");
+
             ObjectFactory.Initialize(x =>
                         {
                             x.Scan(scan =>
@@ -46,7 +49,10 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFacebookService>().Use<FacebookService>();
                             x.For<IFileService>().Use<FileService>();
                             x.For<IFollowService>().Use<FollowService>();
-                            x.For<IPhotoService>().Use<PhotoService>();
+                            
+                            x.For<IPhotoService>().Use<PhotoService>()
+                             .Ctor<string>("rootPath").Is(rootDirectory);
+
                             x.For<IPostService>().Use<PostService>();
                             x.For<IUserService>().Use<UserService>();
 

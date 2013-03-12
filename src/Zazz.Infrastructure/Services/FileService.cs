@@ -25,6 +25,9 @@ namespace Zazz.Infrastructure.Services
             if (File.Exists(path))
                 File.Delete(path);
 
+            var dirPath = RemoveFileNameFromPath(path);
+            CreateDirIfNotExists(dirPath);
+
             using (var fileStream = File.Create(path))
             {
                 data.Seek(0, SeekOrigin.Begin);
@@ -38,6 +41,9 @@ namespace Zazz.Infrastructure.Services
         {
             if (File.Exists(path))
                 File.Delete(path);
+
+            var dirPath = RemoveFileNameFromPath(path);
+            CreateDirIfNotExists(dirPath);
 
             using (var fileStream = File.Create(path))
             {
