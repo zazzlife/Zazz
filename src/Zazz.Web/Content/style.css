@@ -226,7 +226,7 @@ hr.dark-line {
 
 /**********LEFT PANEL***********/
 .left-panel {
-    width: 220px;
+    width: 200px;
     font-size: 12.69px;
     float: left;
     height: 100%;
@@ -266,7 +266,7 @@ hr.dark-line {
 .middle-panel {
     float: left;
     min-height: 600px;
-    width: 555px;
+    width: 575px;
     border-right: 1px solid #dcdcdc;
     border-left: 1px solid #dcdcdc;
     margin-top: -50px;
