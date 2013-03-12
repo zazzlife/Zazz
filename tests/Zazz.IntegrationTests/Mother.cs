@@ -10,7 +10,6 @@ namespace Zazz.IntegrationTests
              return new User
                         {
                             Email = "test@test.com",
-                            JoinedDate = DateTime.UtcNow,
                             LastActivity = DateTime.UtcNow,
                             Username = "username",
                             Password = "password",

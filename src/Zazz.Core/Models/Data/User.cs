@@ -16,47 +16,17 @@ namespace Zazz.Core.Models.Data
         [MaxLength(28), Required, DataType("char")]
         public string Password { get; set; }
 
-        public Gender Gender { get; set; }
-
         public AccountType AccountType { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime JoinedDate { get; set; }
 
         public DateTime LastActivity { get; set; }
 
         public bool IsConfirmed { get; set; }
-
-        [MaxLength(30)]
-        public string FullName { get; set; }
-
-        [ForeignKey("SchoolId")]
-        public School School { get; set; }
-
-        public short? SchoolId { get; set; }
-
-        [ForeignKey("MajorId")]
-        public Major Major { get; set; }
-
-        public byte? MajorId { get; set; }
-
-        [ForeignKey("CityId")]
-        public City City { get; set; }
-
-        public int? CityId { get; set; }
-
-        [MaxLength(40), DataType(DataType.EmailAddress)]
-        public string PublicEmail { get; set; }
 
         public virtual ValidationToken ValidationToken { get; set; }
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 
         public virtual ICollection<Photo> UploadedPhotos { get; set; }
-
-        public int CoverPhotoId { get; set; }
-
-        public int ProfilePhotoId { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 

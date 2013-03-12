@@ -272,7 +272,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void AssignUTCDateTimeAsRegiterDate_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail()};
+            var user = new User
+            {
+                Email = "email",
+                Username = "username",
+                Password = "pass",
+                UserDetail = new UserDetail
+                                 {
+                                     JoinedDate = DateTime.MaxValue
+                                 }
+            };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -284,14 +293,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RegisterAsync(user, false).Wait();
 
             //Assert
-            Assert.IsTrue(user.JoinedDate <= DateTime.UtcNow);
+            Assert.IsTrue(user.UserDetail.JoinedDate <= DateTime.UtcNow);
         }
 
         [Test]
         public void GenerateValidationTokenIfRequested_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail() };
+            var user = new User
+            {
+                Email = "email",
+                Username = "username",
+                Password = "pass",
+                UserDetail = new UserDetail
+                                 {
+                                     JoinedDate = DateTime.MaxValue
+                                 }
+            };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -315,7 +333,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void SaveUserWhenEverythingIsOk_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", JoinedDate = DateTime.MaxValue, UserDetail = new UserDetail() };
+            var user = new User
+            {
+                Email = "email",
+                Username = "username",
+                Password = "pass",
+                UserDetail = new UserDetail
+                {
+                    JoinedDate = DateTime.MaxValue
+                }
+            };
             _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
                     .Returns(() => Task.Run(() => false));
             _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
@@ -610,7 +637,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.ValidationTokenRepository.RemoveAsync(user.Id))
                     .Returns(() => Task.Run(() => { }));
-            
+
             //Act
             await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
 
@@ -753,8 +780,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
             var email = "email";
-            var user = new User {Email = email};
-            var oauthAccount = new OAuthAccount {ProviderUserId = providerId, Provider = provider};
+            var user = new User { Email = email };
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))
                     .Returns(() => Task.Run(() => oauthAccount));
@@ -799,7 +826,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
             var email = "email";
-            var user = new User { Email = email, Id = 23};
+            var user = new User { Email = email, Id = 23 };
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))

@@ -39,11 +39,11 @@ namespace Zazz.Web.Controllers
 
                 var vm = new EditProfileViewModel
                 {
-                    Gender = user.Gender,
-                    FullName = user.FullName,
-                    Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", user.CityId),
-                    Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", user.SchoolId),
-                    Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", user.MajorId),
+                    Gender = user.UserDetail.Gender,
+                    FullName = user.UserDetail.FullName,
+                    Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", user.UserDetail.CityId),
+                    Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", user.UserDetail.SchoolId),
+                    Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", user.UserDetail.MajorId),
                     SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                     SyncFbEvents = user.UserDetail.SyncFbEvents,
                     SyncFbPosts = user.UserDetail.SyncFbPosts,
@@ -75,8 +75,6 @@ namespace Zazz.Web.Controllers
                             ShowAlert(message, AlertType.Error);
                             return View(vm);
                         }
-
-                        var photo = new w
                     }
 
                     if (vm.ProfileCoverImage != null)

@@ -49,7 +49,7 @@ namespace Zazz.Infrastructure.Services
             var hashedPassword = _cryptoService.GeneratePasswordHash(user.Password);
             user.Password = hashedPassword;
 
-            user.JoinedDate = DateTime.UtcNow;
+            user.UserDetail.JoinedDate = DateTime.UtcNow;
 
             if (createToken)
             {

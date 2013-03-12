@@ -107,21 +107,21 @@ namespace Zazz.Web.Controllers
             {
                 var user = new User
                                {
-                                   CityId = registerVm.CityId,
                                    Email = registerVm.Email,
-                                   JoinedDate = DateTime.UtcNow,
                                    IsConfirmed = false,
                                    LastActivity = DateTime.UtcNow,
-                                   FullName = registerVm.FullName,
-                                   MajorId = registerVm.MajorId,
                                    Password = registerVm.Password,
-                                   PublicEmail = registerVm.PublicEmail,
-                                   SchoolId = registerVm.SchoolId,
                                    Username = registerVm.UserName,
-                                   Gender = registerVm.Gender,
                                    AccountType = registerVm.AccountType,
                                    UserDetail = new UserDetail
                                    {
+                                       Gender = registerVm.Gender,
+                                       PublicEmail = registerVm.PublicEmail,
+                                       SchoolId = registerVm.SchoolId,
+                                       FullName = registerVm.FullName,
+                                       MajorId = registerVm.MajorId,
+                                       JoinedDate = DateTime.UtcNow,
+                                       CityId = registerVm.CityId,
                                        SendSyncErrorNotifications = true,
                                        SyncFbEvents = true
                                    }
@@ -350,21 +350,21 @@ namespace Zazz.Web.Controllers
 
                 var user = new User
                 {
-                    CityId = registerVm.CityId,
                     Email = oauthData.Email,
-                    JoinedDate = DateTime.UtcNow,
                     IsConfirmed = true,
                     LastActivity = DateTime.UtcNow,
-                    FullName = registerVm.FullName,
-                    MajorId = registerVm.MajorId,
                     Password = registerVm.Password,
-                    PublicEmail = registerVm.PublicEmail,
-                    SchoolId = registerVm.SchoolId,
                     Username = registerVm.UserName,
-                    Gender = registerVm.Gender,
                     AccountType = registerVm.AccountType,
                     UserDetail = new UserDetail
                     {
+                        Gender = registerVm.Gender,
+                        PublicEmail = registerVm.PublicEmail,
+                        SchoolId = registerVm.SchoolId,
+                        FullName = registerVm.FullName,
+                        MajorId = registerVm.MajorId,
+                        JoinedDate = DateTime.UtcNow,
+                        CityId = registerVm.CityId,
                         SendSyncErrorNotifications = true,
                         SyncFbEvents = true
                     }
