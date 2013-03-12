@@ -23,6 +23,11 @@ namespace Zazz.Data.Repositories
             DbSet = DbContext.Set<T>();
         }
 
+        public IQueryable<T> GetAll()
+        {
+            return DbSet;
+        }
+
         public virtual void InsertGraph(T item)
         {
             DbSet.Add(item);
