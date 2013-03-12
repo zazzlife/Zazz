@@ -44,6 +44,7 @@ namespace Zazz.Web.Controllers
                     Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", user.UserDetail.CityId),
                     Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", user.UserDetail.SchoolId),
                     Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", user.UserDetail.MajorId),
+                    Albums = new SelectList(user.Albums.ToList(), "id", "name"),
                     SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                     SyncFbEvents = user.UserDetail.SyncFbEvents,
                     SyncFbPosts = user.UserDetail.SyncFbPosts,
@@ -57,15 +58,17 @@ namespace Zazz.Web.Controllers
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditProfileViewModel vm)
         {
-            vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", vm.CityId);
-            vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", vm.SchoolId);
-            vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", vm.MajorId);
-
-            if (ModelState.IsValid)
+            using (_uow)
             {
-                using (_uow)
+                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+
+                vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", vm.CityId);
+                vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", vm.SchoolId);
+                vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", vm.MajorId);
+                vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
+
+                if (ModelState.IsValid)
                 {
-                    var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);   
 
                     string message;
                     if (vm.ProfileImage != null)

@@ -83,7 +83,17 @@
                         <p>
                             <div class="control-group">
                                 <div class="editor-label">
-                                    <label for="ProfileImage" class="control-label">Profile Picture</label>
+                                    @Html.LabelFor(model => model.AlbumId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.AlbumId, Model.Albums, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.AlbumId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    <label for="ProfileImage" class="control-label">Change Profile Picture</label>
                                 </div>
                                 <div class="editor-field">
                                     <input type="file" name="ProfileImage" accept="image/jpeg" />
@@ -92,7 +102,7 @@
                             
                             <div class="control-group" style="margin-top: 40px;">
                                 <div class="editor-label">
-                                    <label for="ProfileCoverImage" class="control-label">Profile Cover Picture</label>
+                                    <label for="ProfileCoverImage" class="control-label">Change Profile Cover Picture</label>
                                 </div>
                                 <div class="editor-field">
                                     <input type="file" name="ProfileCoverImage" accept="image/jpeg" />

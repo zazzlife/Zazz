@@ -24,6 +24,11 @@ namespace Zazz.Web.Models
 
         public int CityId { get; set; }
 
+        public SelectList Albums { get; set; }
+
+        [Display(Name = "Album")]
+        public int AlbumId { get; set; }
+
         [Display(Name = "Sync Facebook Events")]
         public bool SyncFbEvents { get; set; }
 
