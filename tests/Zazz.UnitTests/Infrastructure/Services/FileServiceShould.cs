@@ -199,6 +199,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.IsFalse(File.Exists(fullFilePath));
         }
 
+        [Test]
+        public void RemoveDirectoryEvenIfItsNotEmpty_OnRemoveDirectory()
+        {
+            //Arrange
+            var dirName = "testDir";
+            var fullDirName = _tempPath + "\\" + dirName;
+
+            Directory.CreateDirectory(fullDirName);
+            Assert.IsTrue(Directory.Exists(fullDirName));
+
+            var fullFilePath = fullDirName + "\\testFile.txt";
+            using (var f = File.Create(fullFilePath))
+            {   
+            }
+
+            Assert.IsTrue(File.Exists(fullFilePath));
+
+            //Act
+            _sut.RemoveDirectory(fullDirName);
+
+            //Assert
+            Assert.IsFalse(Directory.Exists(fullDirName));
+            Assert.IsFalse(File.Exists(fullFilePath));
+        }
+
+        [Test]
+        public void NotThrowIfDirectoryNotExists_OnRemoveDirectory()
+        {
+            //Arrange
+            var dirName = "testDir";
+            var fullDirName = _tempPath + "\\" + dirName;
+
+            Assert.IsFalse(Directory.Exists(fullDirName));
+
+            //Act
+            _sut.RemoveDirectory(fullDirName);
+
+            //Assert
+            Assert.IsFalse(Directory.Exists(fullDirName));
+        }
+
         [TearDown]
         public void Cleanup()
         {
