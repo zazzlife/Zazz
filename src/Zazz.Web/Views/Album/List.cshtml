@@ -11,21 +11,31 @@
 
     <div class="margin-ten">
 
+        <p><strong>Create new album</strong></p>
+        @using (Html.BeginForm("CreateAlbum", "Album", FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.ValidationMessageFor(model => model.AlbumName, null, new { @class = "help-inline" })
+            @Html.TextBoxFor(model => model.AlbumName, new { @class = "span5", @placeholder = "Album Name" })
+            <button class="btn btn-success">Create</button>
+        }
+
+        <hr />
+
         <ul class="thumbnails">
             <li>
                 <div class="thumbnail">
                     <img src="~/Images/placeholder.gif" width="255" height="255" />
                     <h4>Album Name</h4>
-                    <a href="#" class="pull-right font-small">REMOVE ALBUM</a>
+                    <a href="#" class="pull-right font-small">REMOVE</a>
                     <div class="clearfix"></div>
                 </div>
             </li>
-            
+
             <li>
                 <div class="thumbnail">
                     <img src="~/Images/placeholder.gif" width="255" height="255" />
                     <h4>Album Name</h4>
-                    <a href="#" class="pull-right font-small">REMOVE ALBUM</a>
+                    <a href="#" class="pull-right font-small">REMOVE</a>
                     <div class="clearfix"></div>
                 </div>
             </li>
