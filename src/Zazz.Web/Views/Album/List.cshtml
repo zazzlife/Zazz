@@ -21,25 +21,23 @@
         }
 
         <hr />
-
+        
         <ul class="thumbnails">
-            <li>
-                <div class="thumbnail">
-                    <img src="~/Images/placeholder.gif" width="255" height="255" />
-                    <h4>Album Name</h4>
-                    <a href="#" class="pull-right font-small">REMOVE</a>
-                    <div class="clearfix"></div>
-                </div>
-            </li>
 
+        @foreach (var album in Model.Albums)
+        {
             <li>
                 <div class="thumbnail">
-                    <img src="~/Images/placeholder.gif" width="255" height="255" />
-                    <h4>Album Name</h4>
-                    <a href="#" class="pull-right font-small">REMOVE</a>
+                    <a href="~/album/photos/@album.Id/1">
+                        <img src="@album.ThumbnailUrl" width="255" height="255" />
+                    </a>
+                    <h4>@album.Name</h4>
+                    <a href="~/album/remove/@album.Id" class="pull-right font-small">REMOVE</a>
                     <div class="clearfix"></div>
                 </div>
             </li>
+        }
+
         </ul>
         
         <div class="text-center">

@@ -14,16 +14,19 @@ namespace Zazz.Web.Controllers
     {
         private readonly IAlbumService _albumService;
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
 
-        public AlbumController(IAlbumService albumService, IUserService userService)
+        public AlbumController(IAlbumService albumService, IUserService userService, IPhotoService photoService)
         {
             _albumService = albumService;
             _userService = userService;
+            _photoService = photoService;
         }
 
         [Authorize]
         public ActionResult Index()
         {
+            using (_photoService)
             using (_albumService)
             using (_userService)
             {
@@ -40,18 +43,29 @@ namespace Zazz.Web.Controllers
             const int PAGE_SIZE = 6;
             var skip = (page - 1)*PAGE_SIZE;
 
+            using (_photoService)
             using (_albumService)
             using (_userService)
             {
-                var totalAlbums = await _albumService.GetUserAlbumsCountAsync(id);
+                var totalAlbumsCount = await _albumService.GetUserAlbumsCountAsync(id);
                 var albums = await _albumService.GetUserAlbumsAsync(id, skip, PAGE_SIZE);
 
-                var albumsVM = albums.Select(album => new AlbumViewModel
-                                                          {
-                                                              Id = album.Id,
-                                                              Name = album.Name,
-                                                              ThumbnailUrl = ""
-                                                          });
+                const string DEFAULT_IMAGE_PATH = "/Images/placeholder.gif";
+                var albumsVM = new List<AlbumViewModel>();
+                foreach (var album in albums)
+                {
+                    var albumVm = new AlbumViewModel
+                                      {
+                                          Id = album.Id,
+                                          Name = album.Name
+                                      };
+                    var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
+                    albumVm.ThumbnailUrl = firstAlbumImageId == 0
+                        ? DEFAULT_IMAGE_PATH
+                        : _photoService.GeneratePhotoUrl(id, album.Id, firstAlbumImageId);
+
+                    albumsVM.Add(albumVm);
+                }
 
                 var isOwner = false;
                 if (User.Identity.IsAuthenticated)
@@ -60,12 +74,13 @@ namespace Zazz.Web.Controllers
                     isOwner = currentUserId == id;
                 }
 
-                var pagedList = new StaticPagedList<AlbumViewModel>(albumsVM, page, PAGE_SIZE, totalAlbums);
+                var pagedList = new StaticPagedList<AlbumViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
 
                 var vm = new AlbumListViewModel
                              {
                                  IsOwner = isOwner,
-                                 Albums = pagedList
+                                 Albums = pagedList,
+                                 UserId = id
                              };
 
                 return View("List", vm);
@@ -76,6 +91,17 @@ namespace Zazz.Web.Controllers
         public ActionResult CreateAlbum(string albumName)
         {
             return RedirectToAction("List");
+        }
+
+        public ActionResult Remove(int id, string returnUrl)
+        {
+            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+        }
+
+        [HttpGet]
+        public ActionResult Photos(int id, int page = 1)
+        {
+            return View();
         }
     }
 }

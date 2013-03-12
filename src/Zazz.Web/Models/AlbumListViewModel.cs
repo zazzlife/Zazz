@@ -11,6 +11,8 @@ namespace Zazz.Web.Models
 
         public bool IsOwner { get; set; }
 
+        public int UserId { get; set; }
+
         public IPagedList<AlbumViewModel> Albums { get; set; }
     }
 }
