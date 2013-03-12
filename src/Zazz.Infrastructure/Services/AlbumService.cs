@@ -62,7 +62,7 @@ namespace Zazz.Infrastructure.Services
             if (album.UserId != currentUserId)
                 throw new SecurityException();
 
-            foreach (var photo in album.Photos)
+            foreach (var photo in album.Photos.ToList())
             {
                 await _photoService.RemovePhotoAsync(photo.Id, currentUserId);
             }

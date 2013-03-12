@@ -32,17 +32,17 @@ namespace Zazz.Web.Controllers
             using (_userService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                return RedirectToAction("List", "Album", new {id = userId, page = 1});
+                return RedirectToAction("List", "Album", new { id = userId, page = 1 });
             }
         }
-        
+
         public async Task<ActionResult> List(int id, int page = 1)
         {
             if (page == 0)
                 throw new HttpException(400, "Bad Request");
 
             const int PAGE_SIZE = 6;
-            var skip = (page - 1)*PAGE_SIZE;
+            var skip = (page - 1) * PAGE_SIZE;
 
             using (_photoService)
             using (_albumService)
@@ -115,8 +115,18 @@ namespace Zazz.Web.Controllers
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-        public ActionResult Remove(int id)
+        [Authorize]
+        public async Task<ActionResult> Remove(int id)
         {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+
+                await _albumService.DeleteAlbumAsync(id, userId);
+            }
+
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
