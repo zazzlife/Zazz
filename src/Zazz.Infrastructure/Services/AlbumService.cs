@@ -21,6 +21,7 @@ namespace Zazz.Infrastructure.Services
         {
             return Task.Run(() => _uoW.AlbumRepository.GetAll()
                                       .Where(a => a.UserId == userId)
+                                      .OrderBy(a => a.Id)
                                       .Skip(skip)
                                       .Take(take).ToList());
         }

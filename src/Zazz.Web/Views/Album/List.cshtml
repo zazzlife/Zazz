@@ -1,4 +1,5 @@
-﻿@model Zazz.Web.Models.AlbumListViewModel
+﻿@using PagedList.Mvc
+@model Zazz.Web.Models.AlbumListViewModel
 @{
     ViewBag.Title = "Album List";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -40,6 +41,10 @@
                 </div>
             </li>
         </ul>
+        
+        <div class="text-center">
+            @Html.PagedListPager(Model.Albums, page => Url.Action("List", new { page }))
+        </div>
 
     </div>
 </div>
