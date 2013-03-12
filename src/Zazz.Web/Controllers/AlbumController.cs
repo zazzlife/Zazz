@@ -10,7 +10,7 @@ namespace Zazz.Web.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return View("List");
         }
     }
 }
