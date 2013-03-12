@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security;
 using System.Threading.Tasks;
 using Moq;
@@ -16,14 +17,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private AlbumService _sut;
         private Album _album;
         private int _userId;
+        private Mock<IPhotoService> _photoService;
+        private int _photoId;
 
         [SetUp]
         public void Init()
         {
             _uoW = new Mock<IUoW>();
-            _sut = new AlbumService(_uoW.Object);
+            _photoService = new Mock<IPhotoService>();
+            _sut = new AlbumService(_uoW.Object, _photoService.Object);
             _album = new Album();
             _userId = 12;
+            _photoId = 1;
 
             _uoW.Setup(x => x.SaveAsync())
                 .Returns(() => Task.Run(() => { }));
@@ -115,8 +120,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 123;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => 155));
+            _album.UserId = 400;
+            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _album));
 
             //Act & Assert
             try
@@ -127,7 +133,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+            _uoW.Verify(x => x.AlbumRepository.GetByIdAsync(_album.Id), Times.Once());
+        }
+
+        [Test]
+        public async Task RemoveAllImagesFirst_OnDeleteAlbum()
+        {
+            //Arrange
+            _album.Id = 123;
+            _album.UserId = _userId;
+            _album.Photos = new List<Photo>
+                                {
+                                    new Photo {Id = _photoId},
+                                    new Photo {Id = _photoId},
+                                    new Photo {Id = _photoId},
+                                };
+
+            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _album));
+            _uoW.Setup(x => x.AlbumRepository.Remove(_album));
+            _photoService.Setup(x => x.RemovePhotoAsync(_photoId, _userId))
+                         .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.DeleteAlbumAsync(_album.Id, _userId);
+
+            //Assert
+            _photoService.Verify(x => x.RemovePhotoAsync(_photoId, _userId), Times.Exactly(_album.Photos.Count));
         }
 
         [Test]
@@ -135,16 +167,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 123;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _userId));
-            _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
-                .Returns(() => Task.Run(() => { }));
+            _album.UserId = _userId;
+            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _album));
+            _uoW.Setup(x => x.AlbumRepository.Remove(_album));
+            _photoService.Setup(x => x.RemovePhotoAsync(It.IsAny<int>(), _userId))
+                         .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.DeleteAlbumAsync(_album.Id, _userId);
 
             //Assert
-            _uoW.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
+            _uoW.Verify(x => x.AlbumRepository.Remove(_album), Times.Once());
             _uoW.Verify(x => x.SaveAsync(), Times.Once());
         }
     }

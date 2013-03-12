@@ -11,10 +11,12 @@ namespace Zazz.Infrastructure.Services
     public class AlbumService : IAlbumService
     {
         private readonly IUoW _uoW;
+        private readonly IPhotoService _photoService;
 
-        public AlbumService(IUoW uoW)
+        public AlbumService(IUoW uoW, IPhotoService photoService)
         {
             _uoW = uoW;
+            _photoService = photoService;
         }
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
@@ -56,11 +58,16 @@ namespace Zazz.Infrastructure.Services
             if (albumId == 0)
                 throw new ArgumentException("Album Id cannot be 0", "albumId");
 
-            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(albumId);
-            if (ownerId != currentUserId)
+            var album = await _uoW.AlbumRepository.GetByIdAsync(albumId);
+            if (album.UserId != currentUserId)
                 throw new SecurityException();
 
-            await _uoW.AlbumRepository.RemoveAsync(albumId);
+            foreach (var photo in album.Photos)
+            {
+                await _photoService.RemovePhotoAsync(photo.Id, currentUserId);
+            }
+
+            _uoW.AlbumRepository.Remove(album);
             await _uoW.SaveAsync();
         }
 

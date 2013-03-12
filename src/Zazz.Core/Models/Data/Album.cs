@@ -6,6 +6,11 @@ namespace Zazz.Core.Models.Data
 {
     public class Album : BaseEntity
     {
+        public Album()
+        {
+            Photos = new List<Photo>();
+        }
+
         [MaxLength(50)]
         public string Name { get; set; }
 

@@ -115,7 +115,7 @@ namespace Zazz.Web.Controllers
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-        public ActionResult Remove(int id, string returnUrl)
+        public ActionResult Remove(int id)
         {
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
