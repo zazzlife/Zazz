@@ -35,7 +35,7 @@ namespace Zazz.Infrastructure.Services
             return _uoW.PhotoRepository.GetDescriptionAsync(photoId);
         }
 
-        public async Task SavePhotoAsync(Photo photo, Stream data)
+        public async Task<int> SavePhotoAsync(Photo photo, Stream data)
         {
             photo.UploadDate = DateTime.UtcNow;
             _uoW.PhotoRepository.InsertGraph(photo);
@@ -43,6 +43,8 @@ namespace Zazz.Infrastructure.Services
 
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             await _fileService.SaveFileAsync(path, data);
+
+            return photo.Id;
         }
 
         public async Task RemovePhotoAsync(int photoId, int currentUserId)

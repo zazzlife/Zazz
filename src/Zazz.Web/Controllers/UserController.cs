@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -69,7 +70,6 @@ namespace Zazz.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-
                     string message;
                     if (vm.ProfileImage != null)
                     {
@@ -78,6 +78,13 @@ namespace Zazz.Web.Controllers
                             ShowAlert(message, AlertType.Error);
                             return View(vm);
                         }
+
+                        var photo = new Photo
+                                        {
+                                            AlbumId = vm.AlbumId,
+                                            UploadDate = DateTime.UtcNow,
+                                            UploaderId = user.Id
+                                        };
                     }
 
                     if (vm.ProfileCoverImage != null)

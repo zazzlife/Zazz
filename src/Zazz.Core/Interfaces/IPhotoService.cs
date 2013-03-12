@@ -13,7 +13,7 @@ namespace Zazz.Core.Interfaces
 
         Task<string> GetPhotoDescriptionAsync(int photoId);
         
-        Task SavePhotoAsync(Photo photo, Stream data);
+        Task<int> SavePhotoAsync(Photo photo, Stream data);
 
         Task RemovePhotoAsync(int photoId, int currentUserId);
 
