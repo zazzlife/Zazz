@@ -12,11 +12,19 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uoW;
         private readonly IPhotoService _photoService;
+        private readonly IFileService _fileService;
 
-        public AlbumService(IUoW uoW, IPhotoService photoService)
+        public AlbumService(IUoW uoW, IPhotoService photoService, IFileService fileService)
         {
             _uoW = uoW;
             _photoService = photoService;
+            _fileService = fileService;
+        }
+
+        public string GenerateAlbumPath(int userId, int albumId)
+        {
+            var fullImagePath = _photoService.GeneratePhotoFilePath(userId, albumId, 0);
+            return _fileService.RemoveFileNameFromPath(fullImagePath);
         }
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
@@ -58,16 +66,14 @@ namespace Zazz.Infrastructure.Services
             if (albumId == 0)
                 throw new ArgumentException("Album Id cannot be 0", "albumId");
 
-            var album = await _uoW.AlbumRepository.GetByIdAsync(albumId);
-            if (album.UserId != currentUserId)
+            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(albumId);
+            if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            foreach (var photo in album.Photos.ToList())
-            {
-                await _photoService.RemovePhotoAsync(photo.Id, currentUserId);
-            }
+            var albumPath = GenerateAlbumPath(currentUserId, albumId);
+            _fileService.RemoveDirectory(albumPath);
 
-            _uoW.AlbumRepository.Remove(album);
+            await _uoW.AlbumRepository.RemoveAsync(albumId);
             await _uoW.SaveAsync();
         }
 

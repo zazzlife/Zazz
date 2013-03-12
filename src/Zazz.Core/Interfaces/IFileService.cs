@@ -14,5 +14,7 @@ namespace Zazz.Core.Interfaces
         Task SaveFileAsync(string path, byte[] data);
 
         void RemoveFile(string path);
+        
+        void RemoveDirectory(string path);
     }
 }

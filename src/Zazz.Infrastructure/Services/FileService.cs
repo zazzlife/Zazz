@@ -57,5 +57,11 @@ namespace Zazz.Infrastructure.Services
             if (File.Exists(path))
                 File.Delete(path);
         }
+
+        public void RemoveDirectory(string path)
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+        }
     }
 }

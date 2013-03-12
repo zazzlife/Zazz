@@ -19,13 +19,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userId;
         private Mock<IPhotoService> _photoService;
         private int _photoId;
+        private Mock<IFileService> _fileService;
 
         [SetUp]
         public void Init()
         {
             _uoW = new Mock<IUoW>();
             _photoService = new Mock<IPhotoService>();
-            _sut = new AlbumService(_uoW.Object, _photoService.Object);
+            _fileService = new Mock<IFileService>();
+            _sut = new AlbumService(_uoW.Object, _photoService.Object, _fileService.Object);
             _album = new Album();
             _userId = 12;
             _photoId = 1;
@@ -33,6 +35,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uoW.Setup(x => x.SaveAsync())
                 .Returns(() => Task.Run(() => { }));
         }
+
+        [Test]
+        public void GenerateCorrectAlbumPath_OnGenerateAlbumPath()
+        {
+            //Arrange
+            var albumId = 2;
+
+            var sample = String.Format(@"C:\Zazz.Web\picture\user\{0}\{1}\0.jpg", _userId, albumId);
+            var expected = String.Format(@"C:\Zazz.Web\picture\user\{0}\{1}", _userId, albumId);
+            var sut = new AlbumService(_uoW.Object, _photoService.Object, new FileService());
+            _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, albumId, 0))
+                         .Returns(sample);
+
+            //Act
+            var result = sut.GenerateAlbumPath(_userId, albumId);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+
 
         [Test]
         public async Task InsertAndSave_OnCreateAlbum()
@@ -121,8 +144,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _album.Id = 123;
             _album.UserId = 400;
-            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _album));
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _album.UserId));
 
             //Act & Assert
             try
@@ -133,33 +156,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uoW.Verify(x => x.AlbumRepository.GetByIdAsync(_album.Id), Times.Once());
+            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
         }
 
         [Test]
-        public async Task RemoveAllImagesFirst_OnDeleteAlbum()
+        public async Task RemoveAllAlbumDirectory_OnDeleteAlbum()
         {
             //Arrange
             _album.Id = 123;
+            var dirPath = "c:\test";
             _album.UserId = _userId;
-            _album.Photos = new List<Photo>
-                                {
-                                    new Photo {Id = _photoId},
-                                    new Photo {Id = _photoId},
-                                    new Photo {Id = _photoId},
-                                };
-
-            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _album));
-            _uoW.Setup(x => x.AlbumRepository.Remove(_album));
-            _photoService.Setup(x => x.RemovePhotoAsync(_photoId, _userId))
-                         .Returns(() => Task.Run(() => { }));
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+               .Returns(() => Task.Run(() => _userId));
+            _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
+                .Returns(() => Task.Run(() => { }));
+            _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, _album.Id, 0))
+                         .Returns(dirPath);
+            _fileService.Setup(x => x.RemoveFileNameFromPath(dirPath))
+                        .Returns(dirPath);
+            _fileService.Setup(x => x.RemoveDirectory(dirPath));
 
             //Act
             await _sut.DeleteAlbumAsync(_album.Id, _userId);
 
             //Assert
-            _photoService.Verify(x => x.RemovePhotoAsync(_photoId, _userId), Times.Exactly(_album.Photos.Count));
+            _photoService.Verify(x => x.GeneratePhotoFilePath(_userId, _album.Id, 0), Times.Once());
+            _fileService.Verify(x => x.RemoveDirectory(dirPath), Times.Once());
+
         }
 
         [Test]
@@ -167,18 +190,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 123;
+            var dirPath = "c:\test";
             _album.UserId = _userId;
-            _uoW.Setup(x => x.AlbumRepository.GetByIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _album));
-            _uoW.Setup(x => x.AlbumRepository.Remove(_album));
-            _photoService.Setup(x => x.RemovePhotoAsync(It.IsAny<int>(), _userId))
-                         .Returns(() => Task.Run(() => { }));
+            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+                .Returns(() => Task.Run(() => _userId));
+            _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
+                .Returns(() => Task.Run(() => { }));
+            _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, _album.Id, 0))
+                         .Returns(dirPath);
+            _fileService.Setup(x => x.RemoveFileNameFromPath(dirPath))
+                        .Returns(dirPath);
+            _fileService.Setup(x => x.RemoveDirectory(dirPath));
 
             //Act
             await _sut.DeleteAlbumAsync(_album.Id, _userId);
 
             //Assert
-            _uoW.Verify(x => x.AlbumRepository.Remove(_album), Times.Once());
+            _uoW.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
             _uoW.Verify(x => x.SaveAsync(), Times.Once());
         }
     }

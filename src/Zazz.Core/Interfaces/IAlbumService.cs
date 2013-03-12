@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumService : IDisposable
     {
+        string GenerateAlbumPath(int userId, int albumId);
+
         Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take);
 
         Task<int> GetUserAlbumsCountAsync(int userId);
