@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
@@ -13,6 +15,19 @@ namespace Zazz.Infrastructure.Services
         public AlbumService(IUoW uoW)
         {
             _uoW = uoW;
+        }
+
+        public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
+        {
+            return Task.Run(() => _uoW.AlbumRepository.GetAll()
+                                      .Where(a => a.UserId == userId)
+                                      .Skip(skip)
+                                      .Take(take).ToList());
+        }
+
+        public Task<int> GetUserAlbumsCountAsync(int userId)
+        {
+            return Task.Run(() => _uoW.AlbumRepository.GetAll().Count(a => a.UserId == userId));
         }
 
         public async Task CreateAlbumAsync(Album album)

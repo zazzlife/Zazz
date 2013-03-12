@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
@@ -6,6 +7,10 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumService : IDisposable
     {
+        Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take);
+
+        Task<int> GetUserAlbumsCountAsync(int userId);
+
         Task CreateAlbumAsync(Album album);
 
         /// <summary>
