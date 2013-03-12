@@ -75,7 +75,7 @@ namespace Zazz.Data
 
             modelBuilder.Entity<Photo>()
                 .HasRequired(i => i.Uploader)
-                .WithMany(u => u.UploadedPhotos)
+                .WithMany(u => u.Photos)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Post>()

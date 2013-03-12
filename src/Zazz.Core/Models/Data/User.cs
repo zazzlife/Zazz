@@ -26,7 +26,9 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 
-        public virtual ICollection<Photo> UploadedPhotos { get; set; }
+        public virtual ICollection<Album> Albums  { get; set; }
+
+        public virtual ICollection<Photo> Photos { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
 

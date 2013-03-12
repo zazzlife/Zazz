@@ -114,17 +114,24 @@ namespace Zazz.Web.Controllers
                                    Username = registerVm.UserName,
                                    AccountType = registerVm.AccountType,
                                    UserDetail = new UserDetail
-                                   {
-                                       Gender = registerVm.Gender,
-                                       PublicEmail = registerVm.PublicEmail,
-                                       SchoolId = registerVm.SchoolId,
-                                       FullName = registerVm.FullName,
-                                       MajorId = registerVm.MajorId,
-                                       JoinedDate = DateTime.UtcNow,
-                                       CityId = registerVm.CityId,
-                                       SendSyncErrorNotifications = true,
-                                       SyncFbEvents = true
-                                   }
+                                                    {
+                                                        Gender = registerVm.Gender,
+                                                        PublicEmail = registerVm.PublicEmail,
+                                                        SchoolId = registerVm.SchoolId,
+                                                        FullName = registerVm.FullName,
+                                                        MajorId = registerVm.MajorId,
+                                                        JoinedDate = DateTime.UtcNow,
+                                                        CityId = registerVm.CityId,
+                                                        SendSyncErrorNotifications = true,
+                                                        SyncFbEvents = true
+                                                    },
+                                   Albums = new List<Album>
+                                                {
+                                                    new Album
+                                                        {
+                                                            Name = "Default"
+                                                        }
+                                                }
                                };
 
                 if (registerVm.AccountType == AccountType.ClubAdmin)
@@ -367,7 +374,14 @@ namespace Zazz.Web.Controllers
                         CityId = registerVm.CityId,
                         SendSyncErrorNotifications = true,
                         SyncFbEvents = true
-                    }
+                    },
+                    Albums = new List<Album>
+                                 {
+                                     new Album
+                                         {
+                                             Name = "Default"
+                                         }
+                                 }
                 };
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {
