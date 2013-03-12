@@ -317,6 +317,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\toastr.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\font\fontawesome-webfont.woff" />
@@ -361,6 +362,7 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Content\modernizr-2.6.2.js" />
     <Content Include="Scripts\mvc-bootstrap-integration.js" />
+    <Content Include="Scripts\toastr.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
