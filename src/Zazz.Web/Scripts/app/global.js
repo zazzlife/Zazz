@@ -22,8 +22,27 @@ $(function () {
 
     $('*[title]').tooltip();
 
+    $('#party-web-link').click(function() {
+        var url = "/follow/GetFollowRequests";
 
-    $('.btn-followrequest-action').click(function () {
+        $.ajax({
+            url: url,
+            cache: false,
+            error: function() {
+                toastr.error("An error occured, Please try again later.");
+            },
+            success: function(data) {
+                var container = $('#party-web-requests-body');
+                container.fadeOut('slow', function() {
+                    container.html(data);
+                    container.fadeIn('slow');
+                });
+            }
+        });
+
+    });
+
+    $(document).on('click', '.btn-followrequest-action', function () {
         var btn = $(this);
         var originalBtnText = showBtnBusy(btn);
 

@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult GetFollowRequests()
         {
-            return View();
+            return View("_FollowRequestsPartial");
         }
     }
 }

@@ -15,7 +15,7 @@
                 <li class="divider"></li>
 
                 <li class="nav-header">ACCOUNT</li>
-                <li><a href="#" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web <span id="follow-request-count" class="badge badge-small badge-info">4</span></a></li>
+                <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web <span id="follow-request-count" class="badge badge-small badge-info">4</span></a></li>
                 <li><a href="~/event/list"><i class="icon-calendar"></i>Events</a></li>
                 <li><a href="~/album/"><i class="icon-camera"></i>Photos</a></li>
                 <li><a href="~/user/edit"><i class="icon-pencil"></i>Edit Profile</a></li>
@@ -60,33 +60,10 @@
                 <h3>Party web requests</h3>
             </div>
             
-            <div class="modal-body">
-                <table class="table table-striped">
-                    <tr>
-                        <td><img src="~/Images/placeholder.gif" /></td>
-                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/Images/placeholder.gif" /></td>
-                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/Images/placeholder.gif" /></td>
-                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
-                    </tr>
-                    <tr>
-                        <td><img src="~/Images/placeholder.gif" /></td>
-                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
-                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
-                    </tr>
-                </table>
+            <div class="modal-body" id="party-web-requests-body">
+                <div class="text-center">
+                    <i class="icon-large icon-refresh icon-spin"></i>
+                </div>
             </div>
 
             <div class="modal-footer">
