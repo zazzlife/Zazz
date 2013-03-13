@@ -3,4 +3,31 @@
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
-<h2>Photos</h2>
+<div>
+    <div class="page-header">
+        <h3>Photos</h3>
+    </div>
+
+    <div class="margin-ten">
+        <p><strong>Upload New Photo</strong></p>
+        <form method="POST" class="form-inline" action="~/photo/upload">
+            <input type="file" name="photo" />
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
+
+        <hr />
+
+        <ul class="thumbnails">
+            <li class="thumbnail">
+                <div>
+                    <a href="#">
+                        <img src="~/Images/placeholder.gif" class="width-110" title="test tooltip" />
+                    </a>
+                </div>
+                <a href="#" class="font-verysmall">REMOVE</a>
+            </li>
+        </ul>
+
+    </div>
+
+</div>

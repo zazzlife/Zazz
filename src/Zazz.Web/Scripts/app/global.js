@@ -14,4 +14,6 @@ $(function () {
     
     $('.datepicker').datetimepicker();
 
+
+    $('*[title]').tooltip();
 })
