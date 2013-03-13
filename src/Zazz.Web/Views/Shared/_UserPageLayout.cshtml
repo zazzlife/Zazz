@@ -15,7 +15,7 @@
                 <li class="divider"></li>
 
                 <li class="nav-header">ACCOUNT</li>
-                <li><a href="#"><i class="icon-beer"></i>Party Web <span class="badge badge-small badge-info">5</span></a></li>
+                <li><a href="#" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web <span id="follow-request-count" class="badge badge-small badge-info">4</span></a></li>
                 <li><a href="~/event/list"><i class="icon-calendar"></i>Events</a></li>
                 <li><a href="~/album/"><i class="icon-camera"></i>Photos</a></li>
                 <li><a href="~/user/edit"><i class="icon-pencil"></i>Edit Profile</a></li>
@@ -36,12 +36,12 @@
         <section class="middle-panel">
 
              @if (TempData["alert"] != null && ((bool)TempData["alert"]))
-                {
+             {
                     <div class="alert alert-block @TempData["alertClass"] margin-ten" style="margin-bottom: 30px;">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <p>@TempData["alertMessage"]</p>
                     </div>
-                }
+             }
 
             @RenderBody()
         </section>
@@ -53,6 +53,47 @@
         </section>
 
         <div class="clearfix"></div>
+        
+        <div class="modal hide fade" id="party-web-requests">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Party web requests</h3>
+            </div>
+            
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tr>
+                        <td><img src="~/Images/placeholder.gif" /></td>
+                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
+                    </tr>
+                    <tr>
+                        <td><img src="~/Images/placeholder.gif" /></td>
+                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
+                    </tr>
+                    <tr>
+                        <td><img src="~/Images/placeholder.gif" /></td>
+                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
+                    </tr>
+                    <tr>
+                        <td><img src="~/Images/placeholder.gif" /></td>
+                        <td style="padding-top: 29px; width: 230px;"><strong>User Name</strong></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/acceptfollow/1" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
+                        <td style="padding-top: 22px;" class="text-right"><button data-url="/follow/rejectfollow/1" class="btn btn-followrequest-action">Reject</button></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn">Close</a>
+            </div>
+        </div>
+
     </div>
 </div>
 
