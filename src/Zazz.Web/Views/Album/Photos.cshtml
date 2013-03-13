@@ -1,4 +1,5 @@
-﻿@{
+﻿@model AlbumPhotosViewModel
+@{
     ViewBag.Title = "Photos";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
@@ -9,23 +10,33 @@
     </div>
 
     <div class="margin-ten">
-        <p><strong>Upload New Photo</strong></p>
-        <form method="POST" class="form-inline" action="~/photo/upload">
-            <input type="file" name="photo" />
-            <button type="submit" class="btn btn-success">Send</button>
-        </form>
+        @if (Model.IsOwner)
+        {
+            <p><strong>Upload New Photo</strong></p>
+            <form method="POST" class="form-inline" action="~/photo/upload">
+                <input type="file" name="photo" />
+                <button type="submit" class="btn btn-success">Send</button>
+            </form>
 
-        <hr />
+            <hr />
+        }
 
         <ul class="thumbnails">
-            <li class="thumbnail">
-                <div>
-                    <a href="#">
-                        <img src="~/Images/placeholder.gif" class="width-110" title="test tooltip" />
-                    </a>
-                </div>
-                <a href="#" class="font-verysmall">REMOVE</a>
-            </li>
+            @foreach (var p in Model.Albums)
+            {
+                <li class="thumbnail">
+                    <div>
+                        <a href="@p.ImageUrl">
+                            <img src="@p.ImageUrl" class="width-110" title="@p.Text" />
+                        </a>
+                    </div>
+                    
+                    @if (Model.IsOwner)
+                    {
+                        <a href="#" class="font-verysmall">REMOVE</a>
+                    }
+                </li>
+            }
         </ul>
 
     </div>

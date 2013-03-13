@@ -21,6 +21,11 @@ namespace Zazz.Infrastructure.Services
             _fileService = fileService;
         }
 
+        public Task<Album> GetAlbumAsync(int albumId)
+        {
+            return _uoW.AlbumRepository.GetByIdAsync(albumId);
+        }
+
         public string GenerateAlbumPath(int userId, int albumId)
         {
             var fullImagePath = _photoService.GeneratePhotoFilePath(userId, albumId, 0);

@@ -131,7 +131,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Photos(int id, int page = 1)
+        public async Task<ActionResult> Photos(int id, int page = 1)
         {
             if (page == 0)
                 throw new HttpException(400, "Bad Request");
@@ -143,18 +143,18 @@ namespace Zazz.Web.Controllers
             using (_albumService)
             using (_userService)
             {
-                var isOwner = false;
                 var userId = 0;
-
                 if (User.Identity.IsAuthenticated)
                     userId = _userService.GetUserId(User.Identity.Name);
 
-                var totalPhotos = _photoService.GetAlbumPhotosCount(id);
-                var photos = _photoService.GetAlbumPhotos(id, skip, PAGE_SIZE);
+                var album = await _albumService.GetAlbumAsync(id);
+                var isOwner = userId == album.UserId;
 
-                var singlePhoto = photos.FirstOrDefault();
-                if (singlePhoto != null)
-                    isOwner = userId == singlePhoto.UploaderId;
+                var totalPhotos = album.Photos.Count();
+                var photos = album.Photos
+                                  .OrderBy(p => p.Id)
+                                  .Skip(skip)
+                                  .Take(PAGE_SIZE);
 
                 var photosVm = photos
                     .Select(p => new ImageViewModel

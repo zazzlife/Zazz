@@ -21,23 +21,7 @@ namespace Zazz.Infrastructure.Services
             _fileService = fileService;
             _rootPath = rootPath;
         }
-
-        public List<Photo> GetAlbumPhotos(int albumId, int skip, int take)
-        {
-            return _uoW.PhotoRepository.GetAll()
-                       .Where(p => p.AlbumId == albumId)
-                       .OrderBy(p => p.Id)
-                       .Skip(skip)
-                       .Take(take)
-                       .ToList();
-        }
-
-        public int GetAlbumPhotosCount(int albumId)
-        {
-            return _uoW.PhotoRepository.GetAll()
-                       .Count(p => p.AlbumId == albumId);
-        }
-
+        
         public string GeneratePhotoUrl(int userId, int albumId, int photoId)
         {
             return String.Format("/picture/user/{0}/{1}/{2}.jpg", userId, albumId, photoId);
