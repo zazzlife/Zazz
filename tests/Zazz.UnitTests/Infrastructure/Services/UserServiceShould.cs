@@ -56,6 +56,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         }
 
+        [Test]
+        public void ReturnGetUserAccountTypeFromRepo_OnGetUserAccountType()
+        {
+            //Arrange
+            var id = 123;
+            var accountType = AccountType.User;
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(id))
+                .Returns(accountType);
+
+            //Act
+            var result = _sut.GetUserAccountType(id);
+
+            //Assert
+            Assert.AreEqual(accountType, result);
+            _uow.Verify(x => x.UserRepository.GetUserAccountType(id), Times.Once());
+        }
+
 
     }
 }

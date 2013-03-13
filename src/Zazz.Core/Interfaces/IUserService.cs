@@ -6,6 +6,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserService : IDisposable
     {
+        AccountType GetUserAccountType(int userId);
+
         int GetUserId(string username);
 
         Task<User> GetUserAsync(string username);

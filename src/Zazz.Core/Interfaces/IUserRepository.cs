@@ -17,6 +17,8 @@ namespace Zazz.Core.Interfaces
 
         Task<bool> ExistsByUsernameAsync(string username);
 
+        AccountType GetUserAccountType(int userId);
+
         //Task<string> GetUserPassword(string username);
     }
 }

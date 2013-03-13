@@ -13,6 +13,11 @@ namespace Zazz.Infrastructure.Services
             _uoW = uoW;
         }
 
+        public AccountType GetUserAccountType(int userId)
+        {
+            return _uoW.UserRepository.GetUserAccountType(userId);
+        }
+
         public int GetUserId(string username)
         {
             return _uoW.UserRepository.GetIdByUsername(username);
