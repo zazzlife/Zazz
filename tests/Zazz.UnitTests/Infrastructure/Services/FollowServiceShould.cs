@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -118,6 +120,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public async Task ThrowIfCurrentUserIsNotTheTargetUser_OnAcceptFollowRequest()
+        {
+            //Arrange
+            var followRequestId = 555;
+            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
+                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+
+            //Act
+            try
+            {
+                await _sut.AcceptFollowRequestAsync(followRequestId, 999);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
+            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+        }
+
+        [Test]
         public async Task AddNewUserFollowAndDeleteRequest_OnAcceptFollowRequest()
         {
             //Arrange
@@ -128,7 +156,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
                 
             //Act
-            await _sut.AcceptFollowRequestAsync(followRequestId);
+            await _sut.AcceptFollowRequestAsync(followRequestId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
@@ -137,7 +165,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveTheRequest_RejectRequest()
+        public async Task ThrowIfCurrentUserIdIsNotTheTargetUser_OnRejectRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -147,7 +175,34 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
             //Act
-            await _sut.RejectFollowRequestAsync(followRequestId);
+
+            try
+            {
+                await _sut.RejectFollowRequestAsync(followRequestId, 999);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
+            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+        }
+
+        [Test]
+        public async Task RemoveTheRequest_OnRejectRequest()
+        {
+            //Arrange
+            var followRequestId = 555;
+            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
+                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+
+            //Act
+            await _sut.RejectFollowRequestAsync(followRequestId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());

@@ -11,9 +11,9 @@ namespace Zazz.Core.Interfaces
 
         Task SendFollowRequestAsync(int fromUserId, int toUserId);
 
-        Task AcceptFollowRequestAsync(int requestId);
+        Task AcceptFollowRequestAsync(int requestId, int currentUserId);
 
-        Task RejectFollowRequestAsync(int requestId);
+        Task RejectFollowRequestAsync(int requestId, int currentUserId);
 
         Task RemoveFollowAsync(int fromUserId, int toUserId);
 

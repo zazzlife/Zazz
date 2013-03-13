@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -44,11 +45,14 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public async Task AcceptFollowRequestAsync(int requestId)
+        public async Task AcceptFollowRequestAsync(int requestId, int currentUserId)
         {
             var followRequest = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
             if (followRequest == null)
                 return;
+
+            if (followRequest.ToUserId != currentUserId)
+                throw new SecurityException();
 
             var userFollow = new Follow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
             _uow.FollowRepository.InsertGraph(userFollow);
@@ -57,11 +61,14 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public async Task RejectFollowRequestAsync(int requestId)
+        public async Task RejectFollowRequestAsync(int requestId, int currentUserId)
         {
             var request = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
             if (request == null)
                 return;
+
+            if (request.ToUserId != currentUserId)
+                throw new SecurityException();
 
             _uow.FollowRequestRepository.Remove(request);
             await _uow.SaveAsync();
