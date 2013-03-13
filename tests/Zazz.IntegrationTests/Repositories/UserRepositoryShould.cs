@@ -36,24 +36,12 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void SetEntityStateAsAdded_OnInsertOrUpdate_WhenUserDoesntExists()
-        {
-            //Arrange;
-            var user = Mother.GetUser();
-
-            //Act
-            _repo.InsertOrUpdate(user);
-
-            //Assert
-            Assert.AreEqual(EntityState.Added, _zazzDbContext.Entry(user).State);
-        }
-
-        [Test]
         public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsProvided()
         {
             //Arrange
             var user = Mother.GetUser();
             user.Id = 12;
+            user.UserDetail.Id = 12;
 
             //Act
             _repo.InsertOrUpdate(user);
@@ -63,7 +51,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
+        public void Throw_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
         {
             //Arrange
 
@@ -80,10 +68,14 @@ namespace Zazz.IntegrationTests.Repositories
             var user2 = Mother.GetUser();
 
             //Act
-            _repo.InsertOrUpdate(user2);
-
-            //Assert
-            Assert.AreEqual(EntityState.Modified, _zazzDbContext.Entry(user2).State);
+            try
+            {
+                _repo.InsertOrUpdate(user2);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (InvalidOperationException)
+            {
+            }
         }
 
         [Test]

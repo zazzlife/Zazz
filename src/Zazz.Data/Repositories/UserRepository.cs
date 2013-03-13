@@ -16,7 +16,8 @@ namespace Zazz.Data.Repositories
 
         protected override int GetItemId(User item)
         {
-            return GetIdByUsername(item.Username);
+            throw new InvalidOperationException(
+                "You must always provide user id for updating the user, use insert graph for insert");
         }
 
         public Task<User> GetByEmailAsync(string email)
