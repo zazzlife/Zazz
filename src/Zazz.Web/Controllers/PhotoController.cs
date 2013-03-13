@@ -25,6 +25,20 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
+        public async Task<ActionResult> Remove(int id)
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                await _photoService.RemovePhotoAsync(id, userId);
+            }
+
+            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+        }
+
+        [Authorize]
         public async Task<ActionResult> Upload(HttpPostedFileBase image, string description, int albumId)
         {
             var errorMessage = "Image was not valid";
