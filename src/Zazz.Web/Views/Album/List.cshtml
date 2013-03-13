@@ -12,34 +12,41 @@
 
     <div class="margin-ten">
 
-        <p><strong>Create a new album</strong></p>
-        @using (Html.BeginForm("CreateAlbum", "Album", FormMethod.Post, new { @class = "form-inline" }))
+        @if (Model.IsOwner)
         {
+            <p><strong>Create a new album</strong></p>
+            using (Html.BeginForm("CreateAlbum", "Album", FormMethod.Post, new { @class = "form-inline" }))
+            {
             @Html.ValidationMessageFor(model => model.AlbumName, null, new { @class = "help-inline" })
             @Html.TextBoxFor(model => model.AlbumName, new { @class = "span5", @placeholder = "Album Name" })
             <button class="btn btn-success">Create</button>
-        }
+            }
 
-        <hr />
-        
+            <hr />
+        }
         <ul class="thumbnails">
 
-        @foreach (var album in Model.Albums)
-        {
-            <li>
-                <div class="thumbnail">
-                    <a href="~/album/photos/@album.Id/1">
-                        <img src="@album.ThumbnailUrl" width="255" height="255" />
-                    </a>
-                    <h4>@album.Name</h4>
-                    <a href="~/album/remove/@album.Id" class="pull-right font-small">REMOVE</a>
-                    <div class="clearfix"></div>
-                </div>
-            </li>
-        }
+            @foreach (var album in Model.Albums)
+            {
+                <li>
+                    <div class="thumbnail">
+                        <a href="~/album/photos/@album.Id/1">
+                            <img src="@album.ThumbnailUrl" width="255" height="255" />
+                        </a>
+                        <h4>@album.Name</h4>
+
+                        @if (Model.IsOwner)
+                        {
+                            <a href="~/album/remove/@album.Id" class="pull-right font-small">REMOVE</a>
+                            <div class="clearfix"></div>
+                        }
+
+                    </div>
+                </li>
+            }
 
         </ul>
-        
+
         <div class="text-center">
             @Html.PagedListPager(Model.Albums, page => Url.Action("List", new { page }))
         </div>
