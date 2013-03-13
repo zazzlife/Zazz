@@ -230,6 +230,7 @@
     <Compile Include="HtmlHelpers\RadioButtonHelpers.cs" />
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
+    <Compile Include="Models\AlbumPhotosViewModel.cs" />
     <Compile Include="Models\ImageViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
