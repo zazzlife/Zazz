@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -368,7 +369,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ShouldDelete_OnDeleteById()
+        public async Task ShouldDelete_OnDeleteById()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -382,10 +383,10 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            _repo.RemoveAsync(user.Id).Wait();
+            await _repo.RemoveAsync(user.Id);
             _zazzDbContext.SaveChanges();
 
-            var result = _repo.GetByIdAsync(user.Id).Result;
+            var result = await _repo.GetByIdAsync(user.Id);
 
             //Assert
             Assert.IsNull(result);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,6 +65,21 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(u => u.Id == userId)
                         .Select(u => u.UserDetail.ProfilePhotoId)
                         .SingleOrDefault();
+        }
+
+        public override async Task RemoveAsync(int id)
+        {
+            var item = await GetByIdAsync(id);
+            if (item != null)
+                Remove(item);
+        }
+
+        public override void Remove(User item)
+        {
+            if (item.UserDetail != null)
+                DbContext.Entry(item.UserDetail).State = EntityState.Deleted;
+
+            DbContext.Entry(item).State = EntityState.Deleted;
         }
 
         //public Task<string> GetUserPassword(string username)
