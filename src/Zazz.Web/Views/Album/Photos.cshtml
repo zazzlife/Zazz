@@ -1,4 +1,5 @@
-﻿@model AlbumPhotosViewModel
+﻿@using PagedList.Mvc
+@model AlbumPhotosViewModel
 @{
     ViewBag.Title = "Photos";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -22,7 +23,7 @@
         }
 
         <ul class="thumbnails">
-            @foreach (var p in Model.Albums)
+            @foreach (var p in Model.Photos)
             {
                 <li class="thumbnail">
                     <div>
@@ -38,6 +39,10 @@
                 </li>
             }
         </ul>
+        
+        <div class="text-center">
+            @Html.PagedListPager(Model.Photos, page => Url.Action("List", new { page }))
+        </div>
 
     </div>
 

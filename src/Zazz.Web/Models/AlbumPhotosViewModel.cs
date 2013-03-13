@@ -8,6 +8,6 @@ namespace Zazz.Web.Models
 
         public int AlbumId { get; set; }
 
-        public IPagedList<ImageViewModel> Albums { get; set; }
+        public IPagedList<ImageViewModel> Photos { get; set; }
     }
 }
