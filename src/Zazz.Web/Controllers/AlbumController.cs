@@ -52,16 +52,16 @@ namespace Zazz.Web.Controllers
                 var albums = await _albumService.GetUserAlbumsAsync(id, skip, PAGE_SIZE);
 
                 const string DEFAULT_IMAGE_PATH = "/Images/placeholder.gif";
-                var albumsVM = new List<AlbumViewModel>();
+                var albumsVM = new List<ImageViewModel>();
                 foreach (var album in albums)
                 {
-                    var albumVm = new AlbumViewModel
+                    var albumVm = new ImageViewModel
                                       {
                                           Id = album.Id,
-                                          Name = album.Name
+                                          Text = album.Name
                                       };
                     var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
-                    albumVm.ThumbnailUrl = firstAlbumImageId == 0
+                    albumVm.ImageUrl = firstAlbumImageId == 0
                         ? DEFAULT_IMAGE_PATH
                         : _photoService.GeneratePhotoUrl(id, album.Id, firstAlbumImageId);
 
@@ -75,7 +75,7 @@ namespace Zazz.Web.Controllers
                     isOwner = currentUserId == id;
                 }
 
-                var pagedList = new StaticPagedList<AlbumViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
+                var pagedList = new StaticPagedList<ImageViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
 
                 var vm = new AlbumListViewModel
                              {

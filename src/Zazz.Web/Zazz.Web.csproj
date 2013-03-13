@@ -230,7 +230,7 @@
     <Compile Include="HtmlHelpers\RadioButtonHelpers.cs" />
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
-    <Compile Include="Models\AlbumViewModel.cs" />
+    <Compile Include="Models\ImageViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
@@ -396,6 +396,7 @@
     <Content Include="Views\Event\Show.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Album\List.cshtml" />
+    <Content Include="Views\Album\Photos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
