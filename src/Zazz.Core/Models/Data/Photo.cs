@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Data
     public class Photo : BaseEntity
     {
         [ForeignKey("UploaderId")]
-        public User Uploader { get; set; }
+        public virtual User Uploader { get; set; }
 
         public int UploaderId { get; set; }
 
@@ -15,7 +15,7 @@ namespace Zazz.Core.Models.Data
         public string Description { get; set; }
 
         [ForeignKey("AlbumId")]
-        public Album Album { get; set; }
+        public virtual Album Album { get; set; }
 
         public int AlbumId { get; set; }
 

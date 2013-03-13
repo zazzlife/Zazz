@@ -134,19 +134,125 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveFileAndDbRecord_OnRemovePhoto()
+        public async Task SetCoverPhotoIdTo0IfThePhotoIsCoverPhotoId_OnRemovePhoto()
+        {
+            ///Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+            var coverPhotoId = photoId;
+            var profilePhotoId = 2;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UploaderId = userId,
+                Uploader = new User
+                {
+                    UserDetail = new UserDetail
+                    {
+                        CoverPhotoId = coverPhotoId,
+                        ProfilePhotoId = profilePhotoId
+                    }
+                }
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
+                .Returns(() => Task.Run(() => photo));
+
+            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
+                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.RemoveAsync(photoId))
+                .Returns(() => Task.Run(() => { }));
+            _fs.Setup(x => x.RemoveFile(filePath));
+
+            //Act
+            await _sut.RemovePhotoAsync(photoId, userId);
+
+            //Assert
+            Assert.AreEqual(0, photo.Uploader.UserDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.Uploader.UserDetail.ProfilePhotoId);
+            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+
+        }
+
+        [Test]
+        public async Task SetProfilePhotoIdTo0IfThePhotoIsCoverPhotoId_OnRemovePhoto()
+        {
+            ///Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+            var coverPhotoId = 2;
+            var profilePhotoId = photoId;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UploaderId = userId,
+                Uploader = new User
+                {
+                    UserDetail = new UserDetail
+                    {
+                        CoverPhotoId = coverPhotoId,
+                        ProfilePhotoId = profilePhotoId
+                    }
+                }
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
+                .Returns(() => Task.Run(() => photo));
+
+            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
+                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.RemoveAsync(photoId))
+                .Returns(() => Task.Run(() => { }));
+            _fs.Setup(x => x.RemoveFile(filePath));
+
+            //Act
+            await _sut.RemovePhotoAsync(photoId, userId);
+
+            //Assert
+            Assert.AreEqual(coverPhotoId, photo.Uploader.UserDetail.CoverPhotoId);
+            Assert.AreEqual(0, photo.Uploader.UserDetail.ProfilePhotoId);
+            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+
+        }
+
+        [Test]
+        public async Task RemoveFileAndDbRecordAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
         {
             //Arrange
             var photoId = 124;
             var userId = 12;
             var albumId = 444;
+            var coverPhotoId = 4;
+            var profilePhotoId = 2;
 
             var photo = new Photo
-                            {
-                                Id = photoId,
-                                AlbumId = albumId,
-                                UploaderId = userId
-                            };
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UploaderId = userId,
+                Uploader = new User
+                {
+                    UserDetail = new UserDetail
+                    {
+                        CoverPhotoId = coverPhotoId,
+                        ProfilePhotoId = profilePhotoId
+                    }
+                }
+            };
             
             _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
                 .Returns(() => Task.Run(() => photo));
@@ -163,6 +269,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             await _sut.RemovePhotoAsync(photoId, userId);
 
             //Assert
+            Assert.AreEqual(coverPhotoId, photo.Uploader.UserDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.Uploader.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());

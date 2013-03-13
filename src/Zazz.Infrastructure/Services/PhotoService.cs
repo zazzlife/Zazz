@@ -60,6 +60,14 @@ namespace Zazz.Infrastructure.Services
             if (photo.UploaderId != currentUserId)
                 throw new SecurityException();
 
+            var userDetail = photo.Uploader.UserDetail;
+
+            if (photo.Id == userDetail.ProfilePhotoId)
+                photo.Uploader.UserDetail.ProfilePhotoId = 0;
+
+            if (photo.Id == userDetail.CoverPhotoId)
+                photo.Uploader.UserDetail.CoverPhotoId = 0;
+
             _uoW.PhotoRepository.Remove(photo);
             await _uoW.SaveAsync();
 
