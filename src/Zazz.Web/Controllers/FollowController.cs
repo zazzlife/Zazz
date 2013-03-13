@@ -116,5 +116,25 @@ namespace Zazz.Web.Controllers
                 return View("_FollowRequestsPartial", vm);
             }
         }
+
+        public string GetFollowRequestsCount()
+        {
+            using (_followService)
+            using (_userService)
+            using (_photoService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var requestsCount = _followService.GetFollowRequestsCountAsync(userId).Result;
+
+                if (requestsCount == 0)
+                    return "";
+                else
+                {
+                    return
+                        "<span id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
+                        + requestsCount + "</span>";
+                }
+            }
+        }
     }
 }
