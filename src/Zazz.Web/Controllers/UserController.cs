@@ -136,6 +136,15 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
+        public string GetCurrentUserImageUrl()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+
+            var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+            return GetUserImageUrl(userId);
+        }
+
         public string GetUserImageUrl(int userId)
         {
             using (_uow)

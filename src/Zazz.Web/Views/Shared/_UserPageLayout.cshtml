@@ -8,7 +8,7 @@
         @* LEFT PANEL *@
         <section class="left-panel">
             <div class="user">
-                <img width="42" height="42" src="~/Images/placeholder.gif" />
+                <img class="user-img" src="@Html.Action("GetCurrentUserImageUrl", "User")" />
                 <a href="~/user/me" class="username">USER NAME</a>
             </div>
             <ul class="nav nav-list">

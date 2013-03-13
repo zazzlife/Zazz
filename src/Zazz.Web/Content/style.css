@@ -245,6 +245,10 @@ hr.dark-line {
     float: left;
     height: 100%;
 }
+    .left-panel .user-img {
+        width: 42px;
+        height: 42px;
+    }
 
     .left-panel a {
         color: #222;
