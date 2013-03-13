@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPhotoService : IDisposable
     {
+        Task<Photo> GetPhotoAsync(int id);
+
         string GeneratePhotoUrl(int userId, int albumId, int photoId);
 
         string GeneratePhotoFilePath(int userId, int albumId, int photoId);

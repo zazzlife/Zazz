@@ -9,7 +9,7 @@ namespace Zazz.Core.Models.Data
         /// This is the user that follows another user
         /// </summary>
         [ForeignKey("FromUserId")]
-        public User FromUser { get; set; }
+        public virtual User FromUser { get; set; }
 
         /// <summary>
         /// This is the user that follows another user
@@ -20,7 +20,7 @@ namespace Zazz.Core.Models.Data
         /// This is the user that is being followed
         /// </summary>
         [ForeignKey("ToUserId")]
-        public User ToUser { get; set; }
+        public virtual User ToUser { get; set; }
 
         /// <summary>
         /// This is the user that is being followed

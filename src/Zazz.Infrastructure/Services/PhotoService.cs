@@ -21,7 +21,12 @@ namespace Zazz.Infrastructure.Services
             _fileService = fileService;
             _rootPath = rootPath;
         }
-        
+
+        public Task<Photo> GetPhotoAsync(int id)
+        {
+            return _uoW.PhotoRepository.GetByIdAsync(id);
+        }
+
         public string GeneratePhotoUrl(int userId, int albumId, int photoId)
         {
             return String.Format("/picture/user/{0}/{1}/{2}.jpg", userId, albumId, photoId);

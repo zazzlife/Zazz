@@ -228,11 +228,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="HtmlHelpers\MenuHelpers.cs" />
-    <Compile Include="HtmlHelpers\RadioButtonHelpers.cs" />
+    <Compile Include="Helpers\DefaultImageHelper.cs" />
+    <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
     <Compile Include="Models\AlbumPhotosViewModel.cs" />
+    <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\ImageViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
