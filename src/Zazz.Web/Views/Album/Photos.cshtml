@@ -14,7 +14,7 @@
         @if (Model.IsOwner)
         {
             <p><strong>Upload New Photo</strong></p>
-            using (Html.BeginForm("Image", "Upload", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            using (Html.BeginForm("Upload", "Photo", FormMethod.Post, new { @enctype = "multipart/form-data" }))
             {
                 
                 <input type="hidden" name="albumId" value="@Model.AlbumId"/>
@@ -50,7 +50,7 @@
 
                     @if (Model.IsOwner)
                     {
-                        <a href="#" class="font-verysmall">REMOVE</a>
+                        <a href="~/photo/remove/@p.Id" class="font-verysmall">REMOVE</a>
                     }
                 </li>
             }
