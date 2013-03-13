@@ -14,10 +14,26 @@
         @if (Model.IsOwner)
         {
             <p><strong>Upload New Photo</strong></p>
-            <form method="POST" class="form-inline" action="~/photo/upload">
-                <input type="file" name="photo" />
-                <button type="submit" class="btn btn-success">Send</button>
-            </form>
+            using (Html.BeginForm("Image", "Upload", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                
+                <input type="hidden" name="albumId" value="@Model.AlbumId"/>
+                
+            <div class="control-group">
+                <div class="editor-field">
+                    <input type="file" name="image" />
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Description, new { @class = "span4", @placeholder = "Description" })
+                    @Html.ValidationMessageFor(model => model.Description, null, new { @class = "help-inline" })
+                </div>
+            </div>
+            
+            <p>
+                <button type="submit" class="btn btn-success">Submit</button></p>
+            }
 
             <hr />
         }
@@ -31,7 +47,7 @@
                             <img src="@p.ImageUrl" class="width-110" title="@p.Text" />
                         </a>
                     </div>
-                    
+
                     @if (Model.IsOwner)
                     {
                         <a href="#" class="font-verysmall">REMOVE</a>
@@ -39,7 +55,7 @@
                 </li>
             }
         </ul>
-        
+
         <div class="text-center">
             @Html.PagedListPager(Model.Photos, page => Url.Action("List", new { page }))
         </div>
