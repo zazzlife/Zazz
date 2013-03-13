@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -37,6 +38,7 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Edit()
         {
             using (_uow)
+            using (_photoService)
             {
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
 
@@ -62,6 +64,7 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Edit(EditProfileViewModel vm)
         {
             using (_uow)
+            using (_photoService)
             {
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
 
@@ -131,6 +134,30 @@ namespace Zazz.Web.Controllers
             }
 
             return View(vm);
+        }
+
+        public string GetUserImageUrl(int userId)
+        {
+            using (_uow)
+            using (_photoService)
+            {
+                var photoId = _uow.UserRepository.GetUserPhotoId(userId);
+
+                if (photoId == 0)
+                {
+                    var user = _uow.UserRepository.GetByIdAsync(userId).Result;
+                    return DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                }
+
+                var photo = _photoService.GetPhotoAsync(photoId).Result;
+                if (photo == null)
+                {
+                    var user = _uow.UserRepository.GetByIdAsync(userId).Result;
+                    return DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                }
+
+                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+            }
         }
     }
 }

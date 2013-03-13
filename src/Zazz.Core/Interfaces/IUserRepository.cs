@@ -20,5 +20,7 @@ namespace Zazz.Core.Interfaces
         AccountType GetUserAccountType(int userId);
 
         //Task<string> GetUserPassword(string username);
+        
+        int GetUserPhotoId(int userId);
     }
 }

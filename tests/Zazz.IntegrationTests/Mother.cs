@@ -13,6 +13,11 @@ namespace Zazz.IntegrationTests
                             LastActivity = DateTime.UtcNow,
                             Username = "username",
                             Password = "password",
+                            UserDetail = new UserDetail
+                                         {
+                                             Gender = Gender.Female,
+                                             JoinedDate = DateTime.UtcNow
+                                         }
                         };
          }
 

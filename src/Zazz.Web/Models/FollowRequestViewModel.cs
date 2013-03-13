@@ -6,8 +6,6 @@
 
         public int FromUserId { get; set; }
 
-        public string FromUserPictureUrl { get; set; }
-
         public string FromUsername { get; set; }
     }
 }

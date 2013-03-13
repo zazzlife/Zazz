@@ -87,29 +87,6 @@ namespace Zazz.Web.Controllers
                                 RequestId = followRequest.Id
                             };
 
-                    var imgId = followRequest.FromUser.UserDetail.ProfilePhotoId;
-                    if (imgId == 0)
-                    { 
-                        // the user has not uploaded an image
-                        r.FromUserPictureUrl = DefaultImageHelper
-                            .GetUserDefaultImage(followRequest.FromUser.UserDetail.Gender);
-                    }
-                    else
-                    {
-                        var photo = await _photoService.GetPhotoAsync(imgId);
-                        if (photo == null)
-                        {
-                            // the image might have been deleted just a few miliseconds ago
-                            r.FromUserPictureUrl = DefaultImageHelper
-                                .GetUserDefaultImage(followRequest.FromUser.UserDetail.Gender);
-                        }
-                        else
-                        {
-                            var photoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
-                            r.FromUserPictureUrl = photoUrl;
-                        }
-                    }
-
                     vm.Add(r);
                 }
 

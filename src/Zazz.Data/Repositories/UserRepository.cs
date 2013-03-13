@@ -59,6 +59,13 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public int GetUserPhotoId(int userId)
+        {
+            return DbSet.Where(u => u.Id == userId)
+                        .Select(u => u.UserDetail.ProfilePhotoId)
+                        .SingleOrDefault();
+        }
+
         //public Task<string> GetUserPassword(string username)
         //{
         //    return Task.Run(() => DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
