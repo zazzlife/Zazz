@@ -31,13 +31,17 @@
 ***************************************/
 
 .ui-widget {
-    font-family: 'Open Sans';
+    font-family: 'Segoe UI','Open Sans';
     font-size: 14px;
 }
 
 /***************************************
         Global
 ***************************************/
+body {
+    font-family: 'Segoe UI','Open Sans';
+}
+
 .alfa-slab-font {
     font-family: 'Alfa Slab One';
     font-size: 28px;
@@ -54,6 +58,7 @@
 }
 
 .font-light {
+    font-family: 'Segoe UI Light', 'Open Sans';
     font-weight: 300 !important;
 }
 
