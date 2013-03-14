@@ -431,6 +431,93 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.UserDetail.ProfilePhotoId, result);
         }
 
+        [Test]
+        public void ReturnCorrectValue_OnGetUserGender()
+        {
+            //Arrange
+            var gender = Gender.Male;
+            var user = Mother.GetUser();
+            user.UserDetail.Gender = gender;
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserGender(user.Id);
+
+            //Assert
+            Assert.AreEqual(gender, result);
+        }
+
+        [TestCase("USERNAME")]
+        [TestCase("username")]
+        [TestCase("UserName")]
+        public void NotBeCaseSensetiveAndReturnCorrectValue_OnGetUserGenderByUsername(string username)
+        {
+            //Arrange
+            var gender = Gender.Male;
+            var user = Mother.GetUser();
+            user.UserDetail.Gender = gender;
+            user.Username = "username";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserGender(username);
+
+            //Assert
+            Assert.AreEqual(gender, result);
+        }
+
+        [Test]
+        public void ReturnCorrectFullName_OnGetFullnameWithUserId()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.UserDetail.FullName = "Full Name";
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserFullName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+        }
+
+        [TestCase("USERNAME")]
+        [TestCase("username")]
+        [TestCase("UserName")]
+        public void NotBeCaseSensetiveAndReturnCorrectValue_OnGetUserFullNameByUsername(string username)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            user.Username = "username";
+            user.UserDetail.FullName = "Full Name";
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserFullName(username);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+        }
+
         //[Test]
         //public void ReturnNull_OnGetPassword_WhenUserNotExists()
         //{

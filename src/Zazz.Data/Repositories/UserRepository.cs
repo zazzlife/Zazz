@@ -61,6 +61,35 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public Gender GetUserGender(int userId)
+        {
+            return DbContext.UserDetails.Where(u => u.Id == userId)
+                            .Select(u => u.Gender)
+                            .SingleOrDefault();
+
+        }
+
+        public Gender GetUserGender(string username)
+        {
+            return DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(u => u.UserDetail.Gender)
+                        .SingleOrDefault();
+        }
+
+        public string GetUserFullName(int userId)
+        {
+            return DbContext.UserDetails.Where(u => u.Id == userId)
+                            .Select(u => u.FullName)
+                            .SingleOrDefault();
+        }
+
+        public string GetUserFullName(string username)
+        {
+            return DbSet.Where(u => u.Username.Equals(username))
+                        .Select(u => u.UserDetail.FullName)
+                        .SingleOrDefault();
+        }
+
         public int GetUserPhotoId(int userId)
         {
             return DbSet.Where(u => u.Id == userId)

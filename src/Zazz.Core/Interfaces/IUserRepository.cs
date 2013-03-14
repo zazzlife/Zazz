@@ -19,6 +19,14 @@ namespace Zazz.Core.Interfaces
 
         AccountType GetUserAccountType(int userId);
 
+        Gender GetUserGender(int userId);
+
+        Gender GetUserGender(string username);
+
+        string GetUserFullName(int userId);
+
+        string GetUserFullName(string username);
+
         //Task<string> GetUserPassword(string username);
         
         int GetUserPhotoId(int userId);
