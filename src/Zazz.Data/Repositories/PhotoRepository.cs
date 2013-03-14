@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 
 namespace Zazz.Data.Repositories
 {
@@ -16,6 +17,18 @@ namespace Zazz.Data.Repositories
         protected override int GetItemId(Photo item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the image, if it's new then use insert graph.");
+        }
+
+        public PhotoMinimalDTO GetPhotoWithMinimalData(int photoId)
+        {
+            return DbSet.Where(p => p.Id == photoId)
+                        .Select(p => new PhotoMinimalDTO
+                                     {
+                                         AlbumId = p.AlbumId,
+                                         Id = p.Id,
+                                         UploaderId = p.UploaderId
+                                     })
+                        .SingleOrDefault();
         }
 
         public Task<string> GetDescriptionAsync(int photoId)
