@@ -153,7 +153,7 @@ namespace Zazz.Web.Controllers
                     return DefaultImageHelper.GetUserDefaultImage(gender);
                 }
 
-                var photo = _photoService.GetPhotoAsync(photoId).Result;
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
                 if (photo == null)
                 {
                     var gender = _uow.UserRepository.GetUserGender(username);
@@ -177,7 +177,7 @@ namespace Zazz.Web.Controllers
                     return DefaultImageHelper.GetUserDefaultImage(gender);
                 }
 
-                var photo = _photoService.GetPhotoAsync(photoId).Result;
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
                 if (photo == null)
                 {
                     var gender = _uow.UserRepository.GetUserGender(userId);
