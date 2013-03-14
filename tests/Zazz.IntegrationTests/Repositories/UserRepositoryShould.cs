@@ -431,6 +431,32 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.UserDetail.ProfilePhotoId, result);
         }
 
+        [TestCase("USERNAME")]
+        [TestCase("username")]
+        [TestCase("UserName")]
+        public void NotBeCaseSensitiveReturnCorrectPhotoId_OnGetUserPhotoIdByUsername(string username)
+        {
+            //Arrange
+            var photoId = 4432;
+            var user = Mother.GetUser();
+            user.Username = "username";
+            user.UserDetail.ProfilePhotoId = photoId;
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserPhotoId(username);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.ProfilePhotoId, result);
+        }
+
         [Test]
         public void ReturnCorrectValue_OnGetUserGender()
         {
@@ -455,7 +481,7 @@ namespace Zazz.IntegrationTests.Repositories
         [TestCase("USERNAME")]
         [TestCase("username")]
         [TestCase("UserName")]
-        public void NotBeCaseSensetiveAndReturnCorrectValue_OnGetUserGenderByUsername(string username)
+        public void NotBeCaseSensitiveAndReturnCorrectValue_OnGetUserGenderByUsername(string username)
         {
             //Arrange
             var gender = Gender.Male;
@@ -498,7 +524,7 @@ namespace Zazz.IntegrationTests.Repositories
         [TestCase("USERNAME")]
         [TestCase("username")]
         [TestCase("UserName")]
-        public void NotBeCaseSensetiveAndReturnCorrectValue_OnGetUserFullNameByUsername(string username)
+        public void NotBeCaseSensitiveAndReturnCorrectValue_OnGetUserFullNameByUsername(string username)
         {
             //Arrange
             var user = Mother.GetUser();

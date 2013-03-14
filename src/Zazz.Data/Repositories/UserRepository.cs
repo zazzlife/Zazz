@@ -92,7 +92,14 @@ namespace Zazz.Data.Repositories
 
         public int GetUserPhotoId(int userId)
         {
-            return DbSet.Where(u => u.Id == userId)
+            return DbContext.UserDetails.Where(u => u.Id == userId)
+                        .Select(u => u.ProfilePhotoId)
+                        .SingleOrDefault();
+        }
+
+        public int GetUserPhotoId(string username)
+        {
+            return DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
                         .Select(u => u.UserDetail.ProfilePhotoId)
                         .SingleOrDefault();
         }

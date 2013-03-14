@@ -30,5 +30,7 @@ namespace Zazz.Core.Interfaces
         //Task<string> GetUserPassword(string username);
         
         int GetUserPhotoId(int userId);
+
+        int GetUserPhotoId(string username);
     }
 }

@@ -121,8 +121,8 @@ namespace Zazz.Web.Controllers
                     user.UserDetail.Gender = vm.Gender;
                     user.UserDetail.FullName = vm.FullName;
                     user.UserDetail.SchoolId = (short)vm.SchoolId;
-                    user.UserDetail.CityId = (short) vm.CityId;
-                    user.UserDetail.MajorId = (byte) vm.MajorId;
+                    user.UserDetail.CityId = (short)vm.CityId;
+                    user.UserDetail.MajorId = (byte)vm.MajorId;
                     user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
                     user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
                     user.UserDetail.SyncFbImages = vm.SyncFbImages;
@@ -138,11 +138,30 @@ namespace Zazz.Web.Controllers
 
         public string GetCurrentUserImageUrl()
         {
-            if (!User.Identity.IsAuthenticated)
-                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+            using (_uow)
+            using (_photoService)
+            {
+                if (!User.Identity.IsAuthenticated)
+                    return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
 
-            var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
-            return GetUserImageUrl(userId);
+                var username = User.Identity.Name;
+                var photoId = _uow.UserRepository.GetUserPhotoId(username);
+
+                if (photoId == 0)
+                {
+                    var gender = _uow.UserRepository.GetUserGender(username);
+                    return DefaultImageHelper.GetUserDefaultImage(gender);
+                }
+
+                var photo = _photoService.GetPhotoAsync(photoId).Result;
+                if (photo == null)
+                {
+                    var gender = _uow.UserRepository.GetUserGender(username);
+                    return DefaultImageHelper.GetUserDefaultImage(gender);
+                }
+
+                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+            }
         }
 
         public string GetUserImageUrl(int userId)
@@ -154,15 +173,15 @@ namespace Zazz.Web.Controllers
 
                 if (photoId == 0)
                 {
-                    var user = _uow.UserRepository.GetByIdAsync(userId).Result;
-                    return DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                    var gender = _uow.UserRepository.GetUserGender(userId);
+                    return DefaultImageHelper.GetUserDefaultImage(gender);
                 }
 
                 var photo = _photoService.GetPhotoAsync(photoId).Result;
                 if (photo == null)
                 {
-                    var user = _uow.UserRepository.GetByIdAsync(userId).Result;
-                    return DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                    var gender = _uow.UserRepository.GetUserGender(userId);
+                    return DefaultImageHelper.GetUserDefaultImage(gender);
                 }
 
                 return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
