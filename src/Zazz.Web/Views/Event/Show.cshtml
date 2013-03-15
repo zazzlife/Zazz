@@ -3,6 +3,8 @@
 @{
     ViewBag.Title = Model.Name;
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
+
+    var isMapAvailable = (Model != null && Model.Latitude.HasValue && Model.Longitude.HasValue);
 }
 
 
@@ -27,6 +29,13 @@
             @Model.Street, @Model.City
 
         </address>
+        
+        @if (isMapAvailable)
+        {
+            <div id="map-canvas" style="height: 400px;"></div>
+            <div style="margin-bottom: 200px;"></div> @* TODO: Remove this line later *@
+        }
+
     </div>
 </div>
 
@@ -58,4 +67,29 @@
             <li class="disabled"><a href="@Model.FacebookLink" class="disabled"><i class="icon-facebook"></i>Facebook Link</a></li>
         }
     </ul>
+}
+
+@if (isMapAvailable)
+{
+    @section ScriptsTop
+    {
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC-ZWW7fhSaFI1i3i3jjpJUuGPJZI87A6s&sensor=true" type="text/javascript"></script>
+    }
+    
+    @section Scripts
+{
+    <script type="text/javascript">
+
+        $(function() {
+                    
+            var lat = @Model.Latitude.Value;
+            var lng = @Model.Longitude.Value;
+
+            var latlng = new google.maps.LatLng(lat, lng, false);
+            initMap(lat, lng);
+            placeMarker(latlng, 14);
+        });
+
+    </script>
+}
 }
