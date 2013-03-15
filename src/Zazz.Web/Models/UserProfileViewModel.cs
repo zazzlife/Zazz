@@ -8,7 +8,7 @@
 
         public string Major { get; set; }
 
-        public string University { get; set; }
+        public string School { get; set; }
 
         public string City { get; set; }
 

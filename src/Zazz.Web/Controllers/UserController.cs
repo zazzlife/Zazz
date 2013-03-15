@@ -98,7 +98,7 @@ namespace Zazz.Web.Controllers
                     vm.City = user.UserDetail.City.Name;
 
                 if (user.UserDetail.School != null)
-                    vm.University = user.UserDetail.School.Name;
+                    vm.School = user.UserDetail.School.Name;
 
                 if (user.UserDetail.Major != null)
                     vm.Major = user.UserDetail.Major.Name;
