@@ -104,6 +104,13 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public int GetUserCoverPhotoId(int userId)
+        {
+            return DbContext.UserDetails.Where(u => u.Id == userId)
+                            .Select(u => u.CoverPhotoId)
+                            .SingleOrDefault();
+        }
+
         public override async Task RemoveAsync(int id)
         {
             var item = await GetByIdAsync(id);

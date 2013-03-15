@@ -24,14 +24,81 @@ namespace Zazz.Web.Controllers
             _photoService = photoService;
         }
 
+        [Authorize]
         public ActionResult Index()
         {
-            return Me();
+            return RedirectToAction("Me");
         }
 
-        public ActionResult Me()
+        [Authorize]
+        public async Task<ActionResult> Me()
         {
-            return View("Profile");
+            var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+            return await Profile(userId);
+        }
+
+        public new async Task<ActionResult> Profile(int id)
+        {
+            using (_uow)
+            using (_photoService)
+            {
+                var user = await _uow.UserRepository.GetByIdAsync(id);
+                
+                // Profile Photo
+                string profilePhotoUrl;
+                if (user.UserDetail.ProfilePhotoId == 0)
+                {
+                    profilePhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                }
+                else
+                {
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.ProfilePhotoId);
+                    if (photo == null)
+                    {
+                        profilePhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+                    }
+                    else
+                    {
+                        profilePhotoUrl = _photoService.GeneratePhotoUrl(id, photo.AlbumId, photo.Id);
+                    }
+                }
+
+                // Cover Photo
+                string coverPhotoUrl;
+                if (user.UserDetail.CoverPhotoId == 0)
+                {
+                    coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
+                }
+                else
+                {
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.CoverPhotoId);
+                    if (photo == null)
+                    {
+                        coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
+                    }
+                    else
+                    {
+                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.AlbumId, photo.Id);
+                    }
+                }
+
+                // User Name
+                var username = String.IsNullOrEmpty(user.UserDetail.FullName)
+                                      ? user.Username
+                                      : user.UserDetail.FullName;
+
+                var vm = new UserProfileViewModel
+                         {
+                             City = user.UserDetail.City.Name,
+                             University = user.UserDetail.School.Name,
+                             Major = user.UserDetail.Major.Name,
+                             UserPhotoUrl = profilePhotoUrl,
+                             CoverPhotoUrl = coverPhotoUrl,
+                             UserName = username
+                         };
+
+                return View("Profile", vm);
+            }
         }
 
         [HttpGet, Authorize]

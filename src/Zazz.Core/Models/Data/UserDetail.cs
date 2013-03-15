@@ -15,17 +15,17 @@ namespace Zazz.Core.Models.Data
         public Gender Gender { get; set; }
 
         [ForeignKey("SchoolId")]
-        public School School { get; set; }
+        public virtual School School { get; set; }
 
         public short? SchoolId { get; set; }
 
         [ForeignKey("MajorId")]
-        public Major Major { get; set; }
+        public virtual Major Major { get; set; }
 
         public byte? MajorId { get; set; }
 
         [ForeignKey("CityId")]
-        public City City { get; set; }
+        public virtual City City { get; set; }
 
         public int? CityId { get; set; }
 

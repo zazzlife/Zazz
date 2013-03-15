@@ -1,18 +1,19 @@
-﻿@{
+﻿@model UserProfileViewModel
+@{
     ViewBag.Title = "Profile";
 }
 
     <div class="container">
     @*COVET IMAGE*@
-    <img id="coverImg" class="img-polaroid" src="~/Images/cover-image.gif" />
+    <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
 
     <div>
 
         @*LEFT ITEMS*@
         <div class="pull-left">
-            <h4>Major: Getting Backout</h4>
-            <h4>Concordia University</h4>
-            <h5 class="uppercase">Montreal</h5>
+            <h4>Major: @Model.Major</h4>
+            <h4>@Model.University</h4>
+            <h5 class="uppercase">@Model.City</h5>
         </div>
 
         @*RIGHT ITEMS*@
@@ -26,8 +27,8 @@
 
         @*CENTER ITEMS*@
         <div class="profile-center">
-            <img id="profilePic" class="img-polaroid" src="~/Images/placeholder.gif" />
-            <h3>Full User Name</h3>
+            <img id="profilePic" class="img-polaroid" src="@Model.UserPhotoUrl" />
+            <h3>@Model.UserName</h3>
         </div>
     </div>
 

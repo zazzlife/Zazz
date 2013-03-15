@@ -544,6 +544,29 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.UserDetail.FullName, result);
         }
 
+        [Test]
+        public void ReturnCorrectCoverPhotoId_OnGetUserPhotoId()
+        {
+            //Arrange
+            var photoId = 4432;
+            var user = Mother.GetUser();
+            user.UserDetail.CoverPhotoId = photoId;
+
+            using (var ctx = new ZazzDbContext())
+            {
+                var repo = new UserRepository(ctx);
+                repo.InsertGraph(user);
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetUserCoverPhotoId(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.CoverPhotoId, result);
+        }
+
         //[Test]
         //public void ReturnNull_OnGetPassword_WhenUserNotExists()
         //{

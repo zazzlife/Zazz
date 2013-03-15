@@ -8,5 +8,10 @@ namespace Zazz.Web.Helpers
         {
             return "/Images/placeholder.gif";
         }
+
+        public static string GetDefaultCoverImage()
+        {
+            return "/Images/cover-image.gif";
+        }
     }
 }
