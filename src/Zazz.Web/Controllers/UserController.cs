@@ -89,13 +89,19 @@ namespace Zazz.Web.Controllers
 
                 var vm = new UserProfileViewModel
                          {
-                             City = user.UserDetail.City.Name,
-                             University = user.UserDetail.School.Name,
-                             Major = user.UserDetail.Major.Name,
                              UserPhotoUrl = profilePhotoUrl,
                              CoverPhotoUrl = coverPhotoUrl,
                              UserName = username
                          };
+
+                if (user.UserDetail.City != null)
+                    vm.City = user.UserDetail.City.Name;
+
+                if (user.UserDetail.School != null)
+                    vm.University = user.UserDetail.School.Name;
+
+                if (user.UserDetail.Major != null)
+                    vm.Major = user.UserDetail.Major.Name;
 
                 return View("Profile", vm);
             }
