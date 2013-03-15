@@ -257,5 +257,15 @@ namespace Zazz.Web.Controllers
                 return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
             }
         }
+
+        public string GetCurrentUserDisplayName()
+        {
+            using (_uow)
+            using (_photoService)
+            {
+                var fullName = _uow.UserRepository.GetUserFullName(User.Identity.Name);
+                return !String.IsNullOrEmpty(fullName) ? fullName : User.Identity.Name;
+            }
+        }
     }
 }
