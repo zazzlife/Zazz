@@ -1,5 +1,5 @@
 ﻿@using PagedList.Mvc
-@model Zazz.Web.Models.AlbumListViewModel
+@model AlbumListViewModel
 @{
     ViewBag.Title = "Album List";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -24,6 +24,11 @@
 
             <hr />
         }
+        
+        <ul class="breadcrumb">
+            <li class="active">Albums<span class="divider">/</span></li>
+        </ul>
+
         <ul class="thumbnails">
 
             @foreach (var album in Model.Albums)

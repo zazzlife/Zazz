@@ -12,6 +12,10 @@ namespace Zazz.Web.Models
 
         public int AlbumId { get; set; }
 
+        public int UserId { get; set; }
+
+        public string AlbumName { get; set; }
+
         public IPagedList<ImageViewModel> Photos { get; set; }
     }
 }

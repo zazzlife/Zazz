@@ -170,7 +170,9 @@ namespace Zazz.Web.Controllers
                          {
                              IsOwner = isOwner,
                              AlbumId = id,
-                             Photos = pagedList
+                             Photos = pagedList,
+                             UserId = album.UserId,
+                             AlbumName = album.Name
                          };
 
                 return View(vm);

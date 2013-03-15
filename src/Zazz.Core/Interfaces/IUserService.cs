@@ -11,5 +11,9 @@ namespace Zazz.Core.Interfaces
         int GetUserId(string username);
 
         Task<User> GetUserAsync(string username);
+
+        string GetUserFullName(int userId);
+
+        string GetUserFullName(string username);
     }
 }

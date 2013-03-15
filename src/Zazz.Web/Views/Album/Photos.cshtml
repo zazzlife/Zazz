@@ -37,6 +37,11 @@
 
             <hr />
         }
+        
+        <ul class="breadcrumb">
+            <li><a href="~/album/list/@Model.UserId/1">Albums</a><span class="divider">/</span></li>
+            <li class="active">@Model.AlbumName</li>
+        </ul>
 
         <ul class="thumbnails">
             @foreach (var p in Model.Photos)

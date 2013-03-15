@@ -28,6 +28,16 @@ namespace Zazz.Infrastructure.Services
             return _uoW.UserRepository.GetByUsernameAsync(username);
         }
 
+        public string GetUserFullName(int userId)
+        {
+            return _uoW.UserRepository.GetUserFullName(userId);
+        }
+
+        public string GetUserFullName(string username)
+        {
+            return _uoW.UserRepository.GetUserFullName(username);
+        }
+
         public void Dispose()
         {
             _uoW.Dispose();
