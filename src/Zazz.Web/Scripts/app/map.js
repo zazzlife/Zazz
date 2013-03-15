@@ -5,7 +5,7 @@ var infowindow = new google.maps.InfoWindow();
 var latitude;
 var longitude;
 
-function placeMarker(location) {
+function placeMarker(location, zoom) {
     if (marker != null) {
         marker.setMap(null);
     }
@@ -22,6 +22,9 @@ function placeMarker(location) {
     $('input[name="Longitude"]').val(location.lng());
 
     map.setCenter(location);
+
+    if (zoom)
+        map.setZoom(zoom);
 }
 
 function initMap(lat, lng) {

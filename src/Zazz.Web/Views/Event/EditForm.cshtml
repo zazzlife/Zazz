@@ -113,8 +113,29 @@
 {
     <script type="text/javascript">
 
-        $(function () {
-            initMap(45.586365, -73.542480);
+        $(function() {
+
+            @if (Model != null && Model.Latitude.HasValue && Model.Longitude.HasValue)
+            {
+                <text>
+                    
+                    var lat = @Model.Latitude.Value;
+                    var lng = @Model.Longitude.Value;
+
+            var latlng = new google.maps.LatLng(lat, lng, false);
+            initMap(lat, lng);
+            placeMarker(latlng, 14);
+                
+                </text>
+
+            }
+            else
+            {
+                <text>
+                    initMap(45.586365, -73.542480);
+                </text>
+            }
+
         });
 
     </script>
