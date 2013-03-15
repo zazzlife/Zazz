@@ -20,9 +20,9 @@ namespace Zazz.Core.Models.Data
         [MaxLength(50)]
         public string City { get; set; }
 
-        public float Latitude { get; set; }
+        public float? Latitude { get; set; }
 
-        public float Longitude { get; set; }
+        public float? Longitude { get; set; }
 
         [DataType(DataType.Currency)]
         public float? Price { get; set; }

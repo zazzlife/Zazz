@@ -130,15 +130,11 @@ namespace Zazz.Web.Controllers
                                                      Location = vm.Location,
                                                      Price = vm.Price,
                                                      StartTime = vm.StartTime,
-                                                     Street = vm.Street
+                                                     Street = vm.Street,
+                                                     Latitude = vm.Latitude,
+                                                     Longitude = vm.Longitude
                                                  }
                            };
-
-            if (vm.Latitude.HasValue)
-                post.EventDetail.Latitude = vm.Latitude.Value;
-
-            if (vm.Longitude.HasValue)
-                post.EventDetail.Longitude = vm.Longitude.Value;
 
             return post;
         }
@@ -169,7 +165,9 @@ namespace Zazz.Web.Controllers
                     StartTime = post.EventDetail.StartTime,
                     Street = post.EventDetail.Street,
                     FacebookLink = post.FacebookLink,
-                    IsOwner = post.UserId == userId
+                    IsOwner = post.UserId == userId,
+                    Latitude = post.EventDetail.Latitude,
+                    Longitude = post.EventDetail.Longitude
                 };
 
                 return vm;
