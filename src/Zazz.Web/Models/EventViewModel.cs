@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Zazz.Web.Models
 {
@@ -38,5 +39,11 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public bool IsOwner { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public float? Latitude { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public float? Longitude { get; set; }
     }
 }

@@ -133,6 +133,13 @@ namespace Zazz.Web.Controllers
                                                      Street = vm.Street
                                                  }
                            };
+
+            if (vm.Latitude.HasValue)
+                post.EventDetail.Latitude = vm.Latitude.Value;
+
+            if (vm.Longitude.HasValue)
+                post.EventDetail.Longitude = vm.Longitude.Value;
+
             return post;
         }
 
