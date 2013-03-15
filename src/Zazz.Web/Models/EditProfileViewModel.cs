@@ -14,15 +14,15 @@ namespace Zazz.Web.Models
 
         public SelectList Schools { get; set; }
 
-        public int SchoolId { get; set; }
+        public int? SchoolId { get; set; }
 
         public SelectList Majors { get; set; }
 
-        public int MajorId { get; set; }
+        public int? MajorId { get; set; }
 
         public SelectList Cities { get; set; }
 
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
 
         public SelectList Albums { get; set; }
 

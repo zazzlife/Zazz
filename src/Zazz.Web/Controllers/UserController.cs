@@ -113,9 +113,12 @@ namespace Zazz.Web.Controllers
                 {
                     Gender = user.UserDetail.Gender,
                     FullName = user.UserDetail.FullName,
-                    Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", user.UserDetail.CityId),
-                    Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", user.UserDetail.SchoolId),
-                    Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", user.UserDetail.MajorId),
+                    CityId = user.UserDetail.CityId,
+                    Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
+                    SchoolId = user.UserDetail.SchoolId,
+                    Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
+                    MajorId = user.UserDetail.MajorId,
+                    Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
                     Albums = new SelectList(user.Albums.ToList(), "id", "name"),
                     SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                     SyncFbEvents = user.UserDetail.SyncFbEvents,
@@ -135,9 +138,9 @@ namespace Zazz.Web.Controllers
             {
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
 
-                vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name", vm.CityId);
-                vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name", vm.SchoolId);
-                vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name", vm.MajorId);
+                vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
+                vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
+                vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
                 vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
 
                 if (ModelState.IsValid)

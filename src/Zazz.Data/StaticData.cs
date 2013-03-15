@@ -29,10 +29,10 @@ namespace Zazz.Data
         public static IEnumerable<School> GetSchools()
         {
             yield return new School { Id = 1, Name = "University of Victoria" };
-            yield return new School { Id = 1, Name = "University of British Columbia" };
-            yield return new School { Id = 1, Name = "Concordia University" };
-            yield return new School { Id = 1, Name = "McGill University" };
-            yield return new School { Id = 1, Name = "University of Montreal" };
+            yield return new School { Id = 2, Name = "University of British Columbia" };
+            yield return new School { Id = 3, Name = "Concordia University" };
+            yield return new School { Id = 4, Name = "McGill University" };
+            yield return new School { Id = 5, Name = "University of Montreal" };
         }
     }
 }
