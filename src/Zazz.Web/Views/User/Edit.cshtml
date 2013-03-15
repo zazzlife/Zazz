@@ -80,6 +80,14 @@
                         </p>
                     </div>
                     <div class="tab-pane" id="profilePicTab">
+                        @if (!Model.Albums.Any())
+                        {
+                            <div class="alert alert-block">
+                                <strong>You have no albums!</strong>
+                                <span>You need to <a href="~/album">create an album</a> before uploading any pictures.</span>
+                            </div>
+                        }
+
                         <p>
                             <div class="control-group">
                                 <div class="editor-label">
@@ -99,7 +107,7 @@
                                     <input type="file" name="ProfileImage" accept="image/jpeg" />
                                 </div>
                             </div>
-                            
+
                             <div class="control-group" style="margin-top: 40px;">
                                 <div class="editor-label">
                                     <label for="ProfileCoverImage" class="control-label">Change Profile Cover Picture</label>
