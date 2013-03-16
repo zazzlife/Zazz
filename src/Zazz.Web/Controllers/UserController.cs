@@ -101,7 +101,8 @@ namespace Zazz.Web.Controllers
                              IsSelf = user.Id == currentUserId,
                              FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
                              AccountType = user.AccountType,
-                             UserId = id
+                             UserId = id,
+                             IsClub = user.AccountType == AccountType.ClubAdmin
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)

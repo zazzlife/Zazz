@@ -29,6 +29,8 @@ namespace Zazz.Web.Models
         public bool IsCurrentUserFollowingTargetUser { get; set; }
 
         public bool FollowRequestAlreadySent { get; set; }
+
+        public bool IsClub { get; set; }
     }
 
 }

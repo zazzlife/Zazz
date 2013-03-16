@@ -1,7 +1,7 @@
 ﻿var geocoder;
 var map;
 var marker;
-var infowindow = new google.maps.InfoWindow();
+//var infowindow = new google.maps.InfoWindow();
 var latitude;
 var longitude;
 

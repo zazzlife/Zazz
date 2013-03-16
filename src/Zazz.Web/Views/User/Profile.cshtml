@@ -29,28 +29,29 @@
             }
             else
             {
-                <div id="followRequestBtn">
+                <input type="hidden" id="isClub" value="@Model.IsClub.ToString()"/>
+                <div id="followRequestBtnContainer">
                     @if (!Model.IsCurrentUserFollowingTargetUser)
-                    {
+                    {   
                         if (Model.AccountType == AccountType.ClubAdmin)
                         {
-                            <button data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info">Follow</button>
+                            <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
                         }
                         else
                         {
                             if (Model.FollowRequestAlreadySent)
                             {
-                        <button class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
+                                <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
                             }
                             else
                             {
-                        <button data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info">Send Follow Request</button>
+                                <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
                             }
                         }
                     }
                     else
                     {
-                        <button data-url="/follow/unfollowuser/@Model.UserId" data-action="unfollow" class="btn btn-large pull-right btn-info">Unfollow</button>
+                        <button data-id="@Model.UserId" data-url="/follow/unfollowuser/@Model.UserId" data-action="unfollow" class="btn btn-large pull-right btn-info btn-follow">Unfollow</button>
                     }
                 </div>
             }
