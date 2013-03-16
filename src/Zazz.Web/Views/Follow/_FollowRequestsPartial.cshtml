@@ -17,7 +17,7 @@ else
         {
             <tr>
                 <td>
-                    <img src="@Html.Action("GetUserImageUrl", "User")" alt="@r.FromUsername"/>
+                    <img src="@Html.Action("GetUserImageUrl", "User", new { userId = r.FromUserId })" alt="@r.FromUsername"/>
                 </td>
                 <td style="padding-top: 29px; width: 230px;"><strong>@r.FromUsername</strong></td>
                 <td style="padding-top: 22px;" class="text-right">
