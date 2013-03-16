@@ -1,4 +1,6 @@
-﻿namespace Zazz.Web.Models
+﻿using Zazz.Core.Models.Data;
+
+namespace Zazz.Web.Models
 {
     public class UserProfileViewModel
     {
@@ -14,7 +16,9 @@
 
         public string UserName { get; set; }
 
-        public int PartyWebCount { get; set; }
+        public int FollowersCount { get; set; }
+
+        public AccountType AccountType { get; set; }
 
         public bool IsSelf { get; set; }
 

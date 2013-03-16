@@ -87,12 +87,27 @@ namespace Zazz.Web.Controllers
                                       ? user.Username
                                       : user.UserDetail.FullName;
 
+                var currentUserId = 0;
+                if (User.Identity.IsAuthenticated)
+                {
+                    currentUserId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                }
+
                 var vm = new UserProfileViewModel
                          {
                              UserPhotoUrl = profilePhotoUrl,
                              CoverPhotoUrl = coverPhotoUrl,
-                             UserName = username
+                             UserName = username,
+                             IsSelf = user.Id == currentUserId,
+                             FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
+                             AccountType = user.AccountType
                          };
+
+                if (!vm.IsSelf && currentUserId != 0)
+                {
+                    vm.IsCurrentUserFollowingTargetUser = await _uow.FollowRepository.ExistsAsync(currentUserId, id);
+                    vm.IsTargetUserFollowingCurrentUser = await _uow.FollowRepository.ExistsAsync(id, currentUserId);
+                }
 
                 if (user.UserDetail.City != null)
                     vm.City = user.UserDetail.City.Name;
