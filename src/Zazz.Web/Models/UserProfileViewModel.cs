@@ -14,6 +14,8 @@ namespace Zazz.Web.Models
 
         public string City { get; set; }
 
+        public int UserId { get; set; }
+
         public string UserName { get; set; }
 
         public int FollowersCount { get; set; }
@@ -25,6 +27,8 @@ namespace Zazz.Web.Models
         public bool IsTargetUserFollowingCurrentUser { get; set; }
 
         public bool IsCurrentUserFollowingTargetUser { get; set; }
+
+        public bool FollowRequestAlreadySent { get; set; }
     }
 
 }

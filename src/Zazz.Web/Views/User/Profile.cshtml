@@ -29,24 +29,31 @@
             }
             else
             {
-                if (!Model.IsCurrentUserFollowingTargetUser)
-                {
-                    if (Model.AccountType == AccountType.ClubAdmin)
+                <div id="followRequestBtn">
+                    @if (!Model.IsCurrentUserFollowingTargetUser)
                     {
-                        <button data-action="follow" class="btn btn-large pull-right btn-info">Follow</button>
+                        if (Model.AccountType == AccountType.ClubAdmin)
+                        {
+                            <button data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info">Follow</button>
+                        }
+                        else
+                        {
+                            if (Model.FollowRequestAlreadySent)
+                            {
+                        <button class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
+                            }
+                            else
+                            {
+                        <button data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info">Send Follow Request</button>
+                            }
+                        }
                     }
                     else
                     {
-                        <button data-action="followRequest" class="btn btn-large pull-right btn-info">Send Follow Request</button>
+                        <button data-url="/follow/unfollowuser/@Model.UserId" data-action="unfollow" class="btn btn-large pull-right btn-info">Unfollow</button>
                     }
-                }
-                else
-                {
-                    <button data-action="unfollow" class="btn btn-large pull-right btn-info">Unfollow</button>
-                }
+                </div>
             }
-
-
 
             <div class="clearfix"></div>
         </div>

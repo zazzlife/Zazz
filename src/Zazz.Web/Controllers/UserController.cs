@@ -100,13 +100,20 @@ namespace Zazz.Web.Controllers
                              UserName = username,
                              IsSelf = user.Id == currentUserId,
                              FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
-                             AccountType = user.AccountType
+                             AccountType = user.AccountType,
+                             UserId = id
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)
                 {
                     vm.IsCurrentUserFollowingTargetUser = await _uow.FollowRepository.ExistsAsync(currentUserId, id);
                     vm.IsTargetUserFollowingCurrentUser = await _uow.FollowRepository.ExistsAsync(id, currentUserId);
+
+                    if (!vm.IsCurrentUserFollowingTargetUser)
+                    {
+                        vm.FollowRequestAlreadySent = await _uow.FollowRequestRepository
+                            .ExistsAsync(currentUserId, id);
+                    }
                 }
 
                 if (user.UserDetail.City != null)
