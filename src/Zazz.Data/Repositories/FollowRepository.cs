@@ -36,6 +36,11 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable());
         }
 
+        public int GetFollowersCount(int userId)
+        {
+            return DbSet.Count(f => f.ToUserId == userId);
+        }
+
         public Task<bool> ExistsAsync(int fromUserId, int toUserId)
         {
             return Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId)
