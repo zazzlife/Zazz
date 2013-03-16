@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers
             _photoService = photoService;
         }
 
-        public async void FollowUser(int id)
+        public async Task FollowUser(int id)
         {
             using (_followService)
             using (_userService)
@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public async void AcceptFollow(int id)
+        public async Task AcceptFollow(int id)
         {
             using (_followService)
             using (_userService)
@@ -56,7 +56,7 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public async void RejectFollow(int id)
+        public async Task RejectFollow(int id)
         {
             using (_followService)
             using (_userService)
