@@ -34,10 +34,11 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Me()
         {
             var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
-            return await Profile(userId);
+            return await ShowProfile(userId);
         }
 
-        public new async Task<ActionResult> Profile(int id)
+        [ActionName("Profile")]
+        public async Task<ActionResult> ShowProfile(int id)
         {
             using (_uow)
             using (_photoService)

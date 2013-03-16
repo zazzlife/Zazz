@@ -25,7 +25,7 @@
             if (action == "followRequest") {
                 btn = '<button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>';
             } else if (action == "follow") {
-                btn = '<button data-id="' + id + '" data-url="/follow/unfollowuser/' + id + '" data-action="unfollow" class="btn btn-large pull-right btn-info btn-follow">Unfollow</button>';
+                btn = '<button data-id="' + id + '" data-url="/follow/unfollow/' + id + '" data-action="unfollow" class="btn btn-large pull-right btn-info btn-follow">Unfollow</button>';
             } else if (action == "unfollow") {
                 var isClub = $('#isClub').val().toLowerCase() === 'true';
                 if (isClub) {

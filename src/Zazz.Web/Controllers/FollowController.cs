@@ -45,6 +45,17 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        public async Task Unfollow(int id)
+        {
+            using (_followService)
+            using (_userService)
+            using (_photoService)
+            {
+                var currentUserId = _userService.GetUserId(User.Identity.Name);
+                await _followService.RemoveFollowAsync(currentUserId, id);
+            }
+        }
+
         public async Task AcceptFollow(int id)
         {
             using (_followService)
