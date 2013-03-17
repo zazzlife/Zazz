@@ -2,13 +2,13 @@
 <div class="feed-item well well-small">
     <p>
         <img src="@Model.UserImageUrl" class="feed-user-img" />
-        <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> uploaded a new photo
+        <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has uploaded a new photo
    
     </p>
     <div class="feed-content">
         <a href="@Model.PhotoUrl" target="_blank"><img style="width: 100%" src="@Model.PhotoUrl" /></a>
     </div>
 
-    <span style="margin-top: 15px;" class="pull-right font-verysmall">@Model.Time</span>
+    <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" style="margin-top: 15px;" class="pull-right font-verysmall">@Model.RelativeTime</span>
     <div class="clearfix"></div>
 </div>

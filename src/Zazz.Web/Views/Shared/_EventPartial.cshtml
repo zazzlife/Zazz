@@ -6,7 +6,11 @@
         <p class="event-title">@Model.Name</p>
         <p class="font-small uppercase">@Model.StartTime.ToLongDateString() - @Model.StartTime.ToShortTimeString()</p>
         <div>@Model.Location</div>
-        <div class="pull-right"><strong>@Model.Price</strong></div>
+        @if (Model.Price.HasValue)
+        {
+            <div class="pull-right"><strong>@Model.Price.Value.ToString("C")</strong></div>
+        }            
+        
         <div class="clearfix"></div>
     </div>
     <div class="event-back" data-side="back">

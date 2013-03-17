@@ -63,8 +63,9 @@ namespace Zazz.Web.Controllers
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
-                                 Time = feed.Time.ToRelativeTime(),
-                                 FeedType = feed.FeedType
+                                 RelativeTime = feed.Time.ToRelativeTime(),
+                                 FeedType = feed.FeedType,
+                                 Time = feed.Time
                              };
 
                 if (feed.FeedType == FeedType.Event)

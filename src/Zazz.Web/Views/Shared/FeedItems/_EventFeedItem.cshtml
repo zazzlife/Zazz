@@ -7,6 +7,6 @@
     <div class="feed-content">@Html.Partial("_EventPartial", Model.EventViewModel)</div>
     
 
-    <span class="pull-right font-verysmall">@Model.Time</span>
+    <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall">@Model.RelativeTime</span>
     <div class="clearfix"></div>
 </div>
