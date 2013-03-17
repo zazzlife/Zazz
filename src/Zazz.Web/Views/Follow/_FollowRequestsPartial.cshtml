@@ -17,9 +17,9 @@ else
         {
             <tr>
                 <td>
-                    <img src="@Html.Action("GetUserImageUrl", "User", new { userId = r.FromUserId })" alt="@r.FromUsername"/>
+                    <a href="~/user/profile/@r.FromUserId" target="_blank"><img src="@Html.Action("GetUserImageUrl", "User", new { userId = r.FromUserId })" alt="@r.FromUsername"/></a>
                 </td>
-                <td style="padding-top: 29px; width: 230px;"><strong>@r.FromUsername</strong></td>
+                <td style="padding-top: 29px; width: 230px;"><a href="~/user/profile/@r.FromUserId" target="_blank"><strong>@r.FromUsername</strong></a></td>
                 <td style="padding-top: 22px;" class="text-right">
                     <button data-url="/follow/acceptfollow/@r.RequestId" class="btn btn-primary pull-right btn-followrequest-action">Accept</button></td>
                 <td style="padding-top: 22px;" class="text-right">

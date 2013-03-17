@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Zazz.Core.Models.Data
+@model IEnumerable<FeedViewModel>
+@{
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
@@ -11,9 +13,19 @@
 <div class="clearfix"></div>
 
 <div class="margin-ten">
-    @Html.Partial("FeedItems/_EventFeedItem")
-
-    @Html.Partial("FeedItems/_PicturePostFeedItem")
+    
+    @foreach (var feed in Model)
+    {
+        if (feed.FeedType == FeedType.Event)
+        {
+            @Html.Partial("FeedItems/_EventFeedItem", feed)
+        }
+        else if (feed.FeedType == FeedType.Picture)
+        {
+            @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+        }
+    }
+    
 </div>
 
 @section RightPanel

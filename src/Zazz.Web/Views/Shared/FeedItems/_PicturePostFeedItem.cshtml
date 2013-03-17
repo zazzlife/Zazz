@@ -1,19 +1,14 @@
-﻿<div class="feed-item well well-small">
+﻿@model FeedViewModel
+<div class="feed-item well well-small">
     <p>
-        <img src="~/Images/placeholder.gif" class="feed-user-img" />
-        <a href="#">User B</a> uploaded new pictures
+        <img src="@Model.UserImageUrl" class="feed-user-img" />
+        <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> uploaded a new photo
    
     </p>
     <div class="feed-content">
-        <div>
-            <img style="margin: 0 5px 0 0" src="~/Images/placeholder.gif" width="64" height="64" class="img-polaroid pull-left" />
-            <img style="margin: 0 5px 0 0" src="~/Images/placeholder.gif" width="64" height="64" class="img-polaroid pull-left" />
-            <img style="margin: 0 5px 0 0" src="~/Images/placeholder.gif" width="64" height="64" class="img-polaroid pull-left" />
-            <img style="margin: 0 5px 0 0" src="~/Images/placeholder.gif" width="64" height="64" class="img-polaroid pull-left" />
-            <div class="clearfix"></div>
-        </div>
+        <a href="@Model.PhotoUrl" target="_blank"><img style="width: 100%" src="@Model.PhotoUrl" /></a>
     </div>
 
-    <span class="pull-right font-verysmall">16 MINUTES AGO</span>
+    <span style="margin-top: 15px;" class="pull-right font-verysmall">@Model.Time</span>
     <div class="clearfix"></div>
 </div>

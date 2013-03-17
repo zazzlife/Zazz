@@ -45,5 +45,8 @@ namespace Zazz.Web.Models
 
         [HiddenInput(DisplayValue = false)]
         public float? Longitude { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string ImageUrl { get; set; }
     }
 }
