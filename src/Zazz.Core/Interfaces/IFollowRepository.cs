@@ -19,6 +19,8 @@ namespace Zazz.Core.Interfaces
         /// <returns></returns>
         Task<IEnumerable<Follow>> GetUserFollowsAsync(int fromUserId);
 
+        IEnumerable<int> GetFollowsUserIds(int fromUserId);
+
         int GetFollowersCount(int userId);
 
         Task<bool> ExistsAsync(int fromUserId, int toUserId);

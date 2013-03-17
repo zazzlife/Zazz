@@ -3,35 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.Controllers
 {
     public class HomeController : BaseController
     {
+        private readonly IUoW _uow;
+
+        public HomeController(IUoW uow)
+        {
+            _uow = uow;
+        }
+
         public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            using (_uow)
             {
-                return View("UserHome");
+                if (User.Identity.IsAuthenticated)
+                {
+                    
+
+                    return View("UserHome");
+                }
+                else
+                {
+                    return View("LandingPage");
+                }
             }
-            else
-            {
-                return View("LandingPage");    
-            }
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your app description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
         }
     }
 }

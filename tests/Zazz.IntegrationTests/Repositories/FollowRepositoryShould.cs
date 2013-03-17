@@ -145,6 +145,18 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(0, resultC);
         }
 
+        [Test]
+        public void ReturnCorrectFollowUserIds_OnGetFollowsUserIds()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetFollowsUserIds(_userA.Id);
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(_userB.Id, result.First());
+        }
+
 
     }
 }
