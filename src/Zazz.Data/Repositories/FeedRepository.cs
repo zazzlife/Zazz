@@ -22,5 +22,10 @@ namespace Zazz.Data.Repositories
         {
             return DbSet.Where(f => userIds.Contains(f.UserId));
         }
+
+        public IQueryable<Feed> GetUserFeeds(int userId)
+        {
+            return DbSet.Where(f => f.UserId == userId);
+        }
     }
 }

@@ -93,6 +93,53 @@ namespace Zazz.IntegrationTests.Repositories
 
         }
 
+        [Test]
+        public void ReturnCorrectFeeds_OnGetUserFeeds()
+        {
+            //Arrange
 
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
+
+            _dbContext.Users.Add(userA);
+            _dbContext.Users.Add(userB);
+
+            _dbContext.SaveChanges();
+
+            var feeds = new List<Feed>();
+            for (int i = 0; i < 5; i++)
+            {
+                feeds.Add(new Feed
+                {
+                    Time = DateTime.UtcNow,
+                    UserId = userA.Id
+                });
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                feeds.Add(new Feed
+                {
+                    Time = DateTime.UtcNow,
+                    UserId = userB.Id
+                });
+            }
+
+            foreach (var feed in feeds)
+            {
+                _dbContext.Feeds.Add(feed);
+            }
+
+            _dbContext.SaveChanges();
+            var expectedCount = feeds.Count(f => f.UserId == userA.Id);
+
+            //Act
+
+            var result = _repo.GetUserFeeds(userA.Id);
+
+            //Assert
+            Assert.AreEqual(expectedCount, result.Count());
+
+        }
     }
 }
