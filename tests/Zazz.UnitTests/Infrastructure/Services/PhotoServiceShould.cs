@@ -73,7 +73,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBThenReturnPhotoId_OnSavePhoto()
+        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -84,6 +84,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                 UploaderId = 17
                             };
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
             var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             using (var ms = new MemoryStream())
             {
@@ -96,7 +98,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.SaveAsync());
+                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+                _uow.Verify(x => x.SaveAsync(), Times.Exactly(2));
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);

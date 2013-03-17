@@ -48,6 +48,17 @@ namespace Zazz.Infrastructure.Services
             _uoW.PhotoRepository.InsertGraph(photo);
             await _uoW.SaveAsync();
 
+            var feed = new Feed
+                       {
+                           FeedType = FeedType.Picture,
+                           PhotoId = photo.Id,
+                           Time = photo.UploadDate,
+                           UserId = photo.UploaderId
+                       };
+
+            _uoW.FeedRepository.InsertGraph(feed);
+            await _uoW.SaveAsync();
+
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             await _fileService.SaveFileAsync(path, data);
 
