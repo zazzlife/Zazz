@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -29,7 +31,7 @@ namespace Zazz.Web.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var feeds = GetFeeds(0);
+                    var feeds = GetFeeds();
                     return View("UserHome", feeds);
                 }
                 else
@@ -39,11 +41,17 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        private List<FeedViewModel> GetFeeds(int page)
+        private List<FeedViewModel> GetFeeds(int page = 0)
         {
+            const int PAGE_SIZE = 10;
+            var skip = PAGE_SIZE*page;
+
             var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
             var followIds = _uow.FollowRepository.GetFollowsUserIds(userId);
-            var feeds = _uow.FeedRepository.GetFeeds(followIds);
+            var feeds = _uow.FeedRepository.GetFeeds(followIds)
+                            .OrderByDescending(f => f.Time)
+                            .Skip(skip)
+                            .Take(PAGE_SIZE);
 
             var vm = new List<FeedViewModel>();
 
@@ -54,14 +62,39 @@ namespace Zazz.Web.Controllers
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
+                                 Time = feed.Time.ToRelativeTime()
                              };
 
-                
+                if (feed.FeedType == FeedType.Event)
+                {
+                    // EVENT
+                    feedVm.EventViewModel = new EventViewModel
+                                            {
+                                                City = feed.Post.EventDetail.City,
+                                                CreatedDate = feed.Post.CreatedDate,
+                                                Detail = feed.Post.Message,
+                                                FacebookLink = feed.Post.FacebookLink,
+                                                Id = feed.Post.Id,
+                                                IsOwner = false,
+                                                Latitude = feed.Post.EventDetail.Latitude,
+                                                Location = feed.Post.EventDetail.Location,
+                                                Longitude = feed.Post.EventDetail.Longitude,
+                                                Name = feed.Post.Title,
+                                                Price = feed.Post.EventDetail.Price,
+                                                StartTime = feed.Post.EventDetail.StartTime,
+                                                Street = feed.Post.EventDetail.Street
+                                            };
+                }
+                else if (feed.FeedType == FeedType.Picture)
+                {
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feed.PhotoId.Value);
+                    feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                }
 
-
+                vm.Add(feedVm);
             }
 
-            throw new NotImplementedException();
+            return vm;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Zazz.Core.Models.Data;
+﻿using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
@@ -17,6 +16,6 @@ namespace Zazz.Web.Models
 
         public string PhotoUrl { get; set; }
 
-        public DateTime Time { get; set; }
+        public string Time { get; set; }
     }
 }
