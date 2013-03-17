@@ -12,17 +12,20 @@ namespace Zazz.Web.Controllers
     {
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
+        private readonly IUserService _userService;
 
-        public HomeController(IUoW uow, IPhotoService photoService)
+        public HomeController(IUoW uow, IPhotoService photoService, IUserService userService)
         {
             _uow = uow;
             _photoService = photoService;
+            _userService = userService;
         }
 
         public ActionResult Index()
         {
             using (_uow)
             using (_photoService)
+            using (_userService)
             {
                 if (User.Identity.IsAuthenticated)
                 {
@@ -49,17 +52,11 @@ namespace Zazz.Web.Controllers
                 var feedVm = new FeedViewModel
                              {
                                  UserId = feed.UserId,
+                                 UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
+                                 UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
                              };
 
-                var fullName = _uow.UserRepository.GetUserFullName(feed.UserId);
-                if (String.IsNullOrEmpty(fullName))
-                {
-                    feedVm.UserDisplayName = _uow.UserRepository.GetUserName(feed.UserId);
-                }
-                else
-                {
-                    feedVm.UserDisplayName = fullName;
-                }
+                
 
 
             }
