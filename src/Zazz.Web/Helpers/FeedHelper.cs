@@ -14,6 +14,12 @@ namespace Zazz.Web.Helpers
         private readonly IPhotoService _photoService;
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// IMPORTANT: This class does not dispose any of the injected resources.
+        /// </summary>
+        /// <param name="uow"></param>
+        /// <param name="userService"></param>
+        /// <param name="photoService"></param>
         public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService)
         {
             _uow = uow;
