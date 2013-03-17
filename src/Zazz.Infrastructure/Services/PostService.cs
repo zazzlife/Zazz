@@ -65,6 +65,7 @@ namespace Zazz.Infrastructure.Services
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
+            _uow.FeedRepository.RemovePostFeed(postId);
             await _uow.PostRepository.RemoveAsync(postId);
             await _uow.SaveAsync();
         }

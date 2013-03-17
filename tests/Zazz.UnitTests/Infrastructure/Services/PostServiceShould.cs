@@ -188,6 +188,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() =>_post.UserId));
             _uow.Setup(x => x.PostRepository.RemoveAsync(_post.Id))
                 .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.FeedRepository.RemovePostFeed(_post.Id));
 
             //Act
             await _sut.DeletePostAsync(_post.Id, _userId);
@@ -195,6 +196,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.PostRepository.RemoveAsync(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemovePostFeed(_post.Id), Times.Once());
         }
 
 
