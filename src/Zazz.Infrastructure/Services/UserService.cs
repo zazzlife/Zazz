@@ -54,7 +54,15 @@ namespace Zazz.Infrastructure.Services
 
         public string GetUserDisplayName(string username)
         {
-            throw new System.NotImplementedException();
+            var fullName = _uoW.UserRepository.GetUserFullName(username);
+            if (!String.IsNullOrEmpty(fullName))
+            {
+                return fullName;
+            }
+            else
+            {
+                return username;
+            }
         }
 
         public void Dispose()
