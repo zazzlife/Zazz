@@ -1,9 +1,11 @@
-﻿using Zazz.Core.Models.Data;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
     public interface IFeedRepository : IRepository<Feed>
     {
-         
+        IQueryable<Feed> GetFeeds(IEnumerable<int> userIds);
     }
 }
