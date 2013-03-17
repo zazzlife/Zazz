@@ -47,17 +47,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task InsertAndSave_OnCreateEvent()
+        public async Task InsertAndSaveAndCreateFeed_OnCreateEvent()
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
             await _sut.CreatePostAsync(_post);
 
             //Assert
             _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
-            _uow.Verify(x => x.SaveAsync());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Exactly(2));
         }
 
         [Test]

@@ -22,6 +22,18 @@ namespace Zazz.Infrastructure.Services
 
             post.CreatedDate = DateTime.UtcNow;
             _uow.PostRepository.InsertGraph(post);
+
+            await _uow.SaveAsync();
+
+            var feed = new Feed
+                       {
+                           FeedType = post.IsEvent ? FeedType.Event : FeedType.Post,
+                           PostId = post.Id,
+                           UserId = post.UserId,
+                           Time = post.CreatedDate
+                       };
+
+            _uow.FeedRepository.InsertGraph(feed);
             await _uow.SaveAsync();
         }
 

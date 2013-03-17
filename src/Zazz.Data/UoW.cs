@@ -71,6 +71,12 @@ namespace Zazz.Data
             }
         }
 
+        private IFeedRepository _feedRepository;
+        public IFeedRepository FeedRepository
+        {
+            get { return _feedRepository ?? (_feedRepository = new FeedRepository(_dbContext)); }
+        }
+
         public UoW()
         {
             _dbContext = new ZazzDbContext();
