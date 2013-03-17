@@ -79,6 +79,7 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == userDetail.CoverPhotoId)
                 photo.Uploader.UserDetail.CoverPhotoId = 0;
 
+            _uow.FeedRepository.RemovePhotoFeed(photoId);
             _uow.PhotoRepository.Remove(photo);
             await _uow.SaveAsync();
 
