@@ -32,20 +32,20 @@
                 <input type="hidden" id="isClub" value="@Model.IsClub.ToString()"/>
                 <div id="followRequestBtnContainer">
                     @if (!Model.IsCurrentUserFollowingTargetUser)
-                    {   
+                    {
                         if (Model.AccountType == AccountType.ClubAdmin)
                         {
-                            <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
+                        <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
                         }
                         else
                         {
                             if (Model.FollowRequestAlreadySent)
                             {
-                                <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
+                        <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
                             }
                             else
                             {
-                                <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
+                        <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
                             }
                         }
                     }
@@ -111,11 +111,17 @@
     @* FEEDS *@
 
     <div id="feedContent">
-        @*
-        @Html.Partial("FeedItems/_EventFeedItem")
-
-        @Html.Partial("FeedItems/_PicturePostFeedItem")
-        *@
+        @foreach (var feed in Model.Feeds)
+        {
+            if (feed.FeedType == FeedType.Event)
+            {
+            @Html.Partial("FeedItems/_EventFeedItem", feed)
+            }
+            else if (feed.FeedType == FeedType.Picture)
+            {
+            @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+            }
+        }
     </div>
 
     <div class="clearfix"></div>

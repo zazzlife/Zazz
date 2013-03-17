@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Models.Data;
+﻿using System.Collections.Generic;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
@@ -31,6 +32,8 @@ namespace Zazz.Web.Models
         public bool FollowRequestAlreadySent { get; set; }
 
         public bool IsClub { get; set; }
+
+        public List<FeedViewModel> Feeds { get; set; }
     }
 
 }

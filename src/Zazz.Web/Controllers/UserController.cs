@@ -107,7 +107,8 @@ namespace Zazz.Web.Controllers
                              FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
                              AccountType = user.AccountType,
                              UserId = id,
-                             IsClub = user.AccountType == AccountType.ClubAdmin
+                             IsClub = user.AccountType == AccountType.ClubAdmin,
+                             Feeds =  new List<FeedViewModel>()
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)
@@ -130,6 +131,10 @@ namespace Zazz.Web.Controllers
 
                 if (user.UserDetail.Major != null)
                     vm.Major = user.UserDetail.Major.Name;
+
+                // Feeds
+
+
 
                 return View("Profile", vm);
             }
