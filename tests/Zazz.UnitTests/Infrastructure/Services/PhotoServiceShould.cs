@@ -6,6 +6,8 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -367,6 +369,101 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
+        [Test]
+        public void ReturnDefaultImage_WhenPhotoIdIs0_GetUserImageUrl()
+        {
+            //Arrange
+            var userId = 12;
+            var gender = Gender.Male;
+            var photoId = 123;
 
+            var photo = new PhotoMinimalDTO
+                        {
+                            AlbumId = 3,
+                            Id = photoId,
+                            UploaderId = userId
+                        };
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(0);
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(gender);
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
+                .Returns(() => photo);
+
+            //Act
+            var result = _sut.GetUserImageUrl(userId);
+
+            //Assert
+            Assert.AreEqual(DefaultImageHelper.GetUserDefaultImage(gender), result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(It.IsAny<int>()), Times.Never());
+        }
+
+        [Test]
+        public void ReturnDefaultImage_WhenPhotoIdIsNot0ButPhotoIsNull_GetUserImageUrl()
+        {
+            //Arrange
+            var userId = 12;
+            var gender = Gender.Male;
+            var photoId = 123;
+
+            var photo = new PhotoMinimalDTO
+            {
+                AlbumId = 3,
+                Id = photoId,
+                UploaderId = userId
+            };
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(photoId);
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(gender);
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
+                .Returns(() => null);
+
+            //Act
+            var result = _sut.GetUserImageUrl(userId);
+
+            //Assert
+            Assert.AreEqual(DefaultImageHelper.GetUserDefaultImage(gender), result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+        }
+
+        [Test]
+        public void ReturnUserImage_WhenPhotoIdIsNot0AndPhotoIsNotNull_GetUserImageUrl()
+        {
+            //Arrange
+            var userId = 12;
+            var gender = Gender.Male;
+            var photoId = 123;
+
+            var photo = new PhotoMinimalDTO
+            {
+                AlbumId = 3,
+                Id = photoId,
+                UploaderId = userId
+            };
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(photoId);
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(gender);
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
+                .Returns(() => photo);
+
+            var expected = _sut.GeneratePhotoUrl(userId, photo.AlbumId, photoId);
+            //Act
+            var result = _sut.GetUserImageUrl(userId);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+        }
     }
 }
