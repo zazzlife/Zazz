@@ -6,60 +6,60 @@ namespace Zazz.Data
 {
     public class UoW : IUoW
     {
-        private readonly ZazzDbContext _dbContext;
+        private ZazzDbContext _dbContext;
 
         private IOAuthAccountRepository _oAuthAccountRepository;
         public IOAuthAccountRepository OAuthAccountRepository
         {
-            get { return _oAuthAccountRepository ?? (_oAuthAccountRepository = new OAuthAccountRepository(_dbContext)); }
+            get { return _oAuthAccountRepository ?? (_oAuthAccountRepository = new OAuthAccountRepository(GetContext())); }
         }
 
         private ICommentRepository _commentRepository;
         public ICommentRepository CommentRepository
         {
-            get { return _commentRepository ?? (_commentRepository = new CommentRepository(_dbContext)); }
+            get { return _commentRepository ?? (_commentRepository = new CommentRepository(GetContext())); }
         }
 
         private IPostRepository _postRepository;
         public IPostRepository PostRepository
         {
-            get { return _postRepository ?? (_postRepository = new PostRepository(_dbContext)); }
+            get { return _postRepository ?? (_postRepository = new PostRepository(GetContext())); }
         }
 
         private IFollowRepository _followRepository;
         public IFollowRepository FollowRepository
         {
-            get { return _followRepository ?? (_followRepository = new FollowRepository(_dbContext)); }
+            get { return _followRepository ?? (_followRepository = new FollowRepository(GetContext())); }
         }
 
         private IFollowRequestRepository _followRequestRepository;
         public IFollowRequestRepository FollowRequestRepository
         {
-            get { return _followRequestRepository ?? (_followRequestRepository = new FollowRequestRepository(_dbContext)); }
+            get { return _followRequestRepository ?? (_followRequestRepository = new FollowRequestRepository(GetContext())); }
         }
 
         private IAlbumRepository _albumRepository;
         public IAlbumRepository AlbumRepository
         {
-            get { return _albumRepository ?? (_albumRepository = new AlbumRepository(_dbContext)); }
+            get { return _albumRepository ?? (_albumRepository = new AlbumRepository(GetContext())); }
         }
 
         private IPhotoRepository _photoRepository;
         public IPhotoRepository PhotoRepository
         {
-            get { return _photoRepository ?? (_photoRepository = new PhotoRepository(_dbContext)); }
+            get { return _photoRepository ?? (_photoRepository = new PhotoRepository(GetContext())); }
         }
 
         private IUserRepository _userRepository;
         public IUserRepository UserRepository
         {
-            get { return _userRepository ?? (_userRepository = new UserRepository(_dbContext)); }
+            get { return _userRepository ?? (_userRepository = new UserRepository(GetContext())); }
         }
 
         private IValidationTokenRepository _validationTokenRepository;
         public IValidationTokenRepository ValidationTokenRepository
         {
-            get { return _validationTokenRepository ?? (_validationTokenRepository = new ValidationTokenRepository(_dbContext)); }
+            get { return _validationTokenRepository ?? (_validationTokenRepository = new ValidationTokenRepository(GetContext())); }
         }
 
         private IFacebookSyncRetryRepository _facebookSyncRetryRepository;
@@ -67,19 +67,22 @@ namespace Zazz.Data
         {
             get
             {
-                return _facebookSyncRetryRepository ?? (_facebookSyncRetryRepository = new FacebookSyncRetryRepository(_dbContext));
+                return _facebookSyncRetryRepository ?? (_facebookSyncRetryRepository = new FacebookSyncRetryRepository(GetContext()));
             }
         }
 
         private IFeedRepository _feedRepository;
         public IFeedRepository FeedRepository
         {
-            get { return _feedRepository ?? (_feedRepository = new FeedRepository(_dbContext)); }
+            get { return _feedRepository ?? (_feedRepository = new FeedRepository(GetContext())); }
         }
 
-        public UoW()
+        private ZazzDbContext GetContext()
         {
-            _dbContext = new ZazzDbContext();
+            if (_dbContext == null)
+                _dbContext = new ZazzDbContext();
+
+            return _dbContext;
         }
 
         public Task SaveAsync()
@@ -89,7 +92,8 @@ namespace Zazz.Data
 
         public void Dispose()
         {
-            _dbContext.Dispose();
+            if (_dbContext != null)
+                _dbContext.Dispose();
         }
     }
 }
