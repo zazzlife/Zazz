@@ -11,20 +11,20 @@ namespace Zazz.Infrastructure.Services
 {
     public class PhotoService : IPhotoService
     {
-        private readonly IUoW _uoW;
+        private readonly IUoW _uow;
         private readonly IFileService _fileService;
         private readonly string _rootPath;
 
-        public PhotoService(IUoW uoW, IFileService fileService, string rootPath)
+        public PhotoService(IUoW uow, IFileService fileService, string rootPath)
         {
-            _uoW = uoW;
+            _uow = uow;
             _fileService = fileService;
             _rootPath = rootPath;
         }
 
         public Task<Photo> GetPhotoAsync(int id)
         {
-            return _uoW.PhotoRepository.GetByIdAsync(id);
+            return _uow.PhotoRepository.GetByIdAsync(id);
         }
 
         public string GeneratePhotoUrl(int userId, int albumId, int photoId)
@@ -39,14 +39,14 @@ namespace Zazz.Infrastructure.Services
 
         public Task<string> GetPhotoDescriptionAsync(int photoId)
         {
-            return _uoW.PhotoRepository.GetDescriptionAsync(photoId);
+            return _uow.PhotoRepository.GetDescriptionAsync(photoId);
         }
 
         public async Task<int> SavePhotoAsync(Photo photo, Stream data)
         {
             photo.UploadDate = DateTime.UtcNow;
-            _uoW.PhotoRepository.InsertGraph(photo);
-            await _uoW.SaveAsync();
+            _uow.PhotoRepository.InsertGraph(photo);
+            await _uow.SaveAsync();
 
             var feed = new Feed
                        {
@@ -56,8 +56,8 @@ namespace Zazz.Infrastructure.Services
                            UserId = photo.UploaderId
                        };
 
-            _uoW.FeedRepository.InsertGraph(feed);
-            await _uoW.SaveAsync();
+            _uow.FeedRepository.InsertGraph(feed);
+            await _uow.SaveAsync();
 
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             await _fileService.SaveFileAsync(path, data);
@@ -67,7 +67,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task RemovePhotoAsync(int photoId, int currentUserId)
         {
-            var photo = await _uoW.PhotoRepository.GetByIdAsync(photoId);
+            var photo = await _uow.PhotoRepository.GetByIdAsync(photoId);
             if (photo.UploaderId != currentUserId)
                 throw new SecurityException();
 
@@ -79,8 +79,8 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == userDetail.CoverPhotoId)
                 photo.Uploader.UserDetail.CoverPhotoId = 0;
 
-            _uoW.PhotoRepository.Remove(photo);
-            await _uoW.SaveAsync();
+            _uow.PhotoRepository.Remove(photo);
+            await _uow.SaveAsync();
 
             var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             _fileService.RemoveFile(filePath);
@@ -91,17 +91,37 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == 0)
                 throw new ArgumentException();
 
-            var ownerId = await _uoW.PhotoRepository.GetOwnerIdAsync(photo.Id);
+            var ownerId = await _uow.PhotoRepository.GetOwnerIdAsync(photo.Id);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            _uoW.PhotoRepository.InsertOrUpdate(photo);
-            await _uoW.SaveAsync();
+            _uow.PhotoRepository.InsertOrUpdate(photo);
+            await _uow.SaveAsync();
+        }
+
+        public string GetUserImageUrl(int userId)
+        {
+            var photoId = _uow.UserRepository.GetUserPhotoId(userId);
+
+            if (photoId == 0)
+            {
+                var gender = _uow.UserRepository.GetUserGender(userId);
+                return DefaultImageHelper.GetUserDefaultImage(gender);
+            }
+
+            var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
+            if (photo == null)
+            {
+                var gender = _uow.UserRepository.GetUserGender(userId);
+                return DefaultImageHelper.GetUserDefaultImage(gender);
+            }
+
+            return GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
         }
 
         public void Dispose()
         {
-            _uoW.Dispose();
+            _uow.Dispose();
         }
     }
 }

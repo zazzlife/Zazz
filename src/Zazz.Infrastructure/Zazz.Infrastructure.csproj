@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FacebookHelper.cs" />
     <Compile Include="FakeEMailService.cs" />

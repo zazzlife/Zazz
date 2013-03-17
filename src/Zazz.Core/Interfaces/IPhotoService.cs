@@ -20,5 +20,7 @@ namespace Zazz.Core.Interfaces
         Task RemovePhotoAsync(int photoId, int currentUserId);
 
         Task UpdatePhotoAsync(Photo photo, int currentUserId);
+
+        string GetUserImageUrl(int userId);
     }
 }

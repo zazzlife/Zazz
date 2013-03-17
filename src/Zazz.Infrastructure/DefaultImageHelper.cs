@@ -1,6 +1,6 @@
-﻿using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data;
 
-namespace Zazz.Web.Helpers
+namespace Zazz.Infrastructure
 {
     public class DefaultImageHelper
     {

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
@@ -269,22 +270,7 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_photoService)
             {
-                var photoId = _uow.UserRepository.GetUserPhotoId(userId);
-
-                if (photoId == 0)
-                {
-                    var gender = _uow.UserRepository.GetUserGender(userId);
-                    return DefaultImageHelper.GetUserDefaultImage(gender);
-                }
-
-                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
-                if (photo == null)
-                {
-                    var gender = _uow.UserRepository.GetUserGender(userId);
-                    return DefaultImageHelper.GetUserDefaultImage(gender);
-                }
-
-                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                return _photoService.GetUserImageUrl(userId);
             }
         }
 
