@@ -73,6 +73,44 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.GetUserAccountType(id), Times.Once());
         }
 
+        [Test]
+        public void ReturnFullNameWhenIsNotEmpty_OnGetUserDisplayNameWithId()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+                .Returns(user.UserDetail.FullName);
+            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
+                .Returns(user.Username);
+
+            //Act
+            var result = _sut.GetUserDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
+        }
+
+        [Test]
+        public void ReturnUserNameWhenFullNameIsEmpty_OnGetUserDisplayNameWithId()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+                .Returns(() => null);
+            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
+                .Returns(user.Username);
+
+            //Act
+            var result = _sut.GetUserDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.Username, result);
+            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserName(user.Id), Times.Once());
+        }
     }
 }

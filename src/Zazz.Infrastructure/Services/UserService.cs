@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -36,6 +37,24 @@ namespace Zazz.Infrastructure.Services
         public string GetUserFullName(string username)
         {
             return _uoW.UserRepository.GetUserFullName(username);
+        }
+
+        public string GetUserDisplayName(int userId)
+        {
+            var fullName = _uoW.UserRepository.GetUserFullName(userId);
+            if (!String.IsNullOrEmpty(fullName))
+            {
+                return fullName;
+            }
+            else
+            {
+                return _uoW.UserRepository.GetUserName(userId);
+            }
+        }
+
+        public string GetUserDisplayName(string username)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void Dispose()

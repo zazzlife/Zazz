@@ -15,5 +15,9 @@ namespace Zazz.Core.Interfaces
         string GetUserFullName(int userId);
 
         string GetUserFullName(string username);
+
+        string GetUserDisplayName(int userId);
+
+        string GetUserDisplayName(string username);
     }
 }
