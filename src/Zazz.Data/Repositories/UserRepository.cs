@@ -111,6 +111,13 @@ namespace Zazz.Data.Repositories
                             .SingleOrDefault();
         }
 
+        public string GetUserName(int userId)
+        {
+            return DbSet.Where(u => u.Id == userId)
+                        .Select(u => u.Username)
+                        .SingleOrDefault();
+        }
+
         public override async Task RemoveAsync(int id)
         {
             var item = await GetByIdAsync(id);

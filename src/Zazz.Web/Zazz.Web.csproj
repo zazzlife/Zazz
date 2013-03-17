@@ -233,6 +233,7 @@
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
     <Compile Include="Models\AlbumPhotosViewModel.cs" />
+    <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\ImageViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />

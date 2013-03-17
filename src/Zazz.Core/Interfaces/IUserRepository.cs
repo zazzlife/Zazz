@@ -34,5 +34,7 @@ namespace Zazz.Core.Interfaces
         int GetUserPhotoId(string username);
 
         int GetUserCoverPhotoId(int userId);
+        
+        string GetUserName(int userId);
     }
 }
