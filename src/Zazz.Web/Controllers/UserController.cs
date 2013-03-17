@@ -98,6 +98,9 @@ namespace Zazz.Web.Controllers
                     currentUserId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
                 }
 
+                // Feeds 
+                var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
+
                 var vm = new UserProfileViewModel
                          {
                              UserPhotoUrl = profilePhotoUrl,
@@ -108,7 +111,7 @@ namespace Zazz.Web.Controllers
                              AccountType = user.AccountType,
                              UserId = id,
                              IsClub = user.AccountType == AccountType.ClubAdmin,
-                             Feeds =  new List<FeedViewModel>()
+                             Feeds =  feedsHelper.GetUserActivityFeed(user.Id)
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)
@@ -131,10 +134,6 @@ namespace Zazz.Web.Controllers
 
                 if (user.UserDetail.Major != null)
                     vm.Major = user.UserDetail.Major.Name;
-
-                // Feeds
-
-
 
                 return View("Profile", vm);
             }
