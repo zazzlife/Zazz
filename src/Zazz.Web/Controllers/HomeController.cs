@@ -51,7 +51,8 @@ namespace Zazz.Web.Controllers
             var feeds = _uow.FeedRepository.GetFeeds(followIds)
                             .OrderByDescending(f => f.Time)
                             .Skip(skip)
-                            .Take(PAGE_SIZE);
+                            .Take(PAGE_SIZE)
+                            .ToList();
 
             var vm = new List<FeedViewModel>();
 
@@ -62,7 +63,8 @@ namespace Zazz.Web.Controllers
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
-                                 Time = feed.Time.ToRelativeTime()
+                                 Time = feed.Time.ToRelativeTime(),
+                                 FeedType = feed.FeedType
                              };
 
                 if (feed.FeedType == FeedType.Event)
