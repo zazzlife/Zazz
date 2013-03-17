@@ -17,12 +17,14 @@ namespace Zazz.Web.Controllers
         private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
+        private readonly IUserService _userService;
 
-        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService)
+        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService, IUserService userService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
             _photoService = photoService;
+            _userService = userService;
         }
 
         [Authorize]
@@ -42,7 +44,8 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> ShowProfile(int id)
         {
             using (_uow)
-            using (_photoService)
+            using (_photoService) 
+            using (_userService)
             {
                 var user = await _uow.UserRepository.GetByIdAsync(id);
                 
@@ -136,6 +139,7 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Edit()
         {
             using (_uow)
+            using (_userService)
             using (_photoService)
             {
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
@@ -165,6 +169,7 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Edit(EditProfileViewModel vm)
         {
             using (_uow)
+            using (_userService)
             using (_photoService)
             {
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
@@ -240,6 +245,7 @@ namespace Zazz.Web.Controllers
         public string GetCurrentUserImageUrl()
         {
             using (_uow)
+            using (_userService)
             using (_photoService)
             {
                 if (!User.Identity.IsAuthenticated)
@@ -268,6 +274,7 @@ namespace Zazz.Web.Controllers
         public string GetUserImageUrl(int userId)
         {
             using (_uow)
+            using (_userService)
             using (_photoService)
             {
                 return _photoService.GetUserImageUrl(userId);
@@ -277,10 +284,20 @@ namespace Zazz.Web.Controllers
         public string GetCurrentUserDisplayName()
         {
             using (_uow)
+            using (_userService)
             using (_photoService)
             {
-                var fullName = _uow.UserRepository.GetUserFullName(User.Identity.Name);
-                return !String.IsNullOrEmpty(fullName) ? fullName : User.Identity.Name;
+                return _userService.GetUserDisplayName(User.Identity.Name);
+            }
+        }
+
+        public string GetUserDisplayName(int userId)
+        {
+            using (_uow)
+            using (_userService)
+            using (_photoService)
+            {
+                return _userService.GetUserDisplayName(userId);
             }
         }
     }
