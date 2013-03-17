@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Xml.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -26,6 +27,20 @@ namespace Zazz.Data.Repositories
         public IQueryable<Feed> GetUserFeeds(int userId)
         {
             return DbSet.Where(f => f.UserId == userId);
+        }
+
+        public void RemovePhotoFeed(int photoId)
+        {
+            var item = DbSet.FirstOrDefault(f => f.PhotoId == photoId);
+            if (item != null)
+                Remove(item);
+        }
+
+        public void RemovePostFeed(int postId)
+        {
+            var item = DbSet.FirstOrDefault(f => f.PostId == postId);
+            if (item != null)
+                Remove(item);
         }
     }
 }

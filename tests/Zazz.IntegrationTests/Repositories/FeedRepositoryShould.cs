@@ -81,11 +81,11 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             _dbContext.SaveChanges();
-            var userIds = new int[] {userA.Id, userD.Id, userC.Id};
+            var userIds = new int[] { userA.Id, userD.Id, userC.Id };
             var expectedCount = feeds.Count(f => userIds.Contains(f.UserId));
 
             //Act
-            
+
             var result = _repo.GetFeeds(userIds);
 
             //Assert
@@ -139,7 +139,66 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(expectedCount, result.Count());
+        }
 
+        [Test]
+        public void RemoveRecord_OnRemovePhotoFeed()
+        {
+            //Arrange
+            var photo = new Photo { UploadDate = DateTime.UtcNow };
+            var album = new Album { Name = "album", Photos = new List<Photo> { photo } };
+
+            var user = Mother.GetUser();
+            user.Albums = new List<Album> { album };
+
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var feed = new Feed { UserId = user.Id, PhotoId = photo.Id, Time = DateTime.UtcNow };
+            _dbContext.Feeds.Add(feed);
+            _dbContext.SaveChanges();
+
+            Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
+            //Act
+            _repo.RemovePhotoFeed(photo.Id);
+            _dbContext.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
+        }
+
+        [Test]
+        public void RemoveRecord_OnRemovePostFeed()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var post = new Post
+                       {
+                           CreatedDate = DateTime.UtcNow,
+                           Title = "title",
+                           Message = "message",
+                           UserId = user.Id
+                       };
+
+            _dbContext.Posts.Add(post);
+            _dbContext.SaveChanges();
+
+            var feed = new Feed { UserId = user.Id, PostId = post.Id, Time = DateTime.UtcNow };
+            _dbContext.Feeds.Add(feed);
+            _dbContext.SaveChanges();
+
+            Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
+            //Act
+            _repo.RemovePostFeed(post.Id);
+            _dbContext.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
         }
     }
 }
