@@ -42,22 +42,25 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetDescriptionAsync(photoId);
         }
 
-        public async Task<int> SavePhotoAsync(Photo photo, Stream data)
+        public async Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed)
         {
             photo.UploadDate = DateTime.UtcNow;
             _uow.PhotoRepository.InsertGraph(photo);
             await _uow.SaveAsync();
 
-            var feed = new Feed
-                       {
-                           FeedType = FeedType.Picture,
-                           PhotoId = photo.Id,
-                           Time = photo.UploadDate,
-                           UserId = photo.UploaderId
-                       };
+            if (showInFeed)
+            {
+                var feed = new Feed
+                {
+                    FeedType = FeedType.Picture,
+                    PhotoId = photo.Id,
+                    Time = photo.UploadDate,
+                    UserId = photo.UploaderId
+                };
 
-            _uow.FeedRepository.InsertGraph(feed);
-            await _uow.SaveAsync();
+                _uow.FeedRepository.InsertGraph(feed);
+                await _uow.SaveAsync();
+            }
 
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
             await _fileService.SaveFileAsync(path, data);

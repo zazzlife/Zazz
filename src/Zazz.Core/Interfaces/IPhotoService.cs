@@ -15,7 +15,7 @@ namespace Zazz.Core.Interfaces
 
         Task<string> GetPhotoDescriptionAsync(int photoId);
         
-        Task<int> SavePhotoAsync(Photo photo, Stream data);
+        Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed);
 
         Task RemovePhotoAsync(int photoId, int currentUserId);
 

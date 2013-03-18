@@ -96,12 +96,46 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms);
+                var id = await _sut.SavePhotoAsync(photo, ms, true);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
                 _uow.Verify(x => x.SaveAsync(), Times.Exactly(2));
+                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+                Assert.AreEqual(photo.Id, id);
+            }
+        }
+
+        [Test]
+        public async Task SavePhotoToDiskAndDBAndNotCreateAFeedWhenIsSpecifiedThenReturnPhotoId_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UploaderId = 17
+            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            using (var ms = new MemoryStream())
+            {
+                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                   .Returns(() => Task.Run(() => { }));
+
+                //Act
+
+                var id = await _sut.SavePhotoAsync(photo, ms, false);
+
+                //Assert
+                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
+                _uow.Verify(x => x.SaveAsync(), Times.Once());
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);

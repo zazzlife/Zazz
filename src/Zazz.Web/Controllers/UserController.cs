@@ -202,7 +202,7 @@ namespace Zazz.Web.Controllers
                                 UploaderId = user.Id
                             };
 
-                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileImage.InputStream);
+                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileImage.InputStream, true);
                             user.UserDetail.ProfilePhotoId = photoId;
                         }
                     }
@@ -223,7 +223,7 @@ namespace Zazz.Web.Controllers
                                 UploaderId = user.Id
                             };
 
-                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileCoverImage.InputStream);
+                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileCoverImage.InputStream, true);
                             user.UserDetail.CoverPhotoId = photoId;
                         }
                     }

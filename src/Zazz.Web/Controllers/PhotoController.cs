@@ -65,7 +65,7 @@ namespace Zazz.Web.Controllers
                     UploaderId = userId
                 };
 
-                await _photoService.SavePhotoAsync(photo, image.InputStream);
+                await _photoService.SavePhotoAsync(photo, image.InputStream, true);
             }
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
