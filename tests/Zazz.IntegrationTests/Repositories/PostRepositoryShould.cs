@@ -97,6 +97,37 @@ namespace Zazz.IntegrationTests.Repositories
             CollectionAssert.DoesNotContain(result, postC);
         }
 
+        [Test]
+        public void ResetPhotoIdOnAllPosts_OnResetPhotoId()
+        {
+            //Arrange
+            var photoId = 123;
+            var user = Mother.GetUser();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
+            var postA = Mother.GetPost();
+            postA.PhotoId = photoId;
+            postA.UserId = user.Id;
+            postA.IsEvent = true;
+
+            var postB = Mother.GetPost();
+            postB.PhotoId = photoId;
+            postB.UserId = user.Id;
+            postB.IsEvent = true;
+
+            _context.Posts.Add(postA);
+            _context.Posts.Add(postB);
+            _context.SaveChanges();
+
+            //Act
+            _repo.ResetPhotoId(photoId);
+
+            //Assert
+            var postACheck = _repo.GetByIdAsync(postA.Id).Result;
+            var postBCheck = _repo.GetByIdAsync(postB.Id).Result;
+            Assert.IsNull(postACheck.PhotoId);
+            Assert.IsNull(postBCheck.PhotoId);
+        }
     }
 }

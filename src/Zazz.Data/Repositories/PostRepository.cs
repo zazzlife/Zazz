@@ -59,5 +59,14 @@ namespace Zazz.Data.Repositories
                         .Where(p => EntityFunctions.TruncateTime(p.EventDetail.TimeUtc) >= from)
                         .Where(p => EntityFunctions.TruncateTime(p.EventDetail.TimeUtc) <= to);
         }
+
+        public void ResetPhotoId(int photoId)
+        {
+            var posts = DbSet.Where(p => p.PhotoId == photoId);
+            foreach (var post in posts)
+            {
+                post.PhotoId = null;
+            }
+        }
     }
 }

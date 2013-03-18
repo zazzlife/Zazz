@@ -10,5 +10,7 @@ namespace Zazz.Core.Interfaces
         Task<int> GetOwnerIdAsync(int postId);
 
         IQueryable<Post> GetEventRange(DateTime from, DateTime to);
+
+        void ResetPhotoId(int photoId);
     }
 }
