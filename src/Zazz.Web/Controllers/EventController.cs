@@ -48,10 +48,10 @@ namespace Zazz.Web.Controllers
         {
             var today = DateTime.UtcNow;
 
-            var delta = DayOfWeek.Monday - today.DayOfWeek;
+            var delta = DayOfWeek.Sunday - today.DayOfWeek;
             var firstDayOfWeek = today.AddDays(delta).Date;
 
-            delta = DayOfWeek.Sunday - today.DayOfWeek;
+            delta = DayOfWeek.Saturday - today.DayOfWeek;
             var lastDayOfWeek = today.AddDays(delta).Date;
 
             return GetEvents(firstDayOfWeek, lastDayOfWeek, page);
