@@ -1,0 +1,11 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<EventViewModel>
+
+@foreach (var e in Model)
+{
+    @Html.Partial("_EventPartial", e)
+}
+
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("List", new { page }))
+</div>

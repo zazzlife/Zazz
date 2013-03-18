@@ -6,6 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
@@ -16,11 +17,15 @@ namespace Zazz.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IPostService _postService;
+        private readonly IUoW _uow;
 
-        public EventController(IUserService userService, IPostService postService)
+        private const int PAGE_SIZE = 10;
+
+        public EventController(IUserService userService, IPostService postService, IUoW uow)
         {
             _userService = userService;
             _postService = postService;
+            _uow = uow;
         }
 
         public ActionResult Index()
@@ -30,7 +35,66 @@ namespace Zazz.Web.Controllers
 
         public ActionResult List()
         {
-            return View();
+            var vm = new EventListViewModel
+                     {
+                         MonthEvents = GetMonthEvents(),
+                         WeekEvents = GetWeekEvents()
+                     };
+
+            return View(vm);
+        }
+
+        private IPagedList<EventViewModel> GetWeekEvents(int page = 1)
+        {
+            var today = DateTime.UtcNow;
+
+            var delta = DayOfWeek.Monday - today.DayOfWeek;
+            var firstDayOfWeek = today.AddDays(delta).Date;
+
+            delta = DayOfWeek.Sunday - today.DayOfWeek;
+            var lastDayOfWeek = today.AddDays(delta).Date;
+
+            return GetEvents(firstDayOfWeek, lastDayOfWeek, page);
+        }
+
+        private IPagedList<EventViewModel> GetMonthEvents(int page = 1)
+        {
+            var today = DateTime.UtcNow;
+            var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
+
+            var firstDayOfMonth = new DateTime(today.Year, today.Month, 1).Date;
+            var lastDayOfMonth = new DateTime(today.Year, today.Month, daysInMonth).Date;
+
+            return GetEvents(firstDayOfMonth, lastDayOfMonth, page);
+        }
+
+        private IPagedList<EventViewModel> GetEvents(DateTime from, DateTime to, int page)
+        {
+            var skip = (page - 1)*PAGE_SIZE;
+
+            var events = _uow.PostRepository.GetEventRange(from, to)
+                             .OrderBy(e => e.EventDetail.TimeUtc)
+                             .Skip(skip)
+                             .Take(PAGE_SIZE)
+                             .Select(e => new EventViewModel
+                             {
+                                 City = e.EventDetail.City,
+                                 Id = e.Id,
+                                 CreatedDate = e.CreatedDate,
+                                 Detail = e.Message,
+                                 FacebookLink = e.FacebookPhotoLink,
+                                 Latitude = e.EventDetail.Latitude,
+                                 Longitude = e.EventDetail.Longitude,
+                                 Location = e.EventDetail.Location,
+                                 Name = e.Title,
+                                 Price = e.EventDetail.Price,
+                                 Street = e.EventDetail.Street,
+                                 Time = e.EventDetail.Time,
+                             });
+
+            var eventsCount = _uow.PostRepository.GetEventRange(from, to).Count();
+
+            return new StaticPagedList<EventViewModel>(events, page, PAGE_SIZE, eventsCount);
         }
 
         [HttpGet, Authorize]

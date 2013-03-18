@@ -234,6 +234,7 @@
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
     <Compile Include="Models\AlbumPhotosViewModel.cs" />
+    <Compile Include="Models\EventListViewModel.cs" />
     <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\ImageViewModel.cs" />
@@ -407,6 +408,7 @@
     <Content Include="Views\Album\List.cshtml" />
     <Content Include="Views\Album\Photos.cshtml" />
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
+    <Content Include="Views\Event\_EventsListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
