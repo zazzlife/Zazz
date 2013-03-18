@@ -98,7 +98,7 @@ namespace Zazz.Web.Helpers
                                                 Longitude = feed.Post.EventDetail.Longitude,
                                                 Name = feed.Post.Title,
                                                 Price = feed.Post.EventDetail.Price,
-                                                StartTime = feed.Post.EventDetail.StartTime,
+                                                Time = feed.Post.EventDetail.Time,
                                                 Street = feed.Post.EventDetail.Street
                                             };
                 }

@@ -38,14 +38,16 @@
                     @Html.ValidationMessageFor(model => model.Detail, null, new { @class = "help-inline" })
                 </div>
             </div>
+            
+            @Html.HiddenFor(m => m.UtcTime)
 
             <div class="control-group">
                 <div class="editor-label">
-                    @Html.LabelFor(model => model.StartTime, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.Time, new { @class = "control-label" })
                 </div>
                 <div class="editor-field">
-                    @Html.TextBoxFor(model => model.StartTime, new { @class = "span4 datepicker" })
-                    @Html.ValidationMessageFor(model => model.StartTime, null, new { @class = "help-inline" })
+                    @Html.TextBoxFor(model => model.Time, new { @class = "span4 datepicker" })
+                    @Html.ValidationMessageFor(model => model.Time, null, new { @class = "help-inline" })
                 </div>
             </div>
 
@@ -114,6 +116,15 @@
     <script type="text/javascript">
 
         $(function() {
+
+            $(document).on('change', '.datepicker', function() {
+                var date = new Date($('.datepicker').datetimepicker('getDate'));
+                $('input[name="UtcTime"]').val(date.toISOString());
+                //console.log('DATE: ' + date);
+                //console.log('UTC: ' + date.toUTCString());
+                //console.log('ISO: ' + date.toISOString());
+
+            });
 
             @if (Model != null && Model.Latitude.HasValue && Model.Longitude.HasValue)
             {

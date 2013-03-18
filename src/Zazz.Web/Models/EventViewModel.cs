@@ -17,7 +17,10 @@ namespace Zazz.Web.Models
         public string Detail { get; set; }
 
         [Required, Display(Name = "Time")]
-        public DateTime StartTime { get; set; }
+        public DateTime Time { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string UtcTime { get; set; } // don't use datetime here, it'll convert to local time
 
         [StringLength(80)]
         public string Location { get; set; }

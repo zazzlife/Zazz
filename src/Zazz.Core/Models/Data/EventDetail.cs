@@ -9,7 +9,9 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Id")]
         public virtual Post Post { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateTime Time { get; set; }
+
+        public DateTime TimeUtc { get; set; }
 
         [MaxLength(80)]
         public string Location { get; set; }

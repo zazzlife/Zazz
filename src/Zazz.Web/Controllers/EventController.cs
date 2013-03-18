@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
@@ -129,12 +130,15 @@ namespace Zazz.Web.Controllers
                                                      City = vm.City,
                                                      Location = vm.Location,
                                                      Price = vm.Price,
-                                                     StartTime = vm.StartTime,
+                                                     Time = vm.Time,
                                                      Street = vm.Street,
                                                      Latitude = vm.Latitude,
                                                      Longitude = vm.Longitude
                                                  }
                            };
+
+            post.EventDetail.TimeUtc = DateTime.Parse(vm.UtcTime, CultureInfo.InvariantCulture,
+                                                      DateTimeStyles.RoundtripKind);
 
             return post;
         }
@@ -162,7 +166,7 @@ namespace Zazz.Web.Controllers
                     Location = post.EventDetail.Location,
                     Name = post.Title,
                     Price = post.EventDetail.Price,
-                    StartTime = post.EventDetail.StartTime,
+                    Time = post.EventDetail.Time,
                     Street = post.EventDetail.Street,
                     FacebookLink = post.FacebookLink,
                     IsOwner = post.UserId == userId,
