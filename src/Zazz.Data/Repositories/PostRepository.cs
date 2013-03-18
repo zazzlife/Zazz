@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Objects;
 using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
@@ -50,6 +51,13 @@ namespace Zazz.Data.Repositories
         public Task<int> GetOwnerIdAsync(int postId)
         {
             return Task.Run(() => DbSet.Where(e => e.Id == postId).Select(e => e.UserId).SingleOrDefault());
+        }
+
+        public IQueryable<Post> GetEventRange(DateTime from, DateTime to)
+        {
+            return DbSet.Where(p => p.IsEvent)
+                        .Where(p => EntityFunctions.TruncateTime(p.EventDetail.TimeUtc) >= from)
+                        .Where(p => EntityFunctions.TruncateTime(p.EventDetail.TimeUtc) <= to);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -42,6 +43,58 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(_user.Id, result);
+        }
+
+        [Test]
+        public void GetCorrectEvents_OnGetEventRange()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            var postA = Mother.GetPost();
+            postA.UserId = user.Id;
+            postA.IsEvent = true;
+            postA.EventDetail = new EventDetail
+                                {
+                                    Time = DateTime.UtcNow,
+                                    TimeUtc = DateTime.UtcNow.AddDays(2)
+                                };
+
+            var postB = Mother.GetPost();
+            postB.UserId = user.Id;
+            postB.IsEvent = true;
+            postB.EventDetail = new EventDetail
+            {
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow
+            };
+
+            var postC = Mother.GetPost();
+            postC.UserId = user.Id;
+            postC.IsEvent = true;
+            postC.EventDetail = new EventDetail
+            {
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow.AddDays(-2)
+            };
+
+            _context.Posts.Add(postA);
+            _context.Posts.Add(postB);
+            _context.Posts.Add(postC);
+            _context.SaveChanges();
+
+            var from = DateTime.UtcNow;
+            var to = DateTime.UtcNow.AddDays(2);
+
+            //Act
+            var result = _repo.GetEventRange(from.Date, to.Date).ToList();
+
+            //Assert
+            CollectionAssert.Contains(result, postA);
+            CollectionAssert.Contains(result, postB);
+            CollectionAssert.DoesNotContain(result, postC);
         }
 
 
