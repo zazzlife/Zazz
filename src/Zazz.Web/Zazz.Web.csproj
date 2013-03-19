@@ -341,6 +341,7 @@
     <Content Include="Images\fb-login-btn.jpg" />
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\app\edit-event-form.js" />
     <Content Include="Scripts\app\flip.js" />
     <Content Include="Scripts\app\follow.js" />
     <Content Include="Scripts\app\global.js" />

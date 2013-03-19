@@ -192,7 +192,9 @@ namespace Zazz.Web.Controllers
                 var userId = _userService.GetUserId(User.Identity.Name);
                 var albums = await _albumService.GetUserAlbumsAsync(userId);
 
-                return Json(albums, JsonRequestBehavior.AllowGet);
+                var response = albums.Select(a => new { id = a.Id, name = a.Name });
+
+                return Json(response, JsonRequestBehavior.AllowGet);
             }
         }
     }

@@ -16,10 +16,25 @@ function hideBtnBusy(btn, originalText) {
     $(btn).html(originalText);
 }
 
-function loadAlbumsDropDown(dropdownElem) {
+function loadAlbumsDropDownAsync(dropdownElem) {
 
-    var url = "/album/getalbums";
+    var def = $.Deferred();
 
+    $.ajax({
+        url: "/album/getalbums",
+        error: function() {
+            toastr.error("Failed to load the albums. Please try again later.");
+            def.reject();
+        },
+        success: function (res) {
+            
+
+
+            def.resolve(res);
+        }
+    });
+
+    return def.promise();
 }
 
 $(function () {
