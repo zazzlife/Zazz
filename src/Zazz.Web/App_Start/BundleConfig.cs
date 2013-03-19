@@ -25,12 +25,21 @@ namespace Zazz.Web
                     "~/Content/themes/base/jquery.ui.theme.css");
 
 
-            var jqueryFileUploadOrder = new BundleFileSetOrdering("jqueryFileUploadOrder");
-            jqueryFileUploadOrder.Files.Add("jquery.fileupload.js");
-            jqueryFileUploadOrder.Files.Add("jquery.fileupload-fp.js");
-            jqueryFileUploadOrder.Files.Add("jquery.fileupload-ui.js");
+            var fineUploadOrder = new BundleFileSetOrdering("FineUploadOrder");
+            fineUploadOrder.Files.Add("header.js");
+            fineUploadOrder.Files.Add("util.js");
+            fineUploadOrder.Files.Add("button.js");
+            fineUploadOrder.Files.Add("ajax.requester.js");
+            fineUploadOrder.Files.Add("deletefile.ajax.requester.js");
+            fineUploadOrder.Files.Add("handler.base.js");
+            fineUploadOrder.Files.Add("window.receive.message.js");
+            fineUploadOrder.Files.Add("handler.form.js");
+            fineUploadOrder.Files.Add("handler.xhr.js");
+            fineUploadOrder.Files.Add("uploader.basic.js");
+            fineUploadOrder.Files.Add("dnd.js");
+            fineUploadOrder.Files.Add("uploader.js");
 
-            bundles.FileSetOrderList.Add(jqueryFileUploadOrder);
+            bundles.FileSetOrderList.Add(fineUploadOrder);
 
             bundles.Add(css);
             bundles.Add(jqueryUiCss);

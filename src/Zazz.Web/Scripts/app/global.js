@@ -118,8 +118,21 @@ $(document).on('change', '#pg-albumSelect', function () {
 
 ///////////////////////UPLOAD PHOTO MODAL////////////////////////////////
 
+var imgUploader;
+
 $('#uploadPicModal').on('show', function() {
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+
+    imgUploader = new qq.FineUploader({
+        element: document.getElementById("upload"),
+        request: {
+            endpoint: '/photo/ajaxupload/'
+        },
+        autoUpload: false,
+        //text: {
+        //    uploadButton: '<button class="btn btn-info">Select File</button>'
+        //}
+    });
 });
 
 $('#uploadImg').on('click', function() {
@@ -130,23 +143,14 @@ $('#uploadImg').on('click', function() {
         return;
     }
 
-    $('#imgInput').ajaxfileupload({
-        action: '/photo/ajaxupload',
-        params: {
-            albumId: albumId,
-            description: description
-        },
-        onComplete: function(res) {
-            console.log(res);
-        },
-        onStart: function() {
-            
-        },
-        onCancel: function() {
-            
-        }
+    if (!imgUploader)
+        return;
+    imgUploader.setParams({
+        albumId: albumId,
+        description: description
     });
-    
+
+    imgUploader.uploadStoredFiles();
 });
 
 /////////////////////////////////////////////////////////////////////////
