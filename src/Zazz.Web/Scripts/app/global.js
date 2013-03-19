@@ -1,4 +1,6 @@
-﻿function showBtnBusy(btn) {
+﻿var LOADING_INDICATOR = '<i class="icon-spin icon-refresh"></i>';
+
+function showBtnBusy(btn) {
     var originalText = $(btn).html();
 
     var textWithSpinner = '<i style="margin-right:5px;" class="icon-refresh icon-spin"></i>' + originalText;
@@ -71,6 +73,25 @@ $('#pg-open').click(function (e) {
     loadAlbumTask.done(function(res) {
         loadPGPhotos();
     });
+});
+
+$(document).on('click', '*[data-ajax-pagination] a', function(e) {
+    e.preventDefault();
+
+    var url = $(this).attr('href');
+    var panelToUpdate = $($(this).closest('*[data-ajax-pagination]').attr('data-update'));
+    panelToUpdate.html(LOADING_INDICATOR);
+
+    $.ajax({
+        url: url,
+        error: function() {
+            toastr.error("An error occured");
+        },
+        success: function(res) {
+            panelToUpdate.html(res);
+        }
+    });
+
 });
 
 $(document).on('click', 'button[data-selectPhoto]', function (e) {

@@ -16,7 +16,7 @@
         }
     </ul>
 
-    <div class="text-center">
-        @Html.PagedListPager(Model, page => Url.Action("GetPhotos", new { page, albumId = ViewBag.AlbumId }))
+    <div class="text-center" data-ajax-pagination="1" data-update="#pg-photos">
+        @Html.PagedListPager(Model, page => String.Format("/album/getphotos/?albumId={0}&page={1}", ViewBag.AlbumId, page))
     </div>
 </div>
