@@ -73,6 +73,16 @@ $('#pg-open').click(function (e) {
     });
 });
 
+$(document).on('click', 'button[data-selectPhoto]', function (e) {
+
+    e.preventDefault();
+
+    var id = $(this).data('id');
+    $('#photoId').val(id);
+
+    $('#pg-modal').modal('hide');
+});
+
 $(document).on('change', '#pg-albumSelect', function () {
     loadPGPhotos();
 });

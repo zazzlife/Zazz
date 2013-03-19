@@ -1,0 +1,22 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<ImageViewModel>
+@{
+    Layout = null;
+}
+<div style="margin-top: 25px;">
+    <ul class="thumbnails">
+        @foreach (var p in Model)
+        {
+            <li class="thumbnail">
+                <div>
+                    <img src="@p.ImageUrl" class="width-110" title="@p.Text" />
+                </div>
+                <button style="margin-top: 5px;" class="btn btn-info btn-block" data-selectPhoto="1" data-id="@p.Id">Select</button>
+            </li>
+        }
+    </ul>
+
+    <div class="text-center">
+        @Html.PagedListPager(Model, page => Url.Action("GetPhotos", new { page, albumId = ViewBag.AlbumId }))
+    </div>
+</div>

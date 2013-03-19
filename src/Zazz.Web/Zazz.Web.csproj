@@ -411,6 +411,7 @@
     <Content Include="Views\Album\Photos.cshtml" />
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
     <Content Include="Views\Event\_EventsListPartial.cshtml" />
+    <Content Include="Views\Album\_PhotosPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

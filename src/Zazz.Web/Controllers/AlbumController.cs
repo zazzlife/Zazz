@@ -133,50 +133,56 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Photos(int id, int page = 1)
         {
-            if (page == 0)
-                throw new HttpException(400, "Bad Request");
-
-            const int PAGE_SIZE = 20;
-            var skip = (page - 1) * PAGE_SIZE;
-
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
-                var userId = 0;
-                if (User.Identity.IsAuthenticated)
-                    userId = _userService.GetUserId(User.Identity.Name);
+                if (page == 0)
+                    throw new HttpException(400, "Bad Request");
 
-                var album = await _albumService.GetAlbumAsync(id);
-                var isOwner = userId == album.UserId;
-
-                var totalPhotos = album.Photos.Count();
-                var photos = album.Photos
-                                  .OrderBy(p => p.Id)
-                                  .Skip(skip)
-                                  .Take(PAGE_SIZE);
-
-                var photosVm = photos
-                    .Select(p => new ImageViewModel
-                                 {
-                                     Id = p.Id,
-                                     Text = p.Description,
-                                     ImageUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.AlbumId, p.Id)
-                                 });
-
-                var pagedList = new StaticPagedList<ImageViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
-
-                var vm = new AlbumPhotosViewModel
-                         {
-                             IsOwner = isOwner,
-                             AlbumId = id,
-                             Photos = pagedList,
-                             UserId = album.UserId,
-                             AlbumName = album.Name
-                         };
-
+                var vm = await GetPhotosAsync(id, page);
                 return View(vm);
             }
+        }
+
+        private async Task<AlbumPhotosViewModel> GetPhotosAsync(int albumId, int page)
+        {
+            const int PAGE_SIZE = 20;
+            var skip = (page - 1)*PAGE_SIZE;
+
+            var userId = 0;
+            if (User.Identity.IsAuthenticated)
+                userId = _userService.GetUserId(User.Identity.Name);
+
+            var album = await _albumService.GetAlbumAsync(albumId);
+            var isOwner = userId == album.UserId;
+
+            var totalPhotos = album.Photos.Count();
+            var photos = album.Photos
+                              .OrderBy(p => p.Id)
+                              .Skip(skip)
+                              .Take(PAGE_SIZE);
+
+            var photosVm = photos
+                .Select(p => new ImageViewModel
+                             {
+                                 Id = p.Id,
+                                 Text = p.Description,
+                                 ImageUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.AlbumId, p.Id)
+                             });
+
+            var pagedList = new StaticPagedList<ImageViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
+
+            var vm = new AlbumPhotosViewModel
+                     {
+                         IsOwner = isOwner,
+                         AlbumId = albumId,
+                         Photos = pagedList,
+                         UserId = album.UserId,
+                         AlbumName = album.Name
+                     };
+
+            return vm;
         }
 
         [HttpGet]
@@ -199,9 +205,12 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPhotos(int albumId)
+        public async Task<ActionResult> GetPhotos(int albumId, int page = 1)
         {
-            return View();
+            ViewBag.AlbumId = albumId;
+            var vm = await GetPhotosAsync(albumId, page);
+
+            return View("_PhotosPartial", vm.Photos);
         }
     }
 }
