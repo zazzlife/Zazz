@@ -70,7 +70,7 @@ function loadPGPhotos() {
     }
 }
 
-$('#pg-open').click(function (e) {
+$('#pg-modal').on('show', function () {
     var loadAlbumTask = loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
 
     loadAlbumTask.done(function(res) {
@@ -110,11 +110,17 @@ $(document).on('click', 'button[data-selectPhoto]', function (e) {
     $('#pg-modal').modal('hide');
 });
 
+
+
 $(document).on('change', '#pg-albumSelect', function () {
     loadPGPhotos();
 });
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////UPLOAD PHOTO MODAL////////////////////////////////
+
+
+
+/////////////////////////////////////////////////////////////////////////
 
 $(function () {
     
