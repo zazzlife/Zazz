@@ -126,12 +126,16 @@ $('#uploadPicModal').on('show', function() {
     imgUploader = new qq.FineUploader({
         element: document.getElementById("upload"),
         request: {
-            endpoint: '/photo/ajaxupload/'
+            endpoint: '/photo/ajaxupload/',
+            inputName: "image"
         },
         autoUpload: false,
-        //text: {
-        //    uploadButton: '<button class="btn btn-info">Select File</button>'
-        //}
+        multiple: false,
+        disableCancelForFormUploads: true,
+        validation: {
+            allowedExtensions: ['jpg', 'jpeg']
+        }
+        
     });
 });
 
