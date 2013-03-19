@@ -13,6 +13,8 @@ namespace Zazz.Core.Interfaces
 
         Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take);
 
+        Task<List<Album>> GetUserAlbumsAsync(int userId);
+
         Task<int> GetUserAlbumsCountAsync(int userId);
 
         Task CreateAlbumAsync(Album album);

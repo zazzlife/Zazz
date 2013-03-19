@@ -16,6 +16,12 @@ function hideBtnBusy(btn, originalText) {
     $(btn).html(originalText);
 }
 
+function loadAlbumsDropDown(dropdownElem) {
+
+    var url = "/album/getalbums";
+
+}
+
 $(function () {
     
     $('.datepicker').datetimepicker();

@@ -38,7 +38,7 @@
                     @Html.ValidationMessageFor(model => model.Detail, null, new { @class = "help-inline" })
                 </div>
             </div>
-            
+
             @Html.HiddenFor(m => m.UtcTime)
 
             <div class="control-group">
@@ -90,26 +90,49 @@
                     @Html.ValidationMessageFor(model => model.Price, null, new { @class = "help-inline" })
                 </div>
             </div>
+
             <div class="control-group">
                 <div class="editor-label">
                     <label class="control-label">Picture</label>
                 </div>
-                <input id="photoId" type="hidden"/>
+                <input id="photoId" type="hidden" />
                 <div class="btn-group">
-                    <button class="btn btn-info">Select Picture</button>
+                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
                     <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#">From gallery</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#picGallery">From gallery</a></li>
                         <li><a href="#">Upload picture</a></li>
                     </ul>
                 </div>
             </div>
 
+            <div class="modal hide fade" id="picGallery">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>Photo Gallery</h3>
+                </div>
+
+                <div class="modal-body" id="party-web-requests-body">
+                    <strong>Album: </strong>
+                    <select class="span4">
+                        <option>Loading...</option>                            
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" data-dismiss="modal" class="btn">Close</a>
+                </div>
+            </div>
+
+
+
+            <hr />
+
             @Html.HiddenFor(m => m.Latitude)
             @Html.HiddenFor(m => m.Longitude)
-                <div id="map-canvas" style="height: 400px;"></div>
+            <div id="map-canvas" style="height: 400px;"></div>
 
         </div>
 
@@ -147,8 +170,8 @@
             {
                 <text>
                     
-                    var lat = @Model.Latitude.Value;
-                    var lng = @Model.Longitude.Value;
+            var lat = @Model.Latitude.Value;
+            var lng = @Model.Longitude.Value;
 
             var latlng = new google.maps.LatLng(lat, lng, false);
             initMap(lat, lng);
@@ -160,8 +183,8 @@
             else
             {
                 <text>
-                    initMap(45.586365, -73.542480);
-                </text>
+            initMap(45.586365, -73.542480);
+            </text>
             }
 
         });

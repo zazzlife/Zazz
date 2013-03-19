@@ -178,5 +178,22 @@ namespace Zazz.Web.Controllers
                 return View(vm);
             }
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAlbums()
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                if (!User.Identity.IsAuthenticated)
+                    throw new HttpException(403, "");
+
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var albums = await _albumService.GetUserAlbumsAsync(userId);
+
+                return Json(albums, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

@@ -41,6 +41,12 @@ namespace Zazz.Infrastructure.Services
                                       .Take(take).ToList());
         }
 
+        public Task<List<Album>> GetUserAlbumsAsync(int userId)
+        {
+            return Task.Run(() => _uoW.AlbumRepository.GetAll()
+                                      .Where(a => a.UserId == userId).ToList());
+        }
+
         public Task<int> GetUserAlbumsCountAsync(int userId)
         {
             return Task.Run(() => _uoW.AlbumRepository.GetAll().Count(a => a.UserId == userId));
