@@ -16,6 +16,8 @@ function hideBtnBusy(btn, originalText) {
     $(btn).html(originalText);
 }
 
+/////////////// SELECT IMAGE FROM GALLERY ////////////////
+
 function loadAlbumsDropDownAsync(dropdownElem) {
 
     var def = $.Deferred();
@@ -27,15 +29,26 @@ function loadAlbumsDropDownAsync(dropdownElem) {
             def.reject();
         },
         success: function (res) {
-            
 
+            var options = "";
 
+            _.forEach(res, function(obj) {
+                options += '<option value="' + obj.id + '">' + obj.name + '</option>';
+            });
+
+            $(dropdownElem).html(options);
             def.resolve(res);
         }
     });
 
     return def.promise();
 }
+
+$('#pg-open').click(function (e) {
+    loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
+});
+
+//////////////////////////////////////////////////////////////////////////
 
 $(function () {
     

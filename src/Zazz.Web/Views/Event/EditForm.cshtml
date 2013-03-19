@@ -102,13 +102,13 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#" data-toggle="modal" data-target="#picGallery" id="galleryImgSelect">From gallery</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#pg-modal" id="pg-open">From gallery</a></li>
                         <li><a href="#">Upload picture</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div class="modal hide fade" id="picGallery">
+            <div class="modal hide fade" id="pg-modal">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3>Photo Gallery</h3>
@@ -116,7 +116,7 @@
 
                 <div class="modal-body" id="party-web-requests-body">
                     <strong>Album: </strong>
-                    <select class="span4">
+                    <select class="span4" id="pg-albumSelect">
                         <option>Loading...</option>                            
                     </select>
                 </div>
