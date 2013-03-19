@@ -62,7 +62,7 @@
         </ul>
 
         <div class="text-center">
-            @Html.PagedListPager(Model.Photos, page => Url.Action("List", new { page }))
+            @Html.PagedListPager(Model.Photos, page => Url.Action("Photos", new { id = Model.AlbumId, page }))
         </div>
 
     </div>
