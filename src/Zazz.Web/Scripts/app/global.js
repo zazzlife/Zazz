@@ -122,6 +122,33 @@ $('#uploadPicModal').on('show', function() {
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
 });
 
+$('#uploadImg').on('click', function() {
+    var description = $('#Description').val();
+    var albumId = $('#upload-albumSelect').val();
+    if (!albumId) {
+        toastr.error("Album must be selected");
+        return;
+    }
+
+    $('#imgInput').ajaxfileupload({
+        action: '/photo/ajaxupload',
+        params: {
+            albumId: albumId,
+            description: description
+        },
+        onComplete: function(res) {
+            console.log(res);
+        },
+        onStart: function() {
+            
+        },
+        onCancel: function() {
+            
+        }
+    });
+    
+});
+
 /////////////////////////////////////////////////////////////////////////
 
 $(function () {

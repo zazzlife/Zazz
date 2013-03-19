@@ -71,5 +71,10 @@ namespace Zazz.Web.Controllers
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
+
+        public ActionResult AjaxUpload(string description, int albumId, HttpPostedFileBase image)
+        {
+            return View();
+        }
     }
 }
