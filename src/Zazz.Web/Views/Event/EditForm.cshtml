@@ -90,6 +90,23 @@
                     @Html.ValidationMessageFor(model => model.Price, null, new { @class = "help-inline" })
                 </div>
             </div>
+            <div class="control-group">
+                <div class="editor-label">
+                    <label class="control-label">Picture</label>
+                </div>
+                <input id="photoId" type="hidden"/>
+                <div class="btn-group">
+                    <button class="btn btn-info">Select Picture</button>
+                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">From gallery</a></li>
+                        <li><a href="#">Upload picture</a></li>
+                    </ul>
+                </div>
+            </div>
+
             @Html.HiddenFor(m => m.Latitude)
             @Html.HiddenFor(m => m.Longitude)
                 <div id="map-canvas" style="height: 400px;"></div>
