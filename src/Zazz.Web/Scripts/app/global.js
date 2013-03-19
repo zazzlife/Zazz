@@ -44,8 +44,37 @@ function loadAlbumsDropDownAsync(dropdownElem) {
     return def.promise();
 }
 
+function loadPGPhotos() {
+    var albumId = $('#pg-albumSelect').val();
+    if (albumId) {
+
+        var url = "/album/getphotos";
+
+        $.ajax({
+            url: url,
+            data: {
+                albumId: albumId
+            },
+            error: function() {
+                toastr.error("Failed to load photos. Please try again later");
+            },
+            success: function(res) {
+                $('#pg-photos').html(res);
+            }
+        });
+    }
+}
+
 $('#pg-open').click(function (e) {
-    loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
+    var loadAlbumTask = loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
+
+    loadAlbumTask.done(function(res) {
+        loadPGPhotos();
+    });
+});
+
+$(document).on('change', '#pg-albumSelect', function () {
+    loadPGPhotos();
 });
 
 //////////////////////////////////////////////////////////////////////////

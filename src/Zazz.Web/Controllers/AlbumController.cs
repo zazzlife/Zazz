@@ -197,5 +197,11 @@ namespace Zazz.Web.Controllers
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetPhotos(int albumId)
+        {
+            return View();
+        }
     }
 }
