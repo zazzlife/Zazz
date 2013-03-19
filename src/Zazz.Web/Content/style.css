@@ -31,7 +31,7 @@
 ***************************************/
 
 .ui-widget {
-    font-family: 'Segoe UI','Open Sans';
+    font-family: 'Open Sans';
     font-size: 14px;
 }
 
@@ -39,7 +39,7 @@
         Global
 ***************************************/
 body {
-    font-family: 'Segoe UI','Open Sans';
+    font-family: 'Open Sans';
 }
 
 .alfa-slab-font {
@@ -58,7 +58,7 @@ body {
 }
 
 .font-light {
-    font-family: 'Segoe UI Light', 'Open Sans';
+    font-family: 'Open Sans';
     font-weight: 300 !important;
 }
 
