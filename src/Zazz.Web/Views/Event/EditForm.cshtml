@@ -18,6 +18,26 @@
         @Html.HiddenFor(m => m.CreatedDate)
             
         <div class="margin-ten">
+            
+            <div class="control-group">
+                <div class="editor-label">
+                    <label class="control-label">Picture</label>
+                </div>
+                <input id="photoId" type="hidden" />
+                
+                <img id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
+
+                <div class="btn-group">
+                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-toggle="modal" data-target="#pg-modal" id="pg-open">From gallery</a></li>
+                        <li><a href="#">Upload picture</a></li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="control-group">
                 <div class="editor-label">
@@ -88,23 +108,6 @@
                 <div class="editor-field">
                     @Html.TextBoxFor(model => model.Price, new { @class = "span4" })
                     @Html.ValidationMessageFor(model => model.Price, null, new { @class = "help-inline" })
-                </div>
-            </div>
-
-            <div class="control-group">
-                <div class="editor-label">
-                    <label class="control-label">Picture</label>
-                </div>
-                <input id="photoId" type="hidden" />
-                <div class="btn-group">
-                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
-                    <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" data-toggle="modal" data-target="#pg-modal" id="pg-open">From gallery</a></li>
-                        <li><a href="#">Upload picture</a></li>
-                    </ul>
                 </div>
             </div>
 

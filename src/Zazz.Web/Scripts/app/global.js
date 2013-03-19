@@ -78,7 +78,10 @@ $(document).on('click', 'button[data-selectPhoto]', function (e) {
     e.preventDefault();
 
     var id = $(this).data('id');
+    var imgUrl = $(this).data('url');
+    
     $('#photoId').val(id);
+    $('#selectedImg-thumbnail').attr('src', imgUrl);
 
     $('#pg-modal').modal('hide');
 });
