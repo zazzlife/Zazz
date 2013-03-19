@@ -26,7 +26,7 @@ function loadAlbumsDropDownAsync(dropdownElem) {
 
     $.ajax({
         url: "/album/getalbums",
-        error: function() {
+        error: function () {
             toastr.error("Failed to load the albums. Please try again later.");
             def.reject();
         },
@@ -34,7 +34,7 @@ function loadAlbumsDropDownAsync(dropdownElem) {
 
             var options = "";
 
-            _.forEach(res, function(obj) {
+            _.forEach(res, function (obj) {
                 options += '<option value="' + obj.id + '">' + obj.name + '</option>';
             });
 
@@ -60,10 +60,10 @@ function loadPGPhotos() {
             data: {
                 albumId: albumId
             },
-            error: function() {
+            error: function () {
                 toastr.error("Failed to load photos. Please try again later");
             },
-            success: function(res) {
+            success: function (res) {
                 photoContainer.html(res);
             }
         });
@@ -73,12 +73,12 @@ function loadPGPhotos() {
 $('#pg-modal').on('show', function () {
     var loadAlbumTask = loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
 
-    loadAlbumTask.done(function(res) {
+    loadAlbumTask.done(function (res) {
         loadPGPhotos();
     });
 });
 
-$(document).on('click', '*[data-ajax-pagination] a', function(e) {
+$(document).on('click', '*[data-ajax-pagination] a', function (e) {
     e.preventDefault();
 
     var url = $(this).attr('href');
@@ -87,10 +87,10 @@ $(document).on('click', '*[data-ajax-pagination] a', function(e) {
 
     $.ajax({
         url: url,
-        error: function() {
+        error: function () {
             toastr.error("An error occured");
         },
-        success: function(res) {
+        success: function (res) {
             panelToUpdate.html(res);
         }
     });
@@ -103,7 +103,7 @@ $(document).on('click', 'button[data-selectPhoto]', function (e) {
 
     var id = $(this).data('id');
     var imgUrl = $(this).data('url');
-    
+
     $('#photoId').val(id);
     $('#selectedImg-thumbnail').attr('src', imgUrl);
 
@@ -120,7 +120,7 @@ $(document).on('change', '#pg-albumSelect', function () {
 
 var imgUploader;
 
-$('#uploadPicModal').on('show', function() {
+$('#uploadPicModal').on('show', function () {
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
 
     imgUploader = new qq.FineUploader({
@@ -134,12 +134,26 @@ $('#uploadPicModal').on('show', function() {
         disableCancelForFormUploads: true,
         validation: {
             allowedExtensions: ['jpg', 'jpeg']
-        }
-        
+        },
+        showMessage: function (msg) {
+            toastr.info(msg);
+        },
+        fileTemplate: '<li class="hide">' +
+    '<div class="qq-progress-bar"></div>' +
+    '<span class="qq-upload-spinner"></span>' +
+    '<span class="qq-upload-finished"></span>' +
+    '<span class="qq-upload-file"></span>' +
+    '<span class="qq-upload-size"></span>' +
+    '<a class="qq-upload-cancel" href="#">{cancelButtonText}</a>' +
+    '<a class="qq-upload-retry" href="#">{retryButtonText}</a>' +
+    '<a class="qq-upload-delete" href="#">{deleteButtonText}</a>' +
+    '<span class="qq-upload-status-text">{statusText}</span>' +
+    '</li>'
+
     });
 });
 
-$('#uploadImg').on('click', function() {
+$('#uploadImg').on('click', function () {
     var description = $('#Description').val();
     var albumId = $('#upload-albumSelect').val();
     if (!albumId) {
@@ -160,23 +174,23 @@ $('#uploadImg').on('click', function() {
 /////////////////////////////////////////////////////////////////////////
 
 $(function () {
-    
+
     $('.datepicker').datetimepicker();
 
     $('*[title]').tooltip();
 
-    $('#party-web-link').click(function() {
+    $('#party-web-link').click(function () {
         var url = "/follow/GetFollowRequests";
 
         $.ajax({
             url: url,
             cache: false,
-            error: function() {
+            error: function () {
                 toastr.error("An error occured, Please try again later.");
             },
-            success: function(data) {
+            success: function (data) {
                 var container = $('#party-web-requests-body');
-                container.fadeOut('slow', function() {
+                container.fadeOut('slow', function () {
                     container.html(data);
                     container.fadeIn('slow');
                 });
@@ -185,5 +199,5 @@ $(function () {
 
     });
 
-    
+
 })
