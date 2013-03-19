@@ -51,6 +51,9 @@ function loadPGPhotos() {
     if (albumId) {
 
         var url = "/album/getphotos";
+        var photoContainer = $('#pg-photos');
+
+        photoContainer.html(LOADING_INDICATOR);
 
         $.ajax({
             url: url,
@@ -61,7 +64,7 @@ function loadPGPhotos() {
                 toastr.error("Failed to load photos. Please try again later");
             },
             success: function(res) {
-                $('#pg-photos').html(res);
+                photoContainer.html(res);
             }
         });
     }
