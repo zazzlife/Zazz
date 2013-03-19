@@ -118,7 +118,9 @@ $(document).on('change', '#pg-albumSelect', function () {
 
 ///////////////////////UPLOAD PHOTO MODAL////////////////////////////////
 
-
+$('#uploadPicModal').on('show', function() {
+    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+});
 
 /////////////////////////////////////////////////////////////////////////
 
