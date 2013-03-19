@@ -138,6 +138,12 @@ $('#uploadPicModal').on('show', function () {
         showMessage: function (msg) {
             toastr.info(msg);
         },
+        template: '<div class="qq-uploader">' +
+    '<div class="qq-upload-drop-area"><span>{dragZoneText}</span></div>'+
+    '<div class="qq-upload-button btn btn-info"><div>{uploadButtonText}</div></div>'+
+    '<span class="qq-drop-processing"><span>{dropProcessingText}</span><span class="qq-drop-processing-spinner"></span></span>' +
+    '<ul class="qq-upload-list"></ul>'+
+    '</div>',
         fileTemplate: '<li class="hide">' +
     '<div class="qq-progress-bar"></div>' +
     '<span class="qq-upload-spinner"></span>' +

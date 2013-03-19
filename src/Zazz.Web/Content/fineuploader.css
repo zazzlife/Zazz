@@ -8,7 +8,15 @@
     position: relative;
     width: 100%;
 }
+
 .qq-upload-button {
+}
+.qq-upload-button-hover {
+}
+.qq-upload-button-focus {
+}
+
+/*.qq-upload-button {
     display: block;
     width: 105px;
     padding: 7px 0;
@@ -22,7 +30,7 @@
 }
 .qq-upload-button-focus {
     outline: 1px dotted #000000;
-}
+}*/
 .qq-upload-drop-area, .qq-upload-extra-drop-area {
     position: absolute;
     top: 0;
