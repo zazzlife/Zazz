@@ -1150,7 +1150,10 @@
         $trk.css({
           zIndex: 290
         });
-        $(document).unbind('.jcrop');
+        $(document).unbind('touchmove.jcrop');
+        $(document).unbind('touchend.jcrop');
+        $(document).unbind('mousemove.jcrop');
+        $(document).unbind('mouseup.jcrop');
       } 
       //}}}
       function trackMove(e) //{{{
