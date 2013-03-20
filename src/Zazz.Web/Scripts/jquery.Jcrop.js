@@ -1150,10 +1150,12 @@
         $trk.css({
           zIndex: 290
         });
-        $(document).unbind('touchmove.jcrop');
-        $(document).unbind('touchend.jcrop');
-        $(document).unbind('mousemove.jcrop');
-        $(document).unbind('mouseup.jcrop');
+        $(document).unbind('.jcrop');
+        //https://github.com/tapmodo/Jcrop/issues/79
+        //$(document).unbind('touchmove.jcrop');
+        //$(document).unbind('touchend.jcrop');
+        //$(document).unbind('mousemove.jcrop');
+        //$(document).unbind('mouseup.jcrop');
       } 
       //}}}
       function trackMove(e) //{{{
