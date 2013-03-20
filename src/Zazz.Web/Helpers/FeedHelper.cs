@@ -99,8 +99,19 @@ namespace Zazz.Web.Helpers
                                                 Name = feed.Post.Title,
                                                 Price = feed.Post.EventDetail.Price,
                                                 Time = feed.Post.EventDetail.Time,
-                                                Street = feed.Post.EventDetail.Street
+                                                Street = feed.Post.EventDetail.Street,
+                                                PhotoId = feed.Post.PhotoId
                                             };
+
+                    if (feedVm.EventViewModel.PhotoId.HasValue)
+                    {
+                        var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
+                        feedVm.EventViewModel.ImageUrl =
+                            _photoService.GeneratePhotoUrl(photo.UploaderId,
+                                                           photo.AlbumId,
+                                                           photo.Id);
+                    }
+
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
