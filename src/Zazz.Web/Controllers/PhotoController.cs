@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
@@ -41,49 +42,66 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Upload(HttpPostedFileBase image, string description, int albumId)
         {
-            var errorMessage = "Image was not valid";
-            if (image == null || !ImageValidator.IsValid(image, out errorMessage))
-            {
-                ShowAlert(errorMessage, AlertType.Error);
-                return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
-            }
-
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var album = await _albumService.GetAlbumAsync(albumId);
-
-                if (album.UserId != userId)
-                    throw new SecurityException();
-
-                var photo = new Photo
+                var errorMessage = "Image was not valid";
+                if (image == null || !ImageValidator.IsValid(image, out errorMessage))
                 {
-                    AlbumId = albumId,
-                    Description = description,
-                    UploaderId = userId
-                };
+                    ShowAlert(errorMessage, AlertType.Error);
+                    return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+                }
 
-                await _photoService.SavePhotoAsync(photo, image.InputStream, true);
+                await SaveImageAsync(image.InputStream, description, albumId);
             }
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-
-        public JsonNetResult AjaxUpload(string description, int albumId, HttpPostedFileBase image)
+        public async Task<JsonNetResult> AjaxUpload(string description, int albumId, HttpPostedFileBase image)
         {
-            var response = new FineUploadResponse
-                           {
-                               Error = "This is the error",
-                               Success = true,
-                               PhotoId = 12,
-                               PhotoUrl = "This is the url",
-                               PreventRetry = false
-                           };
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var response = new FineUploadResponse
+                               {   
+                               };
+                var errorMessage = "Image was not valid";
+                if (image == null || !ImageValidator.IsValid(image, out errorMessage))
+                {
+                    response.Success = false;
+                    response.Error = errorMessage;
+                    return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                }
 
-            return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                var photo = await SaveImageAsync(image.InputStream, description, albumId);
+                response.PhotoId = photo.Id;
+                response.Success = true;
+                response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+
+                return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
+        }
+
+        private async Task<Photo> SaveImageAsync(Stream image, string description, int albumId)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var album = await _albumService.GetAlbumAsync(albumId);
+
+            if (album.UserId != userId)
+                throw new SecurityException();
+
+            var photo = new Photo
+                        {
+                            AlbumId = albumId,
+                            Description = description,
+                            UploaderId = userId
+                        };
+
+            await _photoService.SavePhotoAsync(photo, image, true);
+            return photo;
         }
     }
 }
