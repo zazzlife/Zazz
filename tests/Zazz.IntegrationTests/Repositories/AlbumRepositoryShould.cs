@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -41,6 +44,47 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(user.Id, result);
+        }
+
+        [Test]
+        public void ReturnCorrectPhotoIds_OnGetPhotoIds()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var album = new Album
+                        {
+                            UserId = user.Id,
+                            Name = "Dsadas",
+                            Photos = new List<Photo>()
+                        };
+
+            var photo1 = new Photo
+                         {
+                             UploadDate = DateTime.UtcNow,
+                             UploaderId = user.Id
+                         };
+            var photo2 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                UploaderId = user.Id
+            };
+
+            album.Photos.Add(photo1);
+            album.Photos.Add(photo2);
+
+            _dbContext.Albums.Add(album);
+            _dbContext.SaveChanges();
+
+            //Act
+            var ids = _repo.GetAlbumPhotoIds(album.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, ids.Count);
+            CollectionAssert.Contains(ids, photo1.Id);
+            CollectionAssert.Contains(ids, photo2.Id);
         }
 
 

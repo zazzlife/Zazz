@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Where(a => a.Id == albumId)
                                              .Select(a => a.UserId)
                                              .SingleOrDefault());
+        }
+
+        public IEnumerable<int> GetAlbumPhotoIds(int albumId)
+        {
+            return DbSet.Where(a => a.Id == albumId)
+                        .SelectMany(a => a.Photos)
+                        .Select(p => p.Id);
         }
     }
 }
