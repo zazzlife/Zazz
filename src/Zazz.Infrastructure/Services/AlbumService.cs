@@ -81,9 +81,6 @@ namespace Zazz.Infrastructure.Services
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            var albumPath = GenerateAlbumPath(currentUserId, albumId);
-            _fileService.RemoveDirectory(albumPath);
-
             var photosIds = _uoW.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
 
             foreach (var photoId in photosIds)
@@ -95,6 +92,9 @@ namespace Zazz.Infrastructure.Services
 
             await _uoW.AlbumRepository.RemoveAsync(albumId);
             await _uoW.SaveAsync();
+
+            var albumPath = GenerateAlbumPath(currentUserId, albumId);
+            _fileService.RemoveDirectory(albumPath);
         }
 
         public void Dispose()
