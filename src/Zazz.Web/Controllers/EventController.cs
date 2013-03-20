@@ -93,7 +93,19 @@ namespace Zazz.Web.Controllers
                                  Street = e.EventDetail.Street,
                                  Time = e.EventDetail.Time,
                                  PhotoId = e.PhotoId
-                             });
+                             }).ToList();
+
+            foreach (var e in events)
+            {
+                if (!e.PhotoId.HasValue)
+                    continue;
+
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
+                if (photo == null)
+                    continue;
+
+                e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+            }
 
             var eventsCount = _uow.PostRepository.GetEventRange(from, to).Count();
 
