@@ -90,6 +90,8 @@ namespace Zazz.Infrastructure.Services
                 _uoW.UserRepository.ResetPhotoId(photoId);
             }
 
+            await _uoW.SaveAsync();
+
             await _uoW.AlbumRepository.RemoveAsync(albumId);
             await _uoW.SaveAsync();
 
