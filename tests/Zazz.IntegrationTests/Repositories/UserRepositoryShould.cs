@@ -587,6 +587,40 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.Username, result);
         }
 
+        [Test]
+        public void ResetBothCoverAndProfilePhotosThatUseTheImage_OnResetPhotoId()
+        {
+            //Arrange
+            var idToBeRemoved = 1234;
+            var idNotToBeRemoved = 5678;
+
+            var userA = Mother.GetUser();
+            userA.UserDetail.ProfilePhotoId = idToBeRemoved;
+            userA.UserDetail.CoverPhotoId = idNotToBeRemoved;
+
+            var userB = Mother.GetUser();
+            userB.UserDetail.ProfilePhotoId = idNotToBeRemoved;
+            userB.UserDetail.CoverPhotoId = idToBeRemoved;
+
+            _zazzDbContext.Users.Add(userA);
+            _zazzDbContext.Users.Add(userB);
+            _zazzDbContext.SaveChanges();
+
+            //Act
+            _repo.ResetPhotoId(idToBeRemoved);
+
+            var a = _repo.GetByIdAsync(userA.Id).Result;
+            var b = _repo.GetByIdAsync(userB.Id).Result;
+
+            //Assert
+            Assert.AreEqual(0, a.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(idNotToBeRemoved, a.UserDetail.CoverPhotoId);
+
+            Assert.AreEqual(0, b.UserDetail.CoverPhotoId);
+            Assert.AreEqual(idNotToBeRemoved, b.UserDetail.ProfilePhotoId);
+        }
+
+
         //[Test]
         //public void ReturnNull_OnGetPassword_WhenUserNotExists()
         //{

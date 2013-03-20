@@ -118,6 +118,21 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public void ResetPhotoId(int photoId)
+        {
+            var profilePhotos = DbContext.UserDetails.Where(u => u.ProfilePhotoId == photoId);
+            foreach (var u in profilePhotos)
+            {
+                u.ProfilePhotoId = 0;
+            }
+
+            var coverPhotos = DbContext.UserDetails.Where(u => u.CoverPhotoId == photoId);
+            foreach (var u in coverPhotos)
+            {
+                u.CoverPhotoId = 0;
+            }
+        }
+
         public override async Task RemoveAsync(int id)
         {
             var item = await GetByIdAsync(id);
