@@ -84,6 +84,15 @@ namespace Zazz.Infrastructure.Services
             var albumPath = GenerateAlbumPath(currentUserId, albumId);
             _fileService.RemoveDirectory(albumPath);
 
+            var photosIds = _uoW.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
+
+            foreach (var photoId in photosIds)
+            {
+                _uoW.FeedRepository.RemovePhotoFeed(photoId);
+                _uoW.PostRepository.ResetPhotoId(photoId);
+                _uoW.UserRepository.ResetPhotoId(photoId);
+            }
+
             await _uoW.AlbumRepository.RemoveAsync(albumId);
             await _uoW.SaveAsync();
         }

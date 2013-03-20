@@ -189,6 +189,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task DeleteAndSave_OnDeleteAlbum()
         {
             //Arrange
+            var photoIds = new[] {1, 2, 3, 4};
+            
             _album.Id = 123;
             var dirPath = "c:\test";
             _album.UserId = _userId;
@@ -196,6 +198,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() => _userId));
             _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
                 .Returns(() => Task.Run(() => { }));
+            _uoW.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
+                .Returns(photoIds);
+
+            _uoW.Setup(x => x.UserRepository.ResetPhotoId(It.IsAny<int>()));
+            _uoW.Setup(x => x.FeedRepository.RemovePhotoFeed(It.IsAny<int>()));
+            _uoW.Setup(x => x.PostRepository.ResetPhotoId(It.IsAny<int>()));
+
             _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, _album.Id, 0))
                          .Returns(dirPath);
             _fileService.Setup(x => x.RemoveFileNameFromPath(dirPath))
@@ -208,6 +217,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uoW.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
             _uoW.Verify(x => x.SaveAsync(), Times.Once());
+            _uoW.Verify(x => x.UserRepository.ResetPhotoId(It.IsInRange(1, 4, Range.Inclusive)),
+                        Times.Exactly(photoIds.Length));
+            _uoW.Verify(x => x.FeedRepository.RemovePhotoFeed(It.IsInRange(1, 4, Range.Inclusive)),
+                        Times.Exactly(photoIds.Length));
+            _uoW.Verify(x => x.PostRepository.ResetPhotoId(It.IsInRange(1, 4, Range.Inclusive)),
+                        Times.Exactly(photoIds.Length));
         }
     }
 }
