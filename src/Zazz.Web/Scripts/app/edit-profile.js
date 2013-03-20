@@ -18,7 +18,7 @@ $(document).on('click', '#pg-modalWithCrop button[data-selectPhoto]', function (
     var imgUrl = $(this).data('url');
 
     var html = '<input id="photoId" type="hidden" value="' + id + '" />';
-    html += '<img src="' + imgUrl + '" />';
+    html += '<img id="cropImg" src="' + imgUrl + '" />';
     html += '<button style="margin-top:10px;" id="cropBtn" type="button" class="btn btn-info">Crop</button>';
 
     var modalBody = $(this).closest('.modal-body');

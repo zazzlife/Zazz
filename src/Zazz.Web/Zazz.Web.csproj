@@ -261,6 +261,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\social-buttons.css" />
@@ -339,6 +340,7 @@
     <Content Include="Images\auth-icons.png" />
     <Content Include="Images\cover-image.gif" />
     <Content Include="Images\fb-login-btn.jpg" />
+    <Content Include="Images\Jcrop.gif" />
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\app\edit-profile.js" />
@@ -369,6 +371,8 @@
     <Content Include="Scripts\jquery-ui-1.10.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
+    <Content Include="Scripts\jquery.color.js" />
+    <Content Include="Scripts\jquery.Jcrop.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
