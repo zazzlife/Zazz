@@ -77,10 +77,10 @@ namespace Zazz.Web.Controllers
             var response = new FineUploadResponse
                            {
                                Error = "This is the error",
-                               Success = false,
+                               Success = true,
                                PhotoId = 12,
                                PhotoUrl = "This is the url",
-                               PreventRetry = true
+                               PreventRetry = false
                            };
 
             return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

@@ -119,6 +119,7 @@ $(document).on('change', '#pg-albumSelect', function () {
 ///////////////////////UPLOAD PHOTO MODAL////////////////////////////////
 
 var imgUploader;
+var imgUploadBtn;
 
 $('#uploadPicModal').on('show', function () {
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
@@ -137,6 +138,21 @@ $('#uploadPicModal').on('show', function () {
         },
         showMessage: function (msg) {
             toastr.info(msg);
+        },
+        callbacks: {
+            onComplete: function(id, name, response) {
+                if (!response.success) {
+                    toastr.error(response.error);
+                } else {
+                    $('#photoId').val(response.photoId);
+                    $('#selectedImg-thumbnail').attr('src', response.photoUrl);
+                    $('#uploadPicModal').modal('hide');
+                    
+                    if (imgUploadBtn) {
+                        hideBtnBusy(imgUploadBtn, "Upload");
+                    }   
+                }
+            }
         },
         template: '<div class="qq-uploader">' +
     '<div class="qq-upload-drop-area"><span>{dragZoneText}</span></div>'+
@@ -175,6 +191,9 @@ $('#uploadImg').on('click', function () {
     });
 
     imgUploader.uploadStoredFiles();
+
+    showBtnBusy($(this));
+    imgUploadBtn = $(this);
 });
 
 /////////////////////////////////////////////////////////////////////////
