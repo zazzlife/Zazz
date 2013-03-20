@@ -16,7 +16,7 @@
     <div class="margin-ten">
         <strong class="pull-right">@Model.Time</strong>
 
-        <img src="~/Images/placeholder.gif" width="128" height="128" />
+        <img src="@Model.ImageUrl" style="width: 128px;" />
 
         <p class="event-detail">@Model.Detail</p>
         @if (Model.Price.HasValue)

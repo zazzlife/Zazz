@@ -23,9 +23,16 @@
                 <div class="editor-label">
                     <label class="control-label">Picture</label>
                 </div>
-                <input id="photoId" type="hidden" />
-                
-                <img id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
+                @if (Model != null && Model.PhotoId.HasValue)
+                {
+                    <input name="photoId" id="photoId" type="hidden" value="@Model.PhotoId.Value"/>
+                }
+                else
+                {
+                    <input name="photoId" id="photoId" type="hidden"/>
+                }
+
+                <img src="@Model.ImageUrl" id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
 
                 <div class="btn-group">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>

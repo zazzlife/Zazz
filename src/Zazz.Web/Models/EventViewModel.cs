@@ -51,5 +51,8 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public string ImageUrl { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public int? PhotoId { get; set; }
     }
 }

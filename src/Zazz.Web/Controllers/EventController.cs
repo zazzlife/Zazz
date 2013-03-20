@@ -18,14 +18,16 @@ namespace Zazz.Web.Controllers
         private readonly IUserService _userService;
         private readonly IPostService _postService;
         private readonly IUoW _uow;
+        private readonly IPhotoService _photoService;
 
         private const int PAGE_SIZE = 10;
 
-        public EventController(IUserService userService, IPostService postService, IUoW uow)
+        public EventController(IUserService userService, IPostService postService, IUoW uow, IPhotoService photoService)
         {
             _userService = userService;
             _postService = postService;
             _uow = uow;
+            _photoService = photoService;
         }
 
         public ActionResult Index()
@@ -70,7 +72,7 @@ namespace Zazz.Web.Controllers
 
         private IPagedList<EventViewModel> GetEvents(DateTime from, DateTime to, int page)
         {
-            var skip = (page - 1)*PAGE_SIZE;
+            var skip = (page - 1) * PAGE_SIZE;
 
             var events = _uow.PostRepository.GetEventRange(from, to)
                              .OrderBy(e => e.EventDetail.TimeUtc)
@@ -90,6 +92,7 @@ namespace Zazz.Web.Controllers
                                  Price = e.EventDetail.Price,
                                  Street = e.EventDetail.Street,
                                  Time = e.EventDetail.Time,
+                                 PhotoId = e.PhotoId
                              });
 
             var eventsCount = _uow.PostRepository.GetEventRange(from, to).Count();
@@ -100,18 +103,27 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Create()
         {
-            ViewBag.FormAction = "Create";
-            return View("EditForm");
+            using (_userService)
+            using (_postService)
+            using (_uow)
+            using (_photoService)
+            {
+                ViewBag.FormAction = "Create";
+                return View("EditForm", new EventViewModel {Time = DateTime.UtcNow});
+            }
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
         public async Task<ActionResult> Create(EventViewModel vm)
         {
-            if (ModelState.IsValid)
+            using (_userService)
+            using (_postService)
+            using (_uow)
+            using (_photoService)
             {
-                using (_userService)
-                using (_postService)
+                if (ModelState.IsValid)
                 {
+
                     var userId = _userService.GetUserId(User.Identity.Name);
                     if (userId == 0)
                         throw new HttpException(401, "Unauthorized");
@@ -151,6 +163,8 @@ namespace Zazz.Web.Controllers
             {
                 using (_userService)
                 using (_postService)
+                using (_uow)
+                using (_photoService)
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
                     var post = EventViewModelToPost(vm, userId);
@@ -172,6 +186,8 @@ namespace Zazz.Web.Controllers
         {
             using (_userService)
             using (_postService)
+            using (_uow)
+            using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
                 await _postService.DeletePostAsync(id, userId);
@@ -189,6 +205,7 @@ namespace Zazz.Web.Controllers
                                Message = vm.Detail,
                                IsEvent = true,
                                UserId = userId,
+                               PhotoId = vm.PhotoId,
                                EventDetail = new EventDetail
                                                  {
                                                      City = vm.City,
@@ -211,6 +228,8 @@ namespace Zazz.Web.Controllers
         {
             using (_userService)
             using (_postService)
+            using (_uow)
+            using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
 
@@ -231,12 +250,21 @@ namespace Zazz.Web.Controllers
                     Name = post.Title,
                     Price = post.EventDetail.Price,
                     Time = post.EventDetail.Time,
+                    UtcTime = post.EventDetail.TimeUtc.ToString("s"),
                     Street = post.EventDetail.Street,
                     FacebookLink = post.FacebookLink,
                     IsOwner = post.UserId == userId,
                     Latitude = post.EventDetail.Latitude,
-                    Longitude = post.EventDetail.Longitude
+                    Longitude = post.EventDetail.Longitude,
+                    PhotoId = post.PhotoId
                 };
+
+                if (post.PhotoId.HasValue)
+                {
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(post.PhotoId.Value);
+                    if (photo != null)
+                        vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                }
 
                 return vm;
             }
