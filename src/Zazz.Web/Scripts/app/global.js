@@ -121,9 +121,8 @@ $(document).on('change', '#pg-albumSelect', function () {
 var imgUploader;
 var imgUploadBtn;
 
-$('#uploadPicModal').on('show', function () {
-    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
-
+function initImgUploader(onComplete) {
+    
     imgUploader = new qq.FineUploader({
         element: document.getElementById("upload"),
         request: {
@@ -140,25 +139,13 @@ $('#uploadPicModal').on('show', function () {
             toastr.info(msg);
         },
         callbacks: {
-            onComplete: function(id, name, response) {
-                if (!response.success) {
-                    toastr.error(response.error);
-                } else {
-                    $('#photoId').val(response.photoId);
-                    $('#selectedImg-thumbnail').attr('src', response.photoUrl);
-                    $('#uploadPicModal').modal('hide');
-                    
-                    if (imgUploadBtn) {
-                        hideBtnBusy(imgUploadBtn, "Upload");
-                    }   
-                }
-            }
+            onComplete: onComplete
         },
         template: '<div class="qq-uploader">' +
-    '<div class="qq-upload-drop-area"><span>{dragZoneText}</span></div>'+
-    '<div class="qq-upload-button btn btn-info"><div>{uploadButtonText}</div></div>'+
+    '<div class="qq-upload-drop-area"><span>{dragZoneText}</span></div>' +
+    '<div class="qq-upload-button btn btn-info"><div>{uploadButtonText}</div></div>' +
     '<span class="qq-drop-processing"><span>{dropProcessingText}</span><span class="qq-drop-processing-spinner"></span></span>' +
-    '<ul class="qq-upload-list"></ul>'+
+    '<ul class="qq-upload-list"></ul>' +
     '</div>',
         fileTemplate: '<li class="hide">' +
     '<div class="qq-progress-bar"></div>' +
@@ -172,6 +159,25 @@ $('#uploadPicModal').on('show', function () {
     '<span class="qq-upload-status-text">{statusText}</span>' +
     '</li>'
 
+    });
+
+}
+
+$('#uploadPicModal').on('show', function () {
+    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+
+    initImgUploader(function(id, name, response) {
+        if (!response.success) {
+            toastr.error(response.error);
+        } else {
+            $('#photoId').val(response.photoId);
+            $('#selectedImg-thumbnail').attr('src', response.photoUrl);
+            $('#uploadPicModal').modal('hide');
+
+            if (imgUploadBtn) {
+                hideBtnBusy(imgUploadBtn, "Upload");
+            }
+        }
     });
 });
 
