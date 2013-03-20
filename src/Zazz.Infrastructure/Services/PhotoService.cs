@@ -84,6 +84,8 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FeedRepository.RemovePhotoFeed(photoId);
             _uow.PostRepository.ResetPhotoId(photoId);
+            _uow.UserRepository.ResetPhotoId(photoId);
+
             _uow.PhotoRepository.Remove(photo);
             await _uow.SaveAsync();
 

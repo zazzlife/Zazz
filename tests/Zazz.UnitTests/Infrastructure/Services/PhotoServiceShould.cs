@@ -209,6 +209,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeed(photoId));
             _uow.Setup(x => x.PostRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -221,6 +222,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeed(photoId), Times.Once());
             _uow.Verify(x => x.PostRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
         }
 
         [Test]
@@ -260,6 +262,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeed(photoId));
             _uow.Setup(x => x.PostRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -272,6 +275,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeed(photoId), Times.Once());
             _uow.Verify(x => x.PostRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
         }
 
         [Test]
@@ -311,6 +315,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeed(photoId));
             _uow.Setup(x => x.PostRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -323,6 +328,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeed(photoId), Times.Once());
             _uow.Verify(x => x.PostRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
         }
 
         [Test]
