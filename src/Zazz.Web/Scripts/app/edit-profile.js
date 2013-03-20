@@ -25,8 +25,10 @@ $(document).on('click', '#pg-modalWithCrop button[data-selectPhoto]', function (
     modalBody.slideUp(function() {
         modalBody.html(html);
         modalBody.slideDown();
-        
 
+        $('#cropImg').Jcrop({
+           boxWidth: 530 
+        });
     });    
 
 
