@@ -219,6 +219,7 @@
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FollowController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JsonNetResult.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -235,6 +236,7 @@
     <Compile Include="Models\AlbumPhotosViewModel.cs" />
     <Compile Include="Models\EventListViewModel.cs" />
     <Compile Include="Models\FeedViewModel.cs" />
+    <Compile Include="Models\FineUploadResponse.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\ImageViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />

@@ -72,9 +72,18 @@ namespace Zazz.Web.Controllers
         }
 
 
-        public ActionResult AjaxUpload(string description, int albumId, HttpPostedFileBase image)
+        public JsonNetResult AjaxUpload(string description, int albumId, HttpPostedFileBase image)
         {
-            return View();
+            var response = new FineUploadResponse
+                           {
+                               Error = "This is the error",
+                               Success = false,
+                               PhotoId = 12,
+                               PhotoUrl = "This is the url",
+                               PreventRetry = true
+                           };
+
+            return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
     }
 }
