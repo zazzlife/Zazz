@@ -212,13 +212,13 @@ function showSearchIconBusy(callback) {
 
     var searchIcon = $('#searchIcon');
 
-    searchIcon.fadeOut(function() {
+    searchIcon.fadeOut('fast', function() {
 
         searchIcon.removeClass('icon-search');
         searchIcon.addClass('icon-refresh');
         searchIcon.addClass('icon-spin');
 
-        searchIcon.fadeIn(function() {
+        searchIcon.fadeIn('fast', function() {
             callback();
         });
     });
@@ -228,13 +228,13 @@ function hideSearchIconBusy() {
     
     var searchIcon = $('#searchIcon');
 
-    searchIcon.fadeOut(function() {
+    searchIcon.fadeOut('fast', function() {
 
         searchIcon.removeClass('icon-refresh');
         searchIcon.removeClass('icon-spin');
         searchIcon.addClass('icon-search');
 
-        searchIcon.fadeIn();
+        searchIcon.fadeIn('fast');
     });
 }
 
@@ -266,6 +266,7 @@ $('#navbarSearch').autocomplete({
                     res(data);
                 }
             });
+
         });
         
     }
