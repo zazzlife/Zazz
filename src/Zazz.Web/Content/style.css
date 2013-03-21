@@ -462,8 +462,10 @@ hr.dark-line {
     Footer
 ***************************************/
 footer {
+    background-color: #f1f1f1;
     border-top-style: solid;
     border-top-width: 1px;
+    border-top-color: #272727;
     border-top-color: rgba(39, 39, 39, 0.27);
     padding-top: 10px;
     margin-top: 50px;
