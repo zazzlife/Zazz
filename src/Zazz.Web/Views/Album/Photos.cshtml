@@ -48,7 +48,7 @@
             {
                 <li class="thumbnail">
                     <div>
-                        <a href="@p.PhotoUrl">
+                        <a href="@p.PhotoUrl" data-toggle="lightbox" data-target="#photo-@p.PhotoId">
                             <img src="@p.PhotoUrl" class="width-110" title="@p.PhotoDescription" />
                         </a>
                     </div>
@@ -57,7 +57,10 @@
                     {
                         <a href="~/photo/remove/@p.PhotoId" class="font-verysmall">REMOVE</a>
                     }
+
                 </li>
+                
+                @Html.Partial("_LightBoxPartial", p)
             }
         </ul>
 
