@@ -452,6 +452,10 @@ hr.dark-line {
         margin-top: 5px;
     }
 
+#followsYouSign:hover {
+    cursor: pointer;
+}
+
 #feedContent {
     float: left;
     margin-left: 25px;
