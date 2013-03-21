@@ -238,6 +238,8 @@ $(function() {
 var searchAutocompleteCache = {};
 
 $('#navbarSearch').autocomplete({
+    delay: 500,
+    minLength: 2,
     source: function (req, res) {
 
         var q = req.term;
