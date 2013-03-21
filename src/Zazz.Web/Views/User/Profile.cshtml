@@ -23,7 +23,10 @@
             <h3 class="pull-right">PARTY WEB:</h3>
             <br />
             
-            <p data-id="@Model.UserId" id="followsYouSign" class="pull-right label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
+            @if (Model.IsTargetUserFollowingCurrentUser)
+            {
+                <p data-id="@Model.UserId" id="followsYouSign" class="pull-right label label-success">Follows you <i class="icon icon-ok-sign"></i></p>   
+            }
 
             @if (Model.IsSelf)
             {
