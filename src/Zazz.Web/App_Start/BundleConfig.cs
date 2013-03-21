@@ -17,12 +17,14 @@ namespace Zazz.Web
             var jqueryUiCss = new StyleBundle("~/Content/themes/base/css",
                                               "http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css")
                 .Include(
+                    "~/Content/themes/base/jquery.ui.base.css",
                     "~/Content/themes/base/jquery.ui.core.css",
                     "~/Content/themes/base/jquery.ui.autocomplete.css",
                     "~/Content/themes/base/jquery.ui.selectable.css",
                     "~/Content/themes/base/jquery.ui.slider.css",
                     "~/Content/themes/base/jquery.ui.datepicker.css",
-                    "~/Content/themes/base/jquery.ui.theme.css");
+                    "~/Content/themes/base/jquery.ui.theme.css",
+                    "~/Content/themes/base/jquery.ui.tooltip.css");
 
 
             var fineUploadOrder = new BundleFileSetOrdering("FineUploadOrder");

@@ -204,24 +204,24 @@ $('#uploadImg').on('click', function () {
 
 /////////////////////////////////////////////////////////////////////////
 
-$(function () {
+$(function() {
 
     $('.datepicker').datetimepicker();
 
     $('*[title]').tooltip();
 
-    $('#party-web-link').click(function () {
+    $('#party-web-link').click(function() {
         var url = "/follow/GetFollowRequests";
 
         $.ajax({
             url: url,
             cache: false,
-            error: function () {
+            error: function() {
                 toastr.error("An error occured, Please try again later.");
             },
-            success: function (data) {
+            success: function(data) {
                 var container = $('#party-web-requests-body');
-                container.fadeOut('slow', function () {
+                container.fadeOut('slow', function() {
                     container.html(data);
                     container.fadeIn('slow');
                 });
@@ -229,42 +229,42 @@ $(function () {
         });
 
     });
+});
 
-    /********************************
+/********************************
     *** Search Autocomplete
     *********************************/
 
-    var searchAutocompleteCache = {};
+var searchAutocompleteCache = {};
 
-    $('#navbarSearch').autocomplete({
-        source: function(req, res) {
+$('#navbarSearch').autocomplete({
+    source: function (req, res) {
 
-            var q = req.term;
+        var q = req.term;
 
-            if (q in searchAutocompleteCache) {
-                res(searchAutocompleteCache[q]);
-                return;
-            }
-
-            $.ajax({
-                url: '/home/search',
-                data: {
-                    q: q
-                },
-                success: function(data) {
-                    searchAutocompleteCache[q] = data;
-                    res(data);
-                }
-            });
-
+        if (q in searchAutocompleteCache) {
+            res(searchAutocompleteCache[q]);
+            return;
         }
-    }).data("autocomplete")._renderItem = function (ul, item) {
 
-        var tmpl = "<a style='padding: 5px;'><img style='margin-right:8px;' width='30' height='30' src='" + item.img + "' />" + item.value + "</a>";
+        $.ajax({
+            url: '/home/search',
+            data: {
+                q: q
+            },
+            success: function (data) {
+                searchAutocompleteCache[q] = data;
+                res(data);
+            }
+        });
 
-        return $("<li />")
-                .data("item.autocomplete", item)
-                .append(tmpl)
-                .appendTo(ul);
-    };
-})
+    }
+}).data("ui-autocomplete")._renderItem = function (ul, item) {
+
+    var tmpl = "<a href='/user/profile/" + item.id + "' style='padding: 5px; margin-bottom:50;'><img style='margin-right:8px; width:32px; heigth:32px;' src='" + item.img + "' />" + item.value + "</a>";
+
+    return $("<li />")
+            .data("ui-autocomplete-item", item)
+            .append(tmpl)
+            .appendTo(ul);
+};

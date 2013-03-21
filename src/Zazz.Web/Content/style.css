@@ -35,6 +35,16 @@
     font-size: 14px;
 }
 
+.ui-autocomplete .ui-menu-item {
+    border-bottom-style: dashed;
+    border-bottom-color: #b6b6b6;
+    border-bottom-width: 1px;
+}
+
+.ui-autocomplete .ui-menu-item:last-child {
+    border-bottom: 0;
+}
+
 /***************************************
         Global
 ***************************************/
