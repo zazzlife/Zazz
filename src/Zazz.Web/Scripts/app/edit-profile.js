@@ -5,6 +5,10 @@ var cropPhotoId;
 var aspectRatio;
 var updateUrl;
 
+function onCropSelectionChange(c) {
+    cropSize = c;
+}
+
 function onProfilePicChangeClick() {
     aspectRatio = 1;
     updateUrl = "/user/ChangeProfilePic/";
@@ -39,10 +43,8 @@ function showCropImg(modalBody, imgId, imgUrl) {
         modalBody.slideDown();
 
         $('#cropImg').Jcrop({
-            boxWidth: 530,
-            onChange: function (c) {
-                cropSize = c;
-            },
+            boxWidth: 530, boxHeight: 400,
+            onChange:onCropSelectionChange,
             aspectRatio: aspectRatio
         });
     });
