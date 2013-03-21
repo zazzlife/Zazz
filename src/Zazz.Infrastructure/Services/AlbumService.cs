@@ -12,25 +12,16 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uoW;
         private readonly IPhotoService _photoService;
-        private readonly IFileService _fileService;
 
-        public AlbumService(IUoW uoW, IPhotoService photoService, IFileService fileService)
+        public AlbumService(IUoW uoW, IPhotoService photoService)
         {
             _uoW = uoW;
             _photoService = photoService;
-            _fileService = fileService;
         }
 
         public Task<Album> GetAlbumAsync(int albumId)
         {
             return _uoW.AlbumRepository.GetByIdAsync(albumId);
-        }
-
-        public string GenerateAlbumPath(int userId, int albumId)
-        {
-            throw new NotImplementedException("Remove this");
-            var fullImagePath = _photoService.GeneratePhotoFilePath(userId, 0);
-            return _fileService.RemoveFileNameFromPath(fullImagePath);
         }
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
@@ -85,19 +76,10 @@ namespace Zazz.Infrastructure.Services
             var photosIds = _uoW.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
 
             foreach (var photoId in photosIds)
-            {
-                _uoW.FeedRepository.RemovePhotoFeed(photoId);
-                _uoW.PostRepository.ResetPhotoId(photoId);
-                _uoW.UserRepository.ResetPhotoId(photoId);
-            }
-
-            await _uoW.SaveAsync();
+                await _photoService.RemovePhotoAsync(photoId, currentUserId);
 
             await _uoW.AlbumRepository.RemoveAsync(albumId);
             await _uoW.SaveAsync();
-
-            var albumPath = GenerateAlbumPath(currentUserId, albumId);
-            _fileService.RemoveDirectory(albumPath);
         }
 
         public void Dispose()

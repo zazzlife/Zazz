@@ -9,8 +9,6 @@ namespace Zazz.Core.Interfaces
     {
         Task<Album> GetAlbumAsync(int albumId);
 
-        string GenerateAlbumPath(int userId, int albumId);
-
         Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take);
 
         Task<List<Album>> GetUserAlbumsAsync(int userId);
