@@ -38,7 +38,9 @@ namespace Zazz.Web.Helpers
         {
             var skip = PageSize * page;
 
-            var followIds = _uow.FollowRepository.GetFollowsUserIds(userId);
+            var followIds = _uow.FollowRepository.GetFollowsUserIds(userId).ToList();
+            followIds.Add(userId);
+
             var feeds = _uow.FeedRepository.GetFeeds(followIds)
                             .OrderByDescending(f => f.Time)
                             .Skip(skip)
