@@ -28,7 +28,8 @@ namespace Zazz.Infrastructure.Services
 
         public string GenerateAlbumPath(int userId, int albumId)
         {
-            var fullImagePath = _photoService.GeneratePhotoFilePath(userId, albumId, 0);
+            throw new NotImplementedException("Remove this");
+            var fullImagePath = _photoService.GeneratePhotoFilePath(userId, 0);
             return _fileService.RemoveFileNameFromPath(fullImagePath);
         }
 

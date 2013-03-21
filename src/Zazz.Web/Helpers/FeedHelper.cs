@@ -108,7 +108,6 @@ namespace Zazz.Web.Helpers
                         var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
                         feedVm.EventViewModel.ImageUrl =
                             _photoService.GeneratePhotoUrl(photo.UploaderId,
-                                                           photo.AlbumId,
                                                            photo.Id);
                     }
 
@@ -116,7 +115,7 @@ namespace Zazz.Web.Helpers
                 else if (feed.FeedType == FeedType.Picture)
                 {
                     var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feed.PhotoId.Value);
-                    feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                    feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
                 }
 
                 vm.Add(feedVm);

@@ -28,14 +28,14 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetByIdAsync(id);
         }
 
-        public string GeneratePhotoUrl(int userId, int albumId, int photoId)
+        public string GeneratePhotoUrl(int userId, int photoId)
         {
-            return String.Format("/picture/user/{0}/{1}/{2}.jpg", userId, albumId, photoId);
+            return String.Format("/picture/user/{0}/{1}.jpg", userId, photoId);
         }
 
-        public string GeneratePhotoFilePath(int userId, int albumId, int photoId)
+        public string GeneratePhotoFilePath(int userId, int photoId)
         {
-            return String.Format(@"{0}\picture\user\{1}\{2}\{3}.jpg", _rootPath, userId, albumId, photoId);
+            return String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId);
         }
 
         public Task<string> GetPhotoDescriptionAsync(int photoId)
@@ -63,7 +63,7 @@ namespace Zazz.Infrastructure.Services
                 await _uow.SaveAsync();
             }
 
-            var path = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            var path = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             await _fileService.SaveFileAsync(path, data);
 
             return photo.Id;
@@ -90,7 +90,7 @@ namespace Zazz.Infrastructure.Services
             _uow.PhotoRepository.Remove(photo);
             await _uow.SaveAsync();
 
-            var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             _fileService.RemoveFile(filePath);
         }
 
@@ -124,7 +124,7 @@ namespace Zazz.Infrastructure.Services
                 return DefaultImageHelper.GetUserDefaultImage(gender);
             }
 
-            return GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+            return GeneratePhotoUrl(photo.UploaderId, photo.Id);
         }
 
         //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
@@ -134,7 +134,7 @@ namespace Zazz.Infrastructure.Services
             if (photo.UploaderId != currentUserId)
                 throw new SecurityException();
 
-            var imgPath = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            var imgPath = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             
             using (var bmp = new Bitmap(imgPath))
             using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))

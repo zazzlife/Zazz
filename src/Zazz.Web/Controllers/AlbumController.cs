@@ -63,7 +63,7 @@ namespace Zazz.Web.Controllers
                     var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
                     albumVm.ImageUrl = firstAlbumImageId == 0
                         ? DEFAULT_IMAGE_PATH
-                        : _photoService.GeneratePhotoUrl(id, album.Id, firstAlbumImageId);
+                        : _photoService.GeneratePhotoUrl(id, firstAlbumImageId);
 
                     albumsVM.Add(albumVm);
                 }
@@ -168,7 +168,7 @@ namespace Zazz.Web.Controllers
                              {
                                  Id = p.Id,
                                  Text = p.Description,
-                                 ImageUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.AlbumId, p.Id)
+                                 ImageUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.Id)
                              });
 
             var pagedList = new StaticPagedList<ImageViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);

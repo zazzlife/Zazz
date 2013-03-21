@@ -64,7 +64,7 @@ namespace Zazz.Web.Controllers
                     }
                     else
                     {
-                        profilePhotoUrl = _photoService.GeneratePhotoUrl(id, photo.AlbumId, photo.Id);
+                        profilePhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
                     }
                 }
 
@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers
                     }
                     else
                     {
-                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.AlbumId, photo.Id);
+                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
                     }
                 }
 
@@ -256,7 +256,7 @@ namespace Zazz.Web.Controllers
                     return DefaultImageHelper.GetUserDefaultImage(gender);
                 }
 
-                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
             }
         }
 

@@ -80,7 +80,7 @@ namespace Zazz.Web.Controllers
                 var photo = await SaveImageAsync(image.InputStream, description, albumId);
                 response.PhotoId = photo.Id;
                 response.Success = true;
-                response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+                response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
                 return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             }

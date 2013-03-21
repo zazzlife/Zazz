@@ -31,29 +31,29 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() => { }));
         }
 
-        [TestCase("/picture/user/12/2/333.jpg", 12, 2, 333)]
-        [TestCase("/picture/user/800/9000/1203200.jpg", 800, 9000, 1203200)]
-        [TestCase("/picture/user/102/20/3330.jpg", 102, 20, 3330)]
-        public void GenerateCorrectPath_OnGeneratePhotoUrl(string expected, int userId, int albumId, int photoId)
+        [TestCase("/picture/user/12/333.jpg", 12, 333)]
+        [TestCase("/picture/user/800/1203200.jpg", 800, 1203200)]
+        [TestCase("/picture/user/102/3330.jpg", 102, 3330)]
+        public void GenerateCorrectPath_OnGeneratePhotoUrl(string expected, int userId, int photoId)
         {
             //Arrange
             //Act
-            var result = _sut.GeneratePhotoUrl(userId, albumId, photoId);
+            var result = _sut.GeneratePhotoUrl(userId, photoId);
 
             //Assert
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase(12, 2, 333)]
-        [TestCase(800, 9000, 1203200)]
-        [TestCase(102, 20, 3330)]
-        public void GenerateCorrectPath_OnGeneratePhotoFilePath(int userId, int albumId, int photoId)
+        [TestCase(12, 333)]
+        [TestCase(800, 1203200)]
+        [TestCase(102, 3330)]
+        public void GenerateCorrectPath_OnGeneratePhotoFilePath(int userId, int photoId)
         {
             //Arrange
-            var expected = String.Format(@"{0}\picture\user\{1}\{2}\{3}.jpg", _tempRootPath, userId, albumId, photoId);
+            var expected = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _tempRootPath, userId, photoId);
 
             //Act
-            var result = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+            var result = _sut.GeneratePhotoFilePath(userId, photoId);
 
             //Assert
             Assert.AreEqual(expected, result);
@@ -88,7 +88,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
-            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             using (var ms = new MemoryStream())
             {
                 _fs.Setup(x => x.SaveFileAsync(path, ms))
@@ -122,7 +122,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
-            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             using (var ms = new MemoryStream())
             {
                 _fs.Setup(x => x.SaveFileAsync(path, ms))
@@ -200,7 +200,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
                 .Returns(() => Task.Run(() => photo));
 
-            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
             _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
                 .Returns(() => Task.Run(() => userId));
@@ -253,7 +253,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
                 .Returns(() => Task.Run(() => photo));
 
-            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
             _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
                 .Returns(() => Task.Run(() => userId));
@@ -306,7 +306,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
                 .Returns(() => Task.Run(() => photo));
 
-            var filePath = _sut.GeneratePhotoFilePath(userId, albumId, photoId);
+            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
             _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
                 .Returns(() => Task.Run(() => userId));
@@ -505,7 +505,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
                 .Returns(() => photo);
 
-            var expected = _sut.GeneratePhotoUrl(userId, photo.AlbumId, photoId);
+            var expected = _sut.GeneratePhotoUrl(userId, photoId);
             //Act
             var result = _sut.GetUserImageUrl(userId);
 

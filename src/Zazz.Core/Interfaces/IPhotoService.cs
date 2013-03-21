@@ -10,9 +10,9 @@ namespace Zazz.Core.Interfaces
     {
         Task<Photo> GetPhotoAsync(int id);
 
-        string GeneratePhotoUrl(int userId, int albumId, int photoId);
+        string GeneratePhotoUrl(int userId, int photoId);
 
-        string GeneratePhotoFilePath(int userId, int albumId, int photoId);
+        string GeneratePhotoFilePath(int userId, int photoId);
 
         Task<string> GetPhotoDescriptionAsync(int photoId);
         
