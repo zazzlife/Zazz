@@ -41,5 +41,30 @@ namespace Zazz.Web.Controllers
                 }
             }
         }
+
+        public JsonNetResult Search(string q)
+        {
+            var response = new List<AutocompleteResponse>();
+            for (int i = 0; i < 5; i++)
+            {
+                response.Add(new AutocompleteResponse
+                             {
+                                 Id = i,
+                                 Img = "/picture/user/1/8/38.jpg",
+                                 Value = "User " + i
+                             });
+            }
+
+            return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        public class AutocompleteResponse
+        {
+            public int Id { get; set; }
+
+            public string Value { get; set; }
+
+            public string Img { get; set; }
+        }
     }
 }

@@ -230,5 +230,41 @@ $(function () {
 
     });
 
+    /********************************
+    *** Search Autocomplete
+    *********************************/
 
+    var searchAutocompleteCache = {};
+
+    $('#navbarSearch').autocomplete({
+        source: function(req, res) {
+
+            var q = req.term;
+
+            if (q in searchAutocompleteCache) {
+                res(searchAutocompleteCache[q]);
+                return;
+            }
+
+            $.ajax({
+                url: '/home/search',
+                data: {
+                    q: q
+                },
+                success: function(data) {
+                    searchAutocompleteCache[q] = data;
+                    res(data);
+                }
+            });
+
+        }
+    }).data("autocomplete")._renderItem = function (ul, item) {
+
+        var tmpl = "<a style='padding: 5px;'><img style='margin-right:8px;' width='30' height='30' src='" + item.img + "' />" + item.value + "</a>";
+
+        return $("<li />")
+                .data("item.autocomplete", item)
+                .append(tmpl)
+                .appendTo(ul);
+    };
 })
