@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -66,7 +67,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             {
                 var response = new FineUploadResponse
-                               {   
+                               {
                                };
                 var errorMessage = "Image was not valid";
                 if (image == null || !ImageValidator.IsValid(image, out errorMessage))
@@ -87,31 +88,36 @@ namespace Zazz.Web.Controllers
 
         private async Task<Photo> SaveImageAsync(Stream image, string description, int albumId)
         {
+
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var album = await _albumService.GetAlbumAsync(albumId);
+
+            if (album.UserId != userId)
+                throw new SecurityException();
+
+            var photo = new Photo
+                        {
+                            AlbumId = albumId,
+                            Description = description,
+                            UploaderId = userId
+                        };
+
+            await _photoService.SavePhotoAsync(photo, image, true);
+            return photo;
+        }
+
+        [Authorize]
+        public void Crop(int id, double x, double x2, double y, double y2, double w, double h)
+        {
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                var album = await _albumService.GetAlbumAsync(albumId);
+                var cropArea = new Rectangle((int) x, (int) y, (int) w, (int) h);
 
-                if (album.UserId != userId)
-                    throw new SecurityException();
-
-                var photo = new Photo
-                            {
-                                AlbumId = albumId,
-                                Description = description,
-                                UploaderId = userId
-                            };
-
-                await _photoService.SavePhotoAsync(photo, image, true);
-                return photo;
+                _photoService.CropPhoto(id, userId, cropArea);
             }
-        }
-
-        public void Crop(double x, double x2, double y, double y2, double w, double h)
-        {
-            
         }
     }
 }

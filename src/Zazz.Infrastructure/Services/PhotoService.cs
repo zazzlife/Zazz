@@ -138,6 +138,7 @@ namespace Zazz.Infrastructure.Services
             using (var bmp = new Bitmap(imgPath))
             using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
             {
+                bmp.Dispose();
                 croppedBmp.Save(imgPath);
             }
         }
