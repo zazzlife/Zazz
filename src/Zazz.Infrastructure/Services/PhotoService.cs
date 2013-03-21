@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -124,6 +125,21 @@ namespace Zazz.Infrastructure.Services
             }
 
             return GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
+        }
+
+        public void CropPhoto(int photoId, int currentUserId, Rectangle cropArea)
+        {
+            var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
+            if (photo.UploaderId != currentUserId)
+                throw new SecurityException();
+
+            var imgPath = GeneratePhotoFilePath(photo.UploaderId, photo.AlbumId, photo.Id);
+            
+            using (var bmp = new Bitmap(imgPath))
+            using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
+            {
+                croppedBmp.Save(imgPath);
+            }
         }
 
         public void Dispose()

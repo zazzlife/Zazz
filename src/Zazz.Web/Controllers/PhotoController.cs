@@ -87,21 +87,26 @@ namespace Zazz.Web.Controllers
 
         private async Task<Photo> SaveImageAsync(Stream image, string description, int albumId)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
-            var album = await _albumService.GetAlbumAsync(albumId);
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var album = await _albumService.GetAlbumAsync(albumId);
 
-            if (album.UserId != userId)
-                throw new SecurityException();
+                if (album.UserId != userId)
+                    throw new SecurityException();
 
-            var photo = new Photo
-                        {
-                            AlbumId = albumId,
-                            Description = description,
-                            UploaderId = userId
-                        };
+                var photo = new Photo
+                            {
+                                AlbumId = albumId,
+                                Description = description,
+                                UploaderId = userId
+                            };
 
-            await _photoService.SavePhotoAsync(photo, image, true);
-            return photo;
+                await _photoService.SavePhotoAsync(photo, image, true);
+                return photo;
+            }
         }
 
         public void Crop(double x, double x2, double y, double y2, double w, double h)

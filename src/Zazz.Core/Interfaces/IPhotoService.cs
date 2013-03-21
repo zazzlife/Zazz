@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
@@ -22,5 +23,7 @@ namespace Zazz.Core.Interfaces
         Task UpdatePhotoAsync(Photo photo, int currentUserId);
 
         string GetUserImageUrl(int userId);
+
+        void CropPhoto(int photoId, int currentUserId, Rectangle cropArea);
     }
 }
