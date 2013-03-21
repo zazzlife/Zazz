@@ -6,23 +6,23 @@
    
     </p>
     <div class="feed-content">
-        <a data-toggle="lightbox" data-target="#@Model.PhotoId" href="@Model.PhotoUrl">
-            <img class="img-rounded" style="width: 100%" src="@Model.PhotoUrl" />
+        <a data-toggle="lightbox" data-target="#@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
+            <img class="img-rounded" style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
         </a>
     </div>
 
-    <div id="@Model.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="@Model.PhotoViewModel.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class='lightbox-header'>
             <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
         </div>
         <div class='lightbox-content'>
 
-            <img src="@Model.PhotoUrl" />
+            <img src="@Model.PhotoViewModel.PhotoUrl" />
 
-            @if (!String.IsNullOrEmpty(Model.PhotoDescription))
+            @if (!String.IsNullOrEmpty(Model.PhotoViewModel.PhotoDescription))
             {
                 <div class="lightbox-caption">
-                    <p>@Model.PhotoDescription</p>
+                    <p>@Model.PhotoViewModel.PhotoDescription</p>
                 </div>
             }
 

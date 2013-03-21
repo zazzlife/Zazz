@@ -16,6 +16,6 @@ namespace Zazz.Web.Models
 
         public string AlbumName { get; set; }
 
-        public IPagedList<ImageViewModel> Photos { get; set; }
+        public IPagedList<PhotoViewModel> Photos { get; set; }
     }
 }

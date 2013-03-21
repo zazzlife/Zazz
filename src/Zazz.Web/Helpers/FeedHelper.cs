@@ -118,9 +118,12 @@ namespace Zazz.Web.Helpers
                 else if (feed.FeedType == FeedType.Picture)
                 {
                     var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
-                    feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
-                    feedVm.PhotoId = photo.Id;
-                    feedVm.PhotoDescription = photo.Description;
+                    feedVm.PhotoViewModel = new PhotoViewModel
+                                            {
+                                                PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id),
+                                                PhotoId = photo.Id,
+                                                PhotoDescription = photo.Description
+                                            };
                 }
 
                 vm.Add(feedVm);

@@ -15,11 +15,7 @@ namespace Zazz.Web.Models
 
         public EventViewModel EventViewModel { get; set; }
 
-        public string PhotoUrl { get; set; }
-
-        public int PhotoId { get; set; }
-
-        public string PhotoDescription { get; set; }
+        public PhotoViewModel PhotoViewModel { get; set; }
 
         public string RelativeTime { get; set; }
 

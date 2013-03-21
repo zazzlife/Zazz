@@ -52,16 +52,16 @@ namespace Zazz.Web.Controllers
                 var albums = await _albumService.GetUserAlbumsAsync(id, skip, PAGE_SIZE);
 
                 const string DEFAULT_IMAGE_PATH = "/Images/placeholder.gif";
-                var albumsVM = new List<ImageViewModel>();
+                var albumsVM = new List<PhotoViewModel>();
                 foreach (var album in albums)
                 {
-                    var albumVm = new ImageViewModel
+                    var albumVm = new PhotoViewModel
                                       {
-                                          Id = album.Id,
-                                          Text = album.Name
+                                          PhotoId = album.Id,
+                                          PhotoDescription = album.Name
                                       };
                     var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
-                    albumVm.ImageUrl = firstAlbumImageId == 0
+                    albumVm.PhotoUrl = firstAlbumImageId == 0
                         ? DEFAULT_IMAGE_PATH
                         : _photoService.GeneratePhotoUrl(id, firstAlbumImageId);
 
@@ -75,7 +75,7 @@ namespace Zazz.Web.Controllers
                     isOwner = currentUserId == id;
                 }
 
-                var pagedList = new StaticPagedList<ImageViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
+                var pagedList = new StaticPagedList<PhotoViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
 
                 var vm = new AlbumListViewModel
                              {
@@ -164,14 +164,14 @@ namespace Zazz.Web.Controllers
                               .Take(PAGE_SIZE);
 
             var photosVm = photos
-                .Select(p => new ImageViewModel
+                .Select(p => new PhotoViewModel
                              {
-                                 Id = p.Id,
-                                 Text = p.Description,
-                                 ImageUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.Id)
+                                 PhotoId = p.Id,
+                                 PhotoDescription = p.Description,
+                                 PhotoUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.Id)
                              });
 
-            var pagedList = new StaticPagedList<ImageViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
+            var pagedList = new StaticPagedList<PhotoViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
 
             var vm = new AlbumPhotosViewModel
                      {

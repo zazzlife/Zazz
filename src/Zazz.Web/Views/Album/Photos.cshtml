@@ -48,14 +48,14 @@
             {
                 <li class="thumbnail">
                     <div>
-                        <a href="@p.ImageUrl">
-                            <img src="@p.ImageUrl" class="width-110" title="@p.Text" />
+                        <a href="@p.PhotoUrl">
+                            <img src="@p.PhotoUrl" class="width-110" title="@p.PhotoDescription" />
                         </a>
                     </div>
 
                     @if (Model.IsOwner)
                     {
-                        <a href="~/photo/remove/@p.Id" class="font-verysmall">REMOVE</a>
+                        <a href="~/photo/remove/@p.PhotoId" class="font-verysmall">REMOVE</a>
                     }
                 </li>
             }

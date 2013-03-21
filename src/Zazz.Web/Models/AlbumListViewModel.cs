@@ -12,6 +12,6 @@ namespace Zazz.Web.Models
 
         public int UserId { get; set; }
 
-        public IPagedList<ImageViewModel> Albums { get; set; }
+        public IPagedList<PhotoViewModel> Albums { get; set; }
     }
 }

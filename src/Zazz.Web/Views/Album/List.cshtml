@@ -35,14 +35,14 @@
             {
                 <li>
                     <div class="thumbnail">
-                        <a href="~/album/photos/@album.Id/1">
-                            <img src="@album.ImageUrl" class="width-255" />
+                        <a href="~/album/photos/@album.PhotoId/1">
+                            <img src="@album.PhotoUrl" class="width-255" />
                         </a>
-                        <h4>@album.Text</h4>
+                        <h4>@album.PhotoDescription</h4>
 
                         @if (Model.IsOwner)
                         {
-                            <a href="~/album/remove/@album.Id" class="pull-right font-small">REMOVE</a>
+                            <a href="~/album/remove/@album.PhotoId" class="pull-right font-small">REMOVE</a>
                             <div class="clearfix"></div>
                         }
 
