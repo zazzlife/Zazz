@@ -246,6 +246,34 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
+        [Authorize]
+        public async Task ChangeProfilePic(int id)
+        {
+            using (_uow)
+            using (_userService)
+            using (_photoService)
+            {
+                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                user.UserDetail.ProfilePhotoId = id;
+
+                await _uow.SaveAsync();
+            }
+        }
+
+        [Authorize]
+        public async Task ChangeCoverPic(int id)
+        {
+            using (_uow)
+            using (_userService)
+            using (_photoService)
+            {
+                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                user.UserDetail.CoverPhotoId = id;
+
+                await _uow.SaveAsync();
+            }
+        }
+
         public string GetCurrentUserImageUrl()
         {
             using (_uow)
