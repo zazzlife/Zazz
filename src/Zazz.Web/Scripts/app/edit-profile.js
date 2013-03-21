@@ -3,9 +3,23 @@
 var cropSize;
 var cropPhotoId;
 
-function onCropSelectionChange(c) {
-    cropSize = c;
-}
+$('#uploadPicModalWithCrop').on('show', function() {
+
+    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+
+    initImgUploader(function(id, name, response) {
+        if (!response.success) {
+            toastr.error(response.error);
+        } else {
+
+            var photoId = response.photoId;
+            var photoUrl = response.photoUrl;
+            var modalBody = $('#uploadPicModalWithCrop .modal-body');
+
+            showCropImg(modalBody, photoId, photoUrl);
+        }
+    });
+});
 
 $('#pg-modalWithCrop').on('show', function() {
 
@@ -30,7 +44,9 @@ function showCropImg(modalBody, imgId, imgUrl) {
 
         $('#cropImg').Jcrop({
             boxWidth: 530,
-            onChange: onCropSelectionChange,
+            onChange: function(c) {
+                cropSize = c;
+            },
             aspectRatio: 10 / 3
         });
     });
