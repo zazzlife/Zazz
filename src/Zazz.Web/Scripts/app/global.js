@@ -181,7 +181,7 @@ $('#uploadPicModal').on('show', function () {
     });
 });
 
-$('#uploadImg').on('click', function () {
+$(document).on('click', '#uploadImg', function () {
     var description = $('#Description').val();
     var albumId = $('#upload-albumSelect').val();
     if (!albumId) {
@@ -204,36 +204,9 @@ $('#uploadImg').on('click', function () {
 
 /////////////////////////////////////////////////////////////////////////
 
-$(function() {
-
-    $('.datepicker').datetimepicker();
-
-    $('*[title]').tooltip();
-
-    $('#party-web-link').click(function() {
-        var url = "/follow/GetFollowRequests";
-
-        $.ajax({
-            url: url,
-            cache: false,
-            error: function() {
-                toastr.error("An error occured, Please try again later.");
-            },
-            success: function(data) {
-                var container = $('#party-web-requests-body');
-                container.fadeOut('slow', function() {
-                    container.html(data);
-                    container.fadeIn('slow');
-                });
-            }
-        });
-
-    });
-});
-
 /********************************
-    *** Search Autocomplete
-    *********************************/
+    Search Autocomplete
+*********************************/
 
 var searchAutocompleteCache = {};
 
@@ -270,3 +243,30 @@ $('#navbarSearch').autocomplete({
             .append(tmpl)
             .appendTo(ul);
 };
+
+$(function() {
+
+    $('.datepicker').datetimepicker();
+
+    $('*[title]').tooltip();
+
+    $('#party-web-link').click(function() {
+        var url = "/follow/GetFollowRequests";
+
+        $.ajax({
+            url: url,
+            cache: false,
+            error: function() {
+                toastr.error("An error occured, Please try again later.");
+            },
+            success: function(data) {
+                var container = $('#party-web-requests-body');
+                container.fadeOut('slow', function() {
+                    container.html(data);
+                    container.fadeIn('slow');
+                });
+            }
+        });
+
+    });
+});
