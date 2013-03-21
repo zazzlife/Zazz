@@ -208,6 +208,36 @@ $(document).on('click', '#uploadImg', function () {
     Search Autocomplete
 *********************************/
 
+function showSearchIconBusy(callback) {
+
+    var searchIcon = $('#searchIcon');
+
+    searchIcon.fadeOut(function() {
+
+        searchIcon.removeClass('icon-search');
+        searchIcon.addClass('icon-refresh');
+        searchIcon.addClass('icon-spin');
+
+        searchIcon.fadeIn(function() {
+            callback();
+        });
+    });
+}
+
+function hideSearchIconBusy() {
+    
+    var searchIcon = $('#searchIcon');
+
+    searchIcon.fadeOut(function() {
+
+        searchIcon.removeClass('icon-refresh');
+        searchIcon.removeClass('icon-spin');
+        searchIcon.addClass('icon-search');
+
+        searchIcon.fadeIn();
+    });
+}
+
 var searchAutocompleteCache = {};
 
 $('#navbarSearch').autocomplete({
@@ -215,24 +245,29 @@ $('#navbarSearch').autocomplete({
     minLength: 2,
     source: function (req, res) {
 
-        var q = req.term;
+        showSearchIconBusy(function() {
 
-        if (q in searchAutocompleteCache) {
-            res(searchAutocompleteCache[q]);
-            return;
-        }
+            var q = req.term;
 
-        $.ajax({
-            url: '/home/search',
-            data: {
-                q: q
-            },
-            success: function (data) {
-                searchAutocompleteCache[q] = data;
-                res(data);
+            if (q in searchAutocompleteCache) {
+                res(searchAutocompleteCache[q]);
+                hideSearchIconBusy();
+                return;
             }
-        });
 
+            $.ajax({
+                url: '/home/search',
+                data: {
+                    q: q
+                },
+                success: function (data) {
+                    hideSearchIconBusy();
+                    searchAutocompleteCache[q] = data;
+                    res(data);
+                }
+            });
+        });
+        
     }
 }).data("ui-autocomplete")._renderItem = function (ul, item) {
 
