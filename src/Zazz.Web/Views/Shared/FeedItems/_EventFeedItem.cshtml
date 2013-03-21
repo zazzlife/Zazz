@@ -1,7 +1,7 @@
 ﻿@model FeedViewModel
 <div class="feed-item well well-small">
     <p>
-        <img src="@Model.UserImageUrl" class="feed-user-img"/>
+        <img src="@Model.UserImageUrl" class="feed-user-img img-rounded"/>
         <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/event/show/@Model.EventViewModel.Id">event</a>
     </p>
     <div class="feed-content">@Html.Partial("_EventPartial", Model.EventViewModel)</div>

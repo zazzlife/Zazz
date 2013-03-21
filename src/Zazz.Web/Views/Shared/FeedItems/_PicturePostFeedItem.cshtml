@@ -1,12 +1,12 @@
 ﻿@model FeedViewModel
 <div class="feed-item well well-small">
     <p>
-        <img src="@Model.UserImageUrl" class="feed-user-img" />
+        <img src="@Model.UserImageUrl" class="feed-user-img img-rounded" />
         <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has uploaded a new photo
    
     </p>
     <div class="feed-content">
-        <a href="@Model.PhotoUrl" target="_blank"><img style="width: 100%" src="@Model.PhotoUrl" /></a>
+        <a href="@Model.PhotoUrl" target="_blank"><img class="img-rounded" style="width: 100%" src="@Model.PhotoUrl" /></a>
     </div>
 
     <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" style="margin-top: 15px;" class="pull-right font-verysmall">@Model.RelativeTime</span>
