@@ -425,6 +425,7 @@
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
     <Content Include="Views\Event\_EventsListPartial.cshtml" />
     <Content Include="Views\Album\_PhotosPartial.cshtml" />
+    <Content Include="Views\Shared\_LightBoxPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -6,28 +6,12 @@
    
     </p>
     <div class="feed-content">
-        <a data-toggle="lightbox" data-target="#@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
+        <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
             <img class="img-rounded" style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
         </a>
     </div>
 
-    <div id="@Model.PhotoViewModel.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class='lightbox-header'>
-            <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
-        </div>
-        <div class='lightbox-content'>
-
-            <img src="@Model.PhotoViewModel.PhotoUrl" />
-
-            @if (!String.IsNullOrEmpty(Model.PhotoViewModel.PhotoDescription))
-            {
-                <div class="lightbox-caption">
-                    <p>@Model.PhotoViewModel.PhotoDescription</p>
-                </div>
-            }
-
-        </div>
-    </div>
+    @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
 
     <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" style="margin-top: 15px;" class="pull-right font-verysmall">@Model.RelativeTime</span>
     <div class="clearfix"></div>

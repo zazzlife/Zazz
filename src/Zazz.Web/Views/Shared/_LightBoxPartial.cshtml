@@ -1,0 +1,19 @@
+﻿@model PhotoViewModel
+
+<div id="photo-@Model.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class='lightbox-header'>
+        <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+    </div>
+    <div class='lightbox-content'>
+
+        <img src="@Model.PhotoUrl" />
+
+        @if (!String.IsNullOrEmpty(Model.PhotoDescription))
+        {
+            <div class="lightbox-caption">
+                <p>@Model.PhotoDescription</p>
+            </div>
+        }
+
+    </div>
+</div>
