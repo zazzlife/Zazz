@@ -185,49 +185,6 @@ namespace Zazz.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    string message;
-                    if (vm.ProfileImage != null)
-                    {
-                        using (vm.ProfileImage.InputStream)
-                        {
-                            if (!ImageValidator.IsValid(vm.ProfileImage, out message))
-                            {
-                                ShowAlert(message, AlertType.Error);
-                                return View(vm);
-                            }
-
-                            var photo = new Photo
-                            {
-                                AlbumId = vm.AlbumId,
-                                UploaderId = user.Id
-                            };
-
-                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileImage.InputStream, true);
-                            user.UserDetail.ProfilePhotoId = photoId;
-                        }
-                    }
-
-                    if (vm.ProfileCoverImage != null)
-                    {
-                        using (vm.ProfileCoverImage.InputStream)
-                        {
-                            if (!ImageValidator.IsValid(vm.ProfileCoverImage, out message))
-                            {
-                                ShowAlert(message, AlertType.Error);
-                                return View(vm);
-                            }
-
-                            var photo = new Photo
-                            {
-                                AlbumId = vm.AlbumId,
-                                UploaderId = user.Id
-                            };
-
-                            var photoId = await _photoService.SavePhotoAsync(photo, vm.ProfileCoverImage.InputStream, true);
-                            user.UserDetail.CoverPhotoId = photoId;
-                        }
-                    }
-
                     user.UserDetail.Gender = vm.Gender;
                     user.UserDetail.FullName = vm.FullName;
                     user.UserDetail.SchoolId = (short)vm.SchoolId;

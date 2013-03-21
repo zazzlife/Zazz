@@ -127,6 +127,7 @@ namespace Zazz.Infrastructure.Services
             return GeneratePhotoUrl(photo.UploaderId, photo.AlbumId, photo.Id);
         }
 
+        //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
         public void CropPhoto(int photoId, int currentUserId, Rectangle cropArea)
         {
             var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);

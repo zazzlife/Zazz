@@ -40,9 +40,5 @@ namespace Zazz.Web.Models
 
         [Display(Name = "Email Facebook Errors Notification")]
         public bool SendFbErrorNotification { get; set; }
-
-        public HttpPostedFileBase ProfileImage { get; set; }
-
-        public HttpPostedFileBase ProfileCoverImage { get; set; }
     }
 }
