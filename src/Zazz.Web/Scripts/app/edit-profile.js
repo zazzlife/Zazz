@@ -51,6 +51,26 @@ function showCropImg(modalBody, imgId, imgUrl) {
 
 $('#uploadPicModalWithCrop').on('show', function() {
 
+    var uploadModalContent = '<div class="control-group">' +
+        '<label class="control-label">Picture</label>' +
+        '<div id="upload"></div></div>' +
+        '<div class="control-group"><label class="control-label" for="upload-albumSelect">Album</label>' +
+        '<div class="controls"><select class="span3" id="upload-albumSelect" name="albumId">' +
+        '<option>Loading...</option>' +
+        '</select>' +
+        '</div>' +
+        '</div>' +
+        '<div class="control-group">' +
+        '<label class="control-label" for="Description">Description: </label>' +
+        '<div class="controls">' +
+        '<div class="editor-field">' +
+        '<input class="span4" data-val="true" data-val-length="The field Description must be a string with a maximum length of 250." data-val-length-max="250" id="Description" name="Description" placeholder="Description" type="text" value="" />                            <span class="field-validation-valid help-inline" data-valmsg-for="Description" data-valmsg-replace="true"></span>' +
+        '</div></div></div>' +
+        '<p><button id="uploadImg" class="btn btn-primary">Submit</button></p>';
+
+
+    $('#uploadPicModalWithCrop .modal-body').html(uploadModalContent);
+
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
 
     initImgUploader(function(id, name, response) {
@@ -70,6 +90,9 @@ $('#uploadPicModalWithCrop').on('show', function() {
 });
 
 $('#pg-modalWithCrop').on('show', function() {
+
+    var galleryModalContent = '<strong>Album: </strong><select class="span4" id="pg-albumSelect"><option>Loading...</option></select><div id="pg-photos"><i class="icon-spin icon-refresh"></i></div>';
+    $('#pg-modalWithCrop .modal-body').html(galleryModalContent);
 
     var loadAlbumTask = loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
 
@@ -115,15 +138,10 @@ $(document).on('click', '#cropBtn', function(e) {
     });
 });
 
-function resetModalContents() {
-
-}
-
-
-$(document).on('click', '.selectProfilePic a', function() {
+$(document).on('click', '.selectProfilePic a', function () {
     onProfilePicChangeClick();
 });
 
-$(document).on('click', '.selectCoverPic a', function() {
+$(document).on('click', '.selectCoverPic a', function () {
     onCoverPicChangeClick();
 });
