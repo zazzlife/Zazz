@@ -45,6 +45,11 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// This action should be used when current user wants to stop following another user.
+        /// </summary>
+        /// <param name="id">Id of the other user</param>
+        /// <returns></returns>
         public async Task Unfollow(int id)
         {
             using (_followService)
@@ -53,6 +58,22 @@ namespace Zazz.Web.Controllers
             {
                 var currentUserId = _userService.GetUserId(User.Identity.Name);
                 await _followService.RemoveFollowAsync(currentUserId, id);
+            }
+        }
+
+        /// <summary>
+        /// This action should be used when the current user wants to stop another user from following him.
+        /// </summary>
+        /// <param name="id">Id of the other user</param>
+        /// <returns></returns>
+        public async Task StopFollow(int id)
+        {
+            using (_followService)
+            using (_userService)
+            using (_photoService)
+            {
+                var currentUserId = _userService.GetUserId(User.Identity.Name);
+                await _followService.RemoveFollowAsync(id, currentUserId);
             }
         }
 
