@@ -25,7 +25,7 @@ function updateUserPhotoId(photoId) {
         data: {
             id: photoId
         },
-        error: function() {
+        error: function () {
             toastr.error("An error occured. Please try again later.");
         }
     });
@@ -42,16 +42,21 @@ function showCropImg(modalBody, imgId, imgUrl) {
         modalBody.html(html);
         modalBody.slideDown();
 
+        var imgELem = document.getElementById("cropImg");
+        var imgHeight = imgELem.naturalHeight;
+        var imgWidth = imgELem.naturalWidth;
+
         $('#cropImg').Jcrop({
             boxWidth: 530, boxHeight: 400,
-            onChange:onCropSelectionChange,
+            trueSize: [imgWidth, imgHeight],
+            onChange: onCropSelectionChange,
             aspectRatio: aspectRatio
         });
     });
 
 }
 
-$('#uploadPicModalWithCrop').on('show', function() {
+$('#uploadPicModalWithCrop').on('show', function () {
 
     var uploadModalContent = '<div class="control-group">' +
         '<label class="control-label">Picture</label>' +
@@ -75,7 +80,7 @@ $('#uploadPicModalWithCrop').on('show', function() {
 
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
 
-    initImgUploader(function(id, name, response) {
+    initImgUploader(function (id, name, response) {
         if (!response.success) {
             toastr.error(response.error);
         } else {
@@ -91,14 +96,14 @@ $('#uploadPicModalWithCrop').on('show', function() {
     });
 });
 
-$('#pg-modalWithCrop').on('show', function() {
+$('#pg-modalWithCrop').on('show', function () {
 
     var galleryModalContent = '<strong>Album: </strong><select class="span4" id="pg-albumSelect"><option>Loading...</option></select><div id="pg-photos"><i class="icon-spin icon-refresh"></i></div>';
     $('#pg-modalWithCrop .modal-body').html(galleryModalContent);
 
     var loadAlbumTask = loadAlbumsDropDownAsync(document.getElementById("pg-albumSelect"));
 
-    loadAlbumTask.done(function(res) {
+    loadAlbumTask.done(function (res) {
         loadPGPhotos();
     });
 
@@ -118,7 +123,7 @@ $(document).on('click', '#pg-modalWithCrop button[data-selectPhoto]', function (
     showCropImg(modalBody, imgId, imgUrl);
 });
 
-$(document).on('click', '#cropBtn', function(e) {
+$(document).on('click', '#cropBtn', function (e) {
     e.preventDefault();
     var btn = $(this);
 
@@ -127,11 +132,11 @@ $(document).on('click', '#cropBtn', function(e) {
     $.ajax({
         url: '/photo/crop/' + cropPhotoId,
         data: cropSize,
-        error: function() {
+        error: function () {
             toastr.error('An error occured. Please try again later.');
             hideBtnBusy(btn, 'Crop');
         },
-        success: function() {
+        success: function () {
             hideBtnBusy(btn, 'Crop');
 
             var modal = btn.parent().parent();
