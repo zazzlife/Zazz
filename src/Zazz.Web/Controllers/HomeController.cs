@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
@@ -24,7 +25,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             using (_uow)
             using (_photoService)
@@ -33,7 +34,7 @@ namespace Zazz.Web.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
-                    var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(userId);
+                    var feeds = await new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(userId);
                     return View("UserHome", feeds);
                 }
                 else

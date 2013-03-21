@@ -16,12 +16,16 @@
             <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
         </div>
         <div class='lightbox-content'>
-            
+
             <img src="@Model.PhotoUrl" />
 
-            <div class="lightbox-caption">
-                <p>Your caption here</p>
-            </div>
+            @if (!String.IsNullOrEmpty(Model.PhotoDescription))
+            {
+                <div class="lightbox-caption">
+                    <p>@Model.PhotoDescription</p>
+                </div>
+            }
+
         </div>
     </div>
 

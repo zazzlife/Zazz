@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
@@ -34,7 +35,7 @@ namespace Zazz.Web.Helpers
         /// <param name="userId"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public List<FeedViewModel> GetFeeds(int userId, int page = 0)
+        public async Task<List<FeedViewModel>> GetFeedsAsync(int userId, int page = 0)
         {
             var skip = PageSize * page;
 
@@ -47,7 +48,7 @@ namespace Zazz.Web.Helpers
                             .Take(PageSize)
                             .ToList();
 
-            return ConvertFeedsToFeedsViewModel(feeds);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds);
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Zazz.Web.Helpers
         /// <param name="userId"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public List<FeedViewModel> GetUserActivityFeed(int userId, int page = 0)
+        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int page = 0)
         {
             var skip = PageSize * page;
             var feeds = _uow.FeedRepository.GetUserFeeds(userId)
@@ -65,10 +66,10 @@ namespace Zazz.Web.Helpers
                             .Take(PageSize)
                             .ToList();
 
-            return ConvertFeedsToFeedsViewModel(feeds);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds);
         }
 
-        private List<FeedViewModel> ConvertFeedsToFeedsViewModel(IEnumerable<Feed> feeds)
+        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds)
         {
             var vm = new List<FeedViewModel>();
 
@@ -116,9 +117,10 @@ namespace Zazz.Web.Helpers
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feed.PhotoId.Value);
+                    var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
                     feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
                     feedVm.PhotoId = photo.Id;
+                    feedVm.PhotoDescription = photo.Description;
                 }
 
                 vm.Add(feedVm);
