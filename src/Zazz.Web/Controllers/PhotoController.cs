@@ -103,5 +103,10 @@ namespace Zazz.Web.Controllers
             await _photoService.SavePhotoAsync(photo, image, true);
             return photo;
         }
+
+        public void Crop(double x, double x2, double y, double y2, double w, double h)
+        {
+            
+        }
     }
 }
