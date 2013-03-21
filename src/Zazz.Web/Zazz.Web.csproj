@@ -255,6 +255,7 @@
     <Compile Include="ValidateImageAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-lightbox.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\fineuploader.css" />
     <Content Include="Content\font-awesome-ie7.min.css" />
@@ -351,6 +352,7 @@
     <Content Include="Scripts\app\global.js" />
     <Content Include="Scripts\app\map.js" />
     <Content Include="Scripts\app\register.js" />
+    <Content Include="Scripts\bootstrap-lightbox.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\fine-upload\ajax.requester.js" />
     <Content Include="Scripts\fine-upload\button.js" />
