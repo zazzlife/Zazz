@@ -81,7 +81,7 @@ namespace Zazz.Web.Helpers
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
                                  RelativeTime = feed.Time.ToRelativeTime(),
                                  FeedType = feed.FeedType,
-                                 Time = feed.Time
+                                 Time = feed.Time,
                              };
 
                 if (feed.FeedType == FeedType.Event)
@@ -118,6 +118,7 @@ namespace Zazz.Web.Helpers
                 {
                     var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feed.PhotoId.Value);
                     feedVm.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                    feedVm.PhotoId = photo.Id;
                 }
 
                 vm.Add(feedVm);
