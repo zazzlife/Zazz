@@ -121,7 +121,11 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             {
                 ViewBag.FormAction = "Create";
-                return View("EditForm", new EventViewModel {Time = DateTime.UtcNow});
+                return View("EditForm", new EventViewModel
+                                        {
+                                            Time = DateTime.UtcNow,
+                                            UtcTime = DateTime.UtcNow.ToString("s")
+                                        });
             }
         }
 
