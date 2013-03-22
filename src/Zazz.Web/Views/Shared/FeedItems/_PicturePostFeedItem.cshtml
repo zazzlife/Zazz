@@ -4,7 +4,7 @@
         <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
     </a>
 
-    <div class="feed-content well well-small no-padding" title="@Model.RelativeTime (@Model.Time.ToLongDateString() @Model.Time.ToShortTimeString())">
+    <div class="feed-content well well-small no-padding" title="@Model.RelativeTime @Environment.NewLine (@Model.Time.ToLongDateString() @Model.Time.ToShortTimeString())" data-placement="right">
 
         <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
             <img style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
@@ -12,11 +12,18 @@
 
         @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
 
-
-        @*<span title="" class="pull-right font-verysmall"></span>*@
         <div class="clearfix"></div>
         
-        <hr/>
+        
+        <ul class="feed-options">
+            <li><a href="#"><i class="icon-question-sign"></i> Option 1</a></li>
+            <li><a href="#"><i class="icon-question-sign"></i> Option 2</a></li>
+            <li><a href="#"><i class="icon-question-sign"></i> Option 3</a></li>
+        </ul>
+        
+        <div class="clearfix"></div>
+
+        <hr class="no-margin"/>
 
     </div>
 

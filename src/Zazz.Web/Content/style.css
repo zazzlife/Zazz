@@ -26,6 +26,10 @@
     width: 1000px !important;
 }
 
+.tooltip {
+    white-space: pre-line;
+}
+
 /***************************************
     JQuery UI overrides
 ***************************************/
@@ -354,10 +358,6 @@ hr.dark-line {
         margin-left: 55px;
     }
 
-    .feed-item a {
-        font-weight: 600;
-    }
-
     .feed-item .img-caption {
         padding: 15px;
         position: absolute;
@@ -370,6 +370,28 @@ hr.dark-line {
         text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
         font-size: 14px;
         line-height: 18px;
+    }
+
+    .feed-item .feed-options {
+        display: block;
+        list-style: none;
+        margin: 15px 0 50px 10px;
+    }
+
+    .feed-item .feed-options li {
+        float: left;
+        margin-right: 20px;
+    }
+
+    .feed-item .feed-options li a {
+        color: #474747;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .feed-item .feed-options li a:hover {
+        color: black;
     }
 
 /***************************************
