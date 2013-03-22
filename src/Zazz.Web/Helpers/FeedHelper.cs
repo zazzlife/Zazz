@@ -123,7 +123,11 @@ namespace Zazz.Web.Helpers
                     }
 
                     feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    comments = feed.Post.Comments.OrderByDescending(c => c.Time).Take(5).ToList();
+                    comments = _uow.CommentRepository.GetAll()
+                                   .Where(c => c.PostId == feed.PostId)
+                                   .OrderByDescending(c => c.Time)
+                                   .Take(5)
+                                   .ToList();
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -136,7 +140,11 @@ namespace Zazz.Web.Helpers
                                             };
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    comments = feed.Photo.Comments.OrderByDescending(c => c.Time).Take(5).ToList();
+                    comments = _uow.CommentRepository.GetAll()
+                                   .Where(c => c.PhotoId == feed.PhotoId)
+                                   .OrderByDescending(c => c.Time)
+                                   .Take(5)
+                                   .ToList();
                 }
 
                 if (comments != null && comments.Count > 0)
@@ -151,7 +159,7 @@ namespace Zazz.Web.Helpers
                                                  UserDisplayName = _userService.GetUserDisplayName(c.FromId),
                                                  UserId = c.FromId,
                                                  UserPhotoUrl = _photoService.GetUserImageUrl(c.FromId)
-                                             });
+                                             }).ToList();
                 }
 
                 vm.Add(feedVm);
