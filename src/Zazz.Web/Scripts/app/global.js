@@ -292,6 +292,12 @@ $('.comment-textbox').on('keypress', function(e) {
     
     // Enter is pressed
     var self = $(this);
+    var comment = self.val();
+
+    if (!comment) {
+        return;
+    }
+        
 
     //disableing the current text box and removing focus
     self.attr('disabled', 'disabled');
@@ -312,6 +318,31 @@ $('.comment-textbox').on('keypress', function(e) {
 
     loadingIndicator.appendTo(self.parent());
     loadingIndicator.hide().fadeIn('slow');
+
+
+    var id = self.data('id');
+    var feedType = self.attr('data-feedType');
+    var url = "/comment/new";
+
+    $.ajax({
+        url: url,
+        data: {
+            id: id,
+            feedType: feedType,
+            comment: comment
+        },
+        error: function() {
+            toastr.error("An error occured. Please try again later.");
+            self.removeAttr('disabled');
+            loadingIndicator.remove();
+        },
+        success: function (res) {
+            self.val('');
+            self.removeAttr('disabled');
+            loadingIndicator.remove();
+        }
+    });
+
 });
 
 ///////////////////////////////
