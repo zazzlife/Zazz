@@ -4,17 +4,14 @@
 }
 <div class="feed-comments-section">
     <div>
-        <img src="@Model.CurrentUserPhotoUrl" class="img-small-rounded"/>
+        <img title="You" src="@Model.CurrentUserPhotoUrl" class="img-small-rounded"/>
         <input data-id="@Model.ItemId" data-feedType="@Model.FeedType" type="text" class="comment-textbox" placeholder="Write a comment..." />
     </div>
     <ul class="feed-comments">
 
         @if (Model.Comments != null)
         {
-            foreach (var c in Model.Comments)
-            {
-                @Html.Partial("FeedItems/_SingleComment", c)
-            }
+            @Html.Partial("FeedItems/_CommentList", Model.Comments)
         }
 
     </ul>

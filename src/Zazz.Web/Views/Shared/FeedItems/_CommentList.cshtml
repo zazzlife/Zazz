@@ -1,0 +1,9 @@
+﻿@model IEnumerable<CommentViewModel>
+@{
+    Layout = null;
+}
+
+@foreach (var c in Model)
+{
+    @Html.Partial("FeedItems/_SingleComment", c)
+}

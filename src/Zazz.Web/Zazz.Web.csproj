@@ -432,6 +432,7 @@
     <Content Include="Views\Shared\_LightBoxPartial.cshtml" />
     <Content Include="Views\Shared\FeedItems\_FeedComments.cshtml" />
     <Content Include="Views\Shared\FeedItems\_SingleComment.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_CommentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
