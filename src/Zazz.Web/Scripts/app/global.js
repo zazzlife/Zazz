@@ -18,6 +18,31 @@ function hideBtnBusy(btn, originalText) {
     $(btn).html(originalText);
 }
 
+function applyPageStyles() {
+    $('.datepicker').datetimepicker();
+    $('*[title]').tooltip();
+}
+
+$('#party-web-link').click(function () {
+    var url = "/follow/GetFollowRequests";
+
+    $.ajax({
+        url: url,
+        cache: false,
+        error: function () {
+            toastr.error("An error occured, Please try again later.");
+        },
+        success: function (data) {
+            var container = $('#party-web-requests-body');
+            container.fadeOut('slow', function () {
+                container.html(data);
+                container.fadeIn('slow');
+            });
+        }
+    });
+
+});
+
 /////////////// SELECT IMAGE FROM GALLERY ////////////////
 
 function loadAlbumsDropDownAsync(dropdownElem) {
@@ -347,6 +372,7 @@ $('.comment-textbox').on('keypress', function(e) {
             var commentElem = commentsContainer.children(':first');
             commentElem.hide().slideDown();
 
+            applyPageStyles();
         }
     });
 
@@ -355,27 +381,6 @@ $('.comment-textbox').on('keypress', function(e) {
 ///////////////////////////////
 $(function() {
 
-    $('.datepicker').datetimepicker();
-
-    $('*[title]').tooltip();
-
-    $('#party-web-link').click(function() {
-        var url = "/follow/GetFollowRequests";
-
-        $.ajax({
-            url: url,
-            cache: false,
-            error: function() {
-                toastr.error("An error occured, Please try again later.");
-            },
-            success: function(data) {
-                var container = $('#party-web-requests-body');
-                container.fadeOut('slow', function() {
-                    container.html(data);
-                    container.fadeIn('slow');
-                });
-            }
-        });
-
-    });
+    applyPageStyles();
+    
 });
