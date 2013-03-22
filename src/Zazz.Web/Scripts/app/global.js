@@ -280,6 +280,41 @@ $('#navbarSearch').autocomplete({
             .appendTo(ul);
 };
 
+/********************************
+    Comments
+*********************************/
+
+$('.comment-textbox').on('keypress', function(e) {
+
+    if (e.keyCode != 13) {
+        return;
+    }
+    
+    // Enter is pressed
+    var self = $(this);
+
+    //disableing the current text box and removing focus
+    self.attr('disabled', 'disabled');
+    self.blur();
+
+    //getting the current position and creating the loading indicator
+    var position = self.offset();
+    var i = document.createElement('i');
+    var loadingIndicator = $(i);
+
+    position.left += (self.width() - 8);
+    position.top += 8;
+
+    loadingIndicator.addClass('icon-refresh');
+    loadingIndicator.addClass('icon-spin');
+    loadingIndicator.css(position);
+    loadingIndicator.css('position', 'absolute');
+
+    loadingIndicator.appendTo(self.parent());
+    loadingIndicator.hide().fadeIn('slow');
+});
+
+///////////////////////////////
 $(function() {
 
     $('.datepicker').datetimepicker();
