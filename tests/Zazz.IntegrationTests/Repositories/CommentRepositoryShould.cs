@@ -43,14 +43,14 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var e1Comment1 = new Comment
                                  {
-                                     Date = DateTime.Now,
+                                     Time = DateTime.Now,
                                      FromId = _user.Id,
                                      Message = "m",
                                      PostId = _event1.Id
                                  };
             var e1Comment2 = new Comment
             {
-                Date = DateTime.Now,
+                Time = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
                 PostId = _event1.Id
@@ -58,7 +58,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             var e2Comment1 = new Comment
             {
-                Date = DateTime.Now,
+                Time = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
                 PostId = _event2.Id

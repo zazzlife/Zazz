@@ -14,13 +14,16 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("PostId")]
         public Post Post { get; set; }
 
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
+
+        [ForeignKey("PhotoId")]
+        public Photo Photo { get; set; }
+
+        public int? PhotoId { get; set; }
 
         [MaxLength(1000)]
         public string Message { get; set; }
 
-        public DateTime Date { get; set; }
-
-        public int? ParentId { get; set; }
+        public DateTime Time { get; set; }
     }
 }
