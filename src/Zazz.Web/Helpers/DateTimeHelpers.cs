@@ -22,6 +22,9 @@ namespace Zazz.Web.Helpers
             }
             if (delta < 1 * MINUTE)
             {
+                if (ts.Seconds == 0)
+                    return "just now!";
+
                 return ts.Seconds == 1 ? "one second ago" : ts.Seconds + " seconds ago";
             }
             if (delta < 2 * MINUTE)
