@@ -429,6 +429,7 @@
     <Content Include="Views\Album\_PhotosPartial.cshtml" />
     <Content Include="Views\Shared\_LightBoxPartial.cshtml" />
     <Content Include="Views\Shared\FeedItems\_FeedComments.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_SingleComment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

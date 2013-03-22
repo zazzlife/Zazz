@@ -11,7 +11,7 @@ namespace Zazz.Web.Controllers
     {
         public ActionResult New(int id, FeedType feedType, string comment)
         {
-            return View("FeedItems/_FeedComments");
+            return View("FeedItems/_SingleComment");
         }
     }
 }

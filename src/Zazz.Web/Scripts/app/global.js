@@ -340,6 +340,13 @@ $('.comment-textbox').on('keypress', function(e) {
             self.val('');
             self.removeAttr('disabled');
             loadingIndicator.remove();
+
+            var commentsContainer = self.parent().next('.feed-comments');
+            commentsContainer.prepend(res);
+
+            var commentElem = commentsContainer.children(':first');
+            commentElem.hide().slideDown();
+
         }
     });
 
