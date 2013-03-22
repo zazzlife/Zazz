@@ -1,12 +1,19 @@
 ﻿@model FeedViewModel
-<div class="feed-item well well-small">
-    <p>
-        <img src="@Model.UserImageUrl" class="feed-user-img img-rounded"/>
-        <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/event/show/@Model.EventViewModel.Id">event</a>
-    </p>
-    <div class="feed-content">@Html.Partial("_EventPartial", Model.EventViewModel)</div>
-    
+<div class="feed-item">
+    <a href="~/user/profile/@Model.UserId">
+        <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
+    </a>
 
-    <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall">@Model.RelativeTime</span>
-    <div class="clearfix"></div>
+    <div class="feed-content well well-small">
+        <p>
+            <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/event/show/@Model.EventViewModel.Id">event</a>
+        </p>
+        
+        @Html.Partial("_EventPartial", Model.EventViewModel)
+    
+        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall">@Model.RelativeTime</div>
+        <div class="clearfix"></div>
+    </div>
+    
+    
 </div>
