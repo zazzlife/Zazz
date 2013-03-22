@@ -1,18 +1,25 @@
 ﻿@model FeedViewModel
-<div class="feed-item well well-small">
-    <p>
-        <img src="@Model.UserImageUrl" class="feed-user-img img-rounded" />
-        <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has uploaded a new photo
-   
-    </p>
-    <div class="feed-content">
+<div class="feed-item">
+    <a href="~/user/profile/@Model.UserId">
+        <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
+    </a>
+
+    <div class="feed-content well well-small no-padding" title="@Model.RelativeTime (@Model.Time.ToLongDateString() @Model.Time.ToShortTimeString())">
+
         <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
-            <img class="img-rounded" style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
+            <img style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
         </a>
+
+        @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
+
+
+        @*<span title="" class="pull-right font-verysmall"></span>*@
+        <div class="clearfix"></div>
+        
+        <hr/>
+
     </div>
 
-    @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
 
-    <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" style="margin-top: 15px;" class="pull-right font-verysmall">@Model.RelativeTime</span>
-    <div class="clearfix"></div>
+
 </div>
