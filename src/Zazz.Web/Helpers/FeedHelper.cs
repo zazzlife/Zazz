@@ -73,7 +73,6 @@ namespace Zazz.Web.Helpers
         {
             var vm = new List<FeedViewModel>();
 
-            var currentUserDisplayName = _userService.GetUserDisplayName(userId);
             var currentUserPhotoUrl = _photoService.GetUserImageUrl(userId);
 
             foreach (var feed in feeds)
@@ -88,8 +87,6 @@ namespace Zazz.Web.Helpers
                                  CommentsViewModel = new CommentsViewModel
                                                      {
                                                          FeedType = feed.FeedType,
-                                                         CurrentUserId = userId,
-                                                         CurrentUserDisplayName = currentUserDisplayName,
                                                          CurrentUserPhotoUrl = currentUserPhotoUrl,
                                                      }
                              };

@@ -8,11 +8,7 @@ namespace Zazz.Web.Models
     /// </summary>
     public class CommentsViewModel
     {
-        public int CurrentUserId { get; set; }
-
         public string CurrentUserPhotoUrl { get; set; }
-
-        public string CurrentUserDisplayName { get; set; }
 
         /// <summary>
         /// This is id of the item that the user can comment on. (post/event/photo/...)
