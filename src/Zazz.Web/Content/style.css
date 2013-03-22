@@ -417,14 +417,22 @@ hr.dark-line {
 
     .feed-item .feed-comments {
         margin: 10px 2px 0 36px;
+        list-style: none;
     }
 
     .feed-item .feed-comment {
-        font-size: 12px
+        font-size: 12px;
+        border-bottom: #a5a5a5 dashed 1px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .feed-item .feed-comment:last-child {
+        border-bottom: 0;
     }
 
     .feed-item .feed-comment .comment-text {
-        margin-left: 38px;
+        margin: 0 0 0 38px;
     }
 
 /***************************************
