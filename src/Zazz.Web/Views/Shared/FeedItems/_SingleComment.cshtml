@@ -8,6 +8,18 @@
     </a>
     
     <p class="comment-text">@Model.CommentText</p>
-    <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall">@Model.Time.ToRelativeTime()</span>
+    <div>
+        @if (Model.IsFromCurrentUser)
+        {
+            <ul class="comment-options">
+                <li><a href="#" class="font-verysmall"><i class="icon-remove"></i>Remove</a></li>
+                <li><a href="#" class="font-verysmall"><i class="icon-pencil"></i>Edit</a></li>
+            </ul>
+        }
+
+        <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()"
+              data-placement="right" class="pull-right font-verysmall">@Model.Time.ToRelativeTime()</span>
+    </div>
+    
     <div class="clearfix"></div>
 </li>

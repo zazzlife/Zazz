@@ -438,6 +438,20 @@ hr.dark-line {
         margin: 0 0 0 38px;
     }
 
+    .feed-item .comment-options {
+        list-style: none;
+        margin: 20px 0 0 0;
+    }
+
+    .feed-item .comment-options li {
+        float: left;
+        margin-right: 15px;
+    }
+
+    .feed-item .comment-options li a{
+        text-decoration: none;
+    }
+
 /***************************************
         Events
 ***************************************/
