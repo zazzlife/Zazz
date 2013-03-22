@@ -30,7 +30,7 @@ namespace Zazz.Web.Helpers
         }
 
         /// <summary>
-        /// Returns a list of activities of people that the user follows
+        /// Returns a list of activities of people that the user follows and the user himself
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="page"></param>
@@ -48,7 +48,7 @@ namespace Zazz.Web.Helpers
                             .Take(PageSize)
                             .ToList();
 
-            return await ConvertFeedsToFeedsViewModelAsync(feeds);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds, userId);
         }
 
         /// <summary>
@@ -66,12 +66,15 @@ namespace Zazz.Web.Helpers
                             .Take(PageSize)
                             .ToList();
 
-            return await ConvertFeedsToFeedsViewModelAsync(feeds);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds, userId);
         }
 
-        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds)
+        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds, int userId)
         {
             var vm = new List<FeedViewModel>();
+
+            var currentUserDisplayName = _userService.GetUserDisplayName(userId);
+            var currentUserPhotoUrl = _photoService.GetUserImageUrl(userId);
 
             foreach (var feed in feeds)
             {
@@ -82,7 +85,16 @@ namespace Zazz.Web.Helpers
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
                                  FeedType = feed.FeedType,
                                  Time = feed.Time,
+                                 CommentsViewModel = new CommentsViewModel
+                                                     {
+                                                         FeedType = feed.FeedType,
+                                                         CurrentUserId = userId,
+                                                         CurrentUserDisplayName = currentUserDisplayName,
+                                                         CurrentUserPhotoUrl = currentUserPhotoUrl,
+                                                     }
                              };
+
+                List<Comment> comments = null;
 
                 if (feed.FeedType == FeedType.Event)
                 {
@@ -113,6 +125,8 @@ namespace Zazz.Web.Helpers
                                                            photo.Id);
                     }
 
+                    feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
+                    comments = feed.Post.Comments.OrderByDescending(c => c.Time).Take(5).ToList();
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -123,6 +137,24 @@ namespace Zazz.Web.Helpers
                                                 PhotoId = photo.Id,
                                                 PhotoDescription = photo.Description
                                             };
+
+                    feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
+                    comments = feed.Photo.Comments.OrderByDescending(c => c.Time).Take(5).ToList();
+                }
+
+                if (comments != null && comments.Count > 0)
+                {
+                    feedVm.CommentsViewModel.Comments =
+                        comments.Select(c => new CommentViewModel
+                                             {
+                                                 CommentId = c.Id,
+                                                 CommentText = c.Message,
+                                                 IsFromCurrentUser = c.FromId == userId,
+                                                 Time = c.Time,
+                                                 UserDisplayName = _userService.GetUserDisplayName(c.FromId),
+                                                 UserId = c.FromId,
+                                                 UserPhotoUrl = _photoService.GetUserImageUrl(c.FromId)
+                                             });
                 }
 
                 vm.Add(feedVm);
