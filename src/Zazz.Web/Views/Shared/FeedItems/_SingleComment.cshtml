@@ -3,8 +3,8 @@
     Layout = null;
 }
 <li class="feed-comment">
-    <a href="~/user/profile/@Model.UserId" title="@Model.UserDisplayName">
-        <img src="@Model.UserPhotoUrl" class="img-small-rounded pull-left" />
+    <a href="~/user/profile/@Model.UserId">
+        <img src="@Model.UserPhotoUrl" class="img-small-rounded pull-left" title="@Model.UserDisplayName"/>
     </a>
     
     <p class="comment-text">@Model.CommentText</p>
