@@ -30,6 +30,10 @@
     white-space: pre-line;
 }
 
+input {
+    border-radius: 2px !important;
+}
+
 /***************************************
     JQuery UI overrides
 ***************************************/
@@ -392,6 +396,35 @@ hr.dark-line {
 
     .feed-item .feed-options li a:hover {
         color: black;
+    }
+
+    .feed-item .feed-comments-section {
+        border-top: solid white 1px;
+        margin: 0 10px;
+        padding: 15px 0;
+    }
+
+    .feed-item .feed-comments-section img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .feed-item .feed-comments-section .comment-textbox {
+        margin: 0;
+        font-size: 12px;
+        width: 427px;
+    }
+
+    .feed-item .feed-comments {
+        margin: 10px 2px 0 36px;
+    }
+
+    .feed-item .feed-comment {
+        font-size: 12px
+    }
+
+    .feed-item .feed-comment .comment-text {
+        margin-left: 38px;
     }
 
 /***************************************
