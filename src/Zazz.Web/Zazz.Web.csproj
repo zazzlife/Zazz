@@ -237,6 +237,8 @@
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\AlbumListViewModel.cs" />
     <Compile Include="Models\AlbumPhotosViewModel.cs" />
+    <Compile Include="Models\CommentsViewModel.cs" />
+    <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\EventListViewModel.cs" />
     <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\FineUploadResponse.cs" />
