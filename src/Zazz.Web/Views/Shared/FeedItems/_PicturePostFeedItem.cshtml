@@ -4,14 +4,15 @@
         <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
     </a>
 
-    <div class="feed-content well well-small no-padding" title="@Model.RelativeTime @Environment.NewLine (@Model.Time.ToLongDateString() @Model.Time.ToShortTimeString())" data-placement="right">
+    <div class="feed-content well well-small no-padding">
 
         <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
             <img style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
         </a>
 
         @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
-
+        
+        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.RelativeTime</div>
         <div class="clearfix"></div>
         
         

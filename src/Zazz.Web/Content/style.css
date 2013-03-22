@@ -415,6 +415,7 @@ hr.dark-line {
         margin: 0;
         font-size: 12px;
         width: 427px;
+        font-style: italic;
     }
 
     .feed-item .feed-comments {
