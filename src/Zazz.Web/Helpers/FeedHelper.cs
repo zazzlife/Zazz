@@ -80,7 +80,6 @@ namespace Zazz.Web.Helpers
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
-                                 RelativeTime = feed.Time.ToRelativeTime(),
                                  FeedType = feed.FeedType,
                                  Time = feed.Time,
                              };

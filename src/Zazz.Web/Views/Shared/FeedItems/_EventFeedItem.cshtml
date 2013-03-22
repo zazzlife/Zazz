@@ -12,7 +12,7 @@
 
             @Html.Partial("_EventPartial", Model.EventViewModel)
 
-            <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall" data-placement="right">@Model.RelativeTime</div>
+            <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall" data-placement="right">@Model.Time.ToRelativeTime()</div>
             <div class="clearfix"></div>
 
         </div>

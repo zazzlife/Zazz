@@ -12,7 +12,7 @@
 
         @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
         
-        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.RelativeTime</div>
+        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()</div>
         <div class="clearfix"></div>
         
         

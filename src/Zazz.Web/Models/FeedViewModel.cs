@@ -17,8 +17,6 @@ namespace Zazz.Web.Models
 
         public PhotoViewModel PhotoViewModel { get; set; }
 
-        public string RelativeTime { get; set; }
-
         public DateTime Time { get; set; }
     }
 }
