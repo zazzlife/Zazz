@@ -426,8 +426,8 @@ hr.dark-line {
     .feed-item .feed-comment {
         font-size: 12px;
         border-bottom: #a5a5a5 dashed 1px;
-        margin-bottom: 10px;
-        padding-bottom: 10px;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
     }
 
     .feed-item .feed-comment:last-child {
