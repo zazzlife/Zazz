@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -30,8 +31,20 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             using (_userService)
             {
+                if (id == 0)
+                    throw new ArgumentException("Id cannot be 0", "id");
 
-                return View("FeedItems/_CommentList");
+                if (lastComment == 0)
+                    throw new ArgumentException("Last Comment cannot be 0", "lastComment");
+
+                var userId = 0;
+                if (User.Identity.IsAuthenticated)
+                    userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+
+                var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+                var comments = feedHelper.GetComments(id, feedType, userId, lastComment, 10);
+
+                return View("FeedItems/_CommentList", comments);
             }
         }
             

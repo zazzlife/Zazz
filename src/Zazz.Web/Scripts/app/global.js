@@ -500,7 +500,7 @@ $(document).on('click', '.load-comments-btn', function() {
             hideBtnBusy(self, btnText);
         },
         success: function(res) {
-            ul.appendTo(res);
+            ul.append(res);
             hideBtnBusy(self, btnText);
         }
     });
