@@ -46,12 +46,23 @@ function showCropImg(modalBody, imgId, imgUrl) {
         var imgHeight = imgELem.naturalHeight;
         var imgWidth = imgELem.naturalWidth;
 
-        $('#cropImg').Jcrop({
-            boxWidth: 530, boxHeight: 400,
-            trueSize: [imgWidth, imgHeight],
-            onChange: onCropSelectionChange,
-            aspectRatio: aspectRatio
-        });
+        if (!imgHeight || !imgWidth) {
+            $('#cropImg').Jcrop({
+                boxWidth: 530, boxHeight: 400,
+                onChange: onCropSelectionChange,
+                aspectRatio: aspectRatio
+            });
+        } else {
+            $('#cropImg').Jcrop({
+                boxWidth: 530, boxHeight: 400,
+                trueSize: [imgWidth, imgHeight],
+                onChange: onCropSelectionChange,
+                aspectRatio: aspectRatio
+            });
+        }
+            
+
+        
     });
 
 }
