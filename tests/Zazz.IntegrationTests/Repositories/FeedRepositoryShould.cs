@@ -169,7 +169,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RemoveRecord_OnRemovePostFeed()
+        public void RemoveRecord_OnRemoveEventFeed()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -177,24 +177,26 @@ namespace Zazz.IntegrationTests.Repositories
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();
 
-            var post = new Post
+            var zazzEvent = new ZazzEvent
                        {
                            CreatedDate = DateTime.UtcNow,
-                           Title = "title",
-                           Message = "message",
+                           Time = DateTime.Now,
+                           TimeUtc = DateTime.UtcNow,
+                           Name = "title",
+                           Description = "message",
                            UserId = user.Id
                        };
 
-            _dbContext.Posts.Add(post);
+            _dbContext.Events.Add(zazzEvent);
             _dbContext.SaveChanges();
 
-            var feed = new Feed { UserId = user.Id, PostId = post.Id, Time = DateTime.UtcNow };
+            var feed = new Feed { UserId = user.Id, EventId = zazzEvent.Id, Time = DateTime.UtcNow };
             _dbContext.Feeds.Add(feed);
             _dbContext.SaveChanges();
 
             Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
             //Act
-            _repo.RemovePostFeed(post.Id);
+            _repo.RemoveEventFeed(zazzEvent.Id);
             _dbContext.SaveChanges();
 
             //Assert

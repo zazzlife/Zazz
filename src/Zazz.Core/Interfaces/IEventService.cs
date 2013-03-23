@@ -4,36 +4,36 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IPostService : IDisposable
+    public interface IEventService : IDisposable
     {
         /// <summary>
-        /// Creates an event or post.
+        /// Creates an event
         /// </summary>
-        /// <param name="post"></param>
+        /// <param name="zazzEvent"></param>
         /// <returns></returns>
-        Task CreatePostAsync(Post post);
+        Task CreateEventAsync(ZazzEvent zazzEvent);
 
         /// <summary>
         /// Updates an event.
         /// </summary>
-        /// <param name="post">The post to update. (Id is required)</param>
+        /// <param name="zazzEvent">The event to update. (Id is required)</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task UpdatePostAsync(Post post, int currentUserId);
+        Task UpdateEventAsync(ZazzEvent zazzEvent, int currentUserId);
 
         /// <summary>
         /// Gets an entry
         /// </summary>
-        /// <param name="id">Event or post id</param>
+        /// <param name="id">Event id</param>
         /// <returns></returns>
-        Task<Post> GetPostAsync(int id);
+        Task<ZazzEvent> GetEventAsync(int id);
 
         /// <summary>
         /// Deletes an event
         /// </summary>
-        /// <param name="postId">Id of the post to delete.</param>
+        /// <param name="eventId">Id of the event to delete.</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task DeletePostAsync(int postId, int currentUserId);
+        Task DeleteEventAsync(int eventId, int currentUserId);
     }
 }

@@ -16,16 +16,16 @@ namespace Zazz.Web.Controllers
     public class EventController : BaseController
     {
         private readonly IUserService _userService;
-        private readonly IPostService _postService;
+        private readonly IEventService _eventService;
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
 
         private const int PAGE_SIZE = 10;
 
-        public EventController(IUserService userService, IPostService postService, IUoW uow, IPhotoService photoService)
+        public EventController(IUserService userService, IEventService eventService, IUoW uow, IPhotoService photoService)
         {
             _userService = userService;
-            _postService = postService;
+            _eventService = eventService;
             _uow = uow;
             _photoService = photoService;
         }
@@ -74,24 +74,24 @@ namespace Zazz.Web.Controllers
         {
             var skip = (page - 1) * PAGE_SIZE;
 
-            var events = _uow.PostRepository.GetEventRange(from, to)
-                             .OrderBy(e => e.EventDetail.TimeUtc)
+            var events = _uow.EventRepository.GetEventRange(from, to)
+                             .OrderBy(e => e.TimeUtc)
                              .Skip(skip)
                              .Take(PAGE_SIZE)
                              .Select(e => new EventViewModel
                              {
-                                 City = e.EventDetail.City,
+                                 City = e.City,
                                  Id = e.Id,
                                  CreatedDate = e.CreatedDate,
-                                 Detail = e.Message,
+                                 Detail = e.Description,
                                  FacebookLink = e.FacebookPhotoLink,
-                                 Latitude = e.EventDetail.Latitude,
-                                 Longitude = e.EventDetail.Longitude,
-                                 Location = e.EventDetail.Location,
-                                 Name = e.Title,
-                                 Price = e.EventDetail.Price,
-                                 Street = e.EventDetail.Street,
-                                 Time = e.EventDetail.Time,
+                                 Latitude = e.Latitude,
+                                 Longitude = e.Longitude,
+                                 Location = e.Location,
+                                 Name = e.Name,
+                                 Price = e.Price,
+                                 Street = e.Street,
+                                 Time = e.Time,
                                  PhotoId = e.PhotoId
                              }).ToList();
 
@@ -107,7 +107,7 @@ namespace Zazz.Web.Controllers
                 e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
             }
 
-            var eventsCount = _uow.PostRepository.GetEventRange(from, to).Count();
+            var eventsCount = _uow.EventRepository.GetEventRange(from, to).Count();
 
             return new StaticPagedList<EventViewModel>(events, page, PAGE_SIZE, eventsCount);
         }
@@ -116,7 +116,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Create()
         {
             using (_userService)
-            using (_postService)
+            using (_eventService)
             using (_uow)
             using (_photoService)
             {
@@ -133,7 +133,7 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Create(EventViewModel vm)
         {
             using (_userService)
-            using (_postService)
+            using (_eventService)
             using (_uow)
             using (_photoService)
             {
@@ -147,7 +147,7 @@ namespace Zazz.Web.Controllers
                     var post = EventViewModelToPost(vm, userId);
                     post.CreatedDate = DateTime.UtcNow;
 
-                    await _postService.CreatePostAsync(post);
+                    await _eventService.CreateEventAsync(post);
                     return Redirect("~/event/show/" + post.Id);
                 }
             }
@@ -178,17 +178,16 @@ namespace Zazz.Web.Controllers
             if (ModelState.IsValid)
             {
                 using (_userService)
-                using (_postService)
+                using (_eventService)
                 using (_uow)
                 using (_photoService)
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
                     var post = EventViewModelToPost(vm, userId);
                     post.Id = id;
-                    post.EventDetail.Id = id;
                     post.CreatedDate = vm.CreatedDate.Value;
 
-                    await _postService.UpdatePostAsync(post, userId);
+                    await _eventService.UpdateEventAsync(post, userId);
                 }
 
                 return Redirect("~/event/show/" + id);
@@ -201,40 +200,36 @@ namespace Zazz.Web.Controllers
         public async Task<ActionResult> Remove(int id)
         {
             using (_userService)
-            using (_postService)
+            using (_eventService)
             using (_uow)
             using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _postService.DeletePostAsync(id, userId);
+                await _eventService.DeleteEventAsync(id, userId);
             }
 
             ShowAlert("The event has been deleted.", AlertType.Success);
             return Redirect("~/");
         }
 
-        private static Post EventViewModelToPost(EventViewModel vm, int userId)
+        private static ZazzEvent EventViewModelToPost(EventViewModel vm, int userId)
         {
-            var post = new Post
-                           {
-                               Title = vm.Name,
-                               Message = vm.Detail,
-                               IsEvent = true,
-                               UserId = userId,
-                               PhotoId = vm.PhotoId,
-                               EventDetail = new EventDetail
-                                                 {
-                                                     City = vm.City,
-                                                     Location = vm.Location,
-                                                     Price = vm.Price,
-                                                     Time = vm.Time,
-                                                     Street = vm.Street,
-                                                     Latitude = vm.Latitude,
-                                                     Longitude = vm.Longitude
-                                                 }
-                           };
+            var post = new ZazzEvent
+                       {
+                           Name = vm.Name,
+                           Description = vm.Detail,
+                           UserId = userId,
+                           PhotoId = vm.PhotoId,
+                           City = vm.City,
+                           Location = vm.Location,
+                           Price = vm.Price,
+                           Time = vm.Time,
+                           Street = vm.Street,
+                           Latitude = vm.Latitude,
+                           Longitude = vm.Longitude
+                       };
 
-            post.EventDetail.TimeUtc = DateTime.Parse(vm.UtcTime, CultureInfo.InvariantCulture,
+            post.TimeUtc = DateTime.Parse(vm.UtcTime, CultureInfo.InvariantCulture,
                                                       DateTimeStyles.RoundtripKind);
 
             return post;
@@ -243,13 +238,13 @@ namespace Zazz.Web.Controllers
         public async Task<EventViewModel> GetEventAsync(int id, bool ownerOnly)
         {
             using (_userService)
-            using (_postService)
+            using (_eventService)
             using (_uow)
             using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
 
-                var post = await _postService.GetPostAsync(id);
+                var post = await _eventService.GetEventAsync(id);
                 if (post == null)
                     throw new HttpException(404, "The requested entry was not found");
 
@@ -259,19 +254,19 @@ namespace Zazz.Web.Controllers
                 var vm = new EventViewModel
                 {
                     Id = post.Id,
-                    City = post.EventDetail.City,
+                    City = post.City,
                     CreatedDate = post.CreatedDate,
-                    Detail = post.Message,
-                    Location = post.EventDetail.Location,
-                    Name = post.Title,
-                    Price = post.EventDetail.Price,
-                    Time = post.EventDetail.Time,
-                    UtcTime = post.EventDetail.TimeUtc.ToString("s"),
-                    Street = post.EventDetail.Street,
+                    Detail = post.Description,
+                    Location = post.Location,
+                    Name = post.Name,
+                    Price = post.Price,
+                    Time = post.Time,
+                    UtcTime = post.TimeUtc.ToString("s"),
+                    Street = post.Street,
                     FacebookLink = post.FacebookLink,
                     IsOwner = post.UserId == userId,
-                    Latitude = post.EventDetail.Latitude,
-                    Longitude = post.EventDetail.Longitude,
+                    Latitude = post.Latitude,
+                    Longitude = post.Longitude,
                     PhotoId = post.PhotoId
                 };
 

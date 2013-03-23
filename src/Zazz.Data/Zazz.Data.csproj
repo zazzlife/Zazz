@@ -54,7 +54,7 @@
     <Compile Include="Repositories\FacebookSyncRetryRepository.cs" />
     <Compile Include="Repositories\OAuthAccountRepository.cs" />
     <Compile Include="Repositories\CommentRepository.cs" />
-    <Compile Include="Repositories\PostRepository.cs" />
+    <Compile Include="Repositories\EventRepository.cs" />
     <Compile Include="Repositories\FeedRepository.cs" />
     <Compile Include="Repositories\FollowRepository.cs" />
     <Compile Include="Repositories\FollowRequestRepository.cs" />

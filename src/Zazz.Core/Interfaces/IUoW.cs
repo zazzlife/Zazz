@@ -7,7 +7,7 @@ namespace Zazz.Core.Interfaces
     {
         IOAuthAccountRepository OAuthAccountRepository { get; }
         ICommentRepository CommentRepository { get; }
-        IPostRepository PostRepository { get; }
+        IEventRepository EventRepository { get; }
         IFollowRepository FollowRepository { get; }
         IFollowRequestRepository FollowRequestRepository { get; }
         IAlbumRepository AlbumRepository { get; }

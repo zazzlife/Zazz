@@ -21,13 +21,13 @@ namespace Zazz.IntegrationTests
                         };
          }
 
-        public static Post GetPost()
+        public static ZazzEvent GetEvent()
         {
-            return new Post
+            return new ZazzEvent
                        {
-                           Message = "some text",
+                           Description = "some text",
                            CreatedDate = DateTime.Now,
-                           Title = "Title"
+                           Name = "Title"
                        };
         }
     }

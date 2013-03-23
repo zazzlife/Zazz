@@ -74,7 +74,7 @@ namespace Zazz.Web.Controllers
 
                 if (feedType == FeedType.Post || feedType == FeedType.Event)
                 {
-                    c.PostId = id;
+                    c.EventId = id;
                 }
                 else if (feedType == FeedType.Picture)
                 {

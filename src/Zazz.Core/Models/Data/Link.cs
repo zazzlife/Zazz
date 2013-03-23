@@ -9,10 +9,5 @@ namespace Zazz.Core.Models.Data
         public string Url { get; set; }
 
         public LinkType LinkType { get; set; }
-
-        [ForeignKey("PostId")]
-        public Post Post { get; set; }
-
-        public int PostId { get; set; }
     }
 }

@@ -20,10 +20,10 @@ namespace Zazz.Data
             get { return _commentRepository ?? (_commentRepository = new CommentRepository(GetContext())); }
         }
 
-        private IPostRepository _postRepository;
-        public IPostRepository PostRepository
+        private IEventRepository _eventRepository;
+        public IEventRepository EventRepository
         {
-            get { return _postRepository ?? (_postRepository = new PostRepository(GetContext())); }
+            get { return _eventRepository ?? (_eventRepository = new EventRepository(GetContext())); }
         }
 
         private IFollowRepository _followRepository;

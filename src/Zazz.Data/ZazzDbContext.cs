@@ -16,13 +16,12 @@ namespace Zazz.Data
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
-        public IDbSet<Post> Posts { get; set; }
+        public IDbSet<ZazzEvent> Events { get; set; }
         public IDbSet<Link> Links { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
         public IDbSet<Feed> Feeds { get; set; }
-        public IDbSet<EventDetail> EventDetails { get; set; }
 
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
 
@@ -77,10 +76,6 @@ namespace Zazz.Data
                 .HasRequired(i => i.Uploader)
                 .WithMany(u => u.Photos)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Post>()
-                        .HasOptional(p => p.EventDetail)
-                        .WithRequired(e => e.Post);
 
             base.OnModelCreating(modelBuilder);
         }

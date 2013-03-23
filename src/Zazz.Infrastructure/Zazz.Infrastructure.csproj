@@ -62,7 +62,7 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\FollowService.cs" />
     <Compile Include="Services\PhotoService.cs" />
-    <Compile Include="Services\PostService.cs" />
+    <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

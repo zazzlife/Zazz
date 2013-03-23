@@ -84,7 +84,7 @@ namespace Zazz.Infrastructure.Services
                 photo.Uploader.UserDetail.CoverPhotoId = 0;
 
             _uow.FeedRepository.RemovePhotoFeed(photoId);
-            _uow.PostRepository.ResetPhotoId(photoId);
+            _uow.EventRepository.ResetPhotoId(photoId);
             _uow.UserRepository.ResetPhotoId(photoId);
 
             _uow.PhotoRepository.Remove(photo);

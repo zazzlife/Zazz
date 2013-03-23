@@ -12,8 +12,8 @@ namespace Zazz.IntegrationTests.Repositories
     {
         private ZazzDbContext _context;
         private CommentRepository _repo;
-        private Post _event1;
-        private Post _event2;
+        private ZazzEvent _event1;
+        private ZazzEvent _event2;
         private User _user;
 
         [SetUp]
@@ -26,14 +26,14 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(_user);
             _context.SaveChanges();
 
-            _event1 = Mother.GetPost();
+            _event1 = Mother.GetEvent();
             _event1.UserId = _user.Id;
 
-            _event2 = Mother.GetPost();
+            _event2 = Mother.GetEvent();
             _event2.UserId = _user.Id;
 
-            _context.Posts.Add(_event1);
-            _context.Posts.Add(_event2);
+            _context.Events.Add(_event1);
+            _context.Events.Add(_event2);
             _context.SaveChanges();
         }
 
@@ -46,14 +46,14 @@ namespace Zazz.IntegrationTests.Repositories
                                      Time = DateTime.Now,
                                      FromId = _user.Id,
                                      Message = "m",
-                                     PostId = _event1.Id
+                                     EventId = _event1.Id
                                  };
             var e1Comment2 = new Comment
             {
                 Time = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
-                PostId = _event1.Id
+                EventId = _event1.Id
             };
 
             var e2Comment1 = new Comment
@@ -61,7 +61,7 @@ namespace Zazz.IntegrationTests.Repositories
                 Time = DateTime.Now,
                 FromId = _user.Id,
                 Message = "m",
-                PostId = _event2.Id
+                EventId = _event2.Id
             };
 
             _repo.InsertGraph(e1Comment1);

@@ -77,8 +77,8 @@
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\ICommentRepository.cs" />
-    <Compile Include="Interfaces\IPostRepository.cs" />
-    <Compile Include="Interfaces\IPostService.cs" />
+    <Compile Include="Interfaces\IEventRepository.cs" />
+    <Compile Include="Interfaces\IEventService.cs" />
     <Compile Include="Interfaces\IFeedRepository.cs" />
     <Compile Include="Interfaces\IFollowRepository.cs" />
     <Compile Include="Interfaces\IFollowRequestRepository.cs" />
@@ -91,7 +91,6 @@
     <Compile Include="Models\Data\BaseEntity.cs" />
     <Compile Include="Models\Data\ClubDetail.cs" />
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
-    <Compile Include="Models\Data\EventDetail.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\Gender.cs" />
@@ -104,7 +103,7 @@
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
-    <Compile Include="Models\Data\Post.cs" />
+    <Compile Include="Models\Data\ZazzEvent.cs" />
     <Compile Include="Models\Data\Comment.cs" />
     <Compile Include="Models\Data\Feed.cs" />
     <Compile Include="Models\Data\Follow.cs" />

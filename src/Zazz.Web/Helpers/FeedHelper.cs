@@ -96,20 +96,20 @@ namespace Zazz.Web.Helpers
                     // EVENT
                     feedVm.EventViewModel = new EventViewModel
                                             {
-                                                City = feed.Post.EventDetail.City,
-                                                CreatedDate = feed.Post.CreatedDate,
-                                                Detail = feed.Post.Message,
-                                                FacebookLink = feed.Post.FacebookLink,
-                                                Id = feed.Post.Id,
+                                                City = feed.Event.City,
+                                                CreatedDate = feed.Event.CreatedDate,
+                                                Detail = feed.Event.Description,
+                                                FacebookLink = feed.Event.FacebookLink,
+                                                Id = feed.Event.Id,
                                                 IsOwner = false,
-                                                Latitude = feed.Post.EventDetail.Latitude,
-                                                Location = feed.Post.EventDetail.Location,
-                                                Longitude = feed.Post.EventDetail.Longitude,
-                                                Name = feed.Post.Title,
-                                                Price = feed.Post.EventDetail.Price,
-                                                Time = feed.Post.EventDetail.Time,
-                                                Street = feed.Post.EventDetail.Street,
-                                                PhotoId = feed.Post.PhotoId
+                                                Latitude = feed.Event.Latitude,
+                                                Location = feed.Event.Location,
+                                                Longitude = feed.Event.Longitude,
+                                                Name = feed.Event.Name,
+                                                Price = feed.Event.Price,
+                                                Time = feed.Event.Time,
+                                                Street = feed.Event.Street,
+                                                PhotoId = feed.Event.PhotoId
                                             };
 
                     if (feedVm.EventViewModel.PhotoId.HasValue)
@@ -120,8 +120,8 @@ namespace Zazz.Web.Helpers
                                                            photo.Id);
                     }
 
-                    feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, userId);
+                    feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value, feed.FeedType, userId);
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -150,7 +150,7 @@ namespace Zazz.Web.Helpers
 
             if (feedType == FeedType.Post || feedType == FeedType.Event)
             {
-                query = query.Where(c => c.PostId == id);
+                query = query.Where(c => c.EventId == id);
             }
             else if (feedType == FeedType.Picture)
             {

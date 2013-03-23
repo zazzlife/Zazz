@@ -36,9 +36,9 @@ namespace Zazz.Data.Repositories
                 Remove(item);
         }
 
-        public void RemovePostFeed(int postId)
+        public void RemoveEventFeed(int eventId)
         {
-            var item = DbSet.FirstOrDefault(f => f.PostId == postId);
+            var item = DbSet.FirstOrDefault(f => f.EventId == eventId);
             if (item != null)
                 Remove(item);
         }

@@ -12,6 +12,6 @@ namespace Zazz.Core.Interfaces
 
         void RemovePhotoFeed(int photoId);
 
-        void RemovePostFeed(int postId);
+        void RemoveEventFeed(int eventId);
     }
 }

@@ -10,20 +10,20 @@ using Zazz.Infrastructure.Services;
 namespace Zazz.UnitTests.Infrastructure.Services
 {
     [TestFixture]
-    public class PostServiceShould
+    public class EventServiceShould
     {
         private Mock<IUoW> _uow;
-        private PostService _sut;
+        private EventService _sut;
         private int _userId;
-        private Post _post;
+        private ZazzEvent _zazzEvent;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
-            _sut = new PostService(_uow.Object);
+            _sut = new EventService(_uow.Object);
             _userId = 21;
-            _post = new Post {UserId = _userId};
+            _zazzEvent = new ZazzEvent {UserId = _userId};
 
             _uow.Setup(x => x.SaveAsync())
                 .Returns(() => Task.Run(() => { }));
@@ -33,11 +33,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowExceptionWhenUserIdIs0_OnCreateEvent()
         {
             //Arrange
-            _post.UserId = 0;
+            _zazzEvent.UserId = 0;
             //Act
             try
             {
-                await _sut.CreatePostAsync(_post);
+                await _sut.CreateEventAsync(_zazzEvent);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException e)
@@ -50,33 +50,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task InsertAndSaveAndCreateFeed_OnCreateEvent()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.InsertGraph(_post));
+            _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
-            await _sut.CreatePostAsync(_post);
+            await _sut.CreateEventAsync(_zazzEvent);
 
             //Assert
-            _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
+            _uow.Verify(x => x.EventRepository.InsertGraph(_zazzEvent), Times.Once());
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Exactly(2));
         }
 
         [Test]
-        public async Task CallGetById_OnGetPost()
+        public async Task CallGetById_OnGetEvent()
         {
             //Arrange
             var id = 123;
-            var post = new Post();
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(id))
-                .Returns(() => Task.Run(() => post));
+            var zazzEvent = new ZazzEvent();
+            _uow.Setup(x => x.EventRepository.GetByIdAsync(id))
+                .Returns(() => Task.Run(() => zazzEvent));
 
             //Act
-            var result = await _sut.GetPostAsync(id);
+            var result = await _sut.GetEventAsync(id);
 
             //Assert
-            Assert.AreSame(post, result);
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(id), Times.Once());
+            Assert.AreSame(zazzEvent, result);
+            _uow.Verify(x => x.EventRepository.GetByIdAsync(id), Times.Once());
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UpdatePostAsync(_post, _userId);
+                await _sut.UpdateEventAsync(_zazzEvent, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -99,15 +99,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowIfCurrentUserDoesntMatchTheOwner_OnUpdateEvent()
         {
             //Arrange
-            _post.Id = 444;
-            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
 
             try
             {
-                await _sut.UpdatePostAsync(_post, _userId);
+                await _sut.UpdateEventAsync(_zazzEvent, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -115,22 +115,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PostRepository.GetOwnerIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
         public async Task SaveUpdatedEvent_OnUpdateEvent()
         {
             //Arrange
-            _post.Id = 444;
-            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
-                .Returns(() => Task.Run(() => _post.UserId));
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
+                .Returns(() => Task.Run(() => _zazzEvent.UserId));
 
             //Act
-            await _sut.UpdatePostAsync(_post, _userId);
+            await _sut.UpdateEventAsync(_zazzEvent, _userId);
 
             //Assert
-            _uow.Verify(x => x.PostRepository.InsertOrUpdate(_post), Times.Once());
+            _uow.Verify(x => x.EventRepository.InsertOrUpdate(_zazzEvent), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
 
         }
@@ -139,13 +139,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ShouldThrowIfEventIdIs0_OnDelete()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
+            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
             try
             {
-                await _sut.DeletePostAsync(0, _post.UserId);
+                await _sut.DeleteEventAsync(0, _zazzEvent.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -160,15 +160,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowIfUserIdDoesntMatchTheOwnerId_OnDelete()
         {
             //Arrange
-            _post.Id = 444;
-            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => 123));
 
             //Act
 
             try
             {
-                await _sut.DeletePostAsync(_post.Id, _post.UserId);
+                await _sut.DeleteEventAsync(_zazzEvent.Id, _zazzEvent.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -176,27 +176,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PostRepository.GetOwnerIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
         public async Task Delete_OnDelete()
         {
             //Arrange
-            _post.Id = 444;
-            _uow.Setup(x => x.PostRepository.GetOwnerIdAsync(_post.Id))
-                .Returns(() => Task.Run(() =>_post.UserId));
-            _uow.Setup(x => x.PostRepository.RemoveAsync(_post.Id))
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
+                .Returns(() => Task.Run(() =>_zazzEvent.UserId));
+            _uow.Setup(x => x.EventRepository.RemoveAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => { }));
-            _uow.Setup(x => x.FeedRepository.RemovePostFeed(_post.Id));
+            _uow.Setup(x => x.FeedRepository.RemoveEventFeed(_zazzEvent.Id));
 
             //Act
-            await _sut.DeletePostAsync(_post.Id, _userId);
+            await _sut.DeleteEventAsync(_zazzEvent.Id, _userId);
 
             //Assert
-            _uow.Verify(x => x.PostRepository.RemoveAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.RemoveAsync(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemovePostFeed(_post.Id), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveEventFeed(_zazzEvent.Id), Times.Once());
         }
 
 
