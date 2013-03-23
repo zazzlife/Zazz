@@ -309,6 +309,8 @@ $('#navbarSearch').autocomplete({
     Comments
 *********************************/
 
+//Add
+
 $('.comment-textbox').on('keypress', function(e) {
 
     if (e.keyCode != 13) {
@@ -336,8 +338,7 @@ $('.comment-textbox').on('keypress', function(e) {
     position.left += (self.width() - 8);
     position.top += 8;
 
-    loadingIndicator.addClass('icon-refresh');
-    loadingIndicator.addClass('icon-spin');
+    loadingIndicator.addClass('icon-refresh icon-spin');
     loadingIndicator.css(position);
     loadingIndicator.css('position', 'absolute');
 
@@ -373,6 +374,33 @@ $('.comment-textbox').on('keypress', function(e) {
             commentElem.hide().slideDown();
 
             applyPageStyles();
+        }
+    });
+
+});
+
+
+// Remove
+
+$(document).on('click', '.comment-remove', function(e) {
+    e.preventDefault();
+
+    var self = $(this);
+    var id = self.data('id');
+    var url = '/comment/remove/' + id;
+    var listItem = self.parent().parent().parent().parent();
+                    //      li       ul      div     li
+
+    listItem.css('opacity', '0.6');
+
+    $.ajax({
+        url: url,
+        error: function () {
+            listItem.css('opacity', '1');
+            toastr.error("An error occured. Please try again later.");
+        },
+        success: function() {
+            listItem.fadeOut();
         }
     });
 
