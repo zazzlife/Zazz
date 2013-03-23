@@ -37,7 +37,7 @@ function showCropImg(modalBody, imgId, imgUrl) {
 
     var html = '<p id="cropImg-loading-msg"><i class="icon-spin icon-refresh"></i> Please wait while the image is loading.</p>';
     html += '<img id="cropImg" src="' + imgUrl + '" />';
-    html += '<button style="margin-top:10px;" id="cropBtn" type="button" class="btn btn-info">Crop</button>';
+    html += '<button style="margin-top:10px;" id="cropBtn" type="button" class="btn btn-info disabled">Crop</button>';
 
     modalBody.slideUp(function () {
         modalBody.html(html);
@@ -64,6 +64,8 @@ function showCropImg(modalBody, imgId, imgUrl) {
                     aspectRatio: aspectRatio
                 });
             }
+
+            $('#cropBtn').removeClass('disabled');
         });
         
     });
