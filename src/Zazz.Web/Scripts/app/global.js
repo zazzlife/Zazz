@@ -422,6 +422,8 @@ $(document).on('click', '.comment-remove', function(e) {
 
 // Edit
 
+var originalComment;
+
 $(document).on('click', '.comment-edit', function(e) {
     e.preventDefault();
 
@@ -429,6 +431,8 @@ $(document).on('click', '.comment-edit', function(e) {
     var id = self.data('id');
     var p = self.parent().parent().parent().prev();
     var text = p.text();
+
+    originalComment = text;
 
     var editElem = $(document.createElement('input'));
     editElem.attr('type', 'text');
@@ -446,18 +450,22 @@ $(document).on('click', '.comment-edit', function(e) {
 
     editElem.tooltip('show');
 
+    editElem.focus();
+
 });
 
 $(document).on('keypress', '.comment-edit-box', function(e) {
+
+    var self = $(this);
+    var p = self.parent();
+    var comment = self.val();
 
     if (e.keyCode != 13) {
         return;
     }
 
     // Enter is pressed
-    var self = $(this);
-    var p = self.parent();
-    var comment = self.val();
+    
     var id = self.data('id');
 
     var url = '/comment/edit/' + id;
@@ -479,6 +487,11 @@ $(document).on('keypress', '.comment-edit-box', function(e) {
             p.html(comment);
         }
     });
+});
+
+$(document).on('blur', '.comment-edit-box', function(e) {
+    var p = $(this).parent();
+    p.html(originalComment);
 });
 
 // Get More Comments
