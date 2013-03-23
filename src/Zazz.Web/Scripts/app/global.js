@@ -494,6 +494,14 @@ $(document).on('blur', '.comment-edit-box', function(e) {
     p.html(originalComment);
 });
 
+$(document).on('keyup', '.comment-edit-box', function(e) {
+
+    if (e.keyCode == 27) {
+        var p = $(this).parent();
+        p.html(originalComment);
+    }
+});
+
 // Get More Comments
 
 $(document).on('click', '.load-comments-btn', function() {
