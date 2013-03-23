@@ -332,8 +332,14 @@ function showInputBusy(elem) {
     return loadingIndicator;
 }
 
+$('.comment-textbox').on('blur', function(e) {
+    $(this).tooltip('destroy');
+});
+
 //Add
-$('.comment-textbox').on('focus', function(e) {
+$('.comment-textbox').on('focus', function (e) {
+    $(this).tooltip('destroy');
+
     $(this).tooltip({
         title: "Press 'enter' to send",
         placement: 'right'
@@ -427,6 +433,7 @@ var originalComment;
 $(document).on('click', '.comment-edit', function(e) {
     e.preventDefault();
 
+
     var self = $(this);
     var id = self.data('id');
     var p = self.parent().parent().parent().prev();
@@ -489,7 +496,8 @@ $(document).on('keypress', '.comment-edit-box', function(e) {
     });
 });
 
-$(document).on('blur', '.comment-edit-box', function(e) {
+$(document).on('blur', '.comment-edit-box', function (e) {
+    $(this).tooltip('destroy');
     var p = $(this).parent();
     p.html(originalComment);
 });
@@ -497,6 +505,8 @@ $(document).on('blur', '.comment-edit-box', function(e) {
 $(document).on('keyup', '.comment-edit-box', function(e) {
 
     if (e.keyCode == 27) {
+        $(this).tooltip('destroy');
+        
         var p = $(this).parent();
         p.html(originalComment);
     }
@@ -546,6 +556,7 @@ $(document).on('click', '.load-comments-btn', function() {
             }
 
             hideBtnBusy(self, btnText);
+            applyPageStyles();
         }
     });
 
