@@ -472,6 +472,41 @@ $(document).on('keypress', '.comment-edit-box', function(e) {
     });
 });
 
+// Get More Comments
+
+$(document).on('click', '.load-comments-btn', function() {
+
+    var self = $(this);
+    var id = self.data('id');
+
+    var url = '/comment/get/' + id;
+    var feedType = self.attr('data-feedType');
+
+    var ul = self.prev();
+
+    var lastComment = ul.children('li:last-child');
+    var lastCommentId = lastComment.data('id');
+
+    var btnText = showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        data: {
+            feedType: feedType,
+            lastComment: lastCommentId
+        },
+        error: function() {
+            toastr.error("An error occured. Please try again later");
+            hideBtnBusy(self, btnText);
+        },
+        success: function(res) {
+            ul.appendTo(res);
+            hideBtnBusy(self, btnText);
+        }
+    });
+
+});
+
 ///////////////////////////////
 $(function() {
 

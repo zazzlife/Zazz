@@ -24,6 +24,35 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
+        public async Task<ActionResult> Get(int id, FeedType feedType, int lastComment)
+        {
+            using (_uow)
+            using (_photoService)
+            using (_userService)
+            {
+                const int PAGE_SIZE = 10;
+
+                var query = _uow.CommentRepository.GetAll();
+                if (feedType == FeedType.Post || feedType == FeedType.Event)
+                {
+                    query = query.Where(c => c.PhotoId == id);
+                }
+                else if (feedType == FeedType.Picture)
+                {
+                    query = query.Where(c => c.PhotoId == id);
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid feed type", "feedType");
+                }
+
+                query = query.Where(c => c.Id < lastComment)
+                             .Take(PAGE_SIZE);
+
+                return View("FeedItems/_CommentList");
+            }
+        }
+            
         [Authorize, HttpPost]
         public async Task<ActionResult> New(int id, FeedType feedType, string comment)
         {

@@ -2,7 +2,7 @@
 @{
     Layout = null;
 }
-<li class="feed-comment">
+<li class="feed-comment" data-id="@Model.CommentId">
     <a href="~/user/profile/@Model.UserId">
         <img src="@Model.UserPhotoUrl" class="img-small-rounded pull-left" title="@Model.UserDisplayName"/>
     </a>
