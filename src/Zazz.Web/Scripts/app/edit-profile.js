@@ -35,33 +35,36 @@ function showCropImg(modalBody, imgId, imgUrl) {
 
     cropPhotoId = imgId;
 
-    var html = '<img id="cropImg" src="' + imgUrl + '" />';
+    var html = '<p class="cropImg-loading-msg"><i class="icon-spin icon-refresh"></i> Please wait while the image is loading.</p>';
+    html += '<img id="cropImg" src="' + imgUrl + '" />';
     html += '<button style="margin-top:10px;" id="cropBtn" type="button" class="btn btn-info">Crop</button>';
 
     modalBody.slideUp(function () {
         modalBody.html(html);
         modalBody.slideDown();
 
-        var imgELem = document.getElementById("cropImg");
-        var imgHeight = imgELem.naturalHeight;
-        var imgWidth = imgELem.naturalWidth;
+        $('#cropImg').load(function() {
+            $('#cropImg-loading-msg').remove();
 
-        if (!imgHeight || !imgWidth) {
-            $('#cropImg').Jcrop({
-                boxWidth: 530, boxHeight: 400,
-                onChange: onCropSelectionChange,
-                aspectRatio: aspectRatio
-            });
-        } else {
-            $('#cropImg').Jcrop({
-                boxWidth: 530, boxHeight: 400,
-                trueSize: [imgWidth, imgHeight],
-                onChange: onCropSelectionChange,
-                aspectRatio: aspectRatio
-            });
-        }
-            
+            var imgELem = document.getElementById("cropImg");
+            var imgHeight = imgELem.naturalHeight;
+            var imgWidth = imgELem.naturalWidth;
 
+            if (!imgHeight || !imgWidth) {
+                $('#cropImg').Jcrop({
+                    boxWidth: 530, boxHeight: 400,
+                    onChange: onCropSelectionChange,
+                    aspectRatio: aspectRatio
+                });
+            } else {
+                $('#cropImg').Jcrop({
+                    boxWidth: 530, boxHeight: 400,
+                    trueSize: [imgWidth, imgHeight],
+                    onChange: onCropSelectionChange,
+                    aspectRatio: aspectRatio
+                });
+            }
+        });
         
     });
 
