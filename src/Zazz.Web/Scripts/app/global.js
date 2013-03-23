@@ -333,6 +333,15 @@ function showInputBusy(elem) {
 }
 
 //Add
+$('.comment-textbox').on('focus', function(e) {
+    $(this).tooltip({
+        title: "Press 'enter' to send",
+        placement: 'right'
+    });
+
+    $(this).tooltip('show');
+});
+
 
 $('.comment-textbox').on('keypress', function(e) {
 
@@ -424,7 +433,7 @@ $(document).on('click', '.comment-edit', function(e) {
     var editElem = $(document.createElement('input'));
     editElem.attr('type', 'text');
     editElem.attr('value', text);
-    editElem.attr('title', 'Press enter to send');
+    editElem.attr('title', "Press 'enter' to send");
     editElem.attr('data-id', id);
     editElem.css('width', 370);
     editElem.addClass('comment-edit-box');
