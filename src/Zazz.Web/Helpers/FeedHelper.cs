@@ -150,7 +150,7 @@ namespace Zazz.Web.Helpers
 
             if (feedType == FeedType.Post || feedType == FeedType.Event)
             {
-                query = query.Where(c => c.PhotoId == id);
+                query = query.Where(c => c.PostId == id);
             }
             else if (feedType == FeedType.Picture)
             {
