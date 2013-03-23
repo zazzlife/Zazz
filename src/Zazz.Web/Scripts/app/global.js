@@ -309,6 +309,29 @@ $('#navbarSearch').autocomplete({
     Comments
 *********************************/
 
+function showInputBusy(elem) {
+    //disableing the current text box and removing focus
+    elem.attr('disabled', 'disabled');
+    elem.blur();
+
+    //getting the current position and creating the loading indicator
+    var position = elem.offset();
+    var i = document.createElement('i');
+    var loadingIndicator = $(i);
+
+    position.left += (elem.width() - 8);
+    position.top += 8;
+
+    loadingIndicator.addClass('icon-refresh icon-spin');
+    loadingIndicator.css(position);
+    loadingIndicator.css('position', 'absolute');
+
+    loadingIndicator.appendTo(elem.parent());
+    loadingIndicator.hide().fadeIn('slow');
+
+    return loadingIndicator;
+}
+
 //Add
 
 $('.comment-textbox').on('keypress', function(e) {
@@ -324,27 +347,8 @@ $('.comment-textbox').on('keypress', function(e) {
     if (!comment) {
         return;
     }
-        
 
-    //disableing the current text box and removing focus
-    self.attr('disabled', 'disabled');
-    self.blur();
-
-    //getting the current position and creating the loading indicator
-    var position = self.offset();
-    var i = document.createElement('i');
-    var loadingIndicator = $(i);
-
-    position.left += (self.width() - 8);
-    position.top += 8;
-
-    loadingIndicator.addClass('icon-refresh icon-spin');
-    loadingIndicator.css(position);
-    loadingIndicator.css('position', 'absolute');
-
-    loadingIndicator.appendTo(self.parent());
-    loadingIndicator.hide().fadeIn('slow');
-
+    var loadingIndicator = showInputBusy(self);
 
     var id = self.data('id');
     var feedType = self.attr('data-feedType');
@@ -352,6 +356,7 @@ $('.comment-textbox').on('keypress', function(e) {
 
     $.ajax({
         url: url,
+        type: 'POST',
         data: {
             id: id,
             feedType: feedType,
@@ -404,6 +409,67 @@ $(document).on('click', '.comment-remove', function(e) {
         }
     });
 
+});
+
+// Edit
+
+$(document).on('click', '.comment-edit', function(e) {
+    e.preventDefault();
+
+    var self = $(this);
+    var id = self.data('id');
+    var p = self.parent().parent().parent().prev();
+    var text = p.text();
+
+    var editElem = $(document.createElement('input'));
+    editElem.attr('type', 'text');
+    editElem.attr('value', text);
+    editElem.attr('title', 'Press enter to send');
+    editElem.attr('data-id', id);
+    editElem.css('width', 370);
+    editElem.addClass('comment-edit-box');
+
+    p.html(editElem);
+
+    editElem.tooltip({
+        placement: 'right'
+    });
+
+    editElem.tooltip('show');
+
+});
+
+$(document).on('keypress', '.comment-edit-box', function(e) {
+
+    if (e.keyCode != 13) {
+        return;
+    }
+
+    // Enter is pressed
+    var self = $(this);
+    var p = self.parent();
+    var comment = self.val();
+    var id = self.data('id');
+
+    var url = '/comment/edit/' + id;
+
+    var loadingIndicator = showInputBusy(self);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            comment: comment
+        },
+        error: function() {
+            toastr.error('An error occured. Please try again later.');
+            self.removeAttr('disabled');
+            loadingIndicator.remove();
+        },
+        success: function () {
+            p.html(comment);
+        }
+    });
 });
 
 ///////////////////////////////

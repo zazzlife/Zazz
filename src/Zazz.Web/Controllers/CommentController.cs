@@ -101,6 +101,14 @@ namespace Zazz.Web.Controllers
 
                 await _uow.SaveAsync();
             }
-        } 
+        }
+
+        public async Task Edit(int id, string comment)
+        {
+            using (_uow)
+            using (_photoService)
+            using (_userService)
+            {}
+        }
     }
 }
