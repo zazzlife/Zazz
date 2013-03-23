@@ -78,5 +78,29 @@ namespace Zazz.Web.Controllers
                 return View("FeedItems/_SingleComment", commentVm);
             }
         }
+
+        [Authorize]
+        public async Task Remove(int id)
+        {
+            using (_uow)
+            using (_photoService)
+            using (_userService)
+            {
+                if (id == 0)
+                    throw new ArgumentException("Id cannot be 0", "id");
+
+                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var comment = await _uow.CommentRepository.GetByIdAsync(id);
+                if (comment == null)
+                    return;
+
+                if (comment.FromId != userId)
+                    throw new SecurityException();
+
+                _uow.CommentRepository.Remove(comment);
+
+                await _uow.SaveAsync();
+            }
+        } 
     }
 }
