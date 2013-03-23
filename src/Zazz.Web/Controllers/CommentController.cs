@@ -30,24 +30,6 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             using (_userService)
             {
-                const int PAGE_SIZE = 10;
-
-                var query = _uow.CommentRepository.GetAll();
-                if (feedType == FeedType.Post || feedType == FeedType.Event)
-                {
-                    query = query.Where(c => c.PhotoId == id);
-                }
-                else if (feedType == FeedType.Picture)
-                {
-                    query = query.Where(c => c.PhotoId == id);
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid feed type", "feedType");
-                }
-
-                query = query.Where(c => c.Id < lastComment)
-                             .Take(PAGE_SIZE);
 
                 return View("FeedItems/_CommentList");
             }

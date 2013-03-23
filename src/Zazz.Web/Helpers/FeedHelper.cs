@@ -91,8 +91,6 @@ namespace Zazz.Web.Helpers
                                                      }
                              };
 
-                List<Comment> comments = null;
-
                 if (feed.FeedType == FeedType.Event)
                 {
                     // EVENT
@@ -123,11 +121,7 @@ namespace Zazz.Web.Helpers
                     }
 
                     feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    comments = _uow.CommentRepository.GetAll()
-                                   .Where(c => c.PostId == feed.PostId)
-                                   .OrderByDescending(c => c.Time)
-                                   .Take(5)
-                                   .ToList();
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, userId);
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -140,32 +134,52 @@ namespace Zazz.Web.Helpers
                                             };
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    comments = _uow.CommentRepository.GetAll()
-                                   .Where(c => c.PhotoId == feed.PhotoId)
-                                   .OrderByDescending(c => c.Time)
-                                   .Take(5)
-                                   .ToList();
-                }
-
-                if (comments != null && comments.Count > 0)
-                {
-                    feedVm.CommentsViewModel.Comments =
-                        comments.Select(c => new CommentViewModel
-                                             {
-                                                 CommentId = c.Id,
-                                                 CommentText = c.Message,
-                                                 IsFromCurrentUser = c.FromId == userId,
-                                                 Time = c.Time,
-                                                 UserDisplayName = _userService.GetUserDisplayName(c.FromId),
-                                                 UserId = c.FromId,
-                                                 UserPhotoUrl = _photoService.GetUserImageUrl(c.FromId)
-                                             }).ToList();
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, userId);
                 }
 
                 vm.Add(feedVm);
             }
 
             return vm;
+        }
+
+        public List<CommentViewModel> GetComments(int id, FeedType feedType, int currentUserId, int lastComment = 0,
+                                                  int pageSize = 5)
+        {
+            var query = _uow.CommentRepository.GetAll();
+
+            if (feedType == FeedType.Post || feedType == FeedType.Event)
+            {
+                query = query.Where(c => c.PhotoId == id);
+            }
+            else if (feedType == FeedType.Picture)
+            {
+                query = query.Where(c => c.PhotoId == id);
+            }
+            else
+            {
+                throw new ArgumentException("Invalid feed type", "feedType");
+            }
+
+            if (lastComment != 0)
+                query = query.Where(c => c.Id < lastComment);
+
+
+            query = query.OrderByDescending(c => c.Time)
+                         .Take(pageSize);
+
+            var comments = query.ToList();
+
+            return comments.Select(c => new CommentViewModel
+                                     {
+                                         CommentId = c.Id,
+                                         CommentText = c.Message,
+                                         IsFromCurrentUser = c.FromId == currentUserId,
+                                         Time = c.Time,
+                                         UserDisplayName = _userService.GetUserDisplayName(c.FromId),
+                                         UserId = c.FromId,
+                                         UserPhotoUrl = _photoService.GetUserImageUrl(c.FromId)
+                                     }).ToList();
         }
     }
 }
