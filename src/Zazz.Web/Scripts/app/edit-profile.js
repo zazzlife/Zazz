@@ -52,13 +52,13 @@ function showCropImg(modalBody, imgId, imgUrl) {
 
             if (!imgHeight || !imgWidth) {
                 $('#cropImg').Jcrop({
-                    boxWidth: 530, boxHeight: 400,
+                    boxWidth: 530, boxHeight: 300,
                     onChange: onCropSelectionChange,
                     aspectRatio: aspectRatio
                 });
             } else {
                 $('#cropImg').Jcrop({
-                    boxWidth: 530, boxHeight: 400,
+                    boxWidth: 530, boxHeight: 300,
                     trueSize: [imgWidth, imgHeight],
                     onChange: onCropSelectionChange,
                     aspectRatio: aspectRatio
