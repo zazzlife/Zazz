@@ -499,8 +499,22 @@ $(document).on('click', '.load-comments-btn', function() {
             toastr.error("An error occured. Please try again later");
             hideBtnBusy(self, btnText);
         },
-        success: function(res) {
-            ul.append(res);
+        success: function (res) {
+            var newComments = $(res.trim());
+            newComments.appendTo(ul);
+
+            // there is a problem with animating them, so I'm going to do this manually
+
+            for (var i = 0; i < newComments.length; i++) {
+                var li = $(newComments[i]);
+                var id = li.data('id');
+                
+                if (id) {
+                    li.hide();
+                    li.fadeIn();
+                }
+            }
+
             hideBtnBusy(self, btnText);
         }
     });
