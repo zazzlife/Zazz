@@ -24,7 +24,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+        [Authorize, HttpPost]
         public async Task<ActionResult> New(int id, FeedType feedType, string comment)
         {
             using (_uow)
@@ -103,12 +103,28 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        [Authorize, HttpPost]
         public async Task Edit(int id, string comment)
         {
             using (_uow)
             using (_photoService)
             using (_userService)
-            {}
+            {
+                if (id == 0)
+                    throw new ArgumentException("Id cannot be 0", "id");
+
+                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var c = await _uow.CommentRepository.GetByIdAsync(id);
+                if (c == null)
+                    return;
+
+                if (c.FromId != userId)
+                    throw new SecurityException();
+
+                c.Message = comment;
+
+                await _uow.SaveAsync();
+            }
         }
     }
 }
