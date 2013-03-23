@@ -14,7 +14,7 @@ namespace Zazz.Web.Models
         public string Name { get; set; }
 
         [Required, DataType(DataType.MultilineText)]
-        public string Detail { get; set; }
+        public string Description { get; set; }
 
         [Required, Display(Name = "Time")]
         public DateTime Time { get; set; }

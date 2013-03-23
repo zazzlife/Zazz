@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers
                                  City = e.City,
                                  Id = e.Id,
                                  CreatedDate = e.CreatedDate,
-                                 Detail = e.Description,
+                                 Description = e.Description,
                                  FacebookLink = e.FacebookPhotoLink,
                                  Latitude = e.Latitude,
                                  Longitude = e.Longitude,
@@ -217,7 +217,7 @@ namespace Zazz.Web.Controllers
             var post = new ZazzEvent
                        {
                            Name = vm.Name,
-                           Description = vm.Detail,
+                           Description = vm.Description,
                            UserId = userId,
                            PhotoId = vm.PhotoId,
                            City = vm.City,
@@ -256,7 +256,7 @@ namespace Zazz.Web.Controllers
                     Id = post.Id,
                     City = post.City,
                     CreatedDate = post.CreatedDate,
-                    Detail = post.Description,
+                    Description = post.Description,
                     Location = post.Location,
                     Name = post.Name,
                     Price = post.Price,

@@ -18,7 +18,7 @@
 
         <img src="@Model.ImageUrl" style="width: 128px;" />
 
-        <p class="event-detail">@Model.Detail</p>
+        <p class="event-detail">@Model.Description</p>
         @if (Model.Price.HasValue)
         {
             <p class="event-price"><strong>@Model.Price.Value.ToString("C")</strong></p>    

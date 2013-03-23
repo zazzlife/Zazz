@@ -98,7 +98,7 @@ namespace Zazz.Web.Helpers
                                             {
                                                 City = feed.Event.City,
                                                 CreatedDate = feed.Event.CreatedDate,
-                                                Detail = feed.Event.Description,
+                                                Description = feed.Event.Description,
                                                 FacebookLink = feed.Event.FacebookLink,
                                                 Id = feed.Event.Id,
                                                 IsOwner = false,
