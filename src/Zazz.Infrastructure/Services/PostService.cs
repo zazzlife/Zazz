@@ -39,8 +39,10 @@ namespace Zazz.Infrastructure.Services
 
             if (post.UserId != currentUserId)
                 throw new SecurityException();
-
+            
             _uow.PostRepository.Remove(post);
+
+            
 
             await _uow.SaveAsync();
         }

@@ -76,7 +76,10 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             using (_postService)
-            {}
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                await _postService.RemovePostAsync(id, userId);
+            }
         }
     }
 }

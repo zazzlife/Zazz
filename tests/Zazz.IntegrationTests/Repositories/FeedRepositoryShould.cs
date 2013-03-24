@@ -161,7 +161,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
             //Act
-            _repo.RemovePhotoFeed(photo.Id);
+            _repo.RemovePhotoFeeds(photo.Id);
             _dbContext.SaveChanges();
 
             //Assert
@@ -196,7 +196,38 @@ namespace Zazz.IntegrationTests.Repositories
 
             Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
             //Act
-            _repo.RemoveEventFeed(zazzEvent.Id);
+            _repo.RemoveEventFeeds(zazzEvent.Id);
+            _dbContext.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
+        }
+
+        [Test]
+        public void RemoveRecord_OnRemovePostFeed()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var post = new Post
+                       {
+                           CreatedTime = DateTime.UtcNow,
+                           UserId = user.Id
+                       };
+
+            _dbContext.Posts.Add(post);
+            _dbContext.SaveChanges();
+
+            var feed = new Feed { UserId = user.Id, PostId = post.Id, Time = DateTime.UtcNow };
+            _dbContext.Feeds.Add(feed);
+            _dbContext.SaveChanges();
+
+            Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
+            //Act
+            _repo.RemovePostFeeds(post.Id);
             _dbContext.SaveChanges();
 
             //Assert

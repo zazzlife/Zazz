@@ -29,17 +29,24 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(f => f.UserId == userId);
         }
 
-        public void RemovePhotoFeed(int photoId)
+        public void RemovePhotoFeeds(int photoId)
         {
-            var item = DbSet.FirstOrDefault(f => f.PhotoId == photoId);
-            if (item != null)
+            var items = DbSet.Where(f => f.PhotoId == photoId);
+            foreach (var item in items)
                 Remove(item);
         }
 
-        public void RemoveEventFeed(int eventId)
+        public void RemoveEventFeeds(int eventId)
         {
-            var item = DbSet.FirstOrDefault(f => f.EventId == eventId);
-            if (item != null)
+            var items = DbSet.Where(f => f.EventId == eventId);
+            foreach (var item in items)
+                Remove(item);
+        }
+
+        public void RemovePostFeeds(int postId)
+        {
+            var items = DbSet.Where(f => f.PostId == postId);
+            foreach (var item in items)
                 Remove(item);
         }
     }

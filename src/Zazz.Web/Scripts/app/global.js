@@ -625,7 +625,6 @@ $(document).on('click', '.removeFeedBtn', function() {
         cache: false,
         error: function() {
             toastr.error('An error occured, Please try again later.');
-            self.closest('.feed-item').fadeOut();
         },
         success: function() {
             self.closest('.feed-item').fadeOut();

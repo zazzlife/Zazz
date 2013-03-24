@@ -188,7 +188,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() =>_zazzEvent.UserId));
             _uow.Setup(x => x.EventRepository.RemoveAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => { }));
-            _uow.Setup(x => x.FeedRepository.RemoveEventFeed(_zazzEvent.Id));
+            _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
 
             //Act
             await _sut.DeleteEventAsync(_zazzEvent.Id, _userId);
@@ -196,7 +196,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.EventRepository.RemoveAsync(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemoveEventFeed(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Once());
         }
 
 
