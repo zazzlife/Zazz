@@ -85,8 +85,13 @@ namespace Zazz.Web.Controllers
         [Authorize, HttpPost]
         public async Task Edit(int id, string text)
         {
-            
+            using (_userService)
+            using (_photoService)
+            using (_postService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                await _postService.EditPostAsync(id, text, userId);
+            }
         }
-
     }
 }

@@ -639,13 +639,15 @@ $(document).on('click', '.submitPostEdit', function () {
     var self = $(this);
     var p = self.parent();
     var id = self.data('id');
-    var text = $('#editPostInput-' + id).val();
+    var editor = $('#editPostInput-' + id);
+    var text = editor.val();
     
     if (!text || text.trim().length == 0) {
         toastr.error('Post cannot be empty');
         return;
     }
 
+    editor.css('width', '78%');
     showBtnBusy(self);
 
     var showNormalPost = function(val) {

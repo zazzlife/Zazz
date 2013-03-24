@@ -94,5 +94,66 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
+
+        [Test]
+        public async Task ThrowWhenPostNotExists_OnEditPost()
+        {
+            //Arrange
+            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
+                .Returns(() => Task.Factory.StartNew<Post>(() => null));
+
+            //Act
+            try
+            {
+                await _sut.EditPostAsync(_post.Id, "new text", _post.UserId);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+        }
+
+        [Test]
+        public async Task ThrowWhenUserIdIsDifferent_OnEditPost()
+        {
+            //Arrange
+            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
+                .Returns(() => Task.Run(() => _post));
+
+            //Act
+            try
+            {
+                await _sut.EditPostAsync(_post.Id, "new text", 99);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+        }
+
+        [Test]
+        public async Task SaveNewChanges_OnEditPost()
+        {
+            //Arrange
+            var newText = "Edited";
+            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
+                .Returns(() => Task.Run(() => _post));
+
+            //Act
+            await _sut.EditPostAsync(_post.Id, newText, _post.UserId);
+
+            //Assert
+            Assert.AreEqual(newText, _post.Message);
+            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
     }
 }

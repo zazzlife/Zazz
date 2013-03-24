@@ -8,6 +8,8 @@ namespace Zazz.Core.Interfaces
     {
         Task NewPostAsync(Post post);
 
+        Task EditPostAsync(int postId, string newText, int currentUserId);
+
         Task RemovePostAsync(int id, int currentUserId);
     }
 }
