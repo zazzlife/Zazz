@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Interfaces;
+﻿using System.Threading.Tasks;
+using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
@@ -12,9 +13,20 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public void NewPost(Post post)
+        public async Task NewPostAsync(Post post)
         {
-            throw new System.NotImplementedException();
+            _uow.PostRepository.InsertGraph(post);
+
+            var feed = new Feed
+                       {
+                           PostId = post.Id,
+                           Time = post.CreatedTime,
+                           UserId = post.UserId
+                       };
+
+            _uow.FeedRepository.InsertGraph(feed);
+
+            await _uow.SaveAsync();
         }
     }
 }

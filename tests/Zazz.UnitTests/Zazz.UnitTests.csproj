@@ -67,6 +67,7 @@
     <Compile Include="Infrastructure\Services\FollowServiceShould.cs" />
     <Compile Include="Infrastructure\Services\PhotoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\EventServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\PostServiceShould.cs" />
     <Compile Include="Infrastructure\Services\UserServiceShould.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
