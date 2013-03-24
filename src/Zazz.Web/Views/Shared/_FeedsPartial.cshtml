@@ -1,0 +1,22 @@
+﻿@using Zazz.Core.Models.Data
+@model IEnumerable<FeedViewModel>
+@{
+    Layout = null;
+}
+<div id="feedsContainer">
+    @foreach (var feed in Model)
+    {
+        if (feed.FeedType == FeedType.Event)
+        {
+        @Html.Partial("FeedItems/_EventFeedItem", feed)
+        }
+        else if (feed.FeedType == FeedType.Picture)
+        {
+        @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+        }
+        else if (feed.FeedType == FeedType.Post)
+        {
+        @Html.Partial("FeedItems/_PostFeedItem", feed)
+        }
+    }
+</div>

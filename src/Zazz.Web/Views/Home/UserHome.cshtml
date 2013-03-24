@@ -30,23 +30,7 @@
 
 <div class="margin-ten">
 
-    @Html.Partial("FeedItems/_PostFeedItem")
-
-    @foreach (var feed in Model)
-    {
-        if (feed.FeedType == FeedType.Event)
-        {
-        @Html.Partial("FeedItems/_EventFeedItem", feed)
-        }
-        else if (feed.FeedType == FeedType.Picture)
-        {
-        @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
-        }
-        else if (feed.FeedType == FeedType.Post)
-        {
-        @Html.Partial("FeedItems/_PostFeedItem", feed)
-        }
-    }
+    @Html.Partial("_FeedsPartial", Model)
 
 </div>
 

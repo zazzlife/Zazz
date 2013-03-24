@@ -436,6 +436,7 @@
     <Content Include="Views\Shared\FeedItems\_SingleComment.cshtml" />
     <Content Include="Views\Shared\FeedItems\_CommentList.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PostFeedItem.cshtml" />
+    <Content Include="Views\Shared\_FeedsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

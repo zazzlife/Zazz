@@ -116,17 +116,7 @@
     @* FEEDS *@
 
     <div id="feedContent">
-        @foreach (var feed in Model.Feeds)
-        {
-            if (feed.FeedType == FeedType.Event)
-            {
-            @Html.Partial("FeedItems/_EventFeedItem", feed)
-            }
-            else if (feed.FeedType == FeedType.Picture)
-            {
-            @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
-            }
-        }
+        @Html.Partial("_FeedsPartial", Model.Feeds)
     </div>
 
     <div class="clearfix"></div>

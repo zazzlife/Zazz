@@ -562,7 +562,43 @@ $(document).on('click', '.load-comments-btn', function() {
 
 });
 
-///////////////////////////////
+/********************************
+    Post
+*********************************/
+
+$(document).on('click', '#submitPostBtn', function() {
+
+    var self = $(this);
+    var message = $('#postInput').val();
+    
+    if (!message) {
+        toastr.error("Post message cannot be empty!");
+        return;
+    }
+
+    showBtnBusy(self);
+    var url = '/post/new';
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            message: message
+        },
+        error: function() {
+            toastr.error('An error occured, Please try again later.');
+            hideBtnBusy(self, "Submit");
+        },
+        success: function(res) {
+            var feed = $(res.trim());
+            feed.prependTo($('#feedsContainer')).hide().slideDown();
+            
+            hideBtnBusy(self, "Submit");
+        }
+    });
+
+});
+
 $(function() {
 
     applyPageStyles();
