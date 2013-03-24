@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -179,30 +180,87 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void GetCommentsCorrectly()
+        public async Task GetCommentsCorrectly()
         {
             //Arrange
 
             //Act
-            var result = _repo.GetCommentsAsync(_event1.Id).Result;
+            var result = await _repo.GetCommentsAsync(_event1.Id);
 
             //Assert
             Assert.AreEqual(2, result.Count());
         }
 
         [Test]
-        public void RemoveAllEventsComments_OnRemoveEventComments()
+        public async Task RemoveAllEventsComments_OnRemoveEventComments()
         {
             //Arrange
-
-
             //Act
-
+            _repo.RemoveEventComments(_event1.Id);
+            _context.SaveChanges();
 
             //Assert
 
+            Assert.IsFalse(await _repo.ExistsAsync(_event1Comment1.Id));
+            Assert.IsFalse(await _repo.ExistsAsync(_event1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
         }
 
+        [Test]
+        public async Task RemoveAllPostsComments_OnRemoveEventComments()
+        {
+            //Arrange
+            //Act
+            _repo.RemovePostComments(_post1.Id);
+            _context.SaveChanges();
 
+            //Assert
+
+            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
+            Assert.IsFalse(await _repo.ExistsAsync(_post1Comment1.Id));
+            Assert.IsFalse(await _repo.ExistsAsync(_post1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
+        }
+
+        [Test]
+        public async Task RemoveAllPhotosComments_OnRemoveEventComments()
+        {
+            //Arrange
+            //Act
+            _repo.RemovePhotoComments(_photo1.Id);
+            _context.SaveChanges();
+
+            //Assert
+
+            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
+            Assert.IsFalse(await _repo.ExistsAsync(_photo1Comment1.Id));
+            Assert.IsFalse(await _repo.ExistsAsync(_photo1Comment2.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
+            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
+        }
     }
 }
