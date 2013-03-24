@@ -18,6 +18,11 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("PhotoId")]
         public virtual Photo Photo { get; set; }
 
+        [ForeignKey("PostId")]
+        public virtual Post Post { get; set; }
+
+        public int? PostId { get; set; }
+
         public int? PhotoId { get; set; }
 
         public DateTime Time { get; set; }
