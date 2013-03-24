@@ -136,6 +136,22 @@ namespace Zazz.Web.Helpers
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
                     feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, userId);
                 }
+                else if (feed.FeedType == FeedType.Post)
+                {
+                    var post = await _uow.PostRepository.GetByIdAsync(feed.PostId.Value);
+                    feedVm.PostViewModel = new PostViewModel
+                                           {
+                                               PostId = post.Id,
+                                               PostText = post.Message
+                                           };
+
+                    feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, userId);
+                }
+                else
+                {
+                    throw new NotImplementedException("Feed type is not implemented");
+                }
 
                 vm.Add(feedVm);
             }
@@ -155,6 +171,10 @@ namespace Zazz.Web.Helpers
             else if (feedType == FeedType.Picture)
             {
                 query = query.Where(c => c.PhotoId == id);
+            }
+            else if (feedType == FeedType.Post)
+            {
+                query = query.Where(c => c.PostId == id);
             }
             else
             {
