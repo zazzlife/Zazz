@@ -45,9 +45,9 @@ namespace Zazz.Infrastructure.Services
             await _uow.SaveAsync();
         }
 
-        public async Task RemovePostAsync(int id, int currentUserId)
+        public async Task RemovePostAsync(int postId, int currentUserId)
         {
-            var post = await _uow.PostRepository.GetByIdAsync(id);
+            var post = await _uow.PostRepository.GetByIdAsync(postId);
             if (post == null)
                 return;
 
@@ -55,7 +55,8 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
             
             _uow.PostRepository.Remove(post);
-            _uow.FeedRepository.RemovePostFeeds(id);
+            _uow.FeedRepository.RemovePostFeeds(postId);
+            _uow.CommentRepository.RemovePostComments(postId);
 
             await _uow.SaveAsync();
         }

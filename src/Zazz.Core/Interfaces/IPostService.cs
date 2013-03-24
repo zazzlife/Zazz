@@ -10,6 +10,6 @@ namespace Zazz.Core.Interfaces
 
         Task EditPostAsync(int postId, string newText, int currentUserId);
 
-        Task RemovePostAsync(int id, int currentUserId);
+        Task RemovePostAsync(int postId, int currentUserId);
     }
 }

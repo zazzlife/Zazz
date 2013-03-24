@@ -66,6 +66,8 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
             _uow.FeedRepository.RemoveEventFeeds(eventId);
+            _uow.CommentRepository.RemoveEventComments(eventId);
+
             await _uow.EventRepository.RemoveAsync(eventId);
             await _uow.SaveAsync();
         }

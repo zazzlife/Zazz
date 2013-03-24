@@ -73,6 +73,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
+            _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Never());
             _uow.Verify(x => x.SaveAsync(), Times.Never());
         }
 
@@ -84,6 +85,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => Task.Run(() => _post));
             _uow.Setup(x => x.PostRepository.Remove(_post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
+            _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
 
             //Act
             await _sut.RemovePostAsync(_post.Id, _post.UserId);
@@ -92,6 +94,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
         }
 
