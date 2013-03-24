@@ -72,7 +72,7 @@ namespace Zazz.Web.Controllers
                             Time = DateTime.UtcNow
                         };
 
-                if (feedType == FeedType.Post || feedType == FeedType.Event)
+                if (feedType == FeedType.Event)
                 {
                     c.EventId = id;
                 }

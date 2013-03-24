@@ -148,7 +148,7 @@ namespace Zazz.Web.Helpers
         {
             var query = _uow.CommentRepository.GetAll();
 
-            if (feedType == FeedType.Post || feedType == FeedType.Event)
+            if (feedType == FeedType.Event)
             {
                 query = query.Where(c => c.EventId == id);
             }
