@@ -612,31 +612,25 @@ $(document).on('click', '.editFeedBtn', function() {
     isPostFeedEditBoxVisible = true;
 
     var self = $(this);
-    var postContainer = self.parent().next('.post-feed-message');
-    originalPostText = postContainer.text().trim();
+    var p = self.parent().next('.post-feed-message');
+    originalPostText = p.text().trim();
     var id = self.data('id');
     self.parent('.feed-actions').hide();
 
-    var editElem = $(document.createElement('textarea'));
-    editElem.attr('title', "Press 'enter' to send");
-    editElem.attr('class', 'editPostInput');
-    editElem.attr('data-id', id);
-    editElem.attr('data-placement', 'right');
-    editElem.css({
-        'margin-top': '25px',
-        'width': '98%',
-        'height': '70px',
-        'display': 'none'
-    });
 
+    var editHtml = '<textarea id="editPostInput-' + id + '" style="margin-top: 25px; width: 82%; height: 70px;font-size: 12px;font-style: italic;"></textarea>';
+    editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 11px;" type="button" class="btn btn-small btn-success">Submit</button>';
+    editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 45px;margin-right: -65px;width: 67px;" type="button" class="btn btn-small ">Cancel</button>';
+
+    p.html(editHtml);
+    var editElem = p.children('#editPostInput-' + id);
     editElem.val(originalPostText);
-    postContainer.html(editElem);
+    p.hide();
 
-    editElem.fadeIn(function () {
+    p.fadeIn('fast', function() {
         editElem.focus();
-        editElem.tooltip('show');
     });
-    
+
 });
 
 function showNormalPost(elem, val) {
