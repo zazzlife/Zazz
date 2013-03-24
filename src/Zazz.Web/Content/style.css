@@ -472,6 +472,11 @@ hr.dark-line {
     }
 
 .load-comments-btn {
+    font-size: 12px;
+    padding: 0 6px;
+}
+
+.load-comments-btn i {
     font-size: 14px;
 }
 
