@@ -614,6 +614,26 @@ $(document).on('mouseleave', '.feed-content', function () {
     $(this).children('.feed-actions').fadeOut('fast');
 });
 
+$(document).on('click', '.removeFeedBtn', function() {
+
+    var self = $(this);
+    var url = self.data('url');
+
+
+    $.ajax({
+        url: url,
+        cache: false,
+        error: function() {
+            toastr.error('An error occured, Please try again later.');
+            self.closest('.feed-item').fadeOut();
+        },
+        success: function() {
+            self.closest('.feed-item').fadeOut();
+        }
+    });
+
+});
+
 $(function() {
 
     applyPageStyles();

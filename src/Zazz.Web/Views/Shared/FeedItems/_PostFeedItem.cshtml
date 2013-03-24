@@ -11,7 +11,8 @@
     <div class="feed-content well well-small no-padding">
         <div class="feed-actions btn-group">
             <button id="editFeedBtn" title="Edit Post" type="button" class="btn"><i class="icon-pencil"></i></button>
-            <button title="Remove Post" type="button" class="btn removeFeedBtn"><i class="icon-remove"></i></button>
+            <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
+                class="btn removeFeedBtn"><i class="icon-remove"></i></button>
         </div>
         <p class="post-feed-message">
             @Model.PostViewModel.PostText
