@@ -41,8 +41,7 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
             
             _uow.PostRepository.Remove(post);
-
-            
+            _uow.FeedRepository.RemovePostFeeds(id);
 
             await _uow.SaveAsync();
         }
