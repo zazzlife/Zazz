@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security;
+using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -25,6 +27,20 @@ namespace Zazz.Infrastructure.Services
                        };
 
             _uow.FeedRepository.InsertGraph(feed);
+
+            await _uow.SaveAsync();
+        }
+
+        public async Task RemovePostAsync(int id, int currentUserId)
+        {
+            var post = await _uow.PostRepository.GetByIdAsync(id);
+            if (post == null)
+                return;
+
+            if (post.UserId != currentUserId)
+                throw new SecurityException();
+
+            _uow.PostRepository.Remove(post);
 
             await _uow.SaveAsync();
         }

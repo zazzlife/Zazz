@@ -69,5 +69,14 @@ namespace Zazz.Web.Controllers
                 return View("FeedItems/_PostFeedItem", vm);
             }
         }
+
+        [Authorize]
+        public async Task Remove(int id)
+        {
+            using (_userService)
+            using (_photoService)
+            using (_postService)
+            {}
+        }
     }
 }
