@@ -21,6 +21,11 @@ namespace Zazz.Core.Models.Data
 
         public int? PhotoId { get; set; }
 
+        [ForeignKey("PostId")]
+        public Post Post { get; set; }
+
+        public int? PostId { get; set; }
+
         [MaxLength(1000)]
         public string Message { get; set; }
 
