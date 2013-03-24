@@ -456,8 +456,9 @@ hr.dark-line {
 
 
     .feed-item .post-feed-message {
-        margin: 10px;
+        margin: -15px 10px 0 10px;
         font-size: 12px;
+        white-space: pre-line;
     }
 
 .load-comments-btn {
