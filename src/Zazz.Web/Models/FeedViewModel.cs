@@ -13,6 +13,8 @@ namespace Zazz.Web.Models
 
         public string UserDisplayName { get; set; }
 
+        public bool IsFromCurrentUser { get; set; }
+
         public EventViewModel EventViewModel { get; set; }
 
         public PhotoViewModel PhotoViewModel { get; set; }

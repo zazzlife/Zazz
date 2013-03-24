@@ -32,15 +32,15 @@ namespace Zazz.Web.Helpers
         /// <summary>
         /// Returns a list of activities of people that the user follows and the user himself
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="currentUserId"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<List<FeedViewModel>> GetFeedsAsync(int userId, int page = 0)
+        public async Task<List<FeedViewModel>> GetFeedsAsync(int currentUserId, int page = 0)
         {
             var skip = PageSize * page;
 
-            var followIds = _uow.FollowRepository.GetFollowsUserIds(userId).ToList();
-            followIds.Add(userId);
+            var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
+            followIds.Add(currentUserId);
 
             var feeds = _uow.FeedRepository.GetFeeds(followIds)
                             .OrderByDescending(f => f.Time)
@@ -48,32 +48,32 @@ namespace Zazz.Web.Helpers
                             .Take(PageSize)
                             .ToList();
 
-            return await ConvertFeedsToFeedsViewModelAsync(feeds, userId);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
         }
 
         /// <summary>
         /// Returns a list of user activities
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="currentUserId"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int page = 0)
+        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int currentUserId, int page = 0)
         {
             var skip = PageSize * page;
-            var feeds = _uow.FeedRepository.GetUserFeeds(userId)
+            var feeds = _uow.FeedRepository.GetUserFeeds(currentUserId)
                             .OrderByDescending(f => f.Time)
                             .Skip(skip)
                             .Take(PageSize)
                             .ToList();
 
-            return await ConvertFeedsToFeedsViewModelAsync(feeds, userId);
+            return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
         }
 
-        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds, int userId)
+        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds, int currentUserId)
         {
             var vm = new List<FeedViewModel>();
 
-            var currentUserPhotoUrl = _photoService.GetUserImageUrl(userId);
+            var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
 
             foreach (var feed in feeds)
             {
@@ -82,6 +82,7 @@ namespace Zazz.Web.Helpers
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
+                                 IsFromCurrentUser = currentUserId == feed.UserId,
                                  FeedType = feed.FeedType,
                                  Time = feed.Time,
                                  CommentsViewModel = new CommentsViewModel
@@ -101,7 +102,7 @@ namespace Zazz.Web.Helpers
                                                 Description = feed.Event.Description,
                                                 FacebookLink = feed.Event.FacebookLink,
                                                 Id = feed.Event.Id,
-                                                IsOwner = false,
+                                                IsOwner = feed.UserId == currentUserId,
                                                 Latitude = feed.Event.Latitude,
                                                 Location = feed.Event.Location,
                                                 Longitude = feed.Event.Longitude,
@@ -121,7 +122,7 @@ namespace Zazz.Web.Helpers
                     }
 
                     feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value, feed.FeedType, userId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value, feed.FeedType, currentUserId);
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -134,7 +135,7 @@ namespace Zazz.Web.Helpers
                                             };
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, userId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, currentUserId);
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {
@@ -146,7 +147,7 @@ namespace Zazz.Web.Helpers
                                            };
 
                     feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, userId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, currentUserId);
                 }
                 else
                 {
