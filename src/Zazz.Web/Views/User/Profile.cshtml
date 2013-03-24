@@ -75,21 +75,8 @@
     <hr />
 
     @* TABS *@
-    <div id="profileTabs">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab1" data-toggle="tab">Action 1</a></li>
-                <li><a href="#tab2" data-toggle="tab">Action 2</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
-                    <p>Post something?</p>
-                </div>
-                <div class="tab-pane" id="tab2">
-                    <p>Show something?</p>
-                </div>
-            </div>
-        </div>
+    <div>
+        @Html.Partial("_PostInputsPartial")
     </div>
 
     @* LEFT MENU *@
