@@ -7,6 +7,11 @@ namespace Zazz.Core.Models.Data
 {
     public class Photo : BaseEntity
     {
+        public Photo()
+        {
+            Comments = new HashSet<Comment>();
+        }
+
         [ForeignKey("UploaderId")]
         public virtual User Uploader { get; set; }
 

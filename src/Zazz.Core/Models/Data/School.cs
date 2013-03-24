@@ -6,7 +6,7 @@ namespace Zazz.Core.Models.Data
     {
         public short Id { get; set; }
 
-        [MaxLength(35)]
+        [MaxLength(50)]
         public string Name { get; set; }
     }
 }

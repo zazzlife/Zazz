@@ -5,7 +5,7 @@ namespace Zazz.Core.Models.Data
 {
     public class Link : BaseEntity
     {
-        [MaxLength(255), Required]
+        [MaxLength(500), Required]
         public string Url { get; set; }
 
         public LinkType LinkType { get; set; }

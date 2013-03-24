@@ -7,10 +7,19 @@ namespace Zazz.Core.Models.Data
 {
     public class User : BaseEntity
     {
+        public User()
+        {
+            LinkedAccounts = new List<OAuthAccount>();
+            Albums = new HashSet<Album>();
+            Photos = new HashSet<Photo>();
+            FollowingUsers = new HashSet<Follow>();
+            SentFollowRequests = new HashSet<FollowRequest>();
+        }
+
         [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {1} and {2} characters.")]
         public string Username { get; set; }
 
-        [MaxLength(40), Required, DataType(DataType.EmailAddress)]
+        [MaxLength(50), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [MaxLength(28), Required, DataType("char")]

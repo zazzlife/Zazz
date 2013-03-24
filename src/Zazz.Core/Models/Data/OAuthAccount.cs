@@ -13,7 +13,7 @@ namespace Zazz.Core.Models.Data
 
         public long ProviderUserId { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(300)]
         public string AccessToken { get; set; }
 
         public OAuthProvider Provider { get; set; }

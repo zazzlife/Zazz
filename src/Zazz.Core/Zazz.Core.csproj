@@ -99,6 +99,7 @@
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\OAuthProvider.cs" />
+    <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />

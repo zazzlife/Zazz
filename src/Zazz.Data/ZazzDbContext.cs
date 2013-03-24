@@ -17,7 +17,8 @@ namespace Zazz.Data
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
         public IDbSet<ZazzEvent> Events { get; set; }
-        public IDbSet<Link> Links { get; set; }
+        public IDbSet<Post> Posts { get; set; }
+        //public IDbSet<Link> Links { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
