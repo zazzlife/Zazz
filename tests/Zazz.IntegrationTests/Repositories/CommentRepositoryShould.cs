@@ -174,40 +174,14 @@ namespace Zazz.IntegrationTests.Repositories
                                   PhotoId = _photo2.Id
                               };
             _context.Comments.Add(_photo2Comment2);
+
+            _context.SaveChanges();
         }
 
         [Test]
         public void GetCommentsCorrectly()
         {
             //Arrange
-            var e1Comment1 = new Comment
-                                 {
-                                     Time = DateTime.Now,
-                                     FromId = _user.Id,
-                                     Message = "m",
-                                     EventId = _event1.Id
-                                 };
-            var e1Comment2 = new Comment
-            {
-                Time = DateTime.Now,
-                FromId = _user.Id,
-                Message = "m",
-                EventId = _event1.Id
-            };
-
-            var e2Comment1 = new Comment
-            {
-                Time = DateTime.Now,
-                FromId = _user.Id,
-                Message = "m",
-                EventId = _event2.Id
-            };
-
-            _repo.InsertGraph(e1Comment1);
-            _repo.InsertGraph(e1Comment2);
-            _repo.InsertGraph(e2Comment1);
-
-            _context.SaveChanges();
 
             //Act
             var result = _repo.GetCommentsAsync(_event1.Id).Result;

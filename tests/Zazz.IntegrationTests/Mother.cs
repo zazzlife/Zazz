@@ -27,7 +27,9 @@ namespace Zazz.IntegrationTests
                        {
                            Description = "some text",
                            CreatedDate = DateTime.Now,
-                           Name = "Title"
+                           Name = "Title",
+                           Time = DateTime.UtcNow,
+                           TimeUtc = DateTime.UtcNow
                        };
         }
 
