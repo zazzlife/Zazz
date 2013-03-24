@@ -185,26 +185,7 @@ function initImgUploader(onComplete) {
     '</li>'
 
     });
-
 }
-
-$('#uploadPicModal').on('show', function () {
-    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
-
-    initImgUploader(function(id, name, response) {
-        if (!response.success) {
-            toastr.error(response.error);
-        } else {
-            $('#photoId').val(response.photoId);
-            $('#selectedImg-thumbnail').attr('src', response.photoUrl);
-            $('#uploadPicModal').modal('hide');
-
-            if (imgUploadBtn) {
-                hideBtnBusy(imgUploadBtn, "Upload");
-            }
-        }
-    });
-});
 
 $(document).on('click', '#uploadImg', function () {
     var description = $('#Description').val();

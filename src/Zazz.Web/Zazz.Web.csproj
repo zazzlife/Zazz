@@ -351,6 +351,7 @@
     <Content Include="Images\Jcrop.gif" />
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\app\edit-event.js" />
     <Content Include="Scripts\app\edit-profile.js" />
     <Content Include="Scripts\app\flip.js" />
     <Content Include="Scripts\app\follow.js" />
