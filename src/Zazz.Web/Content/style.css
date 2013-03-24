@@ -454,6 +454,12 @@ hr.dark-line {
                 text-decoration: none;
             }
 
+
+    .feed-item .post-feed-message {
+        margin: 10px;
+        font-size: 12px;
+    }
+
 .load-comments-btn {
     font-size: 14px;
 }

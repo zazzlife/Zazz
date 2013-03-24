@@ -80,6 +80,10 @@ namespace Zazz.Web.Controllers
                 {
                     c.PhotoId = id;
                 }
+                else if (feedType == FeedType.Post)
+                {
+                    c.PostId = id;
+                }
                 else
                 {
                     throw new ArgumentException("Invalid feed type", "feedType");
