@@ -619,13 +619,14 @@ $(document).on('click', '.editFeedBtn', function() {
 
 
     var editHtml = '<textarea id="editPostInput-' + id + '" style="margin-top: 25px; width: 82%; height: 70px;font-size: 12px;font-style: italic;"></textarea>';
-    editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 11px;" type="button" class="btn btn-small btn-success">Submit</button>';
-    editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 45px;margin-right: -65px;width: 67px;" type="button" class="btn btn-small ">Cancel</button>';
+    editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 11px;" type="button" class="btn btn-small btn-success submitPostEdit">Submit</button>';
+    editHtml += '<button style="float:right;margin-top: 45px;margin-right: -65px;width: 67px;" type="button" class="btn btn-small cancelPostEdit">Cancel</button>';
 
     p.html(editHtml);
     var editElem = p.children('#editPostInput-' + id);
     editElem.val(originalPostText);
     p.hide();
+    
 
     p.fadeIn('fast', function() {
         editElem.focus();
@@ -633,30 +634,30 @@ $(document).on('click', '.editFeedBtn', function() {
 
 });
 
-function showNormalPost(elem, val) {
-    var p = $(elem).parent();
-    p.html('');
-    p.text(val);
-    isPostFeedEditBoxVisible = false;
-    p.css('margin-top', '6px');
-}
-
-$(document).on('keypress', '.editPostInput', function (e) {
-    
-    if (e.keyCode != 13) {
-        return;
-    }
+$(document).on('click', '.submitPostEdit', function () {
 
     var self = $(this);
-    var text = self.val();
+    var p = self.parent();
     var id = self.data('id');
-
+    var text = $('#editPostInput-' + id).val();
+    
     if (!text || text.trim().length == 0) {
         toastr.error('Post cannot be empty');
         return;
     }
 
-    showInputBusy(self);
+    showBtnBusy(self);
+
+    var showNormalPost = function(val) {
+        p.fadeOut(function() {
+            p.html('');
+            p.css('margin-top', '6px');
+            p.text(val);
+            p.fadeIn();
+
+            isPostFeedEditBoxVisible = false;
+        });
+    };
 
     $.ajax({
         url: '/post/edit/' + id,
@@ -665,28 +666,33 @@ $(document).on('keypress', '.editPostInput', function (e) {
         data: {
             text: text
         },
-        error: function() {
+        error: function () {
             toastr.error('An error occured. Please try again later.');
-            showNormalPost(self, originalPostText);
+            showNormalPost(originalPostText);
         },
-        success: function() {
-            showNormalPost(self, text);
+        success: function () {
+            showNormalPost(text);
         }
     });
 
 });
 
-$(document).on('blur', '.editPostInput', function (e) {
-    //showNormalPost(this, originalPostText);
+$(document).on('click', '.cancelPostEdit', function() {
+
+    var self = $(this);
+    var p = self.parent();
+
+    p.fadeOut('fast', function() {
+        p.html('');
+        p.text(originalPostText);
+        p.css('margin-top', '6px');
+        p.fadeIn();
+
+        isPostFeedEditBoxVisible = false;
+    });
+
 });
 
-$(document).on('keyup', '.editPostInput', function(e) {
-
-    if (e.keyCode == 27) {
-        showNormalPost(this, originalPostText);
-    }
-
-});
 
 /********************************
     Feed
