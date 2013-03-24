@@ -170,6 +170,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetByIdAsync(photoId), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Never());
+            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Never());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Never());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Never());
         }
 
         [Test]
@@ -210,6 +214,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeeds(photoId));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -223,6 +228,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
         }
 
         [Test]
@@ -263,6 +269,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeeds(photoId));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -276,6 +283,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
         }
 
         [Test]
@@ -316,6 +324,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.RemovePhotoFeeds(photoId));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -329,6 +338,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
         }
 
         [Test]
