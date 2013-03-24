@@ -6,27 +6,34 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
     public class PostController : Controller
     {
-        private readonly IUoW _uow;
+        private readonly IPostService _postService;
+        private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
 
-        public PostController(IUoW uow)
+        public PostController(IPostService postService, IUserService userService, IPhotoService photoService)
         {
-            _uow = uow;
+            _postService = postService;
+            _userService = userService;
+            _photoService = photoService;
         }
 
         [Authorize, HttpPost]
         public async Task<ActionResult> New(string message)
         {
-            using (_uow)
+            using (_userService)
+            using (_photoService)
+            using (_postService)
             {
                 if (String.IsNullOrEmpty(message))
                     throw new ArgumentNullException("message");
 
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
                 var post = new Post
                            {
                                CreatedTime = DateTime.UtcNow,
@@ -34,7 +41,32 @@ namespace Zazz.Web.Controllers
                                UserId = userId
                            };
 
-                return View("FeedItems/_PostFeedItem");
+                await _postService.NewPostAsync(post);
+
+                var userPhotoUrl = _photoService.GetUserImageUrl(userId);
+
+                var vm = new FeedViewModel
+                         {
+                             FeedType = FeedType.Post,
+                             UserId = userId,
+                             Time = post.CreatedTime,
+                             UserDisplayName = _userService.GetUserDisplayName(userId),
+                             UserImageUrl = userPhotoUrl,
+                             PostViewModel = new PostViewModel
+                                             {
+                                                 PostId = post.Id,
+                                                 PostText = message
+                                             },
+                             CommentsViewModel = new CommentsViewModel
+                                                 {
+                                                     Comments = new List<CommentViewModel>(),
+                                                     CurrentUserPhotoUrl = userPhotoUrl,
+                                                     FeedType = FeedType.Post,
+                                                     ItemId = post.Id
+                                                 }
+                         };
+
+                return View("FeedItems/_PostFeedItem", vm);
             }
         }
     }

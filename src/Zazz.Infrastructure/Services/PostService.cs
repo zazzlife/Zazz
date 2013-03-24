@@ -28,5 +28,10 @@ namespace Zazz.Infrastructure.Services
 
             await _uow.SaveAsync();
         }
+
+        public void Dispose()
+        {
+            _uow.Dispose();
+        }
     }
 }
