@@ -30,7 +30,8 @@
     white-space: pre-line;
 }
 
-input {
+input,
+textarea {
     border-radius: 2px !important;
 }
 
@@ -351,10 +352,11 @@ hr.dark-line {
 
 .feed-item {
 }
+
     .feed-item a {
         font-weight: 600;
     }
-        
+
     .feed-item .feed-user-img {
         width: 50px;
         height: 50px;
@@ -385,20 +387,20 @@ hr.dark-line {
         margin: 15px 0 50px 10px;
     }
 
-    .feed-item .feed-options li {
-        float: left;
-        margin-right: 20px;
-    }
+        .feed-item .feed-options li {
+            float: left;
+            margin-right: 20px;
+        }
 
-    .feed-item .feed-options li a {
-        color: #474747;
-        font-size: 14px;
-        text-decoration: none;
-    }
+            .feed-item .feed-options li a {
+                color: #474747;
+                font-size: 14px;
+                text-decoration: none;
+            }
 
-    .feed-item .feed-options li a:hover {
-        color: black;
-    }
+                .feed-item .feed-options li a:hover {
+                    color: black;
+                }
 
     .feed-item .feed-comments-section {
         border-top: solid white 1px;
@@ -406,17 +408,17 @@ hr.dark-line {
         padding: 15px 0;
     }
 
-    .feed-item .feed-comments-section img {
-        width: 32px;
-        height: 32px;
-    }
+        .feed-item .feed-comments-section img {
+            width: 32px;
+            height: 32px;
+        }
 
-    .feed-item .feed-comments-section .comment-textbox {
-        margin: 0;
-        font-size: 12px;
-        width: 427px;
-        font-style: italic;
-    }
+        .feed-item .feed-comments-section .comment-textbox {
+            margin: 0;
+            font-size: 12px;
+            width: 427px;
+            font-style: italic;
+        }
 
     .feed-item .feed-comments {
         margin: 10px 2px 0 36px;
@@ -430,31 +432,31 @@ hr.dark-line {
         padding-bottom: 5px;
     }
 
-    .feed-item .feed-comment:last-child {
-        border-bottom: 0;
-    }
+        .feed-item .feed-comment:last-child {
+            border-bottom: 0;
+        }
 
-    .feed-item .feed-comment .comment-text {
-        margin: 0 0 0 38px;
-    }
+        .feed-item .feed-comment .comment-text {
+            margin: 0 0 0 38px;
+        }
 
     .feed-item .comment-options {
         list-style: none;
         margin: 20px 0 0 0;
     }
 
-    .feed-item .comment-options li {
-        float: left;
-        margin-right: 15px;
-    }
+        .feed-item .comment-options li {
+            float: left;
+            margin-right: 15px;
+        }
 
-    .feed-item .comment-options li a{
-        text-decoration: none;
-    }
+            .feed-item .comment-options li a {
+                text-decoration: none;
+            }
 
-    .load-comments-btn {
-        font-size: 14px;
-    }
+.load-comments-btn {
+    font-size: 14px;
+}
 
 /***************************************
         Events
@@ -532,6 +534,12 @@ hr.dark-line {
 
 #profileTabs {
     margin-bottom: 50px;
+}
+
+#postInput {
+    width: 98%;
+    height: 75px;
+    font-style: italic;
 }
 
 #leftMenu {

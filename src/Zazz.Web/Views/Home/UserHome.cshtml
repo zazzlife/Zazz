@@ -5,27 +5,43 @@
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
-<div style="height: 200px; margin-left: 10px;">
-    <strong>reserving space for later use</strong>
+<div style="margin-top: 55px;">
+    <div id="profileTabs">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">Post</a></li>
+                <li><a href="#tab2" data-toggle="tab">Photo</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active margin-ten" id="tab1">
+                    <textarea placeholder="What's on your mind?" id="postInput"></textarea>
+                    <button type="button" class="btn btn-primary" id="submitPostBtn">Submit</button>
+                </div>
+                <div class="tab-pane margin-ten" id="tab2">
+                    <p>Show something?</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-
+<hr/>
 <div class="clearfix"></div>
 
 <div class="margin-ten">
-    
+
     @foreach (var feed in Model)
     {
         if (feed.FeedType == FeedType.Event)
         {
-            @Html.Partial("FeedItems/_EventFeedItem", feed)
+        @Html.Partial("FeedItems/_EventFeedItem", feed)
         }
         else if (feed.FeedType == FeedType.Picture)
         {
-            @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+        @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
         }
     }
-    
+
 </div>
 
 @section RightPanel
