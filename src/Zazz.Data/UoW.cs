@@ -77,6 +77,13 @@ namespace Zazz.Data
             get { return _feedRepository ?? (_feedRepository = new FeedRepository(GetContext())); }
         }
 
+        private IPostRepository _postRepository;
+
+        public IPostRepository PostRepository
+        {
+            get { return _postRepository ?? (_postRepository = new PostRepository(GetContext())); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null)

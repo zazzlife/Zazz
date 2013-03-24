@@ -16,6 +16,7 @@ namespace Zazz.Core.Interfaces
         IValidationTokenRepository ValidationTokenRepository { get; }
         IFacebookSyncRetryRepository FacebookSyncRetryRepository { get; }
         IFeedRepository FeedRepository { get; }
+        IPostRepository PostRepository { get;}
 
         Task SaveAsync();
     }

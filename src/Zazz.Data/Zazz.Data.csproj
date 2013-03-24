@@ -59,6 +59,7 @@
     <Compile Include="Repositories\FollowRepository.cs" />
     <Compile Include="Repositories\FollowRequestRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
+    <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
     <Compile Include="StaticData.cs" />
