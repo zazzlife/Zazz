@@ -566,6 +566,7 @@ $(document).on('click', '.load-comments-btn', function() {
     Post
 *********************************/
 
+// ADD
 $(document).on('click', '#submitPostBtn', function() {
 
     var self = $(this);
@@ -602,12 +603,105 @@ $(document).on('click', '#submitPostBtn', function() {
 
 });
 
+//Edit
+var originalPostText;
+var isPostFeedEditBoxVisible = false;
+
+$(document).on('click', '.editFeedBtn', function() {
+
+    isPostFeedEditBoxVisible = true;
+
+    var self = $(this);
+    var postContainer = self.parent().next('.post-feed-message');
+    originalPostText = postContainer.text().trim();
+    var id = self.data('id');
+    self.parent('.feed-actions').hide();
+
+    var editElem = $(document.createElement('textarea'));
+    editElem.attr('title', "Press 'enter' to send");
+    editElem.attr('class', 'editPostInput');
+    editElem.attr('data-id', id);
+    editElem.attr('data-placement', 'right');
+    editElem.css({
+        'margin-top': '25px',
+        'width': '98%',
+        'height': '70px',
+        'display': 'none'
+    });
+
+    editElem.val(originalPostText);
+    postContainer.html(editElem);
+
+    editElem.fadeIn(function () {
+        editElem.focus();
+        editElem.tooltip('show');
+    });
+    
+});
+
+function showNormalPost(elem, val) {
+    var p = $(elem).parent();
+    p.html('');
+    p.text(val);
+    isPostFeedEditBoxVisible = false;
+    p.css('margin-top', '6px');
+}
+
+$(document).on('keypress', '.editPostInput', function (e) {
+    
+    if (e.keyCode != 13) {
+        return;
+    }
+
+    var self = $(this);
+    var text = self.val();
+    var id = self.data('id');
+
+    if (!text || text.trim().length == 0) {
+        toastr.error('Post cannot be empty');
+        return;
+    }
+
+    showInputBusy(self);
+
+    $.ajax({
+        url: '/post/edit/' + id,
+        type: 'POST',
+        cache: false,
+        data: {
+            text: text
+        },
+        error: function() {
+            toastr.error('An error occured. Please try again later.');
+            showNormalPost(self, originalPostText);
+        },
+        success: function() {
+            showNormalPost(self, text);
+        }
+    });
+
+});
+
+$(document).on('blur', '.editPostInput', function (e) {
+    //showNormalPost(this, originalPostText);
+});
+
+$(document).on('keyup', '.editPostInput', function(e) {
+
+    if (e.keyCode == 27) {
+        showNormalPost(this, originalPostText);
+    }
+
+});
+
 /********************************
     Feed
 *********************************/
 
 $(document).on('mouseenter', '.feed-content', function () {
-    $(this).children('.feed-actions').fadeIn('fast');
+    if (!isPostFeedEditBoxVisible) {
+        $(this).children('.feed-actions').fadeIn('fast');
+    }
 });
 
 $(document).on('mouseleave', '.feed-content', function () {

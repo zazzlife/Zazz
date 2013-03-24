@@ -81,5 +81,12 @@ namespace Zazz.Web.Controllers
                 await _postService.RemovePostAsync(id, userId);
             }
         }
+
+        [Authorize, HttpPost]
+        public async Task Edit(int id, string text)
+        {
+            
+        }
+
     }
 }
