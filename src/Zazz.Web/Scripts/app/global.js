@@ -332,12 +332,12 @@ function showInputBusy(elem) {
     return loadingIndicator;
 }
 
-$('.comment-textbox').on('blur', function(e) {
+$(document).on('blur', '.comment-textbox', function (e) {
     $(this).tooltip('destroy');
 });
 
 //Add
-$('.comment-textbox').on('focus', function (e) {
+$(document).on('focus', '.comment-textbox', function (e) {
     $(this).tooltip('destroy');
 
     $(this).tooltip({
@@ -349,7 +349,7 @@ $('.comment-textbox').on('focus', function (e) {
 });
 
 
-$('.comment-textbox').on('keypress', function(e) {
+$(document).on('keypress', '.comment-textbox', function(e) {
 
     if (e.keyCode != 13) {
         return;
