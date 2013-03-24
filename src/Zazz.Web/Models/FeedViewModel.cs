@@ -17,6 +17,8 @@ namespace Zazz.Web.Models
 
         public PhotoViewModel PhotoViewModel { get; set; }
 
+        public PostViewModel PostViewModel { get; set; }
+
         public CommentsViewModel CommentsViewModel { get; set; }
 
         public DateTime Time { get; set; }

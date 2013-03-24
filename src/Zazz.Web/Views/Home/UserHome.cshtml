@@ -25,11 +25,11 @@
     </div>
 </div>
 
-<hr/>
+<hr />
 <div class="clearfix"></div>
 
 <div class="margin-ten">
-    
+
     @Html.Partial("FeedItems/_PostFeedItem")
 
     @foreach (var feed in Model)
@@ -41,6 +41,10 @@
         else if (feed.FeedType == FeedType.Picture)
         {
         @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+        }
+        else if (feed.FeedType == FeedType.Post)
+        {
+        @Html.Partial("FeedItems/_PostFeedItem", feed)
         }
     }
 
