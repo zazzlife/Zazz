@@ -594,6 +594,8 @@ $(document).on('click', '#submitPostBtn', function() {
             feed.prependTo($('#feedsContainer')).hide().slideDown();
             
             hideBtnBusy(self, "Submit");
+
+            applyPageStyles();
         }
     });
 
