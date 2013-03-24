@@ -461,6 +461,16 @@ hr.dark-line {
         white-space: pre-line;
     }
 
+    .feed-item .feed-actions {
+        float: right;
+        display: none;
+    }
+
+    .feed-item .feed-actions button {
+        padding: 0 8px;
+        font-size: 8px;
+    }
+
 .load-comments-btn {
     font-size: 14px;
 }

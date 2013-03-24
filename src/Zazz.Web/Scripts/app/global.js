@@ -602,6 +602,18 @@ $(document).on('click', '#submitPostBtn', function() {
 
 });
 
+/********************************
+    Feed
+*********************************/
+
+$(document).on('mouseenter', '.feed-content', function () {
+    $(this).children('.feed-actions').fadeIn('fast');
+});
+
+$(document).on('mouseleave', '.feed-content', function () {
+    $(this).children('.feed-actions').fadeOut('fast');
+});
+
 $(function() {
 
     applyPageStyles();
