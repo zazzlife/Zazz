@@ -153,7 +153,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-
+            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.EventRepository.RemoveAsync(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Never());
         }
 
         [Test]
@@ -177,6 +181,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.RemoveAsync(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Never());
         }
 
         [Test]
@@ -189,6 +197,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.RemoveAsync(_zazzEvent.Id))
                 .Returns(() => Task.Run(() => { }));
             _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
+            _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));
 
             //Act
             await _sut.DeleteEventAsync(_zazzEvent.Id, _userId);
@@ -197,6 +206,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.RemoveAsync(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Once());
         }
 
 
