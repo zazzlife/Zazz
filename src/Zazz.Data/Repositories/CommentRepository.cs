@@ -22,5 +22,26 @@ namespace Zazz.Data.Repositories
         {
             return Task.Run(() => DbSet.Where(c => c.EventId == eventId));
         }
+
+        public void RemovePhotoComments(int photoId)
+        {
+            var comments = DbSet.Where(c => c.PhotoId == photoId);
+            foreach (var comment in comments)
+                Remove(comment);
+        }
+
+        public void RemoveEventComments(int eventId)
+        {
+            var comments = DbSet.Where(c => c.EventId == eventId);
+            foreach (var comment in comments)
+                Remove(comment);
+        }
+
+        public void RemovePostComments(int postId)
+        {
+            var comments = DbSet.Where(c => c.PostId == postId);
+            foreach (var comment in comments)
+                Remove(comment);
+        }
     }
 }
