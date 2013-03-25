@@ -1,4 +1,7 @@
 ﻿@model FeedViewModel
+@{
+    Layout = null;
+}
 <div class="feed-item">
     <a href="~/user/profile/@Model.UserId">
         <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />

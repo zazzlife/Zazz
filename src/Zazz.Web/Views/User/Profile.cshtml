@@ -40,17 +40,17 @@
                     {
                         if (Model.AccountType == AccountType.ClubAdmin)
                         {
-                        <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
+                            <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
                         }
                         else
                         {
                             if (Model.FollowRequestAlreadySent)
                             {
-                        <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
+                                <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
                             }
                             else
                             {
-                        <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
+                                <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
                             }
                         }
                     }
@@ -82,7 +82,7 @@
         </div>
     }
 
-@* LEFT MENU *@
+    @* LEFT MENU *@
     <div id="leftMenu" class="well light-background">
         <div class="menu-title"><strong>MY CLUBS</strong></div>
         <ul>
@@ -111,4 +111,5 @@
 
     <div class="clearfix"></div>
 </div>
+@Html.Partial("_UploadPicModal", "uploadPicModalWithFeed")
 
