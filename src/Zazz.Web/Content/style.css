@@ -572,6 +572,7 @@ hr.dark-line {
     padding: 0;
     font-weight: 600;
     font-size: 20px;
+    margin-bottom: 10px;
 }
 
 #coverImg {
@@ -620,10 +621,6 @@ hr.dark-line {
 
     #leftMenu li {
         margin-top: 5px;
-    }
-
-    #followsYouSign {
-        margin-top: 10px;
     }
 
 #followsYouSign:hover {
