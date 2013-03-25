@@ -7,18 +7,24 @@
     <a href="~/user/profile/@Model.UserId">
         <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
     </a>
-    
+
     <div class="feed-content well well-small no-padding">
-        <div class="feed-actions btn-group">
-            <button title="Edit Post" type="button" class="btn editFeedBtn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
-            <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
-                class="btn removeFeedBtn"><i class="icon-remove"></i></button>
-        </div>
+        @if (Model.IsFromCurrentUser)
+        {
+            <div class="feed-actions btn-group">
+                <button title="Edit Post" type="button" class="btn editFeedBtn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
+                <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
+                    class="btn removeFeedBtn">
+                    <i class="icon-remove"></i>
+                </button>
+            </div>
+        }
+
         <p class="post-feed-message">
             @Model.PostViewModel.PostText
         </p>
-        
-        <div class="clearfix" style="margin-bottom: 10px;"></div>    
+
+        <div class="clearfix" style="margin-bottom: 10px;"></div>
 
         @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
     </div>

@@ -22,7 +22,7 @@
             <h3 class="pull-right" style="margin-left: 5px;">@Model.FollowersCount</h3>
             <h3 class="pull-right">PARTY WEB:</h3>
             <br />
-            
+
             @if (Model.IsTargetUserFollowingCurrentUser)
             {
                 <p data-id="@Model.UserId" id="followsYouSign" class="pull-right label label-success">Follows you <i class="icon icon-ok-sign"></i></p>   
@@ -30,7 +30,7 @@
 
             @if (Model.IsSelf)
             {
-                <button class="btn btn-large pull-right btn-info">Join Other Party Webs</button>
+
             }
             else
             {
@@ -75,11 +75,14 @@
     <hr />
 
     @* TABS *@
-    <div>
-        @Html.Partial("_PostInputsPartial")
-    </div>
+    @if (Model.IsSelf)
+    {
+        <div>
+            @Html.Partial("_PostInputsPartial")
+        </div>
+    }
 
-    @* LEFT MENU *@
+@* LEFT MENU *@
     <div id="leftMenu" class="well light-background">
         <div class="menu-title"><strong>MY CLUBS</strong></div>
         <ul>
