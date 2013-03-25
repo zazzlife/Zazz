@@ -35,13 +35,21 @@ textarea {
     border-radius: 2px !important;
 }
 
+body, button, .btn, label, input, button, select, textarea,
+input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], 
+input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], 
+input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], 
+.uneditable-input, .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
+    font-size: 13px;
+}
+
 /***************************************
     JQuery UI overrides
 ***************************************/
 
 .ui-widget {
     font-family: 'Open Sans';
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .ui-autocomplete .ui-menu-item {
@@ -266,7 +274,7 @@ hr.dark-line {
 /**********LEFT PANEL***********/
 .left-panel {
     width: 200px;
-    font-size: 12.69px;
+    font-size: 13px;
     float: left;
     height: 100%;
 }
@@ -314,7 +322,7 @@ hr.dark-line {
     border-right: 1px solid #dcdcdc;
     border-left: 1px solid #dcdcdc;
     margin-top: -50px;
-    padding-top: 30px;
+    padding-top: 39px;
 }
 
     .middle-panel .page-header {
@@ -486,7 +494,7 @@ hr.dark-line {
 .event-city-name {
     position: relative;
     top: 5px;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -499,7 +507,7 @@ hr.dark-line {
     .event .event-title {
         margin: 0;
         padding: 0;
-        font-size: 18px;
+        font-size: 14px;
         font-weight: 600;
     }
 
