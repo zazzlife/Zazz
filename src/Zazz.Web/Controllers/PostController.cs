@@ -47,6 +47,7 @@ namespace Zazz.Web.Controllers
 
                 var vm = new FeedViewModel
                          {
+                             IsFromCurrentUser = true,
                              FeedType = FeedType.Post,
                              UserId = userId,
                              Time = post.CreatedTime,

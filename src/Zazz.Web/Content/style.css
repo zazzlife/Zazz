@@ -43,6 +43,15 @@ textarea {
         font-size: 13px;
     }
 
+input, textarea, select {
+    font-style: italic;
+}
+
+    input:focus, textarea:focus, select:focus {
+        font-style: normal;
+    }
+
+
 /***************************************
     JQuery UI overrides
 ***************************************/
@@ -116,7 +125,12 @@ hr.dark-line {
 
 #navbarSearch {
     padding-left: 30px;
+    width: 300px;
 }
+
+    #navbarSearch:focus {
+        width: 300px;
+    }
 
 #searchIcon {
     position: absolute;
@@ -206,7 +220,6 @@ hr.dark-line {
     font-size: 12px;
     float: right;
     margin-right: 20px;
-    font-style: italic;
     margin-bottom: 5px;
 }
 
@@ -425,7 +438,6 @@ hr.dark-line {
             margin: 0;
             font-size: 12px;
             width: 427px;
-            font-style: italic;
         }
 
     .feed-item .feed-comments {
@@ -577,7 +589,6 @@ hr.dark-line {
     width: 98%;
     height: 75px;
     font-size: 12px;
-    font-style: italic;
 }
 
 #leftMenu {
