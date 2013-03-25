@@ -13,5 +13,10 @@ namespace Zazz.Infrastructure
         {
             return "/Images/cover-image.gif";
         }
+
+        public static string GetDefaultAlbumImage()
+        {
+            return "/Images/placeholder.gif";
+        }
     }
 }

@@ -18,12 +18,11 @@
         @if (Model.IsOwner)
         {
             <p><strong>Create a new album</strong></p>
-            using (Html.BeginForm("CreateAlbum", "Album", FormMethod.Post, new { @class = "form-inline" }))
-            {
-            @Html.ValidationMessageFor(model => model.AlbumName, null, new { @class = "help-inline" })
-            @Html.TextBoxFor(model => model.AlbumName, new { @class = "span5", @placeholder = "Album Name" })
-            <button class="btn btn-success">Create</button>
-            }
+            <form class="form-inline" method="post">
+                <span class="field-validation-valid help-inline" data-valmsg-for="AlbumName" data-valmsg-replace="true"></span>
+                <input class="span5" data-val="true" data-val-length="The field Album Name must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="The Album Name field is required." id="AlbumName" name="AlbumName" placeholder="Album Name" type="text" value="" />
+                <button type="button" id="createAlbumBtn" class="btn btn-success">Create</button>
+            </form>  
 
             <hr />
         }

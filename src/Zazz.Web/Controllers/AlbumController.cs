@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -58,7 +59,6 @@ namespace Zazz.Web.Controllers
                     isOwner = currentUserId == id;
                 }
 
-                const string DEFAULT_IMAGE_PATH = "/Images/placeholder.gif";
                 var albumsVM = new List<PhotoViewModel>();
                 foreach (var album in albums)
                 {
@@ -70,7 +70,7 @@ namespace Zazz.Web.Controllers
                                       };
                     var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
                     albumVm.PhotoUrl = firstAlbumImageId == 0
-                        ? DEFAULT_IMAGE_PATH
+                        ? DefaultImageHelper.GetDefaultAlbumImage()
                         : _photoService.GeneratePhotoUrl(id, firstAlbumImageId);
 
                     albumsVM.Add(albumVm);
@@ -95,6 +95,7 @@ namespace Zazz.Web.Controllers
             if (albumName.Length > 50)
             {
                 ShowAlert("Album name cannot be longer than 50 characters", AlertType.Error);
+                throw new HttpException(400, "Bad Request");
             }
             else
             {
@@ -110,10 +111,18 @@ namespace Zazz.Web.Controllers
                     };
 
                     await _albumService.CreateAlbumAsync(album);
+
+                    var vm = new PhotoViewModel
+                             {
+                                 IsFromCurrentUser = true,
+                                 PhotoDescription = albumName,
+                                 PhotoId = album.Id,
+                                 PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage()
+                             };
+
+                    return View("_AlbumThumbnail", vm);
                 }
             }
-
-            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
         [Authorize]
