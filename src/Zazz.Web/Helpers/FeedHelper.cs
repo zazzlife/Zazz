@@ -54,13 +54,14 @@ namespace Zazz.Web.Helpers
         /// <summary>
         /// Returns a list of user activities
         /// </summary>
-        /// <param name="currentUserId"></param>
+        /// <param name="userId">Id of the target user</param>
+        /// <param name="currentUserId">Id of the current user</param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int currentUserId, int page = 0)
+        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int currentUserId, int page = 0)
         {
             var skip = PageSize * page;
-            var feeds = _uow.FeedRepository.GetUserFeeds(currentUserId)
+            var feeds = _uow.FeedRepository.GetUserFeeds(userId)
                             .OrderByDescending(f => f.Time)
                             .Skip(skip)
                             .Take(PageSize)

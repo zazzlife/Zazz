@@ -111,7 +111,7 @@ namespace Zazz.Web.Controllers
                              AccountType = user.AccountType,
                              UserId = id,
                              IsClub = user.AccountType == AccountType.ClubAdmin,
-                             Feeds = await feedsHelper.GetUserActivityFeedAsync(user.Id)
+                             Feeds = await feedsHelper.GetUserActivityFeedAsync(user.Id, currentUserId)
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)
