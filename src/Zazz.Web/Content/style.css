@@ -78,6 +78,11 @@ body {
     font-family: 'Open Sans';
 }
 
+img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
 .alfa-slab-font {
     font-family: 'Alfa Slab One';
     font-size: 28px;
@@ -635,6 +640,7 @@ hr.dark-line {
     min-height: 150px;
     height: 150px;
     max-height: 150px;
+    text-align: center;
 }
 
 .photo-hover {

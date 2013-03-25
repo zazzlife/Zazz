@@ -45,10 +45,11 @@
         </ul>
 
         <ul class="thumbnails">
+
             @foreach (var p in Model.Photos)
             {
-                <li class="thumbnail photo-thumbnail">
-                    <div>
+                <li class="thumbnail">
+                    <div class="photo-thumbnail">
                         <a href="@p.PhotoUrl" data-toggle="lightbox" data-target="#photo-@p.PhotoId">
                             <img src="@p.PhotoUrl" title="@p.PhotoDescription" />
                         </a>
@@ -69,7 +70,7 @@
                 @Html.Partial("_LightBoxPartial", p)
             }
         </ul>
-        
+
         <div class="clearfix"></div>
         <div class="text-center">
             @Html.PagedListPager(Model.Photos, page => Url.Action("Photos", new { id = Model.AlbumId, page }))
