@@ -208,6 +208,14 @@ $(document).on('click', '#uploadImg', function () {
     imgUploadBtn = $(this);
 });
 
+$(document).on('show', '#uploadPicModalWithFeed', function() {
+    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+    initImgUploader(function(id, name, response) {
+
+    });
+
+});
+
 /////////////////////////////////////////////////////////////////////////
 
 /********************************

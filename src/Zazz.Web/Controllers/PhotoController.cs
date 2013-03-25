@@ -119,5 +119,44 @@ namespace Zazz.Web.Controllers
                 _photoService.CropPhoto(id, userId, cropArea);
             }
         }
+
+        [Authorize]
+        public async Task<ActionResult> Feed(int id)
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var userDisplayName = _userService.GetUserDisplayName(userId);
+                var userPhoto = _photoService.GetUserImageUrl(userId);
+                var photo = await _photoService.GetPhotoAsync(id);
+
+                var vm = new FeedViewModel
+                         {
+                             UserId = userId,
+                             UserImageUrl = userPhoto,
+                             UserDisplayName = userDisplayName,
+                             Time = photo.UploadDate,
+                             FeedType = FeedType.Picture,
+                             IsFromCurrentUser = true,
+                             PhotoViewModel = new PhotoViewModel
+                                              {
+                                                  PhotoId = photo.Id,
+                                                  PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id),
+                                                  PhotoDescription = photo.Description
+                                              },
+                             CommentsViewModel = new CommentsViewModel
+                                                 {
+                                                     Comments = new List<CommentViewModel>(),
+                                                     FeedType = FeedType.Picture,
+                                                     CurrentUserPhotoUrl = userPhoto,
+                                                     ItemId = photo.Id
+                                                 }
+                         };
+
+                return View("FeedItems/_PicturePostFeedItem", vm);
+            }
+        }
     }
 }
