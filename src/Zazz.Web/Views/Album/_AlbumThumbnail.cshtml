@@ -2,3 +2,25 @@
 @{
     Layout = null;
 }
+
+<li class="thumbnail">
+    <div class="photo-thumbnail">
+
+        <a href="~/album/photos/@Model.PhotoId/1">
+            <img src="@Model.PhotoUrl" />
+        </a>
+    </div>
+
+    <div class="photo-hover">
+        <span>@Model.PhotoDescription</span>
+        @if (Model.IsFromCurrentUser)
+        {
+            <button title="Remove Album" data-url="/album/remove/@Model.PhotoId"
+                                        class="btn btn-small icononly-btn pull-right remove-photo-btn">
+                <i class="icon-remove"></i>
+            </button>
+            <div class="clearfix"></div>
+        }
+    </div>
+    <div class="clearfix"></div>
+</li>

@@ -32,30 +32,7 @@
 
             @foreach (var album in Model.Albums)
             {
-                <li>
-                    <div class="thumbnail">
-                        <div class="photo-thumbnail">
-
-
-                            <a href="~/album/photos/@album.PhotoId/1">
-                                <img src="@album.PhotoUrl" />
-                            </a>
-                        </div>
-
-                        <div class="photo-hover">
-                            <span>@album.PhotoDescription</span>
-                            @if (Model.IsOwner)
-                            {
-                                <button title="Remove Album" data-url="/album/remove/@album.PhotoId"
-                                        class="btn btn-small icononly-btn pull-right remove-photo-btn">
-                                    <i class="icon-remove"></i>
-                                </button>
-                                <div class="clearfix"></div>
-                            }
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                </li>
+                @Html.Partial("_AlbumThumbnail", album)
             }
 
         </ul>
