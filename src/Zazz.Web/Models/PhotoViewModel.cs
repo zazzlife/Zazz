@@ -7,5 +7,7 @@
         public string PhotoDescription { get; set; }
 
         public string PhotoUrl { get; set; }
+
+        public bool IsFromCurrentUser { get; set; }
     }
 }

@@ -10,6 +10,11 @@
         <h3>Photos</h3>
     </div>
 
+    <ul class="breadcrumb">
+        <li><a href="~/album/list/@Model.UserId/1">Albums</a><span class="divider">/</span></li>
+        <li class="active">@Model.AlbumName</li>
+    </ul>
+
     <div class="margin-ten">
         @if (Model.IsOwner)
         {
@@ -38,11 +43,6 @@
 
             <hr />
         }
-
-        <ul class="breadcrumb">
-            <li><a href="~/album/list/@Model.UserId/1">Albums</a><span class="divider">/</span></li>
-            <li class="active">@Model.AlbumName</li>
-        </ul>
 
         <ul class="thumbnails">
 
