@@ -24,7 +24,8 @@
 
             @if (Model.IsTargetUserFollowingCurrentUser)
             {
-                <p data-id="@Model.UserId" id="followsYouSign" class="pull-right label label-success">Follows you <i class="icon icon-ok-sign"></i></p>   
+                <p data-id="@Model.UserId" id="followsYouSign" class="pull-right label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
+                <div class="clearfix"></div>
             }
 
             @if (Model.IsSelf)
