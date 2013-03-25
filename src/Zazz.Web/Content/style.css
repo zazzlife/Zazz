@@ -628,9 +628,13 @@ hr.dark-line {
     Photo
 ***************************************/
 
-.album-item {
-    max-width: 265px;
-
+.photo-thumbnail {
+    min-width: 150px;
+    width: 150px;
+    max-width: 150px;
+    min-height: 150px;
+    height: 150px;
+    max-height: 150px;
 }
 
 .photo-hover {

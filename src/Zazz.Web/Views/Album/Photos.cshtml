@@ -17,7 +17,7 @@
             using (Html.BeginForm("Upload", "Photo", FormMethod.Post, new { @enctype = "multipart/form-data" }))
             {
                 
-                <input type="hidden" name="albumId" value="@Model.AlbumId"/>
+            <input type="hidden" name="albumId" value="@Model.AlbumId"/>
                 
             <div class="control-group">
                 <div class="editor-field">
@@ -32,12 +32,13 @@
             </div>
             
             <p>
-                <button type="submit" class="btn btn-success">Submit</button></p>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </p>
             }
 
             <hr />
         }
-        
+
         <ul class="breadcrumb">
             <li><a href="~/album/list/@Model.UserId/1">Albums</a><span class="divider">/</span></li>
             <li class="active">@Model.AlbumName</li>
@@ -46,16 +47,21 @@
         <ul class="thumbnails">
             @foreach (var p in Model.Photos)
             {
-                <li class="thumbnail">
+                <li class="thumbnail photo-thumbnail">
                     <div>
                         <a href="@p.PhotoUrl" data-toggle="lightbox" data-target="#photo-@p.PhotoId">
-                            <img src="@p.PhotoUrl" class="width-110" title="@p.PhotoDescription" />
+                            <img src="@p.PhotoUrl" title="@p.PhotoDescription" />
                         </a>
                     </div>
 
                     @if (Model.IsOwner)
                     {
-                        <a href="~/photo/remove/@p.PhotoId" class="font-verysmall">REMOVE</a>
+                        <div class="photo-hover">
+                            <button title="Remove Photo" data-url="/photo/remove/@p.PhotoId"
+                                        class="btn btn-info btn-block remove-photo-btn">
+                                <i class="icon-remove"></i>
+                            </button>
+                        </div>
                     }
 
                 </li>
@@ -63,7 +69,8 @@
                 @Html.Partial("_LightBoxPartial", p)
             }
         </ul>
-
+        
+        <div class="clearfix"></div>
         <div class="text-center">
             @Html.PagedListPager(Model.Photos, page => Url.Action("Photos", new { id = Model.AlbumId, page }))
         </div>
