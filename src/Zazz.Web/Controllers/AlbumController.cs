@@ -116,7 +116,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Remove(int id)
+        public async Task Remove(int id)
         {
             using (_photoService)
             using (_albumService)
@@ -126,8 +126,6 @@ namespace Zazz.Web.Controllers
 
                 await _albumService.DeleteAlbumAsync(id, userId);
             }
-
-            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
         [HttpGet]

@@ -12,9 +12,9 @@
         @if (Model.IsFromCurrentUser)
         {
             <div class="feed-actions btn-group">
-                <button title="Edit Post" type="button" class="btn editFeedBtn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
+                <button title="Edit Post" type="button" class="btn editFeedBtn icononly-btn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
                 <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
-                    class="btn removeFeedBtn">
+                    class="btn removeFeedBtn icononly-btn">
                     <i class="icon-remove"></i>
                 </button>
             </div>

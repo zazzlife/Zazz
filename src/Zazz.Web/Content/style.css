@@ -198,6 +198,15 @@ hr.dark-line {
     border-radius: 3px;
 }
 
+.icononly-btn {
+    padding: 0 8px;
+    font-size: 8px;
+}
+
+.icononly-btn i {
+    font-size: 8px;
+}
+
 /***************************************
         Landing page
 ***************************************/
@@ -486,11 +495,6 @@ hr.dark-line {
         display: none;
     }
 
-        .feed-item .feed-actions button {
-            padding: 0 8px;
-            font-size: 8px;
-        }
-
 .load-comments-btn {
     font-size: 12px;
     padding: 0 6px;
@@ -618,6 +622,19 @@ hr.dark-line {
     float: left;
     margin-left: 25px;
     width: 715px;
+}
+
+/***************************************
+    Photo
+***************************************/
+
+.album-item {
+    max-width: 265px;
+
+}
+
+.photo-hover {
+    margin-top: 10px;
 }
 
 /***************************************

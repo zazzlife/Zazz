@@ -12,6 +12,11 @@
 
     <div class="margin-ten">
 
+        <ul class="breadcrumb">
+            <li class="active">Albums<span class="divider">/</span></li>
+        </ul>
+
+
         @if (Model.IsOwner)
         {
             <p><strong>Create a new album</strong></p>
@@ -24,10 +29,6 @@
 
             <hr />
         }
-        
-        <ul class="breadcrumb">
-            <li class="active">Albums<span class="divider">/</span></li>
-        </ul>
 
         <ul class="thumbnails">
 
@@ -38,15 +39,16 @@
                         <a href="~/album/photos/@album.PhotoId/1">
                             <img src="@album.PhotoUrl" class="width-255" />
                         </a>
-                        <h4>@album.PhotoDescription</h4>
-
-                        @if (Model.IsOwner)
-                        {
-                            <a href="~/album/remove/@album.PhotoId" class="pull-right font-small">REMOVE</a>
-                            <div class="clearfix"></div>
-                        }
-
+                        <div class="photo-hover">
+                            <span>@album.PhotoDescription</span>
+                            @if (Model.IsOwner)
+                            {
+                                <button title="Remove Album" data-url="/album/remove/@album.PhotoId" class="btn btn-small icononly-btn pull-right remove-photo-btn"><i class="icon-remove"></i></button>
+                                <div class="clearfix"></div>
+                            }
+                        </div>
                     </div>
+                    <div class="clearfix"></div>
                 </li>
             }
 
