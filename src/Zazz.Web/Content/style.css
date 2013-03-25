@@ -35,13 +35,13 @@ textarea {
     border-radius: 2px !important;
 }
 
-body, button, .btn, label, input, button, select, textarea,
-input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], 
-input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], 
-input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], 
-.uneditable-input, .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
-    font-size: 13px;
-}
+    body, button, .btn, label, input, button, select, textarea,
+    input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"],
+    input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
+    .uneditable-input, .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
+        font-size: 13px;
+    }
 
 /***************************************
     JQuery UI overrides
@@ -474,19 +474,19 @@ hr.dark-line {
         display: none;
     }
 
-    .feed-item .feed-actions button {
-        padding: 0 8px;
-        font-size: 8px;
-    }
+        .feed-item .feed-actions button {
+            padding: 0 8px;
+            font-size: 8px;
+        }
 
 .load-comments-btn {
     font-size: 12px;
     padding: 0 6px;
 }
 
-.load-comments-btn i {
-    font-size: 14px;
-}
+    .load-comments-btn i {
+        font-size: 14px;
+    }
 
 /***************************************
         Events
@@ -542,6 +542,13 @@ hr.dark-line {
 /***************************************
         Profile Page
 ***************************************/
+
+.followers-text {
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    font-size: 20px;
+}
 
 #coverImg {
     margin-bottom: 25px;

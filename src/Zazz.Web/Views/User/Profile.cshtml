@@ -6,9 +6,9 @@
 
 <div class="container">
     @*COVET IMAGE*@
-    <img id="coverImg" class="img-polaroid img-rounded" src="@Model.CoverPhotoUrl" />
+    <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
 
-    <div>
+    <div style="min-height: 120px;">
 
         @*LEFT ITEMS*@
         <div class="pull-left">
@@ -19,8 +19,7 @@
 
         @*RIGHT ITEMS*@
         <div class="pull-right">
-            <h3 class="pull-right" style="margin-left: 5px;">@Model.FollowersCount</h3>
-            <h3 class="pull-right">PARTY WEB:</h3>
+            <span class="pull-right followers-text">Party Web Followers: @Model.FollowersCount</span>
             <br />
 
             @if (Model.IsTargetUserFollowingCurrentUser)
