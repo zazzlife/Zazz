@@ -17,6 +17,6 @@ namespace Zazz.Web.Models
 
         public FeedType FeedType { get; set; }
 
-        public IEnumerable<CommentViewModel> Comments { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
     }
 }
