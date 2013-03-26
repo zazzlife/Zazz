@@ -14,12 +14,6 @@ namespace Zazz.Infrastructure
             _client = new FacebookClient();
         }
 
-        public FacebookHelper(string accessToken)
-            : this()
-        {
-            _client.AccessToken = accessToken;
-        }
-
         public void SetAccessToken(string token)
         {
             _client.AccessToken = token;

@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Facebook
     public class FbUserChangesEntry
     {
         [DataMember(Name = "uid")]
-        public int UserId { get; set; }
+        public long UserId { get; set; }
 
         [DataMember(Name = "changed_fields")]
         public IEnumerable<string> ChangedFields { get; set; }

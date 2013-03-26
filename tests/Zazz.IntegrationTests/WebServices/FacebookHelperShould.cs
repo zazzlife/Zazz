@@ -29,8 +29,8 @@ namespace Zazz.IntegrationTests.WebServices
         {
             //Arrange
             const string ACCESS_TOKEN = "";
-            var sut = new FacebookHelper(ACCESS_TOKEN);
-
+            var sut = new FacebookHelper();
+            sut.SetAccessToken(ACCESS_TOKEN);
             //Act
             var result = await sut.GetAsync<FbUser>("me", "email", "username");
 

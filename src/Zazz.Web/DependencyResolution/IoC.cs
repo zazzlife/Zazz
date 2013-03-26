@@ -50,7 +50,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFileService>().Use<FileService>();
                             x.For<IFollowService>().Use<FollowService>();
                             x.For<IPostService>().Use<PostService>();
-
+                            x.For<IFacebookService>().Use<FacebookService>();
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory);
 
