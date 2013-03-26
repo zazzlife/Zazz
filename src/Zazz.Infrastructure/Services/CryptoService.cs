@@ -39,6 +39,14 @@ namespace Zazz.Infrastructure.Services
             return ComputeSHA1SignedHash(RandomSignHashSecret, clearText);
         }
 
+        public string GenerateSignedSHA1Hash(string clearText, string key)
+        {
+            var hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key));
+            var hash = hmacsha1.ComputeHash(Encoding.UTF8.GetBytes(clearText));
+
+            return BitConverter.ToString(hash).Replace("-", "");
+        }
+
         private string ComputeSHA1SignedHash(byte[] secretKey, string clearText)
         {
             var hmacsha1 = new HMACSHA1(secretKey);

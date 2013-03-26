@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -71,6 +72,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Act
             var hash = _sut.GenerateTextSignature(text);
+
+            //Assert
+            Assert.AreEqual(expected, hash);
+        }
+
+        [TestCase("Soroush", "D793844EE149C54A666038F6CEE9D208C1CC7F67")]
+        [TestCase("Test", "1963801F189AABE6D09B4C185956C0BA39B8DF81")]
+        [TestCase(" ", "79966BEDFB6BA4320DBBFFB259B8909495317C80")]
+        [TestCase("TEST", "77EDB25DB5E27153EE0FA5217D1E69E294E3CF7E")]
+        public void GenerateExpectedValues_OnComputeSHA1SignedHash(string text, string expected)
+        {
+            //Act
+            var hash = _sut.GenerateSignedSHA1Hash(text, ApiKeys.FACEBOOK_API_SECRET);
 
             //Assert
             Assert.AreEqual(expected, hash);
