@@ -35,7 +35,8 @@ namespace Zazz.Core.Models.Data
 
         public int? PhotoId { get; set; }
 
-        public DateTime Time { get; set; }
+        [DataType("datetimeoffset(0)")]
+        public DateTimeOffset Time { get; set; }
 
         public DateTime TimeUtc { get; set; }
 

@@ -144,11 +144,11 @@ namespace Zazz.Web.Controllers
                     if (userId == 0)
                         throw new HttpException(401, "Unauthorized");
 
-                    var post = EventViewModelToPost(vm, userId);
-                    post.CreatedDate = DateTime.UtcNow;
+                    var zazzEvent = EventViewModelToPost(vm, userId);
+                    zazzEvent.CreatedDate = DateTime.UtcNow;
 
-                    await _eventService.CreateEventAsync(post);
-                    return Redirect("~/event/show/" + post.Id);
+                    await _eventService.CreateEventAsync(zazzEvent);
+                    return Redirect("~/event/show/" + zazzEvent.Id);
                 }
             }
 
@@ -224,13 +224,12 @@ namespace Zazz.Web.Controllers
                            Location = vm.Location,
                            Price = vm.Price,
                            Time = vm.Time,
+                           TimeUtc = vm.Time.UtcDateTime,
                            Street = vm.Street,
                            Latitude = vm.Latitude,
                            Longitude = vm.Longitude
                        };
 
-            post.TimeUtc = DateTime.Parse(vm.UtcTime, CultureInfo.InvariantCulture,
-                                                      DateTimeStyles.RoundtripKind);
 
             return post;
         }

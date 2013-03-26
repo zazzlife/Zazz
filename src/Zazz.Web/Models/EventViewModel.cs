@@ -17,7 +17,7 @@ namespace Zazz.Web.Models
         public string Description { get; set; }
 
         [Required, Display(Name = "Time")]
-        public DateTime Time { get; set; }
+        public DateTimeOffset Time { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public string UtcTime { get; set; } // don't use datetime here, it'll convert to local time
