@@ -6,7 +6,9 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFacebookService
     {
-        Task HandleRealtimeUpdatesAsync(FbUserChanges userChanges);
+        Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
+
+        Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);
 
         /// <summary>
         /// Gets the user info

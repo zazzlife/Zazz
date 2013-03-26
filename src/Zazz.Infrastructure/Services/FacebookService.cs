@@ -18,7 +18,12 @@ namespace Zazz.Infrastructure.Services
             _errorHandler = errorHandler;
         }
 
-        public Task HandleRealtimeUpdatesAsync(FbUserChanges userChanges)
+        public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task HandleRealtimePageUpdatesAsync(FbPageChanges changes)
         {
             throw new NotImplementedException();
         }
