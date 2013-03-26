@@ -26,15 +26,21 @@ namespace Zazz.Infrastructure
             _client.AccessToken = token;
         }
 
-        public Task<IEnumerable<FbEvent>> GetEvents(int creatorId, long fromDate = 0)
+        public Task<IEnumerable<FbEvent>> GetEvents(int creatorId, List<int> idsToExclude)
         {
             const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue";
             const string TABLE = "event";
+            var exclude = String.Empty;
 
-            if (fromDate == 0)
-                fromDate = DateTime.UtcNow.ToUnixTimestamp();
+            if (idsToExclude.Count > 0)
+            {
+                foreach (var id in idsToExclude)
+                {
+                    exclude += String.Format(" AND NOT (id = {0})", id);
+                }
+            }
 
-            var where = String.Format("creator = {0} AND start_time > {1}", creatorId, fromDate);
+            var where = String.Format("creator = {0}{1}", creatorId, exclude);
             var query = GenerateFql(FIELDS, TABLE, where);
 
             return _client.GetTaskAsync<IEnumerable<FbEvent>>("fql", new { q = query });

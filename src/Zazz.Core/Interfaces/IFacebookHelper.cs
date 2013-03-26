@@ -9,7 +9,7 @@ namespace Zazz.Core.Interfaces
     {
         void SetAccessToken(string token);
 
-        Task<IEnumerable<FbEvent>> GetEvents(int creatorId, long fromDate = 0);
+        Task<IEnumerable<FbEvent>> GetEvents(int creatorId, List<int> idsToExclude);
 
         Task<T> GetAsync<T>(string path) where T : class;
 
