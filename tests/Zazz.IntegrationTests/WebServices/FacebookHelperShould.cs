@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
 
 namespace Zazz.IntegrationTests.WebServices
 {
-    [TestFixture]
+    [TestFixture, Explicit("Valid access token is required")]
     public class FacebookHelperShould
     {
         [Test]
@@ -24,19 +25,22 @@ namespace Zazz.IntegrationTests.WebServices
             Assert.IsNotNull(result.Name);
         }
 
-        [Test, Explicit("Valid access token is required")]
-        public async Task GetCorrectFieldsWhenSpecified()
+        [Test]
+        public async Task GetEvents_OnGetEvents()
         {
             //Arrange
-            const string ACCESS_TOKEN = "";
+            var accessToken = "AAACEdEose0cBADvBE2umDFDedP2BLhAnfpdpI0cTMbjZCPEUgHjAKjgZAYaFgZAKGJJzqZAA65HMkWzSmlep2XbwfnJQExzY2EFD8ceQJP0ZAWYfVvNUT";
+            var userId = 100004326581895;
+            var excludeList = new List<int>();
+
             var sut = new FacebookHelper();
-            sut.SetAccessToken(ACCESS_TOKEN);
+            sut.SetAccessToken(accessToken);
+            
             //Act
-            var result = await sut.GetAsync<FbUser>("me", "email", "username");
+            var result = await sut.GetEvents(userId, excludeList);
 
             //Assert
-            Assert.IsNotNull(result.Email);
-            Assert.IsNotNull(result.Username);
+
         }
 
 

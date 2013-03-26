@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Facebook;
 using Zazz.Core.Interfaces;
@@ -26,9 +27,9 @@ namespace Zazz.Infrastructure
             _client.AccessToken = token;
         }
 
-        public Task<IEnumerable<FbEvent>> GetEvents(int creatorId, List<int> idsToExclude)
+        public async Task<IEnumerable<FbEvent>> GetEvents(long creatorId, List<int> idsToExclude)
         {
-            const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue";
+            const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
             const string TABLE = "event";
             var exclude = String.Empty;
 
@@ -43,7 +44,52 @@ namespace Zazz.Infrastructure
             var where = String.Format("creator = {0}{1}", creatorId, exclude);
             var query = GenerateFql(FIELDS, TABLE, where);
 
-            return _client.GetTaskAsync<IEnumerable<FbEvent>>("fql", new { q = query });
+            dynamic result = await _client.GetTaskAsync("fql", new { q = query });
+            var events = new List<FbEvent>();
+
+            foreach (var e in result.data)
+            {
+                var ev = new FbEvent
+                         {
+                             Description = e.description,
+                             Id = e.eid,
+                             Location = e.location,
+                             Name = e.name,
+                             Pic = e.pic_square,
+                             UpdatedTime = e.update_time,
+                             Venue = new FbVenue()
+                         };
+
+                var startTime = (string) e.start_time;
+
+                if ((bool)e.is_date_only)
+                {
+                    ev.StartTime = DateTime.ParseExact((string) e.start_time, "yyyy-MM-dd",
+                                                       CultureInfo.InvariantCulture,
+                                                       DateTimeStyles.AssumeUniversal);
+                }
+                else
+                {
+                    var datetime = DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                        DateTimeStyles.RoundtripKind);
+                    var utc = datetime.ToUniversalTime();
+
+                }
+
+
+                if (!(e.venue is IEnumerable<object>))
+                {
+                    ev.Venue.City = e.venue.city;
+                    ev.Venue.Country = e.venue.country;
+                    ev.Venue.Latitude = e.venue.latitude;
+                    ev.Venue.Longitude = e.venue.longitude;
+                    ev.Venue.Street = e.venue.street;
+                }
+
+                events.Add(ev);
+            }
+
+            return events;
         }
 
         public Task<T> GetAsync<T>(string path) where T : class

@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Facebook
     public class FbEvent
     {
         [DataMember(Name = "eid")]
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         [DataMember(Name = "name")]
         public string Name { get; set; }
@@ -31,6 +31,6 @@ namespace Zazz.Core.Models.Facebook
         public FbVenue Venue { get; set; }
 
         [DataMember(Name = "updated_time")]
-        public DateTime UpdatedTime { get; set; }
+        public long UpdatedTime { get; set; }
     }
 }
