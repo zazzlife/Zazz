@@ -33,13 +33,13 @@ namespace Zazz.Web.Controllers
 
             return "";
 
-            var providedSignature = Request.Headers["X-Hub-Signature"];
-            var signature = _cryptoService.ComputeSHA1SignedHash(
-                secretKey: Encoding.UTF8.GetBytes(ApiKeys.FACEBOOK_API_SECRET),
-                clearText: body);
+            //var providedSignature = Request.Headers["X-Hub-Signature"];
+            //var signature = _cryptoService.ComputeSHA1SignedHash(
+            //    secretKey: Encoding.UTF8.GetBytes(ApiKeys.FACEBOOK_API_SECRET),
+            //    clearText: body);
             
-            if (providedSignature != signature)
-                throw new SecurityException();
+            //if (providedSignature != signature)
+            //    throw new SecurityException();
 
             
 
