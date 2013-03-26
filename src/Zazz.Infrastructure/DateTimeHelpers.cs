@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Zazz.Web.Helpers
+namespace Zazz.Infrastructure
 {
     public static class DateTimeHelpers
     {
