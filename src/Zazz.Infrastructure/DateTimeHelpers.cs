@@ -11,7 +11,7 @@ namespace Zazz.Infrastructure
             return (long)(time - UnixEpoch).TotalSeconds;
         }
 
-        public static DateTime UnitTimestampToDateTime(this long seconds)
+        public static DateTime UnixTimestampToDateTime(this long seconds)
         {
             return UnixEpoch.AddSeconds(seconds);
         }
