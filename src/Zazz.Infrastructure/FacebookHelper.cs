@@ -64,16 +64,14 @@ namespace Zazz.Infrastructure
 
                 if ((bool)e.is_date_only)
                 {
-                    ev.StartTime = DateTime.ParseExact((string) e.start_time, "yyyy-MM-dd",
-                                                       CultureInfo.InvariantCulture,
-                                                       DateTimeStyles.AssumeUniversal);
+                    ev.StartTime = DateTimeOffset.Parse(startTime,
+                                                        CultureInfo.InvariantCulture,
+                                                        DateTimeStyles.AssumeUniversal);
                 }
                 else
                 {
-                    var datetime = DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                    ev.StartTime = DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
                                                         DateTimeStyles.RoundtripKind);
-                    var utc = datetime.ToUniversalTime();
-
                 }
 
 

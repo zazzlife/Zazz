@@ -29,7 +29,7 @@ namespace Zazz.IntegrationTests.WebServices
         public async Task GetEvents_OnGetEvents()
         {
             //Arrange
-            var accessToken = "AAACEdEose0cBADvBE2umDFDedP2BLhAnfpdpI0cTMbjZCPEUgHjAKjgZAYaFgZAKGJJzqZAA65HMkWzSmlep2XbwfnJQExzY2EFD8ceQJP0ZAWYfVvNUT";
+            var accessToken = "AAACEdEose0cBABaoejBLGpoNNAXsZBoKpoT8dLrLksz2zZCcU25yKg5jTClQ3xwcw9JZCURKxkDZB2Ja21GBD4vSGykZAxOYFpjUESg9ZAoFyGJaF9epmD";
             var userId = 100004326581895;
             var excludeList = new List<int>();
 

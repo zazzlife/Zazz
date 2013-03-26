@@ -22,10 +22,10 @@ namespace Zazz.Core.Models.Facebook
         public string Pic { get; set; }
 
         [DataMember(Name = "start_time")]
-        public DateTime StartTime { get; set; }
+        public DateTimeOffset StartTime { get; set; }
 
         [DataMember(Name = "end_time")]
-        public DateTime? EndTime { get; set; }
+        public DateTimeOffset? EndTime { get; set; }
 
         [DataMember(Name = "venue")]
         public FbVenue Venue { get; set; }
