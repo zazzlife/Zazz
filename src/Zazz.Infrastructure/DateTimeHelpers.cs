@@ -4,6 +4,18 @@ namespace Zazz.Infrastructure
 {
     public static class DateTimeHelpers
     {
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public static long ToUnixTimestamp(this DateTime time)
+        {
+            return (long)(time - UnixEpoch).TotalSeconds;
+        }
+
+        public static DateTime UnitTimestampToDateTime(this long seconds)
+        {
+            return UnixEpoch.AddSeconds(seconds);
+        }
+
         //http://stackoverflow.com/questions/11/calculating-relative-time
         public static string ToRelativeTime(this DateTime dt)
         {
