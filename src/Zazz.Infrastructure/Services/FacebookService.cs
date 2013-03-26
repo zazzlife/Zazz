@@ -18,6 +18,11 @@ namespace Zazz.Infrastructure.Services
             _errorHandler = errorHandler;
         }
 
+        public Task HandleRealtimeUpdatesAsync(FbUserChanges userChanges)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)
         {
             try

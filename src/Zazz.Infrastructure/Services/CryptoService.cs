@@ -28,7 +28,7 @@ namespace Zazz.Infrastructure.Services
             if (String.IsNullOrEmpty(password))
                 throw new ArgumentNullException("password");
 
-            return ComputeHash(PasswordHashSecret, password);
+            return ComputeSHA1SignedHash(PasswordHashSecret, password);
         }
 
         public string GenerateTextSignature(string clearText)
@@ -36,10 +36,10 @@ namespace Zazz.Infrastructure.Services
             if (String.IsNullOrEmpty(clearText))
                 throw new ArgumentNullException("clearText");
 
-            return ComputeHash(RandomSignHashSecret, clearText);
+            return ComputeSHA1SignedHash(RandomSignHashSecret, clearText);
         }
 
-        private string ComputeHash(byte[] secretKey, string clearText)
+        public string ComputeSHA1SignedHash(byte[] secretKey, string clearText)
         {
             var hmacsha1 = new HMACSHA1(secretKey);
             var textBytes = Encoding.UTF8.GetBytes(clearText);
