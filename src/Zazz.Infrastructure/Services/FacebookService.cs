@@ -24,7 +24,6 @@ namespace Zazz.Infrastructure.Services
 
         public async Task HandleRealtimePageUpdatesAsync(FbPageChanges changes)
         {
-            throw new NotImplementedException();
         }
 
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)

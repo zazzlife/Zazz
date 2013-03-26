@@ -10,6 +10,6 @@ namespace Zazz.Core.Models.Facebook
         public string Id { get; set; }
 
         [DataMember(Name = "changes")]
-        public IEnumerable<string> ChangedFields { get; set; }
+        public IEnumerable<FbPageChangedFields> ChangedFields { get; set; }
     }
 }
