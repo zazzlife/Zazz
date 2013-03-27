@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Facebook;
 using Moq;
@@ -28,6 +29,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _fbHelper.Setup(x => x.SetAccessToken(It.IsAny<string>()));
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
+            _uow.Setup(x => x.SaveAsync())
+                .Returns(() => Task.Run(() => { }));
         }
 
         [Test]
@@ -110,8 +113,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Setup(x => x.GetAsync<FbUser>(id, "email"))
                      .Throws<Exception>();
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
-            
-                //Act
+
+            //Act
             try
             {
                 var t = await _sut.GetUserAsync(id, token);
@@ -124,6 +127,150 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _errorHander.Verify(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()),
                                 Times.Once());
+        }
+
+        [Test]
+        public async Task NotThrowOrDoAnythingIfItDidntFintAnyUser_OnHandleRealtimeUserUpdatesAsync()
+        {
+            //Arrange
+            var userAId = 1234L;
+            var userBId = 5678L;
+            var changes = new FbUserChanges
+                          {
+                              Entries = new List<FbUserChangesEntry>
+                                        {
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userAId,
+                                                ChangedFields = new[] {"events"}
+                                            },
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userBId,
+                                                ChangedFields = new[] {"events"}
+                                            }
+                                        }
+                          };
+
+            _uow.Setup(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(It.IsAny<long>(), OAuthProvider.Facebook))
+                .Returns(() => null);
+
+            //Act
+            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+
+            //Assert
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
+            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task NotDoAnythingIfChangedFieldsAreNotEvents_OnHandleRealtimeUserUpdatesAsync()
+        {
+            //Arrange
+            var userAId = 1234L;
+            var userBId = 5678L;
+            var changes = new FbUserChanges
+            {
+                Entries = new List<FbUserChangesEntry>
+                                        {
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userAId,
+                                                ChangedFields = new[] {"random"}
+                                            },
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userBId,
+                                                ChangedFields = new[] {"random"}
+                                            }
+                                        }
+            };
+
+            //Act
+            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+
+            //Assert
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
+                        Times.Never());
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
+                        Times.Never());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
+            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task NotRequestEventsIfUserDoesntWantEventsToBeSynced_OnHandleRealtimeUserUpdatesAsync()
+        {
+            //Arrange
+            var userAId = 1234L;
+            var userBId = 5678L;
+            var userAAccount = new OAuthAccount
+                               {
+                                   AccessToken = "user a token",
+                                   UserId = (int)userAId,
+                                   ProviderUserId = userAId
+                               };
+            var userBAccount = new OAuthAccount
+                               {
+                                   AccessToken = "user a token",
+                                   UserId = (int)userBId,
+                                   ProviderUserId = userBId
+                               };
+
+            var changes = new FbUserChanges
+            {
+                Entries = new List<FbUserChangesEntry>
+                                        {
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userAId,
+                                                ChangedFields = new[] {"events"}
+                                            },
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userBId,
+                                                ChangedFields = new[] {"events"}
+                                            }
+                                        }
+            };
+
+            _uow.Setup(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook))
+                .Returns(() => userAAccount);
+            _uow.Setup(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook))
+                .Returns(() => userBAccount);
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()))
+                .Returns(() => false);
+
+
+            //Act
+            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+
+            //Assert
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
+            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
         }
     }
 }
