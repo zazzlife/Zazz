@@ -10,23 +10,23 @@ namespace Zazz.Infrastructure.Services
 {
     public class AlbumService : IAlbumService
     {
-        private readonly IUoW _uoW;
+        private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
 
-        public AlbumService(IUoW uoW, IPhotoService photoService)
+        public AlbumService(IUoW uow, IPhotoService photoService)
         {
-            _uoW = uoW;
+            _uow = uow;
             _photoService = photoService;
         }
 
         public Task<Album> GetAlbumAsync(int albumId)
         {
-            return _uoW.AlbumRepository.GetByIdAsync(albumId);
+            return _uow.AlbumRepository.GetByIdAsync(albumId);
         }
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
         {
-            return Task.Run(() => _uoW.AlbumRepository.GetAll()
+            return Task.Run(() => _uow.AlbumRepository.GetAll()
                                       .Where(a => a.UserId == userId)
                                       .OrderBy(a => a.Id)
                                       .Skip(skip)
@@ -35,20 +35,20 @@ namespace Zazz.Infrastructure.Services
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId)
         {
-            return Task.Run(() => _uoW.AlbumRepository.GetAll()
+            return Task.Run(() => _uow.AlbumRepository.GetAll()
                                       .Where(a => a.UserId == userId).ToList());
         }
 
         public Task<int> GetUserAlbumsCountAsync(int userId)
         {
-            return Task.Run(() => _uoW.AlbumRepository.GetAll().Count(a => a.UserId == userId));
+            return Task.Run(() => _uow.AlbumRepository.GetAll().Count(a => a.UserId == userId));
         }
 
         public async Task CreateAlbumAsync(Album album)
         {
-            _uoW.AlbumRepository.InsertGraph(album);
+            _uow.AlbumRepository.InsertGraph(album);
 
-            await _uoW.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task UpdateAlbumAsync(Album album, int currentUserId)
@@ -56,12 +56,12 @@ namespace Zazz.Infrastructure.Services
             if (album.Id == 0)
                 throw new ArgumentException("Album id cannot be 0");
 
-            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(album.Id);
+            var ownerId = await _uow.AlbumRepository.GetOwnerIdAsync(album.Id);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            _uoW.AlbumRepository.InsertOrUpdate(album);
-            await _uoW.SaveAsync();
+            _uow.AlbumRepository.InsertOrUpdate(album);
+            _uow.SaveChanges();
         }
 
         public async Task DeleteAlbumAsync(int albumId, int currentUserId)
@@ -69,22 +69,22 @@ namespace Zazz.Infrastructure.Services
             if (albumId == 0)
                 throw new ArgumentException("Album Id cannot be 0", "albumId");
 
-            var ownerId = await _uoW.AlbumRepository.GetOwnerIdAsync(albumId);
+            var ownerId = await _uow.AlbumRepository.GetOwnerIdAsync(albumId);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            var photosIds = _uoW.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
+            var photosIds = _uow.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
 
             foreach (var photoId in photosIds)
                 await _photoService.RemovePhotoAsync(photoId, currentUserId);
 
-            await _uoW.AlbumRepository.RemoveAsync(albumId);
-            await _uoW.SaveAsync();
+            await _uow.AlbumRepository.RemoveAsync(albumId);
+            _uow.SaveChanges();
         }
 
         public void Dispose()
         {
-            _uoW.Dispose();
+            _uow.Dispose();
         }
     }
 }

@@ -27,8 +27,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs = new Mock<IFileService>();
             _tempRootPath = Path.GetTempPath();
             _sut = new PhotoService(_uow.Object, _fs.Object, _tempRootPath);
-            _uow.Setup(x => x.SaveAsync())
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
         }
 
         [TestCase("/picture/user/12/333.jpg", 12, 333)]
@@ -101,7 +100,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
-                _uow.Verify(x => x.SaveAsync(), Times.Exactly(2));
+                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
@@ -135,7 +134,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
-                _uow.Verify(x => x.SaveAsync(), Times.Once());
+                _uow.Verify(x => x.SaveChanges(), Times.Once());
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
@@ -223,7 +222,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(0, photo.Uploader.UserDetail.CoverPhotoId);
             Assert.AreEqual(profilePhotoId, photo.Uploader.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
@@ -278,7 +277,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(coverPhotoId, photo.Uploader.UserDetail.CoverPhotoId);
             Assert.AreEqual(0, photo.Uploader.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
@@ -333,7 +332,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(coverPhotoId, photo.Uploader.UserDetail.CoverPhotoId);
             Assert.AreEqual(profilePhotoId, photo.Uploader.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePhotoFeeds(photoId), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
@@ -426,7 +425,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Once());
             _uow.Verify(x => x.PhotoRepository.InsertOrUpdate(photo), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]

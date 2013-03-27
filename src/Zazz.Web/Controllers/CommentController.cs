@@ -90,7 +90,7 @@ namespace Zazz.Web.Controllers
                 }
 
                 _uow.CommentRepository.InsertGraph(c);
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
 
                 var commentVm = new CommentViewModel
                                 {
@@ -127,7 +127,7 @@ namespace Zazz.Web.Controllers
 
                 _uow.CommentRepository.Remove(comment);
 
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
             }
         }
 
@@ -151,7 +151,7 @@ namespace Zazz.Web.Controllers
 
                 c.Message = comment;
 
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
             }
         }
     }

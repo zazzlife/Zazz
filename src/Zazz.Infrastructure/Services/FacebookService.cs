@@ -32,7 +32,7 @@ namespace Zazz.Infrastructure.Services
                 tasks.Add(UpdateUserEvents(entry));
 
             await Task.WhenAll(tasks);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         private async Task UpdateUserEvents(FbUserChangesEntry entry)

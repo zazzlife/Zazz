@@ -28,7 +28,7 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FeedRepository.InsertGraph(feed);
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task EditPostAsync(int postId, string newText, int currentUserId)
@@ -42,7 +42,7 @@ namespace Zazz.Infrastructure.Services
 
             post.Message = newText;
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task RemovePostAsync(int postId, int currentUserId)
@@ -58,7 +58,7 @@ namespace Zazz.Infrastructure.Services
             _uow.FeedRepository.RemovePostFeeds(postId);
             _uow.CommentRepository.RemovePostComments(postId);
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public void Dispose()

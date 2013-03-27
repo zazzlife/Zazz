@@ -18,6 +18,6 @@ namespace Zazz.Core.Interfaces
         IFeedRepository FeedRepository { get; }
         IPostRepository PostRepository { get;}
 
-        Task SaveAsync();
+        void SaveChanges();
     }
 }

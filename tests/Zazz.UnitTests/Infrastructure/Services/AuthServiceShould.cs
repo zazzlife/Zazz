@@ -23,8 +23,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cryptoMock = new Mock<ICryptoService>();
             _sut = new AuthService(_uowMock.Object, _cryptoMock.Object);
 
-            _uowMock.Setup(x => x.SaveAsync())
-                    .Returns(Task.Run(() => { }));
+            _uowMock.Setup(x => x.SaveChanges());
         }
 
         #region Login
@@ -138,7 +137,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.LoginAsync("user", pass).Wait();
 
             //Assert
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
         #endregion
 
@@ -355,7 +354,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
         #endregion
 
@@ -480,7 +479,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uowMock.Verify(x => x.ValidationTokenRepository.InsertGraph(result));
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         #endregion
@@ -615,7 +614,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newPassHash, user.Password);
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -643,7 +642,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newPassHash, user.Password);
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
             _uowMock.Verify(x => x.ValidationTokenRepository.RemoveAsync(user.Id));
         }
 
@@ -763,7 +762,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
 
             Assert.AreEqual(newPassHash, user.Password);
-            _uowMock.Verify(x => x.SaveAsync());
+            _uowMock.Verify(x => x.SaveChanges());
             _uowMock.Verify(x => x.UserRepository.GetByIdAsync(userId), Times.Once());
             _cryptoMock.Verify(x => x.GeneratePasswordHash(newPassword), Times.Once());
             _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
@@ -843,7 +842,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
             _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
             Assert.AreEqual(user.Id, oauthAccount.UserId);
-            _uowMock.Verify(x => x.SaveAsync(), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]

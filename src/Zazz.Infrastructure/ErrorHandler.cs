@@ -9,13 +9,13 @@ namespace Zazz.Infrastructure
 {
     public class ErrorHandler : IErrorHandler
     {
-        private readonly IUoW _uoW;
+        private readonly IUoW _uow;
         private readonly ILogger _logger;
         private readonly IEmailService _emailService;
 
-        public ErrorHandler(IUoW uoW, ILogger logger, IEmailService emailService)
+        public ErrorHandler(IUoW uow, ILogger logger, IEmailService emailService)
         {
-            _uoW = uoW;
+            _uow = uow;
             _logger = logger;
             _emailService = emailService;
         }
@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure
             var errorLog = "Expired access token: " + fbUserId;
             _logger.LogError("ErrorHandler", errorLog);
 
-            var oauthAccount = _uoW.OAuthAccountRepository.GetOAuthAccountByProviderId(long.Parse(fbUserId),
+            var oauthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(long.Parse(fbUserId),
                                                                                             provider);
 
             if (oauthAccount.User.UserDetail.SendSyncErrorNotifications &&
@@ -47,7 +47,7 @@ namespace Zazz.Infrastructure
             }
 
             oauthAccount.User.UserDetail.LastSyncError = DateTime.UtcNow;
-            await _uoW.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields)
@@ -63,8 +63,8 @@ namespace Zazz.Infrastructure
                                       Path = path,
                                       LastTry = DateTime.UtcNow
                                   };
-            _uoW.FacebookSyncRetryRepository.InsertGraph(fbSyncRetry);
-            await _uoW.SaveAsync();
+            _uow.FacebookSyncRetryRepository.InsertGraph(fbSyncRetry);
+            _uow.SaveChanges();
         }
 
         public void LogException(string message, string nameSpace, Exception exception)
@@ -74,7 +74,7 @@ namespace Zazz.Infrastructure
 
         public void Dispose()
         {
-            _uoW.Dispose();
+            _uow.Dispose();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure.Services
             var follow = new Follow { FromUserId = fromUserId, ToUserId = clubAdminUserId };
             _uow.FollowRepository.InsertGraph(follow);
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task SendFollowRequestAsync(int fromUserId, int toUserId)
@@ -42,7 +42,7 @@ namespace Zazz.Infrastructure.Services
                               };
 
             _uow.FollowRequestRepository.InsertGraph(request);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task AcceptFollowRequestAsync(int requestId, int currentUserId)
@@ -58,7 +58,7 @@ namespace Zazz.Infrastructure.Services
             _uow.FollowRepository.InsertGraph(userFollow);
             _uow.FollowRequestRepository.Remove(followRequest);
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task RejectFollowRequestAsync(int requestId, int currentUserId)
@@ -71,13 +71,13 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
             _uow.FollowRequestRepository.Remove(request);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task RemoveFollowAsync(int fromUserId, int toUserId)
         {
             await _uow.FollowRepository.RemoveAsync(fromUserId, toUserId);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public Task<int> GetFollowRequestsCountAsync(int userId)

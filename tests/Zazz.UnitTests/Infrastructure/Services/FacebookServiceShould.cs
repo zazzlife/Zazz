@@ -31,8 +31,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _fbHelper.Setup(x => x.SetAccessToken(It.IsAny<string>()));
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
-            _uow.Setup(x => x.SaveAsync())
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
@@ -393,7 +392,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _eventService.Verify(x => x.CreateEventAsync(newEvent1), Times.Never());
 
             _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }
 }

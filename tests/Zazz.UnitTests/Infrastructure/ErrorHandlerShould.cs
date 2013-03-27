@@ -26,8 +26,7 @@ namespace Zazz.UnitTests.Infrastructure
             _emailService = new Mock<IEmailService>();
             _sut = new ErrorHandler(_uow.Object, _logger.Object, _emailService.Object);
 
-            _uow.Setup(x => x.SaveAsync())
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
 
             _emailService.Setup(x => x.SendAsync(It.IsAny<MailMessage>()))
                          .Returns(() => Task.Run(() => { }));
@@ -58,7 +57,7 @@ namespace Zazz.UnitTests.Infrastructure
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -80,7 +79,7 @@ namespace Zazz.UnitTests.Infrastructure
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LasySyncErrorEmailSent.Value.Date);
             _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -103,7 +102,7 @@ namespace Zazz.UnitTests.Infrastructure
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
             Assert.AreNotEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LasySyncErrorEmailSent.Value.Date);
             _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -125,7 +124,7 @@ namespace Zazz.UnitTests.Infrastructure
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
             _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -158,7 +157,7 @@ namespace Zazz.UnitTests.Infrastructure
             //Assert
             _logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             _uow.Verify(x => x.FacebookSyncRetryRepository.InsertGraph(It.IsAny<FacebookSyncRetry>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]

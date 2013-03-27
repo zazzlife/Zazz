@@ -32,8 +32,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _followRequest = new FollowRequest {FromUserId = _userAId, ToUserId = _userBId};
 
 
-            _uow.Setup(x => x.SaveAsync())
-                    .Returns(Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
@@ -50,7 +49,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -67,7 +66,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -116,7 +115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.ExistsAsync(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -142,7 +141,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -161,7 +160,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -188,7 +187,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -207,7 +206,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -222,7 +221,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.FollowRepository.RemoveAsync(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
 

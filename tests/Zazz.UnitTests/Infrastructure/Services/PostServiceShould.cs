@@ -22,8 +22,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow = new Mock<IUoW>();
             _sut = new PostService(_uow.Object);
 
-            _uow.Setup(x => x.SaveAsync())
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
 
             _post = new Post
                     {
@@ -49,7 +48,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(DateTime.MinValue, _post.CreatedTime);
             _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
 
         }
 
@@ -74,7 +73,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
             _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Never());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -95,7 +94,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -117,7 +116,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -139,7 +138,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -156,7 +155,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(newText, _post.Message);
             _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
-            _uow.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }
 }

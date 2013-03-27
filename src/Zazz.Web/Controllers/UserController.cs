@@ -195,7 +195,7 @@ namespace Zazz.Web.Controllers
                     user.UserDetail.SyncFbImages = vm.SyncFbImages;
                     user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
-                    await _uow.SaveAsync();
+                    _uow.SaveChanges();
                     ShowAlert("Your preferences has been updated.", AlertType.Success);
                 }
             }
@@ -213,7 +213,7 @@ namespace Zazz.Web.Controllers
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
                 user.UserDetail.ProfilePhotoId = id;
 
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
             }
         }
 
@@ -227,7 +227,7 @@ namespace Zazz.Web.Controllers
                 var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
                 user.UserDetail.CoverPhotoId = id;
 
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
             }
         }
 

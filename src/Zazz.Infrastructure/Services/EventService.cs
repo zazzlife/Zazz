@@ -23,7 +23,7 @@ namespace Zazz.Infrastructure.Services
             zazzEvent.CreatedDate = DateTime.UtcNow;
             _uow.EventRepository.InsertGraph(zazzEvent);
 
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
 
             var feed = new Feed
                        {
@@ -34,7 +34,7 @@ namespace Zazz.Infrastructure.Services
                        };
 
             _uow.FeedRepository.InsertGraph(feed);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task UpdateEventAsync(ZazzEvent zazzEvent, int currentUserId)
@@ -48,7 +48,7 @@ namespace Zazz.Infrastructure.Services
 
             // if you want to set update datetime later, the place would be here!
             _uow.EventRepository.InsertOrUpdate(zazzEvent);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public Task<ZazzEvent> GetEventAsync(int id)
@@ -69,7 +69,7 @@ namespace Zazz.Infrastructure.Services
             _uow.CommentRepository.RemoveEventComments(eventId);
 
             await _uow.EventRepository.RemoveAsync(eventId);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public void Dispose()

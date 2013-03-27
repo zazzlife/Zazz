@@ -8,19 +8,19 @@ namespace Zazz.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUoW _uoW;
+        private readonly IUoW _uow;
         private readonly ICryptoService _cryptoService;
 
-        public AuthService(IUoW uoW, ICryptoService cryptoService)
+        public AuthService(IUoW uow, ICryptoService cryptoService)
         {
-            _uoW = uoW;
+            _uow = uow;
             _cryptoService = cryptoService;
         }
 
         public async Task LoginAsync(string username, string password)
         {
             var passwordHash = _cryptoService.GeneratePasswordHash(password);
-            var user = await _uoW.UserRepository.GetByUsernameAsync(username);
+            var user = await _uow.UserRepository.GetByUsernameAsync(username);
 
             if (user == null)
                 throw new UserNotExistsException();
@@ -30,7 +30,7 @@ namespace Zazz.Infrastructure.Services
 
             user.LastActivity = DateTime.UtcNow;
 
-            await _uoW.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task<User> RegisterAsync(User user, bool createToken)
@@ -38,11 +38,11 @@ namespace Zazz.Infrastructure.Services
             if (user.UserDetail == null)
                 throw new ArgumentNullException();
 
-            var usernameExists = await _uoW.UserRepository.ExistsByUsernameAsync(user.Username);
+            var usernameExists = await _uow.UserRepository.ExistsByUsernameAsync(user.Username);
             if (usernameExists)
                 throw new UsernameExistsException();
 
-            var emailExists = await _uoW.UserRepository.ExistsByEmailAsync(user.Email);
+            var emailExists = await _uow.UserRepository.ExistsByEmailAsync(user.Email);
             if (emailExists)
                 throw new EmailExistsException();
 
@@ -60,16 +60,16 @@ namespace Zazz.Infrastructure.Services
                                            };
             }
 
-            _uoW.UserRepository.InsertGraph(user);
+            _uow.UserRepository.InsertGraph(user);
 
-            await _uoW.SaveAsync();
+            _uow.SaveChanges();
 
             return user;
         }
 
         public async Task<ValidationToken> GenerateResetPasswordTokenAsync(string email)
         {
-            var userId = await _uoW.UserRepository.GetIdByEmailAsync(email);
+            var userId = await _uow.UserRepository.GetIdByEmailAsync(email);
             if (userId == 0)
                 throw new EmailNotExistsException();
 
@@ -80,19 +80,19 @@ namespace Zazz.Infrastructure.Services
                                 Token = Guid.NewGuid(),
                             };
 
-            var oldToken = await _uoW.ValidationTokenRepository.GetByIdAsync(userId);
+            var oldToken = await _uow.ValidationTokenRepository.GetByIdAsync(userId);
             if (oldToken != null)
-                _uoW.ValidationTokenRepository.Remove(oldToken);
+                _uow.ValidationTokenRepository.Remove(oldToken);
 
-            _uoW.ValidationTokenRepository.InsertGraph(token);
-            await _uoW.SaveAsync();
+            _uow.ValidationTokenRepository.InsertGraph(token);
+            _uow.SaveChanges();
 
             return token;
         }
 
         public async Task<bool> IsTokenValidAsync(int userId, Guid token)
         {
-            var userToken = await _uoW.ValidationTokenRepository.GetByIdAsync(userId);
+            var userToken = await _uow.ValidationTokenRepository.GetByIdAsync(userId);
             if (userToken == null)
                 return false;
 
@@ -108,17 +108,17 @@ namespace Zazz.Infrastructure.Services
             if (!isTokenValid)
                 throw new InvalidTokenException();
 
-            var user = await _uoW.UserRepository.GetByIdAsync(userId);
+            var user = await _uow.UserRepository.GetByIdAsync(userId);
             var newPassHash = _cryptoService.GeneratePasswordHash(newPassword);
 
             user.Password = newPassHash;
-            await _uoW.ValidationTokenRepository.RemoveAsync(user.Id);
-            await _uoW.SaveAsync();
+            await _uow.ValidationTokenRepository.RemoveAsync(user.Id);
+            _uow.SaveChanges();
         }
 
         public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
         {
-            var user = await _uoW.UserRepository.GetByIdAsync(userId);
+            var user = await _uow.UserRepository.GetByIdAsync(userId);
 
             var currentPassHash = _cryptoService.GeneratePasswordHash(currentPassword);
             if (currentPassHash != user.Password)
@@ -128,23 +128,23 @@ namespace Zazz.Infrastructure.Services
 
             user.Password = newPasshash;
 
-            await _uoW.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public async Task<User> GetOAuthUserAsync(OAuthAccount oAuthAccount, string email)
         {
-            var existingOAuthAccount = _uoW.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
+            var existingOAuthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
                                                                         oAuthAccount.Provider);
             if (existingOAuthAccount != null)
                 return existingOAuthAccount.User; // user and OAuth account exist
 
-            var user = await _uoW.UserRepository.GetByEmailAsync(email);
+            var user = await _uow.UserRepository.GetByEmailAsync(email);
             if (user != null)
             {
                 oAuthAccount.UserId = user.Id;
-                _uoW.OAuthAccountRepository.InsertGraph(oAuthAccount);
+                _uow.OAuthAccountRepository.InsertGraph(oAuthAccount);
 
-                await _uoW.SaveAsync();
+                _uow.SaveChanges();
 
                 return user;
             }
@@ -154,7 +154,7 @@ namespace Zazz.Infrastructure.Services
 
         public void Dispose()
         {
-            _uoW.Dispose();
+            _uow.Dispose();
         }
     }
 }

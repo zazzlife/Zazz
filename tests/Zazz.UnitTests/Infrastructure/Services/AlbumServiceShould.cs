@@ -13,7 +13,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
     [TestFixture]
     public class AlbumServiceShould
     {
-        private Mock<IUoW> _uoW;
+        private Mock<IUoW> _uow;
         private AlbumService _sut;
         private Album _album;
         private int _userId;
@@ -23,29 +23,28 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [SetUp]
         public void Init()
         {
-            _uoW = new Mock<IUoW>();
+            _uow = new Mock<IUoW>();
             _photoService = new Mock<IPhotoService>();
-            _sut = new AlbumService(_uoW.Object, _photoService.Object);
+            _sut = new AlbumService(_uow.Object, _photoService.Object);
             _album = new Album();
             _userId = 12;
             _photoId = 1;
 
-            _uoW.Setup(x => x.SaveAsync())
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
         public async Task InsertAndSave_OnCreateAlbum()
         {
             //Arrange
-            _uoW.Setup(x => x.AlbumRepository.InsertGraph(_album));
+            _uow.Setup(x => x.AlbumRepository.InsertGraph(_album));
 
             //Act
             await _sut.CreateAlbumAsync(_album);
 
             //Assert
-            _uoW.Verify(x => x.AlbumRepository.InsertGraph(_album), Times.Once());
-            _uoW.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(_album), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -68,7 +67,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
                 .Returns(() => Task.Run(() => 155));
 
             //Act & Assert
@@ -80,7 +79,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
         }
 
         [Test]
@@ -88,16 +87,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
                 .Returns(() => Task.Run(() => _userId));
-            _uoW.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
+            _uow.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
 
             //Act
             await _sut.UpdateAlbumAsync(_album, _userId);
 
             //Assert
-            _uoW.Verify(x => x.AlbumRepository.InsertOrUpdate(_album), Times.Once());
-            _uoW.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.InsertOrUpdate(_album), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
@@ -121,7 +120,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _album.Id = 123;
             _album.UserId = 400;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
                 .Returns(() => Task.Run(() => _album.UserId));
 
             //Act & Assert
@@ -133,7 +132,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uoW.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
         }
 
         [Test]
@@ -145,11 +144,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _album.Id = 123;
             var dirPath = "c:\test";
             _album.UserId = _userId;
-            _uoW.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
                 .Returns(() => Task.Run(() => _userId));
-            _uoW.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.RemoveAsync(_album.Id))
                 .Returns(() => Task.Run(() => { }));
-            _uoW.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
+            _uow.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
                 .Returns(photoIds);
             _photoService.Setup(x => x.RemovePhotoAsync(It.IsInRange(1, 4, Range.Inclusive), _userId))
                          .Returns(() => Task.Run(() => { }));
@@ -161,8 +160,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             await _sut.DeleteAlbumAsync(_album.Id, _userId);
 
             //Assert
-            _uoW.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
-            _uoW.Verify(x => x.SaveAsync(), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.RemoveAsync(_album.Id), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
             _photoService.Verify(x => x.RemovePhotoAsync(It.IsInRange(1, 4, Range.Inclusive), _userId),
                                  Times.Exactly(photoIds.Length));
         }

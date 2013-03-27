@@ -92,9 +92,9 @@ namespace Zazz.Data
             return _dbContext;
         }
 
-        public Task SaveAsync()
+        public void SaveChanges()
         {
-            return Task.Run(() => _dbContext.SaveChanges());
+            _dbContext.SaveChanges();
         }
 
         public void Dispose()

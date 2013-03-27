@@ -47,7 +47,7 @@ namespace Zazz.Infrastructure.Services
         {
             photo.UploadDate = DateTime.UtcNow;
             _uow.PhotoRepository.InsertGraph(photo);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
 
             if (showInFeed)
             {
@@ -60,7 +60,7 @@ namespace Zazz.Infrastructure.Services
                 };
 
                 _uow.FeedRepository.InsertGraph(feed);
-                await _uow.SaveAsync();
+                _uow.SaveChanges();
             }
 
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
@@ -89,7 +89,7 @@ namespace Zazz.Infrastructure.Services
             _uow.CommentRepository.RemovePhotoComments(photoId);
 
             _uow.PhotoRepository.Remove(photo);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
 
             var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
             _fileService.RemoveFile(filePath);
@@ -105,7 +105,7 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
             _uow.PhotoRepository.InsertOrUpdate(photo);
-            await _uow.SaveAsync();
+            _uow.SaveChanges();
         }
 
         public string GetUserImageUrl(int userId)
