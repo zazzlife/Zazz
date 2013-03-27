@@ -92,11 +92,14 @@ namespace Zazz.Web.Controllers
                                  Price = e.Price,
                                  Street = e.Street,
                                  Time = e.Time,
-                                 PhotoId = e.PhotoId
+                                 PhotoId = e.PhotoId,
+                                 IsFacebookEvent = e.IsFacebookEvent,
+                                 ImageUrl = e.IsFacebookEvent ? e.FacebookPhotoLink : null
                              }).ToList();
 
             foreach (var e in events)
             {
+
                 if (!e.PhotoId.HasValue)
                     continue;
 

@@ -38,7 +38,7 @@ namespace Zazz.Infrastructure
                                       creatorId);
             var query = GenerateFql(FIELDS, TABLE, where);
 
-            dynamic result = await _client.GetTaskAsync("fql", new { q = query });
+            dynamic result = _client.Get("fql", new { q = query }); // the async method is buggy!
             var events = new List<FbEvent>();
 
             foreach (var e in result.data)
