@@ -101,7 +101,6 @@ namespace Zazz.Web.Helpers
                                                 City = feed.Event.City,
                                                 CreatedDate = feed.Event.CreatedDate,
                                                 Description = feed.Event.Description,
-                                                FacebookLink = feed.Event.FacebookLink,
                                                 Id = feed.Event.Id,
                                                 IsOwner = feed.UserId == currentUserId,
                                                 Latitude = feed.Event.Latitude,
@@ -111,7 +110,13 @@ namespace Zazz.Web.Helpers
                                                 Price = feed.Event.Price,
                                                 Time = feed.Event.Time,
                                                 Street = feed.Event.Street,
-                                                PhotoId = feed.Event.PhotoId
+                                                PhotoId = feed.Event.PhotoId,
+                                                IsFacebookEvent = feed.Event.IsFacebookEvent,
+                                                ImageUrl = feed.Event.IsFacebookEvent
+                                                               ? feed.Event.FacebookPhotoLink
+                                                               : null,
+                                                IsDateOnly = feed.Event.IsDateOnly,
+                                                FacebookEventId = feed.Event.FacebookEventId
                                             };
 
                     if (feedVm.EventViewModel.PhotoId.HasValue)

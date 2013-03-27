@@ -36,12 +36,15 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public DateTime? CreatedDate { get; set; }
-
-        [Display(AutoGenerateField = false)]
-        public string FacebookLink { get; set; }
         
         [Display(AutoGenerateField = false)]
         public bool IsFacebookEvent { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public long? FacebookEventId { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public bool IsDateOnly { get; set; }
 
         [Display(AutoGenerateField = false)]
         public bool IsOwner { get; set; }

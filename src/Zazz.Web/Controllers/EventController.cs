@@ -84,7 +84,6 @@ namespace Zazz.Web.Controllers
                                  Id = e.Id,
                                  CreatedDate = e.CreatedDate,
                                  Description = e.Description,
-                                 FacebookLink = e.FacebookPhotoLink,
                                  Latitude = e.Latitude,
                                  Longitude = e.Longitude,
                                  Location = e.Location,
@@ -94,7 +93,9 @@ namespace Zazz.Web.Controllers
                                  Time = e.Time,
                                  PhotoId = e.PhotoId,
                                  IsFacebookEvent = e.IsFacebookEvent,
-                                 ImageUrl = e.IsFacebookEvent ? e.FacebookPhotoLink : null
+                                 ImageUrl = e.IsFacebookEvent ? e.FacebookPhotoLink : null,
+                                 IsDateOnly = e.IsDateOnly,
+                                 FacebookEventId = e.FacebookEventId
                              }).ToList();
 
             foreach (var e in events)
@@ -147,7 +148,7 @@ namespace Zazz.Web.Controllers
                     if (userId == 0)
                         throw new HttpException(401, "Unauthorized");
 
-                    var zazzEvent = EventViewModelToPost(vm, userId);
+                    var zazzEvent = EventViewModelToZazzEvent(vm, userId);
                     zazzEvent.CreatedDate = DateTime.UtcNow;
 
                     await _eventService.CreateEventAsync(zazzEvent);
@@ -186,7 +187,7 @@ namespace Zazz.Web.Controllers
                 using (_photoService)
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
-                    var post = EventViewModelToPost(vm, userId);
+                    var post = EventViewModelToZazzEvent(vm, userId);
                     post.Id = id;
                     post.CreatedDate = vm.CreatedDate.Value;
 
@@ -215,7 +216,7 @@ namespace Zazz.Web.Controllers
             return Redirect("~/");
         }
 
-        private static ZazzEvent EventViewModelToPost(EventViewModel vm, int userId)
+        private static ZazzEvent EventViewModelToZazzEvent(EventViewModel vm, int userId)
         {
             var post = new ZazzEvent
                        {
@@ -246,35 +247,38 @@ namespace Zazz.Web.Controllers
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
 
-                var post = await _eventService.GetEventAsync(id);
-                if (post == null)
+                var zazzEvent = await _eventService.GetEventAsync(id);
+                if (zazzEvent == null)
                     throw new HttpException(404, "The requested entry was not found");
 
-                if (ownerOnly && userId != post.UserId)
+                if (ownerOnly && userId != zazzEvent.UserId)
                     throw new HttpException(401, "Unauthorized");
 
                 var vm = new EventViewModel
                 {
-                    Id = post.Id,
-                    City = post.City,
-                    CreatedDate = post.CreatedDate,
-                    Description = post.Description,
-                    Location = post.Location,
-                    Name = post.Name,
-                    Price = post.Price,
-                    Time = post.Time,
-                    UtcTime = post.TimeUtc.ToString("s"),
-                    Street = post.Street,
-                    FacebookLink = post.FacebookLink,
-                    IsOwner = post.UserId == userId,
-                    Latitude = post.Latitude,
-                    Longitude = post.Longitude,
-                    PhotoId = post.PhotoId
+                    Id = zazzEvent.Id,
+                    City = zazzEvent.City,
+                    CreatedDate = zazzEvent.CreatedDate,
+                    Description = zazzEvent.Description,
+                    Location = zazzEvent.Location,
+                    Name = zazzEvent.Name,
+                    Price = zazzEvent.Price,
+                    Time = zazzEvent.Time,
+                    UtcTime = zazzEvent.TimeUtc.ToString("s"),
+                    Street = zazzEvent.Street,
+                    IsOwner = zazzEvent.UserId == userId,
+                    Latitude = zazzEvent.Latitude,
+                    Longitude = zazzEvent.Longitude,
+                    PhotoId = zazzEvent.PhotoId,
+                    IsFacebookEvent = zazzEvent.IsFacebookEvent,
+                    ImageUrl = zazzEvent.IsFacebookEvent ? zazzEvent.FacebookPhotoLink : null,
+                    IsDateOnly = zazzEvent.IsDateOnly,
+                    FacebookEventId = zazzEvent.FacebookEventId
                 };
 
-                if (post.PhotoId.HasValue)
+                if (zazzEvent.PhotoId.HasValue)
                 {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(post.PhotoId.Value);
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(zazzEvent.PhotoId.Value);
                     if (photo != null)
                         vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
                 }

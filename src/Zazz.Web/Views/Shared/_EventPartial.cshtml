@@ -7,7 +7,13 @@
         <img class="event-img" src="@Model.ImageUrl" />
         <i class="loading-indicator icon-refresh icon-spin hidden"></i>
         <p class="event-title">@Model.Name</p>
-        <p class="font-small uppercase">@Model.Time.DateTime.ToLongDateString() - @Model.Time.DateTime.ToShortTimeString()</p>
+        <p class="font-small uppercase">
+            @Model.Time.DateTime.ToLongDateString() @if (!Model.IsDateOnly)
+                                                          {
+                                                              <text>-</text>
+                                                              @Model.Time.DateTime.ToShortTimeString()
+                                                          }
+        </p>
         <div>@Model.Location</div>
         @if (Model.Price.HasValue)
         {
@@ -18,13 +24,19 @@
     </div>
     <div class="event-back" data-side="back">
         <i class="loading-indicator icon-refresh icon-spin hidden"></i>
-        <div class="font-small pull-right">@Model.Time.DateTime.ToLongDateString() - @Model.Time.DateTime.ToShortTimeString()</div>
+        <div class="font-small pull-right">
+            @Model.Time.DateTime.ToLongDateString() @if (!Model.IsDateOnly)
+                                                          {
+                                                              <text>-</text>
+                                                              @Model.Time.DateTime.ToShortTimeString()
+                                                          }
+        </div>
         <p>
             <strong>@Model.Location</strong>
         </p>
-        @if (!String.IsNullOrEmpty(Model.FacebookLink))
+        @if (Model.FacebookEventId.HasValue)
         {
-             <a href="@Model.FacebookLink" target="_blank" class="facebook-link"><i class="icon-facebook icon-large"></i></a>   
+             <a href="https://www.facebook.com/events/@Model.FacebookEventId.Value" target="_blank" class="facebook-link"><i class="icon-facebook icon-large"></i></a>   
         }
     </div>
 </div>
