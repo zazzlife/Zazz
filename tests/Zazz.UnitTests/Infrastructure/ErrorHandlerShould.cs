@@ -49,8 +49,8 @@ namespace Zazz.UnitTests.Infrastructure
             var nameSpace = "Test";
             var fbUserId = 1234L;
             _logger.Setup(x => x.LogError(nameSpace, It.IsAny<string>()));
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(fbUserId, OAuthProvider.Facebook))
-                .Returns(() => Task.Run(() => _oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(_oauthAccount);
 
 
             //Act
@@ -70,8 +70,8 @@ namespace Zazz.UnitTests.Infrastructure
             var nameSpace = "Test";
             var fbUserId = 1234L;
             _logger.Setup(x => x.LogError(nameSpace, It.IsAny<string>()));
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(fbUserId, OAuthProvider.Facebook))
-                .Returns(() => Task.Run(() => _oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(_oauthAccount);
             
 
             //Act
@@ -92,8 +92,8 @@ namespace Zazz.UnitTests.Infrastructure
             var nameSpace = "Test";
             var fbUserId = 1234L;
             _logger.Setup(x => x.LogError(nameSpace, It.IsAny<string>()));
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(fbUserId, OAuthProvider.Facebook))
-                .Returns(() => Task.Run(() => _oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(_oauthAccount);
 
 
             //Act
@@ -115,8 +115,8 @@ namespace Zazz.UnitTests.Infrastructure
             var nameSpace = "Test";
             var fbUserId = 1234L;
             _logger.Setup(x => x.LogError(nameSpace, It.IsAny<string>()));
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(fbUserId, OAuthProvider.Facebook))
-                .Returns(() => Task.Run(() => _oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(_oauthAccount);
 
 
             //Act
@@ -134,8 +134,8 @@ namespace Zazz.UnitTests.Infrastructure
             //Arrange
             var fbUserId = 1234L;
             _logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()));
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(fbUserId, OAuthProvider.Facebook))
-                .Returns(() => Task.Run(() => _oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(_oauthAccount);
 
             //Act
             await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);

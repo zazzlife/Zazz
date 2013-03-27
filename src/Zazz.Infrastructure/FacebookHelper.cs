@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Facebook;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Infrastructure
@@ -50,12 +51,13 @@ namespace Zazz.Infrastructure
                              Name = e.name,
                              Pic = e.pic_square,
                              UpdatedTime = e.update_time,
+                             IsDateOnly = e.is_date_only,
                              Venue = new FbVenue()
                          };
 
                 var startTime = (string) e.start_time;
 
-                if ((bool)e.is_date_only)
+                if (ev.IsDateOnly)
                 {
                     ev.StartTime = DateTimeOffset.Parse(startTime,
                                                         CultureInfo.InvariantCulture,
@@ -92,6 +94,33 @@ namespace Zazz.Infrastructure
         {
             var fields = String.Join(",", fieldsToGet);
             return _client.GetTaskAsync<T>(path, new { fields });
+        }
+
+        public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
+        {
+            var e = new ZazzEvent
+                   {
+                       CreatedDate = fbEvent.UpdatedTime.UnixTimestampToDateTime(),
+                       Description = fbEvent.Description,
+                       FacebookEventId = fbEvent.Id,
+                       FacebookPhotoLink = fbEvent.Pic,
+                       IsDateOnly = fbEvent.IsDateOnly,
+                       IsFacebookEvent = true,
+                       Name = fbEvent.Name,
+                       Time = fbEvent.StartTime,
+                       TimeUtc = fbEvent.StartTime.UtcDateTime,
+                       Location = fbEvent.Location
+                   };
+
+            if (fbEvent.Venue != null)
+            {
+                e.City = fbEvent.Venue.City;
+                e.Street = fbEvent.Venue.Street;
+                e.Latitude = fbEvent.Venue.Latitude;
+                e.Longitude = fbEvent.Venue.Longitude;
+            }
+
+            return e;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure
             var errorLog = "Expired access token: " + fbUserId;
             _logger.LogError("ErrorHandler", errorLog);
 
-            var oauthAccount = await _uoW.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(long.Parse(fbUserId),
+            var oauthAccount = _uoW.OAuthAccountRepository.GetOAuthAccountByProviderId(long.Parse(fbUserId),
                                                                                             provider);
 
             if (oauthAccount.User.UserDetail.SendSyncErrorNotifications &&

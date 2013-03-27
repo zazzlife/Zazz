@@ -36,15 +36,45 @@ namespace Zazz.Infrastructure.Services
         {
             if (entry.ChangedFields.Contains("events"))
             {
-                var oauthAccount = await _uow.OAuthAccountRepository
-                                         .GetOAuthAccountByProviderIdAsync(entry.UserId, OAuthProvider.Facebook);
-                if (!oauthAccount.User.UserDetail.SyncFbEvents)
+                //getting user account
+                var oauthAccount = _uow.OAuthAccountRepository
+                                         .GetOAuthAccountByProviderId(entry.UserId, OAuthProvider.Facebook);
+                if (!oauthAccount.User.UserDetail.SyncFbEvents) //checking if the user wants to sync events
                     return;
 
+                // getting last 10 events from fb
                 var events = await _facebookHelper.GetEventsAsync(entry.UserId, oauthAccount.AccessToken);
                 foreach (var fbEvent in events)
                 {
-                    throw new NotImplementedException();
+                    //getting the current event that we have in db
+                    var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
+                    var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent); //converting the fb event to our model
+                    //checking if we actually have the event in db or it's new
+                    if (dbEvent != null)
+                    {
+                        // checking if the event has changed or not
+                        if (!dbEvent.CreatedDate.Equals(convertedEvent.CreatedDate))
+                        {
+                            dbEvent.Name = convertedEvent.Name;
+                            dbEvent.Description = convertedEvent.Description;
+                            dbEvent.IsDateOnly = convertedEvent.IsDateOnly;
+                            dbEvent.CreatedDate = convertedEvent.CreatedDate;
+                            dbEvent.FacebookPhotoLink = convertedEvent.FacebookPhotoLink;
+                            dbEvent.Time = convertedEvent.Time;
+                            dbEvent.TimeUtc = convertedEvent.TimeUtc;
+                            dbEvent.Location = convertedEvent.Location;
+                            dbEvent.Street = convertedEvent.Street;
+                            dbEvent.City = convertedEvent.City;
+                            dbEvent.Latitude = convertedEvent.Latitude;
+                            dbEvent.Longitude = convertedEvent.Longitude;
+                        }
+                    }
+                    else
+                    {
+                        //we don't have the event
+                        convertedEvent.UserId = oauthAccount.UserId;
+                        _uow.EventRepository.InsertGraph(convertedEvent);
+                    }
                 }
             }
         }

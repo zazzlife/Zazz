@@ -30,6 +30,9 @@ namespace Zazz.Core.Models.Facebook
         [DataMember(Name = "venue")]
         public FbVenue Venue { get; set; }
 
+        [DataMember(Name = "is_date_only")]
+        public bool IsDateOnly { get; set; }
+
         [DataMember(Name = "updated_time")]
         public long UpdatedTime { get; set; }
     }

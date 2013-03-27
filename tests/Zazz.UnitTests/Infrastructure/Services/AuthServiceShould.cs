@@ -783,8 +783,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var user = new User { Email = email };
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))
-                    .Returns(() => Task.Run(() => oauthAccount));
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(oauthAccount);
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Run(() => user));
 
@@ -792,7 +792,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
-            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(It.IsAny<string>()), Times.Never());
         }
 
@@ -806,8 +806,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var user = new User { Email = email };
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))
-                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => null);
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Run(() => user));
 
@@ -815,7 +815,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
-            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
         }
 
@@ -829,8 +829,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var user = new User { Email = email, Id = 23 };
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))
-                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => null);
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Run(() => user));
             _uowMock.Setup(x => x.OAuthAccountRepository.InsertGraph(oauthAccount));
@@ -839,7 +839,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
-            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
             _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
             Assert.AreEqual(user.Id, oauthAccount.UserId);
@@ -856,8 +856,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var user = new User { Email = email };
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider))
-                    .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => null);
             _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
                     .Returns(() => Task.Factory.StartNew<User>(() => null));
 
@@ -865,7 +865,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
-            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderIdAsync(providerId, provider), Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
             Assert.IsNull(result);
         }

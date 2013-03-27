@@ -236,7 +236,7 @@ namespace Zazz.IntegrationTests.Repositories
             var user = AddUser();
 
             //Act
-            var result = _repo.GetOAuthAccountByProviderIdAsync(1234L, OAuthProvider.Facebook).Result;
+            var result = _repo.GetOAuthAccountByProviderId(1234L, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsNull(result);
@@ -264,7 +264,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetOAuthAccountByProviderIdAsync(providerUserId, OAuthProvider.Facebook).Result;
+            var result = _repo.GetOAuthAccountByProviderId(providerUserId, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsNotNull(result);
