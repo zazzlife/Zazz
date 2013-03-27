@@ -37,7 +37,7 @@ namespace Zazz.IntegrationTests.WebServices
             sut.SetAccessToken(accessToken);
             
             //Act
-            var result = await sut.GetEvents(userId);
+            var result = await sut.GetEventsAsync(userId, accessToken);
 
             //Assert
 

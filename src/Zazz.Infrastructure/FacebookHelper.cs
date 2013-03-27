@@ -27,8 +27,10 @@ namespace Zazz.Infrastructure
             _client.AccessToken = token;
         }
 
-        public async Task<IEnumerable<FbEvent>> GetEvents(long creatorId)
+        public async Task<IEnumerable<FbEvent>> GetEventsAsync(long creatorId, string accessToken)
         {
+            _client.AccessToken = accessToken;
+
             const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
             const string TABLE = "event";
             var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT 10",

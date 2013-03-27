@@ -16,13 +16,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IFacebookHelper> _fbHelper;
         private FacebookService _sut;
         private Mock<IErrorHandler> _errorHander;
+        private Mock<IUoW> _uow;
 
         [SetUp]
         public void Init()
         {
             _fbHelper = new Mock<IFacebookHelper>();
             _errorHander = new Mock<IErrorHandler>();
-            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object);
+            _uow = new Mock<IUoW>();
+            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object);
 
             _fbHelper.Setup(x => x.SetAccessToken(It.IsAny<string>()));
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));

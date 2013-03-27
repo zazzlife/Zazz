@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Facebook;
 using Zazz.Core.Interfaces;
@@ -11,15 +13,40 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IFacebookHelper _facebookHelper;
         private readonly IErrorHandler _errorHandler;
+        private readonly IUoW _uow;
 
-        public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler)
+        public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow)
         {
             _facebookHelper = facebookHelper;
             _errorHandler = errorHandler;
+            _uow = uow;
         }
 
         public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
         {
+            var tasks = new List<Task>();
+            foreach (var entry in changes.Entries)
+                tasks.Add(UpdateUserEvents(entry));
+
+            await Task.WhenAll(tasks);
+            await _uow.SaveAsync();
+        }
+
+        private async Task UpdateUserEvents(FbUserChangesEntry entry)
+        {
+            if (entry.ChangedFields.Contains("events"))
+            {
+                var oauthAccount = await _uow.OAuthAccountRepository
+                                         .GetOAuthAccountByProviderIdAsync(entry.UserId, OAuthProvider.Facebook);
+                if (!oauthAccount.User.UserDetail.SyncFbEvents)
+                    return;
+
+                var events = await _facebookHelper.GetEventsAsync(entry.UserId, oauthAccount.AccessToken);
+                foreach (var fbEvent in events)
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         public async Task HandleRealtimePageUpdatesAsync(FbPageChanges changes)
