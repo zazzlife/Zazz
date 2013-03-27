@@ -23,6 +23,7 @@ namespace Zazz.Data
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
         public IDbSet<Feed> Feeds { get; set; }
+        public IDbSet<FacebookPage> FacebookPages { get; set; }
 
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
 
