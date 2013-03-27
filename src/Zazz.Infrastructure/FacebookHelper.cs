@@ -57,17 +57,11 @@ namespace Zazz.Infrastructure
 
                 var startTime = (string) e.start_time;
 
-                if (ev.IsDateOnly)
-                {
-                    ev.StartTime = DateTimeOffset.Parse(startTime,
-                                                        CultureInfo.InvariantCulture,
-                                                        DateTimeStyles.AssumeUniversal);
-                }
-                else
-                {
-                    ev.StartTime = DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
-                                                        DateTimeStyles.RoundtripKind);
-                }
+                ev.StartTime = ev.IsDateOnly
+                                   ? DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.AssumeUniversal)
+                                   : DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.RoundtripKind);
 
 
                 if (!(e.venue is IEnumerable<object>))
