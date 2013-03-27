@@ -27,8 +27,6 @@ namespace Zazz.Core.Interfaces
 
         string GetUserFullName(string username);
 
-        //Task<string> GetUserPassword(string username);
-        
         int GetUserPhotoId(int userId);
 
         int GetUserPhotoId(string username);
@@ -38,5 +36,11 @@ namespace Zazz.Core.Interfaces
         string GetUserName(int userId);
 
         void ResetPhotoId(int photoId);
+
+        bool WantsFbEventsSynced(int userId);
+
+        bool WantsFbPostsSynced(int userId);
+
+        bool WantsFbImagesSynced(int userId);
     }
 }

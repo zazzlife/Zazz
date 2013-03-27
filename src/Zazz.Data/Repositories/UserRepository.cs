@@ -133,6 +133,30 @@ namespace Zazz.Data.Repositories
             }
         }
 
+        public bool WantsFbEventsSynced(int userId)
+        {
+            return DbContext.UserDetails
+                            .Where(u => u.Id == userId)
+                            .Select(u => u.SyncFbEvents)
+                            .SingleOrDefault();
+        }
+
+        public bool WantsFbPostsSynced(int userId)
+        {
+            return DbContext.UserDetails
+                            .Where(u => u.Id == userId)
+                            .Select(u => u.SyncFbPosts)
+                            .SingleOrDefault();
+        }
+
+        public bool WantsFbImagesSynced(int userId)
+        {
+            return DbContext.UserDetails
+                            .Where(u => u.Id == userId)
+                            .Select(u => u.SyncFbImages)
+                            .SingleOrDefault();
+        }
+
         public override async Task RemoveAsync(int id)
         {
             var item = await GetByIdAsync(id);
@@ -147,12 +171,5 @@ namespace Zazz.Data.Repositories
 
             DbContext.Entry(item).State = EntityState.Deleted;
         }
-
-        //public Task<string> GetUserPassword(string username)
-        //{
-        //    return Task.Run(() => DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
-        //                              .Select(u => u.Password)
-        //                              .SingleOrDefault());
-        //}
     }
 }

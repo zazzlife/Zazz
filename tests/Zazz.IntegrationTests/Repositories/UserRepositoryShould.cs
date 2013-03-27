@@ -620,38 +620,73 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(idNotToBeRemoved, b.UserDetail.ProfilePhotoId);
         }
 
+        [Test]
+        public void ReturnCorrectValue_OnWantsFbEventsSynced()
+        {
+            //Arrange
+            var userA = Mother.GetUser();
+            userA.UserDetail.SyncFbEvents = true;
 
-        //[Test]
-        //public void ReturnNull_OnGetPassword_WhenUserNotExists()
-        //{
-        //    //Arrange
-        //    //Act
+            var userB = Mother.GetUser();
+            userB.UserDetail.SyncFbEvents = false;
 
-        //    var result = _repo.GetUserPassword("notExists").Result;
+            _zazzDbContext.Users.Add(userA);
+            _zazzDbContext.Users.Add(userB);
+            _zazzDbContext.SaveChanges();
 
-        //    //Assert
-        //    Assert.IsNull(result);
-        //}
+            //Act
+            var resultA = _repo.WantsFbEventsSynced(userA.Id);
+            var resultB = _repo.WantsFbEventsSynced(userB.Id);
 
-        //[TestCase("testuser")]
-        //[TestCase("testUser")]
-        //[TestCase("TESTUSER")]
-        //[TestCase("TestUser")]
-        //public void NotBeCaseSensetive( string username)
-        //{
-        //    //Arrange
-        //    var user = Mother.GetUser();
-        //    user.Username = "TestUser";
-        //    _repo.InsertGraph(user);
-        //    _zazzDbContext.SaveChanges();
+            //Assert
+            Assert.IsTrue(resultA);
+            Assert.IsFalse(resultB);
+        }
 
-        //    //Act
-        //    var pass = _repo.GetUserPassword(username).Result;
+        [Test]
+        public void ReturnCorrectValue_OnWantsFbPostsSynced()
+        {
+            //Arrange
+            var userA = Mother.GetUser();
+            userA.UserDetail.SyncFbPosts = true;
 
-        //    //Assert
-        //    Assert.AreEqual(user.Password, pass);
-        //}
+            var userB = Mother.GetUser();
+            userB.UserDetail.SyncFbPosts = false;
 
+            _zazzDbContext.Users.Add(userA);
+            _zazzDbContext.Users.Add(userB);
+            _zazzDbContext.SaveChanges();
 
+            //Act
+            var resultA = _repo.WantsFbPostsSynced(userA.Id);
+            var resultB = _repo.WantsFbPostsSynced(userB.Id);
+
+            //Assert
+            Assert.IsTrue(resultA);
+            Assert.IsFalse(resultB);
+        }
+
+        [Test]
+        public void ReturnCorrectValue_OnWantsFbImagesSynced()
+        {
+            //Arrange
+            var userA = Mother.GetUser();
+            userA.UserDetail.SyncFbImages = true;
+
+            var userB = Mother.GetUser();
+            userB.UserDetail.SyncFbImages = false;
+
+            _zazzDbContext.Users.Add(userA);
+            _zazzDbContext.Users.Add(userB);
+            _zazzDbContext.SaveChanges();
+
+            //Act
+            var resultA = _repo.WantsFbImagesSynced(userA.Id);
+            var resultB = _repo.WantsFbImagesSynced(userB.Id);
+
+            //Assert
+            Assert.IsTrue(resultA);
+            Assert.IsFalse(resultB);
+        }
     }
 }
