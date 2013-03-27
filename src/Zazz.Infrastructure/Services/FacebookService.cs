@@ -39,13 +39,16 @@ namespace Zazz.Infrastructure.Services
                 //getting user account
                 var oauthAccount = _uow.OAuthAccountRepository
                                          .GetOAuthAccountByProviderId(entry.UserId, OAuthProvider.Facebook);
-                
+
+                if (oauthAccount == null)
+                    return;
+
                 //checking if the user wants to sync events
                 if (!_uow.UserRepository.WantsFbEventsSynced(oauthAccount.UserId)) 
                     return;
 
                 // getting last 10 events from fb
-                var events = await _facebookHelper.GetEventsAsync(entry.UserId, oauthAccount.AccessToken);
+                var events = _facebookHelper.GetEvents(entry.UserId, oauthAccount.AccessToken);
                 foreach (var fbEvent in events)
                 {
                     //getting the current event that we have in db

@@ -28,7 +28,7 @@ namespace Zazz.Infrastructure
             _client.AccessToken = token;
         }
 
-        public async Task<IEnumerable<FbEvent>> GetEventsAsync(long creatorId, string accessToken)
+        public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken)
         {
             _client.AccessToken = accessToken;
 
