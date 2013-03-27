@@ -24,8 +24,7 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedDate { get; set; }
 
-        [MaxLength(75), DataType("varchar")]
-        public string FacebookItemId { get; set; }
+        public long? FacebookEventId { get; set; }
 
         [MaxLength(300), DataType(DataType.Url)]
         public string FacebookLink { get; set; }

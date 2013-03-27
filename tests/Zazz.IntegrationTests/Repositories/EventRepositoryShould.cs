@@ -115,5 +115,33 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsNull(eventACheck.PhotoId);
             Assert.IsNull(eventBCheck.PhotoId);
         }
+
+        [Test]
+        public void GetCorrectEvent_OnGetByFacebookId()
+        {
+            //Arrange
+            var facebookEventId = 1234L;
+
+            var user = Mother.GetUser();
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            var e1 = Mother.GetEvent();
+            e1.FacebookEventId = facebookEventId;
+            e1.UserId = user.Id;
+
+            var e2 = Mother.GetEvent();
+            e2.UserId = user.Id;
+
+            _context.Events.Add(e1);
+            _context.Events.Add(e2);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetByFacebookId(facebookEventId);
+
+            //Assert
+            Assert.AreEqual(e1.Id, result.Id);
+        }
     }
 }

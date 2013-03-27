@@ -41,6 +41,11 @@ namespace Zazz.Data.Repositories
                         .Where(p => EntityFunctions.TruncateTime(p.TimeUtc) <= to);
         }
 
+        public ZazzEvent GetByFacebookId(long fbEventId)
+        {
+            return DbSet.SingleOrDefault(e => e.FacebookEventId == fbEventId);
+        }
+
         public void ResetPhotoId(int photoId)
         {
             var events = DbSet.Where(p => p.PhotoId == photoId);

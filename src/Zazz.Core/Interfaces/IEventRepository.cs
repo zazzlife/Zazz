@@ -11,6 +11,8 @@ namespace Zazz.Core.Interfaces
 
         IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to);
 
+        ZazzEvent GetByFacebookId(long fbEventId);
+
         void ResetPhotoId(int photoId);
     }
 }
