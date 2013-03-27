@@ -272,5 +272,122 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
         }
+
+        [Test]
+        public async Task AddFbEventsIfTheyAreNewAndUpdateIfTheyExist_OnHandleRealtimeUserUpdatesAsync()
+        {
+            //Arrange
+            var userAId = 1234L;
+            var userAAccount = new OAuthAccount
+            {
+                AccessToken = "user a token",
+                UserId = (int)userAId,
+                ProviderUserId = userAId
+            };
+
+            var changes = new FbUserChanges
+            {
+                Entries = new List<FbUserChangesEntry>
+                                        {
+                                            new FbUserChangesEntry
+                                            {
+                                                UserId = userAId,
+                                                ChangedFields = new[] {"events"}
+                                            }
+                                        }
+            };
+
+            // fb event 1 is exists and needs to be updated
+            var event1 = new ZazzEvent
+                         {
+                             Id = 1,
+                             Name = "old Name",
+                             Description = "old desc",
+                             IsDateOnly = false,
+                             Location = "old loc",
+                             FacebookPhotoLink = "old pic",
+                             CreatedDate = DateTime.UtcNow.AddDays(-1)
+                         };
+
+            var fbEvent1 = new FbEvent
+                           {
+                               Id = 1
+                           };
+
+            // fb event 2 is not exists and need to be inserted
+            var fbEvent2 = new FbEvent
+                           {
+                               Id = 2
+                           };
+            var event2 = new ZazzEvent { Id = 2 };
+
+            // fb event 3 is the new version of event1
+            var fbEvent3 = new FbEvent
+                           {
+                               Id = 1,
+                               Name = "new Name",
+                               Description = "new desc",
+                               IsDateOnly = true,
+                               Location = "new loc",
+                               Pic = "new pic"
+                           };
+
+            var newEvent1 = new ZazzEvent
+            {
+                Id = 1,
+                Name = "new Name",
+                Description = "new desc",
+                IsDateOnly = true,
+                Location = "new loc",
+                FacebookPhotoLink = "new pic",
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var fbEvents = new List<FbEvent> { fbEvent2, fbEvent3 };
+
+            _uow.Setup(x => x.OAuthAccountRepository
+                             .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook))
+                .Returns(() => userAAccount);
+
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()))
+                .Returns(() => true);
+
+            _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent1.Id))
+                .Returns(event1);
+
+            _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent2.Id))
+                .Returns(() => null);
+
+            _fbHelper.Setup(x => x.GetEvents(userAId, userAAccount.AccessToken))
+                     .Returns(fbEvents);
+
+            _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent3))
+                     .Returns(newEvent1);
+
+            _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent2))
+                     .Returns(event2);
+
+            //Act
+            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+
+            //Assert
+            Assert.AreEqual(newEvent1.Name, event1.Name);
+            Assert.AreEqual(newEvent1.Description, event1.Description);
+            Assert.AreEqual(newEvent1.IsDateOnly, event1.IsDateOnly);
+            Assert.AreEqual(newEvent1.Location, event1.Location);
+            Assert.AreEqual(newEvent1.FacebookPhotoLink, event1.FacebookPhotoLink);
+
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
+
+            _uow.Verify(x => x.EventRepository.InsertGraph(event2), Times.Once());
+            _uow.Verify(x => x.EventRepository.InsertGraph(event1), Times.Never());
+            _uow.Verify(x => x.EventRepository.InsertGraph(newEvent1), Times.Never());
+
+            _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken), Times.Once());
+            _uow.Verify(x => x.SaveAsync(), Times.Once());
+        }
     }
 }
