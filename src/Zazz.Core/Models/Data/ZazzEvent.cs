@@ -27,7 +27,7 @@ namespace Zazz.Core.Models.Data
         public long? FacebookEventId { get; set; }
 
         [MaxLength(300), DataType(DataType.Url)]
-        public string FacebookLink { get; set; }
+        public string FacebookLink { get; set; } //TODO: remove this property later
 
         [MaxLength(300), DataType(DataType.ImageUrl)]
         public string FacebookPhotoLink { get; set; }

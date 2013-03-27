@@ -34,7 +34,7 @@ namespace Zazz.Infrastructure
 
             const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
             const string TABLE = "event";
-            var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT 10",
+            var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT 5",
                                       creatorId);
             var query = GenerateFql(FIELDS, TABLE, where);
 
