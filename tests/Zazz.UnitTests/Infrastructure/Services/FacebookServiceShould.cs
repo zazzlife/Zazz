@@ -18,14 +18,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private FacebookService _sut;
         private Mock<IErrorHandler> _errorHander;
         private Mock<IUoW> _uow;
+        private Mock<IEventService> _eventService;
 
         [SetUp]
         public void Init()
         {
             _fbHelper = new Mock<IFacebookHelper>();
             _errorHander = new Mock<IErrorHandler>();
+            _eventService = new Mock<IEventService>();
             _uow = new Mock<IUoW>();
-            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object);
+            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object);
 
             _fbHelper.Setup(x => x.SetAccessToken(It.IsAny<string>()));
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
@@ -165,10 +167,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
                         Times.Once());
             _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
+                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
             _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
-            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
         }
 
@@ -207,7 +209,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
-            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
         }
 
@@ -269,7 +271,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
-            _uow.Verify(x => x.EventRepository.InsertGraph(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>()), Times.Never());
         }
 
@@ -367,6 +369,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent2))
                      .Returns(event2);
 
+            _eventService.Setup(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()))
+                         .Returns(() => Task.Run(() => { }));
+
             //Act
             await _sut.HandleRealtimeUserUpdatesAsync(changes);
 
@@ -383,9 +388,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
 
-            _uow.Verify(x => x.EventRepository.InsertGraph(event2), Times.Once());
-            _uow.Verify(x => x.EventRepository.InsertGraph(event1), Times.Never());
-            _uow.Verify(x => x.EventRepository.InsertGraph(newEvent1), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(event2), Times.Once());
+            _eventService.Verify(x => x.CreateEventAsync(event1), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(newEvent1), Times.Never());
 
             _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken), Times.Once());
             _uow.Verify(x => x.SaveAsync(), Times.Once());

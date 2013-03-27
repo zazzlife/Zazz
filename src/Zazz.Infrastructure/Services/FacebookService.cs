@@ -14,12 +14,15 @@ namespace Zazz.Infrastructure.Services
         private readonly IFacebookHelper _facebookHelper;
         private readonly IErrorHandler _errorHandler;
         private readonly IUoW _uow;
+        private readonly IEventService _eventService;
 
-        public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow)
+        public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow,
+                               IEventService eventService)
         {
             _facebookHelper = facebookHelper;
             _errorHandler = errorHandler;
             _uow = uow;
+            _eventService = eventService;
         }
 
         public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
@@ -78,7 +81,7 @@ namespace Zazz.Infrastructure.Services
                     {
                         //we don't have the event
                         convertedEvent.UserId = oauthAccount.UserId;
-                        _uow.EventRepository.InsertGraph(convertedEvent);
+                        await _eventService.CreateEventAsync(convertedEvent);
                     }
                 }
             }
