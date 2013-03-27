@@ -376,6 +376,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(newEvent1.IsDateOnly, event1.IsDateOnly);
             Assert.AreEqual(newEvent1.Location, event1.Location);
             Assert.AreEqual(newEvent1.FacebookPhotoLink, event1.FacebookPhotoLink);
+            Assert.AreEqual(event2.UserId, userAId);
 
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
                         Times.Once());
