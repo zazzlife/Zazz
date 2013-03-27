@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Facebook;
@@ -25,19 +26,18 @@ namespace Zazz.IntegrationTests.WebServices
             Assert.IsNotNull(result.Name);
         }
 
-        [Test]
+        [Test, Explicit("This test is only for manual checking")]
         public async Task GetEvents_OnGetEvents()
         {
             //Arrange
-            var accessToken = "AAACEdEose0cBABaoejBLGpoNNAXsZBoKpoT8dLrLksz2zZCcU25yKg5jTClQ3xwcw9JZCURKxkDZB2Ja21GBD4vSGykZAxOYFpjUESg9ZAoFyGJaF9epmD";
+            var accessToken = "AAACEdEose0cBANC156cTAhp4X74G90XRQqZCulMIdwoQDkH6QDnumEwBhhXqezFSMhWbKaagvcQv8J4TZApZAZAfFIfCzFgrmWjM5wt7GzsK3dUm0B8O";
             var userId = 100004326581895;
-            var excludeList = new List<int>();
 
             var sut = new FacebookHelper();
             sut.SetAccessToken(accessToken);
             
             //Act
-            var result = await sut.GetEvents(userId, excludeList);
+            var result = await sut.GetEvents(userId);
 
             //Assert
 

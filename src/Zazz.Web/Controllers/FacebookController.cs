@@ -32,7 +32,8 @@ namespace Zazz.Web.Controllers
             var mode = Request.QueryString["hub.mode"];
             if (!String.IsNullOrEmpty(mode) && mode.Equals("subscribe", StringComparison.InvariantCultureIgnoreCase))
                 return VerifySubscription(); // the request is for verifying subscription
-
+            
+            return String.Empty;
             //getting request body
             Request.InputStream.Seek(0, SeekOrigin.Begin);
             var body = await new StreamReader(Request.InputStream, Encoding.UTF8).ReadToEndAsync();
