@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Facebook;
 
@@ -9,6 +10,8 @@ namespace Zazz.Core.Interfaces
         Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
 
         Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);
+
+        Task<IEnumerable<FbPage>> GetUserPages(string accessToken);
 
         /// <summary>
         /// Gets the user info
