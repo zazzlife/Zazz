@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
 using Zazz.Web.Models;
@@ -105,6 +106,31 @@ namespace Zazz.Web.Controllers
                 }
 
                 return View("_FacebookPagesList", vm);
+            }
+        }
+
+        [Authorize]
+        public async Task LinkPage(string pageId)
+        {
+            using (_uow)
+            using (_facebookService)
+            {
+                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var allPages = await _facebookService.GetUserPagesAsync(userId);
+                
+                var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
+                if (wantedPage == null)
+                    return;
+
+                var fbPage = new FacebookPage
+                             {
+                                 AccessToken = wantedPage.AcessToken,
+                                 FacebookId = wantedPage.Id,
+                                 Name = wantedPage.Name,
+                                 UserId = userId
+                             };
+
+                _facebookService.LinkPage(fbPage);
             }
         }
     }
