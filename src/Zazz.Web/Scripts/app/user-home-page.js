@@ -39,7 +39,33 @@ $(document).on('click', '#linkPageBtn', function () {
         success: function() {
             toastr.success("This page has been successfully linked!");
             var parent = self.parent();
-            parent.html('<button id="unlinkPageBtn" data-id="@p.Id" class="btn btn-danger">Un-link</button>');
+            parent.html('<button id="unlinkPageBtn" data-id="' + pageId + '" class="btn btn-danger">Un-link</button>');
+        }
+    });
+
+});
+
+$(document).on('click', '#unlinkPageBtn', function () {
+
+    var self = $(this);
+    var url = '/facebook/unlinkpage';
+    var pageId = self.data('id');
+
+    showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        data: {
+            pageId: pageId
+        },
+        error: function () {
+            toastr.error('An error occured, Please try again later.');
+            hideBtnBusy(self, "Un-Link");
+        },
+        success: function () {
+            toastr.success("This page has been successfully Un-Linked!");
+            var parent = self.parent();
+            parent.html('<button id="linkPageBtn" data-id="' + pageId + '" class="btn btn-success">Link</button>');
         }
     });
 
