@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Facebook;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
@@ -393,6 +394,111 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        public async Task ThrowWhenAccessTokenIsNull_OnGetPages(string username)
+        {
+            //Arrange
+            _fbHelper.Setup(x => x.GetPages(It.IsAny<string>()))
+                     .Returns(new List<FbPage>());
+            //Act
+            try
+            {
+                await _sut.GetUserPagesAsync(username);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (ArgumentNullException)
+            {
+            }
+
+            //Assert
+            _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task ThrowIfAccessTokenWasEmpty_OnGetPages()
+        {
+            //Arrange
+            var username = "!23";
+            var pages = new List<FbPage>();
+            var fbOAuthAccount = new OAuthAccount
+            {
+                Provider = OAuthProvider.Facebook
+            };
+
+            var msOAuthAccount = new OAuthAccount
+            {
+                AccessToken = "4321",
+                Provider = OAuthProvider.Microsoft
+            };
+            var user = new User
+            {
+                LinkedAccounts = new List<OAuthAccount>
+                                            {
+                                                fbOAuthAccount,
+                                                msOAuthAccount
+                                            }
+            };
+
+            _fbHelper.Setup(x => x.GetPages(username))
+                     .Returns(pages);
+            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
+                .Returns(() => Task.Run(() => user));
+
+            //Act
+            try
+            {
+                var result = await _sut.GetUserPagesAsync(username);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (OAuthAccountNotFoundException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+            _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public async Task CallAndReturnResultFromFBHelper_OnGetPages()
+        {
+            //Arrange
+            var username = "!23";
+            var pages = new List<FbPage>();
+            var fbOAuthAccount = new OAuthAccount
+            {
+                AccessToken = "1234",
+                Provider = OAuthProvider.Facebook
+            };
+
+            var msOAuthAccount = new OAuthAccount
+            {
+                AccessToken = "4321",
+                Provider = OAuthProvider.Microsoft
+            };
+            var user = new User
+            {
+                LinkedAccounts = new List<OAuthAccount>
+                                            {
+                                                fbOAuthAccount,
+                                                msOAuthAccount
+                                            }
+            };
+
+            _fbHelper.Setup(x => x.GetPages(username))
+                     .Returns(pages);
+            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
+                .Returns(() => Task.Run(() => user));
+
+            //Act
+            var result = await _sut.GetUserPagesAsync(username);
+
+            //Assert
+            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+            _fbHelper.Verify(x => x.GetPages(fbOAuthAccount.AccessToken), Times.Once());
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Zazz.Infrastructure
                              Venue = new FbVenue()
                          };
 
-                var startTime = (string) e.start_time;
+                var startTime = (string)e.start_time;
 
                 ev.StartTime = ev.IsDateOnly
                                    ? DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
@@ -77,6 +77,25 @@ namespace Zazz.Infrastructure
             }
 
             return events;
+        }
+
+        public IEnumerable<FbPage> GetPages(string accessToken)
+        {
+            _client.AccessToken = accessToken;
+            dynamic result = _client.Get("me", new { fields = "name,id,access_token" });
+
+            var pages = new List<FbPage>();
+            foreach (var p in result.data)
+            {
+                pages.Add(new FbPage
+                          {
+                              AcessToken = p.access_token,
+                              Id = p.id,
+                              Name = p.name
+                          });
+            }
+
+            return pages;
         }
 
         public Task<T> GetAsync<T>(string path) where T : class

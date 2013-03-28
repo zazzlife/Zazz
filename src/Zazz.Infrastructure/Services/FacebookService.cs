@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Facebook;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
@@ -89,6 +90,23 @@ namespace Zazz.Infrastructure.Services
 
         public async Task HandleRealtimePageUpdatesAsync(FbPageChanges changes)
         {
+        }
+
+        public async Task<IEnumerable<FbPage>> GetUserPagesAsync(string username)
+        {
+            if (String.IsNullOrEmpty(username))
+                throw new ArgumentNullException("username");
+
+            var user = await _uow.UserRepository.GetByUsernameAsync(username);
+            var accessToken = user.LinkedAccounts
+                                  .Where(a => a.Provider == OAuthProvider.Facebook)
+                                  .Select(a => a.AccessToken)
+                                  .SingleOrDefault();
+
+            if (String.IsNullOrEmpty(accessToken))
+                throw new OAuthAccountNotFoundException();
+
+            return _facebookHelper.GetPages(accessToken);
         }
 
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)

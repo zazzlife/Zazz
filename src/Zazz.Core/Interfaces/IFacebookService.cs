@@ -11,7 +11,7 @@ namespace Zazz.Core.Interfaces
 
         Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);
 
-        Task<IEnumerable<FbPage>> GetUserPages(string accessToken);
+        Task<IEnumerable<FbPage>> GetUserPagesAsync(string username);
 
         /// <summary>
         /// Gets the user info
