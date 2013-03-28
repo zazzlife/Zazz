@@ -1,5 +1,4 @@
-﻿@using Zazz.Core.Models.Data
-@model IEnumerable<FeedViewModel>
+﻿@model UserHomeViewModel
 @{
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -14,7 +13,7 @@
 
 <div class="margin-ten">
 
-    @Html.Partial("_FeedsPartial", Model)
+    @Html.Partial("_FeedsPartial", Model.Feeds)
 
 </div>
 
