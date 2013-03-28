@@ -89,7 +89,7 @@ namespace Zazz.Web.Controllers
                 }
 
 
-                return new JsonNetResult {Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
+                return new JsonNetResult(response);
             }
         }
 

@@ -7,6 +7,12 @@ namespace Zazz.Web.Controllers
 {
     public class JsonNetResult : JsonResult
     {
+        public JsonNetResult(object data, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.AllowGet)
+        {
+            Data = data;
+            JsonRequestBehavior = jsonRequestBehavior;
+        }
+
         public override void ExecuteResult(ControllerContext context)
         {
             if (context == null)

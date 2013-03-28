@@ -110,27 +110,29 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task LinkPage(string pageId)
+        public async Task<JsonNetResult> LinkPage(string pageId)
         {
             using (_uow)
             using (_facebookService)
             {
                 var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
                 var allPages = await _facebookService.GetUserPagesAsync(userId);
-                
+
                 var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
-                if (wantedPage == null)
-                    return;
+                if (wantedPage != null)
+                {
+                    var fbPage = new FacebookPage
+                    {
+                        AccessToken = wantedPage.AcessToken,
+                        FacebookId = wantedPage.Id,
+                        Name = wantedPage.Name,
+                        UserId = userId
+                    };
 
-                var fbPage = new FacebookPage
-                             {
-                                 AccessToken = wantedPage.AcessToken,
-                                 FacebookId = wantedPage.Id,
-                                 Name = wantedPage.Name,
-                                 UserId = userId
-                             };
+                    _facebookService.LinkPage(fbPage);
+                }
 
-                _facebookService.LinkPage(fbPage);
+                return new JsonNetResult("ok");
             }
         }
 
@@ -140,7 +142,7 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_facebookService)
             {
-                
+
             }
         }
     }

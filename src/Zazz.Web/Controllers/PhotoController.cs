@@ -74,7 +74,7 @@ namespace Zazz.Web.Controllers
                 {
                     response.Success = false;
                     response.Error = errorMessage;
-                    return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    return new JsonNetResult(response);
                 }
 
                 var photo = await SaveImageAsync(image.InputStream, description, albumId);
@@ -82,7 +82,7 @@ namespace Zazz.Web.Controllers
                 response.Success = true;
                 response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
-                return new JsonNetResult { Data = response, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                return new JsonNetResult(response);
             }
         }
 

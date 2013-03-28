@@ -245,6 +245,7 @@
     <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\FineUploadResponse.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
+    <Compile Include="Models\JsonErrorModel.cs" />
     <Compile Include="Models\PhotoViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
