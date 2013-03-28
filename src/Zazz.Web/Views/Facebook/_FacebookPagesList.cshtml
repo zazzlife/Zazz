@@ -1,0 +1,31 @@
+﻿@model IEnumerable<FbPageViewModel>
+@{
+    Layout = null;
+}
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td><strong>@p.Name</strong></td>
+                <td>
+                    @if (p.IsLinked)
+                    {
+                        <button id="linkPageBtn" data-id="@p.Id" class="btn btn-danger">Un-link</button>
+                    }
+                    else
+                    {
+                        <button id="unlinkPageBtn" data-id="@p.Id" class="btn btn-success">link</button>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <div class="text-center">No pages found.</div>
+}
+

@@ -89,7 +89,7 @@ namespace Zazz.Web.Controllers
                 var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
 
                 var allPages = _facebookService.GetUserPagesAsync(userId);
-                var existingPages = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
+                var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
                 await allPages;
 
                 var vm = new List<FbPageViewModel>();
@@ -100,11 +100,11 @@ namespace Zazz.Web.Controllers
                                AcessToken = fbPage.AcessToken,
                                Id = fbPage.Id,
                                Name = fbPage.Name,
-                               IsLinked = existingPages.Contains(fbPage.Id)
+                               IsLinked = existingPageIds.Contains(fbPage.Id)
                            });
                 }
 
-                return View(vm);
+                return View("_FacebookPagesList", vm);
             }
         }
     }

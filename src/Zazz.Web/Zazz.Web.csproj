@@ -444,6 +444,7 @@
     <Content Include="Views\Shared\_PostInputsPartial.cshtml" />
     <Content Include="Views\Shared\_UploadPicModal.cshtml" />
     <Content Include="Views\Album\_AlbumThumbnail.cshtml" />
+    <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
