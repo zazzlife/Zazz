@@ -33,15 +33,14 @@ namespace Zazz.Web.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var user =  _userService.GetUserAsync(User.Identity.Name);
-                    var feeds =  new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
-
-                    await Task.WhenAll(user, feeds);
+                    var user = await _userService.GetUserAsync(User.Identity.Name);
+                    var feeds = await  new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
+                    
 
                     var vm = new UserHomeViewModel
                              {
-                                 AccountType = user.Result.AccountType,
-                                 Feeds = feeds.Result
+                                 AccountType = user.AccountType,
+                                 Feeds = feeds
                              };
 
                     return View("UserHome", vm);
