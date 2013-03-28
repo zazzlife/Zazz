@@ -148,6 +148,10 @@ namespace Zazz.Infrastructure.Services
 
         public void LinkPage(FacebookPage fbPage)
         {
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPage.FacebookId);
+            if(page != null)
+                throw new FacebookPageExistsException();
+
             _uow.FacebookPageRepository.InsertGraph(fbPage);
             _uow.SaveChanges();
         }

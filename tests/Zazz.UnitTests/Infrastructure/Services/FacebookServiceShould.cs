@@ -448,10 +448,45 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SaveNewPage_OnLinkPage()
+        public void ThrowIfPageExists_OnLinkPage()
         {
             //Arrange
-            var page = new FacebookPage();
+            var page = new FacebookPage
+                       {
+                           FacebookId = "123456"
+                       };
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
+
+
+            //Act
+            try
+            {
+                _sut.LinkPage(page);
+                Assert.Fail("Expected exception wasn't thrown");
+            }
+            catch (FacebookPageExistsException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void SaveNewPageIfItsNotExists_OnLinkPage()
+        {
+            //Arrange
+            var page = new FacebookPage
+                       {
+                           FacebookId = "123456"
+                       };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(() => null);
             _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
 
 
@@ -459,6 +494,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.LinkPage(page);
 
             //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
