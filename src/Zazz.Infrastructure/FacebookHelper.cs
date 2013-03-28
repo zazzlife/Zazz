@@ -82,7 +82,7 @@ namespace Zazz.Infrastructure
         public IEnumerable<FbPage> GetPages(string accessToken)
         {
             _client.AccessToken = accessToken;
-            dynamic result = _client.Get("me", new { fields = "name,id,access_token" });
+            dynamic result = _client.Get("me/accounts", new { fields = "name,id,access_token" });
 
             var pages = new List<FbPage>();
             foreach (var p in result.data)
