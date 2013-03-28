@@ -23,6 +23,10 @@ function applyPageStyles() {
     $('*[title]').tooltip();
 }
 
+function showAjaxErrorMessage(res) {
+    toastr.error(res.message);
+}
+
 $('#party-web-link').click(function () {
     var url = "/follow/GetFollowRequests";
 

@@ -32,8 +32,8 @@ $(document).on('click', '#linkPageBtn', function () {
         data: {
             pageId: pageId
         },
-        error: function() {
-            toastr.error('An error occured, Please try again later.');
+        error: function(res) {
+            showAjaxErrorMessage(res);
             hideBtnBusy(self, "Link");
         },
         success: function() {
