@@ -20,6 +20,7 @@ function hideBtnBusy(btn, originalText) {
 
 function applyPageStyles() {
     $('.datepicker').datetimepicker();
+    $('*[title]').tooltip('destroy');
     $('*[title]').tooltip();
 }
 
