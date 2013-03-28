@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
@@ -115,24 +116,37 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_facebookService)
             {
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
-                var allPages = await _facebookService.GetUserPagesAsync(userId);
-
-                var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
-                if (wantedPage != null)
+                try
                 {
-                    var fbPage = new FacebookPage
+                    var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                    var allPages = await _facebookService.GetUserPagesAsync(userId);
+
+                    var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
+                    if (wantedPage != null)
                     {
-                        AccessToken = wantedPage.AcessToken,
-                        FacebookId = wantedPage.Id,
-                        Name = wantedPage.Name,
-                        UserId = userId
-                    };
+                        var fbPage = new FacebookPage
+                                     {
+                                         AccessToken = wantedPage.AcessToken,
+                                         FacebookId = wantedPage.Id,
+                                         Name = wantedPage.Name,
+                                         UserId = userId
+                                     };
 
-                    _facebookService.LinkPage(fbPage);
+                        _facebookService.LinkPage(fbPage);
+                    }
+
+                    return new JsonNetResult("ok");
                 }
+                catch (FacebookPageExistsException)
+                {
+                    var error = new JsonErrorModel
+                                {
+                                    Message = "This page is already linked to another account."
+                                };
 
-                return new JsonNetResult("ok");
+                    Response.StatusCode = 500;
+                    return new JsonNetResult(error);
+                }
             }
         }
 
