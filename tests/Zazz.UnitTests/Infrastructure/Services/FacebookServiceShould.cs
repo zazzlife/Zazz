@@ -446,5 +446,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetUserAccountAsync(userId, OAuthProvider.Facebook), Times.Once());
             _fbHelper.Verify(x => x.GetPages(oauthAccount.AccessToken), Times.Once());
         }
+
+        [Test]
+        public void SaveNewPage_OnLinkPage()
+        {
+            //Arrange
+            var page = new FacebookPage();
+            _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
+
+
+            //Act
+            _sut.LinkPage(page);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+
     }
 }

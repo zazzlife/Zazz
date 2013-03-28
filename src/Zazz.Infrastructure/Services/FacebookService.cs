@@ -146,6 +146,12 @@ namespace Zazz.Infrastructure.Services
             throw new System.NotImplementedException();
         }
 
+        public void LinkPage(FacebookPage fbPage)
+        {
+            _uow.FacebookPageRepository.InsertGraph(fbPage);
+            _uow.SaveChanges();
+        }
+
         public void Dispose()
         {
             _uow.Dispose();

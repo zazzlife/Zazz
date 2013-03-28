@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Core.Interfaces
@@ -55,5 +56,7 @@ namespace Zazz.Core.Interfaces
         /// <param name="accessToken"></param>
         /// <returns>Url to image</returns>
         Task<string> GetPictureAsync(string objectId, PictureSize pictureSize, string accessToken = null);
+
+        void LinkPage(FacebookPage fbPage);
     }
 }
