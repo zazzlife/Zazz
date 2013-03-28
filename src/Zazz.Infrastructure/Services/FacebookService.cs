@@ -92,21 +92,14 @@ namespace Zazz.Infrastructure.Services
         {
         }
 
-        public async Task<IEnumerable<FbPage>> GetUserPagesAsync(string username)
+        public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)
         {
-            if (String.IsNullOrEmpty(username))
-                throw new ArgumentNullException("username");
+            var oAuthAccount = await _uow.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook);
 
-            var user = await _uow.UserRepository.GetByUsernameAsync(username);
-            var accessToken = user.LinkedAccounts
-                                  .Where(a => a.Provider == OAuthProvider.Facebook)
-                                  .Select(a => a.AccessToken)
-                                  .SingleOrDefault();
-
-            if (String.IsNullOrEmpty(accessToken))
+            if (oAuthAccount == null)
                 throw new OAuthAccountNotFoundException();
 
-            return _facebookHelper.GetPages(accessToken);
+            return _facebookHelper.GetPages(oAuthAccount.AccessToken);
         }
 
         public Task<FbUser> GetUserAsync(string id, string accessToken = null)

@@ -88,7 +88,7 @@ namespace Zazz.Web.Controllers
             {
                 var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
 
-                var allPages = _facebookService.GetUserPagesAsync(User.Identity.Name);
+                var allPages = _facebookService.GetUserPagesAsync(userId);
                 var existingPages = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
                 await allPages;
 

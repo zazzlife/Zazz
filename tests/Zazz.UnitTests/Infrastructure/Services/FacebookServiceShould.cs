@@ -396,61 +396,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
-        [TestCase(null)]
-        [TestCase("")]
-        public async Task ThrowWhenAccessTokenIsNull_OnGetPages(string username)
-        {
-            //Arrange
-            _fbHelper.Setup(x => x.GetPages(It.IsAny<string>()))
-                     .Returns(new List<FbPage>());
-            //Act
-            try
-            {
-                await _sut.GetUserPagesAsync(username);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (ArgumentNullException)
-            {
-            }
-
-            //Assert
-            _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
-        }
-
         [Test]
         public async Task ThrowIfAccessTokenWasEmpty_OnGetPages()
         {
             //Arrange
-            var username = "!23";
-            var pages = new List<FbPage>();
-            var fbOAuthAccount = new OAuthAccount
-            {
-                Provider = OAuthProvider.Facebook
-            };
+            var userId = 1234;
+            var oauthAccount = new OAuthAccount
+                               {
+                                   AccessToken = "token"
+                               };
 
-            var msOAuthAccount = new OAuthAccount
-            {
-                AccessToken = "4321",
-                Provider = OAuthProvider.Microsoft
-            };
-            var user = new User
-            {
-                LinkedAccounts = new List<OAuthAccount>
-                                            {
-                                                fbOAuthAccount,
-                                                msOAuthAccount
-                                            }
-            };
-
-            _fbHelper.Setup(x => x.GetPages(username))
-                     .Returns(pages);
-            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
-                .Returns(() => Task.Run(() => user));
+            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook))
+                .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
 
             //Act
             try
             {
-                var result = await _sut.GetUserPagesAsync(username);
+                var result = await _sut.GetUserPagesAsync(userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (OAuthAccountNotFoundException)
@@ -458,7 +420,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetUserAccountAsync(userId, OAuthProvider.Facebook), Times.Once());
             _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
         }
 
@@ -466,39 +429,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task CallAndReturnResultFromFBHelper_OnGetPages()
         {
             //Arrange
-            var username = "!23";
-            var pages = new List<FbPage>();
-            var fbOAuthAccount = new OAuthAccount
+            var userId = 1234;
+            var oauthAccount = new OAuthAccount
             {
-                AccessToken = "1234",
-                Provider = OAuthProvider.Facebook
+                AccessToken = "token"
             };
 
-            var msOAuthAccount = new OAuthAccount
-            {
-                AccessToken = "4321",
-                Provider = OAuthProvider.Microsoft
-            };
-            var user = new User
-            {
-                LinkedAccounts = new List<OAuthAccount>
-                                            {
-                                                fbOAuthAccount,
-                                                msOAuthAccount
-                                            }
-            };
-
-            _fbHelper.Setup(x => x.GetPages(username))
-                     .Returns(pages);
-            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
-                .Returns(() => Task.Run(() => user));
+            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook))
+                .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => oauthAccount));
 
             //Act
-            var result = await _sut.GetUserPagesAsync(username);
+            var result = await _sut.GetUserPagesAsync(userId);
 
             //Assert
-            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
-            _fbHelper.Verify(x => x.GetPages(fbOAuthAccount.AccessToken), Times.Once());
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetUserAccountAsync(userId, OAuthProvider.Facebook), Times.Once());
+            _fbHelper.Verify(x => x.GetPages(oauthAccount.AccessToken), Times.Once());
         }
     }
 }
