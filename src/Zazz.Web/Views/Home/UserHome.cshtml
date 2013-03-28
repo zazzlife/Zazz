@@ -1,4 +1,5 @@
-﻿@model UserHomeViewModel
+﻿@using Zazz.Core.Models.Data
+@model UserHomeViewModel
 @{
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -23,5 +24,9 @@
 {
     <ul class="nav nav-list">
         <li><a href="~/event/create"><i class="icon-calendar"></i>Create event</a></li>
+        @if (Model.AccountType == AccountType.ClubAdmin)
+        {
+            <li><a href="#"><i class="icon-facebook-sign"></i>Manage Facebook Pages</a></li>
+        }
     </ul>
 }

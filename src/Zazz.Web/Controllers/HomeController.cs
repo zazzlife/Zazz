@@ -36,7 +36,7 @@ namespace Zazz.Web.Controllers
                     var user =  _userService.GetUserAsync(User.Identity.Name);
                     var feeds =  new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
 
-                    await Task.WhenAll(feeds, user);
+                    await Task.WhenAll(user, feeds);
 
                     var vm = new UserHomeViewModel
                              {
