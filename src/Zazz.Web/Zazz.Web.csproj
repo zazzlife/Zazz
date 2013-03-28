@@ -241,6 +241,7 @@
     <Compile Include="Models\CommentsViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\EventListViewModel.cs" />
+    <Compile Include="Models\FbPageViewModel.cs" />
     <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\FineUploadResponse.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
