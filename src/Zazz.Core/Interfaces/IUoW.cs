@@ -17,6 +17,7 @@ namespace Zazz.Core.Interfaces
         IFacebookSyncRetryRepository FacebookSyncRetryRepository { get; }
         IFeedRepository FeedRepository { get; }
         IPostRepository PostRepository { get;}
+        IFacebookPageRepository FacebookPageRepository { get; }
 
         void SaveChanges();
     }

@@ -84,6 +84,16 @@ namespace Zazz.Data
             get { return _postRepository ?? (_postRepository = new PostRepository(GetContext())); }
         }
 
+        private IFacebookPageRepository _facebookPageRepository;
+        public IFacebookPageRepository FacebookPageRepository 
+        {
+            get
+            {
+                return _facebookPageRepository 
+                    ?? (_facebookPageRepository = new FacebookPageRepository(GetContext()));
+            } 
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null)

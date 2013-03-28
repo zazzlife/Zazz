@@ -152,5 +152,11 @@ namespace Zazz.Infrastructure.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public void Dispose()
+        {
+            _uow.Dispose();
+            _eventService.Dispose();
+        }
     }
 }
