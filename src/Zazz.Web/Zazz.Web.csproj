@@ -362,6 +362,7 @@
     <Content Include="Scripts\app\map.js" />
     <Content Include="Scripts\app\profile.js" />
     <Content Include="Scripts\app\register.js" />
+    <Content Include="Scripts\app\user-home-page.js" />
     <Content Include="Scripts\bootstrap-lightbox.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\fine-upload\ajax.requester.js" />
