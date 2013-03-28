@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Threading.Tasks;
 using Facebook;
 using Moq;
@@ -499,6 +500,55 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
+        [Test]
+        public void ThrowIfCurrentUserIsNotTheOwner_OnUnlinkPage()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                FacebookId = "123456",
+                UserId = 123
+            };
 
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+
+            //Act
+            try
+            {
+                _sut.UnlinkPage(page.FacebookId, 1);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.FacebookPageRepository.Remove(It.IsAny<FacebookPage>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void RemovePageFromDb_OnUnlinkPage()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                FacebookId = "123456",
+                UserId = 123
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+
+            //Act
+            _sut.UnlinkPage(page.FacebookId, page.UserId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.FacebookPageRepository.Remove(page), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
     }
 }

@@ -58,5 +58,7 @@ namespace Zazz.Core.Interfaces
         Task<string> GetPictureAsync(string objectId, PictureSize pictureSize, string accessToken = null);
 
         void LinkPage(FacebookPage fbPage);
+
+        void UnlinkPage(string fbPageId, int currentUserId);
     }
 }

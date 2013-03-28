@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security;
 using System.Threading.Tasks;
 using Facebook;
 using Zazz.Core.Exceptions;
@@ -153,6 +154,19 @@ namespace Zazz.Infrastructure.Services
                 throw new FacebookPageExistsException();
 
             _uow.FacebookPageRepository.InsertGraph(fbPage);
+            _uow.SaveChanges();
+        }
+
+        public void UnlinkPage(string fbPageId, int currentUserId)
+        {
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
+            if (page == null) 
+                return;
+
+            if (page.UserId != currentUserId)
+                throw new SecurityException();
+
+            _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();
         }
 
