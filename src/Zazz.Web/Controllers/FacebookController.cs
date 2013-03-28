@@ -133,5 +133,15 @@ namespace Zazz.Web.Controllers
                 _facebookService.LinkPage(fbPage);
             }
         }
+
+        [Authorize]
+        public async Task UnlinkPage(string pageId)
+        {
+            using (_uow)
+            using (_facebookService)
+            {
+                
+            }
+        }
     }
 }

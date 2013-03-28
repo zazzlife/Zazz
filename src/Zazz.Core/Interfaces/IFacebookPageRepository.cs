@@ -6,5 +6,7 @@ namespace Zazz.Core.Interfaces
     public interface IFacebookPageRepository : IRepository<FacebookPage>
     {
         List<string> GetUserPageFacebookIds(int userId);
+
+        FacebookPage GetByFacebookPageId(string fbPageId);
     }
 }

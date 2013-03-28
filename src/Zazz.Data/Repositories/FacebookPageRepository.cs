@@ -23,5 +23,11 @@ namespace Zazz.Data.Repositories
                         .Select(p => p.FacebookId)
                         .ToList();
         }
+
+        public FacebookPage GetByFacebookPageId(string fbPageId)
+        {
+            return DbSet.Where(p => p.FacebookId.Equals(fbPageId))
+                        .SingleOrDefault();
+        }
     }
 }
