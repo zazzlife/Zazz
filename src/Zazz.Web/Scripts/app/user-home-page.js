@@ -9,7 +9,11 @@
         },
         success: function(res) {
             var container = $('#manageFbPagesModal .modal-body');
-            container.html(res);
+            container.fadeOut(function() {
+                container.html(res);
+                container.fadeIn();
+            });
+
         }
     });
 
