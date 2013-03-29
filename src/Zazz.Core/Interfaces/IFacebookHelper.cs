@@ -14,6 +14,8 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<FbPage> GetPages(string accessToken);
 
+        void LinkPage(string pageId, string accessToken);
+
         Task<T> GetAsync<T>(string path) where T : class;
 
         Task<T> GetAsync<T>(string path, params string[] fieldsToGet) where T : class;

@@ -98,6 +98,15 @@ namespace Zazz.Infrastructure
             return pages;
         }
 
+        public void LinkPage(string pageId, string accessToken)
+        {
+            _client.AccessToken = accessToken;
+            const string APP_ID = ApiKeys.FACEBOOK_APP_ID;
+            var path = String.Format("{0}/tabs", pageId);
+
+            _client.Post(path, new { app_id = APP_ID });
+        }
+
         public Task<T> GetAsync<T>(string path) where T : class
         {
             return _client.GetTaskAsync<T>(path);

@@ -32,7 +32,7 @@ namespace Zazz.Web
 
             OAuthWebSecurity.RegisterClient(
                 new CustomFacebookClient(
-                    appId: ApiKeys.FACEBOOK_API_KEY,
+                    appId: ApiKeys.FACEBOOK_APP_ID,
                     appSecret: ApiKeys.FACEBOOK_API_SECRET),
                 "facebook", null
             );
