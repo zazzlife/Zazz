@@ -11,6 +11,8 @@ namespace Zazz.Infrastructure
 {
     public class FacebookHelper : IFacebookHelper
     {
+        private const string EVENT_FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
+        private const string EVENT_TABLE = "event";
         private readonly FacebookClient _client;
 
         public FacebookHelper()
@@ -32,11 +34,9 @@ namespace Zazz.Infrastructure
         {
             _client.AccessToken = accessToken;
 
-            const string FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
-            const string TABLE = "event";
             var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT 5",
                                       creatorId);
-            var query = GenerateFql(FIELDS, TABLE, where);
+            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
 
             dynamic result = _client.Get("fql", new { q = query }); // the async method is buggy!
             var events = new List<FbEvent>();
@@ -107,6 +107,11 @@ namespace Zazz.Infrastructure
             var result = (bool) _client.Post(path, new {app_id = APP_ID});
             if (!result)
                 throw new Exception("Link was not successful");
+        }
+
+        public IEnumerable<string> GetPageEventIds(string pageId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<T> GetAsync<T>(string path) where T : class

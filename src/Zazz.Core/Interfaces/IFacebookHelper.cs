@@ -16,6 +16,8 @@ namespace Zazz.Core.Interfaces
 
         void LinkPage(string pageId, string accessToken);
 
+        IEnumerable<string> GetPageEventIds(string pageId);
+
         Task<T> GetAsync<T>(string path) where T : class;
 
         Task<T> GetAsync<T>(string path, params string[] fieldsToGet) where T : class;
