@@ -63,7 +63,7 @@ $(document).on('click', '#unlinkPageBtn', function () {
             hideBtnBusy(self, "Unlink");
         },
         success: function () {
-            toastr.success("This page has been successfully Un-Linked!");
+            toastr.success("This page has been successfully Unlinked!");
             var parent = self.parent();
             parent.html('<button id="linkPageBtn" data-id="' + pageId + '" class="btn btn-success">Link</button>');
         }

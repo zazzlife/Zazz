@@ -475,26 +475,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Never());
         }
 
         [Test]
-        public void SaveNewPageIfItsNotExists_OnLinkPage()
+        public void SaveAndLinkNewPageIfItsNotExists_OnLinkPage()
         {
             //Arrange
             var page = new FacebookPage
                        {
-                           FacebookId = "123456"
+                           FacebookId = "123456",
+                           AccessToken = "tok",
                        };
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(() => null);
             _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
+            _fbHelper.Setup(x => x.LinkPage(page.FacebookId, page.AccessToken));
 
 
             //Act
             _sut.LinkPage(page);
 
             //Assert
+            _fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());

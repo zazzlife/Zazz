@@ -153,6 +153,7 @@ namespace Zazz.Infrastructure.Services
             if(page != null)
                 throw new FacebookPageExistsException();
 
+            _facebookHelper.LinkPage(fbPage.FacebookId, fbPage.AccessToken);
             _uow.FacebookPageRepository.InsertGraph(fbPage);
             _uow.SaveChanges();
         }

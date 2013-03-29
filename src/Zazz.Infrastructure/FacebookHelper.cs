@@ -104,7 +104,9 @@ namespace Zazz.Infrastructure
             const string APP_ID = ApiKeys.FACEBOOK_APP_ID;
             var path = String.Format("{0}/tabs", pageId);
 
-            _client.Post(path, new { app_id = APP_ID });
+            var result = (bool) _client.Post(path, new {app_id = APP_ID});
+            if (!result)
+                throw new Exception("Link was not successful");
         }
 
         public Task<T> GetAsync<T>(string path) where T : class
