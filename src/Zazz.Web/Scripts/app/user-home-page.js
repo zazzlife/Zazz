@@ -39,7 +39,7 @@ $(document).on('click', '#linkPageBtn', function () {
         success: function() {
             toastr.success("This page has been successfully linked!");
             var parent = self.parent();
-            parent.html('<button id="unlinkPageBtn" data-id="' + pageId + '" class="btn btn-danger">Un-link</button>');
+            parent.html('<button id="unlinkPageBtn" data-id="' + pageId + '" class="btn btn-danger">Unlink</button>');
         }
     });
 
@@ -60,7 +60,7 @@ $(document).on('click', '#unlinkPageBtn', function () {
         },
         error: function () {
             toastr.error('An error occured, Please try again later.');
-            hideBtnBusy(self, "Un-Link");
+            hideBtnBusy(self, "Unlink");
         },
         success: function () {
             toastr.success("This page has been successfully Un-Linked!");
