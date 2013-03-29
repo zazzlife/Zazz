@@ -36,7 +36,9 @@ namespace Zazz.Core.Interfaces
         /// <param name="provider"></param>
         /// <returns></returns>
         Task<bool> OAuthAccountExistsAsync(long providerUserId, OAuthProvider provider);
-        
+
+        string GetAccessToken(int userId, OAuthProvider provider);
+
         Task RemoveAsync(int userId, OAuthProvider provider);
     }
 }

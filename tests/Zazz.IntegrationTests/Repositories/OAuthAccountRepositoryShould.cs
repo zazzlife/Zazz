@@ -270,6 +270,54 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void ReturnCorrectAccessToken_OnGetAccessToken()
+        {
+            //Arrange
+            var userA = AddUser();
+            var userB = AddUser();
+
+            var oauthAccountA = new OAuthAccount
+            {
+                AccessToken = "tokenA facebook",
+                OAuthVersion = OAuthVersion.Two,
+                Provider = OAuthProvider.Facebook,
+                ProviderUserId = 123,
+                UserId = userA.Id
+            };
+
+            var oauthAccountB = new OAuthAccount
+            {
+                AccessToken = "tokenA ms",
+                OAuthVersion = OAuthVersion.Two,
+                Provider = OAuthProvider.Microsoft,
+                ProviderUserId = 123,
+                UserId = userA.Id
+            };
+
+            var oauthAccountC = new OAuthAccount
+            {
+                AccessToken = "tokenB facebook",
+                OAuthVersion = OAuthVersion.Two,
+                Provider = OAuthProvider.Facebook,
+                ProviderUserId = 1234,
+                UserId = userB.Id
+            };
+
+            _context.OAuthAccounts.Add(oauthAccountA);
+            _context.OAuthAccounts.Add(oauthAccountB);
+            _context.OAuthAccounts.Add(oauthAccountC);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetAccessToken(userA.Id, OAuthProvider.Facebook);
+
+            //Assert
+            Assert.AreEqual(oauthAccountA.AccessToken, result);
+        }
+
+
+
         private User AddUser()
         {
             var user = Mother.GetUser();

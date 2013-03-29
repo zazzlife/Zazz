@@ -53,6 +53,15 @@ namespace Zazz.Data.Repositories
                                        .Any());
         }
 
+        public string GetAccessToken(int userId, OAuthProvider provider)
+        {
+            return DbSet
+                .Where(a => a.UserId == userId)
+                .Where(a => a.Provider == OAuthProvider.Facebook)
+                .Select(a => a.AccessToken)
+                .SingleOrDefault();
+        }
+
         public async Task RemoveAsync(int userId, OAuthProvider provider)
         {
             var item = await GetUserAccountAsync(userId, provider);
