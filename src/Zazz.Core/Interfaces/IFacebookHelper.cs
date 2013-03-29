@@ -12,11 +12,11 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken);
 
+        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken);
+
         IEnumerable<FbPage> GetPages(string accessToken);
 
         void LinkPage(string pageId, string accessToken);
-
-        IEnumerable<string> GetPageEventIds(string pageId);
 
         Task<T> GetAsync<T>(string path) where T : class;
 

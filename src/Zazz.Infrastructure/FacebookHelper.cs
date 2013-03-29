@@ -108,9 +108,13 @@ namespace Zazz.Infrastructure
             if (!result)
                 throw new Exception("Link was not successful");
         }
-
-        public IEnumerable<string> GetPageEventIds(string pageId)
+        
+        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
         {
+            // this is a temporary workaround since FQL is not working: (SELECT ... FROM event WHERE creator = pageId)
+            var ids = new List<string>();
+
+
             throw new NotImplementedException();
         }
 
