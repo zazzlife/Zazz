@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Facebook;
+using Microsoft.CSharp.RuntimeBinder;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
@@ -38,22 +40,79 @@ namespace Zazz.Infrastructure
                                       creatorId);
             var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
 
-            dynamic result = _client.Get("fql", new { q = query }); // the async method is buggy!
-            var events = new List<FbEvent>();
+            return QueryForEvents(query);
+        }
 
+        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
+        {
+            _client.AccessToken = accessToken;
+
+            // this is a temporary workaround since FQL is not working: (SELECT ... FROM event WHERE creator = pageId)
+            var allEvents = new Dictionary<DateTimeOffset, string>();
+
+            var path = "me/events";
+            const string FIELDS = "id,updated_time";
+
+            while (true)
+            {
+                dynamic result = _client.Get(path, new { fields = FIELDS });
+
+                try
+                {
+                    path = result.paging.next;
+                }
+                catch (RuntimeBinderException)
+                {
+                    break;
+                }
+
+                var events = (IEnumerable<dynamic>) result.data;
+
+                if (!events.Any())
+                    break;
+
+                foreach (var e in events)
+                {
+                    DateTimeOffset dt;
+                    if (DateTimeOffset.TryParse(e.updated_time, CultureInfo.InvariantCulture,
+                                                DateTimeStyles.RoundtripKind, out dt))
+                    {
+                        var id = (string)e.id;
+                        if (!String.IsNullOrEmpty(id))
+                            allEvents.Add(dt, id);
+                    }
+                }
+            }
+
+            if (!allEvents.Any())
+                return new List<FbEvent>();
+
+            var ids = String.Join(",", allEvents
+                                           .OrderByDescending(e => e.Key)
+                                           .Select(e => e.Value)
+                                           .Take(10));
+
+            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, String.Format("eid in ({0})", ids));
+            return QueryForEvents(query);
+        }
+
+        private IEnumerable<FbEvent> QueryForEvents(string q)
+        {
+            dynamic result = _client.Get("fql", new { q }); // the async method is buggy!
+            var events = new List<FbEvent>();
             foreach (var e in result.data)
             {
                 var ev = new FbEvent
-                         {
-                             Description = e.description,
-                             Id = e.eid,
-                             Location = e.location,
-                             Name = e.name,
-                             Pic = e.pic_square,
-                             UpdatedTime = e.update_time,
-                             IsDateOnly = e.is_date_only,
-                             Venue = new FbVenue()
-                         };
+                {
+                    Description = e.description,
+                    Id = e.eid,
+                    Location = e.location,
+                    Name = e.name,
+                    Pic = e.pic_square,
+                    UpdatedTime = e.update_time,
+                    IsDateOnly = e.is_date_only,
+                    Venue = new FbVenue()
+                };
 
                 var startTime = (string)e.start_time;
 
@@ -104,18 +163,9 @@ namespace Zazz.Infrastructure
             const string APP_ID = ApiKeys.FACEBOOK_APP_ID;
             var path = String.Format("{0}/tabs", pageId);
 
-            var result = (bool) _client.Post(path, new {app_id = APP_ID});
+            var result = (bool)_client.Post(path, new { app_id = APP_ID });
             if (!result)
                 throw new Exception("Link was not successful");
-        }
-        
-        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
-        {
-            // this is a temporary workaround since FQL is not working: (SELECT ... FROM event WHERE creator = pageId)
-            var ids = new List<string>();
-
-
-            throw new NotImplementedException();
         }
 
         public Task<T> GetAsync<T>(string path) where T : class

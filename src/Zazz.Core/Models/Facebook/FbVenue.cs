@@ -18,9 +18,9 @@ namespace Zazz.Core.Models.Facebook
         public string Country { get; set; }
 
         [DataMember(Name = "latitude")]
-        public float Latitude { get; set; }
+        public float? Latitude { get; set; }
 
         [DataMember(Name = "longitude")]
-        public float Longitude { get; set; }
+        public float? Longitude { get; set; }
     }
 }
