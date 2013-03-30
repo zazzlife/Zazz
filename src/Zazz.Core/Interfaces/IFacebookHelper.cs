@@ -10,10 +10,20 @@ namespace Zazz.Core.Interfaces
     {
         void SetAccessToken(string token);
 
+        /// <summary>
+        /// Use this only for getting user events until the FQL bug is fixed
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5);
 
+        /// <summary>
+        /// Use this only for getting page events until the FQL bug is fixed
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit = 10);
-
+        
         IEnumerable<FbPage> GetPages(string accessToken);
 
         void LinkPage(string pageId, string accessToken);
