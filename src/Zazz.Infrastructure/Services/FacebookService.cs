@@ -138,50 +138,6 @@ namespace Zazz.Infrastructure.Services
             return _facebookHelper.GetPages(oAuthAccount.AccessToken);
         }
 
-        public Task<FbUser> GetUserAsync(string id, string accessToken = null)
-        {
-            try
-            {
-                _facebookHelper.SetAccessToken(accessToken);
-                return _facebookHelper.GetAsync<FbUser>(id, "email");
-            }
-            catch (FacebookOAuthException)
-            {
-                _errorHandler.HandleAccessTokenExpiredAsync(id, OAuthProvider.Facebook).Wait();
-                throw;
-            }
-            catch (FacebookApiLimitException)
-            {
-                _errorHandler.HandleFacebookApiLimitReachedAsync(id, "", "").Wait();
-                throw;
-            }
-            catch (Exception e)
-            {
-                _errorHandler.LogException("Fb user id: " + id, "FacebookService.GetUserAsync", e);
-                throw;
-            }
-        }
-
-        public Task<FbEvent> GetEventAsync(string id, string accessToken = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<FbPost> GetPostAsync(string id, string accessToken = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<string> GetPictureAsync(string objectId, int width, int height, string accessToken = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<string> GetPictureAsync(string objectId, PictureSize pictureSize, string accessToken = null)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void LinkPage(FacebookPage fbPage)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPage.FacebookId);

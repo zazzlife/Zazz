@@ -133,6 +133,7 @@ namespace Zazz.Web.Controllers
                                      };
 
                         _facebookService.LinkPage(fbPage);
+                        await _facebookService.UpdatePageEventsAsync(fbPage.FacebookId);
                     }
 
                     return new JsonNetResult("ok");

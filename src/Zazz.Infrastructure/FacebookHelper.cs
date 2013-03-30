@@ -27,11 +27,6 @@ namespace Zazz.Infrastructure
             return String.Format("SELECT {0} FROM {1} WHERE {2}", fields, table, where);
         }
 
-        public void SetAccessToken(string token)
-        {
-            _client.AccessToken = token;
-        }
-
         public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5)
         {
             _client.AccessToken = accessToken;
@@ -167,17 +162,6 @@ namespace Zazz.Infrastructure
             var result = (bool)_client.Post(path, new { app_id = APP_ID });
             if (!result)
                 throw new Exception("Link was not successful");
-        }
-
-        public Task<T> GetAsync<T>(string path) where T : class
-        {
-            return _client.GetTaskAsync<T>(path);
-        }
-
-        public Task<T> GetAsync<T>(string path, params string[] fieldsToGet) where T : class
-        {
-            var fields = String.Join(",", fieldsToGet);
-            return _client.GetTaskAsync<T>(path, new { fields });
         }
 
         public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
