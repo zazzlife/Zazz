@@ -177,9 +177,29 @@ namespace Zazz.Infrastructure
             return result.data[0].name;
         }
 
-        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 25)
+        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 5)
         {
-            throw new NotImplementedException();
+            _client.AccessToken = accessToken;
+
+            const string TABLE = "status";
+            const string FIELDS = "message, status_id, time";
+            var where = String.Format("uid = me() ORDER BY time DESC LIMIT {0}", limit);
+            var query = GenerateFql(FIELDS, TABLE, where);
+
+            dynamic result = _client.Get("fql", new { q = query });
+            var statuses = new List<FbStatus>();
+
+            foreach (var s in result.data)
+            {
+                statuses.Add(new FbStatus
+                             {
+                                 Id = s.status_id,
+                                 Message = s.message,
+                                 Time = s.time
+                             });
+            }
+
+            return statuses;
         }
 
         public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 25)

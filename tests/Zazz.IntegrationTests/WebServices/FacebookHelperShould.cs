@@ -34,7 +34,6 @@ namespace Zazz.IntegrationTests.WebServices
 
             //Act
 
-
             //Assert
             Assert.Pass("This is only for debugging");
         }
