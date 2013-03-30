@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Collections.Generic;
 using System.Security;
@@ -30,67 +31,99 @@ namespace Zazz.Infrastructure.Services
         public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
         {
             var tasks = new List<Task>();
-            foreach (var entry in changes.Entries)
-                tasks.Add(UpdateUserEventsAsync(entry));
+            foreach (var entry in changes.Entries.Where(c => c.ChangedFields.Contains("events")))
+                tasks.Add(UpdateUserEventsAsync(entry.UserId));
 
             await Task.WhenAll(tasks);
             _uow.SaveChanges();
         }
 
-        private async Task UpdateUserEventsAsync(FbUserChangesEntry entry)
+        public async Task UpdateUserEventsAsync(long fbUserId)
         {
-            if (entry.ChangedFields.Contains("events"))
+            //getting user account
+            var oauthAccount = _uow.OAuthAccountRepository
+                                     .GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook);
+
+            if (oauthAccount == null)
+                return;
+
+            //checking if the user wants to sync events
+            if (!_uow.UserRepository.WantsFbEventsSynced(oauthAccount.UserId))
+                return;
+
+            // getting last 10 events from fb
+            var events = _facebookHelper.GetEvents(fbUserId, oauthAccount.AccessToken);
+            foreach (var fbEvent in events)
             {
-                //getting user account
-                var oauthAccount = _uow.OAuthAccountRepository
-                                         .GetOAuthAccountByProviderId(entry.UserId, OAuthProvider.Facebook);
-
-                if (oauthAccount == null)
-                    return;
-
-                //checking if the user wants to sync events
-                if (!_uow.UserRepository.WantsFbEventsSynced(oauthAccount.UserId)) 
-                    return;
-
-                // getting last 10 events from fb
-                var events = _facebookHelper.GetEvents(entry.UserId, oauthAccount.AccessToken);
-                foreach (var fbEvent in events)
+                //getting the current event that we have in db
+                var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
+                var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent); //converting the fb event to our model
+                //checking if we actually have the event in db or it's new
+                if (dbEvent != null)
                 {
-                    //getting the current event that we have in db
-                    var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
-                    var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent); //converting the fb event to our model
-                    //checking if we actually have the event in db or it's new
-                    if (dbEvent != null)
+                    // checking if the event has changed or not
+                    if (!dbEvent.CreatedDate.Equals(convertedEvent.CreatedDate))
                     {
-                        // checking if the event has changed or not
-                        if (!dbEvent.CreatedDate.Equals(convertedEvent.CreatedDate))
-                        {
-                            dbEvent.Name = convertedEvent.Name;
-                            dbEvent.Description = convertedEvent.Description;
-                            dbEvent.IsDateOnly = convertedEvent.IsDateOnly;
-                            dbEvent.CreatedDate = convertedEvent.CreatedDate;
-                            dbEvent.FacebookPhotoLink = convertedEvent.FacebookPhotoLink;
-                            dbEvent.Time = convertedEvent.Time;
-                            dbEvent.TimeUtc = convertedEvent.TimeUtc;
-                            dbEvent.Location = convertedEvent.Location;
-                            dbEvent.Street = convertedEvent.Street;
-                            dbEvent.City = convertedEvent.City;
-                            dbEvent.Latitude = convertedEvent.Latitude;
-                            dbEvent.Longitude = convertedEvent.Longitude;
-                        }
+                        UpdateDbEvent(ref dbEvent, ref convertedEvent);
                     }
-                    else
-                    {
-                        //we don't have the event
-                        convertedEvent.UserId = oauthAccount.UserId;
-                        await _eventService.CreateEventAsync(convertedEvent);
-                    }
+                }
+                else
+                {
+                    //we don't have the event
+                    convertedEvent.UserId = oauthAccount.UserId;
+                    await _eventService.CreateEventAsync(convertedEvent);
                 }
             }
         }
 
         public async Task HandleRealtimePageUpdatesAsync(FbPageChanges changes)
         {
+        }
+
+        public async Task UpdatePageEventsAsync(string pageId)
+        {
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
+            if (page == null)
+                return;
+
+            if (!_uow.UserRepository.WantsFbEventsSynced(page.UserId))
+                return;
+
+            var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken);
+            foreach (var fbEvent in fbEvents)
+            {
+                var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
+                var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent);
+
+                if (dbEvent != null)
+                {
+                    if (!dbEvent.CreatedDate.Equals(convertedEvent.CreatedDate))
+                    {
+                        UpdateDbEvent(ref dbEvent, ref convertedEvent);
+                    }
+                }
+                else
+                {
+                    convertedEvent.UserId = page.UserId;
+                    await _eventService.CreateEventAsync(convertedEvent);
+                }
+            }
+        }
+
+        public void UpdateDbEvent(ref ZazzEvent dbEvent, ref ZazzEvent convertedEvent)
+        {
+            dbEvent.Name = convertedEvent.Name;
+            dbEvent.Description = convertedEvent.Description;
+            dbEvent.IsDateOnly = convertedEvent.IsDateOnly;
+            dbEvent.CreatedDate = convertedEvent.CreatedDate;
+            dbEvent.FacebookPhotoLink = convertedEvent.FacebookPhotoLink;
+            dbEvent.Time = convertedEvent.Time;
+            dbEvent.TimeUtc = convertedEvent.TimeUtc;
+            dbEvent.Location = convertedEvent.Location;
+            dbEvent.Street = convertedEvent.Street;
+            dbEvent.City = convertedEvent.City;
+            dbEvent.Latitude = convertedEvent.Latitude;
+            dbEvent.Longitude = convertedEvent.Longitude;
         }
 
         public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)
@@ -150,7 +183,7 @@ namespace Zazz.Infrastructure.Services
         public void LinkPage(FacebookPage fbPage)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPage.FacebookId);
-            if(page != null)
+            if (page != null)
                 throw new FacebookPageExistsException();
 
             _facebookHelper.LinkPage(fbPage.FacebookId, fbPage.AccessToken);
@@ -161,7 +194,7 @@ namespace Zazz.Infrastructure.Services
         public void UnlinkPage(string fbPageId, int currentUserId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
-            if (page == null) 
+            if (page == null)
                 return;
 
             if (page.UserId != currentUserId)

@@ -12,6 +12,10 @@ namespace Zazz.Core.Interfaces
 
         Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);
 
+        Task UpdateUserEventsAsync(long fbUserId);
+
+        Task UpdatePageEventsAsync(string pageId);
+
         Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId);
 
         /// <summary>
