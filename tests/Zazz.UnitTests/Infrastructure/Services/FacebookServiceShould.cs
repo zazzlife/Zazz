@@ -554,5 +554,54 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FacebookPageRepository.Remove(page), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
+
+        [Test]
+        public async Task NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()
+        {
+            //Arrange
+            var fbUserId = 1234L;
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+                .Returns(() => null);
+
+            //Act
+            await _sut.UpdateUserEventsAsync(fbUserId);
+
+            //Assert
+            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook),
+                        Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()), Times.Never());
+            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+        }
+
+        [Test]
+        public async Task NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdateUserEvents()
+        {
+            //Arrange
+            var oauthAccount = new OAuthAccount
+                               {
+                                   AccessToken = "token",
+                                   ProviderUserId = 1234,
+                                   UserId = 111
+                               };
+
+            _uow.Setup(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook))
+                .Returns(() => oauthAccount);
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId))
+                .Returns(false);
+
+            //Act
+            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId);
+
+            //Assert
+            _uow.Verify(x => x.OAuthAccountRepository
+                .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook),
+                Times.Once());
+
+            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+        }
     }
 }
