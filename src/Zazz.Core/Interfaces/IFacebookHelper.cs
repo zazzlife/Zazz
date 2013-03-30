@@ -10,9 +10,9 @@ namespace Zazz.Core.Interfaces
     {
         void SetAccessToken(string token);
 
-        IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken);
+        IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5);
 
-        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken);
+        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit = 10);
 
         IEnumerable<FbPage> GetPages(string accessToken);
 

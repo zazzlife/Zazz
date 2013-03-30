@@ -32,18 +32,18 @@ namespace Zazz.Infrastructure
             _client.AccessToken = token;
         }
 
-        public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken)
+        public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5)
         {
             _client.AccessToken = accessToken;
 
-            var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT 5",
-                                      creatorId);
+            var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT {1}",
+                                      creatorId, limit);
             var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
 
             return QueryForEvents(query);
         }
 
-        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
+        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit = 10)
         {
             _client.AccessToken = accessToken;
 
@@ -90,7 +90,7 @@ namespace Zazz.Infrastructure
             var ids = String.Join(",", allEvents
                                            .OrderByDescending(e => e.Key)
                                            .Select(e => e.Value)
-                                           .Take(10));
+                                           .Take(limit));
 
             var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, String.Format("eid in ({0})", ids));
             return QueryForEvents(query);

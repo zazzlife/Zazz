@@ -31,13 +31,13 @@ namespace Zazz.Infrastructure.Services
         {
             var tasks = new List<Task>();
             foreach (var entry in changes.Entries)
-                tasks.Add(UpdateUserEvents(entry));
+                tasks.Add(UpdateUserEventsAsync(entry));
 
             await Task.WhenAll(tasks);
             _uow.SaveChanges();
         }
 
-        private async Task UpdateUserEvents(FbUserChangesEntry entry)
+        private async Task UpdateUserEventsAsync(FbUserChangesEntry entry)
         {
             if (entry.ChangedFields.Contains("events"))
             {
