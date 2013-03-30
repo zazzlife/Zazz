@@ -26,6 +26,19 @@ namespace Zazz.IntegrationTests.WebServices
 
         }
 
+        [Test, Explicit("This test is only for manual checking")]
+        public void ManualTest()
+        {
+            //Arrange
+            var helper = new FacebookHelper();
+
+            //Act
+
+
+            //Assert
+            Assert.Pass("This is only for debugging");
+        }
+
 
     }
 }

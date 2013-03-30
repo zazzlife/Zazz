@@ -61,7 +61,7 @@ namespace Zazz.Infrastructure
                     break;
                 }
 
-                var events = (IEnumerable<dynamic>) result.data;
+                var events = (IEnumerable<dynamic>)result.data;
 
                 if (!events.Any())
                     break;
@@ -166,7 +166,15 @@ namespace Zazz.Infrastructure
 
         public string GetAlbumName(string albumId, string accessToken)
         {
-            throw new NotImplementedException();
+            _client.AccessToken = accessToken;
+
+            const string ALBUM_TABLE = "album";
+            const string FIELDS = "name";
+            var where = String.Format("aid = \"{0}\"", albumId);
+            var query = GenerateFql(FIELDS, ALBUM_TABLE, where);
+
+            dynamic result = _client.Get("fql", new { q = query });
+            return result.data[0].name;
         }
 
         public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 25)
