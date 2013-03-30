@@ -30,7 +30,7 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 5);
 
-        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 25);
+        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 5);
 
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
     }

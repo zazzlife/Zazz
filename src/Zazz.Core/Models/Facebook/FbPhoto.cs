@@ -5,18 +5,20 @@ using System.Runtime.Serialization;
 namespace Zazz.Core.Models.Facebook
 {
     [DataContract]
-    public class FbPhoto : FbImage
+    public class FbPhoto
     {
-        [DataMember(Name = "id")]
         public string Id { get; set; }
 
-        [DataMember(Name = "from")]
-        public FbUser From { get; set; }
+        public string AlbumId { get; set; }
 
-        [DataMember(Name = "images")]
-        public IEnumerable<FbImage> Images { get; set; }
+        public string Description { get; set; }
 
-        [DataMember(Name = "created_time")]
-        public DateTime CreatedTime { get; set; }
+        public string Source { get; set; }
+
+        public int Height { get; set; }
+
+        public int Width { get; set; }
+
+        public long CreatedTime { get; set; }
     }
 }

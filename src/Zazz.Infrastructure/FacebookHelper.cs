@@ -202,9 +202,36 @@ namespace Zazz.Infrastructure
             return statuses;
         }
 
-        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 25)
+        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 5)
         {
-            throw new NotImplementedException();
+            _client.AccessToken = accessToken;
+
+            const string TABLE = "photo";
+            const string FIELDS = "aid, caption, created, owner, pid, modified, images";
+            var where = String.Format("owner = me() ORDER BY modified DESC LIMIT {0}", limit);
+            var query = GenerateFql(FIELDS, TABLE, where);
+
+            dynamic result = _client.Get("fql", new { q = query });
+
+            var photos = new List<FbPhoto>();
+
+            foreach (var p in result.data)
+            {
+                var photo = new FbPhoto
+                            {
+                                CreatedTime = p.modified,
+                                AlbumId = p.aid,
+                                Description = p.caption,
+                                Id = p.pid,
+                                Source = p.images[0].source,
+                                Width = (int) p.images[0].width,
+                                Height = (int) p.images[0].height
+                            };
+
+                photos.Add(photo);
+            }
+
+            return photos;
         }
 
         public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
