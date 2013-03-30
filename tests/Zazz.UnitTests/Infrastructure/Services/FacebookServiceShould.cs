@@ -653,5 +653,105 @@ namespace Zazz.UnitTests.Infrastructure.Services
                              Times.Once());
             _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
         }
+
+        [Test]
+        public async Task NotDoAnythingIfPageDoesntExists_OnUpdatePageEvents()
+        {
+            //Arrange
+            var page = new FacebookPage
+                       {
+                           AccessToken = "token",
+                           FacebookId = "1234",
+                           UserId = 123
+                       };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(() => null);
+
+            //Act
+            await _sut.UpdatePageEventsAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()), Times.Never());
+            _fbHelper.Verify(x => x.GetPageEvents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
+                             Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public async Task NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdatePageEvents()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "1234",
+                UserId = 123
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
+                .Returns(false);
+
+            //Act
+            await _sut.UpdatePageEventsAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPageEvents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
+                             Times.Never());
+            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public async Task AddEventsIfTheyDontExist_OnUpdatePageEvents()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "1234",
+                UserId = 123
+            };
+
+            var fbEvent = new FbEvent
+            {
+                Id = 12345
+            };
+
+            var zazzEvent = new ZazzEvent
+            {
+                FacebookEventId = fbEvent.Id
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbEvent> { fbEvent });
+            _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent.Id))
+                .Returns(() => null);
+            _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
+                     .Returns(zazzEvent);
+            _eventService.Setup(x => x.CreateEventAsync(zazzEvent))
+                         .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.UpdatePageEventsAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, It.IsAny<int>()),
+                             Times.Once());
+            _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
     }
 }

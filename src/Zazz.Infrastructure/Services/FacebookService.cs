@@ -108,6 +108,8 @@ namespace Zazz.Infrastructure.Services
                     await _eventService.CreateEventAsync(convertedEvent);
                 }
             }
+
+            _uow.SaveChanges(); // remove this if you save changes somewhere else
         }
 
         public void UpdateDbEvent(ref ZazzEvent dbEvent, ref ZazzEvent convertedEvent)
