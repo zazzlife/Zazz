@@ -26,6 +26,12 @@ namespace Zazz.Core.Interfaces
 
         void LinkPage(string pageId, string accessToken);
 
+        string GetAlbumName(string albumId, string accessToken);
+
+        IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 20);
+
+        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 25);
+
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
     }
 }

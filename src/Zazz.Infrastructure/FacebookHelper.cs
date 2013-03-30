@@ -164,6 +164,21 @@ namespace Zazz.Infrastructure
                 throw new Exception("Link was not successful");
         }
 
+        public string GetAlbumName(string albumId, string accessToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 25)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 25)
+        {
+            throw new NotImplementedException();
+        }
+
         public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
         {
             var e = new ZazzEvent
