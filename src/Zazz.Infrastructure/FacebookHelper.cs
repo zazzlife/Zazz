@@ -92,7 +92,8 @@ namespace Zazz.Infrastructure
                                            .Select(e => e.Value)
                                            .Take(limit));
 
-            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, String.Format("eid in ({0})", ids));
+            var where = String.Format("eid in ({0}) AND start_time > now() ORDER BY update_time DESC", ids);
+            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
             return QueryForEvents(query);
         }
 
