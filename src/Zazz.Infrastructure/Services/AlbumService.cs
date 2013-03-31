@@ -47,7 +47,7 @@ namespace Zazz.Infrastructure.Services
         public async Task CreateAlbumAsync(Album album)
         {
             _uow.AlbumRepository.InsertGraph(album);
-
+            // there is a direct call to repository in FacebookService (get page photos)
             _uow.SaveChanges();
         }
 

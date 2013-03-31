@@ -64,7 +64,9 @@ namespace Zazz.Infrastructure.Services
             }
 
             var path = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
-            await _fileService.SaveFileAsync(path, data);
+            
+            if (data != Stream.Null)
+                await _fileService.SaveFileAsync(path, data);
 
             return photo.Id;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security;
 using System.Threading.Tasks;
 using Facebook;
@@ -680,7 +681,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.UpdatePageStatusesAsync(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -707,7 +708,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            _sut.UpdatePageStatusesAsync(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -749,7 +750,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.UpdatePageStatusesAsync(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -786,7 +787,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                               Message = "old msg",
                               UserId = page.UserId
                           };
-            
+
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
@@ -799,7 +800,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
 
             //Act
-            _sut.UpdatePageStatusesAsync(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
@@ -809,6 +810,219 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()), Times.Once());
             _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void NotDoAnythingIfPageNotExists_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(() => null);
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(It.IsAny<int>()), Times.Never());
+            _fbHelper.Verify(x => x.GetPhotos(It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetByFacebookId(It.IsAny<string>()), Times.Never());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+                                 Times.Never());
+        }
+
+        [Test]
+        public void NotDoAnythingIfUserDoesntWantToSyncPhotos_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
+                .Returns(false);
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetByFacebookId(It.IsAny<string>()), Times.Never());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+                                 Times.Never());
+        }
+
+        [Test]
+        public void UpdatePhotoIfExists_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbPhoto = new FbPhoto
+                          {
+                              AlbumId = "albumId",
+                              CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                              Description = "desc",
+                              Source = "src",
+                              Id = "id"
+                          };
+
+            var oldPhoto = new Photo
+                           {
+                               FacebookLink = "old link",
+                               Description = "old desc"
+                           };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbPhoto> { fbPhoto });
+            _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
+                .Returns(oldPhoto);
+
+
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId);
+
+            //Assert
+            Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
+            Assert.AreEqual(fbPhoto.Source, oldPhoto.FacebookLink);
+
+            _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+                                 Times.Never());
+        }
+
+        [Test]
+        public void InsertPhotoAndCreateAlbumIfNotExists_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbPhoto = new FbPhoto
+            {
+                AlbumId = "albumId",
+                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                Description = "desc",
+                Source = "src",
+                Id = "id"
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbPhoto> { fbPhoto });
+            _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
+                .Returns(() => null);
+            _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
+                .Returns(() => null);
+            _uow.Setup(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()));
+            _photoService.Setup(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true))
+                         .Returns(() => Task.Run(() => 1));
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId);
+
+            //Assert
+
+            _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true),
+                                 Times.Once());
+        }
+
+        [Test]
+        public void InsertPhotoAndUseExistingAlbumIfExists_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbPhoto = new FbPhoto
+            {
+                AlbumId = "albumId",
+                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                Description = "desc",
+                Source = "src",
+                Id = "id"
+            };
+
+            var album = new Album
+                        {
+                            FacebookId = fbPhoto.AlbumId,
+                            Id = 12,
+                            IsFacebookAlbum = true,
+                            Name = "s",
+                            UserId = page.UserId
+                        };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbPhoto> { fbPhoto });
+            _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
+                .Returns(() => null);
+            _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
+                .Returns(album);
+            _photoService.Setup(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true))
+                         .Returns(() => Task.Run(() => 1));
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId);
+
+            //Assert
+
+            _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true),
+                                 Times.Once());
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Zazz.Core.Interfaces
 
         Task UpdatePageEventsAsync(string pageId);
 
-        void UpdatePageStatusesAsync(string pageId);
+        void UpdatePageStatuses(string pageId);
 
-        void UpdatePagePhotosAsync(string pageId);
+        void UpdatePagePhotos(string pageId);
 
         Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Security;
@@ -132,7 +133,7 @@ namespace Zazz.Infrastructure.Services
             dbEvent.Longitude = convertedEvent.Longitude;
         }
 
-        public void UpdatePageStatusesAsync(string pageId)
+        public void UpdatePageStatuses(string pageId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -166,9 +167,57 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async void UpdatePagePhotosAsync(string pageId)
+        public void UpdatePagePhotos(string pageId)
         {
-            throw new NotImplementedException();
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
+            if (page == null)
+                return;
+
+            if (!_uow.UserRepository.WantsFbImagesSynced(page.UserId))
+                return;
+
+            var photos = _facebookHelper.GetPhotos(page.AccessToken, 25);
+            foreach (var fbPhoto in photos)
+            {
+                var dbPhoto = _uow.PhotoRepository.GetByFacebookId(fbPhoto.Id);
+                if (dbPhoto != null)
+                {
+                    dbPhoto.FacebookLink = fbPhoto.Source;
+                    dbPhoto.Description = fbPhoto.Description;
+                }
+                else
+                {
+                    var album = _uow.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId);
+                    if (album == null)
+                    {
+                        album = new Album
+                                {
+                                    FacebookId = fbPhoto.AlbumId,
+                                    IsFacebookAlbum = true,
+                                    Name = _facebookHelper.GetAlbumName(fbPhoto.AlbumId, page.AccessToken),
+                                    UserId = page.UserId
+                                };
+
+                        _uow.AlbumRepository.InsertGraph(album);
+                        _uow.SaveChanges();
+                    }
+
+                    var photo = new Photo
+                                {
+                                    AlbumId = album.Id,
+                                    Description = fbPhoto.Description,
+                                    FacebookId = fbPhoto.Id,
+                                    FacebookLink = fbPhoto.Source,
+                                    IsFacebookPhoto = true,
+                                    UploadDate = fbPhoto.CreatedTime.UnixTimestampToDateTime(),
+                                    UploaderId = page.UserId
+                                };
+
+                    _photoService.SavePhotoAsync(photo, Stream.Null, true);
+                }
+            }
+
+            _uow.SaveChanges();
         }
 
         public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)
