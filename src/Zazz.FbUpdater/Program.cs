@@ -30,8 +30,7 @@ namespace Zazz.FbUpdater
                 Console.ReadLine();
             }
 
-            Console.WriteLine("Specified Web Root Directory is: {0}", _webRootDirectory);
-
+            Console.WriteLine("* Specified Web Root Directory is: {0}", _webRootDirectory);
 
             RegisterIoC();
 
@@ -39,10 +38,36 @@ namespace Zazz.FbUpdater
             pageUpdateTimer.Elapsed += RunPageUpdate;
             pageUpdateTimer.Start();
 
-            Console.WriteLine("Type exit to exit!");
+            Console.WriteLine("* Type \"stop\" to exit.");
+            Console.Write("\r" + new String('=', Console.WindowWidth) + "\r");
+
+            Console.WriteLine();
+
+            Console.WriteLine("Status:");
+
+            SetStatus("Waiting...");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.Write("\r" + new String('=', Console.WindowWidth) + "\r");
+
             var input = "";
-            while (!input.Equals("exit", StringComparison.InvariantCultureIgnoreCase))
+            while (!input.Equals("stop", StringComparison.InvariantCultureIgnoreCase))
                 input = Console.ReadLine();
+        }
+
+        private static void SetStatus(string message)
+        {
+            var currentCursorTop = Console.CursorTop;
+            var currentCursorLeft = Console.CursorLeft;
+
+            Console.SetCursorPosition(0, 5);
+            Console.Write("\r" + new String(' ', Console.WindowWidth));
+
+            Console.SetCursorPosition(0, 5);
+            Console.Write(message);
+
+            Console.SetCursorPosition(currentCursorLeft, currentCursorTop);
         }
 
         private static void RegisterIoC()
