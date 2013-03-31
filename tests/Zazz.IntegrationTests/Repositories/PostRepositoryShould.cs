@@ -26,7 +26,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             var post = Mother.GetPost(user.Id);
-            post.FacebookId = "fbId";
+            post.FacebookId = 5566;
 
             _context.Posts.Add(post);
             _context.SaveChanges();

@@ -16,7 +16,7 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the post, if it's new then use insert graph.");
         }
 
-        public Post GetByFbId(string fbPostId)
+        public Post GetByFbId(long fbPostId)
         {
             return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbPostId));
         }

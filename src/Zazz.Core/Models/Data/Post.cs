@@ -13,8 +13,7 @@ namespace Zazz.Core.Models.Data
 
         public string Message { get; set; }
 
-        [MaxLength(100), DataType("varchar")]
-        public string FacebookId { get; set; }
+        public long FacebookId { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

@@ -18,14 +18,18 @@ namespace Zazz.Infrastructure.Services
         private readonly IErrorHandler _errorHandler;
         private readonly IUoW _uow;
         private readonly IEventService _eventService;
+        private readonly IPostService _postService;
+        private readonly IPhotoService _photoService;
 
         public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow,
-                               IEventService eventService)
+                               IEventService eventService, IPostService postService, IPhotoService photoService)
         {
             _facebookHelper = facebookHelper;
             _errorHandler = errorHandler;
             _uow = uow;
             _eventService = eventService;
+            _postService = postService;
+            _photoService = photoService;
         }
 
         public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
@@ -126,6 +130,45 @@ namespace Zazz.Infrastructure.Services
             dbEvent.City = convertedEvent.City;
             dbEvent.Latitude = convertedEvent.Latitude;
             dbEvent.Longitude = convertedEvent.Longitude;
+        }
+
+        public void UpdatePageStatusesAsync(string pageId)
+        {
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
+            if (page == null)
+                return;
+
+            if (!_uow.UserRepository.WantsFbPostsSynced(page.UserId))
+                return;
+
+            var statuses = _facebookHelper.GetStatuses(page.AccessToken, 25);
+            foreach (var s in statuses)
+            {
+                var dbPost = _uow.PostRepository.GetByFbId(s.Id);
+                if (dbPost != null)
+                {
+                    dbPost.Message = s.Message;
+                }
+                else
+                {
+                    var post = new Post
+                               {
+                                   FacebookId = s.Id,
+                                   Message = s.Message,
+                                   UserId = page.UserId,
+                                   CreatedTime = s.Time.UnixTimestampToDateTime()
+                               };
+
+                    _postService.NewPostAsync(post);
+                }
+            }
+
+            _uow.SaveChanges();
+        }
+
+        public async void UpdatePagePhotosAsync(string pageId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)

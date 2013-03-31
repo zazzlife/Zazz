@@ -9,6 +9,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -21,6 +22,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IErrorHandler> _errorHander;
         private Mock<IUoW> _uow;
         private Mock<IEventService> _eventService;
+        private Mock<IPhotoService> _photoService;
+        private Mock<IPostService> _postService;
 
         [SetUp]
         public void Init()
@@ -28,8 +31,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper = new Mock<IFacebookHelper>();
             _errorHander = new Mock<IErrorHandler>();
             _eventService = new Mock<IEventService>();
+            _postService = new Mock<IPostService>();
+            _photoService = new Mock<IPhotoService>();
             _uow = new Mock<IUoW>();
-            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object);
+            _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object,
+                                       _postService.Object,
+                                       _photoService.Object);
 
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
             _uow.Setup(x => x.SaveChanges());
@@ -654,6 +661,153 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, It.IsAny<int>()),
                              Times.Once());
             _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void NotDoAnythingIfPageDoesntExists_OnUpdatePageStatuses()
+        {
+            //Arrange
+            var page = new FacebookPage
+                       {
+                           AccessToken = "token",
+                           FacebookId = "12345",
+                           UserId = 12
+                       };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(() => null);
+
+
+            //Act
+            _sut.UpdatePageStatusesAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(It.IsAny<int>()), Times.Never());
+            _fbHelper.Verify(x => x.GetStatuses(It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void NotQueryIfUserDoestWantPostsToBeSynced_OnUpdatePageStatuses()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
+                .Returns(false);
+
+            //Act
+            _sut.UpdatePageStatusesAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetStatuses(It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
+            _postService.Verify(x => x.NewPostAsync(It.IsAny<Post>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void InsertPostIfDoesntExists_OnUpdatePageStatuses()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbStatus = new FbStatus
+                           {
+                               Id = 1,
+                               Message = "message",
+                               Time = DateTime.UtcNow.ToUnixTimestamp()
+                           };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbStatus> { fbStatus });
+            _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
+                .Returns(() => null);
+            _postService.Setup(x => x.NewPostAsync(It.IsAny<Post>()))
+                        .Returns(() => Task.Run(() => { }));
+
+
+            //Act
+            _sut.UpdatePageStatusesAsync(page.FacebookId);
+
+            //Assert
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
+            _postService.Verify(x => x.NewPostAsync(It.IsAny<Post>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void UpdatePostIfExists_OnUpdatePageStatuses()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbStatus = new FbStatus
+            {
+                Id = 1,
+                Message = "message",
+                Time = DateTime.UtcNow.ToUnixTimestamp()
+            };
+
+            var oldPost = new Post
+                          {
+                              CreatedTime = DateTime.UtcNow.AddDays(-1),
+                              FacebookId = fbStatus.Id,
+                              Id = 1234,
+                              Message = "old msg",
+                              UserId = page.UserId
+                          };
+            
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()))
+                     .Returns(new List<FbStatus> { fbStatus });
+            _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
+                .Returns(oldPost);
+            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+
+            //Act
+            _sut.UpdatePageStatusesAsync(page.FacebookId);
+
+            //Assert
+            Assert.AreEqual(fbStatus.Message, oldPost.Message);
+
+            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
+            _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
+            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }
