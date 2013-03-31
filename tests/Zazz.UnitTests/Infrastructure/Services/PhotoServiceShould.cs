@@ -142,6 +142,38 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public async Task SavePhotoRecordToDbButNotCallSaveToDiskWhenStreamIsEmpty_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UploaderId = 17
+            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            var path = _sut.GeneratePhotoFilePath(photo.UploaderId, photo.Id);
+
+            _fs.Setup(x => x.SaveFileAsync(path, Stream.Null))
+                   .Returns(() => Task.Run(() => { }));
+
+            //Act
+
+            var id = await _sut.SavePhotoAsync(photo, Stream.Null, false);
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), It.IsAny<Stream>()), Times.Never());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
+        }
+
+        [Test]
         public async Task ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()
         {
             //Arrange
