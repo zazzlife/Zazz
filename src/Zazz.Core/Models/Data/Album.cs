@@ -19,6 +19,11 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
+        public bool IsFacebookAlbum { get; set; }
+
+        [MaxLength(4000)]
+        public string FacebookId { get; set; }
+
         public virtual ICollection<Photo> Photos { get; set; }
     }
 }

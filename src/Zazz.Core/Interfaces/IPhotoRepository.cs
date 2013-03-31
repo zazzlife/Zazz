@@ -11,5 +11,7 @@ namespace Zazz.Core.Interfaces
         Task<string> GetDescriptionAsync(int photoId);
 
         Task<int> GetOwnerIdAsync(int photoId);
+        
+        Photo GetByFacebookId(string fbId);
     }
 }

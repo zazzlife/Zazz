@@ -118,5 +118,39 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(user.Id, result);
         }
+
+        [Test]
+        public void ReturnCorrectRow_OnGetByFacebookId()
+        {
+            //Arrange
+            var description = "test";
+            var user = Mother.GetUser();
+            var album = new Album { Name = "name" };
+            var photo = new Photo { Description = description, UploadDate = DateTime.UtcNow, FacebookId = "Asdf"};
+
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.Users.Add(user);
+                ctx.SaveChanges();
+
+                album.UserId = user.Id;
+                photo.UploaderId = user.Id;
+
+                ctx.Albums.Add(album);
+                ctx.SaveChanges();
+
+                photo.AlbumId = album.Id;
+                ctx.Photos.Add(photo);
+                ctx.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.GetByFacebookId(photo.FacebookId);
+
+            //Assert
+            Assert.AreEqual(photo.Id, result.Id);
+        }
+
+
     }
 }

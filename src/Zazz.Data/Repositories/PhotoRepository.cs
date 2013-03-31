@@ -44,5 +44,10 @@ namespace Zazz.Data.Repositories
                                        .Select(p => p.UploaderId)
                                        .SingleOrDefault());
         }
+
+        public Photo GetByFacebookId(string fbId)
+        {
+            return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbId, StringComparison.InvariantCultureIgnoreCase));
+        }
     }
 }

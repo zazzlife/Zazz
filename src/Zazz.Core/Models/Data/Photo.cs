@@ -25,6 +25,14 @@ namespace Zazz.Core.Models.Data
 
         public int AlbumId { get; set; }
 
+        public bool IsFacebookPhoto { get; set; }
+
+        [MaxLength(4000)]
+        public string FacebookId { get; set; }
+
+        [MaxLength(4000)]
+        public string FacebookLink { get; set; }
+
         public DateTime UploadDate { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
