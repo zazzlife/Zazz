@@ -9,5 +9,7 @@ namespace Zazz.Core.Interfaces
         Task<int> GetOwnerIdAsync(int albumId);
 
         IEnumerable<int> GetAlbumPhotoIds(int albumId);
+
+        Album GetByFacebookId(string fbId);
     }
 }

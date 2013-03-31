@@ -32,5 +32,10 @@ namespace Zazz.Data.Repositories
                         .SelectMany(a => a.Photos)
                         .Select(p => p.Id);
         }
+
+        public Album GetByFacebookId(string fbId)
+        {
+            return DbSet.SingleOrDefault(a => a.FacebookId.Equals(fbId, StringComparison.InvariantCultureIgnoreCase));
+        }
     }
 }

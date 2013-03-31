@@ -87,6 +87,33 @@ namespace Zazz.IntegrationTests.Repositories
             CollectionAssert.Contains(ids, photo2.Id);
         }
 
+        [Test]
+        public void ReturnCorrectAlbum_OnGetByFacebookId()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var album = new Album
+            {
+                UserId = user.Id,
+                FacebookId = "12345",
+                Name = "Dsadas",
+                Photos = new List<Photo>()
+            };
+
+            _dbContext.Albums.Add(album);
+            _dbContext.SaveChanges();
+
+            //Act
+            var result = _repo.GetByFacebookId(album.FacebookId);
+
+            //Assert
+            Assert.AreEqual(album.Id, result.Id);
+
+        }
+
 
     }
 }
