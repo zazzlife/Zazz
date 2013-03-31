@@ -382,7 +382,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SaveAndLinkNewPageIfItsNotExists_OnLinkPage()
+        public void SaveAndNewPageIfItsNotExists_OnLinkPage()
         {
             //Arrange
             var page = new FacebookPage
@@ -401,7 +401,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.LinkPage(page);
 
             //Assert
-            _fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Once());
+            //_fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());

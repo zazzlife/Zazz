@@ -61,11 +61,11 @@ namespace Zazz.Web.Controllers
                     var userChanges = await JsonConvert.DeserializeObjectAsync<FbUserChanges>(body);
                     _facebookService.HandleRealtimeUserUpdatesAsync(userChanges);
                 }
-                else if (o.Equals("page", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var pageChanges = await JsonConvert.DeserializeObjectAsync<FbPageChanges>(body);
-                    _facebookService.HandleRealtimePageUpdatesAsync(pageChanges);
-                }
+                //else if (o.Equals("page", StringComparison.InvariantCultureIgnoreCase))
+                //{
+                //    var pageChanges = await JsonConvert.DeserializeObjectAsync<FbPageChanges>(body);
+                //    _facebookService.HandleRealtimePageUpdatesAsync(pageChanges);
+                //}
 
                 return String.Empty;
             }
