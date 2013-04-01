@@ -14,7 +14,7 @@
     }
     else
     {
-        <input type="hidden" value="@Model.Ratio"/>
+        <input id="aspectRatio" type="hidden" value="@Model.Ratio"/>
         <form>
             <input type="hidden" name="x" id="x" />
             <input type="hidden" name="x2" id="x2" />
@@ -25,7 +25,7 @@
 
             <p>
                 <div class="text-center" id="cropImgLoadingMsg">
-                    <h3><i class="icon-spin icon-spinner icon-large"></i>Please wait for the image to load.</h3>
+                    <h3><i class="icon-spin icon-spinner icon-large"></i> Please wait for the image to load.</h3>
                 </div>
 
                 <img id="cropImg" src="~/Images/cover-image.gif" />

@@ -348,6 +348,7 @@
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
+    <Content Include="Scripts\jquery.extends.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\auth-icons.png" />
     <Content Include="Images\cover-image.gif" />
@@ -356,6 +357,7 @@
     <Content Include="Images\placeholder.gif" />
     <Content Include="robots.txt" />
     <Content Include="Scripts\app\album-photo.js" />
+    <Content Include="Scripts\app\crop.js" />
     <Content Include="Scripts\app\edit-event.js" />
     <Content Include="Scripts\app\edit-profile.js" />
     <Content Include="Scripts\app\flip.js" />
