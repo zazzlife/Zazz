@@ -20,7 +20,7 @@ namespace Zazz.Core.Interfaces
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit = 10);
+        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit);
         
         IEnumerable<FbPage> GetPages(string accessToken);
 
@@ -28,9 +28,9 @@ namespace Zazz.Core.Interfaces
 
         string GetAlbumName(string albumId, string accessToken);
 
-        IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 5);
+        IEnumerable<FbStatus> GetStatuses(string accessToken, int limit);
 
-        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 5);
+        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit);
 
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
     }

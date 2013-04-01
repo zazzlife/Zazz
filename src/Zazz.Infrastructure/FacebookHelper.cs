@@ -38,7 +38,7 @@ namespace Zazz.Infrastructure
             return QueryForEvents(query);
         }
 
-        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit = 10)
+        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit)
         {
             _client.AccessToken = accessToken;
 
@@ -177,7 +177,7 @@ namespace Zazz.Infrastructure
             return result.data[0].name;
         }
 
-        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit = 5)
+        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit)
         {
             _client.AccessToken = accessToken;
 
@@ -202,7 +202,7 @@ namespace Zazz.Infrastructure
             return statuses;
         }
 
-        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit = 5)
+        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit)
         {
             _client.AccessToken = accessToken;
 
