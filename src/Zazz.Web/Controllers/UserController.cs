@@ -240,23 +240,8 @@ namespace Zazz.Web.Controllers
                 if (!User.Identity.IsAuthenticated)
                     return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
 
-                var username = User.Identity.Name;
-                var photoId = _uow.UserRepository.GetUserPhotoId(username);
-
-                if (photoId == 0)
-                {
-                    var gender = _uow.UserRepository.GetUserGender(username);
-                    return DefaultImageHelper.GetUserDefaultImage(gender);
-                }
-
-                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
-                if (photo == null)
-                {
-                    var gender = _uow.UserRepository.GetUserGender(username);
-                    return DefaultImageHelper.GetUserDefaultImage(gender);
-                }
-
-                return _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                var userId = _userService.GetUserId(User.Identity.Name);
+                return _photoService.GetUserImageUrl(userId);
             }
         }
 
