@@ -133,7 +133,7 @@ namespace Zazz.Infrastructure.Services
             dbEvent.Longitude = convertedEvent.Longitude;
         }
 
-        public void UpdatePageStatuses(string pageId)
+        public void UpdatePageStatuses(string pageId, int limit = 25)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -142,7 +142,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbPostsSynced(page.UserId))
                 return;
 
-            var statuses = _facebookHelper.GetStatuses(page.AccessToken, 25);
+            var statuses = _facebookHelper.GetStatuses(page.AccessToken, limit);
             foreach (var s in statuses)
             {
                 var dbPost = _uow.PostRepository.GetByFbId(s.Id);
@@ -167,7 +167,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UpdatePagePhotos(string pageId)
+        public void UpdatePagePhotos(string pageId, int limit = 25)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -176,7 +176,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbImagesSynced(page.UserId))
                 return;
 
-            var photos = _facebookHelper.GetPhotos(page.AccessToken, 25);
+            var photos = _facebookHelper.GetPhotos(page.AccessToken, limit);
             foreach (var fbPhoto in photos)
             {
                 var dbPhoto = _uow.PhotoRepository.GetByFacebookId(fbPhoto.Id);

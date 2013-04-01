@@ -740,12 +740,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                Message = "message",
                                Time = DateTime.UtcNow.ToUnixTimestamp()
                            };
+            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
                 .Returns(() => null);
@@ -754,12 +755,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId, limit);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
             _postService.Verify(x => x.NewPostAsync(It.IsAny<Post>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
@@ -791,27 +792,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
                               Message = "old msg",
                               UserId = page.UserId
                           };
-
+            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
                 .Returns(oldPost);
             _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId);
+            _sut.UpdatePageStatuses(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
 
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
@@ -898,11 +899,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                Description = "old desc"
                            };
 
+            var limit = 30;
+
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(oldPhoto);
@@ -910,14 +913,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId);
+            _sut.UpdatePagePhotos(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
             Assert.AreEqual(fbPhoto.Source, oldPhoto.FacebookLink);
 
             _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
@@ -945,11 +948,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = "id"
             };
 
+            var limit = 30;
+
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(() => null);
@@ -960,12 +965,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(() => Task.Run(() => 1));
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId);
+            _sut.UpdatePagePhotos(page.FacebookId, limit);
 
             //Assert
 
             _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
@@ -1002,11 +1007,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             UserId = page.UserId
                         };
 
+            var limit = 30;
+
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(() => null);
@@ -1016,12 +1023,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(() => Task.Run(() => 1));
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId);
+            _sut.UpdatePagePhotos(page.FacebookId, limit);
 
             //Assert
 
             _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, It.IsAny<int>()), Times.Once());
+            _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
