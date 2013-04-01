@@ -35,6 +35,8 @@ namespace Zazz.FbUpdater
                 _facebookService.UpdatePagePhotos(page);
                 _facebookService.UpdatePageStatuses(page);
 
+                await Task.Delay(1000);
+
                 counter++;
             }
         }
