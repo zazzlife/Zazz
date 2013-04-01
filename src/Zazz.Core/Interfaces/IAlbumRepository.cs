@@ -11,5 +11,7 @@ namespace Zazz.Core.Interfaces
         IEnumerable<int> GetAlbumPhotoIds(int albumId);
 
         Album GetByFacebookId(string fbId);
+
+        IEnumerable<int> GetPageAlbumIds(int pageId);
     }
 }

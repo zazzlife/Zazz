@@ -37,5 +37,13 @@ namespace Zazz.Data.Repositories
         {
             return DbSet.SingleOrDefault(a => a.FacebookId.Equals(fbId, StringComparison.InvariantCultureIgnoreCase));
         }
+
+        public IEnumerable<int> GetPageAlbumIds(int pageId)
+        {
+            return DbSet
+                .Where(a => a.PageId == pageId)
+                .Select(a => a.Id);
+
+        }
     }
 }

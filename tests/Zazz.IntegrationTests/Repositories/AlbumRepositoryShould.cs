@@ -27,7 +27,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            var album = new Album {Name = "test"};
+            var album = new Album { Name = "test" };
             using (var ctx = new ZazzDbContext())
             {
                 ctx.Users.Add(user);
@@ -112,6 +112,52 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(album.Id, result.Id);
 
+        }
+
+        [Test]
+        public void ReturnCorrectAlbumIds_OnGetPageAlbumIds()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var page = new FacebookPage
+                       {
+                           AccessToken = "asdf",
+                           FacebookId = "1234",
+                           Name = "name",
+                           UserId = user.Id
+                       };
+
+            _dbContext.FacebookPages.Add(page);
+            _dbContext.SaveChanges();
+
+            var album1 = new Album
+            {
+                UserId = user.Id,
+                Name = "Dsadas",
+                PageId = page.Id
+            };
+
+            var album2 = new Album
+            {
+                UserId = user.Id,
+                Name = "Dsadasb",
+                PageId = page.Id
+            };
+
+            _dbContext.Albums.Add(album1);
+            _dbContext.Albums.Add(album2);
+            _dbContext.SaveChanges();
+
+            //Act
+            var result = _repo.GetPageAlbumIds(page.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+            CollectionAssert.Contains(result, album1.Id);
+            CollectionAssert.Contains(result, album2.Id);
         }
 
 
