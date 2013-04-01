@@ -191,7 +191,9 @@ namespace Zazz.Web.Controllers
                              {
                                  PhotoId = p.Id,
                                  PhotoDescription = p.Description,
-                                 PhotoUrl = _photoService.GeneratePhotoUrl(p.UploaderId, p.Id),
+                                 PhotoUrl = p.IsFacebookPhoto
+                                                ? p.FacebookLink
+                                                : _photoService.GeneratePhotoUrl(p.UploaderId, p.Id),
                                  IsFromCurrentUser = isOwner
                              });
 
