@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
@@ -14,5 +15,7 @@ namespace Zazz.Core.Interfaces
         ZazzEvent GetByFacebookId(long fbEventId);
 
         void ResetPhotoId(int photoId);
+
+        IEnumerable<int> GetEventIdsByPageId(int pageId);
     }
 }

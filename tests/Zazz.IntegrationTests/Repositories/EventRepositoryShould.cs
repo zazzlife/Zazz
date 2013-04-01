@@ -143,5 +143,84 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(e1.Id, result.Id);
         }
+
+        [Test]
+        public void ReturnCorrectIds_OnGetEventIdsByPageId()
+        {
+            //Arrange
+            var user1 = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user1);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var page = new FacebookPage
+            {
+                AccessToken = "asdf",
+                FacebookId = "1234",
+                Name = "name",
+                UserId = user1.Id
+            };
+
+            _context.FacebookPages.Add(page);
+            _context.SaveChanges();
+
+            var e1 = new ZazzEvent
+                     {
+                         UserId = user1.Id,
+                         CreatedDate = DateTime.Now,
+                         Name = "name",
+                         PageId = page.Id,
+                         Time = DateTime.UtcNow,
+                         TimeUtc = DateTime.UtcNow,
+                         Description = "Desc"
+                     };
+
+            var e2 = new ZazzEvent
+            {
+                UserId = user1.Id,
+                CreatedDate = DateTime.Now,
+                Name = "name",
+                PageId = page.Id,
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow,
+                Description = "Desc"
+            };
+
+            var e3 = new ZazzEvent
+            {
+                UserId = user1.Id,
+                CreatedDate = DateTime.Now,
+                Name = "name",
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow,
+                Description = "Desc"
+            };
+
+            var e4 = new ZazzEvent
+            {
+                UserId = user2.Id,
+                CreatedDate = DateTime.Now,
+                Name = "name",
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow,
+                Description = "Desc"
+            };
+
+            _context.Events.Add(e1);
+            _context.Events.Add(e2);
+            _context.Events.Add(e3);
+            _context.Events.Add(e4);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetEventIdsByPageId(page.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+
+            CollectionAssert.Contains(result, e1.Id);
+            CollectionAssert.Contains(result, e2.Id);
+        }
     }
 }

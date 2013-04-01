@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Objects;
@@ -53,6 +54,12 @@ namespace Zazz.Data.Repositories
             {
                 e.PhotoId = null;
             }
+        }
+
+        public IEnumerable<int> GetEventIdsByPageId(int pageId)
+        {
+            return DbSet.Where(e => e.PageId == pageId)
+                        .Select(e => e.Id);
         }
     }
 }
