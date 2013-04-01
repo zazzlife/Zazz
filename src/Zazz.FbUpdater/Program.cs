@@ -50,13 +50,15 @@ namespace Zazz.FbUpdater
             Console.WriteLine();
             Console.WriteLine();
             Console.Write("\r" + new String('=', Console.WindowWidth) + "\r");
+            
+            //RunPageUpdate(null, null);
 
             var input = "";
             while (!input.Equals("stop", StringComparison.InvariantCultureIgnoreCase))
                 input = Console.ReadLine();
         }
 
-        private static void SetStatus(string message)
+        public static void SetStatus(string message)
         {
             var currentCursorTop = Console.CursorTop;
             var currentCursorLeft = Console.CursorLeft;
@@ -65,7 +67,7 @@ namespace Zazz.FbUpdater
             Console.Write("\r" + new String(' ', Console.WindowWidth));
 
             Console.SetCursorPosition(0, 5);
-            Console.Write(message);
+            Console.Write("{0} - {1}", DateTime.Now.ToShortTimeString(), message);
 
             Console.SetCursorPosition(currentCursorLeft, currentCursorTop);
         }
@@ -95,6 +97,8 @@ namespace Zazz.FbUpdater
                                            x.For<IErrorHandler>().Use<ErrorHandler>();
                                            x.For<IFacebookHelper>().Use<FacebookHelper>();
                                            x.For<ILogger>().Use<Logger>();
+
+                                           x.For<IEmailService>().Use<FakeEmailService>();
                                        });
         }
 
@@ -104,10 +108,14 @@ namespace Zazz.FbUpdater
                 return;
 
             _isPageUpdateTaskRunning = true;
+            SetStatus("Updating");
 
 
+            var updater = _container.GetInstance<FbPageUpdater>();
+            await updater.StartUpdate();
 
             _isPageUpdateTaskRunning = false;
+            SetStatus("awaiting next run.");
         }
     }
 }

@@ -1,14 +1,42 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.FbUpdater
 {
     public class FbPageUpdater
     {
-        public Task StartUpdate()
+        private readonly IFacebookService _facebookService;
+        private readonly IUoW _uow;
+
+        public FbPageUpdater(IFacebookService facebookService, IUoW uow)
         {
-            var tsc = new TaskCompletionSource<object>();
-            tsc.SetResult(null);
-            return tsc.Task;
+            _facebookService = facebookService;
+            _uow = uow;
+        }
+
+        public async Task StartUpdate()
+        {
+            // NOTE: don't use this method if the pages grow over 1000
+            var pages = _uow.FacebookPageRepository
+                .GetAll()
+                .Select(p => p.FacebookId)
+                .ToList();
+
+            var counter = 1;
+
+            foreach (var page in pages)
+            {
+                Program.SetStatus(String.Format("Updating...{0} - {1}/{2}", page, counter, pages.Count));
+
+                // not sending them in parallel so facebook won't block us!
+                await _facebookService.UpdatePageEventsAsync(page);
+                _facebookService.UpdatePagePhotos(page);
+                _facebookService.UpdatePageStatuses(page);
+
+                counter++;
+            }
         }
     }
 }
