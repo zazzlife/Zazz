@@ -161,5 +161,16 @@ namespace Zazz.Web.Controllers
                 await _facebookService.UnlinkPageAsync(pageId, userId);
             }
         }
+
+        public async Task SyncPage(string pageId)
+        {
+            using (_uow)
+            using (_facebookService)
+            {
+                await _facebookService.UpdatePageEventsAsync(pageId, 25);
+                _facebookService.UpdatePagePhotos(pageId);
+                _facebookService.UpdatePageStatuses(pageId);
+            }
+        }
     }
 }
