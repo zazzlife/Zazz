@@ -160,13 +160,13 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpGet]
-        public ActionResult Crop(int id)
+        public ActionResult Crop(int id, string @for)
         {
             return View();
         }
 
         [Authorize, HttpPost]
-        public ActionResult Crop(int id, double x, double x2, double y, double y2, double w, double h)
+        public ActionResult Crop(int id, string @for, double x, double x2, double y, double y2, double w, double h)
         {
             return View();
         }

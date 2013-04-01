@@ -2,6 +2,23 @@
     ViewBag.Title = "Crop Image";
 }
 
-<p>
-    <img src="~/Images/cover-image.gif"/>
-</p>
+<div class="container" style="margin-top: 50px;">
+    <input type="hidden" value="10/3"/>
+    <form>
+        <input type="hidden" name="x" id="x"/>
+        <input type="hidden" name="x2" id="x2"/>
+        <input type="hidden" name="y" id="y"/>
+        <input type="hidden" name="y2" id="y2"/>
+        <input type="hidden" name="w" id="w"/>
+        <input type="hidden" name="h" id="h"/>
+
+        <p>
+            <div class="text-center" id="cropImgLoadingMsg">
+                <h3><i class="icon-spin icon-spinner icon-large"></i> Please wait for the image to load.</h3>
+            </div>
+            
+            <img id="cropImg" src="~/Images/cover-image.gif" />
+        </p>
+        <button id="cropBtn" type="submit" class="btn btn-primary btn-large">Crop</button>
+    </form>
+</div>

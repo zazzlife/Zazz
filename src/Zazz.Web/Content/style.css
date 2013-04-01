@@ -5,6 +5,14 @@
     src: local('Alfa Slab One'), local('AlfaSlabOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/alfaslabone/v2/Qx6FPcitRwTC_k88tLPc-fn8qdNnd5eCmWXua5W-n7c.woff) format('woff');
 }
 
+.icon-spin {
+  display: inline-block;
+  -moz-animation: spin 1.3s infinite linear;
+  -o-animation: spin 1.3s infinite linear;
+  -webkit-animation: spin 1.3s infinite linear;
+  animation: spin 1.3s infinite linear;
+}
+
 /***************************************
     Bootstrap overrides
 ***************************************/
@@ -41,6 +49,10 @@ textarea {
     input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
     .uneditable-input, .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
         font-size: 13px;
+    }
+
+    .btn-large {
+        font-size: 18.75px;
     }
 
 input, textarea, select {
