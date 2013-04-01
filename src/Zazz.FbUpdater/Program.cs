@@ -39,6 +39,7 @@ namespace Zazz.FbUpdater
             pageUpdateTimer.Start();
 
             Console.WriteLine("* Type \"stop\" to exit.");
+            Console.WriteLine("* Type \"run\" to force run.");
             Console.Write("\r" + new String('=', Console.WindowWidth) + "\r");
 
             Console.WriteLine();
@@ -50,12 +51,21 @@ namespace Zazz.FbUpdater
             Console.WriteLine();
             Console.WriteLine();
             Console.Write("\r" + new String('=', Console.WindowWidth) + "\r");
-            
-            //RunPageUpdate(null, null);
 
             var input = "";
             while (!input.Equals("stop", StringComparison.InvariantCultureIgnoreCase))
+            {
                 input = Console.ReadLine();
+                if (input.Equals("run", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    RunPageUpdate(null, null);
+                }
+
+                Console.SetCursorPosition(0, 9);
+                Console.Write("\r" + new String(' ', Console.WindowWidth) + "\r");
+                Console.SetCursorPosition(0, 9);
+            }
+                
         }
 
         public static void SetStatus(string message)
@@ -63,10 +73,10 @@ namespace Zazz.FbUpdater
             var currentCursorTop = Console.CursorTop;
             var currentCursorLeft = Console.CursorLeft;
 
-            Console.SetCursorPosition(0, 5);
+            Console.SetCursorPosition(0, 6);
             Console.Write("\r" + new String(' ', Console.WindowWidth));
 
-            Console.SetCursorPosition(0, 5);
+            Console.SetCursorPosition(0, 6);
             Console.Write("{0} - {1}", DateTime.Now.ToShortTimeString(), message);
 
             Console.SetCursorPosition(currentCursorLeft, currentCursorTop);
