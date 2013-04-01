@@ -106,19 +106,19 @@ namespace Zazz.Web.Controllers
             return photo;
         }
 
-        [Authorize]
-        public void Crop(int id, double x, double x2, double y, double y2, double w, double h)
-        {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var cropArea = new Rectangle((int) x, (int) y, (int) w, (int) h);
+        //[Authorize]
+        //public void Crop(int id, double x, double x2, double y, double y2, double w, double h)
+        //{
+        //    using (_photoService)
+        //    using (_albumService)
+        //    using (_userService)
+        //    {
+        //        var userId = _userService.GetUserId(User.Identity.Name);
+        //        var cropArea = new Rectangle((int) x, (int) y, (int) w, (int) h);
 
-                _photoService.CropPhoto(id, userId, cropArea);
-            }
-        }
+        //        _photoService.CropPhoto(id, userId, cropArea);
+        //    }
+        //}
 
         [Authorize]
         public async Task<ActionResult> Feed(int id)
@@ -157,6 +157,18 @@ namespace Zazz.Web.Controllers
 
                 return View("FeedItems/_PicturePostFeedItem", vm);
             }
+        }
+
+        [Authorize, HttpGet]
+        public ActionResult Crop(int id)
+        {
+            return View();
+        }
+
+        [Authorize, HttpPost]
+        public ActionResult Crop(int id, double x, double x2, double y, double y2, double w, double h)
+        {
+            return View();
         }
     }
 }

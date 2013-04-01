@@ -97,7 +97,6 @@ namespace Zazz.Web.Controllers
                     response.Add(autocompleteResponse);
                 }
 
-
                 return new JsonNetResult(response);
             }
         }

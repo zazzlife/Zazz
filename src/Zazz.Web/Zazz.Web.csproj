@@ -447,6 +447,7 @@
     <Content Include="Views\Shared\_UploadPicModal.cshtml" />
     <Content Include="Views\Album\_AlbumThumbnail.cshtml" />
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
+    <Content Include="Views\Photo\Crop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
