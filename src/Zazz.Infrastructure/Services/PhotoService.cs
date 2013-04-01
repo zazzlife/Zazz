@@ -127,6 +127,9 @@ namespace Zazz.Infrastructure.Services
                 return DefaultImageHelper.GetUserDefaultImage(gender);
             }
 
+            if (photo.IsFacebookPhoto)
+                return photo.FacebookPicUrl;
+
             return GeneratePhotoUrl(photo.UploaderId, photo.Id);
         }
 

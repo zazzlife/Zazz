@@ -7,5 +7,9 @@
         public int UploaderId { get; set; }
 
         public int AlbumId { get; set; }
+
+        public bool IsFacebookPhoto { get; set; }
+
+        public string FacebookPicUrl { get; set; }
     }
 }

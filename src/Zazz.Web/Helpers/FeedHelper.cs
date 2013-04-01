@@ -134,11 +134,14 @@ namespace Zazz.Web.Helpers
                 {
                     var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
                     feedVm.PhotoViewModel = new PhotoViewModel
-                                            {
-                                                PhotoUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id),
+                                            {   
                                                 PhotoId = photo.Id,
                                                 PhotoDescription = photo.Description
                                             };
+
+                    feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto 
+                        ? photo.FacebookLink 
+                        : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
                     feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, currentUserId);
