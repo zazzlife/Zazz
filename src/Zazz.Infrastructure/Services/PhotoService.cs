@@ -134,9 +134,8 @@ namespace Zazz.Infrastructure.Services
         }
 
         //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
-        public void CropPhoto(int photoId, int currentUserId, Rectangle cropArea)
+        public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
         {
-            var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
             if (photo.UploaderId != currentUserId)
                 throw new SecurityException();
 

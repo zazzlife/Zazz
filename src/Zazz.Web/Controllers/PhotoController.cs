@@ -106,20 +106,6 @@ namespace Zazz.Web.Controllers
             return photo;
         }
 
-        //[Authorize]
-        //public void Crop(int id, double x, double x2, double y, double y2, double w, double h)
-        //{
-        //    using (_photoService)
-        //    using (_albumService)
-        //    using (_userService)
-        //    {
-        //        var userId = _userService.GetUserId(User.Identity.Name);
-        //        var cropArea = new Rectangle((int) x, (int) y, (int) w, (int) h);
-
-        //        _photoService.CropPhoto(id, userId, cropArea);
-        //    }
-        //}
-
         [Authorize]
         public async Task<ActionResult> Feed(int id)
         {
@@ -188,9 +174,32 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public ActionResult Crop(int id, string @for, CropViewModel vm)
+        public async Task<ActionResult> Crop(int id, string @for, CropViewModel vm)
         {
-            return View();
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var cropArea = new Rectangle((int)vm.X, (int)vm.Y, (int)vm.W, (int)vm.H);
+                var photo = await _photoService.GetPhotoAsync(id);
+
+                if (photo.IsFacebookPhoto)
+                {
+                    vm.IsFacebookPhoto = true;
+                    return View(vm);
+                }
+
+                var userId = _userService.GetUserId(User.Identity.Name);
+                if (photo.UploaderId != userId)
+                    throw new HttpException(401, "You are not authorized to crop this image.");
+
+                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
+                vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
+                               ? 10 / 3 : 1;
+
+                _photoService.CropPhoto(photo, userId, cropArea);
+                return View(vm);
+            }
         }
     }
 }

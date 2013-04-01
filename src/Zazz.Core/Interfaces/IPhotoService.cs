@@ -24,6 +24,6 @@ namespace Zazz.Core.Interfaces
 
         string GetUserImageUrl(int userId);
 
-        void CropPhoto(int photoId, int currentUserId, Rectangle cropArea);
+        void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea);
     }
 }
