@@ -9,15 +9,25 @@
         @foreach (var p in Model)
         {
             <tr>
-                <td style="padding-top: 12px; width: 80%;"><strong>@p.Name</strong></td>
-                <td>
+                <td style="padding-top: 12px; width: 58%;"><strong>@p.Name</strong></td>
+                <td style="text-align: right;">
                     @if (p.IsLinked)
                     {
-                        <button id="unlinkPageBtn" data-id="@p.Id" class="btn btn-danger">Unlink</button>
+                        <button style="width: 85px;" data-id="@p.Id" class="btn btn-danger unlinkPageBtn">Unlink</button>
                     }
                     else
                     {
-                        <button id="linkPageBtn" data-id="@p.Id" class="btn btn-success">Link</button>
+                        <button style="width: 85px;" data-id="@p.Id" class="btn btn-success linkPageBtn">Link</button>
+                    }
+                </td>
+                <td style="text-align: right;">
+                    @if (p.IsLinked)
+                    {
+                        <button style="width: 110px;" data-id="@p.Id" class="btn btn-info syncPageBtn">Sync Page</button>
+                    }
+                    else
+                    {
+                        <button style="width: 110px;" data-id="@p.Id" class="btn btn-info syncPageBtn disabled">Sync Page</button>
                     }
                 </td>
             </tr>

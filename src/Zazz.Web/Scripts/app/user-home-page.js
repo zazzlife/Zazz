@@ -19,7 +19,7 @@
 
 });
 
-$(document).on('click', '#linkPageBtn', function () {
+$(document).on('click', '.linkPageBtn', function () {
 
     var self = $(this);
     var url = '/facebook/linkpage';
@@ -39,13 +39,15 @@ $(document).on('click', '#linkPageBtn', function () {
         success: function() {
             toastr.success("This page has been successfully linked!");
             var parent = self.parent();
-            parent.html('<button id="unlinkPageBtn" data-id="' + pageId + '" class="btn btn-danger">Unlink</button>');
+            parent.html('<button style="width: 85px;" data-id="' + pageId + '" class="btn btn-danger unlinkPageBtn">Unlink</button>');
+            var syncBtn = parent.next().children('button');
+            syncBtn.removeClass('disabled');
         }
     });
 
 });
 
-$(document).on('click', '#unlinkPageBtn', function () {
+$(document).on('click', '.unlinkPageBtn', function () {
 
     var self = $(this);
     var url = '/facebook/unlinkpage';
@@ -65,7 +67,9 @@ $(document).on('click', '#unlinkPageBtn', function () {
         success: function () {
             toastr.success("This page has been successfully Unlinked!");
             var parent = self.parent();
-            parent.html('<button id="linkPageBtn" data-id="' + pageId + '" class="btn btn-success">Link</button>');
+            parent.html('<button style="width: 85px;" data-id="' + pageId + '" class="btn btn-success linkPageBtn">Link</button>');
+            var syncBtn = parent.next().children('button');
+            syncBtn.addClass('disabled');
         }
     });
 
