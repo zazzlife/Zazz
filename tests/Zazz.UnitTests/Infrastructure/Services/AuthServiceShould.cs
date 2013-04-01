@@ -770,7 +770,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #endregion
 
-        #region Get OAuth User
+        #region Get/Link OAuth User
 
         [Test]
         public async Task CheckForOAuthAccountFirstAndNotLookForEmailIfExists_OnGetOAuthUserAsync()
@@ -867,6 +867,52 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
             _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void NotAddNewOAuthAccountIfItExists_OnAddOAuthAccount()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(new OAuthAccount());
+
+            //Act
+            _sut.AddOAuthAccount(oauthAccount);
+
+            //Assert
+
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider),
+                            Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(It.IsAny<OAuthAccount>()), Times.Never());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void AddNewOAuthAccountIfItNotExists_OnAddOAuthAccount()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(() => null);
+
+            //Act
+            _sut.AddOAuthAccount(oauthAccount);
+
+            //Assert
+
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider),
+                            Times.Once());
+            _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         #endregion

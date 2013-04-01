@@ -24,12 +24,14 @@ namespace Zazz.Web.Controllers
         private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
+        private readonly IUserService _userService;
 
-        public AccountController(IStaticDataRepository staticData, IAuthService authService, ICryptoService cryptoService)
+        public AccountController(IStaticDataRepository staticData, IAuthService authService, ICryptoService cryptoService, IUserService userService)
         {
             _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
+            _userService = userService;
         }
 
         public ActionResult Index()
@@ -286,7 +288,7 @@ namespace Zazz.Web.Controllers
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
-            var oauthAccount = new Zazz.Core.Models.Data.OAuthAccount
+            var oauthAccount = new OAuthAccount
                                    {
                                        AccessToken = accessToken,
                                        OAuthVersion = oauthVersion,
@@ -295,25 +297,37 @@ namespace Zazz.Web.Controllers
                                    };
 
             var user = await _authService.GetOAuthUserAsync(oauthAccount, email);
-            if (user != null)
+
+            if (User.Identity.IsAuthenticated)
             {
-                //user exists
-                FormsAuthentication.SetAuthCookie(user.Username, true);
+                // the user is already signed in but oauth email is different
+                var userId = _userService.GetUserId(User.Identity.Name);
+                oauthAccount.UserId = userId;
+
+                _authService.AddOAuthAccount(oauthAccount);
             }
             else
             {
-                var oauthData = new OAuthLoginResponse
-                                    {
-                                        AccessToken = accessToken,
-                                        Email = email,
-                                        Name = name,
-                                        Provider = provider,
-                                        ProviderUserId = long.Parse(providerId),
-                                        OAuthVersion = oauthVersion
-                                    };
+                if (user != null)
+                {
+                    //user exists
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+                }
+                else
+                {
+                    var oauthData = new OAuthLoginResponse
+                    {
+                        AccessToken = accessToken,
+                        Email = email,
+                        Name = name,
+                        Provider = provider,
+                        ProviderUserId = long.Parse(providerId),
+                        OAuthVersion = oauthVersion
+                    };
 
-                TempData["oauthData"] = oauthData;
-                return RedirectToAction("OAuthRegister");
+                    TempData["oauthData"] = oauthData;
+                    return RedirectToAction("OAuthRegister");
+                }
             }
 
             return RedirectToAction("Index", "Home");

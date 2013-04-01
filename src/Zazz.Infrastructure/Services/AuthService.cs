@@ -152,6 +152,18 @@ namespace Zazz.Infrastructure.Services
             return null;
         }
 
+        public void AddOAuthAccount(OAuthAccount oauthAccount)
+        {
+            var check = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oauthAccount.ProviderUserId,
+                                                                                oauthAccount.Provider);
+
+            if (check == null)
+            {
+                _uow.OAuthAccountRepository.InsertGraph(oauthAccount);
+                _uow.SaveChanges();
+            }
+        }
+
         public void Dispose()
         {
             _uow.Dispose();
