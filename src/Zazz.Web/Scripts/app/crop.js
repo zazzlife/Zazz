@@ -26,4 +26,6 @@
         }
     });
 
+    $('#cropBtn').removeClass('disabled');
+    $('#cropImgLoadingMsg').fadeOut();
 });

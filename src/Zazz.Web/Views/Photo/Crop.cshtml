@@ -3,7 +3,7 @@
     ViewBag.Title = "Crop Image";
 }
 
-<div class="container" style="margin-top: 50px;">
+<div class="container text-center" style="margin-top: 50px;">
 
     @if (Model.IsFacebookPhoto)
     {
@@ -28,9 +28,9 @@
                     <h3><i class="icon-spin icon-spinner icon-large"></i> Please wait for the image to load.</h3>
                 </div>
 
-                <img id="cropImg" src="~/Images/cover-image.gif" />
+                <img id="cropImg" src="@Model.PhotoUrl" />
             </p>
-            <button id="cropBtn" type="submit" class="btn btn-primary btn-large">Crop</button>
+            <button id="cropBtn" type="submit" class="btn btn-primary btn-large disabled">Crop</button>
         </form>
     }
 
