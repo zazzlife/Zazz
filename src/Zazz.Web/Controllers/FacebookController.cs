@@ -158,7 +158,7 @@ namespace Zazz.Web.Controllers
             using (_facebookService)
             {
                 var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
-                _facebookService.UnlinkPageAsync(pageId, userId);
+                await _facebookService.UnlinkPageAsync(pageId, userId);
             }
         }
     }
