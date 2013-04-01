@@ -72,5 +72,29 @@ $(document).on('click', '.unlinkPageBtn', function () {
             syncBtn.addClass('disabled');
         }
     });
+});
+
+$(document).on('click', '.syncPageBtn', function () {
+
+    var self = $(this);
+    var url = '/facebook/syncpage';
+    var pageId = self.data('id');
+    
+    var text = showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        data: {
+            pageId: pageId
+        },
+        error: function() {
+            toastr.error('An error occured, please try again later.');
+            hideBtnBusy(self, text);
+        },
+        success: function() {
+            toastr.success('Sync has been successful, please refresh the page to see the changes.');
+            hideBtnBusy(self, text);
+        }
+    });
 
 });
