@@ -50,23 +50,7 @@ namespace Zazz.Web.Controllers
                 var user = await _uow.UserRepository.GetByIdAsync(id);
                 
                 // Profile Photo
-                string profilePhotoUrl;
-                if (user.UserDetail.ProfilePhotoId == 0)
-                {
-                    profilePhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
-                }
-                else
-                {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.ProfilePhotoId);
-                    if (photo == null)
-                    {
-                        profilePhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
-                    }
-                    else
-                    {
-                        profilePhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
-                    }
-                }
+                var profilePhotoUrl = _photoService.GetUserImageUrl(id);
 
                 // Cover Photo
                 string coverPhotoUrl;
@@ -83,7 +67,14 @@ namespace Zazz.Web.Controllers
                     }
                     else
                     {
-                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
+                        if (photo.IsFacebookPhoto)
+                        {
+                            coverPhotoUrl = photo.FacebookPicUrl;
+                        }
+                        else
+                        {
+                            coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
+                        }
                     }
                 }
 
