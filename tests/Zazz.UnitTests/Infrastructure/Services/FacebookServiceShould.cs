@@ -627,6 +627,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var page = new FacebookPage
             {
+                Id = 333,
                 AccessToken = "token",
                 FacebookId = "1234",
                 UserId = 123
@@ -661,6 +662,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             await _sut.UpdatePageEventsAsync(page.FacebookId, limit);
 
             //Assert
+            Assert.AreEqual(page.Id, zazzEvent.PageId);
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit),

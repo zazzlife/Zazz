@@ -99,6 +99,7 @@ namespace Zazz.Infrastructure.Services
             {
                 var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
                 var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent);
+                convertedEvent.PageId = page.Id;
 
                 if (dbEvent != null)
                 {
@@ -157,7 +158,8 @@ namespace Zazz.Infrastructure.Services
                                    FacebookId = s.Id,
                                    Message = s.Message,
                                    UserId = page.UserId,
-                                   CreatedTime = s.Time.UnixTimestampToDateTime()
+                                   CreatedTime = s.Time.UnixTimestampToDateTime(),
+                                   PageId = page.Id
                                };
 
                     _postService.NewPostAsync(post);
@@ -195,7 +197,8 @@ namespace Zazz.Infrastructure.Services
                                     FacebookId = fbPhoto.AlbumId,
                                     IsFacebookAlbum = true,
                                     Name = _facebookHelper.GetAlbumName(fbPhoto.AlbumId, page.AccessToken),
-                                    UserId = page.UserId
+                                    UserId = page.UserId,
+                                    PageId = page.Id
                                 };
 
                         _uow.AlbumRepository.InsertGraph(album);
@@ -210,7 +213,8 @@ namespace Zazz.Infrastructure.Services
                                     FacebookLink = fbPhoto.Source,
                                     IsFacebookPhoto = true,
                                     UploadDate = fbPhoto.CreatedTime.UnixTimestampToDateTime(),
-                                    UploaderId = page.UserId
+                                    UploaderId = page.UserId,
+                                    PageId = page.Id
                                 };
 
                     _photoService.SavePhotoAsync(photo, Stream.Null, true);
