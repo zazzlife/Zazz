@@ -14,7 +14,7 @@ namespace Zazz.Core.Interfaces
 
         Task UpdateUserEventsAsync(long fbUserId, int limit = 5);
 
-        Task UpdatePageEventsAsync(string pageId);
+        Task UpdatePageEventsAsync(string pageId, int limit = 10);
 
         void UpdatePageStatuses(string pageId);
 

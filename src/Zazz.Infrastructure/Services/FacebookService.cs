@@ -85,7 +85,7 @@ namespace Zazz.Infrastructure.Services
         //{
         //}
 
-        public async Task UpdatePageEventsAsync(string pageId)
+        public async Task UpdatePageEventsAsync(string pageId, int limit = 10)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -94,7 +94,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbEventsSynced(page.UserId))
                 return;
 
-            var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken);
+            var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken, limit);
             foreach (var fbEvent in fbEvents)
             {
                 var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);

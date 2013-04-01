@@ -642,11 +642,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FacebookEventId = fbEvent.Id
             };
 
+            var limit = 15;
+
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit))
                      .Returns(new List<FbEvent> { fbEvent });
             _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent.Id))
                 .Returns(() => null);
@@ -656,12 +658,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(() => Task.Run(() => { }));
 
             //Act
-            await _sut.UpdatePageEventsAsync(page.FacebookId);
+            await _sut.UpdatePageEventsAsync(page.FacebookId, limit);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, It.IsAny<int>()),
+            _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit),
                              Times.Once());
             _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
