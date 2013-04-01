@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using NUnit.Framework;
+using Zazz.Core.Models.Data;
 using Zazz.Data;
 using Zazz.Data.Repositories;
 
@@ -36,6 +39,74 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(post.Id, result.Id);
+        }
+
+        [Test]
+        public void ReturnCorrectRecords_OnGetPagePostIds()
+        {
+            //Arrange
+            var user1 = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user1);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var page = new FacebookPage
+            {
+                AccessToken = "asdf",
+                FacebookId = "1234",
+                Name = "name",
+                UserId = user1.Id
+            };
+
+            _context.FacebookPages.Add(page);
+            _context.SaveChanges();
+
+            var p1 = new Post
+                     {
+                         CreatedTime = DateTime.UtcNow,
+                         Message = "Dsadsad",
+                         PageId = page.Id,
+                         UserId = user1.Id
+                     };
+
+            var p2 = new Post
+            {
+                CreatedTime = DateTime.UtcNow,
+                Message = "Dsadsad",
+                PageId = page.Id,
+                UserId = user1.Id
+            };
+
+            var p3 = new Post
+            {
+                CreatedTime = DateTime.UtcNow,
+                Message = "Dsadsad",
+                UserId = user1.Id
+            };
+
+            var p4 = new Post
+            {
+                CreatedTime = DateTime.UtcNow,
+                Message = "Dsadsad",
+                UserId = user2.Id
+            };
+
+
+            _context.Posts.Add(p1);
+            _context.Posts.Add(p2);
+            _context.Posts.Add(p3);
+            _context.Posts.Add(p4);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetPagePostIds(page.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+
+            CollectionAssert.Contains(result, p1.Id);
+            CollectionAssert.Contains(result, p2.Id);
         }
 
 

@@ -118,8 +118,10 @@ namespace Zazz.IntegrationTests.Repositories
         public void ReturnCorrectAlbumIds_OnGetPageAlbumIds()
         {
             //Arrange
-            var user = Mother.GetUser();
-            _dbContext.Users.Add(user);
+            var user1 = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            _dbContext.Users.Add(user1);
+            _dbContext.Users.Add(user2);
             _dbContext.SaveChanges();
 
             var page = new FacebookPage
@@ -127,7 +129,7 @@ namespace Zazz.IntegrationTests.Repositories
                            AccessToken = "asdf",
                            FacebookId = "1234",
                            Name = "name",
-                           UserId = user.Id
+                           UserId = user1.Id
                        };
 
             _dbContext.FacebookPages.Add(page);
@@ -135,20 +137,34 @@ namespace Zazz.IntegrationTests.Repositories
 
             var album1 = new Album
             {
-                UserId = user.Id,
+                UserId = user1.Id,
                 Name = "Dsadas",
                 PageId = page.Id
             };
 
             var album2 = new Album
             {
-                UserId = user.Id,
+                UserId = user1.Id,
                 Name = "Dsadasb",
                 PageId = page.Id
             };
 
+            var album3 = new Album
+            {
+                UserId = user1.Id,
+                Name = "Dsadas",
+            };
+
+            var album4 = new Album
+            {
+                UserId = user2.Id,
+                Name = "Dsadasb",
+            };
+
             _dbContext.Albums.Add(album1);
             _dbContext.Albums.Add(album2);
+            _dbContext.Albums.Add(album3);
+            _dbContext.Albums.Add(album4);
             _dbContext.SaveChanges();
 
             //Act

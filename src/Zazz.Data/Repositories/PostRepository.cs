@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Zazz.Core.Interfaces;
@@ -19,6 +20,12 @@ namespace Zazz.Data.Repositories
         public Post GetByFbId(long fbPostId)
         {
             return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbPostId));
+        }
+
+        public IEnumerable<int> GetPagePostIds(int pageId)
+        {
+            return DbSet.Where(p => p.PageId == pageId)
+                        .Select(p => p.Id);
         }
     }
 }
