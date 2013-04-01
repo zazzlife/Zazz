@@ -24,6 +24,11 @@ namespace Zazz.Core.Models.Data
         [MaxLength(4000)]
         public string FacebookId { get; set; }
 
+        [ForeignKey("PageId")]
+        public FacebookPage Page { get; set; }
+
+        public int? PageId { get; set; }
+
         public virtual ICollection<Photo> Photos { get; set; }
     }
 }

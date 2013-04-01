@@ -54,5 +54,10 @@ namespace Zazz.Core.Models.Data
 
         [DataType(DataType.Currency)]
         public float? Price { get; set; }
+
+        [ForeignKey("PageId")]
+        public FacebookPage Page { get; set; }
+
+        public int? PageId { get; set; }
     }
 }

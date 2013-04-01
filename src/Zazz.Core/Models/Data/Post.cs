@@ -14,6 +14,11 @@ namespace Zazz.Core.Models.Data
         public string Message { get; set; }
 
         public long FacebookId { get; set; }
+        
+        [ForeignKey("PageId")]
+        public FacebookPage Page { get; set; }
+
+        public int? PageId { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }

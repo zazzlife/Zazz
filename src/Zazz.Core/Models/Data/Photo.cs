@@ -35,6 +35,11 @@ namespace Zazz.Core.Models.Data
 
         public DateTime UploadDate { get; set; }
 
+        [ForeignKey("PageId")]
+        public FacebookPage Page { get; set; }
+
+        public int? PageId { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
     }
 }
