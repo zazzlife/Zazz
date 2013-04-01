@@ -67,8 +67,7 @@ namespace Zazz.Web.Controllers
                                                  id = u.Id,
                                                  username = u.Username,
                                                  fullname = u.UserDetail.FullName,
-                                                 gender = u.UserDetail.Gender,
-                                                 picId = u.UserDetail.ProfilePhotoId
+                                                 clubname = u.ClubDetail.ClubName
                                              })
                                 .Take(5);
 
@@ -76,16 +75,26 @@ namespace Zazz.Web.Controllers
 
                 foreach (var u in users)
                 {
-                    response.Add(new AutocompleteResponse
-                                 {
-                                     Id = u.id,
-                                     Value = !String.IsNullOrEmpty(u.fullname)
-                                                 ? u.fullname
-                                                 : u.username,
-                                     Img = u.picId == 0
-                                               ? DefaultImageHelper.GetUserDefaultImage(u.gender)
-                                               : _photoService.GeneratePhotoUrl(u.id, u.picId)
-                                 });
+                    var autocompleteResponse = new AutocompleteResponse
+                              {
+                                  Id = u.id,
+                                  Img = _photoService.GetUserImageUrl(u.id)
+                              };
+
+                    if (u.clubname.Contains(q))
+                    {
+                        autocompleteResponse.Value = u.clubname;
+                    }
+                    else if (u.fullname.Contains(q))
+                    {
+                        autocompleteResponse.Value = u.fullname;
+                    }
+                    else
+                    {
+                        autocompleteResponse.Value = u.username;
+                    }
+
+                    response.Add(autocompleteResponse);
                 }
 
 
