@@ -1,4 +1,5 @@
-﻿@model FeedViewModel
+﻿@using Zazz.Infrastructure
+@model FeedViewModel
 @{
     Layout = null;
 }
@@ -23,7 +24,8 @@
         <p class="post-feed-message">
             @Model.PostViewModel.PostText
         </p>
-
+        
+        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 
         @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
