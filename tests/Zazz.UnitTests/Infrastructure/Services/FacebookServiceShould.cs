@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Facebook;
@@ -25,6 +26,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IEventService> _eventService;
         private Mock<IPhotoService> _photoService;
         private Mock<IPostService> _postService;
+        private Mock<IAlbumService> _albumService;
 
         [SetUp]
         public void Init()
@@ -34,10 +36,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _eventService = new Mock<IEventService>();
             _postService = new Mock<IPostService>();
             _photoService = new Mock<IPhotoService>();
+            _albumService = new Mock<IAlbumService>();
+
             _uow = new Mock<IUoW>();
             _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object,
-                                       _postService.Object,
-                                       _photoService.Object);
+                                       _postService.Object, _photoService.Object, _albumService.Object);
 
             _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
             _uow.Setup(x => x.SaveChanges());
@@ -416,7 +419,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ThrowIfCurrentUserIsNotTheOwner_OnUnlinkPage()
+        public async Task ThrowIfCurrentUserIsNotTheOwner_OnUnlinkPage()
         {
             //Arrange
             var page = new FacebookPage
@@ -431,7 +434,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                _sut.UnlinkPage(page.FacebookId, 1);
+                await _sut.UnlinkPageAsync(page.FacebookId, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -442,28 +445,73 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.Remove(It.IsAny<FacebookPage>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
+
+            _uow.Verify(x => x.AlbumRepository.GetPageAlbumIds(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PostRepository.GetPagePostIds(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.EventRepository.GetPageEventIds(It.IsAny<int>()), Times.Never());
+
+            _albumService.Verify(x => x.DeleteAlbumAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _postService.Verify(x => x.RemovePostAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _eventService.Verify(x => x.DeleteEventAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
 
         [Test]
-        public void RemovePageFromDb_OnUnlinkPage()
+        public async Task RemovePageAndAllOfItsAlbumsAndPostsAndEventsFromDb_OnUnlinkPage()
         {
             //Arrange
             var page = new FacebookPage
             {
+                Id = 23,
                 FacebookId = "123456",
                 UserId = 123
             };
 
+            var albumIds = new List<int> { 1, 2 };
+            var postIds = new List<int> { 3, 4, 5 };
+            var eventIds = new List<int> { 6, 7, 8, 9 };
+
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
+            _uow.Setup(x => x.AlbumRepository.GetPageAlbumIds(page.Id))
+                .Returns(albumIds);
+            _uow.Setup(x => x.PostRepository.GetPagePostIds(page.Id))
+                .Returns(postIds);
+            _uow.Setup(x => x.EventRepository.GetPageEventIds(page.Id))
+                .Returns(eventIds);
+
+
+            _albumService.Setup(x => x.DeleteAlbumAsync(
+                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId))
+                         .Returns(() => Task.Run(() => { }));
+            _postService.Setup(x => x.RemovePostAsync(
+                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId))
+                .Returns(() => Task.Run(() => { }));
+            _eventService.Setup(x => x.DeleteEventAsync(
+                It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId))
+                .Returns(() => Task.Run(() => { }));
+
 
             //Act
-            _sut.UnlinkPage(page.FacebookId, page.UserId);
+            await _sut.UnlinkPageAsync(page.FacebookId, page.UserId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
             _uow.Verify(x => x.FacebookPageRepository.Remove(page), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+
+            _uow.Verify(x => x.AlbumRepository.GetPageAlbumIds(page.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetPagePostIds(page.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetPageEventIds(page.Id), Times.Once());
+
+            _albumService.Verify(x => x.DeleteAlbumAsync(
+                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId),
+                                 Times.Exactly(albumIds.Count));
+            _postService.Verify(x => x.RemovePostAsync(
+                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId),
+                                Times.Exactly(postIds.Count));
+            _eventService.Verify(x => x.DeleteEventAsync(
+                It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId),
+                                 Times.Exactly(eventIds.Count));
         }
 
         [Test]

@@ -21,9 +21,11 @@ namespace Zazz.Infrastructure.Services
         private readonly IEventService _eventService;
         private readonly IPostService _postService;
         private readonly IPhotoService _photoService;
+        private readonly IAlbumService _albumService;
 
         public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow,
-                               IEventService eventService, IPostService postService, IPhotoService photoService)
+                               IEventService eventService, IPostService postService, IPhotoService photoService,
+                               IAlbumService albumService)
         {
             _facebookHelper = facebookHelper;
             _errorHandler = errorHandler;
@@ -31,6 +33,7 @@ namespace Zazz.Infrastructure.Services
             _eventService = eventService;
             _postService = postService;
             _photoService = photoService;
+            _albumService = albumService;
         }
 
         public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
@@ -245,7 +248,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UnlinkPage(string fbPageId, int currentUserId)
+        public async Task UnlinkPageAsync(string fbPageId, int currentUserId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
             if (page == null)
@@ -253,6 +256,19 @@ namespace Zazz.Infrastructure.Services
 
             if (page.UserId != currentUserId)
                 throw new SecurityException();
+
+            var pageAlbums = _uow.AlbumRepository.GetPageAlbumIds(page.Id).ToList();
+            var pagePosts = _uow.PostRepository.GetPagePostIds(page.Id).ToList();
+            var pageEvents = _uow.EventRepository.GetPageEventIds(page.Id).ToList();
+
+            foreach (var a in pageAlbums)
+                await _albumService.DeleteAlbumAsync(a, currentUserId);
+
+            foreach (var p in pagePosts)
+                await _postService.RemovePostAsync(p, currentUserId);
+
+            foreach (var e in pageEvents)
+                await _eventService.DeleteEventAsync(e, currentUserId);
 
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();

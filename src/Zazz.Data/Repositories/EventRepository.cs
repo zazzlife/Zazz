@@ -56,7 +56,7 @@ namespace Zazz.Data.Repositories
             }
         }
 
-        public IEnumerable<int> GetEventIdsByPageId(int pageId)
+        public IEnumerable<int> GetPageEventIds(int pageId)
         {
             return DbSet.Where(e => e.PageId == pageId)
                         .Select(e => e.Id);

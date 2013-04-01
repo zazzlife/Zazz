@@ -16,6 +16,6 @@ namespace Zazz.Core.Interfaces
 
         void ResetPhotoId(int photoId);
 
-        IEnumerable<int> GetEventIdsByPageId(int pageId);
+        IEnumerable<int> GetPageEventIds(int pageId);
     }
 }

@@ -24,6 +24,6 @@ namespace Zazz.Core.Interfaces
 
         void LinkPage(FacebookPage fbPage);
 
-        void UnlinkPage(string fbPageId, int currentUserId);
+        Task UnlinkPageAsync(string fbPageId, int currentUserId);
     }
 }
