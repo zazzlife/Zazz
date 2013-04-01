@@ -68,10 +68,25 @@ namespace Zazz.Web.Controllers
                                           PhotoDescription = album.Name,
                                           IsFromCurrentUser = isOwner
                                       };
-                    var firstAlbumImageId = album.Photos.Select(p => p.Id).FirstOrDefault();
-                    albumVm.PhotoUrl = firstAlbumImageId == 0
-                        ? DefaultImageHelper.GetDefaultAlbumImage()
-                        : _photoService.GeneratePhotoUrl(id, firstAlbumImageId);
+                    var firstAlbumImage = album.Photos.FirstOrDefault();
+
+                    if (firstAlbumImage == null)
+                    {
+                        albumVm.PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage();
+                    }
+                    else
+                    {
+                        if (firstAlbumImage.IsFacebookPhoto)
+                        {
+                            albumVm.PhotoUrl = firstAlbumImage.FacebookLink;
+                        }
+                        else
+                        {
+                            albumVm.PhotoUrl = _photoService.GeneratePhotoUrl(firstAlbumImage.UploaderId,
+                                                                              firstAlbumImage.Id);
+                        }
+
+                    }
 
                     albumsVM.Add(albumVm);
                 }
