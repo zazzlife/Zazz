@@ -37,13 +37,13 @@ namespace Zazz.Infrastructure.Services
         {
             var tasks = new List<Task>();
             foreach (var entry in changes.Entries.Where(c => c.ChangedFields.Contains("events")))
-                tasks.Add(UpdateUserEventsAsync(entry.UserId));
+                tasks.Add(UpdateUserEventsAsync(entry.UserId, 5));
 
             await Task.WhenAll(tasks);
             _uow.SaveChanges();
         }
 
-        public async Task UpdateUserEventsAsync(long fbUserId)
+        public async Task UpdateUserEventsAsync(long fbUserId, int limit = 5)
         {
             //getting user account
             var oauthAccount = _uow.OAuthAccountRepository
@@ -57,7 +57,7 @@ namespace Zazz.Infrastructure.Services
                 return;
 
             // getting last 10 events from fb
-            var events = _facebookHelper.GetEvents(fbUserId, oauthAccount.AccessToken);
+            var events = _facebookHelper.GetEvents(fbUserId, oauthAccount.AccessToken, limit);
             foreach (var fbEvent in events)
             {
                 //getting the current event that we have in db

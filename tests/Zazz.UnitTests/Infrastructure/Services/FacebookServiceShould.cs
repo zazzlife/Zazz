@@ -475,7 +475,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            await _sut.UpdateUserEventsAsync(fbUserId);
+            await _sut.UpdateUserEventsAsync(fbUserId, 5);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook),
@@ -503,7 +503,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId);
+            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId, 5);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository
@@ -536,12 +536,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                 FacebookEventId = fbEvent.Id
                             };
 
+            var limit = 12;
+
             _uow.Setup(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook))
                 .Returns(() => oauthAccount);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetEvents(oauthAccount.ProviderUserId, oauthAccount.AccessToken, It.IsAny<int>()))
+            _fbHelper.Setup(x => x.GetEvents(oauthAccount.ProviderUserId, oauthAccount.AccessToken, limit))
                      .Returns(new List<FbEvent> { fbEvent });
             _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent.Id))
                 .Returns(() => null);
@@ -551,7 +553,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(() => Task.Run(() => { }));
 
             //Act
-            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId);
+            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId, limit);
 
             //Assert
             Assert.AreEqual(oauthAccount.UserId, zazzEvent.UserId);
@@ -560,7 +562,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Times.Once());
 
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetEvents(oauthAccount.ProviderUserId, oauthAccount.AccessToken, It.IsAny<int>()),
+            _fbHelper.Verify(x => x.GetEvents(oauthAccount.ProviderUserId, oauthAccount.AccessToken, limit),
                              Times.Once());
             _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
         }
