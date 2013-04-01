@@ -36,10 +36,28 @@ namespace Zazz.Data.Repositories
             return Task.Run(() => DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault());
         }
 
-        public IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to)
+        public IQueryable<ZazzEvent> GetEventRange(DateTime @from, DateTime to, DateTime? from2, DateTime? to2)
         {
-            return DbSet.Where(p => EntityFunctions.TruncateTime(p.TimeUtc) >= from)
-                        .Where(p => EntityFunctions.TruncateTime(p.TimeUtc) <= to);
+
+            var query = DbSet.AsQueryable();
+            
+
+            if (!from2.HasValue && to2.HasValue)
+            {
+                query = DbSet.Where(p => EntityFunctions.TruncateTime(p.TimeUtc) >= from)
+                             .Where(p => EntityFunctions.TruncateTime(p.TimeUtc) <= to);
+            }
+            else
+            {
+                query = query.Where(p =>
+                                    (EntityFunctions.TruncateTime(p.TimeUtc) >= from &&
+                                     EntityFunctions.TruncateTime(p.TimeUtc) <= to) ||
+                                    (EntityFunctions.TruncateTime(p.TimeUtc) >= from2 &&
+                                     EntityFunctions.TruncateTime(p.TimeUtc) <= to2));
+            }
+            
+
+            return query;
         }
 
         public ZazzEvent GetByFacebookId(long fbEventId)

@@ -46,35 +46,47 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        private IPagedList<EventViewModel> GetWeekEvents(int page = 1)
+        private void GetThisWeek(out DateTime firstDayOfWeek, out DateTime lastDayOfWeek)
         {
             var today = DateTime.UtcNow;
 
             var delta = DayOfWeek.Sunday - today.DayOfWeek;
-            var firstDayOfWeek = today.AddDays(delta).Date;
+            firstDayOfWeek = today.AddDays(delta).Date;
 
             delta = DayOfWeek.Saturday - today.DayOfWeek;
-            var lastDayOfWeek = today.AddDays(delta).Date;
+            lastDayOfWeek = today.AddDays(delta).Date;
+        }
 
-            return GetEvents(firstDayOfWeek, lastDayOfWeek, page);
+        private IPagedList<EventViewModel> GetWeekEvents(int page = 1)
+        {
+            DateTime firstDayOfWeek;
+            DateTime lastDayOfWeek;
+            GetThisWeek(out firstDayOfWeek, out lastDayOfWeek);
+
+            return GetEvents(firstDayOfWeek, lastDayOfWeek, null, null, page);
         }
 
         private IPagedList<EventViewModel> GetMonthEvents(int page = 1)
         {
+            DateTime firstDayOfWeek;
+            DateTime lastDayOfWeek;
+            GetThisWeek(out firstDayOfWeek, out lastDayOfWeek);
+
             var today = DateTime.UtcNow;
             var daysInMonth = DateTime.DaysInMonth(today.Year, today.Month);
 
             var firstDayOfMonth = new DateTime(today.Year, today.Month, 1).Date;
             var lastDayOfMonth = new DateTime(today.Year, today.Month, daysInMonth).Date;
+            
 
-            return GetEvents(firstDayOfMonth, lastDayOfMonth, page);
+            return GetEvents(firstDayOfMonth, firstDayOfWeek, lastDayOfWeek, lastDayOfMonth, page);
         }
 
-        private IPagedList<EventViewModel> GetEvents(DateTime from, DateTime to, int page)
+        private IPagedList<EventViewModel> GetEvents(DateTime from, DateTime to, DateTime? from2, DateTime? to2, int page)
         {
             var skip = (page - 1) * PAGE_SIZE;
 
-            var events = _uow.EventRepository.GetEventRange(from, to)
+            var events = _uow.EventRepository.GetEventRange(from, to, from2, to2)
                              .OrderBy(e => e.TimeUtc)
                              .Skip(skip)
                              .Take(PAGE_SIZE)
@@ -111,7 +123,7 @@ namespace Zazz.Web.Controllers
                 e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
             }
 
-            var eventsCount = _uow.EventRepository.GetEventRange(from, to).Count();
+            var eventsCount = _uow.EventRepository.GetEventRange(from, to, from2, to2).Count();
 
             return new StaticPagedList<EventViewModel>(events, page, PAGE_SIZE, eventsCount);
         }

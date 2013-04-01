@@ -10,7 +10,7 @@ namespace Zazz.Core.Interfaces
     {
         Task<int> GetOwnerIdAsync(int eventId);
 
-        IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to);
+        IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to, DateTime? from2, DateTime? to2);
 
         ZazzEvent GetByFacebookId(long fbEventId);
 

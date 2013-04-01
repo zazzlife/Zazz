@@ -29,7 +29,7 @@
             @Model.Street, @Model.City
 
         </address>
-        
+
         @if (isMapAvailable)
         {
             <div id="map-canvas" style="height: 400px;"></div>
@@ -62,9 +62,9 @@
             <li><a data-toggle="modal" data-target="#remove-event-modal" href="#"><i class="icon-remove"></i>Remove Event</a></li>
         }
 
-        @if (!String.IsNullOrEmpty(Model.FacebookLink))
+        @if (Model.FacebookEventId.HasValue)
         {
-            <li class="disabled"><a href="@Model.FacebookLink" class="disabled"><i class="icon-facebook"></i>Facebook Link</a></li>
+            <li class="disabled"><a href="https://www.facebook.com/events/@Model.FacebookEventId.Value" class="disabled"><i class="icon-facebook"></i>Facebook Link</a></li>
         }
     </ul>
 }
@@ -73,16 +73,16 @@
 {
     @section ScriptsTop
     {
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC-ZWW7fhSaFI1i3i3jjpJUuGPJZI87A6s&sensor=true" type="text/javascript"></script>
+        <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC-ZWW7fhSaFI1i3i3jjpJUuGPJZI87A6s&sensor=true" type="text/javascript"></script>
     }
     
     @section Scripts
 {
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        $(function() {
+            $(function() {
                     
-            var lat = @Model.Latitude.Value;
+                var lat = @Model.Latitude.Value;
             var lng = @Model.Longitude.Value;
 
             var latlng = new google.maps.LatLng(lat, lng, false);
@@ -90,6 +90,6 @@
             placeMarker(latlng, 14);
         });
 
-    </script>
-}
+        </script>
+    }
 }

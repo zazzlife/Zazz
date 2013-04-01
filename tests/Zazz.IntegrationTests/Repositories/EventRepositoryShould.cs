@@ -77,7 +77,7 @@ namespace Zazz.IntegrationTests.Repositories
             var to = DateTime.UtcNow.AddDays(2);
 
             //Act
-            var result = _repo.GetEventRange(from.Date, to.Date).ToList();
+            var result = _repo.GetEventRange(@from.Date, to.Date, null, null).ToList();
 
             //Assert
             CollectionAssert.Contains(result, eventA);
