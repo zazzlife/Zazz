@@ -160,13 +160,35 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpGet]
-        public ActionResult Crop(int id, string @for)
+        public async Task<ActionResult> Crop(int id, string @for)
         {
-            return View();
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var vm = new CropViewModel();
+                var photo = await _photoService.GetPhotoAsync(id);
+
+                if (photo.IsFacebookPhoto)
+                {
+                    vm.IsFacebookPhoto = true;
+                    return View(vm);
+                }
+
+                var userId = _userService.GetUserId(User.Identity.Name);
+                if (photo.UploaderId != userId)
+                    throw new HttpException(401, "You are not authorized to crop this image.");
+
+                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
+                vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
+                               ? "10/3" : "1";
+
+                return View(vm);   
+            }
         }
 
         [Authorize, HttpPost]
-        public ActionResult Crop(int id, string @for, double x, double x2, double y, double y2, double w, double h)
+        public ActionResult Crop(int id, string @for, CropViewModel vm)
         {
             return View();
         }
