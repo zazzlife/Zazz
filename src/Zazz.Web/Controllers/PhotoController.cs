@@ -181,7 +181,7 @@ namespace Zazz.Web.Controllers
 
                 vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
                 vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
-                               ? "10/3" : "1";
+                               ? 10/3 : 1;
 
                 return View(vm);   
             }

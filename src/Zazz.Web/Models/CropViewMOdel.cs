@@ -6,7 +6,7 @@
 
         public bool IsFacebookPhoto { get; set; }
 
-        public string Ratio { get; set; }
+        public double Ratio { get; set; }
 
         public double? X { get; set; }
 
