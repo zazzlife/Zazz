@@ -11,9 +11,40 @@
     white-space: pre-line;
 }
 
+.breadcrumb {
+    margin-top: -15px;
+    border-radius: 0;
+}
+
+.well {
+    background-color: #2e2e2e;
+    border: 1px solid #646464;
+}
+
+/***************************************
+    Inputs
+***************************************/
+
 input,
 textarea {
     border-radius: 2px !important;
+    background-color: #e2e2e2 !important;
+    color: black;
+}
+
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #797979;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #797979;
+}
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #797979;
 }
 
     body, button, .btn, label, input, button, select, textarea,
@@ -37,15 +68,30 @@ input, textarea, select {
         font-style: normal;
     }
 
-.breadcrumb {
-    margin-top: -15px;
-    border-radius: 0;
-}
-
-.well {
-    background-color: #2e2e2e;
-    border: 1px solid #646464;
-}
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="datetime"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="date"]:focus,
+    input[type="month"]:focus,
+    input[type="time"]:focus,
+    input[type="week"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    input[type="url"]:focus,
+    input[type="search"]:focus,
+    input[type="tel"]:focus,
+    input[type="color"]:focus,
+    .uneditable-input:focus {
+        border-color: gold;
+        outline: 0;
+        outline: thin dotted \9;
+        /* IE6-9 */
+        -webkit-box-shadow: inset 0 1px 1px gold, 0 0 8px gold;
+        -moz-box-shadow: inset 0 1px 1px gold, 0 0 8px gold;
+        box-shadow: inset 0 1px 1px gold, 0 0 8px gold;
+    }
 
 /***************************************
     Button
@@ -81,7 +127,7 @@ input, textarea, select {
 }
 
 .nav-list > li > a {
-    color: lightgray;
+    color: whitesmoke;
 }
 
 .nav-list > li > a, .nav-list .nav-header {
@@ -113,12 +159,20 @@ input, textarea, select {
 .navbar .nav > li > a {
     padding: 15px 15px 14px;
     border-bottom: 1px solid transparent;
+    -moz-transition: color ease-in-out 0.2s;
+    -o-transition: color ease-in-out 0.2s;
+    -webkit-transition: color ease-in-out 0.2s;
+    transition: color ease-in-out 0.2s;
 }
 
     .navbar .nav > li > a:hover,
     .navbar .nav > .active > a,
     .navbar .nav > .active > a:hover {
         border-bottom: 2px solid gold;
+        -moz-transition: border-bottom ease-in-out 0.4s;
+        -o-transition: border-bottom ease-in-out 0.4s;
+        -webkit-transition: border-bottom ease-in-out 0.4s;
+        transition: border-bottom ease-in-out 0.4s;
     }
 
         .navbar .nav > .active > a,
@@ -402,8 +456,8 @@ input, textarea, select {
 
     .navbar-fixed-top .navbar-inner,
     .navbar-static-top .navbar-inner {
-        -webkit-box-shadow: 0 -2px 30px gold;
-        box-shadow: 0 -2px 30px gold;
+        -webkit-box-shadow: 0 -5px 30px gold;
+        box-shadow: 0 -5px 30px gold;
     }
 
 .navbar-fixed-bottom {
