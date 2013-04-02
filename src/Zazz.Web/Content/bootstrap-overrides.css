@@ -1,16 +1,4 @@
-﻿.btn-extralarge {
-    padding: 24px 60px;
-    font-size: 28.75px !important;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-}
-
-    .btn-extralarge [class^="icon-"],
-    .btn-extralarge [class*=" icon-"] {
-        margin-top: 4px;
-    }
-
+﻿
 .container {
     width: 1000px !important;
 }
@@ -32,9 +20,6 @@ textarea {
         font-size: 13px;
     }
 
-    .btn-large {
-        font-size: 18.75px;
-    }
 
 input, textarea, select {
     font-style: italic;
@@ -44,10 +29,39 @@ input, textarea, select {
         font-style: normal;
     }
 
+    input[type="submit"] {
+        font-style: normal;
+    }
+
 .breadcrumb {
     margin-top: -15px;
     border-radius: 0;
 }
+
+/***************************************
+    Button
+***************************************/
+
+.btn {
+    border-radius: 3px;
+}
+
+.btn-extralarge {
+    padding: 24px 60px;
+    font-size: 28.75px !important;
+    border-radius: 3px;
+}
+
+    .btn-extralarge [class^="icon-"],
+    .btn-extralarge [class*=" icon-"] {
+        margin-top: 4px;
+    }
+
+        .btn-large {
+        font-size: 18.75px;
+    }
+
+
 
 /***************************************
     Navbar
