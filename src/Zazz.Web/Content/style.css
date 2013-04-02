@@ -32,6 +32,11 @@
         border-bottom: 0;
     }
 
+.ui-corner-all,.ui-corner-top,
+.ui-corner-bottom,.ui-corner-right,.ui-corner-left,
+.ui-corner-br,.ui-corner-bl,.ui-corner-tr,.ui-corner-tl {
+    border-radius: 2px;
+}
 /***************************************
         Global
 ***************************************/
@@ -80,9 +85,10 @@ img {
     text-transform: capitalize;
 }
 
-hr.dark-line {
+hr.gold-line {
     height: 1px;
-    background-color: #666666;
+    border: 0;
+    border-bottom: 1px solid goldenrod;
 }
 
 .field-validation-error {
@@ -172,6 +178,10 @@ hr.dark-line {
 
 .icononly-btn i {
     font-size: 8px;
+}
+
+.gold {
+    color: gold;
 }
 
 /***************************************
@@ -501,6 +511,7 @@ hr.dark-line {
     margin-right: 20px;
     height: 100px;
     width: 100px;
+    border-radius: 3px;
 }
 
 .event .loading-indicator {
@@ -616,12 +627,12 @@ hr.dark-line {
     Footer
 ***************************************/
 footer {
-    background-color: #f1f1f1;
+    background-color: #020202;
     border-top-style: solid;
     border-top-width: 1px;
-    border-top-color: #272727;
-    border-top-color: rgba(39, 39, 39, 0.27);
+    border-top-color: goldenrod;
     padding-top: 10px;
     margin-top: 50px;
     padding-bottom: 30px;
+    color: lightgray;
 }

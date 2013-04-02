@@ -5,6 +5,7 @@
 
 .container {
     width: 1000px !important;
+    height: 100%;
 }
 
 .tooltip {
@@ -19,6 +20,7 @@
 .well {
     background-color: #2e2e2e;
     border: 1px solid #646464;
+    border-radius: 2px;
 }
 
 /***************************************
