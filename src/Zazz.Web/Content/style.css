@@ -316,8 +316,8 @@ hr.gold-line {
     float: left;
     min-height: 600px;
     width: 575px;
-    border-right: 1px solid #dcdcdc;
-    border-left: 1px solid #dcdcdc;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
     margin-top: -50px;
     padding-top: 39px;
 }
