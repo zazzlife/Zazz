@@ -26,6 +26,11 @@ namespace Zazz.Web
                     "~/Content/themes/base/jquery.ui.theme.css",
                     "~/Content/themes/base/jquery.ui.tooltip.css");
 
+            var cssOrder = new BundleFileSetOrdering("CssOrder");
+            cssOrder.Files.Add("bootstrap.css");
+            cssOrder.Files.Add("bootstrap-lightbox.css");
+            cssOrder.Files.Add("bootstrap-overrides.css");
+
 
             var fineUploadOrder = new BundleFileSetOrdering("FineUploadOrder");
             fineUploadOrder.Files.Add("header.js");
@@ -42,6 +47,7 @@ namespace Zazz.Web
             fineUploadOrder.Files.Add("uploader.js");
 
             bundles.FileSetOrderList.Add(fineUploadOrder);
+            bundles.FileSetOrderList.Add(cssOrder);
 
             bundles.Add(css);
             bundles.Add(jqueryUiCss);

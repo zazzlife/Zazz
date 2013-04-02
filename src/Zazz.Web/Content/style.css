@@ -14,60 +14,6 @@
 }
 
 /***************************************
-    Bootstrap overrides
-***************************************/
-
-.btn-extralarge {
-    padding: 24px 60px;
-    font-size: 28.75px !important;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-}
-
-    .btn-extralarge [class^="icon-"],
-    .btn-extralarge [class*=" icon-"] {
-        margin-top: 4px;
-    }
-
-.container {
-    width: 1000px !important;
-}
-
-.tooltip {
-    white-space: pre-line;
-}
-
-input,
-textarea {
-    border-radius: 2px !important;
-}
-
-    body, button, .btn, label, input, button, select, textarea,
-    input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"],
-    input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"],
-    input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
-    .uneditable-input, .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
-        font-size: 13px;
-    }
-
-    .btn-large {
-        font-size: 18.75px;
-    }
-
-input, textarea, select {
-    font-style: italic;
-}
-
-    input:focus, textarea:focus, select:focus {
-        font-style: normal;
-    }
-
-.breadcrumb {
-    margin-top: -15px;
-    border-radius: 0;
-}
-/***************************************
     JQuery UI overrides
 ***************************************/
 
@@ -154,8 +100,8 @@ hr.dark-line {
 
 #searchIcon {
     position: absolute;
-    margin-top: 12px;
-    margin-left: 10px;
+    margin-top: 16px;
+    margin-left: 9px;
     font-size: 16px;
 }
 
