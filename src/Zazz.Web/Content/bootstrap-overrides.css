@@ -34,20 +34,20 @@ textarea {
     color: black;
 }
 
-input:-moz-placeholder,
-textarea:-moz-placeholder {
-  color: #797979;
-}
+    input:-moz-placeholder,
+    textarea:-moz-placeholder {
+        color: #797979;
+    }
 
-input:-ms-input-placeholder,
-textarea:-ms-input-placeholder {
-  color: #797979;
-}
+    input:-ms-input-placeholder,
+    textarea:-ms-input-placeholder {
+        color: #797979;
+    }
 
-input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder {
-  color: #797979;
-}
+    input::-webkit-input-placeholder,
+    textarea::-webkit-input-placeholder {
+        color: #797979;
+    }
 
     body, button, .btn, label, input, button, select, textarea,
     input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"],
@@ -132,11 +132,25 @@ input, textarea, select {
     color: whitesmoke;
 }
 
+.nav > li > a:hover, .nav > li > a:focus {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
 .nav-list > li > a, .nav-list .nav-header {
     -webkit-text-shadow: none;
     text-shadow: none;
 }
 
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+    color: gold;
+    cursor: default;
+    background-color: transparent;
+    border: 1px solid goldenrod;
+    border-bottom-color: transparent;
+}
+.nav-tabs > li > a {
+    color: whitesmoke;
+}
 /***************************************
     Navbar
 ***************************************/
