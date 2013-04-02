@@ -78,7 +78,7 @@ input, textarea, select {
 .navbar .nav > li > a:hover,
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover {
-  border-bottom: 2px solid #33b5e5;
+  border-bottom: 2px solid gold;
 }
 
 .navbar .nav > .active > a,
@@ -198,8 +198,12 @@ input, textarea, select {
   margin-left: -20px;
   font-size: 20px;
   font-weight: 200;
-  color: #adafae;
+  color: gold;
   text-shadow: 0 1px 0 #020202;
+}
+
+.navbar .brand:hover {
+    color: goldenrod;
 }
 
 .navbar .brand:hover,
@@ -219,7 +223,7 @@ input, textarea, select {
 
 .navbar-link:hover,
 .navbar-link:focus {
-  color: #ffffff;
+  color: gold;
 }
 
 .navbar .divider-vertical {
@@ -402,7 +406,7 @@ input, textarea, select {
 
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover {
-  color: #ffffff;
+  color: gold;
   text-decoration: none;
   background-color: transparent;
 }
@@ -410,7 +414,7 @@ input, textarea, select {
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
 .navbar .nav > .active > a:focus {
-  color: #ffffff;
+  color: gold;
   text-decoration: none;
   background-color: #020202;
   -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
@@ -424,7 +428,7 @@ input, textarea, select {
   padding: 7px 10px;
   margin-right: 5px;
   margin-left: 5px;
-  color: #ffffff;
+  color: gold;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #000000;
   *background-color: #000000;
