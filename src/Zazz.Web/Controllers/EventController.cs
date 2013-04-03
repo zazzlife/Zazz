@@ -39,11 +39,30 @@ namespace Zazz.Web.Controllers
         {
             var vm = new EventListViewModel
                      {
-                         MonthEvents = GetMonthEvents(),
-                         WeekEvents = GetWeekEvents()
+                         MonthEvents = new EventListSideViewModel
+                                       {
+                                           Events = GetMonthEvents(),
+                                           EventsRange = EventRange.Month
+                                       },
+
+                         WeekEvents = new EventListSideViewModel
+                                      {
+                                          Events = GetWeekEvents(),
+                                          EventsRange = EventRange.Week
+                                      }
                      };
 
             return View(vm);
+        }
+
+        public ActionResult Week(int page)
+        {
+            return View();
+        }
+
+        public ActionResult Month(int page)
+        {
+            return View();
         }
 
         private void GetThisWeek(out DateTime firstDayOfWeek, out DateTime lastDayOfWeek)

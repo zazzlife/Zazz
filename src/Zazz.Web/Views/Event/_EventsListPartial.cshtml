@@ -1,11 +1,18 @@
 ﻿@using PagedList.Mvc
-@model PagedList.IPagedList<EventViewModel>
+@model EventListSideViewModel
 
-@foreach (var e in Model)
+@foreach (var e in Model.Events)
 {
     @Html.Partial("_EventPartial", e)
 }
 
 <div>
-    @Html.PagedListPager(Model, page => Url.Action("List", new { page }))
+    @if (Model.EventsRange == EventRange.Week)
+    {
+        @Html.PagedListPager(Model.Events, page => Url.Action("Week", new { @id = "0", page }))
+    }
+    else
+    {
+        @Html.PagedListPager(Model.Events, page => Url.Action("Month", new { @id = "0", page }))
+    }
 </div>
