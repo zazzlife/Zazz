@@ -62,6 +62,7 @@
     <Compile Include="Infrastructure\ErrorHandlerShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\CacheServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CryptoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FacebookServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FileServiceShould.cs" />
