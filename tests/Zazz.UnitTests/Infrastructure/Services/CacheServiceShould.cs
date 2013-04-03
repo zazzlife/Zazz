@@ -115,5 +115,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(_photoUrl, result);
             _photoUrlCache.Verify(x => x.TryGet(_username), Times.Once());
         }
+
+        [Test]
+        public void ShouldRemoveToAllCachingSystems_OnRemoveUserCache()
+        {
+            //Arrange
+            _userIdCache.Setup(x => x.Remove(_username));
+            _photoUrlCache.Setup(x => x.Remove(_username));
+            _displayNameCache.Setup(x => x.Remove(_username));
+
+            //Act
+            _sut.RemoveUserCache(_username);
+
+            //Assert
+            _userIdCache.Verify(x => x.Remove(_username), Times.Once());
+            _photoUrlCache.Verify(x => x.Remove(_username), Times.Once());
+            _displayNameCache.Verify(x => x.Remove(_username), Times.Once());
+        }
+
+
     }
 }

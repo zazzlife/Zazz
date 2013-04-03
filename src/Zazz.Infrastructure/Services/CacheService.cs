@@ -45,5 +45,12 @@ namespace Zazz.Infrastructure.Services
         {
             return _photoUrlCache.TryGet(username);
         }
+
+        public void RemoveUserCache(string username)
+        {
+            _userIdCache.Remove(username);
+            _displayNameCache.Remove(username);
+            _photoUrlCache.Remove(username);
+        }
     }
 }

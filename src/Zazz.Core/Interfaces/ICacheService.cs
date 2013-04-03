@@ -16,5 +16,7 @@
         void AddUserPhotoUrl(string username, string photoUrl);
 
         string GetUserPhotoUrl(string username);
+
+        void RemoveUserCache(string username);
     }
 }
