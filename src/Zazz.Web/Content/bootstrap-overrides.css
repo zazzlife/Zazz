@@ -526,11 +526,11 @@ input, textarea, select {
     top: 0;
 }
 
-    .navbar-fixed-top .navbar-inner,
+    /*.navbar-fixed-top .navbar-inner,
     .navbar-static-top .navbar-inner {
         -webkit-box-shadow: 0 -5px 30px gold;
         box-shadow: 0 -5px 30px gold;
-    }
+    }*/
 
 .navbar-fixed-bottom {
     bottom: 0;
