@@ -1,5 +1,4 @@
-﻿$(function () {
-
+﻿
     var flipDuration = 250;
 
     function flipToBack(elem, front, back) {
@@ -50,7 +49,7 @@
         });
     }
 
-    $('.flippable').click(function (e) {
+    $(document).on('click', '.flippable', function (e) {
         
 
         var self = this;
@@ -68,7 +67,6 @@
 
     });
 
-    $('.flippable a').click(function(e) {
+    $(document).on('click', '.flippable a', function (e) {
         e.stopPropagation();
     });
-});
