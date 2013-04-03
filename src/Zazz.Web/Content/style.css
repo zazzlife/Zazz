@@ -6,11 +6,11 @@
 }
 
 .icon-spin {
-  display: inline-block;
-  -moz-animation: spin 1.3s infinite linear;
-  -o-animation: spin 1.3s infinite linear;
-  -webkit-animation: spin 1.3s infinite linear;
-  animation: spin 1.3s infinite linear;
+    display: inline-block;
+    -moz-animation: spin 1.3s infinite linear;
+    -o-animation: spin 1.3s infinite linear;
+    -webkit-animation: spin 1.3s infinite linear;
+    animation: spin 1.3s infinite linear;
 }
 
 /***************************************
@@ -32,9 +32,9 @@
         border-bottom: 0;
     }
 
-.ui-corner-all,.ui-corner-top,
-.ui-corner-bottom,.ui-corner-right,.ui-corner-left,
-.ui-corner-br,.ui-corner-bl,.ui-corner-tr,.ui-corner-tl {
+.ui-corner-all, .ui-corner-top,
+.ui-corner-bottom, .ui-corner-right, .ui-corner-left,
+.ui-corner-br, .ui-corner-bl, .ui-corner-tr, .ui-corner-tl {
     border-radius: 2px;
 }
 /***************************************
@@ -176,9 +176,9 @@ hr.gold-line {
     font-size: 8px;
 }
 
-.icononly-btn i {
-    font-size: 8px;
-}
+    .icononly-btn i {
+        font-size: 8px;
+    }
 
 .gold {
     color: gold;
@@ -306,7 +306,8 @@ hr.gold-line {
         .left-panel .user .username {
             margin-left: 5px;
             font-weight: 600;
-            color: white;
+            /*color: white;*/
+            color: #141414;
             text-decoration: none;
         }
 
@@ -316,8 +317,10 @@ hr.gold-line {
     float: left;
     min-height: 600px;
     width: 575px;
-    border-right: 1px solid rgba(255, 255, 255, 0.5);
-    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    /*border-right: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: 1px solid rgba(255, 255, 255, 0.5);*/
+    border-right: 1px solid #cecece;
+    border-left: 1px solid #cecece;
     margin-top: -50px;
     padding-top: 39px;
 }
@@ -627,12 +630,18 @@ hr.gold-line {
     Footer
 ***************************************/
 footer {
-    background-color: #020202;
+    /*background-color: #020202;
     border-top-style: solid;
     border-top-width: 1px;
     border-top-color: goldenrod;
+    color: lightgray;*/
+    background-color: #f1f1f1;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #272727;
+    border-top-color: rgba(39, 39, 39, 0.27);
     padding-top: 10px;
     margin-top: 50px;
     padding-bottom: 30px;
-    color: lightgray;
+    
 }
