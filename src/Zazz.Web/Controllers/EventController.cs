@@ -57,12 +57,24 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Week(int page)
         {
-            return View();
+            var vm = new EventListSideViewModel
+                     {
+                         Events = GetWeekEvents(page),
+                         EventsRange = EventRange.Week
+                     };
+
+            return View("_EventsListPartial", vm);
         }
 
         public ActionResult Month(int page)
         {
-            return View();
+            var vm = new EventListSideViewModel
+            {
+                Events = GetMonthEvents(page),
+                EventsRange = EventRange.Month
+            };
+
+            return View("_EventsListPartial", vm);
         }
 
         private void GetThisWeek(out DateTime firstDayOfWeek, out DateTime lastDayOfWeek)
