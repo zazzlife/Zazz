@@ -113,15 +113,22 @@ $(document).on('click', '*[data-ajax-pagination] a', function (e) {
 
     var url = $(this).attr('href');
     var panelToUpdate = $($(this).closest('*[data-ajax-pagination]').attr('data-update'));
-    panelToUpdate.html(LOADING_INDICATOR);
+    panelToUpdate.css('opacity', '0.5');
 
     $.ajax({
         url: url,
         error: function () {
             toastr.error("An error occured");
+            panelToUpdate.css('opacity', '1');
         },
         success: function (res) {
-            panelToUpdate.html(res);
+            panelToUpdate.fadeOut(function() {
+                panelToUpdate.html(res);
+                panelToUpdate.css('opacity', '1');
+
+                panelToUpdate.fadeIn();
+            });
+
         }
     });
 
