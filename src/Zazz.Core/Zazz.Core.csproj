@@ -63,6 +63,8 @@
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
+    <Compile Include="Interfaces\ICacheService.cs" />
+    <Compile Include="Interfaces\ICacheSystem.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IFacebookHelper.cs" />

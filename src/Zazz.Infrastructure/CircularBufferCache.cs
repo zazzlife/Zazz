@@ -3,10 +3,11 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.Infrastructure
 {
-    public class CircularBufferCache<TKey, TVal>
+    public class CircularBufferCache<TKey, TVal> : ICacheSystem<TKey, TVal>
     {
         private readonly int _maximumSize;
         internal readonly ConcurrentDictionary<TKey, TVal> Items;
@@ -14,6 +15,9 @@ namespace Zazz.Infrastructure
 
         public CircularBufferCache(int maximumSize)
         {
+            if (maximumSize < 1)
+                throw new ArgumentOutOfRangeException("maximumSize");
+
             _maximumSize = maximumSize;
             Items = new ConcurrentDictionary<TKey, TVal>();
             RequestsCounter = new ConcurrentDictionary<TKey, int>();
