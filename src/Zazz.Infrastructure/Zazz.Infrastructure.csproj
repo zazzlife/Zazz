@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
+    <Compile Include="CircularBufferCache.cs" />
     <Compile Include="DateTimeHelpers.cs" />
     <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
