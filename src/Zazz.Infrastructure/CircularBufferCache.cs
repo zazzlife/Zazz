@@ -30,15 +30,20 @@ namespace Zazz.Infrastructure
 
         private void RemoveLowestItem()
         {
-            if (RequestsCounter.Count < 1)
-                return;
+            try
+            {
+                if (RequestsCounter.Count < 1)
+                    return;
 
-            var key = RequestsCounter
-                .OrderBy(r => r.Value)
-                .First()
-                .Key;
+                var key = RequestsCounter
+                    .OrderBy(r => r.Value)
+                    .First()
+                    .Key;
 
-            Remove(key);
+                Remove(key);
+            }
+            catch (Exception)
+            {} // we dont really want to break the request only because it failed to remove because of race condition
         }
 
         public void Remove(TKey key)
