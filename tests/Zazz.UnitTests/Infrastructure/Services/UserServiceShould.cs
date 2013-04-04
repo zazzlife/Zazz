@@ -23,13 +23,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallGetIdByUserName_OnGetUserId()
+        public void CallGetIdByUserNameWhenItNotExistsInCacheThenAddItToCache_OnGetUserId()
         {
             //Arrange
             var username = "soroush";
             var id = 12;
             _uow.Setup(x => x.UserRepository.GetIdByUsername(username))
                 .Returns(id);
+            _cacheService.Setup(x => x.GetUserId(username))
+                         .Returns(0);
+            _cacheService.Setup(x => x.AddUserId(username, id));
 
             //Act
             var result = _sut.GetUserId(username);
@@ -37,6 +40,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(id, result);
             _uow.Verify(x => x.UserRepository.GetIdByUsername(username), Times.Once());
+            _cacheService.Verify(x => x.GetUserId(username), Times.Once());
+            _cacheService.Verify(x => x.AddUserId(username, id), Times.Once());
+        }
+
+        [Test]
+        public void ReturnUserIdFromCacheIfExists_OnGetUserId()
+        {
+            //Arrange
+            var username = "soroush";
+            var id = 12;
+            _uow.Setup(x => x.UserRepository.GetIdByUsername(username))
+                .Returns(id);
+            _cacheService.Setup(x => x.GetUserId(username))
+                         .Returns(id);
+            _cacheService.Setup(x => x.AddUserId(username, id));
+
+            //Act
+            var result = _sut.GetUserId(username);
+
+            //Assert
+            Assert.AreEqual(id, result);
+            _uow.Verify(x => x.UserRepository.GetIdByUsername(It.IsAny<string>()), Times.Never());
+            _cacheService.Verify(x => x.GetUserId(username), Times.Once());
+            _cacheService.Verify(x => x.AddUserId(username, id), Times.Never());
         }
 
         [Test]

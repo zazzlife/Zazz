@@ -23,7 +23,14 @@ namespace Zazz.Infrastructure.Services
 
         public int GetUserId(string username)
         {
-            return _uoW.UserRepository.GetIdByUsername(username);
+            var cache = _cacheService.GetUserId(username);
+            if (cache != default (int))
+                return cache;
+
+            var userId = _uoW.UserRepository.GetIdByUsername(username);
+            _cacheService.AddUserId(username, userId);
+
+            return userId;
         }
 
         public Task<User> GetUserAsync(string username)
