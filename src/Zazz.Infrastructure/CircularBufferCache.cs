@@ -75,6 +75,9 @@ namespace Zazz.Infrastructure
             int currentCount;
             RequestsCounter.TryGetValue(key, out currentCount);
 
+            if (currentCount == Int32.MaxValue)
+                return;
+
             RequestsCounter.TryUpdate(key, (currentCount + 1), currentCount);
         }
     }
