@@ -47,14 +47,14 @@ namespace Zazz.Infrastructure
                 Remove(key);
             }
             catch (Exception)
-            {} // we dont really want to break the request only because it failed to remove because of race condition
+            { } // we dont really want to break the request only because it failed to remove because of race condition
         }
 
         public void Remove(TKey key)
         {
             TVal val;
             Items.TryRemove(key, out val);
-            
+
             int count;
             RequestsCounter.TryRemove(key, out count);
         }
@@ -64,7 +64,7 @@ namespace Zazz.Infrastructure
             TVal val;
             Items.TryGetValue(key, out val);
 
-            if (!val.Equals(default(TVal)))
+            if (!EqualityComparer<TVal>.Default.Equals(val, default(TVal)))
                 IncrementCounter(key);
 
             return val;
