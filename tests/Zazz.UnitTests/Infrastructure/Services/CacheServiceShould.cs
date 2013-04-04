@@ -25,9 +25,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _photoUrlCache = new Mock<ICacheSystem<int, string>>();
 
             _sut = new CacheService();
-            CacheService._userIdCache = _userIdCache.Object;
-            CacheService._displayNameCache = _displayNameCache.Object;
-            CacheService._photoUrlCache = _photoUrlCache.Object;
+            CacheService.UserIdCache = _userIdCache.Object;
+            CacheService.DisplayNameCache = _displayNameCache.Object;
+            CacheService.PhotoUrlCache = _photoUrlCache.Object;
 
             _username = "soroush";
             _userId = 1;
