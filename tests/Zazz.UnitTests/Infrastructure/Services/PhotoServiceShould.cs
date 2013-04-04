@@ -556,5 +556,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
         }
+
+        [Test]
+        public void ReturnFacebookImageUrlIfThePhotoIsFromFacebook_OnGetUserImageUrl()
+        {
+            //Arrange
+            var userId = 12;
+            var gender = Gender.Male;
+            var photoId = 123;
+
+            var photo = new PhotoMinimalDTO
+            {
+                AlbumId = 3,
+                Id = photoId,
+                UploaderId = userId,
+                IsFacebookPhoto = true,
+                FacebookPicUrl = "pic url"
+            };
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(photoId);
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(gender);
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
+                .Returns(() => photo);
+
+            //Act
+            var result = _sut.GetUserImageUrl(userId);
+
+            //Assert
+            Assert.AreEqual(photo.FacebookPicUrl, result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+        }
     }
 }
