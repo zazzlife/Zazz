@@ -36,7 +36,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Me()
         {
-            var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+            var userId = _userService.GetUserId(User.Identity.Name);
             return await ShowProfile(userId);
         }
 
@@ -86,7 +86,7 @@ namespace Zazz.Web.Controllers
                 var currentUserId = 0;
                 if (User.Identity.IsAuthenticated)
                 {
-                    currentUserId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                    currentUserId = _userService.GetUserId(User.Identity.Name);
                 }
 
                 // Feeds 

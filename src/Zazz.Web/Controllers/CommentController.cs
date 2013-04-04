@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
 
                 var userId = 0;
                 if (User.Identity.IsAuthenticated)
-                    userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                    userId = _userService.GetUserId(User.Identity.Name);
 
                 var feedHelper = new FeedHelper(_uow, _userService, _photoService);
                 var comments = feedHelper.GetComments(id, feedType, userId, lastComment, 10);
@@ -61,7 +61,7 @@ namespace Zazz.Web.Controllers
                 if (id == 0)
                     throw new ArgumentException("Id cannot be 0", "id");
 
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
                 if (userId == 0)
                     throw new SecurityException();
 
@@ -117,7 +117,7 @@ namespace Zazz.Web.Controllers
                 if (id == 0)
                     throw new ArgumentException("Id cannot be 0", "id");
 
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
                 var comment = await _uow.CommentRepository.GetByIdAsync(id);
                 if (comment == null)
                     return;
@@ -141,7 +141,7 @@ namespace Zazz.Web.Controllers
                 if (id == 0)
                     throw new ArgumentException("Id cannot be 0", "id");
 
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
                 var c = await _uow.CommentRepository.GetByIdAsync(id);
                 if (c == null)
                     return;

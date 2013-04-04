@@ -24,12 +24,14 @@ namespace Zazz.Web.Controllers
         private readonly ICryptoService _cryptoService;
         private readonly IFacebookService _facebookService;
         private readonly IUoW _uow;
+        private readonly IUserService _userService;
 
-        public FacebookController(ICryptoService cryptoService, IFacebookService facebookService, IUoW uow)
+        public FacebookController(ICryptoService cryptoService, IFacebookService facebookService, IUoW uow, IUserService userService)
         {
             _cryptoService = cryptoService;
             _facebookService = facebookService;
             _uow = uow;
+            _userService = userService;
         }
 
         public async Task<string> Update()
@@ -88,7 +90,7 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_facebookService)
             {
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
 
                 var allPages = _facebookService.GetUserPagesAsync(userId);
                 var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
@@ -118,7 +120,7 @@ namespace Zazz.Web.Controllers
             {
                 try
                 {
-                    var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                    var userId = _userService.GetUserId(User.Identity.Name);
                     var allPages = await _facebookService.GetUserPagesAsync(userId);
 
                     var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
@@ -157,7 +159,7 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_facebookService)
             {
-                var userId = _uow.UserRepository.GetIdByUsername(User.Identity.Name);
+                var userId = _userService.GetUserId(User.Identity.Name);
                 await _facebookService.UnlinkPageAsync(pageId, userId);
             }
         }
