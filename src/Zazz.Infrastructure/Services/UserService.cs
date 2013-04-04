@@ -29,16 +29,6 @@ namespace Zazz.Infrastructure.Services
             return _uoW.UserRepository.GetByUsernameAsync(username);
         }
 
-        public string GetUserFullName(int userId)
-        {
-            return _uoW.UserRepository.GetUserFullName(userId);
-        }
-
-        public string GetUserFullName(string username)
-        {
-            return _uoW.UserRepository.GetUserFullName(username);
-        }
-
         public string GetUserDisplayName(int userId)
         {
             var fullName = _uoW.UserRepository.GetUserFullName(userId);
@@ -54,15 +44,8 @@ namespace Zazz.Infrastructure.Services
 
         public string GetUserDisplayName(string username)
         {
-            var fullName = _uoW.UserRepository.GetUserFullName(username);
-            if (!String.IsNullOrEmpty(fullName))
-            {
-                return fullName;
-            }
-            else
-            {
-                return username;
-            }
+            var userId = GetUserId(username);
+            return GetUserDisplayName(userId);
         }
 
         public void Dispose()
