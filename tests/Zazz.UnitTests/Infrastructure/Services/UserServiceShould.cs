@@ -76,6 +76,59 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ReturnCachedDisplayNameIfExists_OnGetUserDisplayNameWithId()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+                .Returns(user.UserDetail.FullName);
+            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
+                .Returns(user.Username);
+            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
+                         .Returns(user.UserDetail.FullName);
+            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
+
+            //Act
+            var result = _sut.GetUserDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+            _uow.Verify(x => x.UserRepository.GetUserFullName(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
+            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
+            _cacheService.Verify(x => x.AddUserDiplayName(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void ReturnCachedDisplayNameIfExists_OnGetUserDisplayNameWithUsername()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+                .Returns(user.UserDetail.FullName);
+            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
+                .Returns(user.Username);
+            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
+                         .Returns(user.UserDetail.FullName);
+            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
+            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
+                .Returns(user.Id);
+
+            //Act
+            var result = _sut.GetUserDisplayName(user.Username);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username),Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserFullName(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
+            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
+            _cacheService.Verify(x => x.AddUserDiplayName(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
         public void ReturnFullNameWhenIsNotEmptyAndAddToCacheWhenNotExists_OnGetUserDisplayNameWithId()
         {
             //Arrange
