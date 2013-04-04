@@ -34,8 +34,8 @@ namespace Zazz.Web.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var user = await _userService.GetUserAsync(User.Identity.Name);
-                    var feeds = await  new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
-                    
+                    var feeds = await new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
+
 
                     var vm = new UserHomeViewModel
                              {
@@ -81,11 +81,13 @@ namespace Zazz.Web.Controllers
                                   Img = _photoService.GetUserImageUrl(u.id)
                               };
 
-                    if (u.clubname.Contains(q))
+                    if (!String.IsNullOrEmpty(u.clubname) &&
+                        u.clubname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
                     {
                         autocompleteResponse.Value = u.clubname;
                     }
-                    else if (u.fullname.Contains(q))
+                    else if (!String.IsNullOrEmpty(u.fullname) &&
+                             u.fullname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
                     {
                         autocompleteResponse.Value = u.fullname;
                     }
