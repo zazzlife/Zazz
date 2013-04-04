@@ -4,17 +4,9 @@ namespace Zazz.Infrastructure.Services
 {
     public class CacheService : ICacheService
     {
-        private readonly ICacheSystem<string, int> _userIdCache;
-        private readonly ICacheSystem<int, string> _displayNameCache;
-        private readonly ICacheSystem<int, string> _photoUrlCache;
-
-        public CacheService(ICacheSystem<string, int> userIdCache,
-            ICacheSystem<int, string> displayNameCache, ICacheSystem<int, string> photoUrlCache)
-        {
-            _userIdCache = userIdCache;
-            _displayNameCache = displayNameCache;
-            _photoUrlCache = photoUrlCache;
-        }
+        internal static ICacheSystem<string, int> _userIdCache = new CircularBufferCache<string, int>(200);
+        internal static ICacheSystem<int, string> _displayNameCache = new CircularBufferCache<int, string>(200);
+        internal static ICacheSystem<int, string> _photoUrlCache = new CircularBufferCache<int, string>(200);
 
         public void AddUserId(string username, int userId)
         {
