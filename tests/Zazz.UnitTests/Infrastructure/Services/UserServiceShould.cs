@@ -119,17 +119,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Username))
-                .Returns(user.UserDetail.FullName);
+            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
+                .Returns(user.Id);
             _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
                 .Returns(user.Username);
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+                .Returns(user.UserDetail.FullName);
 
             //Act
             var result = _sut.GetUserDisplayName(user.Username);
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Username), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
         }
 
@@ -139,18 +142,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Username))
+            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
                 .Returns(() => null);
             _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
                 .Returns(user.Username);
+            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
+                .Returns(user.Id);
 
             //Act
             var result = _sut.GetUserDisplayName(user.Username);
 
             //Assert
             Assert.AreEqual(user.Username, result);
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Username), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserName(user.Id), Times.Once());
         }
     }
 }

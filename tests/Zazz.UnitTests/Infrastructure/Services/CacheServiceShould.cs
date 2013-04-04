@@ -9,8 +9,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
     public class CacheServiceShould
     {
         private Mock<ICacheSystem<string, int>> _userIdCache;
-        private Mock<ICacheSystem<string, string>> _displayNameCache;
-        private Mock<ICacheSystem<string, string>> _photoUrlCache;
+        private Mock<ICacheSystem<int, string>> _displayNameCache;
+        private Mock<ICacheSystem<int, string>> _photoUrlCache;
         private CacheService _sut;
         private string _username;
         private int _userId;
@@ -21,8 +21,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void Init()
         {
             _userIdCache = new Mock<ICacheSystem<string, int>>();
-            _displayNameCache = new Mock<ICacheSystem<string, string>>();
-            _photoUrlCache = new Mock<ICacheSystem<string, string>>();
+            _displayNameCache = new Mock<ICacheSystem<int, string>>();
+            _photoUrlCache = new Mock<ICacheSystem<int, string>>();
 
             _sut = new CacheService(_userIdCache.Object, _displayNameCache.Object, _photoUrlCache.Object);
 
@@ -64,56 +64,56 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void AddToDisplayNameCache_OnAddDisplayName()
         {
             //Arrange
-            _displayNameCache.Setup(x => x.Add(_username, _displayName));
+            _displayNameCache.Setup(x => x.Add(_userId, _displayName));
 
             //Act
-            _sut.AddUserDiplayName(_username, _displayName);
+            _sut.AddUserDiplayName(_userId, _displayName);
 
             //Assert
-            _displayNameCache.Verify(x => x.Add(_username, _displayName), Times.Once());
+            _displayNameCache.Verify(x => x.Add(_userId, _displayName), Times.Once());
         }
 
         [Test]
         public void ReturnValueFromDisplayNameCache_OnAddDisplayName()
         {
             //_displayNameCache
-            _displayNameCache.Setup(x => x.TryGet(_username))
+            _displayNameCache.Setup(x => x.TryGet(_userId))
                         .Returns(_displayName);
 
             //Act
-            var result = _sut.GetUserDisplayName(_username);
+            var result = _sut.GetUserDisplayName(_userId);
 
             //Assert
             Assert.AreEqual(_displayName, result);
-            _displayNameCache.Verify(x => x.TryGet(_username), Times.Once());
+            _displayNameCache.Verify(x => x.TryGet(_userId), Times.Once());
         }
 
         [Test]
         public void AddToPhotoUrlCache_OnAddPhotoUrl()
         {
             //Arrange
-            _photoUrlCache.Setup(x => x.Add(_username, _photoUrl));
+            _photoUrlCache.Setup(x => x.Add(_userId, _photoUrl));
 
             //Act
-            _sut.AddUserPhotoUrl(_username, _photoUrl);
+            _sut.AddUserPhotoUrl(_userId, _photoUrl);
 
             //Assert
-            _photoUrlCache.Verify(x => x.Add(_username, _photoUrl), Times.Once());
+            _photoUrlCache.Verify(x => x.Add(_userId, _photoUrl), Times.Once());
         }
 
         [Test]
         public void ReturnValueFromPhotoUrlCache_OnAddPhotoUrl()
         {
             //_displayNameCache
-            _photoUrlCache.Setup(x => x.TryGet(_username))
+            _photoUrlCache.Setup(x => x.TryGet(_userId))
                         .Returns(_photoUrl);
 
             //Act
-            var result = _sut.GetUserPhotoUrl(_username);
+            var result = _sut.GetUserPhotoUrl(_userId);
 
             //Assert
             Assert.AreEqual(_photoUrl, result);
-            _photoUrlCache.Verify(x => x.TryGet(_username), Times.Once());
+            _photoUrlCache.Verify(x => x.TryGet(_userId), Times.Once());
         }
 
         [Test]
@@ -121,16 +121,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _userIdCache.Setup(x => x.Remove(_username));
-            _photoUrlCache.Setup(x => x.Remove(_username));
-            _displayNameCache.Setup(x => x.Remove(_username));
+            _photoUrlCache.Setup(x => x.Remove(_userId));
+            _displayNameCache.Setup(x => x.Remove(_userId));
 
             //Act
-            _sut.RemoveUserCache(_username);
+            _sut.RemoveUserCache(_username, _userId);
 
             //Assert
             _userIdCache.Verify(x => x.Remove(_username), Times.Once());
-            _photoUrlCache.Verify(x => x.Remove(_username), Times.Once());
-            _displayNameCache.Verify(x => x.Remove(_username), Times.Once());
+            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Once());
+            _displayNameCache.Verify(x => x.Remove(_userId), Times.Once());
         }
 
 

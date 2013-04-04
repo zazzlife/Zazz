@@ -9,14 +9,14 @@
 
         int GetUserId(string username);
 
-        void AddUserDiplayName(string username, string displayName);
+        void AddUserDiplayName(int userId, string displayName);
 
-        string GetUserDisplayName(string username);
+        string GetUserDisplayName(int userId);
 
-        void AddUserPhotoUrl(string username, string photoUrl);
+        void AddUserPhotoUrl(int userId, string photoUrl);
 
-        string GetUserPhotoUrl(string username);
+        string GetUserPhotoUrl(int userId);
 
-        void RemoveUserCache(string username);
+        void RemoveUserCache(string username, int userId);
     }
 }

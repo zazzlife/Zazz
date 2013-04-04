@@ -5,11 +5,11 @@ namespace Zazz.Infrastructure.Services
     public class CacheService : ICacheService
     {
         private readonly ICacheSystem<string, int> _userIdCache;
-        private readonly ICacheSystem<string, string> _displayNameCache;
-        private readonly ICacheSystem<string, string> _photoUrlCache;
+        private readonly ICacheSystem<int, string> _displayNameCache;
+        private readonly ICacheSystem<int, string> _photoUrlCache;
 
         public CacheService(ICacheSystem<string, int> userIdCache,
-            ICacheSystem<string, string> displayNameCache, ICacheSystem<string, string> photoUrlCache)
+            ICacheSystem<int, string> displayNameCache, ICacheSystem<int, string> photoUrlCache)
         {
             _userIdCache = userIdCache;
             _displayNameCache = displayNameCache;
@@ -26,31 +26,31 @@ namespace Zazz.Infrastructure.Services
             return _userIdCache.TryGet(username);
         }
 
-        public void AddUserDiplayName(string username, string displayName)
+        public void AddUserDiplayName(int userId, string displayName)
         {
-            _displayNameCache.Add(username, displayName);
+            _displayNameCache.Add(userId, displayName);
         }
 
-        public string GetUserDisplayName(string username)
+        public string GetUserDisplayName(int userId)
         {
-            return _displayNameCache.TryGet(username);
+            return _displayNameCache.TryGet(userId);
         }
 
-        public void AddUserPhotoUrl(string username, string photoUrl)
+        public void AddUserPhotoUrl(int userId, string photoUrl)
         {
-            _photoUrlCache.Add(username, photoUrl);
+            _photoUrlCache.Add(userId, photoUrl);
         }
 
-        public string GetUserPhotoUrl(string username)
+        public string GetUserPhotoUrl(int userId)
         {
-            return _photoUrlCache.TryGet(username);
+            return _photoUrlCache.TryGet(userId);
         }
 
-        public void RemoveUserCache(string username)
+        public void RemoveUserCache(string username, int userId)
         {
             _userIdCache.Remove(username);
-            _displayNameCache.Remove(username);
-            _photoUrlCache.Remove(username);
+            _displayNameCache.Remove(userId);
+            _photoUrlCache.Remove(userId);
         }
     }
 }
