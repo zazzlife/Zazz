@@ -15,12 +15,14 @@ namespace Zazz.Infrastructure.Services
         private readonly IUoW _uow;
         private readonly IFileService _fileService;
         private readonly string _rootPath;
+        private readonly ICacheService _cacheService;
 
-        public PhotoService(IUoW uow, IFileService fileService, string rootPath)
+        public PhotoService(IUoW uow, IFileService fileService, string rootPath, ICacheService cacheService)
         {
             _uow = uow;
             _fileService = fileService;
             _rootPath = rootPath;
+            _cacheService = cacheService;
         }
 
         public Task<Photo> GetPhotoAsync(int id)
@@ -112,25 +114,40 @@ namespace Zazz.Infrastructure.Services
 
         public string GetUserImageUrl(int userId)
         {
+            var cache = _cacheService.GetUserPhotoUrl(userId);
+            if (!String.IsNullOrEmpty(cache))
+                return cache;
+
             var photoId = _uow.UserRepository.GetUserPhotoId(userId);
+
+            var img = String.Empty;
 
             if (photoId == 0)
             {
                 var gender = _uow.UserRepository.GetUserGender(userId);
-                return DefaultImageHelper.GetUserDefaultImage(gender);
+                img = DefaultImageHelper.GetUserDefaultImage(gender);
             }
-
-            var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
-            if (photo == null)
+            else
             {
-                var gender = _uow.UserRepository.GetUserGender(userId);
-                return DefaultImageHelper.GetUserDefaultImage(gender);
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
+                if (photo == null)
+                {
+                    var gender = _uow.UserRepository.GetUserGender(userId);
+                    img = DefaultImageHelper.GetUserDefaultImage(gender);
+                }
+                else if (photo.IsFacebookPhoto)
+                {
+                    img = photo.FacebookPicUrl;
+                }
+                else
+                {
+                    img = GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                }
             }
 
-            if (photo.IsFacebookPhoto)
-                return photo.FacebookPicUrl;
+            _cacheService.AddUserPhotoUrl(userId, img);
 
-            return GeneratePhotoUrl(photo.UploaderId, photo.Id);
+            return img;
         }
 
         //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing

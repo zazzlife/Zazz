@@ -19,14 +19,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IFileService> _fs;
         private PhotoService _sut;
         private string _tempRootPath;
+        private Mock<ICacheService> _cacheService;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
             _fs = new Mock<IFileService>();
+            _cacheService = new Mock<ICacheService>();
             _tempRootPath = Path.GetTempPath();
-            _sut = new PhotoService(_uow.Object, _fs.Object, _tempRootPath);
+            _sut = new PhotoService(_uow.Object, _fs.Object, _tempRootPath, _cacheService.Object);
             _uow.Setup(x => x.SaveChanges());
         }
 
@@ -461,7 +463,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ReturnDefaultImage_WhenPhotoIdIs0_GetUserImageUrl()
+        public void ReturnDefaultImage_WhenPhotoIdIs0AndAddToCacheIfItsNotThere_GetUserImageUrl()
         {
             //Arrange
             var userId = 12;
@@ -475,25 +477,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             UploaderId = userId
                         };
 
+            var expected = DefaultImageHelper.GetUserDefaultImage(gender);
+
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(0);
             _uow.Setup(x => x.UserRepository.GetUserGender(userId))
                 .Returns(gender);
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
                 .Returns(() => photo);
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
+
 
             //Act
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(DefaultImageHelper.GetUserDefaultImage(gender), result);
+            Assert.AreEqual(expected, result);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(It.IsAny<int>()), Times.Never());
+            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
         }
 
         [Test]
-        public void ReturnDefaultImage_WhenPhotoIdIsNot0ButPhotoIsNull_GetUserImageUrl()
+        public void ReturnDefaultImage_WhenPhotoIdIsNot0ButPhotoIsNullAndAddToCacheIfItsNotThere_GetUserImageUrl()
         {
             //Arrange
             var userId = 12;
@@ -506,6 +516,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = photoId,
                 UploaderId = userId
             };
+
+            var expected = DefaultImageHelper.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);
@@ -513,19 +525,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(gender);
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
                 .Returns(() => null);
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
 
             //Act
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(DefaultImageHelper.GetUserDefaultImage(gender), result);
+            Assert.AreEqual(expected, result);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
         }
 
         [Test]
-        public void ReturnUserImage_WhenPhotoIdIsNot0AndPhotoIsNotNull_GetUserImageUrl()
+        public void ReturnUserImage_WhenPhotoIdIsNot0AndPhotoIsNotNullAndAddToCacheIfItsNotThere_GetUserImageUrl()
         {
             //Arrange
             var userId = 12;
@@ -539,6 +556,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UploaderId = userId
             };
 
+            var expected = _sut.GeneratePhotoUrl(userId, photoId);
+
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);
             _uow.Setup(x => x.UserRepository.GetUserGender(userId))
@@ -546,7 +565,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
                 .Returns(() => photo);
 
-            var expected = _sut.GeneratePhotoUrl(userId, photoId);
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
+
+            
             //Act
             var result = _sut.GetUserImageUrl(userId);
 
@@ -555,10 +578,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
         }
 
         [Test]
-        public void ReturnFacebookImageUrlIfThePhotoIsFromFacebook_OnGetUserImageUrl()
+        public void ReturnFacebookImageUrlIfThePhotoIsFromFacebookAndAddToCacheIfItsNotThere_OnGetUserImageUrl()
         {
             //Arrange
             var userId = 12;
@@ -574,6 +599,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FacebookPicUrl = "pic url"
             };
 
+            var expected = photo.FacebookPicUrl;
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(photoId);
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(gender);
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
+                .Returns(() => photo);
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
+
+            //Act
+            var result = _sut.GetUserImageUrl(userId);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
+        }
+
+        [Test]
+        public void ReturnUserImageFromCacheIfExists_GetUserImageUrl()
+        {
+            //Arrange
+            var userId = 12;
+            var gender = Gender.Male;
+            var photoId = 123;
+
+            var photo = new PhotoMinimalDTO
+            {
+                AlbumId = 3,
+                Id = photoId,
+                UploaderId = userId
+            };
+
+            var expected = _sut.GeneratePhotoUrl(userId, photoId);
+
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);
             _uow.Setup(x => x.UserRepository.GetUserGender(userId))
@@ -581,14 +647,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
                 .Returns(() => photo);
 
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(expected);
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
+
+
             //Act
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(photo.FacebookPicUrl, result);
-            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
+            Assert.AreEqual(expected, result);
+            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Never());
             _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Never());
+            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Never());
         }
     }
 }
