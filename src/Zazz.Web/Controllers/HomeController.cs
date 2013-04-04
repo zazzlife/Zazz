@@ -60,7 +60,8 @@ namespace Zazz.Web.Controllers
             {
                 var users = _uow.UserRepository.GetAll()
                                 .Where(u =>
-                                    u.UserDetail.FullName.Contains(q) || u.Username.Contains(q) ||
+                                    u.UserDetail.FullName.Contains(q) || 
+                                    u.Username.Contains(q) ||
                                     u.ClubDetail.ClubName.Contains(q))
                                 .Select(u => new
                                              {
