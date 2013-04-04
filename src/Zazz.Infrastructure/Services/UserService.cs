@@ -8,10 +8,12 @@ namespace Zazz.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IUoW _uoW;
+        private readonly ICacheService _cacheService;
 
-        public UserService(IUoW uoW)
+        public UserService(IUoW uoW, ICacheService cacheService)
         {
             _uoW = uoW;
+            _cacheService = cacheService;
         }
 
         public AccountType GetUserAccountType(int userId)
@@ -31,14 +33,21 @@ namespace Zazz.Infrastructure.Services
 
         public string GetUserDisplayName(int userId)
         {
+            var cache = _cacheService.GetUserDisplayName(userId);
+            if (!String.IsNullOrEmpty(cache))
+                return cache;
+
             var fullName = _uoW.UserRepository.GetUserFullName(userId);
             if (!String.IsNullOrEmpty(fullName))
             {
+                _cacheService.AddUserDiplayName(userId, fullName);
                 return fullName;
             }
             else
             {
-                return _uoW.UserRepository.GetUserName(userId);
+                var username = _uoW.UserRepository.GetUserName(userId);
+                _cacheService.AddUserDiplayName(userId, username);
+                return username;
             }
         }
 
