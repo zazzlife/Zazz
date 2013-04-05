@@ -626,14 +626,23 @@ hr.gold-line {
 
 .pic-list {
     margin-top: 50px;
-    padding: 5px;
+    padding: 0;
+    padding-left: 2px;
+    padding-bottom: 10px;
 }
 
-.pic-list img {
+.pic-list .img {
     width: 150px;
     height: 150px;
-    margin: 1px;
-    margin-bottom: 3px;
+    margin: 7px;
+    float: left;
+}
+
+.pic-list .img .remove-img {
+    position: absolute;
+    margin-left: 131px;
+    margin-top: 5px;
+    display: none;
 }
 
 .photo-thumbnail {

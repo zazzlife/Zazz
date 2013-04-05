@@ -1,4 +1,20 @@
-﻿$(document).on('click', '.remove-photo-btn', function() {
+﻿$(document).on('mouseenter', '.pic-list .img', function() {
+
+    var self = $(this);
+    var removeBtn = self.children('.remove-img');
+    removeBtn.fadeIn('fast');
+
+});
+
+$(document).on('mouseleave', '.pic-list .img', function () {
+
+    var self = $(this);
+    var removeBtn = self.children('.remove-img');
+    removeBtn.fadeOut('fast');
+
+});
+
+$(document).on('click', '.remove-photo-btn', function () {
 
     var self = $(this);
     var url = self.data('url');
