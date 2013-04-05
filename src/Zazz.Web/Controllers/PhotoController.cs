@@ -26,6 +26,11 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
+        public ActionResult Index(int? id)
+        {
+            return View();
+        }
+
         [Authorize]
         public async Task<ActionResult> Remove(int id)
         {

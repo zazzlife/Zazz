@@ -612,6 +612,18 @@ hr.gold-line {
     Photo
 ***************************************/
 
+.albim-pic-switch {
+    display: block;
+    width: 500px;
+    margin: 0 auto;
+    list-style: none;
+}
+
+.albim-pic-switch button {
+    width: 250px;
+    font-size: 22px !important;
+}
+
 .photo-thumbnail {
     min-width: 150px;
     width: 150px;
