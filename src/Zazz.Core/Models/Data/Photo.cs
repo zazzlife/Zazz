@@ -23,7 +23,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("AlbumId")]
         public virtual Album Album { get; set; }
 
-        public int AlbumId { get; set; }
+        public int? AlbumId { get; set; }
 
         public bool IsFacebookPhoto { get; set; }
 

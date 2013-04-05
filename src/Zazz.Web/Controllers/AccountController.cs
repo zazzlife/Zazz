@@ -126,14 +126,7 @@ namespace Zazz.Web.Controllers
                                                         CityId = registerVm.CityId,
                                                         SendSyncErrorNotifications = true,
                                                         SyncFbEvents = true
-                                                    },
-                                   Albums = new List<Album>
-                                                {
-                                                    new Album
-                                                        {
-                                                            Name = "Default"
-                                                        }
-                                                }
+                                                    }
                                };
 
                 if (registerVm.AccountType == AccountType.ClubAdmin)
@@ -388,14 +381,7 @@ namespace Zazz.Web.Controllers
                         CityId = registerVm.CityId,
                         SendSyncErrorNotifications = true,
                         SyncFbEvents = true
-                    },
-                    Albums = new List<Album>
-                                 {
-                                     new Album
-                                         {
-                                             Name = "Default"
-                                         }
-                                 }
+                    }
                 };
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {

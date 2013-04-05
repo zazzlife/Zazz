@@ -62,7 +62,7 @@ function loadAlbumsDropDownAsync(dropdownElem) {
         },
         success: function (res) {
 
-            var options = "";
+            var options = '<option value></option>';
 
             _.forEach(res, function (obj) {
                 options += '<option value="' + obj.id + '">' + obj.name + '</option>';
@@ -202,10 +202,6 @@ function initImgUploader(onComplete) {
 $(document).on('click', '#uploadImg', function () {
     var description = $('#Description').val();
     var albumId = $('#upload-albumSelect').val();
-    if (!albumId) {
-        toastr.error("Album must be selected");
-        return;
-    }
 
     if (!imgUploader)
         return;

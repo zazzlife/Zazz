@@ -41,7 +41,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Upload(HttpPostedFileBase image, string description, int albumId)
+        public async Task<ActionResult> Upload(HttpPostedFileBase image, string description, int? albumId)
         {
             using (_photoService)
             using (_albumService)
@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-        public async Task<JsonNetResult> AjaxUpload(string description, int albumId, HttpPostedFileBase image)
+        public async Task<JsonNetResult> AjaxUpload(string description, int? albumId, HttpPostedFileBase image)
         {
             using (_photoService)
             using (_albumService)
@@ -86,14 +86,18 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        private async Task<Photo> SaveImageAsync(Stream image, string description, int albumId)
+        private async Task<Photo> SaveImageAsync(Stream image, string description, int? albumId)
         {
 
             var userId = _userService.GetUserId(User.Identity.Name);
-            var album = await _albumService.GetAlbumAsync(albumId);
 
-            if (album.UserId != userId)
-                throw new SecurityException();
+            if (albumId.HasValue)
+            {
+                var album = await _albumService.GetAlbumAsync(albumId.Value);
+
+                if (album.UserId != userId)
+                    throw new SecurityException();
+            }
 
             var photo = new Photo
                         {
