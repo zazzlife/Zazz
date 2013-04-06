@@ -38,56 +38,59 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        //public ActionResult List(int id, int page = 1)
-        //{
-        //    using (_photoService)
-        //    using (_albumService)
-        //    using (_userService)
-        //    {
-        //        const int PAGE_SIZE = 30;
-        //        var skip = (page - 1) * PAGE_SIZE;
+        public ActionResult List(int id, int page = 1)
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                const int PAGE_SIZE = 30;
+                var skip = (page - 1) * PAGE_SIZE;
 
-        //        var currentUserId = 0;
-        //        if (Request.IsAuthenticated)
-        //            currentUserId = _userService.GetUserId(User.Identity.Name);
+                var currentUserId = 0;
+                if (Request.IsAuthenticated)
+                    currentUserId = _userService.GetUserId(User.Identity.Name);
 
-        //        var photos = _photoService.GetAll()
-        //            .OrderBy(p => p.Id)
-        //            .Skip(skip)
-        //            .Take(PAGE_SIZE)
-        //            .Select(p => new
-        //                         {
-        //                             id = p.Id,
-        //                             userId = p.UploaderId,
-        //                             isFromFb = p.IsFacebookPhoto,
-        //                             fbUrl = p.FacebookLink
-        //                         })
-        //            .ToList();
+                var photos = _photoService.GetAll()
+                    .OrderBy(p => p.Id)
+                    .Skip(skip)
+                    .Take(PAGE_SIZE)
+                    .Select(p => new
+                                 {
+                                     id = p.Id,
+                                     userId = p.UploaderId,
+                                     isFromFb = p.IsFacebookPhoto,
+                                     fbUrl = p.FacebookLink
+                                 })
+                    .ToList();
 
-        //        var photosVm = photos.Select(p => new PhotoViewModel
-        //                                    {
-        //                                        IsFromCurrentUser = p.userId == currentUserId,
-        //                                        PhotoId = p.id,
-        //                                        PhotoUrl = p.isFromFb
-        //                                                       ? p.fbUrl
-        //                                                       : _photoService.GeneratePhotoUrl(p.userId, p.id)
-        //                                    })
-        //                       .ToList();
+                var photosVm = photos.Select(p => new PhotoViewModel
+                                            {
+                                                IsFromCurrentUser = p.userId == currentUserId,
+                                                PhotoId = p.id,
+                                                PhotoUrl = p.isFromFb
+                                                               ? p.fbUrl
+                                                               : _photoService.GeneratePhotoUrl(p.userId, p.id)
+                                            })
+                               .ToList();
 
-        //        if (Request.IsAjaxRequest())
-        //        {
-        //            return View("_PhotoList", photosVm);
-        //        }
+                if (Request.IsAjaxRequest())
+                {
+                    return View("_PhotoList", photosVm);
+                }
 
-        //        var vm = new PhotoListViewModel
-        //                 {
-        //                     UserId = id,
-        //                     Photos = photosVm
-        //                 };
 
-        //        return View(vm);
-        //    }
-        //}
+                var vm = new MainPhotoPageViewModel
+                         {
+                             IsForOwner = currentUserId == id,
+                             Photos = photosVm,
+                             UserId = id,
+                             ViewType = PhotoViewType.Photos
+                         };
+
+                return View("MainView", vm);
+            }
+        }
 
         [Authorize]
         public ActionResult Albums()

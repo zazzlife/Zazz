@@ -8,6 +8,9 @@ namespace Zazz.Web.Models
 
         public bool IsForOwner { get; set; }
 
+        /// <summary>
+        /// Id of the user that owns the page. (May or may not be the current user)
+        /// </summary>
         public int UserId { get; set; }
 
         public IEnumerable<PhotoViewModel> Photos { get; set; }
