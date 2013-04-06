@@ -1,4 +1,14 @@
-﻿$(function () {
+﻿/*
+    Parameters:
+
+    data-scroll-pagination="1" (enabling it)
+    data-url="URL" endpoint url
+    data-page="PAGE NUMBER" page number
+    data-clearfix="1" if you need to move the clearfix to end
+
+*/
+
+$(function () {
 
     var container = $('*[data-scroll-pagination]');
     if (!container) {
@@ -42,8 +52,9 @@
 					clear.appendTo(container);
 
 				    container.data('page', currentPage);
-
 				    isLoading = false;
+
+				    applyPageStyles();
 				}
 			});
         }
