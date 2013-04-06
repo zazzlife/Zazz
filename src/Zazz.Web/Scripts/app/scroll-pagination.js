@@ -18,11 +18,12 @@
 			isLoading = true;
             var currentPage = container.data('page');
 			var clearfix = container.data('clearfix');
-			
+            currentPage++;
+
 			$.ajax({
 				url: url,
 				data: {
-					page: (currentPage + 1)
+					page: currentPage
 				},
 				error: function () {
 					toastr.error('Failed to load more data');
@@ -37,16 +38,12 @@
 					
 					data.appendTo(container);
 					
-					for (var i = 0; i < data.length; i++) {
-							var item = $(data[i]);
-							if (item) {
-								item.hide();
-								item.fadeIn();
-							}
-					}
-					
 					var clear = $('<div class="clearfix"></div>');
 					clear.appendTo(container);
+
+				    container.data('page', currentPage);
+
+				    isLoading = false;
 				}
 			});
         }
