@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
@@ -8,6 +9,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPhotoService : IDisposable
     {
+        IQueryable<Photo> GetAll();
+
         Task<Photo> GetPhotoAsync(int id);
 
         string GeneratePhotoUrl(int userId, int photoId);

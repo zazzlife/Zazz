@@ -25,6 +25,11 @@ namespace Zazz.Infrastructure.Services
             _cacheService = cacheService;
         }
 
+        public IQueryable<Photo> GetAll()
+        {
+            return _uow.PhotoRepository.GetAll();
+        }
+
         public Task<Photo> GetPhotoAsync(int id)
         {
             return _uow.PhotoRepository.GetByIdAsync(id);

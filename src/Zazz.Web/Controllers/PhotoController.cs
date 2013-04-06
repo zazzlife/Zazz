@@ -39,12 +39,42 @@ namespace Zazz.Web.Controllers
             using (_albumService)
             using (_userService)
             {
+                const int PAGE_SIZE = 30;
+                var skip = (page - 1) * PAGE_SIZE;
+
+                var currentUserId = 0;
+                if (Request.IsAuthenticated)
+                    currentUserId = _userService.GetUserId(User.Identity.Name);
+
+                var photos = _photoService.GetAll()
+                    .OrderBy(p => p.Id)
+                    .Skip(skip)
+                    .Take(PAGE_SIZE)
+                    .Select(p => new
+                                 {
+                                     id = p.Id,
+                                     userId = p.UploaderId,
+                                     isFromFb = p.IsFacebookPhoto,
+                                     fbUrl = p.FacebookLink
+                                 })
+                    .ToList();
+
+                var vm = photos.Select(p => new PhotoViewModel
+                                            {
+                                                IsFromCurrentUser = p.userId == currentUserId,
+                                                PhotoId = p.id,
+                                                PhotoUrl = p.isFromFb
+                                                               ? p.fbUrl
+                                                               : _photoService.GeneratePhotoUrl(p.userId, p.id)
+                                            })
+                               .ToList();
+
                 if (Request.IsAjaxRequest())
                 {
-                    return View("_ListPartial");
+                    return View("_ListPartial", vm);
                 }
 
-                return View();
+                return View(vm);
             }
         }
 
