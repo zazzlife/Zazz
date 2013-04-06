@@ -12,14 +12,7 @@
         </div>
 
         <div class="pic-list well">
-            @for (int i = 0; i < 50; i++)
-            {
-                <div class="img">
-                    <button class="btn btn-small remove-img icononly-btn" title="Remove"><i class="icon-remove"></i></button>
-                    <img src="~/Images/placeholder.gif" class="img-polaroid" />
-                </div>
-            }
-            <div class="clearfix"></div>
+            @Html.Partial("_ListPartial")
         </div>
 
     </div>

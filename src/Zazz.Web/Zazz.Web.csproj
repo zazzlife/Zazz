@@ -455,6 +455,7 @@
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
     <Content Include="Views\Photo\Crop.cshtml" />
     <Content Include="Views\Photo\List.cshtml" />
+    <Content Include="Views\Photo\_ListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

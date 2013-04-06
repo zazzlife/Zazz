@@ -35,7 +35,17 @@ namespace Zazz.Web.Controllers
 
         public ActionResult List(int id, int page = 1)
         {
-            return View();
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                if (Request.IsAjaxRequest())
+                {
+                    return View("_ListPartial");
+                }
+
+                return View();
+            }
         }
 
         [Authorize]
