@@ -92,27 +92,40 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        [Authorize]
-        public ActionResult Albums()
+        public async Task<ActionResult> Albums(int id)
         {
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                return RedirectToAction("Albums", new {id = userId, page = 1});
-            }
-        }
+                var albums = await _albumService.GetUserAlbumsAsync(id);
 
-        public ActionResult Albums(int id, int page = 1)
-        {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                var albums = _albumService.GetUserAlbumsAsync(id);
+                var currentUserId = 0;
+                if (User.Identity.IsAuthenticated)
+                    currentUserId = _userService.GetUserId(User.Identity.Name);
 
-                return View();
+                var albumsVm = albums.Select(a => new AlbumViewModel
+                                                  {
+                                                      AlbumId = a.Id,
+                                                      AlbumName = a.Name,
+                                                      IsFromCurrentUser = currentUserId == id,
+                                                      UserId = id
+                                                  });
+
+                if (Request.IsAjaxRequest())
+                {
+                    return View("_AlbumList", albumsVm);
+                }
+
+                var fullVm = new MainPhotoPageViewModel
+                             {
+                                 IsForOwner = currentUserId == id,
+                                 Albums = albumsVm,
+                                 UserId = id,
+                                 ViewType = PhotoViewType.Albums
+                             };
+
+                return View("MainView", fullVm);
             }
         }
 

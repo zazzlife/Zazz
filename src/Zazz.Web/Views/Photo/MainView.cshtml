@@ -7,13 +7,17 @@
 
         <div class="albim-pic-switch">
             <div class="btn-group" data-toggle="buttons-radio">
-                <a href="~/photo/list/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" 
-               class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
-
-                <a href="~/photo/albums/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
+                
+                <a href="~/photo/list/@Model.UserId/1" 
+                   data-ajax="1" data-container="#photosContainer"
+                     class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
+                
+                <a href="~/photo/albums/@Model.UserId/1"
+                   data-ajax="1" data-container="#photosContainer"
+                     class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
             </div>
         </div>
-        
+
         @if (Model.ViewType == PhotoViewType.Photos)
         {
             <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
@@ -22,7 +26,7 @@
         }
         else
         {
-            <div>
+            <div id="photosContainer" class="pic-list well">
                 @Html.Partial("_AlbumList", Model.Albums)
             </div>   
         }

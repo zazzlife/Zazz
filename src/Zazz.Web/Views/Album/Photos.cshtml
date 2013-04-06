@@ -16,7 +16,7 @@
     </ul>
 
     <div class="margin-ten">
-        @if (Model.IsOwner)
+        @if (Model.IsFromCurrentUser)
         {
             <p><strong>Upload New Photo</strong></p>
             using (Html.BeginForm("Upload", "Photo", FormMethod.Post, new { @enctype = "multipart/form-data" }))
@@ -55,7 +55,7 @@
                         </a>
                     </div>
 
-                    @if (Model.IsOwner)
+                    @if (Model.IsFromCurrentUser)
                     {
                         <div class="photo-hover">
                             <button title="Remove Photo" data-url="/photo/remove/@p.PhotoId"

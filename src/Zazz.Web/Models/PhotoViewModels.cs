@@ -26,13 +26,18 @@ namespace Zazz.Web.Models
 
     public class AlbumViewModel
     {
-        public bool IsOwner { get; set; }
+        public bool IsFromCurrentUser { get; set; }
 
         public int AlbumId { get; set; }
 
+        /// <summary>
+        /// Id of the user that owns the page. (May or may not be the current user)
+        /// </summary>
         public int UserId { get; set; }
 
         public string AlbumName { get; set; }
+
+        public string AlbumPicUrl { get; set; }
     }
 
     public class PhotoViewModel
