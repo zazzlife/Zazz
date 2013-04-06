@@ -246,7 +246,6 @@
     <Compile Include="Models\FineUploadResponse.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\JsonErrorModel.cs" />
-    <Compile Include="Models\PhotoListViewModel.cs" />
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />

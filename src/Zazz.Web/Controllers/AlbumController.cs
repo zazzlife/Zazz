@@ -25,84 +25,84 @@ namespace Zazz.Web.Controllers
             _photoService = photoService;
         }
 
-        [Authorize]
-        public ActionResult Index()
-        {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                return RedirectToAction("List", "Album", new { id = userId, page = 1 });
-            }
-        }
+        //[Authorize]
+        //public ActionResult Index()
+        //{
+        //    using (_photoService)
+        //    using (_albumService)
+        //    using (_userService)
+        //    {
+        //        var userId = _userService.GetUserId(User.Identity.Name);
+        //        return RedirectToAction("List", "Album", new { id = userId, page = 1 });
+        //    }
+        //}
 
-        public async Task<ActionResult> List(int id, int page = 1)
-        {
-            if (page == 0)
-                throw new HttpException(400, "Bad Request");
+        //public async Task<ActionResult> List(int id, int page = 1)
+        //{
+        //    if (page == 0)
+        //        throw new HttpException(400, "Bad Request");
 
-            const int PAGE_SIZE = 6;
-            var skip = (page - 1) * PAGE_SIZE;
+        //    const int PAGE_SIZE = 6;
+        //    var skip = (page - 1) * PAGE_SIZE;
 
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                var totalAlbumsCount = await _albumService.GetUserAlbumsCountAsync(id);
-                var albums = await _albumService.GetUserAlbumsAsync(id, skip, PAGE_SIZE);
+        //    using (_photoService)
+        //    using (_albumService)
+        //    using (_userService)
+        //    {
+        //        var totalAlbumsCount = await _albumService.GetUserAlbumsCountAsync(id);
+        //        var albums = await _albumService.GetUserAlbumsAsync(id, skip, PAGE_SIZE);
 
-                var isOwner = false;
-                if (User.Identity.IsAuthenticated)
-                {
-                    var currentUserId = _userService.GetUserId(User.Identity.Name);
-                    isOwner = currentUserId == id;
-                }
+        //        var isOwner = false;
+        //        if (User.Identity.IsAuthenticated)
+        //        {
+        //            var currentUserId = _userService.GetUserId(User.Identity.Name);
+        //            isOwner = currentUserId == id;
+        //        }
 
-                var albumsVM = new List<PhotoViewModel>();
-                foreach (var album in albums)
-                {
-                    var albumVm = new PhotoViewModel
-                                      {
-                                          PhotoId = album.Id,
-                                          PhotoDescription = album.Name,
-                                          IsFromCurrentUser = isOwner
-                                      };
-                    var firstAlbumImage = album.Photos.FirstOrDefault();
+        //        var albumsVM = new List<PhotoViewModel>();
+        //        foreach (var album in albums)
+        //        {
+        //            var albumVm = new PhotoViewModel
+        //                              {
+        //                                  PhotoId = album.Id,
+        //                                  PhotoDescription = album.Name,
+        //                                  IsFromCurrentUser = isOwner
+        //                              };
+        //            var firstAlbumImage = album.Photos.FirstOrDefault();
 
-                    if (firstAlbumImage == null)
-                    {
-                        albumVm.PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage();
-                    }
-                    else
-                    {
-                        if (firstAlbumImage.IsFacebookPhoto)
-                        {
-                            albumVm.PhotoUrl = firstAlbumImage.FacebookLink;
-                        }
-                        else
-                        {
-                            albumVm.PhotoUrl = _photoService.GeneratePhotoUrl(firstAlbumImage.UploaderId,
-                                                                              firstAlbumImage.Id);
-                        }
+        //            if (firstAlbumImage == null)
+        //            {
+        //                albumVm.PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage();
+        //            }
+        //            else
+        //            {
+        //                if (firstAlbumImage.IsFacebookPhoto)
+        //                {
+        //                    albumVm.PhotoUrl = firstAlbumImage.FacebookLink;
+        //                }
+        //                else
+        //                {
+        //                    albumVm.PhotoUrl = _photoService.GeneratePhotoUrl(firstAlbumImage.UploaderId,
+        //                                                                      firstAlbumImage.Id);
+        //                }
 
-                    }
+        //            }
 
-                    albumsVM.Add(albumVm);
-                }
+        //            albumsVM.Add(albumVm);
+        //        }
 
-                var pagedList = new StaticPagedList<PhotoViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
+        //        var pagedList = new StaticPagedList<PhotoViewModel>(albumsVM, page, PAGE_SIZE, totalAlbumsCount);
 
-                var vm = new AlbumListViewModel
-                             {
-                                 IsOwner = isOwner,
-                                 Albums = pagedList,
-                                 UserId = id
-                             };
+        //        var vm = new AlbumListViewModel
+        //                     {
+        //                         IsOwner = isOwner,
+        //                         Albums = pagedList,
+        //                         UserId = id
+        //                     };
 
-                return View("List", vm);
-            }
-        }
+        //        return View("List", vm);
+        //    }
+        //}
 
         [Authorize, HttpPost]
         public async Task<ActionResult> CreateAlbum(string albumName)
