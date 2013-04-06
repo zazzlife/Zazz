@@ -26,7 +26,14 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         public ActionResult Index(int? id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            return RedirectToAction("List", new { id = userId, page = 1 });
+        }
+
+        public ActionResult List(int id, int page = 1)
         {
             return View();
         }
@@ -176,9 +183,9 @@ namespace Zazz.Web.Controllers
 
                 vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
                 vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
-                               ? 10/3 : 1;
+                               ? 10 / 3 : 1;
 
-                return View(vm);   
+                return View(vm);
             }
         }
 
