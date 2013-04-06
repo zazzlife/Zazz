@@ -10,7 +10,7 @@
                 <a href="~/photo/list/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" 
                class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
 
-                <a href="~/photo/albums/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Albums</a>
+                <a href="~/photo/albums/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
             </div>
         </div>
         
