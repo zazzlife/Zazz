@@ -107,6 +107,8 @@ namespace Zazz.Web.Controllers
             using (_albumService)
             using (_userService)
             {
+                var albums = _albumService.GetUserAlbumsAsync(id);
+
                 return View();
             }
         }

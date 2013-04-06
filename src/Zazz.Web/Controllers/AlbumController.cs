@@ -153,63 +153,63 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Photos(int id, int page = 1)
-        {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                if (page == 0)
-                    throw new HttpException(400, "Bad Request");
+        //[HttpGet]
+        //public async Task<ActionResult> Photos(int id, int page = 1)
+        //{
+        //    using (_photoService)
+        //    using (_albumService)
+        //    using (_userService)
+        //    {
+        //        if (page == 0)
+        //            throw new HttpException(400, "Bad Request");
 
-                var vm = await GetPhotosAsync(id, page);
-                return View(vm);
-            }
-        }
+        //        var vm = await GetPhotosAsync(id, page);
+        //        return View(vm);
+        //    }
+        //}
 
-        private async Task<AlbumPhotosViewModel> GetPhotosAsync(int albumId, int page)
-        {
-            const int PAGE_SIZE = 20;
-            var skip = (page - 1)*PAGE_SIZE;
+        //private async Task<AlbumViewModel> GetPhotosAsync(int albumId, int page)
+        //{
+        //    const int PAGE_SIZE = 20;
+        //    var skip = (page - 1)*PAGE_SIZE;
 
-            var userId = 0;
-            if (User.Identity.IsAuthenticated)
-                userId = _userService.GetUserId(User.Identity.Name);
+        //    var userId = 0;
+        //    if (User.Identity.IsAuthenticated)
+        //        userId = _userService.GetUserId(User.Identity.Name);
 
-            var album = await _albumService.GetAlbumAsync(albumId);
-            var isOwner = userId == album.UserId;
+        //    var album = await _albumService.GetAlbumAsync(albumId);
+        //    var isOwner = userId == album.UserId;
 
-            var totalPhotos = album.Photos.Count();
-            var photos = album.Photos
-                              .OrderBy(p => p.Id)
-                              .Skip(skip)
-                              .Take(PAGE_SIZE);
+        //    var totalPhotos = album.Photos.Count();
+        //    var photos = album.Photos
+        //                      .OrderBy(p => p.Id)
+        //                      .Skip(skip)
+        //                      .Take(PAGE_SIZE);
 
-            var photosVm = photos
-                .Select(p => new PhotoViewModel
-                             {
-                                 PhotoId = p.Id,
-                                 PhotoDescription = p.Description,
-                                 PhotoUrl = p.IsFacebookPhoto
-                                                ? p.FacebookLink
-                                                : _photoService.GeneratePhotoUrl(p.UploaderId, p.Id),
-                                 IsFromCurrentUser = isOwner
-                             });
+        //    var photosVm = photos
+        //        .Select(p => new PhotoViewModel
+        //                     {
+        //                         PhotoId = p.Id,
+        //                         PhotoDescription = p.Description,
+        //                         PhotoUrl = p.IsFacebookPhoto
+        //                                        ? p.FacebookLink
+        //                                        : _photoService.GeneratePhotoUrl(p.UploaderId, p.Id),
+        //                         IsFromCurrentUser = isOwner
+        //                     });
 
-            var pagedList = new StaticPagedList<PhotoViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
+        //    var pagedList = new StaticPagedList<PhotoViewModel>(photosVm, page, PAGE_SIZE, totalPhotos);
 
-            var vm = new AlbumPhotosViewModel
-                     {
-                         IsOwner = isOwner,
-                         AlbumId = albumId,
-                         Photos = pagedList,
-                         UserId = album.UserId,
-                         AlbumName = album.Name
-                     };
+        //    var vm = new AlbumViewModel
+        //             {
+        //                 IsOwner = isOwner,
+        //                 AlbumId = albumId,
+        //                 Photos = pagedList,
+        //                 UserId = album.UserId,
+        //                 AlbumName = album.Name
+        //             };
 
-            return vm;
-        }
+        //    return vm;
+        //}
 
         [HttpGet]
         public async Task<JsonResult> GetAlbums()
@@ -230,13 +230,13 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetPhotos(int albumId, int page = 1)
-        {
-            ViewBag.AlbumId = albumId;
-            var vm = await GetPhotosAsync(albumId, page);
+        //[HttpGet]
+        //public async Task<ActionResult> GetPhotos(int albumId, int page = 1)
+        //{
+        //    ViewBag.AlbumId = albumId;
+        //    var vm = await GetPhotosAsync(albumId, page);
 
-            return View("_PhotosPartial", vm.Photos);
-        }
+        //    return View("_PhotosPartial", vm.Photos);
+        //}
     }
 }
