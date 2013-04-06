@@ -29,8 +29,13 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Index(int? id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
-            return RedirectToAction("List", new { id = userId, page = 1 });
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                return RedirectToAction("List", new {id = userId, page = 1});
+            }
         }
 
         public ActionResult List(int id, int page = 1)
@@ -81,6 +86,28 @@ namespace Zazz.Web.Controllers
                          };
 
                 return View(vm);
+            }
+        }
+
+        [Authorize]
+        public ActionResult Albums()
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                return RedirectToAction("Albums", new {id = userId, page = 1});
+            }
+        }
+
+        public ActionResult Albums(int id, int page = 1)
+        {
+            using (_photoService)
+            using (_albumService)
+            using (_userService)
+            {
+                return View();
             }
         }
 
