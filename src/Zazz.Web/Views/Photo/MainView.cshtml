@@ -1,0 +1,30 @@
+﻿@model MainPhotoPageViewModel
+<div class="container" style="margin-top: 50px;">
+    <div class="page-header">
+        <h3>Soroush Photos</h3>
+    </div>
+    <div>
+
+        <div class="albim-pic-switch">
+            <div class="btn-group" data-toggle="buttons-radio">
+                <a href="~/photo/list/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" 
+               class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
+
+                <a href="~/photo/albums/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Albums</a>
+            </div>
+        </div>
+        
+        @if (Model.ViewType == PhotoViewType.Photos)
+        {
+            <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
+                @Html.Partial("_PhotoList", Model.Photos)
+            </div>
+        }
+        else
+        {
+            <div>
+                @Html.Partial("_AlbumList", Model.Albums)
+            </div>   
+        }
+    </div>
+</div>

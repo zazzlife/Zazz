@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
 
         //        if (Request.IsAjaxRequest())
         //        {
-        //            return View("_ListPartial", photosVm);
+        //            return View("_PhotoList", photosVm);
         //        }
 
         //        var vm = new PhotoListViewModel

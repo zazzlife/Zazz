@@ -453,8 +453,9 @@
     <Content Include="Views\Album\_AlbumThumbnail.cshtml" />
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
     <Content Include="Views\Photo\Crop.cshtml" />
-    <Content Include="Views\Photo\PhotoList.cshtml" />
-    <Content Include="Views\Photo\_ListPartial.cshtml" />
+    <Content Include="Views\Photo\_PhotoList.cshtml" />
+    <Content Include="Views\Photo\MainView.cshtml" />
+    <Content Include="Views\Photo\_AlbumList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
