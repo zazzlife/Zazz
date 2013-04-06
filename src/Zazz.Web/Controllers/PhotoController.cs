@@ -59,7 +59,7 @@ namespace Zazz.Web.Controllers
                                  })
                     .ToList();
 
-                var vm = photos.Select(p => new PhotoViewModel
+                var photosVm = photos.Select(p => new PhotoViewModel
                                             {
                                                 IsFromCurrentUser = p.userId == currentUserId,
                                                 PhotoId = p.id,
@@ -71,8 +71,14 @@ namespace Zazz.Web.Controllers
 
                 if (Request.IsAjaxRequest())
                 {
-                    return View("_ListPartial", vm);
+                    return View("_ListPartial", photosVm);
                 }
+
+                var vm = new PhotoListViewModel
+                         {
+                             UserId = id,
+                             Photos = photosVm
+                         };
 
                 return View(vm);
             }

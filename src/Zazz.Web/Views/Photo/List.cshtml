@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PhotoViewModel>
+﻿@model PhotoListViewModel
 <div class="container" style="margin-top: 50px;">
     <div class="page-header">
         <h3>Soroush Photos</h3>
@@ -7,13 +7,13 @@
 
         <div class="albim-pic-switch">
             <div class="btn-group" data-toggle="buttons-radio">
-                <a href="~/photo/list/1/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info active">Photos</a>
-                <a href="~/photo/list/1/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info">Albums</a>
+                <a href="~/photo/list/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info active">Photos</a>
+                <a href="~/photo/albums/@Model.UserId/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info">Albums</a>
             </div>
         </div>
 
         <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
-            @Html.Partial("_ListPartial", Model)
+            @Html.Partial("_ListPartial", Model.Photos)
         </div>
 
     </div>
