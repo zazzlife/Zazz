@@ -6,12 +6,12 @@
 
         <div class="albim-pic-switch">
             <div class="btn-group" data-toggle="buttons-radio">
-                <button class="btn btn-large btn-info active">Photos</button>
-                <button class="btn btn-large btn-info">Albums</button>
+                <a href="~/photo/list/1/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info active">Photos</a>
+                <a href="~/photo/list/1/1" data-ajax="1" data-container="#photosContainer" class="btn btn-large btn-info">Albums</a>
             </div>
         </div>
 
-        <div class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
+        <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
             @Html.Partial("_ListPartial")
         </div>
 

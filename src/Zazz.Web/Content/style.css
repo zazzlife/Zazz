@@ -619,7 +619,7 @@ hr.gold-line {
     list-style: none;
 }
 
-.albim-pic-switch button {
+.albim-pic-switch .btn {
     width: 250px;
     font-size: 22px !important;
 }
