@@ -3,4 +3,13 @@
     Layout = null;
 }
 
-<h1>Album VM</h1>
+<div>
+        @for (int i = 0; i < 25; i++)
+        {
+            <div class="thumbnail album-thumbnail">
+                <img src="~/Images/placeholder.gif" />
+                <p>Album Name</p>
+            </div>
+        }
+    <div class="clearfix"></div>
+</div>

@@ -612,14 +612,14 @@ hr.gold-line {
     Photo
 ***************************************/
 
-.albim-pic-switch {
+.album-pic-switch {
     display: block;
     width: 500px;
     margin: 0 auto;
     list-style: none;
 }
 
-.albim-pic-switch .btn {
+.album-pic-switch .btn {
     width: 250px;
     font-size: 22px !important;
 }
@@ -653,6 +653,14 @@ hr.gold-line {
     height: 150px;
     max-height: 150px;
     text-align: center;
+}
+
+.album-thumbnail {
+    float: left;
+    background-color: white; 
+    margin: 3px; 
+    width: 150px; 
+    height: 200px;
 }
 
 .photo-hover {
