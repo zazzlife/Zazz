@@ -7,24 +7,18 @@ var photoType;
 
 function onProfilePicChangeClick() {
     photoType = "profile";
-    updateUrl = "/user/ChangeProfilePic/";
 }
 
 function onCoverPicChangeClick() {
     photoType = "cover";
-    updateUrl = "/user/ChangeCoverPic/";
 }
 
 function updateUserPhotoId(photoId) {
-    $.ajax({
-        url: updateUrl,
-        data: {
-            id: photoId
-        },
-        error: function () {
-            toastr.error("An error occured. Please try again later.");
-        }
-    });
+    if (photoType == "profile") {
+        updateProfilePic(photoId);
+    } else if (photoType == "cover") {
+        updateCoverPic(photoId);
+    }
 }
 
 function showCropImg(modalBody, imgId, imgUrl) {
