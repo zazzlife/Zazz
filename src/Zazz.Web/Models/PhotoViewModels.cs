@@ -8,6 +8,8 @@ namespace Zazz.Web.Models
 
         public bool IsForOwner { get; set; }
 
+        public string UserDisplayName { get; set; }
+
         /// <summary>
         /// Id of the user that owns the page. (May or may not be the current user)
         /// </summary>

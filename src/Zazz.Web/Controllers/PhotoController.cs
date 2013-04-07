@@ -28,7 +28,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
             using (_photoService)
             using (_albumService)
@@ -90,7 +90,8 @@ namespace Zazz.Web.Controllers
                              IsForOwner = currentUserId == id,
                              Photos = photosVm,
                              UserId = id,
-                             ViewType = PhotoViewType.Photos
+                             ViewType = PhotoViewType.Photos,
+                             UserDisplayName = _userService.GetUserDisplayName(id)
                          };
 
                 return View("MainView", vm);
@@ -143,7 +144,8 @@ namespace Zazz.Web.Controllers
                                  IsForOwner = currentUserId == id,
                                  Albums = albumsVm,
                                  UserId = id,
-                                 ViewType = PhotoViewType.Albums
+                                 ViewType = PhotoViewType.Albums,
+                                 UserDisplayName = _userService.GetUserDisplayName(id)
                              };
 
                 return View("MainView", fullVm);
