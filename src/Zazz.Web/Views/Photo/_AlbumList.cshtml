@@ -4,13 +4,16 @@
 }
 
 <div>
-        @for (int i = 0; i < 25; i++)
-        {
-            <div class="thumbnail album-thumbnail">
-                <button class="btn btn-small remove-album-btn icononly-btn" title="Remove"><i class="icon-remove"></i></button>
+    @for (int i = 0; i < 25; i++)
+    {
+        <div class="thumbnail album-thumbnail">
+            <button class="btn btn-small remove-album-btn icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
+            <a href="/photo/list/1/1?albumId=1" data-ajax="1" data-container="#photosContainer">
                 <img src="~/Images/placeholder.gif" />
-                <p>Album Name</p>
-            </div>
-        }
+            </a>
+            <p>Album Name</p>
+
+        </div>
+    }
     <div class="clearfix"></div>
 </div>
