@@ -34,75 +34,20 @@ $(document).on('mouseleave', '.album-thumbnail .img', function () {
 
 });
 
-$(document).on('click', '.remove-photo-btn', function () {
-
+$(document).on('click', '.remove-album', function () {
     var self = $(this);
-    var url = self.data('url');
-    var btnIcon = '<i class="icon-remove"></i>';
-    self.html('');
-    showBtnBusy(self);
+    var parent = self.parent().parent();
+    var id = self.data('id');
 
+    parent.css('opacity', '0.7');
 
-    $.ajax({
-        url: url,
-        cache: false,
-        error: function() {
-            toastr.error("An error occured, Please try again later.");
-            hideBtnBusy(self, btnIcon);
-        },
-        success: function() {
-            self.closest('li').fadeOut();
-        }
-    });
-});
-
-$(document).on('click', '#createAlbumBtn', function (e) {
-
-    e.preventDefault();
-
-    var self = $(this);
-    var albumName = $('#AlbumName').val();
-    
-    if (!albumName) {
-        toastr.error("Album name cannot be empty");
-        return;
-    }
-
-    var btnText = showBtnBusy(self);
-
-    $.ajax({
-        url: '/album/CreateAlbum',
-        cache: false,
-        data: {
-            albumName: albumName
-        },
-        type: 'POST',
-        error: function() {
-            toastr.error('An error occured, Please try again later.');
-            hideBtnBusy(self, btnText);
-        },
-        success: function (res) {
-
-            var album = $(res.trim());
-            album.css('opacity', '0');
-            album.appendTo('ul.thumbnails');
-
-            // fadeIn just doesnt work!
-            var opacity = 0;
-            var fadeIn = setInterval(function() {
-                opacity += 0.1;
-
-                album.css('opacity', opacity);
-                
-                if (opacity >= 1) {
-                    clearInterval(fadeIn);
-                }
-
-            }, 4);
-
-
-            hideBtnBusy(self, btnText);
-        }
-    });
+    removeAlbum(id,
+        function () {
+        toastr.error('An error occured, Please try again later');
+        parent.css('opacity', '1');
+    },
+        function () {
+            parent.fadeOut();
+        });
 
 });

@@ -5,7 +5,10 @@
 
 <div class="thumbnail album-thumbnail">
     <div class="img">
-        <button data-id="@Model.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
+        @if (Model.IsFromCurrentUser)
+        {
+            <button data-id="@Model.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
+        }
         <a href="/photo/list/@Model.UserId/1?albumId=@Model.AlbumId">
             <img src="@Model.AlbumPicUrl" />
         </a>
