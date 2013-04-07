@@ -654,8 +654,8 @@ hr.gold-line {
 
 .remove-album {
     position: absolute;
-    margin-left: 126px;
-    margin-top: 0;
+    margin-left: 145px;
+    margin-top: -6px;
     display: none;
 }
 
@@ -673,8 +673,13 @@ hr.gold-line {
     float: left;
     background-color: white;
     margin: 3px;
-    width: 150px;
-    height: 200px;
+    width: 175px;
+    height: 220px;
+    text-align: center;
+}
+
+.album-thumbnail .img {
+    margin: 6px;
 }
 
 .photo-hover {

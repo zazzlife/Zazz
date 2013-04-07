@@ -4,13 +4,16 @@
 }
 
 <div>
-    @foreach(var a in Model)
+    @foreach (var a in Model)
     {
         <div class="thumbnail album-thumbnail">
-            <button data-id="@a.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
-            <a href="/photo/list/@a.UserId/1?albumId=@a.AlbumId" data-ajax="1" data-container="#photosContainer">
-                <img src="@a.AlbumPicUrl" />
-            </a>
+            <div class="img">
+                <button data-id="@a.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
+                <a href="/photo/list/@a.UserId/1?albumId=@a.AlbumId" data-ajax="1" data-container="#photosContainer">
+                    <img src="@a.AlbumPicUrl" />
+                </a>
+            </div>
+
             <p>@a.AlbumName</p>
 
         </div>

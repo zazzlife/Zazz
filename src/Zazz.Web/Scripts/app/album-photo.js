@@ -18,7 +18,7 @@ $(document).on('mouseleave', '.pic-list .img', function () {
 
 ///////////ALBUMS////////////
 
-$(document).on('mouseenter', '.album-thumbnail', function () {
+$(document).on('mouseenter', '.album-thumbnail .img', function () {
 
     var self = $(this);
     var removeBtn = self.children('.remove-album');
@@ -26,7 +26,7 @@ $(document).on('mouseenter', '.album-thumbnail', function () {
 
 });
 
-$(document).on('mouseleave', '.album-thumbnail', function () {
+$(document).on('mouseleave', '.album-thumbnail .img', function () {
 
     var self = $(this);
     var removeBtn = self.children('.remove-album');
