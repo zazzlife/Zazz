@@ -632,8 +632,8 @@ hr.gold-line {
 }
 
     .pic-list .img {
-        width: 162px;
-        height: 161px;
+        width: 195px;
+        height: 195px;
         margin: 2px;
         float: left;
         text-align: center;
@@ -648,13 +648,13 @@ hr.gold-line {
 
 .remove-img {
     position: absolute;
-    margin-left: 137px;
+    margin-left: 171px;
     display: none;
 }
 
 .remove-album {
     position: absolute;
-    margin-left: 145px;
+    margin-left: 175px;
     margin-top: -6px;
     display: none;
 }
@@ -673,13 +673,17 @@ hr.gold-line {
     float: left;
     background-color: white;
     margin: 3px;
-    width: 175px;
-    height: 220px;
+    width: 206px;
+    height: 260px;
     text-align: center;
 }
 
 .album-thumbnail .img {
     margin: 6px;
+}
+
+#album-list {
+    margin-left: 50px;
 }
 
 .photo-hover {
