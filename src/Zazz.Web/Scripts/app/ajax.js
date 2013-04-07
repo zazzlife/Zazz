@@ -1,4 +1,11 @@
-﻿var DEFAULT_ERROR_MESSAGE = "An error occured, Please try again later.";
+﻿/*
+    moved ajax calls from these files:
+        album-photo.js
+        edit-profile.js
+        follow.js - tried to move the calls from there but it got a little bad. move it if necessary.
+*/
+
+var DEFAULT_ERROR_MESSAGE = "An error occured, Please try again later.";
 var REMOVE_PHOTO_URL = "/photo/remove/";
 var REMOVE_ALBUM_URL = "/album/remove/";
 var UPDATE_PROFILE_PIC_URL = "/user/ChangeProfilePic/";

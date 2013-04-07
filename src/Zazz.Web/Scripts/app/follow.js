@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿// Try to not move the follow ajax calls into ajax.js, it becomes worse.
+
+$(function () {
     
     /* Follow or Unfollow */
     $(document).on('click', '.btn-follow', function () {
