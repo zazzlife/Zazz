@@ -638,10 +638,17 @@ hr.gold-line {
     float: left;
 }
 
-.pic-list .img .remove-img {
+.remove-img-btn {
     position: absolute;
     margin-left: 131px;
     margin-top: 5px;
+    display: none;
+}
+
+.remove-album-btn {
+    position: absolute;
+    margin-left: 126px;
+    margin-top: 0;
     display: none;
 }
 

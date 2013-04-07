@@ -1,7 +1,9 @@
-﻿$(document).on('mouseenter', '.pic-list .img', function() {
+﻿///////////PHOTOS////////////
+
+$(document).on('mouseenter', '.pic-list .img', function () {
 
     var self = $(this);
-    var removeBtn = self.children('.remove-img');
+    var removeBtn = self.children('.remove-img-btn');
     removeBtn.fadeIn('fast');
 
 });
@@ -9,7 +11,25 @@
 $(document).on('mouseleave', '.pic-list .img', function () {
 
     var self = $(this);
-    var removeBtn = self.children('.remove-img');
+    var removeBtn = self.children('.remove-img-btn');
+    removeBtn.fadeOut('fast');
+
+});
+
+///////////ALBUMS////////////
+
+$(document).on('mouseenter', '.album-thumbnail', function () {
+
+    var self = $(this);
+    var removeBtn = self.children('.remove-album-btn');
+    removeBtn.fadeIn('fast');
+
+});
+
+$(document).on('mouseleave', '.album-thumbnail', function () {
+
+    var self = $(this);
+    var removeBtn = self.children('.remove-album-btn');
     removeBtn.fadeOut('fast');
 
 });

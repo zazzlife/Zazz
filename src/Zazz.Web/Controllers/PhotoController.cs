@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -104,13 +105,29 @@ namespace Zazz.Web.Controllers
                 if (User.Identity.IsAuthenticated)
                     currentUserId = _userService.GetUserId(User.Identity.Name);
 
-                var albumsVm = albums.Select(a => new AlbumViewModel
-                                                  {
-                                                      AlbumId = a.Id,
-                                                      AlbumName = a.Name,
-                                                      IsFromCurrentUser = currentUserId == id,
-                                                      UserId = id
-                                                  });
+                var albumsVm = new List<AlbumViewModel>();
+                foreach (var a in albums)
+                {
+                    var album = new AlbumViewModel
+                                {
+                                    AlbumId = a.Id,
+                                    AlbumName = a.Name,
+                                    IsFromCurrentUser = currentUserId == id,
+                                    UserId = a.UserId
+                                };
+
+                    var photo = a.Photos.FirstOrDefault();
+                    if (photo == null)
+                        album.AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage();
+                    else
+                    {
+                        album.AlbumPicUrl = photo.IsFacebookPhoto
+                                                ? photo.FacebookLink
+                                                : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                    }
+
+                    albumsVm.Add(album);
+                }
 
                 if (Request.IsAjaxRequest())
                 {
