@@ -46,8 +46,15 @@ namespace Zazz.Web
             fineUploadOrder.Files.Add("dnd.js");
             fineUploadOrder.Files.Add("uploader.js");
 
+            var bootstrapOrder = new BundleFileSetOrdering("BootstrapOrder");
+            bootstrapOrder.Files.Add("bootstrap.js");
+            bootstrapOrder.Files.Add("bootstrap-lightbox.js");
+            bootstrapOrder.Files.Add("bootstrap-editable.js");
+
+
             bundles.FileSetOrderList.Add(fineUploadOrder);
             bundles.FileSetOrderList.Add(cssOrder);
+            bundles.FileSetOrderList.Add(bootstrapOrder);
 
             bundles.Add(css);
             bundles.Add(jqueryUiCss);
