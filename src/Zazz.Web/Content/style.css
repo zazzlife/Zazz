@@ -44,10 +44,10 @@ body {
     font-family: 'Open Sans';
 }
 
-img {
+/*img {
     max-height: 100%;
     max-width: 100%;
-}
+}*/
 
 .alfa-slab-font {
     font-family: 'Alfa Slab One';
@@ -619,10 +619,10 @@ hr.gold-line {
     list-style: none;
 }
 
-.album-pic-switch .btn {
-    width: 250px;
-    font-size: 22px !important;
-}
+    .album-pic-switch .btn {
+        width: 250px;
+        font-size: 22px !important;
+    }
 
 .pic-list {
     margin-top: 30px;
@@ -631,17 +631,24 @@ hr.gold-line {
     padding-bottom: 10px;
 }
 
-.pic-list .img {
-    width: 150px;
-    height: 150px;
-    margin: 7px;
-    float: left;
-}
+    .pic-list .img {
+        width: 162px;
+        height: 161px;
+        margin: 2px;
+        float: left;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.29);
+        overflow: hidden;
+    }
+
+    .pic-list .img img {
+        min-width: 100%;
+        min-height: 100%;
+    }
 
 .remove-img {
     position: absolute;
-    margin-left: 131px;
-    margin-top: 5px;
+    margin-left: 137px;
     display: none;
 }
 
@@ -664,9 +671,9 @@ hr.gold-line {
 
 .album-thumbnail {
     float: left;
-    background-color: white; 
-    margin: 3px; 
-    width: 150px; 
+    background-color: white;
+    margin: 3px;
+    width: 150px;
     height: 200px;
 }
 
@@ -691,5 +698,4 @@ footer {
     padding-top: 10px;
     margin-top: 50px;
     padding-bottom: 30px;
-    
 }
