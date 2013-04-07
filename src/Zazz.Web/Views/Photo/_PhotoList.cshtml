@@ -7,12 +7,11 @@
 {
 
     <div class="img">
+        <img src="@p.PhotoUrl" class="img-polaroid" />
         @if (p.IsFromCurrentUser)
         {
-            <button class="btn btn-small remove-img-btn icononly-btn" title="Remove"><i class="icon-remove"></i></button>
+            <button class="btn btn-small remove-img icononly-btn" title="Remove"><i class="icon-remove"></i></button>
         }
-        
-        <img src="@p.PhotoUrl" class="img-polaroid" />
     </div>
 }
 <div class="clearfix"></div>

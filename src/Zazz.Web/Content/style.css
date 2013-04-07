@@ -638,14 +638,14 @@ hr.gold-line {
     float: left;
 }
 
-.remove-img-btn {
+.remove-img {
     position: absolute;
     margin-left: 131px;
     margin-top: 5px;
     display: none;
 }
 
-.remove-album-btn {
+.remove-album {
     position: absolute;
     margin-left: 126px;
     margin-top: 0;
