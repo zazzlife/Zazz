@@ -4,19 +4,11 @@
 }
 
 <div>
-    @foreach (var a in Model)
-    {
-        <div class="thumbnail album-thumbnail">
-            <div class="img">
-                <button data-id="@a.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
-                <a href="/photo/list/@a.UserId/1?albumId=@a.AlbumId">
-                    <img src="@a.AlbumPicUrl" />
-                </a>
-            </div>
-
-            <p><strong>@a.AlbumName</strong></p>
-
-        </div>
-    }
+    <div id="album-list">
+        @foreach (var a in Model)
+        {
+            @Html.Partial("_SingleAlbum", a)
+        }
+    </div>
     <div class="clearfix"></div>
 </div>

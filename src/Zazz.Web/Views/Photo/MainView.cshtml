@@ -53,7 +53,10 @@
                     mode: 'popup',
                     send: 'always',
                     success: function(res) {
-                        console.log(res);
+                        var album = $(res.trim());
+                        album.hide().appendTo($('#album-list')).fadeIn();
+
+                        applyPageStyles();
                     },
                     url: '/album/createalbum',
                     validate: function (value) {

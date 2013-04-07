@@ -460,6 +460,7 @@
     <Content Include="Views\Photo\_PhotoList.cshtml" />
     <Content Include="Views\Photo\MainView.cshtml" />
     <Content Include="Views\Photo\_AlbumList.cshtml" />
+    <Content Include="Views\Shared\_SingleAlbum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

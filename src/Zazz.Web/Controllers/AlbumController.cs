@@ -127,15 +127,16 @@ namespace Zazz.Web.Controllers
 
                     await _albumService.CreateAlbumAsync(album);
 
-                    var vm = new PhotoViewModel
+                    var vm = new AlbumViewModel
                              {
+                                 AlbumId = album.Id,
+                                 AlbumName = value,
+                                 AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
                                  IsFromCurrentUser = true,
-                                 PhotoDescription = value,
-                                 PhotoId = album.Id,
-                                 PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage()
+                                 UserId = userId
                              };
 
-                    return View("_AlbumThumbnail", vm);
+                    return View("_SingleAlbum", vm);
                 }
             }
         }
