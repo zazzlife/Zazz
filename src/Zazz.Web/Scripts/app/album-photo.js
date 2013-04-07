@@ -51,3 +51,21 @@ $(document).on('click', '.remove-album', function () {
         });
 
 });
+
+$(document).on('click', '.remove-img', function () {
+    var self = $(this);
+    var parent = self.parent();
+    var id = self.data('id');
+
+    parent.css('opacity', '0.7');
+
+    removePhoto(id,
+        function () {
+            toastr.error('An error occured, Please try again later');
+            parent.css('opacity', '1');
+        },
+        function () {
+            parent.fadeOut();
+        });
+
+});
