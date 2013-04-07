@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public ActionResult List(int id, int page = 1)
+        public ActionResult List(int id, int? albumId, int page = 1)
         {
             using (_photoService)
             using (_albumService)
@@ -52,7 +52,11 @@ namespace Zazz.Web.Controllers
                 if (Request.IsAuthenticated)
                     currentUserId = _userService.GetUserId(User.Identity.Name);
 
-                var photos = _photoService.GetAll()
+                var query = _photoService.GetAll().Where(p => p.UploaderId == id);
+                if (albumId.HasValue)
+                    query = query.Where(p => p.AlbumId == albumId.Value);
+
+                var photos = query
                     .OrderBy(p => p.Id)
                     .Skip(skip)
                     .Take(PAGE_SIZE)
@@ -116,7 +120,7 @@ namespace Zazz.Web.Controllers
                                     UserId = a.UserId
                                 };
 
-                    var photo = a.Photos.FirstOrDefault();
+                    var photo = a.Photos.FirstOrDefault(); //TODO: dont use this navigation property, it is getting all pictures.
                     if (photo == null)
                         album.AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage();
                     else
