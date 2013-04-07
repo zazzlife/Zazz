@@ -1,7 +1,12 @@
 ﻿@model MainPhotoPageViewModel
 <div class="container" style="margin-top: 50px;">
     <div class="page-header">
-        <h3>@Model.UserDisplayName's Photos</h3>
+        <h3 class="pull-left">@Model.UserDisplayName's Photos</h3>
+        @if (Model.IsForCurrentUser && Model.ViewType == PhotoViewType.Albums)
+        {
+            <a style="margin-top: 30px;" class="btn pull-right">New album</a>
+        }
+        <div class="clearfix"></div>
     </div>
     <div>
 
@@ -9,12 +14,12 @@
             <div class="btn-group" data-toggle="buttons-radio">
                 
                 <a href="~/photo/list/@Model.UserId/1" 
-                   @*data-ajax="1" data-container="#photosContainer"*@
-                     class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
+                    @*data-ajax="1" data-container="#photosContainer"*@
+                   class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
                 
                 <a href="~/photo/albums/@Model.UserId/1"
-                   @*data-ajax="1" data-container="#photosContainer"*@
-                     class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
+                    @*data-ajax="1" data-container="#photosContainer"*@
+                   class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
             </div>
         </div>
 
@@ -32,3 +37,4 @@
         }
     </div>
 </div>
+

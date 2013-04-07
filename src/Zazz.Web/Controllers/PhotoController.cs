@@ -87,7 +87,7 @@ namespace Zazz.Web.Controllers
 
                 var vm = new MainPhotoPageViewModel
                          {
-                             IsForOwner = currentUserId == id,
+                             IsForCurrentUser = currentUserId == id,
                              Photos = photosVm,
                              UserId = id,
                              ViewType = PhotoViewType.Photos,
@@ -141,7 +141,7 @@ namespace Zazz.Web.Controllers
 
                 var fullVm = new MainPhotoPageViewModel
                              {
-                                 IsForOwner = currentUserId == id,
+                                 IsForCurrentUser = currentUserId == id,
                                  Albums = albumsVm,
                                  UserId = id,
                                  ViewType = PhotoViewType.Albums,

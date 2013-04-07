@@ -6,7 +6,7 @@ namespace Zazz.Web.Models
     {
         public PhotoViewType ViewType { get; set; }
 
-        public bool IsForOwner { get; set; }
+        public bool IsForCurrentUser { get; set; }
 
         public string UserDisplayName { get; set; }
 
