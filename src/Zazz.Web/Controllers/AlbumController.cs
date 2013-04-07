@@ -105,9 +105,9 @@ namespace Zazz.Web.Controllers
         //}
 
         [Authorize, HttpPost]
-        public async Task<ActionResult> CreateAlbum(string albumName)
+        public async Task<ActionResult> CreateAlbum(string value)
         {
-            if (albumName.Length > 50)
+            if (value.Length > 50)
             {
                 ShowAlert("Album name cannot be longer than 50 characters", AlertType.Error);
                 throw new HttpException(400, "Bad Request");
@@ -121,7 +121,7 @@ namespace Zazz.Web.Controllers
                     var userId = _userService.GetUserId(User.Identity.Name);
                     var album = new Album
                     {
-                        Name = albumName,
+                        Name = value,
                         UserId = userId
                     };
 
@@ -130,7 +130,7 @@ namespace Zazz.Web.Controllers
                     var vm = new PhotoViewModel
                              {
                                  IsFromCurrentUser = true,
-                                 PhotoDescription = albumName,
+                                 PhotoDescription = value,
                                  PhotoId = album.Id,
                                  PhotoUrl = DefaultImageHelper.GetDefaultAlbumImage()
                              };

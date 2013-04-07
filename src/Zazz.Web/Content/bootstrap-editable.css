@@ -139,12 +139,6 @@
 .editable-container.ui-widget {
    font-size: inherit;  /* jqueryui widget font 1.1em too big, overwrite it */
 }
-.editable-click, 
-a.editable-click, 
-a.editable-click:hover {
-    text-decoration: none;
-    border-bottom: dashed 1px #0088cc;
-}
 
 .editable-click.editable-disabled, 
 a.editable-click.editable-disabled, 

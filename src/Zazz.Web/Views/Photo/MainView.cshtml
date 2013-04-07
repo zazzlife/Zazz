@@ -4,7 +4,7 @@
         <h3 class="pull-left">@Model.UserDisplayName's Photos</h3>
         @if (Model.IsForCurrentUser && Model.ViewType == PhotoViewType.Albums)
         {
-            <a style="margin-top: 30px;" class="btn pull-right">New album</a>
+            <a href="#" id="newAlbum" style="margin-top: 30px;" class="btn pull-right">New album</a>
         }
         <div class="clearfix"></div>
     </div>
@@ -38,3 +38,32 @@
     </div>
 </div>
 
+@if (Model.IsForCurrentUser && Model.ViewType == PhotoViewType.Albums)
+{
+    @section Scripts
+    {
+        <script type="text/javascript">
+            $(function() {
+                $('#newAlbum').editable({
+                    type: 'text',
+                    autotext: 'never',
+                    emptytext: 'Album name',
+                    placeholder: 'Album name',
+                    value: '',
+                    mode: 'popup',
+                    send: 'always',
+                    success: function(res) {
+                        console.log(res);
+                    },
+                    url: '/album/createalbum',
+                    validate: function (value) {
+                        if ($.trim(value) == '') {
+                            return 'Album name is required';
+                        }
+                    }
+                });
+                
+            })
+        </script>
+    }
+}
