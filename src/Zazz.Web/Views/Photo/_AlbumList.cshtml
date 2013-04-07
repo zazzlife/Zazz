@@ -4,14 +4,14 @@
 }
 
 <div>
-    @for (int i = 0; i < 25; i++)
+    @foreach(var a in Model)
     {
         <div class="thumbnail album-thumbnail">
-            <button class="btn btn-small remove-album-btn icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
-            <a href="/photo/list/1/1?albumId=1" data-ajax="1" data-container="#photosContainer">
-                <img src="~/Images/placeholder.gif" />
+            <button data-id="@a.AlbumId" class="btn btn-small remove-album-btn icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
+            <a href="/photo/list/@a.UserId/1?albumId=@a.AlbumId" data-ajax="1" data-container="#photosContainer">
+                <img src="@a.AlbumPicUrl" />
             </a>
-            <p>Album Name</p>
+            <p>@a.AlbumName</p>
 
         </div>
     }
