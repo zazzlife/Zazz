@@ -74,7 +74,6 @@ namespace Zazz.Web.Controllers
             }
         }
 
-
         [Authorize, HttpPost]
         public async Task<ActionResult> New(int id, CommentType commentType, string comment)
         {

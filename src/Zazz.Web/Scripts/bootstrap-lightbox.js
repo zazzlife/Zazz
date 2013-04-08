@@ -301,6 +301,12 @@
                     });
                 }
 
+
+                var commentsContainer = content.find('.lightbox-commentsContainer');
+                var id = $img.data('id');
+
+                loadLightboxComments(id, commentsContainer);
+
                 /****SOROUSH:END****/
 
                 that.w = $img.width();

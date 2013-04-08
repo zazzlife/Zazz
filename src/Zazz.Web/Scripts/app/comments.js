@@ -1,5 +1,4 @@
-﻿
-function showInputBusy(elem) {
+﻿function showInputBusy(elem) {
     //disableing the current text box and removing focus
     elem.attr('disabled', 'disabled');
     elem.blur();
@@ -251,3 +250,27 @@ $(document).on('click', '.load-comments-btn', function () {
     });
 
 });
+
+// Lightbox Comments
+
+function loadLightboxComments(photoId, commentsContainer) {
+
+    var url = "/comment/LightboxComments";
+
+    $.ajax({
+        url: url,
+        cache: false,
+        data: {
+            id: photoId
+        },
+        error: function() {
+            commentsContainer.html('<h4>Failed to load comments</h4>');
+        },
+        success: function(res) {
+            commentsContainer.fadeOut(function() {
+                commentsContainer.html(res);
+                commentsContainer.fadeIn();
+            });
+        }
+    });
+}
