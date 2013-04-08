@@ -18,13 +18,16 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
+        private readonly ICacheService _cacheService;
 
-        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService, IUserService userService)
+        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
+            IUserService userService, ICacheService cacheService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
+            _cacheService = cacheService;
         }
 
         [Authorize]
@@ -187,6 +190,8 @@ namespace Zazz.Web.Controllers
                     user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
                     _uow.SaveChanges();
+
+                    _cacheService.RemoveUserCache(user.Username, user.Id);
                     ShowAlert("Your preferences has been updated.", AlertType.Success);
                 }
             }
@@ -205,6 +210,7 @@ namespace Zazz.Web.Controllers
                 user.UserDetail.ProfilePhotoId = id;
 
                 _uow.SaveChanges();
+                _cacheService.RemoveUserCache(user.Username, user.Id);
             }
         }
 
