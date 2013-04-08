@@ -135,7 +135,7 @@ $(document).on('click', '.comment-edit', function (e) {
     editElem.attr('value', text);
     editElem.attr('title', "Press 'enter' to send");
     editElem.attr('data-id', id);
-    editElem.css('width', 370);
+    editElem.css('width', '93%');
     editElem.addClass('comment-edit-box');
 
     p.html(editElem);
@@ -276,6 +276,12 @@ function loadLightboxComments(photoId, commentsContainer) {
                 commentsContainer.html(res);
                 commentsContainer.fadeIn();
                 commentsContainer.data('isLoaded', 1);
+
+                commentsContainer.find('*[title]').each(function() {
+                    $(this).data('placement', 'top');
+                });
+
+                applyPageStyles();
             });
         }
     });
