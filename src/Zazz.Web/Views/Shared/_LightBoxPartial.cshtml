@@ -7,21 +7,14 @@
         <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
     </div>
     <div class='lightbox-content'>
-        @*<table class="pull-left" width="40%" height="100%" align="center" valign="center">
-            <tr>
-                <td>*@
-
-                    <img src="@Model.PhotoUrl"/>
-                    @if (!String.IsNullOrEmpty(Model.PhotoDescription))
-                    {
-                        <div class="lightbox-caption">
-                            <p>@Model.PhotoDescription</p>
-                        </div>
-                    }
-                @*</td>
-            </tr>
-        </table>*@
-        <div class="well pull-right" style="height: 95%; width: 350px;"></div>
+        <img src="@Model.PhotoUrl"/>
+        @if (!String.IsNullOrEmpty(Model.PhotoDescription))
+        {
+            <div class="lightbox-caption">
+                <p>@Model.PhotoDescription</p>
+            </div>
+        }
+        <div class="well pull-right lightbox-commentbox" style="height: 95%; width: 350px;"></div>
 
     </div>
 </div>
