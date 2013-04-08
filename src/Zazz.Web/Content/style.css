@@ -488,8 +488,16 @@ hr.gold-line {
         overflow-y: auto;
     }
 
+    .lightbox-commentbox a {
+        color: black;
+        text-decoration: none;
+    }
+
     .lightbox-commentbox .feed-comments-section {
-        border-top: 0;
+        /*margin-left: -10px;
+        padding-left: 20px;
+        margin-right: -10px;
+        padding-right: 20px;*/
     }
 
     .lightbox-commentbox hr {
@@ -503,6 +511,7 @@ hr.gold-line {
 
     .lightbox-commentbox .feed-comments-section .feed-comments {
         margin: 0;
+        margin-top: 15px;
         margin-left: 20px;
     }
 
@@ -512,6 +521,17 @@ hr.gold-line {
 
     .lightbox-commentbox .feed-comment .comment-text {
         margin-bottom: 10px;
+    }
+
+    .lightbox-commentbox .photo-details {
+        text-align: left;
+        padding: 10px;
+    }
+
+    .lightbox-commentbox-user-img {
+        width: 50px; 
+        height: 50px; 
+        margin-right: 5px;
     }
 
 /***************************************

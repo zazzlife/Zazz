@@ -20,7 +20,7 @@
 .lightbox {
   background-color: transparent;
   text-align: center;
-  line-height: 0;
+  /*line-height: 0;*/
   z-index: 1050;
   position: relative;
   top: 70px;
