@@ -244,18 +244,55 @@
 					wOffs += 40;
 					hOffs += 10;
 				}
-				$img.css('max-width', $(window).width() - wOffs);
-				$img.css('max-height', $(window).height() - hOffs);
+			    
+			    /****SOROUSH:START****/
+
+				that.$element.css({
+				    "position": "fixed",
+				    "left": 35,
+				    "top": 30,
+				});
+
+				var width = $(window).width() - 100;
+				var height = $(window).height() - 75;
+
+				var content = that.$element.children('.lightbox-content');
+				content.css({
+				    "width": width,
+				    "height": height
+				});
+
 				
-				that.w = $img.width();
-				that.h = $img.height();
+
+			    $img.css({
+			        'max-width': that.$element.width() - 465,
+			        'max-height': that.$element.height() - 22,
+			        'position': 'relative'
+			    });
+
+				//$img.css('max-width', $(window).width() - wOffs);
+				//$img.css('max-height', $(window).height() - hOffs);
+
+			    var parentHeight = $img.parent().height();
+			    var imgHeight = $img.height();
+			    var top = (parentHeight / 2) - (imgHeight / 2);
+
+			    $img.css({
+			        'top': top
+			    });
+
+			    /****SOROUSH:END****/
+
+			    that.w = $img.width();
+			    that.h = $img.height();
 			}
 
-			that.$element.css({
-				"position": "fixed",
-				"left": ( $(window).width()  / 2 ) - ( that.w / 2 ),
-				"top":  ( $(window).height() / 2 ) - ( that.h / 2 ) - resizedOffs
-			});
+			//that.$element.css({
+			//	"position": "fixed",
+			//	"left": ( $(window).width()  / 2 ) - ( that.w / 2 ),
+			//	"top":  ( $(window).height() / 2 ) - ( that.h / 2 ) - resizedOffs
+		    //});
+
 			that.enforceFocus();
 		},
 		cloneSize: function() // The cloneSize function is only run once, but it helps keep image jumping down
