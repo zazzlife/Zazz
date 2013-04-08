@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
-        public async Task<ActionResult> Get(int id, FeedType feedType, int lastComment)
+        public async Task<ActionResult> Get(int id, CommentType commentType, int lastComment)
         {
             using (_uow)
             using (_photoService)
@@ -42,14 +42,14 @@ namespace Zazz.Web.Controllers
                     userId = _userService.GetUserId(User.Identity.Name);
 
                 var feedHelper = new FeedHelper(_uow, _userService, _photoService);
-                var comments = feedHelper.GetComments(id, feedType, userId, lastComment, 10);
+                var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
                 return View("FeedItems/_CommentList", comments);
             }
         }
             
         [Authorize, HttpPost]
-        public async Task<ActionResult> New(int id, FeedType feedType, string comment)
+        public async Task<ActionResult> New(int id, CommentType commentType, string comment)
         {
             using (_uow)
             using (_photoService)
@@ -72,21 +72,21 @@ namespace Zazz.Web.Controllers
                             Time = DateTime.UtcNow
                         };
 
-                if (feedType == FeedType.Event)
+                if (commentType == CommentType.Event)
                 {
                     c.EventId = id;
                 }
-                else if (feedType == FeedType.Picture)
+                else if (commentType == CommentType.Photo)
                 {
                     c.PhotoId = id;
                 }
-                else if (feedType == FeedType.Post)
+                else if (commentType == CommentType.Post)
                 {
                     c.PostId = id;
                 }
                 else
                 {
-                    throw new ArgumentException("Invalid feed type", "feedType");
+                    throw new ArgumentException("Invalid feed type", "commentType");
                 }
 
                 _uow.CommentRepository.InsertGraph(c);

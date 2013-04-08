@@ -62,7 +62,7 @@ namespace Zazz.Web.Controllers
                                                  {
                                                      Comments = new List<CommentViewModel>(),
                                                      CurrentUserPhotoUrl = userPhotoUrl,
-                                                     FeedType = FeedType.Post,
+                                                     CommentType = CommentType.Post,
                                                      ItemId = post.Id
                                                  }
                          };

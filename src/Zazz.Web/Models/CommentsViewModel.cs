@@ -15,7 +15,7 @@ namespace Zazz.Web.Models
         /// </summary>
         public int ItemId { get; set; }
 
-        public FeedType FeedType { get; set; }
+        public CommentType CommentType { get; set; }
 
         public List<CommentViewModel> Comments { get; set; }
     }

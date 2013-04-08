@@ -88,7 +88,6 @@ namespace Zazz.Web.Helpers
                                  Time = feed.Time,
                                  CommentsViewModel = new CommentsViewModel
                                                      {
-                                                         FeedType = feed.FeedType,
                                                          CurrentUserPhotoUrl = currentUserPhotoUrl,
                                                      }
                              };
@@ -119,6 +118,8 @@ namespace Zazz.Web.Helpers
                                                 FacebookEventId = feed.Event.FacebookEventId
                                             };
 
+                    feedVm.CommentsViewModel.CommentType = CommentType.Event;
+
                     if (feedVm.EventViewModel.PhotoId.HasValue)
                     {
                         var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
@@ -128,7 +129,9 @@ namespace Zazz.Web.Helpers
                     }
 
                     feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value, feed.FeedType, currentUserId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value,
+                                                                    feedVm.CommentsViewModel.CommentType,
+                                                                    currentUserId);
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
@@ -142,12 +145,16 @@ namespace Zazz.Web.Helpers
                                                 FromUserId = feedVm.UserId
                                             };
 
+                    feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+
                     feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto 
                         ? photo.FacebookLink 
                         : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value, feed.FeedType, currentUserId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value,
+                                                                    feedVm.CommentsViewModel.CommentType,
+                                                                    currentUserId);
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {
@@ -158,8 +165,12 @@ namespace Zazz.Web.Helpers
                                                PostText = post.Message
                                            };
 
+                    feedVm.CommentsViewModel.CommentType = CommentType.Post;
+
                     feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value, feed.FeedType, currentUserId);
+                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value,
+                                                                    feedVm.CommentsViewModel.CommentType,
+                                                                    currentUserId);
                 }
                 else
                 {
@@ -172,26 +183,26 @@ namespace Zazz.Web.Helpers
             return vm;
         }
 
-        public List<CommentViewModel> GetComments(int id, FeedType feedType, int currentUserId, int lastComment = 0,
+        public List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId, int lastComment = 0,
                                                   int pageSize = 5)
         {
             var query = _uow.CommentRepository.GetAll();
 
-            if (feedType == FeedType.Event)
+            if (commentType == CommentType.Event)
             {
                 query = query.Where(c => c.EventId == id);
             }
-            else if (feedType == FeedType.Picture)
+            else if (commentType == CommentType.Photo)
             {
                 query = query.Where(c => c.PhotoId == id);
             }
-            else if (feedType == FeedType.Post)
+            else if (commentType == CommentType.Post)
             {
                 query = query.Where(c => c.PostId == id);
             }
             else
             {
-                throw new ArgumentException("Invalid feed type", "feedType");
+                throw new ArgumentException("Invalid feed type", "commentType");
             }
 
             if (lastComment != 0)

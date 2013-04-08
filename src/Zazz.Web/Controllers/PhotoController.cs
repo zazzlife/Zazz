@@ -265,7 +265,7 @@ namespace Zazz.Web.Controllers
                              CommentsViewModel = new CommentsViewModel
                                                  {
                                                      Comments = new List<CommentViewModel>(),
-                                                     FeedType = FeedType.Picture,
+                                                     CommentType = CommentType.Photo,
                                                      CurrentUserPhotoUrl = userPhoto,
                                                      ItemId = photo.Id
                                                  }
