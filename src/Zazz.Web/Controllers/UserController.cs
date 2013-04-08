@@ -31,13 +31,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Index()
-        {
-            return RedirectToAction("Me");
-        }
-
-        [Authorize]
-        public async Task<ActionResult> Me()
+        public async Task<ActionResult> Index()
         {
             var userId = _userService.GetUserId(User.Identity.Name);
             return await ShowProfile(userId);
