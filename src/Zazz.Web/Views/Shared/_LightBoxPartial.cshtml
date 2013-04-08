@@ -28,62 +28,14 @@
                 </p>
 
             </div>
-
-            <div class="feed-comments-section">
-                <div>
-                    <img title="You" src="~/Images/placeholder.gif" class="img-small-rounded" />
-                    <input type="text" class="comment-textbox" placeholder="Write a comment..." />
-                </div>
-                <ul class="feed-comments">
-                    
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <li class="feed-comment">
-                            <a href="~/user/profile/">
-                                <img src="~/Images/placeholder.gif" class="img-small-rounded pull-left"/>
-                            </a>
-
-                            <p class="comment-text">Some comment</p>
-                            <div>
-
-                                <span data-placement="right" class="pull-right font-verysmall">an hour ago.</span>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </li>
-                    
-                        <li class="feed-comment">
-                            <a href="~/user/profile/">
-                                <img src="~/Images/placeholder.gif" class="img-small-rounded pull-left"/>
-                            </a>
-
-                            <p class="comment-text">Some comment2</p>
-                            <div>
-
-                                <span data-placement="right" class="pull-right font-verysmall">an hour ago.</span>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </li>
-                    
-                        <li class="feed-comment">
-                            <a href="~/user/profile/">
-                                <img src="~/Images/placeholder.gif" class="img-small-rounded pull-left"/>
-                            </a>
-
-                            <p class="comment-text">This is a very very long comment. dsajkdlanskldnakslndkalsdjisad joapsdmas.mdoomomdos; lasdkokm,asmdkl;sa</p>
-                            <div>
-
-                                <span data-placement="right" class="pull-right font-verysmall">an hour ago.</span>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </li>
-                    }
-                    
-
-                </ul>
+            
+            <div class="lightbox-commentsContainer">
+                <h5>
+                   Loading Comments...  <i style="margin-left: 5px;" class="icon-refresh icon-large icon-spin"></i>
+                </h5>
             </div>
+
+            
         </div>
 
     </div>
