@@ -444,8 +444,6 @@
     <Content Include="Views\Shared\_UserPageLayout.cshtml" />
     <Content Include="Views\Event\Show.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\Album\List.cshtml" />
-    <Content Include="Views\Album\Photos.cshtml" />
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
     <Content Include="Views\Event\_EventsListPartial.cshtml" />
     <Content Include="Views\Photo\_PhotosPartial.cshtml" />
@@ -457,7 +455,6 @@
     <Content Include="Views\Shared\_FeedsPartial.cshtml" />
     <Content Include="Views\Shared\_PostInputsPartial.cshtml" />
     <Content Include="Views\Shared\_UploadPicModal.cshtml" />
-    <Content Include="Views\Album\_AlbumThumbnail.cshtml" />
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
     <Content Include="Views\Photo\Crop.cshtml" />
     <Content Include="Views\Photo\_PhotoList.cshtml" />

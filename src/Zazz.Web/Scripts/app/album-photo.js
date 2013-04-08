@@ -16,6 +16,24 @@ $(document).on('mouseleave', '.pic-list .img', function () {
 
 });
 
+$(document).on('click', '.remove-img', function () {
+    var self = $(this);
+    var parent = self.parent();
+    var id = self.data('id');
+
+    parent.css('opacity', '0.7');
+
+    removePhoto(id,
+        function () {
+            toastr.error('An error occured, Please try again later');
+            parent.css('opacity', '1');
+        },
+        function () {
+            parent.fadeOut();
+        });
+
+});
+
 ///////////ALBUMS////////////
 
 $(document).on('mouseenter', '.album-thumbnail .img', function () {
@@ -46,24 +64,6 @@ $(document).on('click', '.remove-album', function () {
         toastr.error('An error occured, Please try again later');
         parent.css('opacity', '1');
     },
-        function () {
-            parent.fadeOut();
-        });
-
-});
-
-$(document).on('click', '.remove-img', function () {
-    var self = $(this);
-    var parent = self.parent();
-    var id = self.data('id');
-
-    parent.css('opacity', '0.7');
-
-    removePhoto(id,
-        function () {
-            toastr.error('An error occured, Please try again later');
-            parent.css('opacity', '1');
-        },
         function () {
             parent.fadeOut();
         });
