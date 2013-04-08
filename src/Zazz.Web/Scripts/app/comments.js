@@ -255,6 +255,11 @@ $(document).on('click', '.load-comments-btn', function () {
 
 function loadLightboxComments(photoId, commentsContainer) {
 
+    var isLoaded = commentsContainer.data('isLoaded');
+    if (isLoaded) {
+        return;
+    }
+
     var url = "/comment/LightboxComments";
 
     $.ajax({
@@ -270,6 +275,7 @@ function loadLightboxComments(photoId, commentsContainer) {
             commentsContainer.fadeOut(function() {
                 commentsContainer.html(res);
                 commentsContainer.fadeIn();
+                commentsContainer.data('isLoaded', 1);
             });
         }
     });
