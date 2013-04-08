@@ -7,6 +7,7 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
@@ -35,7 +36,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                return RedirectToAction("List", new {id = userId, page = 1});
+                return RedirectToAction("List", new { id = userId, page = 1 });
             }
         }
 
@@ -70,14 +71,14 @@ namespace Zazz.Web.Controllers
                     .ToList();
 
                 var photosVm = photos.Select(p => new PhotoViewModel
-                                            {
-                                                IsFromCurrentUser = p.userId == currentUserId,
-                                                PhotoId = p.id,
-                                                PhotoUrl = p.isFromFb
-                                                               ? p.fbUrl
-                                                               : _photoService.GeneratePhotoUrl(p.userId, p.id)
-                                            })
-                               .ToList();
+                                                  {
+                                                      IsFromCurrentUser = p.userId == currentUserId,
+                                                      PhotoId = p.id,
+                                                      PhotoUrl = p.isFromFb
+                                                                     ? p.fbUrl
+                                                                     : _photoService.GeneratePhotoUrl(p.userId, p.id)
+                                                  })
+                                     .ToList();
 
                 if (Request.IsAjaxRequest())
                 {
@@ -330,6 +331,49 @@ namespace Zazz.Web.Controllers
                 _photoService.CropPhoto(photo, userId, cropArea);
                 return View(vm);
             }
+        }
+
+        [Authorize]
+        public ActionResult GetPhotos(int? albumId, int page = 1)
+        {
+            ViewBag.AlbumId = albumId;
+
+            const int PAGE_SIZE = 20;
+            var skip = (page - 1) * PAGE_SIZE;
+
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+
+            var query = _photoService.GetAll().Where(p => p.UploaderId == currentUserId);
+            if (albumId.HasValue)
+                query = query.Where(p => p.AlbumId == albumId.Value);
+
+            var photos = query
+                .OrderBy(p => p.Id)
+                .Skip(skip)
+                .Take(PAGE_SIZE)
+                .Select(p => new
+                {
+                    id = p.Id,
+                    userId = p.UploaderId,
+                    isFromFb = p.IsFacebookPhoto,
+                    fbUrl = p.FacebookLink
+                })
+                .ToList();
+
+            var photosVm = photos.Select(p => new PhotoViewModel
+            {
+                IsFromCurrentUser = p.userId == currentUserId,
+                PhotoId = p.id,
+                PhotoUrl = p.isFromFb
+                               ? p.fbUrl
+                               : _photoService.GeneratePhotoUrl(p.userId, p.id)
+            })
+                                 .ToList();
+
+
+            var pagedList = new StaticPagedList<PhotoViewModel>(photosVm, page, PAGE_SIZE, query.Count());
+
+            return View("_PhotosPartial", pagedList);
         }
     }
 }

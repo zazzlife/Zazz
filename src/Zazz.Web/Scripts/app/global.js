@@ -78,26 +78,25 @@ function loadAlbumsDropDownAsync(dropdownElem) {
 
 function loadPGPhotos() {
     var albumId = $('#pg-albumSelect').val();
-    if (albumId) {
 
-        var url = "/album/getphotos";
-        var photoContainer = $('#pg-photos');
+    var url = "/photo/getphotos";
+    var photoContainer = $('#pg-photos');
 
-        photoContainer.html(LOADING_INDICATOR);
+    photoContainer.html(LOADING_INDICATOR);
 
-        $.ajax({
-            url: url,
-            data: {
-                albumId: albumId
-            },
-            error: function () {
-                toastr.error("Failed to load photos. Please try again later");
-            },
-            success: function (res) {
-                photoContainer.html(res);
-            }
-        });
-    }
+    $.ajax({
+        url: url,
+        data: {
+            albumId: albumId
+        },
+        error: function () {
+            toastr.error("Failed to load photos. Please try again later");
+        },
+        success: function (res) {
+            photoContainer.html(res);
+        }
+    });
+
 }
 
 $('#pg-modal').on('show', function () {
@@ -122,7 +121,7 @@ $(document).on('click', '*[data-ajax-pagination] a', function (e) {
             panelToUpdate.css('opacity', '1');
         },
         success: function (res) {
-            panelToUpdate.fadeOut(function() {
+            panelToUpdate.fadeOut(function () {
                 panelToUpdate.html(res);
                 panelToUpdate.css('opacity', '1');
 
@@ -159,7 +158,7 @@ var imgUploader;
 var imgUploadBtn;
 
 function initImgUploader(onComplete) {
-    
+
     imgUploader = new qq.FineUploader({
         element: document.getElementById("upload"),
         request: {
@@ -216,9 +215,9 @@ $(document).on('click', '#uploadImg', function () {
     imgUploadBtn = $(this);
 });
 
-$(document).on('show', '#uploadPicModalWithFeed', function() {
+$(document).on('show', '#uploadPicModalWithFeed', function () {
     loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
-    initImgUploader(function(id, name, response) {
+    initImgUploader(function (id, name, response) {
 
         if (!response.success) {
             toastr.error(response.error);
@@ -226,15 +225,15 @@ $(document).on('show', '#uploadPicModalWithFeed', function() {
 
             $.ajax({
                 url: '/photo/feed/' + response.photoId,
-                error: function() {
+                error: function () {
                     toastr.error('Image was uploaded but failed to get the feed. Please refresh the page.');
-                    
+
                     $('#uploadPicModalWithFeed').modal('hide');
                     if (imgUploadBtn) {
                         hideBtnBusy(imgUploadBtn, "Upload");
                     }
                 },
-                success: function(res) {
+                success: function (res) {
                     $('#uploadPicModalWithFeed').modal('hide');
                     if (imgUploadBtn) {
                         hideBtnBusy(imgUploadBtn, "Upload");
@@ -261,23 +260,23 @@ function showSearchIconBusy(callback) {
 
     var searchIcon = $('#searchIcon');
 
-    searchIcon.fadeOut('fast', function() {
+    searchIcon.fadeOut('fast', function () {
 
         searchIcon.removeClass('icon-search');
         searchIcon.addClass('icon-refresh');
         searchIcon.addClass('icon-spin');
 
-        searchIcon.fadeIn('fast', function() {
+        searchIcon.fadeIn('fast', function () {
             callback();
         });
     });
 }
 
 function hideSearchIconBusy() {
-    
+
     var searchIcon = $('#searchIcon');
 
-    searchIcon.fadeOut('fast', function() {
+    searchIcon.fadeOut('fast', function () {
 
         searchIcon.removeClass('icon-refresh');
         searchIcon.removeClass('icon-spin');
@@ -294,7 +293,7 @@ $('#navbarSearch').autocomplete({
     minLength: 2,
     source: function (req, res) {
 
-        showSearchIconBusy(function() {
+        showSearchIconBusy(function () {
 
             var q = req.term;
 
@@ -317,7 +316,7 @@ $('#navbarSearch').autocomplete({
             });
 
         });
-        
+
     }
 }).data("ui-autocomplete")._renderItem = function (ul, item) {
 
@@ -334,11 +333,11 @@ $('#navbarSearch').autocomplete({
 *********************************/
 
 // ADD
-$(document).on('click', '#submitPostBtn', function() {
+$(document).on('click', '#submitPostBtn', function () {
 
     var self = $(this);
     var message = $('#postInput').val();
-    
+
     if (!message) {
         toastr.error("Post message cannot be empty!");
         return;
@@ -353,14 +352,14 @@ $(document).on('click', '#submitPostBtn', function() {
         data: {
             message: message
         },
-        error: function() {
+        error: function () {
             toastr.error('An error occured, Please try again later.');
             hideBtnBusy(self, "Submit");
         },
-        success: function(res) {
+        success: function (res) {
             var feed = $(res.trim());
             feed.prependTo($('#feedsContainer')).hide().slideDown();
-            
+
             hideBtnBusy(self, "Submit");
             applyPageStyles();
 
@@ -374,7 +373,7 @@ $(document).on('click', '#submitPostBtn', function() {
 var originalPostText;
 var isPostFeedEditBoxVisible = false;
 
-$(document).on('click', '.editFeedBtn', function() {
+$(document).on('click', '.editFeedBtn', function () {
 
     isPostFeedEditBoxVisible = true;
 
@@ -393,9 +392,9 @@ $(document).on('click', '.editFeedBtn', function() {
     var editElem = p.children('#editPostInput-' + id);
     editElem.val(originalPostText);
     p.hide();
-    
 
-    p.fadeIn('fast', function() {
+
+    p.fadeIn('fast', function () {
         editElem.focus();
     });
 
@@ -408,7 +407,7 @@ $(document).on('click', '.submitPostEdit', function () {
     var id = self.data('id');
     var editor = $('#editPostInput-' + id);
     var text = editor.val();
-    
+
     if (!text || text.trim().length == 0) {
         toastr.error('Post cannot be empty');
         return;
@@ -417,8 +416,8 @@ $(document).on('click', '.submitPostEdit', function () {
     editor.css('width', '78%');
     showBtnBusy(self);
 
-    var showNormalPost = function(val) {
-        p.fadeOut(function() {
+    var showNormalPost = function (val) {
+        p.fadeOut(function () {
             p.html('');
             p.css('margin-top', '6px');
             p.text(val);
@@ -446,12 +445,12 @@ $(document).on('click', '.submitPostEdit', function () {
 
 });
 
-$(document).on('click', '.cancelPostEdit', function() {
+$(document).on('click', '.cancelPostEdit', function () {
 
     var self = $(this);
     var p = self.parent();
 
-    p.fadeOut('fast', function() {
+    p.fadeOut('fast', function () {
         p.html('');
         p.text(originalPostText);
         p.css('margin-top', '6px');
@@ -477,7 +476,7 @@ $(document).on('mouseleave', '.feed-content', function () {
     $(this).children('.feed-actions').fadeOut('fast');
 });
 
-$(document).on('click', '.removeFeedBtn', function() {
+$(document).on('click', '.removeFeedBtn', function () {
 
     var self = $(this);
     var url = self.data('url');
@@ -486,18 +485,18 @@ $(document).on('click', '.removeFeedBtn', function() {
     $.ajax({
         url: url,
         cache: false,
-        error: function() {
+        error: function () {
             toastr.error('An error occured, Please try again later.');
         },
-        success: function() {
+        success: function () {
             self.closest('.feed-item').fadeOut();
         }
     });
 
 });
 
-$(function() {
+$(function () {
 
     applyPageStyles();
-    
+
 });
