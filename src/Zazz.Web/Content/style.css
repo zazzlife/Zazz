@@ -503,6 +503,7 @@ hr.gold-line {
 
     .lightbox-commentbox .feed-comments-section .feed-comments {
         margin: 0;
+        margin-left: 20px;
     }
 
     .lightbox-commentbox .feed-comments-section .feed-comments .feed-comment {
