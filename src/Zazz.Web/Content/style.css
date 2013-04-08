@@ -482,6 +482,37 @@ hr.gold-line {
         font-size: 14px;
     }
 
+    /**********Lightbox Comments**************/
+
+    .lightbox-commentbox {
+        overflow-y: auto;
+    }
+
+    .lightbox-commentbox .feed-comments-section {
+        border-top: 0;
+    }
+
+    .lightbox-commentbox hr {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+
+    .lightbox-commentbox .feed-comments-section .comment-textbox {
+        width: 84%;
+    }
+
+    .lightbox-commentbox .feed-comments-section .feed-comments {
+        margin: 0;
+    }
+
+    .lightbox-commentbox .feed-comments-section .feed-comments .feed-comment {
+        text-align: left;
+    }
+
+    .lightbox-commentbox .feed-comment .comment-text {
+        margin-bottom: 10px;
+    }
+
 /***************************************
         Events
 ***************************************/
