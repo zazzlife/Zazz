@@ -137,7 +137,7 @@ namespace Zazz.Web.Helpers
                 {
                     var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
                     feedVm.PhotoViewModel = new PhotoViewModel
-                                            {   
+                                            {
                                                 PhotoId = photo.Id,
                                                 PhotoDescription = photo.Description,
                                                 FromUserDisplayName = feedVm.UserDisplayName,
@@ -147,8 +147,8 @@ namespace Zazz.Web.Helpers
 
                     feedVm.CommentsViewModel.CommentType = CommentType.Photo;
 
-                    feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto 
-                        ? photo.FacebookLink 
+                    feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto
+                        ? photo.FacebookLink
                         : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
                     feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
@@ -183,8 +183,8 @@ namespace Zazz.Web.Helpers
             return vm;
         }
 
-        public List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId, int lastComment = 0,
-                                                  int pageSize = 5)
+        public List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId,
+            int lastComment = 0, int pageSize = 5)
         {
             var query = _uow.CommentRepository.GetAll();
 

@@ -8,18 +8,13 @@
     </div>
     <div class='lightbox-content'>
         <img src="@Model.PhotoUrl"/>
-        @*@if (!String.IsNullOrEmpty(Model.PhotoDescription))
-        {
-            <div class="lightbox-caption">
-                <p>@Model.PhotoDescription</p>
-            </div>
-        }*@
         <div class="well pull-right no-padding lightbox-commentbox">
             
             <div class="photo-details">
                 <div style="margin-bottom: 15px;">
                     <a href="~/user/profile/@Model.FromUserId">
-                        <img src="@Model.FromUserPhotoUrl" class="img-small-rounded lightbox-commentbox-user-img"/>
+                        <img  data-id="@Model.PhotoId"
+                            src="@Model.FromUserPhotoUrl" class="img-small-rounded lightbox-commentbox-user-img"/>
                         <strong>@Model.FromUserDisplayName</strong>
                     </a>
                 </div>

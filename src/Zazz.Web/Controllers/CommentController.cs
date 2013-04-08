@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
@@ -47,7 +48,33 @@ namespace Zazz.Web.Controllers
                 return View("FeedItems/_CommentList", comments);
             }
         }
-            
+
+        [Authorize]
+        public ActionResult LightboxComments(int id)
+        {
+            using (_uow)
+            using (_photoService)
+            using (_userService)
+            {
+                if (id == 0)
+                    throw new ArgumentException("Id cannot be 0", "id");
+
+                var currentUserId = _userService.GetUserId(User.Identity.Name);
+                var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+
+                var vm = new CommentsViewModel
+                         {
+                             CommentType = CommentType.Photo,
+                             ItemId = id,
+                             CurrentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId),
+                             Comments = feedHelper.GetComments(id, CommentType.Photo, currentUserId)
+                         };
+
+                return View("FeedItems/_FeedComments", vm);
+            }
+        }
+
+
         [Authorize, HttpPost]
         public async Task<ActionResult> New(int id, CommentType commentType, string comment)
         {
