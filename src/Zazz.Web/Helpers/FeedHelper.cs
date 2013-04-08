@@ -136,7 +136,10 @@ namespace Zazz.Web.Helpers
                     feedVm.PhotoViewModel = new PhotoViewModel
                                             {   
                                                 PhotoId = photo.Id,
-                                                PhotoDescription = photo.Description
+                                                PhotoDescription = photo.Description,
+                                                FromUserDisplayName = feedVm.UserDisplayName,
+                                                FromUserPhotoUrl = feedVm.UserImageUrl,
+                                                FromUserId = feedVm.UserId
                                             };
 
                     feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto 
