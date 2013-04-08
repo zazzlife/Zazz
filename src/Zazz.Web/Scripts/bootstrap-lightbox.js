@@ -259,6 +259,12 @@
                     'top': top
                 });
 
+                var commentBox = $img.nextAll('.lightbox-commentbox').first();
+                commentBox.css({
+                    "width": 350,
+                    "height": height - 41
+                });
+
 
                 $img.off();
 
@@ -267,8 +273,7 @@
                     $img.css("cursor", 'pointer');
 
                     $img.on('click', function () {
-
-                        var commentBox = $img.nextAll('.lightbox-commentbox').first();
+                        
                         var isCommentBoxHidden = commentBox.data('ishidden');
                         if (isCommentBoxHidden) {
 
