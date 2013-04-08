@@ -18,14 +18,13 @@
             
             <div class="photo-details">
                 <div style="margin-bottom: 15px;">
-                    <a href="#">
-                        <img src="~/Images/placeholder.gif" class="img-small-rounded lightbox-commentbox-user-img"
-                             style=""/>
-                        <strong>Soroush Mirzaei</strong>
+                    <a href="~/user/profile/@Model.FromUserId">
+                        <img src="@Model.FromUserPhotoUrl" class="img-small-rounded lightbox-commentbox-user-img"/>
+                        <strong>@Model.FromUserDisplayName</strong>
                     </a>
                 </div>
                 <p>
-                    This is the photo description. dsakdla nsdklsandk las dasjid dsajid saijdas idoasjdioa 
+                    @Model.PhotoDescription
                 </p>
 
             </div>

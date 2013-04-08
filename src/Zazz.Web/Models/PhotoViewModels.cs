@@ -51,5 +51,11 @@ namespace Zazz.Web.Models
         public string PhotoUrl { get; set; }
 
         public bool IsFromCurrentUser { get; set; }
+
+        public int FromUserId { get; set; }
+
+        public string FromUserDisplayName { get; set; }
+
+        public string FromUserPhotoUrl { get; set; }
     }
 }
