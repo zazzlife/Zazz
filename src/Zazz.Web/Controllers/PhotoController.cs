@@ -325,7 +325,7 @@ namespace Zazz.Web.Controllers
 
                 vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
                 vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
-                               ? 10 / 3 : 1;
+                               ? 10 / 4 : 1;
 
                 _photoService.CropPhoto(photo, userId, cropArea);
                 return View(vm);
