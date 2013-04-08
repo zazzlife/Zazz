@@ -17,7 +17,7 @@
     </ul>
     @if (Model.Comments != null && Model.Comments.Count >= 5)
     {
-        <button data-id="@Model.ItemId" data-feedType="@Model.CommentType" class="btn btn-small load-comments-btn"><i class="icon-comments-alt"></i> More...</button>
+        <button data-id="@Model.ItemId" data-commentType="@Model.CommentType" class="btn btn-small load-comments-btn"><i class="icon-comments-alt"></i> More...</button>
     }
 
 </div>
