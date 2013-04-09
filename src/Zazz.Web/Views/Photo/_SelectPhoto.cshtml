@@ -1,0 +1,19 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<PhotoViewModel>
+@{
+    Layout = null;
+}
+<div style="margin-top: 25px;" class="pic-list">
+        @foreach (var p in Model)
+        {
+                <div class="img" style="width: 100px; height: 100px;">
+                    <img src="@p.PhotoUrl" title="Click on photo to select it"  data-selectPhoto="1" data-id="@p.PhotoId" data-url="@p.PhotoUrl" />
+                </div>
+        }
+    
+    <div class="clearfix"></div>
+
+    <div class="text-center" data-ajax-pagination="1" data-update="#pg-photos">
+        @Html.PagedListPager(Model, page => String.Format("/photo/getphotos/?albumId={0}&page={1}", ViewBag.AlbumId, page))
+    </div>
+</div>

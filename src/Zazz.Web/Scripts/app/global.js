@@ -133,7 +133,7 @@ $(document).on('click', '*[data-ajax-pagination] a', function (e) {
 
 });
 
-$(document).on('click', '#pg-modal button[data-selectPhoto]', function (e) {
+$(document).on('click', '#pg-modal *[data-selectPhoto]', function (e) {
 
     e.preventDefault();
 

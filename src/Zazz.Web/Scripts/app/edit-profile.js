@@ -89,7 +89,7 @@ $('#pg-modalWithCrop').on('show', function () {
 });
 
 
-$(document).on('click', '#pg-modalWithCrop button[data-selectPhoto]', function (e) {
+$(document).on('click', '#pg-modalWithCrop *[data-selectPhoto]', function (e) {
 
     e.preventDefault();
 

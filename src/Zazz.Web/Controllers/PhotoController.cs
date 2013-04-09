@@ -373,7 +373,7 @@ namespace Zazz.Web.Controllers
 
             var pagedList = new StaticPagedList<PhotoViewModel>(photosVm, page, PAGE_SIZE, query.Count());
 
-            return View("_PhotosPartial", pagedList);
+            return View("_SelectPhoto", pagedList);
         }
     }
 }
