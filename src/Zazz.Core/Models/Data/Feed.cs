@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
     public class Feed : BaseEntity
     {
+        public Feed()
+        {
+            FeedPhotoIds = new HashSet<FeedPhotoId>();
+        }
+
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
@@ -28,5 +34,7 @@ namespace Zazz.Core.Models.Data
         public DateTime Time { get; set; }
 
         public FeedType FeedType { get; set; }
+
+        public virtual ICollection<FeedPhotoId> FeedPhotoIds { get; set; }
     }
 }

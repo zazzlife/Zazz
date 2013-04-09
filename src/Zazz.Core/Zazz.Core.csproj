@@ -71,6 +71,7 @@
     <Compile Include="Interfaces\IFacebookPageRepository.cs" />
     <Compile Include="Interfaces\IFacebookSyncRetryRepository.cs" />
     <Compile Include="Interfaces\IFacebookService.cs" />
+    <Compile Include="Interfaces\IFeedPhotoIdRepository.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\IFollowService.cs" />
     <Compile Include="Interfaces\IErrorHandler.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
+    <Compile Include="Models\Data\FeedPhotoId.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\Gender.cs" />
     <Compile Include="Models\Data\Major.cs" />
