@@ -25,7 +25,7 @@ namespace Zazz.Data.Repositories
 
         public int GetCount(int feedId)
         {
-            throw new System.NotImplementedException();
+            return DbSet.Count(p => p.FeedId == feedId);
         }
     }
 }

@@ -59,6 +59,34 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsFalse(_repo.ExistsAsync(feedPhotoId.Id).Result);
         }
 
+        [Test]
+        public void ReturnCount_OnGetCount()
+        {
+            //Arrange
+            var feedPhotoId1 = new FeedPhotoId
+                              {
+                                  FeedId = _feed.Id,
+                                  PhotoId = 12
+                              };
+
+
+            var feedPhotoId2 = new FeedPhotoId
+                               {
+                                   FeedId = _feed.Id,
+                                   PhotoId = 13
+                               };
+
+            _context.FeedPhotoIds.Add(feedPhotoId1);
+            _context.FeedPhotoIds.Add(feedPhotoId2);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetCount(_feed.Id);
+
+            //Assert
+            Assert.AreEqual(2, result);
+        }
+
 
     }
 }
