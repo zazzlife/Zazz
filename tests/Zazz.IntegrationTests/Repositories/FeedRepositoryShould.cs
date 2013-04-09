@@ -233,5 +233,41 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
         }
+
+        [Test]
+        public void ReturnLastFeed_OnGetLastFeed()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var firstFeed = new Feed
+                        {
+                            FeedType = FeedType.Picture,
+                            UserId = user.Id,
+                            Time = DateTime.UtcNow
+                        };
+
+            var secondFeed = new Feed
+                        {
+                            UserId = user.Id,
+                            FeedType = FeedType.Post,
+                            Time = DateTime.UtcNow.AddHours(1)
+                        };
+
+            _dbContext.Feeds.Add(firstFeed);
+            _dbContext.Feeds.Add(secondFeed);
+            _dbContext.SaveChanges();
+
+            //Act
+            var result = _repo.GetUserLastFeed(user.Id);
+
+            //Assert
+            Assert.AreEqual(result.Id, secondFeed.Id);
+        }
+
+
     }
 }

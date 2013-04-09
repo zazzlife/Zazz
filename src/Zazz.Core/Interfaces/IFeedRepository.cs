@@ -10,6 +10,8 @@ namespace Zazz.Core.Interfaces
 
         IQueryable<Feed> GetUserFeeds(int userId);
 
+        Feed GetUserLastFeed(int userId);
+
         void RemovePhotoFeeds(int photoId);
 
         void RemoveEventFeeds(int eventId);

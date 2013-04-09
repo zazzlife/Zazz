@@ -29,6 +29,13 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(f => f.UserId == userId);
         }
 
+        public Feed GetUserLastFeed(int userId)
+        {
+            return DbSet.Where(f => f.UserId == userId)
+                        .OrderByDescending(f => f.Time)
+                        .FirstOrDefault();
+        }
+
         public void RemovePhotoFeeds(int photoId)
         {
             var items = DbSet.Where(f => f.PhotoId == photoId);
