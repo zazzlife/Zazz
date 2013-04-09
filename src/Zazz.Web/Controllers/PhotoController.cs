@@ -66,7 +66,8 @@ namespace Zazz.Web.Controllers
                                      id = p.Id,
                                      userId = p.UploaderId,
                                      isFromFb = p.IsFacebookPhoto,
-                                     fbUrl = p.FacebookLink
+                                     fbUrl = p.FacebookLink,
+                                     description = p.Description
                                  })
                     .ToList();
 
@@ -76,7 +77,11 @@ namespace Zazz.Web.Controllers
                                                       PhotoId = p.id,
                                                       PhotoUrl = p.isFromFb
                                                                      ? p.fbUrl
-                                                                     : _photoService.GeneratePhotoUrl(p.userId, p.id)
+                                                                     : _photoService.GeneratePhotoUrl(p.userId, p.id),
+                                                      FromUserId = id,
+                                                      FromUserDisplayName = _userService.GetUserDisplayName(id),
+                                                      PhotoDescription = p.description,
+                                                      FromUserPhotoUrl = _photoService.GetUserImageUrl(id)
                                                   })
                                      .ToList();
 

@@ -261,7 +261,7 @@
 
                 var commentBox = $img.nextAll('.lightbox-commentbox').first();
                 commentBox.css({
-                    "width": 350,
+                    //"width": 350,
                     "height": height
                 });
 

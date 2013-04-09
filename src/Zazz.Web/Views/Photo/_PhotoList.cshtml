@@ -5,13 +5,14 @@
 
 @foreach(var p in Model)
 {
-
     <div class="img">
         @if (p.IsFromCurrentUser)
         {
             <button data-id="@p.PhotoId" class="btn btn-small remove-img icononly-btn" title="Remove"><i class="icon-remove"></i></button>
         }
-        <img src="@p.PhotoUrl"/>
+        <img data-toggle="lightbox" data-target="#photo-@p.PhotoId" src="@p.PhotoUrl"/>
     </div>
+    @Html.Partial("_LightBoxPartial", p)
 }
+
 <div class="clearfix"></div>
