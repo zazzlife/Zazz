@@ -261,7 +261,11 @@ namespace Zazz.Web.Controllers
                                               {
                                                   PhotoId = photo.Id,
                                                   PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id),
-                                                  PhotoDescription = photo.Description
+                                                  PhotoDescription = photo.Description,
+                                                  IsFromCurrentUser = true,
+                                                  FromUserDisplayName = userDisplayName,
+                                                  FromUserId = userId,
+                                                  FromUserPhotoUrl = userPhoto
                                               },
                              CommentsViewModel = new CommentsViewModel
                                                  {
