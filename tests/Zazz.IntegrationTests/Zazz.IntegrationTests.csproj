@@ -61,6 +61,7 @@
     <Compile Include="Repositories\AlbumRepositoryShould.cs" />
     <Compile Include="Repositories\FacebookPageRepositoryShould.cs" />
     <Compile Include="Repositories\FacebookSyncRetryRepositoryShould.cs" />
+    <Compile Include="Repositories\FeedPhotoIdRepositoryShould.cs" />
     <Compile Include="Repositories\FeedRepositoryShould.cs" />
     <Compile Include="Repositories\OAuthAccountRepositoryShould.cs" />
     <Compile Include="Repositories\CommentRepositoryShould.cs" />
