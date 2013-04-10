@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,11 @@ namespace Zazz.Data.Repositories
         protected override int GetItemId(Photo item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the image, if it's new then use insert graph.");
+        }
+
+        public IQueryable<Photo> GetPhotos(IEnumerable<int> photoIds)
+        {
+            return DbSet.Where(p => photoIds.Contains(p.Id));
         }
 
         public PhotoMinimalDTO GetPhotoWithMinimalData(int photoId)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
@@ -149,6 +150,49 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(photo.Id, result.Id);
+        }
+
+        [Test]
+        public void ReturnCorrectPhotos_OnGetPhotos()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
+
+            var photo1 = new Photo
+                         {
+                             UploadDate = DateTime.UtcNow,
+                             UserId = user.Id,
+                         };
+
+            var photo2 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                UserId = user.Id,
+            };
+
+            var photo3 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                UserId = user.Id,
+            };
+
+            _dbContext.Photos.Add(photo1);
+            _dbContext.Photos.Add(photo2);
+            _dbContext.Photos.Add(photo3);
+            _dbContext.SaveChanges();
+
+            var ids = new int[] {photo1.Id, photo2.Id};
+
+            //Act
+            var result = _repo.GetPhotos(ids).ToList();
+
+            //Assert
+            Assert.IsNotNull(result.SingleOrDefault(p => p.Id == photo1.Id));
+            Assert.IsNotNull(result.SingleOrDefault(p => p.Id == photo2.Id));
+            Assert.IsNull(result.SingleOrDefault(p => p.Id == photo3.Id));
+
         }
 
 
