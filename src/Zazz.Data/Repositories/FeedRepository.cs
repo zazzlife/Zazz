@@ -26,12 +26,13 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Feed> GetUserFeeds(int userId)
         {
-            return DbSet.Where(f => f.UserId == userId);
+            return DbSet.Where(f => f.UserId == userId).Include(f => f.FeedPhotoIds);
         }
 
         public Feed GetUserLastFeed(int userId)
         {
             return DbSet.Where(f => f.UserId == userId)
+                        .Include(f => f.FeedPhotoIds)
                         .OrderByDescending(f => f.Time)
                         .FirstOrDefault();
         }

@@ -6,6 +6,11 @@ namespace Zazz.Core.Models.Data
 {
     public class Feed : BaseEntity
     {
+        public Feed()
+        {
+            FeedPhotoIds = new HashSet<FeedPhotoId>();
+        }
+
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
@@ -25,6 +30,6 @@ namespace Zazz.Core.Models.Data
 
         public FeedType FeedType { get; set; }
 
-        public List<FeedPhotoId> FeedPhotoIds { get; set; }
+        public ICollection<FeedPhotoId> FeedPhotoIds { get; set; }
     }
 }

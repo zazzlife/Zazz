@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Moq;
@@ -76,18 +77,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordThenReturnPhotoId_OnSavePhoto()
+        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
-                            {
-                                Id = 1234,
-                                AlbumId = 12,
-                                Description = "desc",
-                                UserId = 17
-                            };
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(() => null);
 
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
@@ -103,7 +106,138 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
                 _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+                Assert.AreEqual(photo.Id, id);
+            }
+        }
+
+        [Test]
+        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsPhotoButItsOlderThan24HoursThenReturnPhotoId_OnSavePhoto()
+        {
+            //Arrange
+            var lastFeed = new Feed
+                           {
+                               FeedType = FeedType.Picture,
+                               Time = DateTime.UtcNow.AddDays(-2)
+                           };
+
+            var photo = new Photo
+                            {
+                                Id = 1234,
+                                AlbumId = 12,
+                                Description = "desc",
+                                UserId = 17
+                            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
+            using (var ms = new MemoryStream())
+            {
+                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                   .Returns(() => Task.Run(() => { }));
+
+                //Act
+
+                var id = await _sut.SavePhotoAsync(photo, ms, true);
+
+                //Assert
+                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+                Assert.AreEqual(photo.Id, id);
+            }
+        }
+
+        [Test]
+        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNotPhotoThenReturnPhotoId_OnSavePhoto()
+        {
+            //Arrange
+            var lastFeed = new Feed
+            {
+                FeedType = FeedType.Event,
+                Time = DateTime.UtcNow.AddHours(-2)
+            };
+
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
+            using (var ms = new MemoryStream())
+            {
+                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                   .Returns(() => Task.Run(() => { }));
+
+                //Act
+
+                var id = await _sut.SavePhotoAsync(photo, ms, true);
+
+                //Assert
+                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+                Assert.AreEqual(photo.Id, id);
+            }
+        }
+
+        [Test]
+        public async Task SavePhotoToDiskAndDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
+        {
+            //Arrange
+            var lastFeed = new Feed
+            {
+                FeedType = FeedType.Picture,
+                Time = DateTime.UtcNow.AddHours(-23)
+            };
+
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
+            using (var ms = new MemoryStream())
+            {
+                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                   .Returns(() => Task.Run(() => { }));
+
+                //Act
+
+                var id = await _sut.SavePhotoAsync(photo, ms, true);
+
+                //Assert
+                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
+                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                Assert.IsNotNull(lastFeed.FeedPhotoIds.Single(p => p.PhotoId == photo.Id));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
             }
@@ -137,6 +271,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
                 _uow.Verify(x => x.SaveChanges(), Times.Once());
+                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Never());
                 _fs.Verify(x => x.SaveFileAsync(path, ms));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);

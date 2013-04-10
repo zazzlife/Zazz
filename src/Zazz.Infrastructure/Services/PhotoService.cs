@@ -58,20 +58,39 @@ namespace Zazz.Infrastructure.Services
 
             if (showInFeed)
             {
-                var feed = new Feed
-                {
-                    FeedType = FeedType.Picture,
-                    //PhotoId = photo.Id,
-                    Time = photo.UploadDate,
-                    UserId = photo.UserId
-                };
+                // Checking if the last user feed is photo and it is less than 24 hours.
 
-                _uow.FeedRepository.InsertGraph(feed);
+                var lastFeed = _uow.FeedRepository.GetUserLastFeed(photo.UserId);
+                if (lastFeed != null && lastFeed.FeedType == FeedType.Picture &&
+                    lastFeed.Time >= DateTime.UtcNow.AddDays(-1))
+                {
+                    lastFeed.FeedPhotoIds.Add(new FeedPhotoId
+                                              {
+                                                  PhotoId = photo.Id
+                                              });
+                }
+                else
+                {
+                    var feed = new Feed
+                               {
+                                   FeedType = FeedType.Picture,
+                                   Time = photo.UploadDate,
+                                   UserId = photo.UserId
+                               };
+
+                    feed.FeedPhotoIds.Add(new FeedPhotoId
+                                          {
+                                              PhotoId = photo.Id
+                                          });
+
+                    _uow.FeedRepository.InsertGraph(feed);
+                }
+
                 _uow.SaveChanges();
             }
 
             var path = GeneratePhotoFilePath(photo.UserId, photo.Id);
-            
+
             if (data != Stream.Null)
                 await _fileService.SaveFileAsync(path, data);
 
@@ -162,7 +181,7 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
             var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
-            
+
             using (var bmp = new Bitmap(imgPath))
             using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
             {
