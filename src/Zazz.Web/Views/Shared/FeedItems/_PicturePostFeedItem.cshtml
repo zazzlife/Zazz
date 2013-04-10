@@ -76,22 +76,25 @@
                         });
                     }
                 }
-                else if (((photosCount + 1) % 3) == 0)
+                else if (((photosCount + 1)%3) == 0)
                 {
                     // 2 large pics + rows of 3
-                    
+
                     @Html.Partial("FeedItems/_PhotoFeedTwoPhotos",
-                        new[] { Model.PhotoViewModel[photosCount - 1], Model.PhotoViewModel[photosCount - 2] })
-                    }
+                                  new[] {Model.PhotoViewModel[photosCount - 1], Model.PhotoViewModel[photosCount - 2]})
+
 
                     for (var i = photosCount - 3; i >= 0; i -= 3)
                     {
-                        Html.RenderPartial("FeedItems/_PhotoFeedThreePhotos", new[] {
-                                Model.PhotoViewModel[i],
-                                Model.PhotoViewModel[i - 1],
-                                Model.PhotoViewModel[i - 2]
-                            });
+                        Html.RenderPartial("FeedItems/_PhotoFeedThreePhotos",
+                                           new[]
+                                           {
+                                               Model.PhotoViewModel[i],
+                                               Model.PhotoViewModel[i - 1],
+                                               Model.PhotoViewModel[i - 2]
+                                           });
                     }
+                }
             }
             
             <div class="clearfix"></div>
