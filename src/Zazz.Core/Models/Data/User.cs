@@ -16,10 +16,10 @@ namespace Zazz.Core.Models.Data
             SentFollowRequests = new HashSet<FollowRequest>();
         }
 
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {1} and {2} characters.")]
+        [MaxLength(50), Required]
         public string Username { get; set; }
 
-        [MaxLength(50), Required, DataType(DataType.EmailAddress)]
+        [MaxLength(200), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [MaxLength(28), Required, DataType("char")]

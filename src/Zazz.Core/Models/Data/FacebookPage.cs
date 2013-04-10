@@ -10,13 +10,13 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(4000)]
         public string Name { get; set; }
 
-        [MaxLength(75), DataType("varchar")]
+        [MaxLength(4000)]
         public string FacebookId { get; set; }
         
-        [MaxLength(300)]
+        [MaxLength(4000)]
         public string AccessToken { get; set; }
     }
 }

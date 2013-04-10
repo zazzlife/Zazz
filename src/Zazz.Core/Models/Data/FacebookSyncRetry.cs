@@ -7,10 +7,10 @@ namespace Zazz.Core.Models.Data
     {
         public long FacebookUserId { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(4000)]
         public string Path { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(4000)]
         public string Fields { get; set; }
 
         public DateTime LastTry { get; set; }

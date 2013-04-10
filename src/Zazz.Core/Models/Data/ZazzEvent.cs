@@ -12,7 +12,7 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
-        [Required, MaxLength(150)]
+        [Required, MaxLength(4000)]
         public string Name { get; set; }
 
         [Required]
@@ -26,10 +26,7 @@ namespace Zazz.Core.Models.Data
 
         public long? FacebookEventId { get; set; }
 
-        [MaxLength(300), DataType(DataType.Url)]
-        public string FacebookLink { get; set; } //TODO: remove this property later
-
-        [MaxLength(300), DataType(DataType.ImageUrl)]
+        [MaxLength(4000), DataType(DataType.ImageUrl)]
         public string FacebookPhotoLink { get; set; }
 
         public int? PhotoId { get; set; }
@@ -39,13 +36,13 @@ namespace Zazz.Core.Models.Data
 
         public DateTime TimeUtc { get; set; }
 
-        [MaxLength(80)]
+        [MaxLength(4000)]
         public string Location { get; set; }
 
-        [MaxLength(80)]
+        [MaxLength(4000)]
         public string Street { get; set; }
 
-        [MaxLength(50)]
+        [MaxLength(4000)]
         public string City { get; set; }
 
         public float? Latitude { get; set; }

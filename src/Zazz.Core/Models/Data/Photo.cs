@@ -17,7 +17,7 @@ namespace Zazz.Core.Models.Data
 
         public int UserId { get; set; }
 
-        [MaxLength(250)]
+        [MaxLength(4000)]
         public string Description { get; set; }
 
         [ForeignKey("AlbumId")]

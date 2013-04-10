@@ -9,7 +9,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Id")]
         public virtual User User { get; set; }
 
-        [MaxLength(60)]
+        [MaxLength(100)]
         public string FullName { get; set; }
 
         public Gender Gender { get; set; }
@@ -33,7 +33,7 @@ namespace Zazz.Core.Models.Data
 
         public int ProfilePhotoId { get; set; }
 
-        [MaxLength(50), DataType(DataType.EmailAddress)]
+        [MaxLength(200), DataType(DataType.EmailAddress)]
         public string PublicEmail { get; set; }
 
         public bool SyncFbEvents { get; set; }

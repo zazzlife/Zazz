@@ -26,7 +26,7 @@ namespace Zazz.Core.Models.Data
 
         public int? PostId { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(4000)]
         public string Message { get; set; }
 
         public DateTime Time { get; set; }
