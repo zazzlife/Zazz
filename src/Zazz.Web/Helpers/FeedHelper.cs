@@ -135,26 +135,30 @@ namespace Zazz.Web.Helpers
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
-                    //var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
-                    //feedVm.PhotoViewModel = new PhotoViewModel
-                    //                        {
-                    //                            PhotoId = photo.Id,
-                    //                            PhotoDescription = photo.Description,
-                    //                            FromUserDisplayName = feedVm.UserDisplayName,
-                    //                            FromUserPhotoUrl = feedVm.UserImageUrl,
-                    //                            FromUserId = feedVm.UserId
-                    //                        };
+                    var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotoIds.Select(f => f.PhotoId)).ToList();
+                    feedVm.PhotoViewModel = photos
+                        .Select(p => new PhotoViewModel
+                                     {
+                                         PhotoId = p.Id,
+                                         PhotoDescription = p.Description,
+                                         FromUserDisplayName = feedVm.UserDisplayName,
+                                         FromUserPhotoUrl = feedVm.UserImageUrl,
+                                         FromUserId = feedVm.UserId,
+                                         PhotoUrl = p.IsFacebookPhoto
+                                                        ? p.FacebookLink
+                                                        : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                     }).ToList();
 
-                    //feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+                    feedVm.CommentsViewModel.CommentType = CommentType.Photo;
 
-                    //feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto
-                    //    ? photo.FacebookLink
-                    //    : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
-
-                    //feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    //feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value,
-                    //                                                feedVm.CommentsViewModel.CommentType,
-                    //                                                currentUserId);
+                    if (photos.Count == 1)
+                    {
+                        var photoId = photos.First().Id;
+                        feedVm.CommentsViewModel.ItemId = photoId;
+                        feedVm.CommentsViewModel.Comments = GetComments(photoId,
+                                                                        feedVm.CommentsViewModel.CommentType,
+                                                                        currentUserId);
+                    }
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {

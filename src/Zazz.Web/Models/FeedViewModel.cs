@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
@@ -17,7 +18,7 @@ namespace Zazz.Web.Models
 
         public EventViewModel EventViewModel { get; set; }
 
-        public PhotoViewModel PhotoViewModel { get; set; }
+        public List<PhotoViewModel> PhotoViewModel { get; set; }
 
         public PostViewModel PostViewModel { get; set; }
 

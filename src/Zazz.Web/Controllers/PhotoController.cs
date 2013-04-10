@@ -262,15 +262,18 @@ namespace Zazz.Web.Controllers
                              Time = photo.UploadDate,
                              FeedType = FeedType.Picture,
                              IsFromCurrentUser = true,
-                             PhotoViewModel = new PhotoViewModel
+                             PhotoViewModel = new List<PhotoViewModel>
                                               {
-                                                  PhotoId = photo.Id,
-                                                  PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id),
-                                                  PhotoDescription = photo.Description,
-                                                  IsFromCurrentUser = true,
-                                                  FromUserDisplayName = userDisplayName,
-                                                  FromUserId = userId,
-                                                  FromUserPhotoUrl = userPhoto
+                                                  new PhotoViewModel
+                                                  {
+                                                      PhotoId = photo.Id,
+                                                      PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id),
+                                                      PhotoDescription = photo.Description,
+                                                      IsFromCurrentUser = true,
+                                                      FromUserDisplayName = userDisplayName,
+                                                      FromUserId = userId,
+                                                      FromUserPhotoUrl = userPhoto
+                                                  }
                                               },
                              CommentsViewModel = new CommentsViewModel
                                                  {
