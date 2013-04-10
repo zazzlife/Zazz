@@ -10,25 +10,63 @@
 
     <div class="feed-content well well-small no-padding">
 
-        <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel.PhotoId" href="@Model.PhotoViewModel.PhotoUrl">
-            <img style="width: 100%" src="@Model.PhotoViewModel.PhotoUrl" />
-        </a>
+        @if (Model.PhotoViewModel.Count == 1)
+        {   
+            <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[0].PhotoId"
+               href="@Model.PhotoViewModel[0].PhotoUrl">
+                <img style="width: 100%" src="@Model.PhotoViewModel[0].PhotoUrl" />
+            </a>
 
-        @Html.Partial("_LightBoxPartial", Model.PhotoViewModel)
+            @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[0])
         
-        <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()</div>
-        <div class="clearfix"></div>
+            <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right"
+                 class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()
+            </div>
+            <div class="clearfix"></div>
         
         
-        @*<ul class="feed-options">
+@*<ul class="feed-options">
             <li><a href="#"><i class="icon-question-sign"></i> Option 1</a></li>
             <li><a href="#"><i class="icon-question-sign"></i> Option 2</a></li>
             <li><a href="#"><i class="icon-question-sign"></i> Option 3</a></li>
         </ul>*@
         
-        <div class="clearfix" style="margin-bottom: 10px;"></div>
+            <div class="clearfix" style="margin-bottom: 10px;"></div>
         
-        @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
+            @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
+        }
+        else
+        {
+            <div style="padding: 10px;">
+                <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> Uploaded <a href="#">@Model.PhotoViewModel.Count new photos.</a>
+            </div>
+
+            if (Model.PhotoViewModel.Count == 2)
+            {
+                <div class="thumbnail-240 pull-left">
+                    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[0].PhotoId"
+                                   href="@Model.PhotoViewModel[0].PhotoUrl">
+                        <img src="@Model.PhotoViewModel[0].PhotoUrl"/>
+                    </a>
+
+                </div>
+            
+                <div class="thumbnail-240 pull-left">
+                    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[1].PhotoId"
+                           href="@Model.PhotoViewModel[1].PhotoUrl">
+                        <img src="@Model.PhotoViewModel[1].PhotoUrl"/>
+                    </a>
+
+                </div>
+            
+                @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[0])
+                @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[1])
+            
+            }
+            
+            <div class="clearfix"></div>
+        }
 
     </div>
 </div>
+
