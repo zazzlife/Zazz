@@ -461,6 +461,9 @@
     <Content Include="Views\Photo\MainView.cshtml" />
     <Content Include="Views\Photo\_AlbumList.cshtml" />
     <Content Include="Views\Shared\_SingleAlbum.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_PhotoFeedSinglePhoto.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_PhotoFeedTwoPhotos.cshtml" />
+    <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
