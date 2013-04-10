@@ -35,7 +35,7 @@ namespace Zazz.IntegrationTests.Repositories
                 ctx.SaveChanges();
 
                 album.UserId = user.Id;
-                photo.UploaderId = user.Id;
+                photo.UserId = user.Id;
 
                 ctx.Albums.Add(album);
                 ctx.SaveChanges();
@@ -68,7 +68,7 @@ namespace Zazz.IntegrationTests.Repositories
                 ctx.SaveChanges();
 
                 album.UserId = user.Id;
-                photo.UploaderId = user.Id;
+                photo.UserId = user.Id;
 
                 ctx.Albums.Add(album);
                 ctx.SaveChanges();
@@ -84,7 +84,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(photo.AlbumId, result.AlbumId);
             Assert.AreEqual(photo.Id, result.Id);
-            Assert.AreEqual(photo.UploaderId, result.UploaderId);
+            Assert.AreEqual(photo.UserId, result.UploaderId);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace Zazz.IntegrationTests.Repositories
                 ctx.SaveChanges();
 
                 album.UserId = user.Id;
-                photo.UploaderId = user.Id;
+                photo.UserId = user.Id;
 
                 ctx.Albums.Add(album);
                 ctx.SaveChanges();
@@ -134,7 +134,7 @@ namespace Zazz.IntegrationTests.Repositories
                 ctx.SaveChanges();
 
                 album.UserId = user.Id;
-                photo.UploaderId = user.Id;
+                photo.UserId = user.Id;
 
                 ctx.Albums.Add(album);
                 ctx.SaveChanges();

@@ -63,14 +63,14 @@ namespace Zazz.Infrastructure.Services
                     FeedType = FeedType.Picture,
                     //PhotoId = photo.Id,
                     Time = photo.UploadDate,
-                    UserId = photo.UploaderId
+                    UserId = photo.UserId
                 };
 
                 _uow.FeedRepository.InsertGraph(feed);
                 _uow.SaveChanges();
             }
 
-            var path = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
+            var path = GeneratePhotoFilePath(photo.UserId, photo.Id);
             
             if (data != Stream.Null)
                 await _fileService.SaveFileAsync(path, data);
@@ -81,16 +81,16 @@ namespace Zazz.Infrastructure.Services
         public async Task RemovePhotoAsync(int photoId, int currentUserId)
         {
             var photo = await _uow.PhotoRepository.GetByIdAsync(photoId);
-            if (photo.UploaderId != currentUserId)
+            if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            var userDetail = photo.Uploader.UserDetail;
+            var userDetail = photo.User.UserDetail;
 
             if (photo.Id == userDetail.ProfilePhotoId)
-                photo.Uploader.UserDetail.ProfilePhotoId = 0;
+                photo.User.UserDetail.ProfilePhotoId = 0;
 
             if (photo.Id == userDetail.CoverPhotoId)
-                photo.Uploader.UserDetail.CoverPhotoId = 0;
+                photo.User.UserDetail.CoverPhotoId = 0;
 
             //_uow.FeedRepository.RemovePhotoFeeds(photoId);
             _uow.EventRepository.ResetPhotoId(photoId);
@@ -100,7 +100,7 @@ namespace Zazz.Infrastructure.Services
             _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();
 
-            var filePath = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
+            var filePath = GeneratePhotoFilePath(photo.UserId, photo.Id);
             _fileService.RemoveFile(filePath);
         }
 
@@ -158,10 +158,10 @@ namespace Zazz.Infrastructure.Services
         //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
         public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
         {
-            if (photo.UploaderId != currentUserId)
+            if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            var imgPath = GeneratePhotoFilePath(photo.UploaderId, photo.Id);
+            var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
             
             using (var bmp = new Bitmap(imgPath))
             using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))

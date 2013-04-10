@@ -26,7 +26,7 @@ namespace Zazz.Data.Repositories
                                      {
                                          AlbumId = p.AlbumId,
                                          Id = p.Id,
-                                         UploaderId = p.UploaderId,
+                                         UploaderId = p.UserId,
                                          IsFacebookPhoto = p.IsFacebookPhoto,
                                          FacebookPicUrl = p.FacebookLink
                                      })
@@ -43,7 +43,7 @@ namespace Zazz.Data.Repositories
         public Task<int> GetOwnerIdAsync(int photoId)
         {
             return Task.Run(() => DbSet.Where(p => p.Id == photoId)
-                                       .Select(p => p.UploaderId)
+                                       .Select(p => p.UserId)
                                        .SingleOrDefault());
         }
 

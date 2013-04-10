@@ -57,7 +57,7 @@ namespace Zazz.IntegrationTests
                    {
                        UploadDate = DateTime.UtcNow,
                        AlbumId = albumId,
-                       UploaderId = userId
+                       UserId = userId
                    };
         }
     }

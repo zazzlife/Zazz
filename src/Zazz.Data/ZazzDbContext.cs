@@ -74,7 +74,7 @@ namespace Zazz.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Photo>()
-                .HasRequired(i => i.Uploader)
+                .HasRequired(i => i.User)
                 .WithMany(u => u.Photos)
                 .WillCascadeOnDelete(false);
 

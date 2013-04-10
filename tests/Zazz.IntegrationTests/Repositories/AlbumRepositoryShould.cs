@@ -64,12 +64,12 @@ namespace Zazz.IntegrationTests.Repositories
             var photo1 = new Photo
                          {
                              UploadDate = DateTime.UtcNow,
-                             UploaderId = user.Id
+                             UserId = user.Id
                          };
             var photo2 = new Photo
             {
                 UploadDate = DateTime.UtcNow,
-                UploaderId = user.Id
+                UserId = user.Id
             };
 
             album.Photos.Add(photo1);

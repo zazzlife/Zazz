@@ -216,7 +216,7 @@ namespace Zazz.Infrastructure.Services
                                     FacebookLink = fbPhoto.Source,
                                     IsFacebookPhoto = true,
                                     UploadDate = fbPhoto.CreatedTime.UnixTimestampToDateTime(),
-                                    UploaderId = page.UserId,
+                                    UserId = page.UserId,
                                     PageId = page.Id
                                 };
 

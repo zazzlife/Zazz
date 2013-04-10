@@ -13,9 +13,9 @@ namespace Zazz.Core.Models.Data
         }
 
         [ForeignKey("UploaderId")]
-        public virtual User Uploader { get; set; }
+        public virtual User User { get; set; }
 
-        public int UploaderId { get; set; }
+        public int UserId { get; set; }
 
         [MaxLength(250)]
         public string Description { get; set; }
