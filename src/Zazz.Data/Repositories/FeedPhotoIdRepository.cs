@@ -16,11 +16,16 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the record, if it's new then use insert graph.");
         }
 
-        public void RemoveByPhotoId(int photoId)
+        public int RemoveByPhotoIdAndReturnFeedId(int photoId)
         {
-            var items = DbSet.Where(p => p.PhotoId == photoId);
-            foreach (var f in items)
-                Remove(f);
+            var item = DbSet.SingleOrDefault(p => p.PhotoId == photoId);
+            if (item != null)
+            {
+                Remove(item);
+                return item.FeedId;
+            }
+
+            return 0;
         }
 
         public int GetCount(int feedId)

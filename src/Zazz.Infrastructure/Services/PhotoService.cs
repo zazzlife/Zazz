@@ -111,7 +111,10 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == userDetail.CoverPhotoId)
                 photo.User.UserDetail.CoverPhotoId = 0;
 
-            //_uow.FeedRepository.RemovePhotoFeeds(photoId);
+            // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
+
+            _uow.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
+
             _uow.EventRepository.ResetPhotoId(photoId);
             _uow.UserRepository.ResetPhotoId(photoId);
             _uow.CommentRepository.RemovePhotoComments(photoId);
@@ -165,7 +168,7 @@ namespace Zazz.Infrastructure.Services
                 }
                 else
                 {
-                    img = GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                    img = GeneratePhotoUrl(photo.UserId, photo.Id);
                 }
             }
 

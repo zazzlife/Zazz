@@ -151,7 +151,7 @@ namespace Zazz.Web.Controllers
                 if (photo == null)
                     continue;
 
-                e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
             }
 
             var eventsCount = _uow.EventRepository.GetEventRange(from, to, from2, to2).Count();
@@ -323,7 +323,7 @@ namespace Zazz.Web.Controllers
                 {
                     var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(zazzEvent.PhotoId.Value);
                     if (photo != null)
-                        vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                        vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
                 }
 
                 return vm;

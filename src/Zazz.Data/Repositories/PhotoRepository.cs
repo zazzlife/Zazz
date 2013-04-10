@@ -26,7 +26,7 @@ namespace Zazz.Data.Repositories
                                      {
                                          AlbumId = p.AlbumId,
                                          Id = p.Id,
-                                         UploaderId = p.UserId,
+                                         UserId = p.UserId,
                                          IsFacebookPhoto = p.IsFacebookPhoto,
                                          FacebookPicUrl = p.FacebookLink
                                      })

@@ -84,7 +84,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(photo.AlbumId, result.AlbumId);
             Assert.AreEqual(photo.Id, result.Id);
-            Assert.AreEqual(photo.UserId, result.UploaderId);
+            Assert.AreEqual(photo.UserId, result.UserId);
         }
 
         [Test]

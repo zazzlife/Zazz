@@ -12,7 +12,7 @@ namespace Zazz.Core.Models.Data
             Comments = new HashSet<Comment>();
         }
 
-        [ForeignKey("UploaderId")]
+        [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
         public int UserId { get; set; }

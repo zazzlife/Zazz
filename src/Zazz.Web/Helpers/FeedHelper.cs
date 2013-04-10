@@ -124,7 +124,7 @@ namespace Zazz.Web.Helpers
                     {
                         var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
                         feedVm.EventViewModel.ImageUrl =
-                            _photoService.GeneratePhotoUrl(photo.UploaderId,
+                            _photoService.GeneratePhotoUrl(photo.UserId,
                                                            photo.Id);
                     }
 

@@ -4,7 +4,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFeedPhotoIdRepository : IRepository<FeedPhotoId>
     {
-        void RemoveByPhotoId(int photoId);
+        int RemoveByPhotoIdAndReturnFeedId(int photoId);
 
         int GetCount(int feedId);
     }

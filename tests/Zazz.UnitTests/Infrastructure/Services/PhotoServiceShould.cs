@@ -602,7 +602,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         {
                             AlbumId = 3,
                             Id = photoId,
-                            UploaderId = userId
+                            UserId = userId
                         };
 
             var expected = DefaultImageHelper.GetUserDefaultImage(gender);
@@ -642,7 +642,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 AlbumId = 3,
                 Id = photoId,
-                UploaderId = userId
+                UserId = userId
             };
 
             var expected = DefaultImageHelper.GetUserDefaultImage(gender);
@@ -681,7 +681,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 AlbumId = 3,
                 Id = photoId,
-                UploaderId = userId
+                UserId = userId
             };
 
             var expected = _sut.GeneratePhotoUrl(userId, photoId);
@@ -722,7 +722,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 AlbumId = 3,
                 Id = photoId,
-                UploaderId = userId,
+                UserId = userId,
                 IsFacebookPhoto = true,
                 FacebookPicUrl = "pic url"
             };
@@ -763,7 +763,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 AlbumId = 3,
                 Id = photoId,
-                UploaderId = userId
+                UserId = userId
             };
 
             var expected = _sut.GeneratePhotoUrl(userId, photoId);

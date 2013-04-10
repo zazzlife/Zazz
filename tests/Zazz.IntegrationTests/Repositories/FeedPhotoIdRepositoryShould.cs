@@ -35,7 +35,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RemoveAllRecordsWithPhotoId_OnRemoveByPhotoId()
+        public void RemovePhotoIdReocrdAndReturnCorrectFeedId_OnRemoveByPhotoId()
         {
             //Arrange
             var photoId = 12;
@@ -52,11 +52,12 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(_repo.ExistsAsync(feedPhotoId.Id).Result);
 
             //Act
-            _repo.RemoveByPhotoId(photoId);
+            var feedId = _repo.RemoveByPhotoIdAndReturnFeedId(photoId);
             _context.SaveChanges();
 
             //Assert
             Assert.IsFalse(_repo.ExistsAsync(feedPhotoId.Id).Result);
+            Assert.AreEqual(feedPhotoId.FeedId, feedId);
         }
 
         [Test]
