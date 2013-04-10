@@ -94,6 +94,16 @@ namespace Zazz.Data
             } 
         }
 
+        private IFeedPhotoIdRepository _feedPhotoIdRepository;
+        public IFeedPhotoIdRepository FeedPhotoIdRepository
+        {
+            get
+            {
+                return _feedPhotoIdRepository 
+                    ?? (_feedPhotoIdRepository = new FeedPhotoIdRepository(GetContext()));
+            }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null)
