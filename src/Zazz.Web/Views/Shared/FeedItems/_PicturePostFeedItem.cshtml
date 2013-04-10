@@ -37,16 +37,16 @@
         }
         else
         {
-            @*<div style="padding: 10px;">
+@*<div style="padding: 10px;">
                 <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> Uploaded <a href="#">@Model.PhotoViewModel.Count new photos.</a>
             </div>*@
 
             
             // 2 photos
-            
+
             if (Model.PhotoViewModel.Count == 2)
             {
-            <div class="thumbnail-247 pull-left">
+            <div class="thumbnail-247">
                 <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[0].PhotoId"
                                    href="@Model.PhotoViewModel[0].PhotoUrl">
                     <img src="@Model.PhotoViewModel[0].PhotoUrl"/>
@@ -68,25 +68,62 @@
             }
             else if (Model.PhotoViewModel.Count == 3) // 3 photos
             {
-                <div>
-                    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[2].PhotoId"
+            <div>
+                <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[2].PhotoId"
                            href="@Model.PhotoViewModel[2].PhotoUrl">
-                        <img style="width: 100%" src="@Model.PhotoViewModel[2].PhotoUrl" />
+                    <img style="width: 100%" src="@Model.PhotoViewModel[2].PhotoUrl" />
+                </a>
+            </div>
+                
+            <div class="thumbnail-247">
+                <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[0].PhotoId"
+                                       href="@Model.PhotoViewModel[0].PhotoUrl">
+                    <img src="@Model.PhotoViewModel[0].PhotoUrl"/>
+                </a>
+
+            </div>
+            
+            <div class="thumbnail-247">
+                <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[1].PhotoId"
+                               href="@Model.PhotoViewModel[1].PhotoUrl">
+                    <img src="@Model.PhotoViewModel[1].PhotoUrl"/>
+                </a>
+
+            </div>
+            
+            @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[0])
+            @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[1])
+            @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[2])
+            }
+            else if (Model.PhotoViewModel.Count == 4) // 4 photos
+            {
+                <div>
+                    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[3].PhotoId"
+                               href="@Model.PhotoViewModel[3].PhotoUrl">
+                        <img style="width: 100%" src="@Model.PhotoViewModel[3].PhotoUrl" />
                     </a>
                 </div>
                 
-                <div class="thumbnail-247 pull-left">
+                <div class="thumbnail-163">
                     <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[0].PhotoId"
-                                       href="@Model.PhotoViewModel[0].PhotoUrl">
+                                           href="@Model.PhotoViewModel[0].PhotoUrl">
                         <img src="@Model.PhotoViewModel[0].PhotoUrl"/>
                     </a>
 
                 </div>
             
-                <div class="thumbnail-247 pull-right">
+                <div class="thumbnail-163">
                     <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[1].PhotoId"
-                               href="@Model.PhotoViewModel[1].PhotoUrl">
+                           href="@Model.PhotoViewModel[1].PhotoUrl">
                         <img src="@Model.PhotoViewModel[1].PhotoUrl"/>
+                    </a>
+
+                </div>
+            
+                <div class="thumbnail-163" style="margin-right: 0;">
+                    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoViewModel[1].PhotoId"
+                                   href="@Model.PhotoViewModel[2].PhotoUrl">
+                        <img src="@Model.PhotoViewModel[2].PhotoUrl"/>
                     </a>
 
                 </div>
@@ -94,6 +131,7 @@
                 @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[0])
                 @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[1])
                 @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[2])
+                @Html.Partial("_LightBoxPartial", Model.PhotoViewModel[3])
             }
             
             <div class="clearfix"></div>

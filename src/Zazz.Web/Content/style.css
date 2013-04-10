@@ -753,12 +753,25 @@ hr.gold-line {
     height: 247px;
     overflow: hidden;
     margin-top: 4px;
+    float: left;
 }
 
 .thumbnail-247 img {
     height: 100%;
 }
 
+.thumbnail-163 {
+    width: 163.3px;
+    height: 163.3px;
+    overflow: hidden;
+    margin-top: 4px;
+    margin-right: 4px;
+    float: left;
+}
+
+.thumbnail-163 img {
+    height: 100%;
+}
 
 /***************************************
     Footer
