@@ -748,14 +748,14 @@ hr.gold-line {
     Thumbnails
 ***************************************/
 
-.thumbnail-240 {
-    width: 240px;
-    height: 240px;
+.thumbnail-247 {
+    width: 247px;
+    height: 247px;
     overflow: hidden;
-    margin: 0 0 6px 6px;
+    margin-top: 4px;
 }
 
-.thumbnail-240 img {
+.thumbnail-247 img {
     height: 100%;
 }
 
