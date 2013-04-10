@@ -21,7 +21,7 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
-            return DbSet.Where(f => userIds.Contains(f.UserId));
+            return DbSet.Where(f => userIds.Contains(f.UserId)).Include(f => f.FeedPhotoIds);
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
@@ -34,13 +34,6 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(f => f.UserId == userId)
                         .OrderByDescending(f => f.Time)
                         .FirstOrDefault();
-        }
-
-        public void RemovePhotoFeeds(int photoId)
-        {
-            var items = DbSet.Where(f => f.PhotoId == photoId);
-            foreach (var item in items)
-                Remove(item);
         }
 
         public void RemoveEventFeeds(int eventId)

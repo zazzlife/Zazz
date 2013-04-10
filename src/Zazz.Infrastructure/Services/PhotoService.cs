@@ -61,7 +61,7 @@ namespace Zazz.Infrastructure.Services
                 var feed = new Feed
                 {
                     FeedType = FeedType.Picture,
-                    PhotoId = photo.Id,
+                    //PhotoId = photo.Id,
                     Time = photo.UploadDate,
                     UserId = photo.UploaderId
                 };
@@ -92,7 +92,7 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == userDetail.CoverPhotoId)
                 photo.Uploader.UserDetail.CoverPhotoId = 0;
 
-            _uow.FeedRepository.RemovePhotoFeeds(photoId);
+            //_uow.FeedRepository.RemovePhotoFeeds(photoId);
             _uow.EventRepository.ResetPhotoId(photoId);
             _uow.UserRepository.ResetPhotoId(photoId);
             _uow.CommentRepository.RemovePhotoComments(photoId);

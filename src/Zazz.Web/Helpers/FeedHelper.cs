@@ -135,26 +135,26 @@ namespace Zazz.Web.Helpers
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
-                    var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
-                    feedVm.PhotoViewModel = new PhotoViewModel
-                                            {
-                                                PhotoId = photo.Id,
-                                                PhotoDescription = photo.Description,
-                                                FromUserDisplayName = feedVm.UserDisplayName,
-                                                FromUserPhotoUrl = feedVm.UserImageUrl,
-                                                FromUserId = feedVm.UserId
-                                            };
+                    //var photo = await _uow.PhotoRepository.GetByIdAsync(feed.PhotoId.Value);
+                    //feedVm.PhotoViewModel = new PhotoViewModel
+                    //                        {
+                    //                            PhotoId = photo.Id,
+                    //                            PhotoDescription = photo.Description,
+                    //                            FromUserDisplayName = feedVm.UserDisplayName,
+                    //                            FromUserPhotoUrl = feedVm.UserImageUrl,
+                    //                            FromUserId = feedVm.UserId
+                    //                        };
 
-                    feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+                    //feedVm.CommentsViewModel.CommentType = CommentType.Photo;
 
-                    feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto
-                        ? photo.FacebookLink
-                        : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
+                    //feedVm.PhotoViewModel.PhotoUrl = photo.IsFacebookPhoto
+                    //    ? photo.FacebookLink
+                    //    : _photoService.GeneratePhotoUrl(photo.UploaderId, photo.Id);
 
-                    feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value,
-                                                                    feedVm.CommentsViewModel.CommentType,
-                                                                    currentUserId);
+                    //feedVm.CommentsViewModel.ItemId = feed.PhotoId.Value;
+                    //feedVm.CommentsViewModel.Comments = GetComments(feed.PhotoId.Value,
+                    //                                                feedVm.CommentsViewModel.CommentType,
+                    //                                                currentUserId);
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {
