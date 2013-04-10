@@ -346,7 +346,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [Test]
         public async Task SetCoverPhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
         {
-            ///Arrange
+            //Arrange
+
+            var feedId = 12;
             var photoId = 124;
             var userId = 12;
             var albumId = 444;
@@ -381,6 +383,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
+            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+                .Returns(feedId);
+            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+                .Returns(1);
+            _uow.Setup(x => x.FeedRepository.RemoveAsync(feedId))
+                .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -389,17 +397,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(0, photo.User.UserDetail.CoverPhotoId);
             Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveAsync(feedId), Times.Never());
         }
 
         [Test]
         public async Task SetProfilePhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
         {
-            ///Arrange
+            //Arrange
+            var feedId = 12;
             var photoId = 124;
             var userId = 12;
             var albumId = 444;
@@ -434,6 +446,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
+            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+                .Returns(feedId);
+            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+                .Returns(1);
+            _uow.Setup(x => x.FeedRepository.RemoveAsync(feedId))
+                .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -442,15 +460,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
             Assert.AreEqual(0, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveAsync(feedId), Times.Never());
         }
 
         [Test]
-        public async Task RemoveFileAndDbAndFeedRecordAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
+        public async Task RemoveFileAndDbAndFeedRecordIfThePictureIsTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -458,6 +479,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var albumId = 444;
             var coverPhotoId = 4;
             var profilePhotoId = 2;
+            var feedId = 888;
 
             var photo = new Photo
             {
@@ -487,6 +509,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
+            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+                .Returns(feedId);
+            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+                .Returns(0);
+            _uow.Setup(x => x.FeedRepository.RemoveAsync(feedId))
+                .Returns(() => Task.Run(() => { }));
 
             //Act
             await _sut.RemovePhotoAsync(photoId, userId);
@@ -495,11 +523,77 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
             Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveAsync(feedId), Times.Once());
+        }
+
+        [Test]
+        public async Task RemoveFileAndDbAndNotDeleteFeedRecordIfThePictureIsNotTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+            var coverPhotoId = 4;
+            var profilePhotoId = 2;
+            var feedId = 888;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = userId,
+                User = new User
+                {
+                    UserDetail = new UserDetail
+                    {
+                        CoverPhotoId = coverPhotoId,
+                        ProfilePhotoId = profilePhotoId
+                    }
+                }
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetByIdAsync(photoId))
+                .Returns(() => Task.Run(() => photo));
+
+            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
+                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.RemoveAsync(photoId))
+                .Returns(() => Task.Run(() => { }));
+            _fs.Setup(x => x.RemoveFile(filePath));
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
+            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+                .Returns(feedId);
+            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+                .Returns(1);
+            _uow.Setup(x => x.FeedRepository.RemoveAsync(feedId))
+                .Returns(() => Task.Run(() => { }));
+
+            //Act
+            await _sut.RemovePhotoAsync(photoId, userId);
+
+            //Assert
+            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemoveAsync(feedId), Times.Never());
         }
 
         [Test]
