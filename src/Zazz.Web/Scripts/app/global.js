@@ -495,6 +495,14 @@ $(document).on('click', '.removeFeedBtn', function () {
 
 });
 
+// load more feeds
+$(document).on('click', '#load-feeds', function() {
+
+    var lastFeed = $('.feed-item:last');
+    var lastFeedId = lastFeed.data('id');
+
+});
+
 $(function () {
 
     applyPageStyles();
