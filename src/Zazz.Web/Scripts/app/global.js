@@ -496,7 +496,7 @@ $(document).on('click', '.removeFeedBtn', function () {
 });
 
 // load more feeds
-$(document).on('click', '#load-feeds', function() {
+$(document).on('click', '#load-feeds', function () {
 
     var self = $(this);
     var lastFeed = $('.feed-item:last');
@@ -511,13 +511,23 @@ $(document).on('click', '#load-feeds', function() {
         data: {
             lastFeedId: lastFeedId
         },
-        error: function() {
+        error: function () {
             toastr.error('An error occured, please try again later.');
             hideBtnBusy(self, "Load more...");
         },
-        success: function(res) {
-            self.remove();
-            lastFeed.append(res);
+        success: function (res) {
+            var data = $(res.trim());
+
+            if (data.find('.feed-item').length > 0) {
+
+                self.fadeOut(function () {
+                    data.appendTo(lastFeed).hide().slideDown();
+                    self.remove();
+                });
+
+            } else {
+                self.text('Not available');
+            }
         }
     });
 
