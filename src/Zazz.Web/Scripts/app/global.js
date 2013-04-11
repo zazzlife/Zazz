@@ -498,8 +498,28 @@ $(document).on('click', '.removeFeedBtn', function () {
 // load more feeds
 $(document).on('click', '#load-feeds', function() {
 
+    var self = $(this);
     var lastFeed = $('.feed-item:last');
     var lastFeedId = lastFeed.data('id');
+    var url = self.data('url');
+
+    showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        cache: false,
+        data: {
+            lastFeedId: lastFeedId
+        },
+        error: function() {
+            toastr.error('An error occured, please try again later.');
+            hideBtnBusy(self, "Load more...");
+        },
+        success: function(res) {
+            self.remove();
+            lastFeed.append(res);
+        }
+    });
 
 });
 
