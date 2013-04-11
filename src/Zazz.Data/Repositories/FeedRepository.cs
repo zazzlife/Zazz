@@ -21,12 +21,18 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
-            return DbSet.Where(f => userIds.Contains(f.UserId)).Include(f => f.FeedPhotoIds);
+            return DbSet.Where(f => userIds.Contains(f.UserId))
+                        .Include(f => f.FeedPhotoIds)
+                        .Include(f => f.Post)
+                        .Include(f => f.Event);
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
         {
-            return DbSet.Where(f => f.UserId == userId).Include(f => f.FeedPhotoIds);
+            return DbSet.Where(f => f.UserId == userId)
+                        .Include(f => f.FeedPhotoIds)
+                        .Include(f => f.Post)
+                        .Include(f => f.Event);
         }
 
         public Feed GetUserLastFeed(int userId)
