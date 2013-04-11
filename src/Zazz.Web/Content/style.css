@@ -411,68 +411,68 @@ hr.gold-line {
                     color: black;
                 }
 
-    .feed-comments-section {
-        border-top: solid white 1px;
-        margin: 0 10px;
-        padding: 15px 0;
+.feed-comments-section {
+    border-top: solid white 1px;
+    margin: 0 10px;
+    padding: 15px 0;
+}
+
+    .feed-comments-section img {
+        width: 32px;
+        height: 32px;
     }
 
-        .feed-comments-section img {
-            width: 32px;
-            height: 32px;
-        }
-
-        .feed-comments-section .comment-textbox {
-            margin: 0;
-            font-size: 12px;
-            width: 427px;
-        }
-
-    .feed-comments {
-        margin: 10px 2px 0 36px;
-        list-style: none;
-    }
-
-    .feed-comment {
+    .feed-comments-section .comment-textbox {
+        margin: 0;
         font-size: 12px;
-        border-bottom: #a5a5a5 dashed 1px;
-        margin-bottom: 15px;
-        padding-bottom: 5px;
+        width: 427px;
     }
 
-        .feed-comment:last-child {
-            border-bottom: 0;
+.feed-comments {
+    margin: 10px 2px 0 36px;
+    list-style: none;
+}
+
+.feed-comment {
+    font-size: 12px;
+    border-bottom: #a5a5a5 dashed 1px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+}
+
+    .feed-comment:last-child {
+        border-bottom: 0;
+    }
+
+    .feed-comment .comment-text {
+        margin: 0 0 0 38px;
+    }
+
+.comment-options {
+    list-style: none;
+    margin: 20px 0 0 0;
+}
+
+    .comment-options li {
+        float: left;
+        margin-right: 15px;
+    }
+
+        .comment-options li a {
+            text-decoration: none;
         }
 
-        .feed-comment .comment-text {
-            margin: 0 0 0 38px;
-        }
 
-    .comment-options {
-        list-style: none;
-        margin: 20px 0 0 0;
-    }
+.post-feed-message {
+    margin: -15px 10px 0 10px;
+    font-size: 12px;
+    white-space: pre-line;
+}
 
-        .comment-options li {
-            float: left;
-            margin-right: 15px;
-        }
-
-            .comment-options li a {
-                text-decoration: none;
-            }
-
-
-    .post-feed-message {
-        margin: -15px 10px 0 10px;
-        font-size: 12px;
-        white-space: pre-line;
-    }
-
-    .feed-actions {
-        float: right;
-        display: none;
-    }
+.feed-actions {
+    float: right;
+    display: none;
+}
 
 .load-comments-btn {
     font-size: 12px;
@@ -483,11 +483,11 @@ hr.gold-line {
         font-size: 14px;
     }
 
-    /**********Lightbox Comments**************/
+/**********Lightbox Comments**************/
 
-    .lightbox-commentbox {
-        overflow-y: auto;
-    }
+.lightbox-commentbox {
+    overflow-y: auto;
+}
 
     .lightbox-commentbox a {
         color: black;
@@ -516,9 +516,9 @@ hr.gold-line {
         margin-left: 20px;
     }
 
-    .lightbox-commentbox .feed-comments-section .feed-comments .feed-comment {
-        text-align: left;
-    }
+        .lightbox-commentbox .feed-comments-section .feed-comments .feed-comment {
+            text-align: left;
+        }
 
     .lightbox-commentbox .feed-comment .comment-text {
         margin-bottom: 10px;
@@ -529,11 +529,11 @@ hr.gold-line {
         padding: 10px;
     }
 
-    .lightbox-commentbox-user-img {
-        width: 50px; 
-        height: 50px; 
-        margin-right: 5px;
-    }
+.lightbox-commentbox-user-img {
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+}
 
 /***************************************
         Events
@@ -549,6 +549,7 @@ hr.gold-line {
     -webkit-backface-visibility: hidden;
     padding: 6px;
     min-height: 100px;
+    position: relative;
 }
 
     .event .event-title {
@@ -586,6 +587,29 @@ hr.gold-line {
     right: 10px;
     bottom: 5px;
 }
+
+.event-arrow {
+    border-right: 10px solid #11aa7f;
+}
+
+    .event-arrow:after {
+        content: ' ';
+        height: 0;
+        position: absolute;
+        width: 0;
+        border: 15px solid transparent;
+        border-top-color: #11aa7f;
+        top: 50%;
+        left: 100%;
+        -moz-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+
+        margin-top: -15.5px;
+        margin-left: 10px;
+    }
 
 /***************************************
         Profile Page
@@ -694,11 +718,11 @@ hr.gold-line {
         overflow: hidden;
     }
 
-    .pic-list .img img {
-        min-width: 100%;
-        min-height: 100%;
-        cursor: pointer;
-    }
+        .pic-list .img img {
+            min-width: 100%;
+            min-height: 100%;
+            cursor: pointer;
+        }
 
 .remove-img {
     position: absolute;
@@ -732,9 +756,9 @@ hr.gold-line {
     text-align: center;
 }
 
-.album-thumbnail .img {
-    margin: 6px;
-}
+    .album-thumbnail .img {
+        margin: 6px;
+    }
 
 #album-list {
     margin-left: 50px;
@@ -755,20 +779,20 @@ ul.thumbnail-rows {
     padding: 0;
 }
 
-ul.thumbnail-rows li {
-    margin: 0;
-    padding: 0;
-    margin-top: 4px;
-    list-style: none;
-}
+    ul.thumbnail-rows li {
+        margin: 0;
+        padding: 0;
+        margin-top: 4px;
+        list-style: none;
+    }
 
-ul.thumbnail-rows li:first-child {
-    margin-top: 0;
-}
+        ul.thumbnail-rows li:first-child {
+            margin-top: 0;
+        }
 
-ul.thumbnail-rows li:last-child {
-    margin-bottom: 0;
-}
+        ul.thumbnail-rows li:last-child {
+            margin-bottom: 0;
+        }
 
 .thumbnail-247 {
     width: 247px;
@@ -777,9 +801,9 @@ ul.thumbnail-rows li:last-child {
     float: left;
 }
 
-.thumbnail-247 img {
-    height: 100%;
-}
+    .thumbnail-247 img {
+        height: 100%;
+    }
 
 .thumbnail-163 {
     width: 163.3px;
@@ -789,9 +813,39 @@ ul.thumbnail-rows li:last-child {
     float: left;
 }
 
-.thumbnail-163 img {
-    height: 100%;
+    .thumbnail-163 img {
+        height: 100%;
+    }
+
+/***************************************
+    Event Arrow Box
+***************************************/
+
+.arrow-box {
+    background-color: #333;
+    height: 400px;
+    position: absolute;
+    width: 350px;
+    top: 80px;
+    left: 760px;
 }
+
+    .arrow-box:after {
+        content: ' ';
+        height: 0;
+        position: absolute;
+        width: 0;
+        border: 10px solid transparent;
+        border-top-color: #333;
+        top: 50%;
+        right: 100%;
+
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
 
 /***************************************
     Footer
