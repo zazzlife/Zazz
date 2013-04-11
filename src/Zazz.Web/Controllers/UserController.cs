@@ -127,6 +127,24 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        public async Task<ActionResult> LoadMoreFeeds(int lastFeedId)
+        {
+            using (_uow)
+            using (_photoService)
+            using (_userService)
+            {
+                var currentUserId = 0;
+                if (Request.IsAuthenticated)
+                    currentUserId = _userService.GetUserId(User.Identity.Name);
+
+                var user = await _userService.GetUserAsync(User.Identity.Name);
+                var feeds = await new FeedHelper(_uow, _userService, _photoService)
+                                      .GetUserActivityFeedAsync(user.Id, currentUserId, lastFeedId);
+
+                return View("_FeedsPartial", feeds);
+            }
+        }
+
         [HttpGet, Authorize]
         public async Task<ActionResult> Edit()
         {
