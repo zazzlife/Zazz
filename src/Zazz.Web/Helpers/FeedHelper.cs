@@ -80,6 +80,7 @@ namespace Zazz.Web.Helpers
             {
                 var feedVm = new FeedViewModel
                              {
+                                 FeedId = feed.Id,
                                  UserId = feed.UserId,
                                  UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
                                  UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
