@@ -590,6 +590,11 @@ hr.gold-line {
 
 .event-arrow {
     border-right: 10px solid #11aa7f;
+    
+    /*-moz-transition: border-right 50ms;
+    -o-transition: border-right 50ms;
+    -webkit-transition: border-right 50ms;
+    transition: border-right 50ms;*/
 }
 
     .event-arrow:after {
