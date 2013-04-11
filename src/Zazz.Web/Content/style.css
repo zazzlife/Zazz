@@ -588,7 +588,7 @@ hr.gold-line {
     bottom: 5px;
 }
 
-.event-arrow {
+.event-arrow-right {
     border-right: 10px solid #11aa7f;
     
     /*-moz-transition: border-right 50ms;
@@ -597,7 +597,7 @@ hr.gold-line {
     transition: border-right 50ms;*/
 }
 
-    .event-arrow:after {
+    .event-arrow-right:after {
         content: ' ';
         height: 0;
         position: absolute;

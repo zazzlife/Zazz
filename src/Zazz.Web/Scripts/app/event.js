@@ -9,7 +9,7 @@ $(document).on('mouseenter', '.event', function () {
     var elemHeight = self.height();
     var top, left;
 
-    self.addClass('event-arrow');
+    self.addClass('event-arrow-right');
 
     var centerY = offset.top + (elemHeight / 2);
     top = centerY - (imgHeight / 2);
@@ -21,6 +21,9 @@ $(document).on('mouseenter', '.event', function () {
     });
 
     eventLargeImg.css({
+        //'border': '1px solid #11aa7f',
+        'border-radius': '7px',
+        'box-shadow': '0 0 20px 1px #11aa7f',
         'position': 'absolute',
         'height': imgHeight + 'px',
         'top': top,
@@ -31,7 +34,7 @@ $(document).on('mouseenter', '.event', function () {
 });
 
 $(document).on('mouseleave', '.event', function () {
-    $(this).removeClass('event-arrow');
+    $(this).removeClass('event-arrow-right');
 
     eventLargeImg.fadeOut('fast', function() {
         eventLargeImg.remove();
