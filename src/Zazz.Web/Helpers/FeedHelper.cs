@@ -33,19 +33,22 @@ namespace Zazz.Web.Helpers
         /// Returns a list of activities of people that the user follows and the user himself
         /// </summary>
         /// <param name="currentUserId"></param>
-        /// <param name="page"></param>
+        /// <param name="lastFeedId"></param>
         /// <returns></returns>
         public async Task<List<FeedViewModel>> GetFeedsAsync(int currentUserId, int lastFeedId = 0)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
 
-            var query = _uow.FeedRepository.GetFeeds(followIds)
-                            .OrderByDescending(f => f.Time)
-                            .Take(PageSize);
-
+            var query = _uow.FeedRepository.GetFeeds(followIds);
+            
             if (lastFeedId != 0)
                 query = query.Where(f => f.Id < lastFeedId);
+
+
+            query = query.OrderByDescending(f => f.Time)
+                         .Take(PageSize);
+            
 
             var feeds = query.ToList();
             return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
@@ -56,18 +59,17 @@ namespace Zazz.Web.Helpers
         /// </summary>
         /// <param name="userId">Id of the target user</param>
         /// <param name="currentUserId">Id of the current user</param>
-        /// <param name="page"></param>
         /// <param name="lastFeedId"></param>
         /// <returns></returns>
         public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int currentUserId,
                                                                         int lastFeedId = 0)
         {
-            var query = _uow.FeedRepository.GetUserFeeds(userId)
-                            .OrderByDescending(f => f.Time)
-                            .Take(PageSize);
-
+            var query = _uow.FeedRepository.GetUserFeeds(userId);
             if (lastFeedId != 0)
                 query = query.Where(f => f.Id < lastFeedId);
+
+            query = query.OrderByDescending(f => f.Time)
+                         .Take(PageSize);
 
             var feeds = query.ToList();
             return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
