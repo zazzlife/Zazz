@@ -33,7 +33,7 @@ namespace Zazz.Web.Helpers
         /// Returns a list of activities of people that the user follows and the user himself
         /// </summary>
         /// <param name="currentUserId"></param>
-        /// <param name="lastFeedId"></param>
+        /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
         public async Task<List<FeedViewModel>> GetFeedsAsync(int currentUserId, int lastFeedId = 0)
         {
@@ -59,7 +59,7 @@ namespace Zazz.Web.Helpers
         /// </summary>
         /// <param name="userId">Id of the target user</param>
         /// <param name="currentUserId">Id of the current user</param>
-        /// <param name="lastFeedId"></param>
+        /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
         public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int currentUserId,
                                                                         int lastFeedId = 0)
