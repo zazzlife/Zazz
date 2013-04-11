@@ -6,6 +6,8 @@ namespace Zazz.Web.Models
 {
     public class FeedViewModel
     {
+        public int FeedId { get; set; }
+
         public FeedType FeedType { get; set; }
 
         public string UserImageUrl { get; set; }
