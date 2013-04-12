@@ -33,7 +33,7 @@ namespace Zazz.Infrastructure.Services
             return userId;
         }
 
-        public async Task<User> GetUserAsync(string username)
+        public User GetUser(string username)
         {
             return _uoW.UserRepository.GetByUsername(username);
         }

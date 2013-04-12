@@ -260,7 +260,7 @@ namespace Zazz.Infrastructure.Services
             var pageEvents = _uow.EventRepository.GetPageEventIds(page.Id).ToList();
 
             foreach (var a in pageAlbums)
-                await _albumService.DeleteAlbumAsync(a, currentUserId);
+                _albumService.DeleteAlbum(a, currentUserId);
 
             foreach (var p in pagePosts)
                 _postService.RemovePost(p, currentUserId);

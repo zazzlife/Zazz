@@ -70,8 +70,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-
-                await _albumService.DeleteAlbumAsync(id, userId);
+                _albumService.DeleteAlbum(id, userId);
             }
         }
 

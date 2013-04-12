@@ -10,7 +10,7 @@ namespace Zazz.Core.Interfaces
 
         int GetUserId(string username);
 
-        Task<User> GetUserAsync(string username);
+        User GetUser(string username);
 
         string GetUserDisplayName(int userId);
 

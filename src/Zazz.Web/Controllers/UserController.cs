@@ -137,7 +137,7 @@ namespace Zazz.Web.Controllers
                 if (Request.IsAuthenticated)
                     currentUserId = _userService.GetUserId(User.Identity.Name);
 
-                var user = await _userService.GetUserAsync(User.Identity.Name);
+                var user = _userService.GetUser(User.Identity.Name);
                 var feeds = await new FeedHelper(_uow, _userService, _photoService)
                                       .GetUserActivityFeedAsync(user.Id, currentUserId, lastFeedId);
 

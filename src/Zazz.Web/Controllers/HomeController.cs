@@ -33,7 +33,7 @@ namespace Zazz.Web.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var user = await _userService.GetUserAsync(User.Identity.Name);
+                    var user = _userService.GetUser(User.Identity.Name);
                     var feeds = await new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
 
 
@@ -58,7 +58,7 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             using (_userService)
             {
-                var user = await _userService.GetUserAsync(User.Identity.Name);
+                var user = _userService.GetUser(User.Identity.Name);
                 var feeds = await new FeedHelper(_uow, _userService, _photoService)
                                       .GetFeedsAsync(user.Id, lastFeedId);
 

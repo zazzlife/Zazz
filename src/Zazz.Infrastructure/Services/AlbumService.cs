@@ -64,7 +64,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task DeleteAlbumAsync(int albumId, int currentUserId)
+        public void DeleteAlbum(int albumId, int currentUserId)
         {
             if (albumId == 0)
                 throw new ArgumentException("Album Id cannot be 0", "albumId");

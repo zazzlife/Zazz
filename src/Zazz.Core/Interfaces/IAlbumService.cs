@@ -31,6 +31,6 @@ namespace Zazz.Core.Interfaces
         /// <param name="albumId">Id of the album to delete</param>
         /// <param name="currentUserId">Id of the user that is updating the album. Required for security checks</param>
         /// <returns></returns>
-        Task DeleteAlbumAsync(int albumId, int currentUserId);
+        void DeleteAlbum(int albumId, int currentUserId);
     }
 }

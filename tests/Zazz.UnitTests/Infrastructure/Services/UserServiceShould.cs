@@ -67,7 +67,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CallGetByUsername_OnGetUser()
+        public void CallGetByUsername_OnGetUser()
         {
             //Arrange
             var username = "soroush";
@@ -77,7 +77,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            var result = await _sut.GetUserAsync(username);
+            var result = _sut.GetUser(username);
 
             //Assert
             Assert.AreSame(user, result);

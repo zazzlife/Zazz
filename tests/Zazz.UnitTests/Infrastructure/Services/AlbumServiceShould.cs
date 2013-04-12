@@ -100,13 +100,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfAlbumIdIs0_OnDeleteAlbum()
+        public void ThrowIfAlbumIdIs0_OnDeleteAlbum()
         {
             //Arrange
             //Act
             try
             {
-                await _sut.DeleteAlbumAsync(0, _userId);
+                _sut.DeleteAlbum(0, _userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (ArgumentException)
@@ -115,7 +115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CheckForOwnerIdAndThrowIfDoesntMatch_OnDeleteAlbum()
+        public void CheckForOwnerIdAndThrowIfDoesntMatch_OnDeleteAlbum()
         {
             //Arrange
             _album.Id = 123;
@@ -126,7 +126,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act & Assert
             try
             {
-                await _sut.DeleteAlbumAsync(_album.Id, _userId);
+                _sut.DeleteAlbum(_album.Id, _userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -136,7 +136,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task DeleteAndSave_OnDeleteAlbum()
+        public void DeleteAndSave_OnDeleteAlbum()
         {
             //Arrange
             var photoIds = new[] {1, 2, 3, 4};
@@ -155,7 +155,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(dirPath);
 
             //Act
-            await _sut.DeleteAlbumAsync(_album.Id, _userId);
+            _sut.DeleteAlbum(_album.Id, _userId);
 
             //Assert
             _uow.Verify(x => x.AlbumRepository.Remove(_album.Id), Times.Once());

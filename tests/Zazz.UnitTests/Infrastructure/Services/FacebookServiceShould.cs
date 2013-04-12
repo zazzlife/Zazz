@@ -449,7 +449,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.GetPagePostIds(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.EventRepository.GetPageEventIds(It.IsAny<int>()), Times.Never());
 
-            _albumService.Verify(x => x.DeleteAlbumAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _albumService.Verify(x => x.DeleteAlbum(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
             _postService.Verify(x => x.RemovePost(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
             _eventService.Verify(x => x.DeleteEvent(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
@@ -479,9 +479,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(eventIds);
 
 
-            _albumService.Setup(x => x.DeleteAlbumAsync(
-                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId))
-                         .Returns(() => Task.Run(() => { }));
+            _albumService.Setup(x => x.DeleteAlbum(
+                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId));
             _postService.Setup(x => x.RemovePost(
                 It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
@@ -500,7 +499,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.GetPagePostIds(page.Id), Times.Once());
             _uow.Verify(x => x.EventRepository.GetPageEventIds(page.Id), Times.Once());
 
-            _albumService.Verify(x => x.DeleteAlbumAsync(
+            _albumService.Verify(x => x.DeleteAlbum(
                 It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId),
                                  Times.Exactly(albumIds.Count));
             _postService.Verify(x => x.RemovePost(
