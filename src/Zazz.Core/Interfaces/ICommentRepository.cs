@@ -6,7 +6,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        Task<IQueryable<Comment>> GetCommentsAsync(int eventId);
+        IQueryable<Comment> GetComments(int eventId);
 
         void RemovePhotoComments(int photoId);
 

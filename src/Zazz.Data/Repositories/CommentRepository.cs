@@ -18,9 +18,9 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the comment, if it's new then use insert graph."); //a user can have multiple comments on a single event.
         }
 
-        public Task<IQueryable<Comment>> GetCommentsAsync(int eventId)
+        public IQueryable<Comment> GetComments(int eventId)
         {
-            return Task.Run(() => DbSet.Where(c => c.EventId == eventId));
+            return DbSet.Where(c => c.EventId == eventId);
         }
 
         public void RemovePhotoComments(int photoId)

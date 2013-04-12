@@ -180,12 +180,12 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task GetCommentsCorrectly()
+        public void GetCommentsCorrectly()
         {
             //Arrange
 
             //Act
-            var result = await _repo.GetCommentsAsync(_event1.Id);
+            var result = _repo.GetComments(_event1.Id);
 
             //Assert
             Assert.AreEqual(2, result.Count());
