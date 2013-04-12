@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IEventRepository : IRepository<ZazzEvent>
     {
-        Task<int> GetOwnerIdAsync(int eventId);
+        int GetOwnerId(int eventId);
 
         IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to, DateTime? from2, DateTime? to2);
 

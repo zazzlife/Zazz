@@ -39,7 +39,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetOwnerIdAsync(_zazzEvent.Id).Result;
+            var result = _repo.GetOwnerId(_zazzEvent.Id);
 
             //Assert
             Assert.AreEqual(_user.Id, result);

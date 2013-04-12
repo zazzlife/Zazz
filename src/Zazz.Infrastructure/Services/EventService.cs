@@ -42,7 +42,7 @@ namespace Zazz.Infrastructure.Services
             if (zazzEvent.Id == 0)
                 throw new ArgumentException();
 
-            var currentOwner = await _uow.EventRepository.GetOwnerIdAsync(zazzEvent.Id);
+            var currentOwner = _uow.EventRepository.GetOwnerId(zazzEvent.Id);
             if (currentOwner != currentUserId)
                 throw new SecurityException();
 
@@ -61,7 +61,7 @@ namespace Zazz.Infrastructure.Services
             if (eventId == 0)
                 throw new ArgumentException();
 
-            var ownerId = await _uow.EventRepository.GetOwnerIdAsync(eventId);
+            var ownerId = _uow.EventRepository.GetOwnerId(eventId);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 

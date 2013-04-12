@@ -99,8 +99,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
-                .Returns(() => Task.Run(() => 123));
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => 123);
 
             //Act
 
@@ -114,7 +114,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
@@ -122,8 +122,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
-                .Returns(() => Task.Run(() => _zazzEvent.UserId));
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => _zazzEvent.UserId);
 
             //Act
             await _sut.UpdateEventAsync(_zazzEvent, _userId);
@@ -138,8 +138,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ShouldThrowIfEventIdIs0_OnDelete()
         {
             //Arrange
-            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
-                .Returns(() => Task.Run(() => 123));
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => 123);
 
             //Act
             try
@@ -152,7 +152,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Never());
+            _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
@@ -164,8 +164,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
-                .Returns(() => Task.Run(() => 123));
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => 123);
 
             //Act
 
@@ -179,7 +179,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
@@ -191,8 +191,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerIdAsync(_zazzEvent.Id))
-                .Returns(() => Task.Run(() =>_zazzEvent.UserId));
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => _zazzEvent.UserId);
             _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
             _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
             _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));

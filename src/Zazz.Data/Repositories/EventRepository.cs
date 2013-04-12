@@ -31,9 +31,9 @@ namespace Zazz.Data.Repositories
             DbContext.Entry(zazzEvent).State = EntityState.Deleted;
         }
 
-        public Task<int> GetOwnerIdAsync(int eventId)
+        public int GetOwnerId(int eventId)
         {
-            return Task.Run(() => DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault());
+            return DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault();
         }
 
         public IQueryable<ZazzEvent> GetEventRange(DateTime @from, DateTime to, DateTime? from2, DateTime? to2)
