@@ -110,7 +110,7 @@ namespace Zazz.Web.Controllers
             var lastDayOfMonth = new DateTime(today.Year, today.Month, daysInMonth).Date;
             
 
-            return GetEvents(firstDayOfMonth, firstDayOfWeek, lastDayOfWeek, lastDayOfMonth, page);
+            return GetEvents(firstDayOfMonth, firstDayOfWeek, lastDayOfWeek.AddDays(1), lastDayOfMonth, page);
         }
 
         private IPagedList<EventViewModel> GetEvents(DateTime from, DateTime to, DateTime? from2, DateTime? to2, int page)
