@@ -123,7 +123,7 @@ namespace Zazz.Data
 
         public void Dispose()
         {
-            if (_dbContext != null)
+            if (_dbContext != null && !_isDisposed)
             {
                 _dbContext.Dispose();
                 _isDisposed = true;
