@@ -418,7 +418,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfCurrentUserIsNotTheOwner_OnUnlinkPage()
+        public void ThrowIfCurrentUserIsNotTheOwner_OnUnlinkPage()
         {
             //Arrange
             var page = new FacebookPage
@@ -433,7 +433,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UnlinkPage(page.FacebookId, 1);
+                _sut.UnlinkPage(page.FacebookId, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -455,7 +455,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemovePageAndAllOfItsAlbumsAndPostsAndEventsFromDb_OnUnlinkPage()
+        public void RemovePageAndAllOfItsAlbumsAndPostsAndEventsFromDb_OnUnlinkPage()
         {
             //Arrange
             var page = new FacebookPage
@@ -488,7 +488,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            await _sut.UnlinkPage(page.FacebookId, page.UserId);
+            _sut.UnlinkPage(page.FacebookId, page.UserId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());

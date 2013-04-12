@@ -246,7 +246,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task UnlinkPage(string fbPageId, int currentUserId)
+        public void UnlinkPage(string fbPageId, int currentUserId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
             if (page == null)

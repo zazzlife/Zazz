@@ -153,13 +153,13 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task UnlinkPage(string pageId)
+        public void UnlinkPage(string pageId)
         {
             using (_uow)
             using (_facebookService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _facebookService.UnlinkPage(pageId, userId);
+                _facebookService.UnlinkPage(pageId, userId);
             }
         }
 
