@@ -8,22 +8,22 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFacebookService : IDisposable
     {
-        Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
+        void HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
 
         //Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);
 
-        Task UpdateUserEventsAsync(long fbUserId, int limit = 5);
+        void UpdateUserEvents(long fbUserId, int limit = 5);
 
-        Task UpdatePageEventsAsync(string pageId, int limit = 10);
+        void UpdatePageEvents(string pageId, int limit = 10);
 
         void UpdatePageStatuses(string pageId, int limit = 25);
 
         void UpdatePagePhotos(string pageId, int limit = 25);
 
-        Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId);
+        IEnumerable<FbPage> GetUserPages(int userId);
 
         void LinkPage(FacebookPage fbPage);
 
-        Task UnlinkPageAsync(string fbPageId, int currentUserId);
+        Task UnlinkPage(string fbPageId, int currentUserId);
     }
 }

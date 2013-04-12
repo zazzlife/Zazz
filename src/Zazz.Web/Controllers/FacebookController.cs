@@ -85,19 +85,18 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> GetPages()
+        public ActionResult GetPages()
         {
             using (_uow)
             using (_facebookService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
 
-                var allPages = _facebookService.GetUserPagesAsync(userId);
+                var allPages = _facebookService.GetUserPages(userId);
                 var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
-                await allPages;
 
                 var vm = new List<FbPageViewModel>();
-                foreach (var fbPage in allPages.Result)
+                foreach (var fbPage in allPages)
                 {
                     vm.Add(new FbPageViewModel
                            {
@@ -113,7 +112,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<JsonNetResult> LinkPage(string pageId)
+        public JsonNetResult LinkPage(string pageId)
         {
             using (_uow)
             using (_facebookService)
@@ -121,7 +120,7 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     var userId = _userService.GetUserId(User.Identity.Name);
-                    var allPages = await _facebookService.GetUserPagesAsync(userId);
+                    var allPages = _facebookService.GetUserPages(userId);
 
                     var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
                     if (wantedPage != null)
@@ -135,7 +134,7 @@ namespace Zazz.Web.Controllers
                                      };
 
                         _facebookService.LinkPage(fbPage);
-                        await _facebookService.UpdatePageEventsAsync(fbPage.FacebookId);
+                        _facebookService.UpdatePageEvents(fbPage.FacebookId);
                     }
 
                     return new JsonNetResult("ok");
@@ -160,16 +159,16 @@ namespace Zazz.Web.Controllers
             using (_facebookService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _facebookService.UnlinkPageAsync(pageId, userId);
+                await _facebookService.UnlinkPage(pageId, userId);
             }
         }
 
-        public async Task SyncPage(string pageId)
+        public void SyncPage(string pageId)
         {
             using (_uow)
             using (_facebookService)
             {
-                await _facebookService.UpdatePageEventsAsync(pageId, 25);
+                _facebookService.UpdatePageEvents(pageId, 25);
                 _facebookService.UpdatePagePhotos(pageId);
                 _facebookService.UpdatePageStatuses(pageId);
             }

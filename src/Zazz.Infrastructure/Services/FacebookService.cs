@@ -36,17 +36,15 @@ namespace Zazz.Infrastructure.Services
             _albumService = albumService;
         }
 
-        public async Task HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
+        public void HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
         {
-            var tasks = new List<Task>();
             foreach (var entry in changes.Entries.Where(c => c.ChangedFields.Contains("events")))
-                tasks.Add(UpdateUserEventsAsync(entry.UserId, 5));
+                UpdateUserEvents(entry.UserId);
 
-            await Task.WhenAll(tasks);
             _uow.SaveChanges();
         }
 
-        public async Task UpdateUserEventsAsync(long fbUserId, int limit = 5)
+        public void UpdateUserEvents(long fbUserId, int limit = 5)
         {
             //getting user account
             var oauthAccount = _uow.OAuthAccountRepository
@@ -88,7 +86,7 @@ namespace Zazz.Infrastructure.Services
         //{
         //}
 
-        public async Task UpdatePageEventsAsync(string pageId, int limit = 10)
+        public void UpdatePageEvents(string pageId, int limit = 10)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -227,7 +225,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)
+        public IEnumerable<FbPage> GetUserPages(int userId)
         {
             var oAuthAccount = _uow.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook);
 
@@ -248,7 +246,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task UnlinkPageAsync(string fbPageId, int currentUserId)
+        public async Task UnlinkPage(string fbPageId, int currentUserId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
             if (page == null)

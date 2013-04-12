@@ -47,7 +47,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotThrowOrDoAnythingIfItDidntFintAnyUser_OnHandleRealtimeUserUpdatesAsync()
+        public void NotThrowOrDoAnythingIfItDidntFintAnyUser_OnHandleRealtimeUserUpdatesAsync()
         {
             //Arrange
             var userAId = 1234L;
@@ -74,7 +74,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+            _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
@@ -90,7 +90,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotDoAnythingIfChangedFieldsAreNotEvents_OnHandleRealtimeUserUpdatesAsync()
+        public void NotDoAnythingIfChangedFieldsAreNotEvents_OnHandleRealtimeUserUpdatesAsync()
         {
             //Arrange
             var userAId = 1234L;
@@ -113,7 +113,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             };
 
             //Act
-            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+            _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
@@ -129,7 +129,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotRequestEventsIfUserDoesntWantEventsToBeSynced_OnHandleRealtimeUserUpdatesAsync()
+        public void NotRequestEventsIfUserDoesntWantEventsToBeSynced_OnHandleRealtimeUserUpdatesAsync()
         {
             //Arrange
             var userAId = 1234L;
@@ -175,7 +175,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+            _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
@@ -191,7 +191,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task AddFbEventsIfTheyAreNewAndUpdateIfTheyExist_OnHandleRealtimeUserUpdatesAsync()
+        public void AddFbEventsIfTheyAreNewAndUpdateIfTheyExist_OnHandleRealtimeUserUpdatesAsync()
         {
             //Arrange
             var userAId = 1234L;
@@ -287,7 +287,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _eventService.Setup(x => x.CreateEvent(It.IsAny<ZazzEvent>()));
 
             //Act
-            await _sut.HandleRealtimeUserUpdatesAsync(changes);
+            _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
             Assert.AreEqual(newEvent1.Name, event1.Name);
@@ -311,7 +311,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfAccessTokenWasEmpty_OnGetPages()
+        public void ThrowIfAccessTokenWasEmpty_OnGetPages()
         {
             //Arrange
             var userId = 1234;
@@ -326,7 +326,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                var result = await _sut.GetUserPagesAsync(userId);
+                var result = _sut.GetUserPages(userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (OAuthAccountNotFoundException)
@@ -340,7 +340,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CallAndReturnResultFromFBHelper_OnGetPages()
+        public void CallAndReturnResultFromFBHelper_OnGetPages()
         {
             //Arrange
             var userId = 1234;
@@ -353,7 +353,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(oauthAccount);
 
             //Act
-            var result = await _sut.GetUserPagesAsync(userId);
+            var result = _sut.GetUserPages(userId);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository
@@ -433,7 +433,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UnlinkPageAsync(page.FacebookId, 1);
+                await _sut.UnlinkPage(page.FacebookId, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -490,7 +490,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            await _sut.UnlinkPageAsync(page.FacebookId, page.UserId);
+            await _sut.UnlinkPage(page.FacebookId, page.UserId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -513,7 +513,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()
+        public void NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()
         {
             //Arrange
             var fbUserId = 1234L;
@@ -521,7 +521,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            await _sut.UpdateUserEventsAsync(fbUserId, 5);
+            _sut.UpdateUserEvents(fbUserId, 5);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook),
@@ -532,7 +532,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdateUserEvents()
+        public void NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdateUserEvents()
         {
             //Arrange
             var oauthAccount = new OAuthAccount
@@ -549,7 +549,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId, 5);
+            _sut.UpdateUserEvents(oauthAccount.ProviderUserId, 5);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository
@@ -562,7 +562,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task AddEventsIfTheyDontExists_OnUpdateUserEvents()
+        public void AddEventsIfTheyDontExists_OnUpdateUserEvents()
         {
             //Arrange
             var oauthAccount = new OAuthAccount
@@ -598,7 +598,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _eventService.Setup(x => x.CreateEvent(zazzEvent));
 
             //Act
-            await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId, limit);
+            _sut.UpdateUserEvents(oauthAccount.ProviderUserId, limit);
 
             //Assert
             Assert.AreEqual(oauthAccount.UserId, zazzEvent.UserId);
@@ -613,7 +613,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotDoAnythingIfPageDoesntExists_OnUpdatePageEvents()
+        public void NotDoAnythingIfPageDoesntExists_OnUpdatePageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -627,7 +627,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            await _sut.UpdatePageEventsAsync(page.FacebookId);
+            _sut.UpdatePageEvents(page.FacebookId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -639,7 +639,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdatePageEvents()
+        public void NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdatePageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -655,7 +655,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            await _sut.UpdatePageEventsAsync(page.FacebookId);
+            _sut.UpdatePageEvents(page.FacebookId);
 
             //Assert
             _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
@@ -667,7 +667,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task AddEventsIfTheyDontExist_OnUpdatePageEvents()
+        public void AddEventsIfTheyDontExist_OnUpdatePageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -703,7 +703,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _eventService.Setup(x => x.CreateEvent(zazzEvent));
 
             //Act
-            await _sut.UpdatePageEventsAsync(page.FacebookId, limit);
+            _sut.UpdatePageEvents(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(page.Id, zazzEvent.PageId);

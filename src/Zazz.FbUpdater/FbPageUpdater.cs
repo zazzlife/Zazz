@@ -31,7 +31,7 @@ namespace Zazz.FbUpdater
                 Program.SetStatus(String.Format("Updating...{0} - {1}/{2}", page, counter, pages.Count));
 
                 // not sending them in parallel so facebook won't block us!
-                await _facebookService.UpdatePageEventsAsync(page);
+                _facebookService.UpdatePageEvents(page);
                 _facebookService.UpdatePagePhotos(page);
                 _facebookService.UpdatePageStatuses(page);
 
