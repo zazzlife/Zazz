@@ -49,14 +49,14 @@ namespace Zazz.IntegrationTests.Repositories
             _context.FeedPhotoIds.Add(feedPhotoId);
             _context.SaveChanges();
 
-            Assert.IsTrue(_repo.ExistsAsync(feedPhotoId.Id).Result);
+            Assert.IsTrue(_repo.Exists(feedPhotoId.Id));
 
             //Act
             var feedId = _repo.RemoveByPhotoIdAndReturnFeedId(photoId);
             _context.SaveChanges();
 
             //Assert
-            Assert.IsFalse(_repo.ExistsAsync(feedPhotoId.Id).Result);
+            Assert.IsFalse(_repo.Exists(feedPhotoId.Id));
             Assert.AreEqual(feedPhotoId.FeedId, feedId);
         }
 

@@ -201,18 +201,18 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
 
-            Assert.IsFalse(await _repo.ExistsAsync(_event1Comment1.Id));
-            Assert.IsFalse(await _repo.ExistsAsync(_event1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
+            Assert.IsFalse(_repo.Exists(_event1Comment1.Id));
+            Assert.IsFalse(_repo.Exists(_event1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_post1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_post1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_photo1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_photo1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment2.Id));
         }
 
         [Test]
@@ -225,18 +225,18 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
 
-            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
-            Assert.IsFalse(await _repo.ExistsAsync(_post1Comment1.Id));
-            Assert.IsFalse(await _repo.ExistsAsync(_post1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_event1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_event1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment2.Id));
+            Assert.IsFalse(_repo.Exists(_post1Comment1.Id));
+            Assert.IsFalse(_repo.Exists(_post1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_photo1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_photo1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment2.Id));
         }
 
         [Test]
@@ -249,18 +249,18 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
 
-            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_event2Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_post2Comment2.Id));
-            Assert.IsFalse(await _repo.ExistsAsync(_photo1Comment1.Id));
-            Assert.IsFalse(await _repo.ExistsAsync(_photo1Comment2.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment1.Id));
-            Assert.IsTrue(await _repo.ExistsAsync(_photo2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_event1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_event1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_event2Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_post1Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_post1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_post2Comment2.Id));
+            Assert.IsFalse(_repo.Exists(_photo1Comment1.Id));
+            Assert.IsFalse(_repo.Exists(_photo1Comment2.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment1.Id));
+            Assert.IsTrue(_repo.Exists(_photo2Comment2.Id));
         }
     }
 }

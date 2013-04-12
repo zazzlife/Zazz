@@ -123,8 +123,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
-                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
+                .Returns(_followRequest);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
@@ -149,8 +149,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
-                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
+                .Returns(_followRequest);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
                 
@@ -168,8 +168,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
-                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
+                .Returns(_followRequest);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
@@ -195,8 +195,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetByIdAsync(followRequestId))
-                .Returns(() => Task.Run(() => _followRequest));
+            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
+                .Returns(_followRequest);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 

@@ -12,11 +12,11 @@ namespace Zazz.Core.Interfaces
 
         void InsertOrUpdate(T item);
 
-        Task<T> GetByIdAsync(int id);
+        T GetById(int id);
 
-        Task<bool> ExistsAsync(int id);
+        bool Exists(int id);
 
-        Task RemoveAsync(int id);
+        void Remove(int id);
 
         void Remove(T item);
     }

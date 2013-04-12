@@ -19,9 +19,9 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
-        public Task<Album> GetAlbumAsync(int albumId)
+        public async Task<Album> GetAlbumAsync(int albumId)
         {
-            return _uow.AlbumRepository.GetByIdAsync(albumId);
+            return _uow.AlbumRepository.GetById(albumId);
         }
 
         public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
@@ -78,7 +78,7 @@ namespace Zazz.Infrastructure.Services
             foreach (var photoId in photosIds)
                 await _photoService.RemovePhotoAsync(photoId, currentUserId);
 
-            await _uow.AlbumRepository.RemoveAsync(albumId);
+            _uow.AlbumRepository.Remove(albumId);
             _uow.SaveChanges();
         }
 

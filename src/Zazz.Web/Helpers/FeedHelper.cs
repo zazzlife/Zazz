@@ -168,7 +168,7 @@ namespace Zazz.Web.Helpers
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {
-                    var post = await _uow.PostRepository.GetByIdAsync(feed.PostId.Value);
+                    var post = _uow.PostRepository.GetById(feed.PostId.Value);
                     feedVm.PostViewModel = new PostViewModel
                                            {
                                                PostId = post.Id,

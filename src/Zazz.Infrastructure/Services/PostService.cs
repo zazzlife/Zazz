@@ -33,7 +33,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task EditPostAsync(int postId, string newText, int currentUserId)
         {
-            var post = await _uow.PostRepository.GetByIdAsync(postId);
+            var post = _uow.PostRepository.GetById(postId);
             if (post == null)
                 throw new Exception("Not Found");
 
@@ -47,14 +47,14 @@ namespace Zazz.Infrastructure.Services
 
         public async Task RemovePostAsync(int postId, int currentUserId)
         {
-            var post = await _uow.PostRepository.GetByIdAsync(postId);
+            var post = _uow.PostRepository.GetById(postId);
             if (post == null)
                 return;
 
             if (post.UserId != currentUserId)
                 throw new SecurityException();
             
-            _uow.PostRepository.Remove(post);
+            _uow.PostRepository.Remove((Post) post);
             _uow.FeedRepository.RemovePostFeeds(postId);
             _uow.CommentRepository.RemovePostComments(postId);
 

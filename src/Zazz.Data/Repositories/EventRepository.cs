@@ -22,9 +22,9 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the event, if it's new then use insert graph.");
         }
 
-        public override async Task RemoveAsync(int id)
+        public override void Remove(int id)
         {
-            var zazzEvent = await GetByIdAsync(id);
+            var zazzEvent = GetById(id);
             if (zazzEvent == null)
                 return;
 

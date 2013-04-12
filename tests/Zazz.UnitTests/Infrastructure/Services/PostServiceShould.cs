@@ -56,8 +56,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowWhenCurrentUserIdIsNotSameAsPostOwner_OnRemovePost()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
-                .Returns(() => Task.Run(() => _post));
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
 
             //Act
             try
@@ -69,7 +69,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {}
             
             //Assert
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
             _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Never());
@@ -80,8 +80,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task RemoveAndPostAndSaveWhenEverythingIsFine_OnRemove()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
-                .Returns(() => Task.Run(() => _post));
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
             _uow.Setup(x => x.PostRepository.Remove(_post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
             _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
@@ -90,7 +90,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             await _sut.RemovePostAsync(_post.Id, _post.UserId);
 
             //Assert
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Once());
@@ -101,8 +101,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowWhenPostNotExists_OnEditPost()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
-                .Returns(() => Task.Factory.StartNew<Post>(() => null));
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(() => null);
 
             //Act
             try
@@ -115,7 +115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
@@ -123,8 +123,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowWhenUserIdIsDifferent_OnEditPost()
         {
             //Arrange
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
-                .Returns(() => Task.Run(() => _post));
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
 
             //Act
             try
@@ -137,7 +137,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
@@ -146,15 +146,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var newText = "Edited";
-            _uow.Setup(x => x.PostRepository.GetByIdAsync(_post.Id))
-                .Returns(() => Task.Run(() => _post));
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
 
             //Act
             await _sut.EditPostAsync(_post.Id, newText, _post.UserId);
 
             //Assert
             Assert.AreEqual(newText, _post.Message);
-            _uow.Verify(x => x.PostRepository.GetByIdAsync(_post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }

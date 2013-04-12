@@ -80,7 +80,7 @@ namespace Zazz.Infrastructure.Services
                                 Token = Guid.NewGuid(),
                             };
 
-            var oldToken = await _uow.ValidationTokenRepository.GetByIdAsync(userId);
+            var oldToken = _uow.ValidationTokenRepository.GetById(userId);
             if (oldToken != null)
                 _uow.ValidationTokenRepository.Remove(oldToken);
 
@@ -92,7 +92,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task<bool> IsTokenValidAsync(int userId, Guid token)
         {
-            var userToken = await _uow.ValidationTokenRepository.GetByIdAsync(userId);
+            var userToken = _uow.ValidationTokenRepository.GetById(userId);
             if (userToken == null)
                 return false;
 
@@ -108,17 +108,17 @@ namespace Zazz.Infrastructure.Services
             if (!isTokenValid)
                 throw new InvalidTokenException();
 
-            var user = await _uow.UserRepository.GetByIdAsync(userId);
+            var user = _uow.UserRepository.GetById(userId);
             var newPassHash = _cryptoService.GeneratePasswordHash(newPassword);
 
             user.Password = newPassHash;
-            await _uow.ValidationTokenRepository.RemoveAsync(user.Id);
+            _uow.ValidationTokenRepository.Remove(user.Id);
             _uow.SaveChanges();
         }
 
         public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
         {
-            var user = await _uow.UserRepository.GetByIdAsync(userId);
+            var user = _uow.UserRepository.GetById(userId);
 
             var currentPassHash = _cryptoService.GeneratePasswordHash(currentPassword);
             if (currentPassHash != user.Password)

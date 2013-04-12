@@ -110,8 +110,8 @@ namespace Zazz.IntegrationTests.Repositories
             _repo.ResetPhotoId(photoId);
 
             //Assert
-            var eventACheck = _repo.GetByIdAsync(eventA.Id).Result;
-            var eventBCheck = _repo.GetByIdAsync(eventB.Id).Result;
+            var eventACheck = _repo.GetById(eventA.Id);
+            var eventBCheck = _repo.GetById(eventB.Id);
             Assert.IsNull(eventACheck.PhotoId);
             Assert.IsNull(eventBCheck.PhotoId);
         }

@@ -310,7 +310,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetByIdAsync(user.Id).Result;
+            var result = _repo.GetById(user.Id);
 
             //Assert
             Assert.IsTrue(user.Id > 0);
@@ -322,7 +322,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetByIdAsync(123).Result;
+            var result = _repo.GetById(123);
 
             //Assert
             Assert.IsNull(result);
@@ -343,7 +343,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.ExistsAsync(user.Id).Result;
+            var result = _repo.Exists(user.Id);
 
             //Assert
             Assert.IsTrue(user.Id > 0);
@@ -354,14 +354,14 @@ namespace Zazz.IntegrationTests.Repositories
         public void ShouldRetrunFalse_OnExists_WhenUserNotExist()
         {
             //Act
-            var result = _repo.ExistsAsync(1234).Result;
+            var result = _repo.Exists(1234);
 
             //Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public async Task ShouldDelete_OnDeleteById()
+        public void ShouldDelete_OnDeleteById()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -375,10 +375,10 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            await _repo.RemoveAsync(user.Id);
+            _repo.Remove(user.Id);
             _zazzDbContext.SaveChanges();
 
-            var result = await _repo.GetByIdAsync(user.Id);
+            var result = _repo.GetById(user.Id);
 
             //Assert
             Assert.IsNull(result);
@@ -402,7 +402,7 @@ namespace Zazz.IntegrationTests.Repositories
             _repo.Remove(user);
             _zazzDbContext.SaveChanges();
 
-            var result = _repo.GetByIdAsync(user.Id).Result;
+            var result = _repo.GetById(user.Id);
 
             //Assert
             Assert.IsNull(result);
@@ -609,8 +609,8 @@ namespace Zazz.IntegrationTests.Repositories
             //Act
             _repo.ResetPhotoId(idToBeRemoved);
 
-            var a = _repo.GetByIdAsync(userA.Id).Result;
-            var b = _repo.GetByIdAsync(userB.Id).Result;
+            var a = _repo.GetById(userA.Id);
+            var b = _repo.GetById(userB.Id);
 
             //Assert
             Assert.AreEqual(0, a.UserDetail.ProfilePhotoId);

@@ -157,9 +157,9 @@ namespace Zazz.Data.Repositories
                             .SingleOrDefault();
         }
 
-        public override async Task RemoveAsync(int id)
+        public override void Remove(int id)
         {
-            var item = await GetByIdAsync(id);
+            var item = GetById(id);
             if (item != null)
                 Remove(item);
         }

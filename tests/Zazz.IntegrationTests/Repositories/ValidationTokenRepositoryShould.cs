@@ -81,7 +81,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            _repo.RemoveAsync(token.Id).Wait();
+            _repo.Remove(token.Id);
 
             //Assert
             Assert.AreEqual(EntityState.Deleted, _context.Entry(token).State);

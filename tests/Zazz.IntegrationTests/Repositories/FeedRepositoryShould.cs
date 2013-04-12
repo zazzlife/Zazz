@@ -167,13 +167,13 @@ namespace Zazz.IntegrationTests.Repositories
             _dbContext.Feeds.Add(feed);
             _dbContext.SaveChanges();
 
-            Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
+            Assert.IsTrue(_repo.Exists(feed.Id));
             //Act
             _repo.RemoveEventFeeds(zazzEvent.Id);
             _dbContext.SaveChanges();
 
             //Assert
-            Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
+            Assert.IsFalse(_repo.Exists(feed.Id));
         }
 
         [Test]
@@ -198,13 +198,13 @@ namespace Zazz.IntegrationTests.Repositories
             _dbContext.Feeds.Add(feed);
             _dbContext.SaveChanges();
 
-            Assert.IsTrue(_repo.ExistsAsync(feed.Id).Result);
+            Assert.IsTrue(_repo.Exists(feed.Id));
             //Act
             _repo.RemovePostFeeds(post.Id);
             _dbContext.SaveChanges();
 
             //Assert
-            Assert.IsFalse(_repo.ExistsAsync(feed.Id).Result);
+            Assert.IsFalse(_repo.Exists(feed.Id));
         }
 
         [Test]

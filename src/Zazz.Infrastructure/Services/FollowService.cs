@@ -47,7 +47,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task AcceptFollowRequestAsync(int requestId, int currentUserId)
         {
-            var followRequest = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
+            var followRequest = _uow.FollowRequestRepository.GetById(requestId);
             if (followRequest == null)
                 return;
 
@@ -56,21 +56,21 @@ namespace Zazz.Infrastructure.Services
 
             var userFollow = new Follow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
             _uow.FollowRepository.InsertGraph(userFollow);
-            _uow.FollowRequestRepository.Remove(followRequest);
+            _uow.FollowRequestRepository.Remove((FollowRequest) followRequest);
 
             _uow.SaveChanges();
         }
 
         public async Task RejectFollowRequestAsync(int requestId, int currentUserId)
         {
-            var request = await _uow.FollowRequestRepository.GetByIdAsync(requestId);
+            var request = _uow.FollowRequestRepository.GetById(requestId);
             if (request == null)
                 return;
 
             if (request.ToUserId != currentUserId)
                 throw new SecurityException();
 
-            _uow.FollowRequestRepository.Remove(request);
+            _uow.FollowRequestRepository.Remove((FollowRequest) request);
             _uow.SaveChanges();
         }
 

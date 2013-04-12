@@ -44,7 +44,7 @@ namespace Zazz.Web.Controllers
             using (_photoService) 
             using (_userService)
             {
-                var user = await _uow.UserRepository.GetByIdAsync(id);
+                var user = _uow.UserRepository.GetById(id);
                 
                 // Profile Photo
                 var profilePhotoUrl = _photoService.GetUserImageUrl(id);

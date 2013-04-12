@@ -54,24 +54,24 @@ namespace Zazz.Data.Repositories
             }
         }
 
-        public virtual Task<T> GetByIdAsync(int id)
+        public virtual T GetById(int id)
         {
-            return Task.Run(() => DbSet.Find(id));
+            return DbSet.Find(id);
         }
 
         protected abstract int GetItemId(T item);
 
-        public virtual async Task<bool> ExistsAsync(int id)
+        public virtual bool Exists(int id)
         {
-            return await Task.Run(() => DbSet.Any(i => i.Id == id));
+            return DbSet.Any(i => i.Id == id);
         }
 
-        public virtual async Task RemoveAsync(int id)
+        public virtual void Remove(int id)
         {
             if (id == default(int))
                 throw new ArgumentException("Id was 0", "id");
 
-            var item = await GetByIdAsync(id);
+            var item = GetById(id);
             if (item != null)
                 DbSet.Remove(item);
         }

@@ -51,9 +51,9 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public Task<ZazzEvent> GetEventAsync(int id)
+        public async Task<ZazzEvent> GetEventAsync(int id)
         {
-            return _uow.EventRepository.GetByIdAsync(id);
+            return _uow.EventRepository.GetById(id);
         }
 
         public async Task DeleteEventAsync(int eventId, int currentUserId)
@@ -68,7 +68,7 @@ namespace Zazz.Infrastructure.Services
             _uow.FeedRepository.RemoveEventFeeds(eventId);
             _uow.CommentRepository.RemoveEventComments(eventId);
 
-            await _uow.EventRepository.RemoveAsync(eventId);
+            _uow.EventRepository.Remove(eventId);
             _uow.SaveChanges();
         }
 

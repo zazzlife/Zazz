@@ -30,9 +30,9 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetAll();
         }
 
-        public Task<Photo> GetPhotoAsync(int id)
+        public async Task<Photo> GetPhotoAsync(int id)
         {
-            return _uow.PhotoRepository.GetByIdAsync(id);
+            return _uow.PhotoRepository.GetById(id);
         }
 
         public string GeneratePhotoUrl(int userId, int photoId)
@@ -99,7 +99,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task RemovePhotoAsync(int photoId, int currentUserId)
         {
-            var photo = await _uow.PhotoRepository.GetByIdAsync(photoId);
+            var photo = _uow.PhotoRepository.GetById(photoId);
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
@@ -118,14 +118,14 @@ namespace Zazz.Infrastructure.Services
             var remainingPhotosCount = _uow.FeedPhotoIdRepository.GetCount(feedId);
             if (remainingPhotosCount == 0)
             {
-                await _uow.FeedRepository.RemoveAsync(feedId);
+                _uow.FeedRepository.Remove(feedId);
             }
 
             _uow.EventRepository.ResetPhotoId(photoId);
             _uow.UserRepository.ResetPhotoId(photoId);
             _uow.CommentRepository.RemovePhotoComments(photoId);
 
-            _uow.PhotoRepository.Remove(photo);
+            _uow.PhotoRepository.Remove((Photo) photo);
             _uow.SaveChanges();
 
             var filePath = GeneratePhotoFilePath(photo.UserId, photo.Id);
