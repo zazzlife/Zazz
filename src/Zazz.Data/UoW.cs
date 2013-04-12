@@ -111,8 +111,7 @@ namespace Zazz.Data
             {
                 _dbContext = new ZazzDbContext();
                 _isDisposed = false;
-            }
-                
+            }   
 
             return _dbContext;
         }
