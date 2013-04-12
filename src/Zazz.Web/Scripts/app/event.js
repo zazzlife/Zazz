@@ -8,16 +8,28 @@ $(document).on('mouseenter', '.event', function () {
         return;
     }
 
+    
+
     var imgHeight = 300;
     var offset = self.offset();
     var elemWidth = self.width();
     var elemHeight = self.height();
     var top, left;
 
-    self.addClass('event-arrow-right');
+    
 
     var centerY = offset.top + (elemHeight / 2);
     top = centerY - (imgHeight / 2);
+
+    var side = self.parent().parent().attr('data-eventImgSide');
+    if (side == "left") {
+        
+        self.addClass('event-arrow-left');
+
+    } else {
+        
+        self.addClass('event-arrow-right');
+    }
 
     left = offset.left + elemWidth + 30;
 
@@ -37,6 +49,7 @@ $(document).on('mouseenter', '.event', function () {
 
 $(document).on('mouseleave', '.event', function () {
     $(this).removeClass('event-arrow-right');
+    $(this).removeClass('event-arrow-left');
     eventLargeImg.remove();
 });
 

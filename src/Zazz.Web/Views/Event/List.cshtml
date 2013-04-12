@@ -21,12 +21,12 @@
     <div class="container split-two" style="min-height: 418px;">
 
         @* LEFT ITEMS *@
-        <div class="left-part">
+        <div class="left-part" data-eventImgSide="right">
             @Html.Partial("_EventsListPartial", Model.WeekEvents)
         </div>
 
         @* RIGHT ITEMS *@
-        <div class="right-part">
+        <div class="right-part" data-eventImgSide="left">
             @Html.Partial("_EventsListPartial", Model.MonthEvents)
         </div>
 
