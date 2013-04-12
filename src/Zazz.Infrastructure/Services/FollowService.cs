@@ -18,7 +18,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task FollowClubAdminAsync(int fromUserId, int clubAdminUserId)
         {
-            var exists = await _uow.FollowRepository.ExistsAsync(fromUserId, clubAdminUserId);
+            var exists = _uow.FollowRepository.Exists(fromUserId, clubAdminUserId);
             if (exists)
                 return;
 
@@ -76,7 +76,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task RemoveFollowAsync(int fromUserId, int toUserId)
         {
-            await _uow.FollowRepository.RemoveAsync(fromUserId, toUserId);
+            _uow.FollowRepository.Remove(fromUserId, toUserId);
             _uow.SaveChanges();
         }
 

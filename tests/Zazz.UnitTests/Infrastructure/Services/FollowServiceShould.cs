@@ -39,15 +39,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task NotCreateFollowIfExists_OnFollowClubAdmin()
         {
             //Arrange
-            _uow.Setup(x => x.FollowRepository.ExistsAsync(_userAId, _userBId))
-                .Returns(() => Task.Run(() => true));
+            _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
+                .Returns(true);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
 
             //Act
             await _sut.FollowClubAdminAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
@@ -56,15 +56,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task CreateFollowIfNotExists_OnFollowClubAdmin()
         {
             //Arrange
-            _uow.Setup(x => x.FollowRepository.ExistsAsync(_userAId, _userBId))
-                .Returns(() => Task.Run(() => false));
+            _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
+                .Returns(false);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
 
             //Act
             await _sut.FollowClubAdminAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.ExistsAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
@@ -213,14 +213,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task RemoveFollow_OnRemoveFollow()
         {
             //Arrange
-            _uow.Setup(x => x.FollowRepository.RemoveAsync(_userAId, _userBId))
-                .Returns(() => Task.Run(() => { }));
+            _uow.Setup(x => x.FollowRepository.Remove(_userAId, _userBId));
 
             //Act
             await _sut.RemoveFollowAsync(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.RemoveAsync(_userAId, _userBId), Times.Once());
+            _uow.Verify(x => x.FollowRepository.Remove(_userAId, _userBId), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 

@@ -104,8 +104,8 @@ namespace Zazz.Web.Controllers
 
                 if (!vm.IsSelf && currentUserId != 0)
                 {
-                    vm.IsCurrentUserFollowingTargetUser = await _uow.FollowRepository.ExistsAsync(currentUserId, id);
-                    vm.IsTargetUserFollowingCurrentUser = await _uow.FollowRepository.ExistsAsync(id, currentUserId);
+                    vm.IsCurrentUserFollowingTargetUser = _uow.FollowRepository.Exists(currentUserId, id);
+                    vm.IsTargetUserFollowingCurrentUser = _uow.FollowRepository.Exists(id, currentUserId);
 
                     if (!vm.IsCurrentUserFollowingTargetUser)
                     {

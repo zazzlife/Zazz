@@ -10,21 +10,21 @@ namespace Zazz.Core.Interfaces
         /// Returns a list of users that follow the user
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<Follow>> GetUserFollowersAsync(int toUserId);
+        IEnumerable<Follow> GetUserFollowers(int toUserId);
 
         /// <summary>
         /// Returns a list of users that the user follows
         /// </summary>
         /// <param name="fromUserId"></param>
         /// <returns></returns>
-        Task<IEnumerable<Follow>> GetUserFollowsAsync(int fromUserId);
+        IEnumerable<Follow> GetUserFollows(int fromUserId);
 
         IEnumerable<int> GetFollowsUserIds(int fromUserId);
 
         int GetFollowersCount(int userId);
 
-        Task<bool> ExistsAsync(int fromUserId, int toUserId);
+        bool Exists(int fromUserId, int toUserId);
 
-        Task RemoveAsync(int fromUserId, int toUserId);
+        void Remove(int fromUserId, int toUserId);
     }
 }

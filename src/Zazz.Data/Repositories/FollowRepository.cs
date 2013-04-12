@@ -26,14 +26,14 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<IEnumerable<Follow>> GetUserFollowersAsync(int toUserId)
+        public IEnumerable<Follow> GetUserFollowers(int toUserId)
         {
-            return Task.Run(() => DbSet.Where(f => f.ToUserId == toUserId).AsEnumerable());
+            return DbSet.Where(f => f.ToUserId == toUserId).AsEnumerable();
         }
 
-        public Task<IEnumerable<Follow>> GetUserFollowsAsync(int fromUserId)
+        public IEnumerable<Follow> GetUserFollows(int fromUserId)
         {
-            return Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable());
+            return DbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable();
         }
 
         public IEnumerable<int> GetFollowsUserIds(int fromUserId)
@@ -47,18 +47,18 @@ namespace Zazz.Data.Repositories
             return DbSet.Count(f => f.ToUserId == userId);
         }
 
-        public Task<bool> ExistsAsync(int fromUserId, int toUserId)
+        public bool Exists(int fromUserId, int toUserId)
         {
-            return Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId)
-                                       .Where(f => f.ToUserId == toUserId)
-                                       .Any());
+            return DbSet.Where(f => f.FromUserId == fromUserId)
+                        .Where(f => f.ToUserId == toUserId)
+                        .Any();
         }
 
-        public async Task RemoveAsync(int fromUserId, int toUserId)
+        public void Remove(int fromUserId, int toUserId)
         {
-            var item = await Task.Run(() => DbSet.Where(f => f.FromUserId == fromUserId)
-                                                 .Where(f => f.ToUserId == toUserId)
-                                                 .SingleOrDefault());
+            var item = DbSet.Where(f => f.FromUserId == fromUserId)
+                            .Where(f => f.ToUserId == toUserId)
+                            .SingleOrDefault();
 
             if (item == null)
                 return;
