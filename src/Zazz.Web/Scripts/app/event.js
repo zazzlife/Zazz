@@ -2,8 +2,13 @@
 
 $(document).on('mouseenter', '.event', function () {
     var self = $(this);
-    var imgHeight = 400;
 
+    var img = self.data('img');
+    if (!img) {
+        return;
+    }
+
+    var imgHeight = 400;
     var offset = self.offset();
     var elemWidth = self.width();
     var elemHeight = self.height();
@@ -21,24 +26,18 @@ $(document).on('mouseenter', '.event', function () {
     });
 
     eventLargeImg.css({
-        //'border': '1px solid #11aa7f',
-        'border-radius': '7px',
-        'box-shadow': '0 0 20px 1px #11aa7f',
         'position': 'absolute',
         'height': imgHeight + 'px',
         'top': top,
         'left': left
     });
 
-    eventLargeImg.appendTo($('article')).hide().fadeIn('fast');
+    eventLargeImg.appendTo($('article'));
 });
 
 $(document).on('mouseleave', '.event', function () {
     $(this).removeClass('event-arrow-right');
-
-    eventLargeImg.fadeOut('fast', function() {
-        eventLargeImg.remove();
-    });
+    eventLargeImg.remove();
 });
 
 /////////////////// Flip /////////////////////////
