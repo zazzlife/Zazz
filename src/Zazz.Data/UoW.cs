@@ -6,6 +6,7 @@ namespace Zazz.Data
 {
     public class UoW : IUoW
     {
+        private bool _isDisposed;
         private ZazzDbContext _dbContext;
 
         private IOAuthAccountRepository _oAuthAccountRepository;
@@ -106,8 +107,12 @@ namespace Zazz.Data
 
         private ZazzDbContext GetContext()
         {
-            if (_dbContext == null)
+            if (_dbContext == null || _isDisposed)
+            {
                 _dbContext = new ZazzDbContext();
+                _isDisposed = false;
+            }
+                
 
             return _dbContext;
         }
@@ -120,7 +125,10 @@ namespace Zazz.Data
         public void Dispose()
         {
             if (_dbContext != null)
+            {
                 _dbContext.Dispose();
+                _isDisposed = true;
+            }
         }
     }
 }
