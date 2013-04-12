@@ -10,12 +10,12 @@ namespace Zazz.Infrastructure
     /// </summary>
     public class FakeEmailService : IEmailService
     {
-        public async Task SendAsync(MailMessage message)
+        public void Send(MailMessage message)
         {
             try
             {
                 using (var smtp = new SmtpClient("localhost"))
-                    await smtp.SendMailAsync(message);
+                    smtp.Send(message);
             }
             catch (Exception)
             {}

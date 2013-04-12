@@ -5,6 +5,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface IEmailService
     {
-        Task SendAsync(MailMessage message);
+        void Send(MailMessage message);
     }
 }

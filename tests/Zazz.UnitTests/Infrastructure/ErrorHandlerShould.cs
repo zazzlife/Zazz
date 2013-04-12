@@ -28,8 +28,7 @@ namespace Zazz.UnitTests.Infrastructure
 
             _uow.Setup(x => x.SaveChanges());
 
-            _emailService.Setup(x => x.SendAsync(It.IsAny<MailMessage>()))
-                         .Returns(() => Task.Run(() => { }));
+            _emailService.Setup(x => x.Send(It.IsAny<MailMessage>()));
 
             _oauthAccount = new OAuthAccount
                                 {
@@ -42,7 +41,7 @@ namespace Zazz.UnitTests.Infrastructure
         }
 
         [Test]
-        public async Task UpdateRecordOnDB_OnAccessTokenExpired()
+        public void UpdateRecordOnDB_OnAccessTokenExpired()
         {
             //Arrange
             var nameSpace = "Test";
@@ -53,7 +52,7 @@ namespace Zazz.UnitTests.Infrastructure
 
 
             //Act
-            await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
+            _sut.HandleAccessTokenExpired(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
@@ -61,7 +60,7 @@ namespace Zazz.UnitTests.Infrastructure
         }
 
         [Test]
-        public async Task SendEmailIfSendNotificationIsTureAndLastEmailWasSentOverAWeekAgo_OnAccessTokenExpired()
+        public void SendEmailIfSendNotificationIsTureAndLastEmailWasSentOverAWeekAgo_OnAccessTokenExpired()
         {
             //Arrange
             _oauthAccount.User.UserDetail.SendSyncErrorNotifications = true;
@@ -74,16 +73,16 @@ namespace Zazz.UnitTests.Infrastructure
             
 
             //Act
-            await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
+            _sut.HandleAccessTokenExpired(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LasySyncErrorEmailSent.Value.Date);
-            _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Once());
+            _emailService.Verify(x => x.Send(It.IsAny<MailMessage>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
-        public async Task NotSendEmailIfSendNotificationIsFalseAndLastEmailWasSentOverAWeekAgo_OnAccessTokenExpired()
+        public void NotSendEmailIfSendNotificationIsFalseAndLastEmailWasSentOverAWeekAgo_OnAccessTokenExpired()
         {
             //Arrange
             _oauthAccount.User.UserDetail.SendSyncErrorNotifications = false;
@@ -96,17 +95,17 @@ namespace Zazz.UnitTests.Infrastructure
 
 
             //Act
-            await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
+            _sut.HandleAccessTokenExpired(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
             Assert.AreNotEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LasySyncErrorEmailSent.Value.Date);
-            _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
+            _emailService.Verify(x => x.Send(It.IsAny<MailMessage>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
-        public async Task NotSendEmailIfSendNotificationIsTrueAndLastEmailWasNotSentOverAWeekAgo_OnAccessTokenExpired([Values(0, -1, -2, -3, -4, -5, -6)] int daysAgo)
+        public void NotSendEmailIfSendNotificationIsTrueAndLastEmailWasNotSentOverAWeekAgo_OnAccessTokenExpired([Values(0, -1, -2, -3, -4, -5, -6)] int daysAgo)
         {
             //Arrange
             _oauthAccount.User.UserDetail.SendSyncErrorNotifications = false;
@@ -119,16 +118,16 @@ namespace Zazz.UnitTests.Infrastructure
 
 
             //Act
-            await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
+            _sut.HandleAccessTokenExpired(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, _oauthAccount.User.UserDetail.LastSyncError.Value.Date);
-            _emailService.Verify(x => x.SendAsync(It.IsAny<MailMessage>()), Times.Never());
+            _emailService.Verify(x => x.Send(It.IsAny<MailMessage>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
         [Test]
-        public async Task LogTheError_OnAccessTokenExpired()
+        public void LogTheError_OnAccessTokenExpired()
         {
             //Arrange
             var fbUserId = 1234L;
@@ -137,14 +136,14 @@ namespace Zazz.UnitTests.Infrastructure
                 .Returns(_oauthAccount);
 
             //Act
-            await _sut.HandleAccessTokenExpiredAsync(fbUserId.ToString(), OAuthProvider.Facebook);
+            _sut.HandleAccessTokenExpired(fbUserId.ToString(), OAuthProvider.Facebook);
 
             //Assert
             _logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
 
         [Test]
-        public async Task LogAndAddRecordForRetry_OnHandleApiLimit()
+        public void LogAndAddRecordForRetry_OnHandleApiLimit()
         {
             //Arrange
             _uow.Setup(x => x.FacebookSyncRetryRepository.InsertGraph(It.IsAny<FacebookSyncRetry>()));
@@ -152,7 +151,7 @@ namespace Zazz.UnitTests.Infrastructure
 
 
             //Act
-            await _sut.HandleFacebookApiLimitReachedAsync("1234", "", "");
+            _sut.HandleFacebookApiLimitReached("1234", "", "");
 
             //Assert
             _logger.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once());

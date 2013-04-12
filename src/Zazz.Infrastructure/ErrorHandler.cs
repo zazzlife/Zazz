@@ -20,7 +20,7 @@ namespace Zazz.Infrastructure
             _emailService = emailService;
         }
 
-        public async Task HandleAccessTokenExpiredAsync(string fbUserId, OAuthProvider provider)
+        public void HandleAccessTokenExpired(string fbUserId, OAuthProvider provider)
         {
             var errorLog = "Expired access token: " + fbUserId;
             _logger.LogError("ErrorHandler", errorLog);
@@ -42,7 +42,7 @@ namespace Zazz.Infrastructure
                                            BodyEncoding = Encoding.UTF8
                                        };
 
-                await _emailService.SendAsync(emailMessage);
+                _emailService.Send(emailMessage);
                 oauthAccount.User.UserDetail.LasySyncErrorEmailSent = DateTime.UtcNow;
             }
 
@@ -50,7 +50,7 @@ namespace Zazz.Infrastructure
             _uow.SaveChanges();
         }
 
-        public async Task HandleFacebookApiLimitReachedAsync(string fbUserId, string path, string fields)
+        public void HandleFacebookApiLimitReached(string fbUserId, string path, string fields)
         {
             var logMessage = String.Format("Facebook API limit reached: [FB user id: {0}] [Path: {1}] [Fields: {2}]",
                                            fbUserId, path, fields);
