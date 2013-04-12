@@ -19,14 +19,14 @@ namespace Zazz.Core.Interfaces
         /// <param name="zazzEvent">The event to update. (Id is required)</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task UpdateEventAsync(ZazzEvent zazzEvent, int currentUserId);
+        void UpdateEvent(ZazzEvent zazzEvent, int currentUserId);
 
         /// <summary>
         /// Gets an entry
         /// </summary>
         /// <param name="id">Event id</param>
         /// <returns></returns>
-        Task<ZazzEvent> GetEventAsync(int id);
+        ZazzEvent GetEvent(int id);
 
         /// <summary>
         /// Deletes an event
@@ -34,6 +34,6 @@ namespace Zazz.Core.Interfaces
         /// <param name="eventId">Id of the event to delete.</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        Task DeleteEventAsync(int eventId, int currentUserId);
+        void DeleteEvent(int eventId, int currentUserId);
     }
 }

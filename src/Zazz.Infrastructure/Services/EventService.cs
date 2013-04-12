@@ -37,7 +37,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task UpdateEventAsync(ZazzEvent zazzEvent, int currentUserId)
+        public void UpdateEvent(ZazzEvent zazzEvent, int currentUserId)
         {
             if (zazzEvent.Id == 0)
                 throw new ArgumentException();
@@ -51,12 +51,12 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task<ZazzEvent> GetEventAsync(int id)
+        public ZazzEvent GetEvent(int id)
         {
             return _uow.EventRepository.GetById(id);
         }
 
-        public async Task DeleteEventAsync(int eventId, int currentUserId)
+        public void DeleteEvent(int eventId, int currentUserId)
         {
             if (eventId == 0)
                 throw new ArgumentException();

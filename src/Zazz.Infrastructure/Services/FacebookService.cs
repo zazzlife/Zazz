@@ -268,7 +268,7 @@ namespace Zazz.Infrastructure.Services
                 await _postService.RemovePostAsync(p, currentUserId);
 
             foreach (var e in pageEvents)
-                await _eventService.DeleteEventAsync(e, currentUserId);
+                _eventService.DeleteEvent(e, currentUserId);
 
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();

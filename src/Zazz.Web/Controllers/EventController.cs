@@ -203,23 +203,23 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet, Authorize]
-        public async Task<ActionResult> Show(int id)
+        public ActionResult Show(int id)
         {
-            var vm = await GetEventAsync(id, false);
+            var vm = GetEventAsync(id, false);
             return View(vm);
         }
 
         [HttpGet, Authorize]
-        public async Task<ActionResult> Edit(int id)
+        public ActionResult Edit(int id)
         {
-            var vm = await GetEventAsync(id, true);
+            var vm = GetEventAsync(id, true);
             ViewBag.FormAction = "Edit";
 
             return View("EditForm", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, EventViewModel vm)
+        public ActionResult Edit(int id, EventViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -233,7 +233,7 @@ namespace Zazz.Web.Controllers
                     post.Id = id;
                     post.CreatedDate = vm.CreatedDate.Value;
 
-                    await _eventService.UpdateEventAsync(post, userId);
+                    _eventService.UpdateEvent(post, userId);
                 }
 
                 return Redirect("~/event/show/" + id);
@@ -243,7 +243,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Remove(int id)
+        public ActionResult Remove(int id)
         {
             using (_userService)
             using (_eventService)
@@ -251,7 +251,7 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _eventService.DeleteEventAsync(id, userId);
+                _eventService.DeleteEvent(id, userId);
             }
 
             ShowAlert("The event has been deleted.", AlertType.Success);
@@ -280,7 +280,7 @@ namespace Zazz.Web.Controllers
             return post;
         }
 
-        public async Task<EventViewModel> GetEventAsync(int id, bool ownerOnly)
+        public EventViewModel GetEventAsync(int id, bool ownerOnly)
         {
             using (_userService)
             using (_eventService)
@@ -289,7 +289,7 @@ namespace Zazz.Web.Controllers
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
 
-                var zazzEvent = await _eventService.GetEventAsync(id);
+                var zazzEvent = _eventService.GetEvent(id);
                 if (zazzEvent == null)
                     throw new HttpException(404, "The requested entry was not found");
 

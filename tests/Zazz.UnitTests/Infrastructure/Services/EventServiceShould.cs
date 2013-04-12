@@ -62,7 +62,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CallGetById_OnGetEvent()
+        public void CallGetById_OnGetEvent()
         {
             //Arrange
             var id = 123;
@@ -71,7 +71,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(zazzEvent);
 
             //Act
-            var result = await _sut.GetEventAsync(id);
+            var result = _sut.GetEvent(id);
 
             //Assert
             Assert.AreSame(zazzEvent, result);
@@ -79,13 +79,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrownIfEventIdIs0_OnUpdateEvent()
+        public void ThrownIfEventIdIs0_OnUpdateEvent()
         {
             //Arrange
             //Act
             try
             {
-                await _sut.UpdateEventAsync(_zazzEvent, _userId);
+                _sut.UpdateEvent(_zazzEvent, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -95,7 +95,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfCurrentUserDoesntMatchTheOwner_OnUpdateEvent()
+        public void ThrowIfCurrentUserDoesntMatchTheOwner_OnUpdateEvent()
         {
             //Arrange
             _zazzEvent.Id = 444;
@@ -106,7 +106,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             try
             {
-                await _sut.UpdateEventAsync(_zazzEvent, _userId);
+                _sut.UpdateEvent(_zazzEvent, _userId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -118,7 +118,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SaveUpdatedEvent_OnUpdateEvent()
+        public void SaveUpdatedEvent_OnUpdateEvent()
         {
             //Arrange
             _zazzEvent.Id = 444;
@@ -126,7 +126,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => _zazzEvent.UserId);
 
             //Act
-            await _sut.UpdateEventAsync(_zazzEvent, _userId);
+            _sut.UpdateEvent(_zazzEvent, _userId);
 
             //Assert
             _uow.Verify(x => x.EventRepository.InsertOrUpdate(_zazzEvent), Times.Once());
@@ -135,7 +135,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ShouldThrowIfEventIdIs0_OnDelete()
+        public void ShouldThrowIfEventIdIs0_OnDelete()
         {
             //Arrange
             _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
@@ -144,7 +144,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.DeleteEventAsync(0, _zazzEvent.UserId);
+                _sut.DeleteEvent(0, _zazzEvent.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException)
@@ -160,7 +160,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfUserIdDoesntMatchTheOwnerId_OnDelete()
+        public void ThrowIfUserIdDoesntMatchTheOwnerId_OnDelete()
         {
             //Arrange
             _zazzEvent.Id = 444;
@@ -171,7 +171,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             try
             {
-                await _sut.DeleteEventAsync(_zazzEvent.Id, _zazzEvent.UserId);
+                _sut.DeleteEvent(_zazzEvent.Id, _zazzEvent.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -187,7 +187,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task Delete_OnDelete()
+        public void Delete_OnDelete()
         {
             //Arrange
             _zazzEvent.Id = 444;
@@ -198,7 +198,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));
 
             //Act
-            await _sut.DeleteEventAsync(_zazzEvent.Id, _userId);
+            _sut.DeleteEvent(_zazzEvent.Id, _userId);
 
             //Assert
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Once());
