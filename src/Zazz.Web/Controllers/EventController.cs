@@ -186,7 +186,6 @@ namespace Zazz.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
                     var userId = _userService.GetUserId(User.Identity.Name);
                     if (userId == 0)
                         throw new HttpException(401, "Unauthorized");
@@ -194,7 +193,7 @@ namespace Zazz.Web.Controllers
                     var zazzEvent = EventViewModelToZazzEvent(vm, userId);
                     zazzEvent.CreatedDate = DateTime.UtcNow;
 
-                    await _eventService.CreateEventAsync(zazzEvent);
+                    _eventService.CreateEvent(zazzEvent);
                     return Redirect("~/event/show/" + zazzEvent.Id);
                 }
             }

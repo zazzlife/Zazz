@@ -15,7 +15,7 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public async Task CreateEventAsync(ZazzEvent zazzEvent)
+        public void CreateEvent(ZazzEvent zazzEvent)
         {
             if (zazzEvent.UserId == 0)
                 throw new ArgumentException("User id cannot be 0");

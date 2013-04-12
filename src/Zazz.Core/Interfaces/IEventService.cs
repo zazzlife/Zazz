@@ -11,7 +11,7 @@ namespace Zazz.Core.Interfaces
         /// </summary>
         /// <param name="zazzEvent"></param>
         /// <returns></returns>
-        Task CreateEventAsync(ZazzEvent zazzEvent);
+        void CreateEvent(ZazzEvent zazzEvent);
 
         /// <summary>
         /// Updates an event.

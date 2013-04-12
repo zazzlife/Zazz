@@ -29,14 +29,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowExceptionWhenUserIdIs0_OnCreateEvent()
+        public void ThrowExceptionWhenUserIdIs0_OnCreateEvent()
         {
             //Arrange
             _zazzEvent.UserId = 0;
             //Act
             try
             {
-                await _sut.CreateEventAsync(_zazzEvent);
+                _sut.CreateEvent(_zazzEvent);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (ArgumentException e)
@@ -46,14 +46,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task InsertAndSaveAndCreateFeed_OnCreateEvent()
+        public void InsertAndSaveAndCreateFeed_OnCreateEvent()
         {
             //Arrange
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
-            await _sut.CreateEventAsync(_zazzEvent);
+            _sut.CreateEvent(_zazzEvent);
 
             //Assert
             _uow.Verify(x => x.EventRepository.InsertGraph(_zazzEvent), Times.Once());

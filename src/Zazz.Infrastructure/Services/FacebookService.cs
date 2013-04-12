@@ -79,7 +79,7 @@ namespace Zazz.Infrastructure.Services
                 {
                     //we don't have the event
                     convertedEvent.UserId = oauthAccount.UserId;
-                    await _eventService.CreateEventAsync(convertedEvent);
+                    _eventService.CreateEvent(convertedEvent);
                 }
             }
         }
@@ -114,7 +114,7 @@ namespace Zazz.Infrastructure.Services
                 else
                 {
                     convertedEvent.UserId = page.UserId;
-                    await _eventService.CreateEventAsync(convertedEvent);
+                    _eventService.CreateEvent(convertedEvent);
                 }
             }
 

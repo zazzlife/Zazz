@@ -85,7 +85,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
         }
 
@@ -124,7 +124,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
         }
 
@@ -186,7 +186,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
         }
 
@@ -284,8 +284,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent2))
                      .Returns(event2);
 
-            _eventService.Setup(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()))
-                         .Returns(() => Task.Run(() => { }));
+            _eventService.Setup(x => x.CreateEvent(It.IsAny<ZazzEvent>()));
 
             //Act
             await _sut.HandleRealtimeUserUpdatesAsync(changes);
@@ -303,9 +302,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
 
-            _eventService.Verify(x => x.CreateEventAsync(event2), Times.Once());
-            _eventService.Verify(x => x.CreateEventAsync(event1), Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(newEvent1), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(event2), Times.Once());
+            _eventService.Verify(x => x.CreateEvent(event1), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(newEvent1), Times.Never());
 
             _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken, It.IsAny<int>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
@@ -530,7 +529,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         Times.Once());
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()), Times.Never());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
         }
 
         [Test]
@@ -560,7 +559,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
         }
 
         [Test]
@@ -597,8 +596,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
                      .Returns(zazzEvent);
-            _eventService.Setup(x => x.CreateEventAsync(zazzEvent))
-                         .Returns(() => Task.Run(() => { }));
+            _eventService.Setup(x => x.CreateEvent(zazzEvent));
 
             //Act
             await _sut.UpdateUserEventsAsync(oauthAccount.ProviderUserId, limit);
@@ -612,7 +610,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetEvents(oauthAccount.ProviderUserId, oauthAccount.AccessToken, limit),
                              Times.Once());
-            _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
+            _eventService.Verify(x => x.CreateEvent(zazzEvent), Times.Once());
         }
 
         [Test]
@@ -637,7 +635,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()), Times.Never());
             _fbHelper.Verify(x => x.GetPageEvents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
                              Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
@@ -665,7 +663,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetPageEvents(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
                              Times.Never());
-            _eventService.Verify(x => x.CreateEventAsync(It.IsAny<ZazzEvent>()), Times.Never());
+            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
@@ -703,8 +701,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
                      .Returns(zazzEvent);
-            _eventService.Setup(x => x.CreateEventAsync(zazzEvent))
-                         .Returns(() => Task.Run(() => { }));
+            _eventService.Setup(x => x.CreateEvent(zazzEvent));
 
             //Act
             await _sut.UpdatePageEventsAsync(page.FacebookId, limit);
@@ -715,7 +712,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit),
                              Times.Once());
-            _eventService.Verify(x => x.CreateEventAsync(zazzEvent), Times.Once());
+            _eventService.Verify(x => x.CreateEvent(zazzEvent), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
