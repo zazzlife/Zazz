@@ -18,10 +18,10 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You need to provide the id for updating the record. If you want to insert, use insert graph");
         }
 
-        public Task<List<FacebookSyncRetry>> GetEligibleRetriesAsync()
+        public List<FacebookSyncRetry> GetEligibleRetries()
         {
-            return Task.Run(() => DbSet.OrderBy(r => r.LastTry)
-                                       .Take(50).ToList());
+            return DbSet.OrderBy(r => r.LastTry)
+                        .Take(50).ToList();
         }
     }
 }

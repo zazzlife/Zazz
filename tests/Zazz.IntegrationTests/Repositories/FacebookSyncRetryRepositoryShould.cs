@@ -11,7 +11,7 @@ namespace Zazz.IntegrationTests.Repositories
     public class FacebookSyncRetryRepositoryShould
     {
         [Test]
-        public async Task Get50Records()
+        public void Get50Records()
         {
             //Arrange
 
@@ -39,7 +39,7 @@ namespace Zazz.IntegrationTests.Repositories
                 var repo = new FacebookSyncRetryRepository(context);
 
                 //Act
-                var result = await repo.GetEligibleRetriesAsync();
+                var result = repo.GetEligibleRetries();
 
                 //Assert
                 Assert.AreEqual(50, result.Count);
