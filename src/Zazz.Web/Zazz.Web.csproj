@@ -357,6 +357,7 @@
     <Content Include="Scripts\app\comments.js" />
     <Content Include="Scripts\app\event.js" />
     <Content Include="Scripts\app\scroll-pagination.js" />
+    <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\jquery.extends.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
