@@ -8,16 +8,12 @@ $(document).on('mouseenter', '.event', function () {
         return;
     }
 
-    
-
     var imgHeight = 300;
     var offset = self.offset();
     var elemWidth = self.width();
     var elemHeight = self.height();
     var top, left;
-
     
-
     var centerY = offset.top + (elemHeight / 2);
     top = centerY - (imgHeight / 2);
 
@@ -33,8 +29,6 @@ $(document).on('mouseenter', '.event', function () {
         self.addClass('event-arrow-right');
         left = offset.left + elemWidth + 30;
     }
-
-    
 
     eventLargeImg = $('<img />', {
         src: img,
@@ -53,7 +47,11 @@ $(document).on('mouseenter', '.event', function () {
 $(document).on('mouseleave', '.event', function () {
     $(this).removeClass('event-arrow-right');
     $(this).removeClass('event-arrow-left');
-    eventLargeImg.remove();
+
+    if (eventLargeImg) {
+        eventLargeImg.remove();
+    }
+    
 });
 
 /////////////////// Flip /////////////////////////
