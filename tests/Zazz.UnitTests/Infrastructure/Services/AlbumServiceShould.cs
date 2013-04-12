@@ -149,8 +149,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.AlbumRepository.Remove(_album.Id));
             _uow.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
                 .Returns(photoIds);
-            _photoService.Setup(x => x.RemovePhotoAsync(It.IsInRange(1, 4, Range.Inclusive), _userId))
-                         .Returns(() => Task.Run(() => { }));
+            _photoService.Setup(x => x.RemovePhoto(It.IsInRange(1, 4, Range.Inclusive), _userId));
 
             _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, 0))
                          .Returns(dirPath);
@@ -161,7 +160,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.AlbumRepository.Remove(_album.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _photoService.Verify(x => x.RemovePhotoAsync(It.IsInRange(1, 4, Range.Inclusive), _userId),
+            _photoService.Verify(x => x.RemovePhoto(It.IsInRange(1, 4, Range.Inclusive), _userId),
                                  Times.Exactly(photoIds.Length));
         }
     }

@@ -30,7 +30,7 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetAll();
         }
 
-        public async Task<Photo> GetPhotoAsync(int id)
+        public Photo GetPhoto(int id)
         {
             return _uow.PhotoRepository.GetById(id);
         }
@@ -45,7 +45,7 @@ namespace Zazz.Infrastructure.Services
             return String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId);
         }
 
-        public async Task<string> GetPhotoDescriptionAsync(int photoId)
+        public string GetPhotoDescription(int photoId)
         {
             return _uow.PhotoRepository.GetDescription(photoId);
         }
@@ -97,7 +97,7 @@ namespace Zazz.Infrastructure.Services
             return photo.Id;
         }
 
-        public async Task RemovePhotoAsync(int photoId, int currentUserId)
+        public void RemovePhoto(int photoId, int currentUserId)
         {
             var photo = _uow.PhotoRepository.GetById(photoId);
             if (photo.UserId != currentUserId)
@@ -132,7 +132,7 @@ namespace Zazz.Infrastructure.Services
             _fileService.RemoveFile(filePath);
         }
 
-        public async Task UpdatePhotoAsync(Photo photo, int currentUserId)
+        public void UpdatePhoto(Photo photo, int currentUserId)
         {
             if (photo.Id == 0)
                 throw new ArgumentException();

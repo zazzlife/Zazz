@@ -166,7 +166,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _photoService.RemovePhotoAsync(id, userId);
+                _photoService.RemovePhoto(id, userId);
             }
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
@@ -243,7 +243,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Feed(int id)
+        public ActionResult Feed(int id)
         {
             using (_photoService)
             using (_albumService)
@@ -252,7 +252,7 @@ namespace Zazz.Web.Controllers
                 var userId = _userService.GetUserId(User.Identity.Name);
                 var userDisplayName = _userService.GetUserDisplayName(userId);
                 var userPhoto = _photoService.GetUserImageUrl(userId);
-                var photo = await _photoService.GetPhotoAsync(id);
+                var photo = _photoService.GetPhoto(id);
 
                 var vm = new FeedViewModel
                          {
@@ -289,14 +289,14 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpGet]
-        public async Task<ActionResult> Crop(int id, string @for)
+        public ActionResult Crop(int id, string @for)
         {
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
                 var vm = new CropViewModel();
-                var photo = await _photoService.GetPhotoAsync(id);
+                var photo = _photoService.GetPhoto(id);
 
                 if (photo.IsFacebookPhoto)
                 {
@@ -317,14 +317,14 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public async Task<ActionResult> Crop(int id, string @for, CropViewModel vm)
+        public ActionResult Crop(int id, string @for, CropViewModel vm)
         {
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
                 var cropArea = new Rectangle((int)vm.X, (int)vm.Y, (int)vm.W, (int)vm.H);
-                var photo = await _photoService.GetPhotoAsync(id);
+                var photo = _photoService.GetPhoto(id);
 
                 if (photo.IsFacebookPhoto)
                 {

@@ -11,19 +11,19 @@ namespace Zazz.Core.Interfaces
     {
         IQueryable<Photo> GetAll();
 
-        Task<Photo> GetPhotoAsync(int id);
+        Photo GetPhoto(int id);
 
         string GeneratePhotoUrl(int userId, int photoId);
 
         string GeneratePhotoFilePath(int userId, int photoId);
 
-        Task<string> GetPhotoDescriptionAsync(int photoId);
+        string GetPhotoDescription(int photoId);
         
         Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed);
 
-        Task RemovePhotoAsync(int photoId, int currentUserId);
+        void RemovePhoto(int photoId, int currentUserId);
 
-        Task UpdatePhotoAsync(Photo photo, int currentUserId);
+        void UpdatePhoto(Photo photo, int currentUserId);
 
         string GetUserImageUrl(int userId);
 

@@ -76,7 +76,7 @@ namespace Zazz.Infrastructure.Services
             var photosIds = _uow.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
 
             foreach (var photoId in photosIds)
-                await _photoService.RemovePhotoAsync(photoId, currentUserId);
+                _photoService.RemovePhoto(photoId, currentUserId);
 
             _uow.AlbumRepository.Remove(albumId);
             _uow.SaveChanges();

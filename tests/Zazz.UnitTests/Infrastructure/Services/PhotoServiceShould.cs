@@ -62,7 +62,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CallGetDescriptionFromRepo_OnGetPhotoDescriptionAsync()
+        public void CallGetDescriptionFromRepo_OnGetPhotoDescriptionAsync()
         {
             //Arrange
             var id = 123;
@@ -70,7 +70,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns("description");
 
             //Act
-            var result = await _sut.GetPhotoDescriptionAsync(id);
+            var result = _sut.GetPhotoDescription(id);
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetDescription(id), Times.Once());
@@ -311,7 +311,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()
+        public void ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -329,7 +329,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RemovePhotoAsync(photoId, userId);
+                _sut.RemovePhoto(photoId, userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -344,7 +344,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SetCoverPhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
+        public void SetCoverPhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
 
@@ -389,7 +389,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
             //Act
-            await _sut.RemovePhotoAsync(photoId, userId);
+            _sut.RemovePhoto(photoId, userId);
 
             //Assert
             Assert.AreEqual(0, photo.User.UserDetail.CoverPhotoId);
@@ -406,7 +406,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SetProfilePhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
+        public void SetProfilePhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
             var feedId = 12;
@@ -450,7 +450,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
             //Act
-            await _sut.RemovePhotoAsync(photoId, userId);
+            _sut.RemovePhoto(photoId, userId);
 
             //Assert
             Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
@@ -467,7 +467,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveFileAndDbAndFeedRecordIfThePictureIsTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
+        public void RemoveFileAndDbAndFeedRecordIfThePictureIsTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -511,7 +511,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
             //Act
-            await _sut.RemovePhotoAsync(photoId, userId);
+            _sut.RemovePhoto(photoId, userId);
 
             //Assert
             Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
@@ -528,7 +528,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveFileAndDbAndNotDeleteFeedRecordIfThePictureIsNotTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
+        public void RemoveFileAndDbAndNotDeleteFeedRecordIfThePictureIsNotTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -572,7 +572,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
             //Act
-            await _sut.RemovePhotoAsync(photoId, userId);
+            _sut.RemovePhoto(photoId, userId);
 
             //Assert
             Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
@@ -589,7 +589,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
+        public void ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
         {
             //Arrange
 
@@ -605,7 +605,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UpdatePhotoAsync(photo, 1234);
+                _sut.UpdatePhoto(photo, 1234);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (ArgumentException)
@@ -617,7 +617,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfUserIdIsNotSameAsOwnerId_OnUpdatePhoto()
+        public void ThrowIfUserIdIsNotSameAsOwnerId_OnUpdatePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -637,7 +637,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.UpdatePhotoAsync(photo, userId);
+                _sut.UpdatePhoto(photo, userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -649,7 +649,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task UpdateAndSave_OnUpdatePhoto()
+        public void UpdateAndSave_OnUpdatePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -668,7 +668,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.InsertOrUpdate(photo));
 
             //Act
-            await _sut.UpdatePhotoAsync(photo, userId);
+            _sut.UpdatePhoto(photo, userId);
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Once());
