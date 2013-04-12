@@ -63,7 +63,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task Remove(int id)
+        public void Remove(int id)
         {
             using (_photoService)
             using (_albumService)

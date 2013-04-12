@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             using (_uow)
             using (_photoService)
@@ -34,7 +34,7 @@ namespace Zazz.Web.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var user = _userService.GetUser(User.Identity.Name);
-                    var feeds = await new FeedHelper(_uow, _userService, _photoService).GetFeedsAsync(user.Id);
+                    var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(user.Id);
 
 
                     var vm = new UserHomeViewModel
@@ -52,15 +52,15 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> LoadMoreFeeds(int lastFeedId)
+        public ActionResult LoadMoreFeeds(int lastFeedId)
         {
             using (_uow)
             using (_photoService)
             using (_userService)
             {
                 var user = _userService.GetUser(User.Identity.Name);
-                var feeds = await new FeedHelper(_uow, _userService, _photoService)
-                                      .GetFeedsAsync(user.Id, lastFeedId);
+                var feeds = new FeedHelper(_uow, _userService, _photoService)
+                                      .GetFeeds(user.Id, lastFeedId);
 
                 return View("_FeedsPartial", feeds);
             }

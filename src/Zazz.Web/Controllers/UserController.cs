@@ -31,14 +31,14 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var userId = _userService.GetUserId(User.Identity.Name);
-            return await ShowProfile(userId);
+            return ShowProfile(userId);
         }
 
         [ActionName("Profile")]
-        public async Task<ActionResult> ShowProfile(int id)
+        public ActionResult ShowProfile(int id)
         {
             using (_uow)
             using (_photoService) 
@@ -99,7 +99,7 @@ namespace Zazz.Web.Controllers
                              AccountType = user.AccountType,
                              UserId = id,
                              IsClub = user.AccountType == AccountType.ClubAdmin,
-                             Feeds = await feedsHelper.GetUserActivityFeedAsync(user.Id, currentUserId)
+                             Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId)
                          };
 
                 if (!vm.IsSelf && currentUserId != 0)
@@ -127,7 +127,7 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> LoadMoreFeeds(int lastFeedId)
+        public ActionResult LoadMoreFeeds(int lastFeedId)
         {
             using (_uow)
             using (_photoService)
@@ -138,15 +138,15 @@ namespace Zazz.Web.Controllers
                     currentUserId = _userService.GetUserId(User.Identity.Name);
 
                 var user = _userService.GetUser(User.Identity.Name);
-                var feeds = await new FeedHelper(_uow, _userService, _photoService)
-                                      .GetUserActivityFeedAsync(user.Id, currentUserId, lastFeedId);
+                var feeds = new FeedHelper(_uow, _userService, _photoService)
+                                      .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
                 return View("_FeedsPartial", feeds);
             }
         }
 
         [HttpGet, Authorize]
-        public async Task<ActionResult> Edit()
+        public ActionResult Edit()
         {
             using (_uow)
             using (_userService)
@@ -176,7 +176,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(EditProfileViewModel vm)
+        public ActionResult Edit(EditProfileViewModel vm)
         {
             using (_uow)
             using (_userService)
@@ -212,7 +212,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task ChangeProfilePic(int id)
+        public void ChangeProfilePic(int id)
         {
             using (_uow)
             using (_userService)
@@ -227,7 +227,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task ChangeCoverPic(int id)
+        public void ChangeCoverPic(int id)
         {
             using (_uow)
             using (_userService)

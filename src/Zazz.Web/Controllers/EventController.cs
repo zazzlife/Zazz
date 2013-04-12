@@ -177,7 +177,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
-        public async Task<ActionResult> Create(EventViewModel vm)
+        public ActionResult Create(EventViewModel vm)
         {
             using (_userService)
             using (_eventService)

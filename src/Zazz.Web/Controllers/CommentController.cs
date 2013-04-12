@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
-        public async Task<ActionResult> Get(int id, CommentType commentType, int lastComment)
+        public ActionResult Get(int id, CommentType commentType, int lastComment)
         {
             using (_uow)
             using (_photoService)
@@ -75,7 +75,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public async Task<ActionResult> New(int id, CommentType commentType, string comment)
+        public ActionResult New(int id, CommentType commentType, string comment)
         {
             using (_uow)
             using (_photoService)
@@ -134,7 +134,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task Remove(int id)
+        public void Remove(int id)
         {
             using (_uow)
             using (_photoService)
@@ -158,7 +158,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public async Task Edit(int id, string comment)
+        public void Edit(int id, string comment)
         {
             using (_uow)
             using (_photoService)

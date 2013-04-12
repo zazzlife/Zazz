@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
@@ -35,7 +34,7 @@ namespace Zazz.Web.Helpers
         /// <param name="currentUserId"></param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public async Task<List<FeedViewModel>> GetFeedsAsync(int currentUserId, int lastFeedId = 0)
+        public List<FeedViewModel> GetFeeds(int currentUserId, int lastFeedId = 0)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
@@ -51,7 +50,7 @@ namespace Zazz.Web.Helpers
             
 
             var feeds = query.ToList();
-            return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
         /// <summary>
@@ -61,7 +60,7 @@ namespace Zazz.Web.Helpers
         /// <param name="currentUserId">Id of the current user</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public async Task<List<FeedViewModel>> GetUserActivityFeedAsync(int userId, int currentUserId,
+        public List<FeedViewModel> GetUserActivityFeed(int userId, int currentUserId,
                                                                         int lastFeedId = 0)
         {
             var query = _uow.FeedRepository.GetUserFeeds(userId);
@@ -72,10 +71,10 @@ namespace Zazz.Web.Helpers
                          .Take(PageSize);
 
             var feeds = query.ToList();
-            return await ConvertFeedsToFeedsViewModelAsync(feeds, currentUserId);
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
-        private async Task<List<FeedViewModel>> ConvertFeedsToFeedsViewModelAsync(IEnumerable<Feed> feeds, int currentUserId)
+        private List<FeedViewModel> ConvertFeedsToFeedsViewModel(IEnumerable<Feed> feeds, int currentUserId)
         {
             var vm = new List<FeedViewModel>();
 
