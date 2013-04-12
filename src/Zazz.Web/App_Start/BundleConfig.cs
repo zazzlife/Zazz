@@ -24,7 +24,10 @@ namespace Zazz.Web
                     "~/Content/themes/base/jquery.ui.slider.css",
                     "~/Content/themes/base/jquery.ui.datepicker.css",
                     "~/Content/themes/base/jquery.ui.theme.css",
-                    "~/Content/themes/base/jquery.ui.tooltip.css");
+                    "~/Content/themes/base/jquery.ui.tooltip.css",
+                    "~/Content/themes/jqueryui-bootstrap/jquery-ui-1.10.0.custom.css",
+                    "~/Content/themes/jqueryui-bootstrap/jquery-ui-1.10.0.ie.css"
+                    );
 
             var cssOrder = new BundleFileSetOrdering("CssOrder");
             cssOrder.Files.Add("bootstrap.css");
