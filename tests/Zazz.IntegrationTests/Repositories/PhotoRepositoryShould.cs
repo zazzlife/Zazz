@@ -22,7 +22,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task ReturnDescription_OnGetDescription()
+        public void ReturnDescription_OnGetDescription()
         {
             //Arrange
             var description = "test";
@@ -47,7 +47,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = await _repo.GetDescriptionAsync(photo.Id);
+            var result = _repo.GetDescription(photo.Id);
 
             //Assert
             Assert.AreEqual(description, result);
@@ -89,7 +89,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task ReturnCorrectOwnerId()
+        public void ReturnCorrectOwnerId()
         {
             //Arrange
             var description = "test";
@@ -114,7 +114,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = await _repo.GetOwnerIdAsync(photo.Id);
+            var result = _repo.GetOwnerId(photo.Id);
 
             //Assert
             Assert.AreEqual(user.Id, result);

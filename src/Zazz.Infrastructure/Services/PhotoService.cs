@@ -45,9 +45,9 @@ namespace Zazz.Infrastructure.Services
             return String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId);
         }
 
-        public Task<string> GetPhotoDescriptionAsync(int photoId)
+        public async Task<string> GetPhotoDescriptionAsync(int photoId)
         {
-            return _uow.PhotoRepository.GetDescriptionAsync(photoId);
+            return _uow.PhotoRepository.GetDescription(photoId);
         }
 
         public async Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed)
@@ -137,7 +137,7 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == 0)
                 throw new ArgumentException();
 
-            var ownerId = await _uow.PhotoRepository.GetOwnerIdAsync(photo.Id);
+            var ownerId = _uow.PhotoRepository.GetOwnerId(photo.Id);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 

@@ -39,18 +39,18 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<string> GetDescriptionAsync(int photoId)
+        public string GetDescription(int photoId)
         {
-            return Task.Run(() => DbSet.Where(p => p.Id == photoId)
-                                       .Select(p => p.Description)
-                                       .SingleOrDefault());
+            return DbSet.Where(p => p.Id == photoId)
+                        .Select(p => p.Description)
+                        .SingleOrDefault();
         }
 
-        public Task<int> GetOwnerIdAsync(int photoId)
+        public int GetOwnerId(int photoId)
         {
-            return Task.Run(() => DbSet.Where(p => p.Id == photoId)
-                                       .Select(p => p.UserId)
-                                       .SingleOrDefault());
+            return DbSet.Where(p => p.Id == photoId)
+                        .Select(p => p.UserId)
+                        .SingleOrDefault();
         }
 
         public Photo GetByFacebookId(string fbId)

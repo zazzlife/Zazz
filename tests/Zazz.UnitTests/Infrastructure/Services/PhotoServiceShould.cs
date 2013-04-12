@@ -66,14 +66,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var id = 123;
-            _uow.Setup(x => x.PhotoRepository.GetDescriptionAsync(id))
-                .Returns(() => Task.Run(() => "description"));
+            _uow.Setup(x => x.PhotoRepository.GetDescription(id))
+                .Returns("description");
 
             //Act
             var result = await _sut.GetPhotoDescriptionAsync(id);
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetDescriptionAsync(id), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetDescription(id), Times.Once());
         }
 
         [Test]
@@ -375,8 +375,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
-                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
@@ -436,8 +436,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
-                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
@@ -497,8 +497,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
-                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
@@ -558,8 +558,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photoId))
-                .Returns(() => Task.Run(() => userId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(filePath));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
@@ -599,8 +599,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = 124,
                 AlbumId = 123
             };
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
-                .Returns(() => Task.Run(() => photo.UserId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
+                .Returns(photo.UserId);
 
             //Act
             try
@@ -613,7 +613,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Never());
+            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Never());
         }
 
         [Test]
@@ -631,8 +631,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = 890
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
-                .Returns(() => Task.Run(() => photo.UserId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
+                .Returns(photo.UserId);
 
             //Act
             try
@@ -645,7 +645,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Once());
         }
 
         [Test]
@@ -663,15 +663,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id))
-                .Returns(() => Task.Run(() => photo.UserId));
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
+                .Returns(photo.UserId);
             _uow.Setup(x => x.PhotoRepository.InsertOrUpdate(photo));
 
             //Act
             await _sut.UpdatePhotoAsync(photo, userId);
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerIdAsync(photo.Id), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Once());
             _uow.Verify(x => x.PhotoRepository.InsertOrUpdate(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }

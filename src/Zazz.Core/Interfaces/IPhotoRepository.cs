@@ -12,9 +12,9 @@ namespace Zazz.Core.Interfaces
 
         PhotoMinimalDTO GetPhotoWithMinimalData(int photoId);
 
-        Task<string> GetDescriptionAsync(int photoId);
+        string GetDescription(int photoId);
 
-        Task<int> GetOwnerIdAsync(int photoId);
+        int GetOwnerId(int photoId);
         
         Photo GetByFacebookId(string fbId);
     }
