@@ -26,12 +26,15 @@ $(document).on('mouseenter', '.event', function () {
         
         self.addClass('event-arrow-left');
 
+        left = offset.left - elemWidth - 60;
+
     } else {
         
         self.addClass('event-arrow-right');
+        left = offset.left + elemWidth + 30;
     }
 
-    left = offset.left + elemWidth + 30;
+    
 
     eventLargeImg = $('<img />', {
         src: img,
@@ -39,7 +42,7 @@ $(document).on('mouseenter', '.event', function () {
 
     eventLargeImg.css({
         'position': 'absolute',
-        'height': imgHeight + 'px',
+        'max-height': imgHeight + 'px',
         'top': top,
         'left': left
     });
