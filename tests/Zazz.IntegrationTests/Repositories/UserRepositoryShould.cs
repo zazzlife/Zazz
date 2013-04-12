@@ -83,7 +83,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetByEmailAsync("notExists@test.com").Result;
+            var result = _repo.GetByEmail("notExists@test.com");
 
             //Assert
             Assert.IsNull(result);
@@ -107,7 +107,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetByEmailAsync(email).Result;
+            var result = _repo.GetByEmail(email);
 
             //Assert
             Assert.IsNotNull(result);
@@ -120,7 +120,7 @@ namespace Zazz.IntegrationTests.Repositories
 
 
             //Act
-            var result = _repo.GetByUsernameAsync("not_exists").Result;
+            var result = _repo.GetByUsername("not_exists");
 
             //Assert
             Assert.IsNull(result);
@@ -144,7 +144,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetByUsernameAsync(username).Result;
+            var result = _repo.GetByUsername(username);
 
             //Assert
             Assert.IsNotNull(result);
@@ -193,7 +193,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetIdByEmailAsync("notExists").Result;
+            var result = _repo.GetIdByEmail("notExists");
 
             //Assert
             Assert.AreEqual(0, result);
@@ -218,7 +218,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetIdByEmailAsync(email).Result;
+            var result = _repo.GetIdByEmail(email);
 
             //Assert
             Assert.IsTrue(user.Id > 0);
@@ -243,7 +243,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.ExistsByEmailAsync(email).Result;
+            var result = _repo.ExistsByEmail(email);
 
             //Assert
             Assert.IsTrue(result);
@@ -254,7 +254,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.ExistsByEmailAsync("notExists@test.com").Result;
+            var result = _repo.ExistsByEmail("notExists@test.com");
 
             //Assert
             Assert.IsFalse(result);
@@ -278,7 +278,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.ExistsByUsernameAsync(username).Result;
+            var result = _repo.ExistsByUsername(username);
 
             //Assert
             Assert.IsTrue(result);
@@ -289,7 +289,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.ExistsByUsernameAsync("notExists").Result;
+            var result = _repo.ExistsByUsername("notExists");
 
             //Assert
             Assert.IsFalse(result);

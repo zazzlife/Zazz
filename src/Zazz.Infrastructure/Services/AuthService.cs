@@ -20,7 +20,7 @@ namespace Zazz.Infrastructure.Services
         public async Task LoginAsync(string username, string password)
         {
             var passwordHash = _cryptoService.GeneratePasswordHash(password);
-            var user = await _uow.UserRepository.GetByUsernameAsync(username);
+            var user = _uow.UserRepository.GetByUsername(username);
 
             if (user == null)
                 throw new UserNotExistsException();
@@ -38,11 +38,11 @@ namespace Zazz.Infrastructure.Services
             if (user.UserDetail == null)
                 throw new ArgumentNullException();
 
-            var usernameExists = await _uow.UserRepository.ExistsByUsernameAsync(user.Username);
+            var usernameExists = _uow.UserRepository.ExistsByUsername(user.Username);
             if (usernameExists)
                 throw new UsernameExistsException();
 
-            var emailExists = await _uow.UserRepository.ExistsByEmailAsync(user.Email);
+            var emailExists = _uow.UserRepository.ExistsByEmail(user.Email);
             if (emailExists)
                 throw new EmailExistsException();
 
@@ -69,7 +69,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task<ValidationToken> GenerateResetPasswordTokenAsync(string email)
         {
-            var userId = await _uow.UserRepository.GetIdByEmailAsync(email);
+            var userId = _uow.UserRepository.GetIdByEmail(email);
             if (userId == 0)
                 throw new EmailNotExistsException();
 
@@ -138,7 +138,7 @@ namespace Zazz.Infrastructure.Services
             if (existingOAuthAccount != null)
                 return existingOAuthAccount.User; // user and OAuth account exist
 
-            var user = await _uow.UserRepository.GetByEmailAsync(email);
+            var user = _uow.UserRepository.GetByEmail(email);
             if (user != null)
             {
                 oAuthAccount.UserId = user.Id;

@@ -72,8 +72,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var username = "soroush";
             var user = new User();
-            _uow.Setup(x => x.UserRepository.GetByUsernameAsync(username))
-                .Returns(() => Task.Run(() => user));
+            _uow.Setup(x => x.UserRepository.GetByUsername(username))
+                .Returns(user);
 
 
             //Act
@@ -81,7 +81,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreSame(user, result);
-            _uow.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+            _uow.Verify(x => x.UserRepository.GetByUsername(username), Times.Once());
 
         }
 

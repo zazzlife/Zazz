@@ -20,21 +20,22 @@ namespace Zazz.Data.Repositories
                 "You must always provide user id for updating the user, use insert graph for insert");
         }
 
-        public Task<User> GetByEmailAsync(string email)
+        public User GetByEmail(string email)
         {
-            return Task.Run(() => DbSet.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase)));
+            return DbSet.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public Task<User> GetByUsernameAsync(string username)
+        public User GetByUsername(string username)
         {
-            return Task.Run(() => DbSet.SingleOrDefault(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
+            return DbSet.SingleOrDefault(u => u.Username.Equals(username,
+                                                                StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public Task<int> GetIdByEmailAsync(string email)
+        public int GetIdByEmail(string email)
         {
-            return Task.Run(() => DbSet.Where(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))
-                                       .Select(u => u.Id)
-                                       .SingleOrDefault());
+            return DbSet.Where(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(u => u.Id)
+                        .SingleOrDefault();
         }
 
         public int GetIdByUsername(string username)
@@ -44,14 +45,14 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<bool> ExistsByEmailAsync(string email)
+        public bool ExistsByEmail(string email)
         {
-            return Task.Run(() => DbSet.Any(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase)));
+            return DbSet.Any(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public Task<bool> ExistsByUsernameAsync(string username)
+        public bool ExistsByUsername(string username)
         {
-            return Task.Run(() => DbSet.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase)));
+            return DbSet.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public AccountType GetUserAccountType(int userId)

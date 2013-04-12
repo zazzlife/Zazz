@@ -152,7 +152,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             {
-                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
 
                 var vm = new EditProfileViewModel
                 {
@@ -182,7 +182,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             {
-                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
 
                 vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
                 vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
@@ -218,7 +218,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             {
-                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
                 user.UserDetail.ProfilePhotoId = id;
 
                 _uow.SaveChanges();
@@ -233,7 +233,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             {
-                var user = await _uow.UserRepository.GetByUsernameAsync(User.Identity.Name);
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
                 user.UserDetail.CoverPhotoId = id;
 
                 _uow.SaveChanges();

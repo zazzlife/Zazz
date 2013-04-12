@@ -5,17 +5,17 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<User> GetByEmailAsync(string email);
+        User GetByEmail(string email);
 
-        Task<User> GetByUsernameAsync(string username);
+        User GetByUsername(string username);
 
-        Task<int> GetIdByEmailAsync(string email);
+        int GetIdByEmail(string email);
 
         int GetIdByUsername(string username);
             
-        Task<bool> ExistsByEmailAsync(string email);
+        bool ExistsByEmail(string email);
 
-        Task<bool> ExistsByUsernameAsync(string username);
+        bool ExistsByUsername(string username);
 
         AccountType GetUserAccountType(int userId);
 

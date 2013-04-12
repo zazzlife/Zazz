@@ -32,8 +32,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var pass = "password";
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
-                    .Returns(() => Task.Run(() => new User { Password = pass }));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+                    .Returns(() => new User { Password = pass });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
 
@@ -51,23 +51,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var username = "username";
             var pass = "pass";
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(username))
-                    .Returns(() => Task.Run(() => new User { Password = pass }));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(username))
+                    .Returns(() => new User { Password = pass });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
             //Act
             _sut.LoginAsync(username, pass).Wait();
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.GetByUsernameAsync(username), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByUsername(username), Times.Once());
         }
 
         [Test]
         public async Task ThrowUserNotExist_WhenUserNotExists_OnLogin()
         {
             //Arrange
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
-                    .Returns(() => Task.Factory.StartNew<User>(() => null));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+                    .Returns(() => null);
 
             //Act
             try
@@ -86,8 +86,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public async Task ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
         {
             //Arrange
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
-                    .Returns(() => Task.Run(() => new User { Password = "password" }));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+                    .Returns(() => new User { Password = "password" });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns("invalidPass");
             //Act
@@ -109,8 +109,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var pass = "pass";
             var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
-                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+                    .Returns(user);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
 
@@ -127,8 +127,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var pass = "pass";
             var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
-            _uowMock.Setup(x => x.UserRepository.GetByUsernameAsync(It.IsAny<string>()))
-                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+                    .Returns(user);
 
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
@@ -167,16 +167,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
 
             //Act
             _sut.RegisterAsync(user, false).Wait();
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.ExistsByUsernameAsync(user.Username), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.ExistsByUsername(user.Username), Times.Once());
         }
 
         [Test]
@@ -184,10 +184,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => true));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(true);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
 
             //Act
             try
@@ -207,16 +207,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
 
             //Act
             _sut.RegisterAsync(user, false).Wait();
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.ExistsByEmailAsync(user.Email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.ExistsByEmail(user.Email), Times.Once());
 
         }
 
@@ -225,10 +225,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => true));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(true);
 
             //Act
             try
@@ -252,10 +252,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var user = new User { Email = "email", Username = "username", Password = clearPass, UserDetail = new UserDetail() };
 
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
                        .Returns(hashedPass);
 
@@ -281,10 +281,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                      JoinedDate = DateTime.MaxValue
                                  }
             };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
                        .Returns(user.Password);
 
@@ -309,10 +309,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                      JoinedDate = DateTime.MaxValue
                                  }
             };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
                        .Returns(user.Password);
 
@@ -342,10 +342,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     JoinedDate = DateTime.MaxValue
                 }
             };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsernameAsync(user.Username))
-                    .Returns(() => Task.Run(() => false));
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmailAsync(user.Email))
-                    .Returns(() => Task.Run(() => false));
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+                    .Returns(false);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
                        .Returns(user.Password);
 
@@ -365,8 +365,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var email = "email";
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => 12));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(12);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(It.IsAny<int>()))
                     .Returns(() => null);
 
@@ -374,7 +374,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.GenerateResetPasswordTokenAsync(email).Wait();
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.GetIdByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetIdByEmail(email), Times.Once());
         }
 
         [Test]
@@ -382,8 +382,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var email = "email";
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => 0));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(0);
 
             try
             {
@@ -404,8 +404,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var userId = 12;
             var email = "email";
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(userId);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(() =>  null);
 
@@ -425,8 +425,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var email = "email";
             var userId = 1;
             var token = new ValidationToken();
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(userId);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(token);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
@@ -447,8 +447,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var email = "email";
             var userId = 1;
             var token = new ValidationToken();
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(userId);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(() => null);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
@@ -468,8 +468,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var email = "email";
             var userId = 1;
             var token = new ValidationToken();
-            _uowMock.Setup(x => x.UserRepository.GetIdByEmailAsync(email))
-                    .Returns(() => Task.Run(() => userId));
+            _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
+                    .Returns(userId);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(() => null);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
@@ -781,15 +781,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oauthAccount);
-            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
-                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.UserRepository.GetByEmail(email))
+                    .Returns(user);
 
             //Act
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(It.IsAny<string>()), Times.Never());
+            _uowMock.Verify(x => x.UserRepository.GetByEmail(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
@@ -804,15 +804,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
-            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
-                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.UserRepository.GetByEmail(email))
+                    .Returns(user);
 
             //Act
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
         }
 
         [Test]
@@ -827,8 +827,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
-            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
-                    .Returns(() => Task.Run(() => user));
+            _uowMock.Setup(x => x.UserRepository.GetByEmail(email))
+                    .Returns(user);
             _uowMock.Setup(x => x.OAuthAccountRepository.InsertGraph(oauthAccount));
 
             //Act
@@ -836,7 +836,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
             _uowMock.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
             Assert.AreEqual(user.Id, oauthAccount.UserId);
             _uowMock.Verify(x => x.SaveChanges(), Times.Once());
@@ -854,15 +854,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
-            _uowMock.Setup(x => x.UserRepository.GetByEmailAsync(email))
-                    .Returns(() => Task.Factory.StartNew<User>(() => null));
+            _uowMock.Setup(x => x.UserRepository.GetByEmail(email))
+                    .Returns(() => null);
 
             //Act
             var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uowMock.Verify(x => x.UserRepository.GetByEmailAsync(email), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
             Assert.IsNull(result);
         }
 
