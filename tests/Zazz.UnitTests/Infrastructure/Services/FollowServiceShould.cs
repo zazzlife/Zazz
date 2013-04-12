@@ -36,7 +36,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotCreateFollowIfExists_OnFollowClubAdmin()
+        public void NotCreateFollowIfExists_OnFollowClubAdmin()
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
@@ -44,7 +44,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
 
             //Act
-            await _sut.FollowClubAdminAsync(_userAId, _userBId);
+            _sut.FollowClubAdmin(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
@@ -53,7 +53,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CreateFollowIfNotExists_OnFollowClubAdmin()
+        public void CreateFollowIfNotExists_OnFollowClubAdmin()
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
@@ -61,7 +61,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
 
             //Act
-            await _sut.FollowClubAdminAsync(_userAId, _userBId);
+            _sut.FollowClubAdmin(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
@@ -70,7 +70,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CheckIfRecordExists_OnSendFollowRequest()
+        public void CheckIfRecordExists_OnSendFollowRequest()
         {
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
@@ -78,7 +78,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
-            await _sut.SendFollowRequestAsync(_userAId, _userBId);
+            _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
@@ -86,7 +86,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task NotInsertIfRecordExists_OnSendFollowRequest()
+        public void NotInsertIfRecordExists_OnSendFollowRequest()
         {
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
@@ -94,7 +94,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
-            await _sut.SendFollowRequestAsync(_userAId, _userBId);
+            _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
@@ -102,7 +102,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task InsertAndSaveCorrectlyWhenNotExists_OnSendFollowRequest()
+        public void InsertAndSaveCorrectlyWhenNotExists_OnSendFollowRequest()
         {
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
@@ -110,7 +110,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
-            await _sut.SendFollowRequestAsync(_userAId, _userBId);
+            _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
@@ -119,7 +119,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfCurrentUserIsNotTheTargetUser_OnAcceptFollowRequest()
+        public void ThrowIfCurrentUserIsNotTheTargetUser_OnAcceptFollowRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -131,7 +131,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.AcceptFollowRequestAsync(followRequestId, 999);
+                _sut.AcceptFollowRequest(followRequestId, 999);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -145,7 +145,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task AddNewUserFollowAndDeleteRequest_OnAcceptFollowRequest()
+        public void AddNewUserFollowAndDeleteRequest_OnAcceptFollowRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -155,7 +155,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
                 
             //Act
-            await _sut.AcceptFollowRequestAsync(followRequestId, _userBId);
+            _sut.AcceptFollowRequest(followRequestId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
@@ -164,7 +164,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfCurrentUserIdIsNotTheTargetUser_OnRejectRequest()
+        public void ThrowIfCurrentUserIdIsNotTheTargetUser_OnRejectRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -177,7 +177,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             try
             {
-                await _sut.RejectFollowRequestAsync(followRequestId, 999);
+                _sut.RejectFollowRequest(followRequestId, 999);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -191,7 +191,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveTheRequest_OnRejectRequest()
+        public void RemoveTheRequest_OnRejectRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -201,7 +201,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
             //Act
-            await _sut.RejectFollowRequestAsync(followRequestId, _userBId);
+            _sut.RejectFollowRequest(followRequestId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
@@ -210,13 +210,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveFollow_OnRemoveFollow()
+        public void RemoveFollow_OnRemoveFollow()
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Remove(_userAId, _userBId));
 
             //Act
-            await _sut.RemoveFollowAsync(_userAId, _userBId);
+            _sut.RemoveFollow(_userAId, _userBId);
 
             //Assert
             _uow.Verify(x => x.FollowRepository.Remove(_userAId, _userBId), Times.Once());
@@ -226,7 +226,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
         [Test]
-        public async Task ReturnCorrectNumber_OnGetFollowRequestsCount()
+        public void ReturnCorrectNumber_OnGetFollowRequestsCount()
         {
             //Arrange
             var count = 42;
@@ -234,7 +234,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(count);
 
             //Act
-            var result = await _sut.GetFollowRequestsCountAsync(_userAId);
+            var result = _sut.GetFollowRequestsCount(_userAId);
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequestsCount(_userAId), Times.Once());
@@ -242,7 +242,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ReturnReceivedRequests_OnGetReceivedRequests()
+        public void ReturnReceivedRequests_OnGetReceivedRequests()
         {
             //Arrange
             var receivedRequests = new List<FollowRequest>();
@@ -250,7 +250,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(receivedRequests);
 
             //Act
-            var result = await _sut.GetFollowRequestsAsync(_userAId);
+            var result = _sut.GetFollowRequests(_userAId);
 
             //Assert
             _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequests(_userAId), Times.Once());

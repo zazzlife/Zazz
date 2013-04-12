@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers
             _photoService = photoService;
         }
 
-        public async Task FollowUser(int id)
+        public void FollowUser(int id)
         {
             using (_followService)
             using (_userService)
@@ -36,11 +36,11 @@ namespace Zazz.Web.Controllers
 
                 if (accountType == AccountType.User)
                 {
-                    await _followService.SendFollowRequestAsync(currentUserId, id);
+                    _followService.SendFollowRequest(currentUserId, id);
                 }
                 else if (accountType == AccountType.ClubAdmin)
                 {
-                    await _followService.FollowClubAdminAsync(currentUserId, id);
+                    _followService.FollowClubAdmin(currentUserId, id);
                 }
             }
         }
@@ -50,14 +50,14 @@ namespace Zazz.Web.Controllers
         /// </summary>
         /// <param name="id">Id of the other user</param>
         /// <returns></returns>
-        public async Task Unfollow(int id)
+        public void Unfollow(int id)
         {
             using (_followService)
             using (_userService)
             using (_photoService)
             {
                 var currentUserId = _userService.GetUserId(User.Identity.Name);
-                await _followService.RemoveFollowAsync(currentUserId, id);
+                _followService.RemoveFollow(currentUserId, id);
             }
         }
 
@@ -66,47 +66,47 @@ namespace Zazz.Web.Controllers
         /// </summary>
         /// <param name="id">Id of the other user</param>
         /// <returns></returns>
-        public async Task StopFollow(int id)
+        public void StopFollow(int id)
         {
             using (_followService)
             using (_userService)
             using (_photoService)
             {
                 var currentUserId = _userService.GetUserId(User.Identity.Name);
-                await _followService.RemoveFollowAsync(id, currentUserId);
+                _followService.RemoveFollow(id, currentUserId);
             }
         }
 
-        public async Task AcceptFollow(int id)
+        public void AcceptFollow(int id)
         {
             using (_followService)
             using (_userService)
             using (_photoService)
             {
                 var currentUserId = _userService.GetUserId(User.Identity.Name);
-                await _followService.AcceptFollowRequestAsync(id, currentUserId);
+                _followService.AcceptFollowRequest(id, currentUserId);
             }
         }
 
-        public async Task RejectFollow(int id)
+        public void RejectFollow(int id)
         {
             using (_followService)
             using (_userService)
             using (_photoService)
             {
                 var currentUserId = _userService.GetUserId(User.Identity.Name);
-                await _followService.RejectFollowRequestAsync(id, currentUserId);
+                _followService.RejectFollowRequest(id, currentUserId);
             }
         }
 
-        public async Task<ActionResult> GetFollowRequests()
+        public ActionResult GetFollowRequests()
         {
             using (_followService)
             using (_userService)
             using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                var userFollows = await _followService.GetFollowRequestsAsync(userId);
+                var userFollows = _followService.GetFollowRequests(userId);
 
                 var vm = new List<FollowRequestViewModel>();
 
@@ -133,7 +133,7 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                var requestsCount = _followService.GetFollowRequestsCountAsync(userId).Result;
+                var requestsCount = _followService.GetFollowRequestsCount(userId);
 
                 if (requestsCount == 0)
                     return "";
