@@ -39,7 +39,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.LoginAsync("user", pass).Wait();
+            _sut.Login("user", pass);
 
             //Assert
             _cryptoMock.Verify(x => x.GeneratePasswordHash(pass), Times.Once());
@@ -56,14 +56,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
             //Act
-            _sut.LoginAsync(username, pass).Wait();
+            _sut.Login(username, pass);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.GetByUsername(username), Times.Once());
         }
 
         [Test]
-        public async Task ThrowUserNotExist_WhenUserNotExists_OnLogin()
+        public void ThrowUserNotExist_WhenUserNotExists_OnLogin()
         {
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
@@ -72,7 +72,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.LoginAsync("user", "pass");
+                _sut.Login("user", "pass");
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (UserNotExistsException e)
@@ -83,7 +83,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
+        public void ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
         {
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
@@ -93,7 +93,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.LoginAsync("user", "invalidPassword");
+                _sut.Login("user", "invalidPassword");
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (InvalidPasswordException e)
@@ -115,7 +115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(pass);
 
             //Act
-            _sut.LoginAsync("user", pass).Wait();
+            _sut.Login("user", pass);
 
             //Assert
             Assert.IsTrue(user.LastActivity <= DateTime.UtcNow);
@@ -134,7 +134,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(pass);
 
             //Act
-            _sut.LoginAsync("user", pass).Wait();
+            _sut.Login("user", pass);
 
             //Assert
             _uowMock.Verify(x => x.SaveChanges(), Times.Once());
@@ -144,7 +144,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Register
 
         [Test]
-        public async Task ThrowWhenUserDetailIsNull_OnRegister()
+        public void ThrowWhenUserDetailIsNull_OnRegister()
         {
             //Arrange
             var user = new User();
@@ -152,7 +152,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RegisterAsync(user, false);
+                _sut.Register(user, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (ArgumentNullException)
@@ -173,14 +173,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(false);
 
             //Act
-            _sut.RegisterAsync(user, false).Wait();
+            _sut.Register(user, false);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.ExistsByUsername(user.Username), Times.Once());
         }
 
         [Test]
-        public async Task ThrowIfUsernameExists_OnRegister()
+        public void ThrowIfUsernameExists_OnRegister()
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
@@ -192,7 +192,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RegisterAsync(user, false);
+                _sut.Register(user, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (UsernameExistsException e)
@@ -213,7 +213,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(false);
 
             //Act
-            _sut.RegisterAsync(user, false).Wait();
+            _sut.Register(user, false);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.ExistsByEmail(user.Email), Times.Once());
@@ -221,7 +221,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfEmailExists_OnRegister()
+        public void ThrowIfEmailExists_OnRegister()
         {
             //Arrange
             var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
@@ -233,7 +233,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RegisterAsync(user, false);
+                _sut.Register(user, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (EmailExistsException e)
@@ -260,7 +260,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(hashedPass);
 
             //Act
-            _sut.RegisterAsync(user, false).Wait();
+            _sut.Register(user, false);
 
             //Assert
             _cryptoMock.Verify(x => x.GeneratePasswordHash(clearPass), Times.Once());
@@ -289,7 +289,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(user.Password);
 
             //Act
-            _sut.RegisterAsync(user, false).Wait();
+            _sut.Register(user, false);
 
             //Assert
             Assert.IsTrue(user.UserDetail.JoinedDate <= DateTime.UtcNow);
@@ -318,7 +318,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.RegisterAsync(user, true).Wait();
+            _sut.Register(user, true);
 
             //Assert
             Assert.IsNotNull(user.ValidationToken);
@@ -350,7 +350,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(user.Password);
 
             //Act
-            _sut.RegisterAsync(user, false).Wait();
+            _sut.Register(user, false);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());
@@ -371,14 +371,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => null);
 
             //Act
-            _sut.GenerateResetPasswordTokenAsync(email).Wait();
+            _sut.GenerateResetPasswordToken(email);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.GetIdByEmail(email), Times.Once());
         }
 
         [Test]
-        public async Task ThrowEmailNotExists_WhenEmailNotExists_OnGenerateResetToken()
+        public void ThrowEmailNotExists_WhenEmailNotExists_OnGenerateResetToken()
         {
             //Arrange
             var email = "email";
@@ -388,7 +388,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             try
             {
                 //Act
-                await _sut.GenerateResetPasswordTokenAsync(email);
+                _sut.GenerateResetPasswordToken(email);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (EmailNotExistsException e)
@@ -410,7 +410,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() =>  null);
 
             //Act
-            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+            var result = _sut.GenerateResetPasswordToken(email);
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.AddDays(1).Date, result.ExpirationDate.Date);
@@ -432,7 +432,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
 
             //Act
-            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+            var result = _sut.GenerateResetPasswordToken(email);
 
             //Assert
             _uowMock.Verify(x => x.ValidationTokenRepository.GetById(userId), Times.Once());
@@ -454,7 +454,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
 
             //Act
-            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+            var result = _sut.GenerateResetPasswordToken(email);
 
             //Assert
             _uowMock.Verify(x => x.ValidationTokenRepository.GetById(userId), Times.Once());
@@ -475,7 +475,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(token));
 
             //Act
-            var result = _sut.GenerateResetPasswordTokenAsync(email).Result;
+            var result = _sut.GenerateResetPasswordToken(email);
 
             //Assert
             _uowMock.Verify(x => x.ValidationTokenRepository.InsertGraph(result));
@@ -495,7 +495,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => token);
 
             //Act
-            var result = _sut.IsTokenValidAsync(token.Id, token.Token).Result;
+            var result = _sut.IsTokenValid(token.Id, token.Token);
 
             //Assert
             Assert.IsTrue(result);
@@ -511,7 +511,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => token);
 
             //Act
-            var result = _sut.IsTokenValidAsync(token.Id, Guid.NewGuid()).Result;
+            var result = _sut.IsTokenValid(token.Id, Guid.NewGuid());
 
             //Assert
             Assert.IsFalse(result);
@@ -520,7 +520,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowExpiredExceptionWhenTokenIsExpired_OnIsTokenValid()
+        public void ThrowExpiredExceptionWhenTokenIsExpired_OnIsTokenValid()
         {
             //Arrange
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(-1) };
@@ -530,7 +530,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                var result = await _sut.IsTokenValidAsync(token.Id, token.Token);
+                var result = _sut.IsTokenValid(token.Id, token.Token);
                 Assert.Fail("Expected Exception wasn't thrown");
             }
             catch (TokenExpiredException e)
@@ -546,7 +546,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Reset Password
 
         [Test]
-        public async Task ThrowInvalidTokenExceptionWhenTokenIsNotValid_OnResetPassword()
+        public void ThrowInvalidTokenExceptionWhenTokenIsNotValid_OnResetPassword()
         {
             //Arrange
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
@@ -555,7 +555,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.ResetPasswordAsync(token.Id, Guid.NewGuid(), "");
+                _sut.ResetPassword(token.Id, Guid.NewGuid(), "");
                 Assert.Fail("Expected Exception wasn't thrown");
             }
             catch (InvalidTokenException e)
@@ -567,7 +567,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task HashTheNewPassword_OnResetPassword()
+        public void HashTheNewPassword_OnResetPassword()
         {
             //Arrange
             var newPass = "newpass";
@@ -583,14 +583,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
 
             //Act
-            await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
+            _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
             _cryptoMock.Verify(x => x.GeneratePasswordHash(newPass));
         }
 
         [Test]
-        public async Task UpdateTheUserCorrectly_OnResetPassword()
+        public void UpdateTheUserCorrectly_OnResetPassword()
         {
             //Arrange
             var newPass = "newpass";
@@ -608,7 +608,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
             //Act
-            await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
+            _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
             Assert.AreEqual(newPassHash, user.Password);
@@ -616,7 +616,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveTokenOnSuccessfulReset_OnResetPassword()
+        public void RemoveTokenOnSuccessfulReset_OnResetPassword()
         {
             //Arrange
             var newPass = "newpass";
@@ -635,7 +635,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
 
             //Act
-            await _sut.ResetPasswordAsync(token.Id, token.Token, newPass);
+            _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
             Assert.AreEqual(newPassHash, user.Password);
@@ -648,7 +648,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Change Password
 
         [Test]
-        public async Task HashTheCurrentPasswordBeforeComparing_OnChangePassword()
+        public void HashTheCurrentPasswordBeforeComparing_OnChangePassword()
         {
             //Arrange
             var userId = 12;
@@ -666,14 +666,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(oldPassHash);
 
             //Act
-            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+            _sut.ChangePassword(userId, oldPass, newPassword);
 
             //Assert
             _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
         }
 
         [Test]
-        public async Task ThrowInvalidPasswordIfCurrentPasswordIsNotCorrect_OnChangePassword()
+        public void ThrowInvalidPasswordIfCurrentPasswordIsNotCorrect_OnChangePassword()
         {
             //Arrange
             var userId = 12;
@@ -696,7 +696,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.ChangePasswordAsync(userId, invalidPass, newPassword);
+                _sut.ChangePassword(userId, invalidPass, newPassword);
                 Assert.Fail("Expected Exception Wasn't thrown");
             }
             catch (InvalidPasswordException e)
@@ -709,7 +709,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task HashTheNewPasswordIfEverythingIsFine_OnChangePassword()
+        public void HashTheNewPasswordIfEverythingIsFine_OnChangePassword()
         {
             //Arrange
             var userId = 12;
@@ -727,7 +727,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(oldPassHash);
 
             //Act
-            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+            _sut.ChangePassword(userId, oldPass, newPassword);
 
             //Assert
             _uowMock.Verify(x => x.UserRepository.GetById(userId), Times.Once());
@@ -736,7 +736,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
+        public void SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
         {
             //Arrange
             var userId = 12;
@@ -754,7 +754,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(oldPassHash);
 
             //Act
-            await _sut.ChangePasswordAsync(userId, oldPass, newPassword);
+            _sut.ChangePassword(userId, oldPass, newPassword);
 
             //Assert
 
@@ -770,7 +770,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Get/Link OAuth User
 
         [Test]
-        public async Task CheckForOAuthAccountFirstAndNotLookForEmailIfExists_OnGetOAuthUserAsync()
+        public void CheckForOAuthAccountFirstAndNotLookForEmailIfExists_OnGetOAuthUserAsync()
         {
             //Arrange
             var providerId = 1234L;
@@ -785,7 +785,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(user);
 
             //Act
-            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+            var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
@@ -793,7 +793,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CheckForUserWithEmailIFOAuthAccountNotExists_OnGetOAuthUserAsync()
+        public void CheckForUserWithEmailIFOAuthAccountNotExists_OnGetOAuthUserAsync()
         {
             //Arrange
             var providerId = 1234L;
@@ -808,7 +808,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(user);
 
             //Act
-            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+            var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
@@ -816,7 +816,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task AddOAuthAccountIfUserExistsAndOAuthAccountIsNot_OnGetOAuthUserAsync()
+        public void AddOAuthAccountIfUserExistsAndOAuthAccountIsNot_OnGetOAuthUserAsync()
         {
             //Arrange
             var providerId = 1234L;
@@ -832,7 +832,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.OAuthAccountRepository.InsertGraph(oauthAccount));
 
             //Act
-            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+            var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
@@ -843,7 +843,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ReturnNullIfNotUserNorOAuthAccountExists_OnGetOAuthUserAsync()
+        public void ReturnNullIfNotUserNorOAuthAccountExists_OnGetOAuthUserAsync()
         {
             //Arrange
             var providerId = 1234L;
@@ -858,7 +858,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => null);
 
             //Act
-            var result = await _sut.GetOAuthUserAsync(oauthAccount, email);
+            var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
             _uowMock.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());

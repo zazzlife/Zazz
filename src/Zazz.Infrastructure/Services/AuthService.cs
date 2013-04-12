@@ -17,7 +17,7 @@ namespace Zazz.Infrastructure.Services
             _cryptoService = cryptoService;
         }
 
-        public async Task LoginAsync(string username, string password)
+        public void Login(string username, string password)
         {
             var passwordHash = _cryptoService.GeneratePasswordHash(password);
             var user = _uow.UserRepository.GetByUsername(username);
@@ -33,7 +33,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task<User> RegisterAsync(User user, bool createToken)
+        public User Register(User user, bool createToken)
         {
             if (user.UserDetail == null)
                 throw new ArgumentNullException();
@@ -67,7 +67,7 @@ namespace Zazz.Infrastructure.Services
             return user;
         }
 
-        public async Task<ValidationToken> GenerateResetPasswordTokenAsync(string email)
+        public ValidationToken GenerateResetPasswordToken(string email)
         {
             var userId = _uow.UserRepository.GetIdByEmail(email);
             if (userId == 0)
@@ -90,7 +90,7 @@ namespace Zazz.Infrastructure.Services
             return token;
         }
 
-        public async Task<bool> IsTokenValidAsync(int userId, Guid token)
+        public bool IsTokenValid(int userId, Guid token)
         {
             var userToken = _uow.ValidationTokenRepository.GetById(userId);
             if (userToken == null)
@@ -102,9 +102,9 @@ namespace Zazz.Infrastructure.Services
             return token.Equals(userToken.Token);
         }
 
-        public async Task ResetPasswordAsync(int userId, Guid token, string newPassword)
+        public void ResetPassword(int userId, Guid token, string newPassword)
         {
-            var isTokenValid = await IsTokenValidAsync(userId, token);
+            var isTokenValid = IsTokenValid(userId, token);
             if (!isTokenValid)
                 throw new InvalidTokenException();
 
@@ -116,7 +116,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        public void ChangePassword(int userId, string currentPassword, string newPassword)
         {
             var user = _uow.UserRepository.GetById(userId);
 
@@ -131,7 +131,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task<User> GetOAuthUserAsync(OAuthAccount oAuthAccount, string email)
+        public User GetOAuthUser(OAuthAccount oAuthAccount, string email)
         {
             var existingOAuthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
                                                                         oAuthAccount.Provider);

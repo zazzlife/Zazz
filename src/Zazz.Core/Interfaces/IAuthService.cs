@@ -6,19 +6,19 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAuthService : IDisposable
     {
-        Task LoginAsync(string username, string password);
+        void Login(string username, string password);
 
-        Task<User> RegisterAsync(User user, bool createToken);
+        User Register(User user, bool createToken);
 
-        Task<ValidationToken> GenerateResetPasswordTokenAsync(string email);
+        ValidationToken GenerateResetPasswordToken(string email);
 
-        Task<bool> IsTokenValidAsync(int userId, Guid token);
+        bool IsTokenValid(int userId, Guid token);
 
-        Task ResetPasswordAsync(int userId, Guid token, string newPassword);
+        void ResetPassword(int userId, Guid token, string newPassword);
         
-        Task ChangePasswordAsync(int userId, string currentPassword, string newPassword);
+        void ChangePassword(int userId, string currentPassword, string newPassword);
         
-        Task<User> GetOAuthUserAsync(OAuthAccount oAuthAccount, string email);
+        User GetOAuthUser(OAuthAccount oAuthAccount, string email);
         
         void AddOAuthAccount(OAuthAccount oauthAccount);
     }

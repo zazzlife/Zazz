@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel login, string returnUrl)
+        public ActionResult Login(LoginViewModel login, string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -58,7 +58,7 @@ namespace Zazz.Web.Controllers
             {
                 try
                 {
-                    await _authService.LoginAsync(login.Username, login.Password);
+                    _authService.Login(login.Username, login.Password);
 
                     FormsAuthentication.SetAuthCookie(login.Username, true);
 
@@ -100,7 +100,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel registerVm)
+        public ActionResult Register(RegisterViewModel registerVm)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -134,7 +134,7 @@ namespace Zazz.Web.Controllers
 
                 try
                 {
-                    await _authService.RegisterAsync(user, true);
+                    _authService.Register(user, true);
 
                     //TODO: send welcome email.
 
@@ -169,7 +169,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Recover(string email)
+        public ActionResult Recover(string email)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -178,7 +178,7 @@ namespace Zazz.Web.Controllers
             {
                 try
                 {
-                    var token = await _authService.GenerateResetPasswordTokenAsync(email);
+                    var token = _authService.GenerateResetPasswordToken(email);
 
                     //TODO: send email
                     var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, token.Token.ToString());
@@ -199,7 +199,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ResetPassword(int? id, Guid? token)
+        public ActionResult ResetPassword(int? id, Guid? token)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -209,7 +209,7 @@ namespace Zazz.Web.Controllers
 
             try
             {
-                var isTokenValid = await _authService.IsTokenValidAsync(id.Value, token.Value);
+                var isTokenValid = _authService.IsTokenValid(id.Value, token.Value);
                 if (!isTokenValid)
                     throw new HttpException(404, "Requested url is not valid");
             }
@@ -223,14 +223,14 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(int id, Guid token, ResetPasswordModel resetPasswordModel)
+        public ActionResult ResetPassword(int id, Guid token, ResetPasswordModel resetPasswordModel)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
             if (ModelState.IsValid)
             {
-                await _authService.ResetPasswordAsync(id, token, resetPasswordModel.NewPassword);
+                _authService.ResetPassword(id, token, resetPasswordModel.NewPassword);
                 ShowAlert("Your password has been successfully changed.", AlertType.Success);
 
                 return RedirectToAction("Login");
@@ -261,7 +261,7 @@ namespace Zazz.Web.Controllers
             return new OAuthLoginResult(id, "/account/oauthcallback");
         }
 
-        public async Task<ActionResult> OAuthCallback()
+        public ActionResult OAuthCallback()
         {
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
@@ -289,7 +289,7 @@ namespace Zazz.Web.Controllers
                                        ProviderUserId = long.Parse(providerId)
                                    };
 
-            var user = await _authService.GetOAuthUserAsync(oauthAccount, email);
+            var user = _authService.GetOAuthUser(oauthAccount, email);
 
             if (User.Identity.IsAuthenticated)
             {
@@ -352,7 +352,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> OAuthRegister(OAuthRegisterViewModel registerVm)
+        public ActionResult OAuthRegister(OAuthRegisterViewModel registerVm)
         {
             if (ModelState.IsValid)
             {
@@ -398,7 +398,7 @@ namespace Zazz.Web.Controllers
                     user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
                 try
                 {
-                    await _authService.RegisterAsync(user, false);
+                    _authService.Register(user, false);
 
                     //TODO: send welcome email.
 
