@@ -56,7 +56,7 @@ namespace Zazz.Infrastructure.Services
             if (album.Id == 0)
                 throw new ArgumentException("Album id cannot be 0");
 
-            var ownerId = await _uow.AlbumRepository.GetOwnerIdAsync(album.Id);
+            var ownerId = _uow.AlbumRepository.GetOwnerId(album.Id);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
@@ -69,7 +69,7 @@ namespace Zazz.Infrastructure.Services
             if (albumId == 0)
                 throw new ArgumentException("Album Id cannot be 0", "albumId");
 
-            var ownerId = await _uow.AlbumRepository.GetOwnerIdAsync(albumId);
+            var ownerId = _uow.AlbumRepository.GetOwnerId(albumId);
             if (ownerId != currentUserId)
                 throw new SecurityException();
 

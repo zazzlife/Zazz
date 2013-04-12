@@ -67,8 +67,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => 155));
+            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
+                .Returns(155);
 
             //Act & Assert
             try
@@ -79,7 +79,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uow.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.GetOwnerId(_album.Id), Times.Once());
         }
 
         [Test]
@@ -87,8 +87,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _userId));
+            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
+                .Returns(_userId);
             _uow.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
 
             //Act
@@ -120,8 +120,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _album.Id = 123;
             _album.UserId = 400;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _album.UserId));
+            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
+                .Returns(_album.UserId);
 
             //Act & Assert
             try
@@ -132,7 +132,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             catch (SecurityException)
             {
             }
-            _uow.Verify(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id), Times.Once());
+            _uow.Verify(x => x.AlbumRepository.GetOwnerId(_album.Id), Times.Once());
         }
 
         [Test]
@@ -144,8 +144,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _album.Id = 123;
             var dirPath = "c:\test";
             _album.UserId = _userId;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerIdAsync(_album.Id))
-                .Returns(() => Task.Run(() => _userId));
+            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
+                .Returns(_userId);
             _uow.Setup(x => x.AlbumRepository.Remove(_album.Id));
             _uow.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
                 .Returns(photoIds);

@@ -23,7 +23,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task ReturnCorrectOwnerId()
+        public void ReturnCorrectOwnerId()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -40,7 +40,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = await _repo.GetOwnerIdAsync(album.Id);
+            var result = _repo.GetOwnerId(album.Id);
 
             //Assert
             Assert.AreEqual(user.Id, result);

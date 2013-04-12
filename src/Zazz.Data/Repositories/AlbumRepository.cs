@@ -19,11 +19,11 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the album, if it's new then use insert graph.");
         }
 
-        public Task<int> GetOwnerIdAsync(int albumId)
+        public int GetOwnerId(int albumId)
         {
-            return Task.Run(() => DbSet.Where(a => a.Id == albumId)
-                                             .Select(a => a.UserId)
-                                             .SingleOrDefault());
+            return DbSet.Where(a => a.Id == albumId)
+                        .Select(a => a.UserId)
+                        .SingleOrDefault();
         }
 
         public IEnumerable<int> GetAlbumPhotoIds(int albumId)
