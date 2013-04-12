@@ -34,13 +34,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task InsertAndSave_OnCreateAlbum()
+        public void InsertAndSave_OnCreateAlbum()
         {
             //Arrange
             _uow.Setup(x => x.AlbumRepository.InsertGraph(_album));
 
             //Act
-            await _sut.CreateAlbumAsync(_album);
+            _sut.CreateAlbum(_album);
 
             //Assert
             _uow.Verify(x => x.AlbumRepository.InsertGraph(_album), Times.Once());
@@ -48,13 +48,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowIfAlbumIdIs0_OnUpdateAlbum()
+        public void ThrowIfAlbumIdIs0_OnUpdateAlbum()
         {
             //Arrange
             //Act
             try
             {
-                await _sut.UpdateAlbumAsync(_album, _userId);
+                _sut.UpdateAlbum(_album, _userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (ArgumentException)
@@ -63,7 +63,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CheckForOwnerIdAndThrowIfDoesntMatch_OnUpdateAlbum()
+        public void CheckForOwnerIdAndThrowIfDoesntMatch_OnUpdateAlbum()
         {
             //Arrange
             _album.Id = 144;
@@ -73,7 +73,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act & Assert
             try
             {
-                await _sut.UpdateAlbumAsync(_album, _userId);
+                _sut.UpdateAlbum(_album, _userId);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (SecurityException)
@@ -83,7 +83,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task UpdateAndSave_OnUpdateAlbum()
+        public void UpdateAndSave_OnUpdateAlbum()
         {
             //Arrange
             _album.Id = 144;
@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
 
             //Act
-            await _sut.UpdateAlbumAsync(_album, _userId);
+            _sut.UpdateAlbum(_album, _userId);
 
             //Assert
             _uow.Verify(x => x.AlbumRepository.InsertOrUpdate(_album), Times.Once());

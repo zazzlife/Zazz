@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public async Task<ActionResult> CreateAlbum(string value)
+        public ActionResult CreateAlbum(string value)
         {
             if (value.Length > 50)
             {
@@ -46,7 +46,7 @@ namespace Zazz.Web.Controllers
                         UserId = userId
                     };
 
-                    await _albumService.CreateAlbumAsync(album);
+                    _albumService.CreateAlbum(album);
 
                     var vm = new AlbumViewModel
                              {
@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetAlbums()
+        public JsonResult GetAlbums()
         {
             using (_photoService)
             using (_albumService)
@@ -86,7 +86,7 @@ namespace Zazz.Web.Controllers
                     throw new HttpException(403, "");
 
                 var userId = _userService.GetUserId(User.Identity.Name);
-                var albums = await _albumService.GetUserAlbumsAsync(userId);
+                var albums = _albumService.GetUserAlbums(userId);
 
                 var response = albums.Select(a => new { id = a.Id, name = a.Name });
 

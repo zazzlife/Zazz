@@ -7,15 +7,15 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumService : IDisposable
     {
-        Task<Album> GetAlbumAsync(int albumId);
+        Album GetAlbum(int albumId);
 
-        Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take);
+        List<Album> GetUserAlbums(int userId, int skip, int take);
 
-        Task<List<Album>> GetUserAlbumsAsync(int userId);
+        List<Album> GetUserAlbums(int userId);
 
-        Task<int> GetUserAlbumsCountAsync(int userId);
+        int GetUserAlbumsCount(int userId);
 
-        Task CreateAlbumAsync(Album album);
+        void CreateAlbum(Album album);
 
         /// <summary>
         /// 
@@ -23,7 +23,7 @@ namespace Zazz.Core.Interfaces
         /// <param name="album">Album to update. Id should not be 0</param>
         /// <param name="currentUserId">Id of the user that is updating the album. Required for security checks</param>
         /// <returns></returns>
-        Task UpdateAlbumAsync(Album album, int currentUserId);
+        void UpdateAlbum(Album album, int currentUserId);
 
         /// <summary>
         /// 

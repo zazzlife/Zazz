@@ -104,13 +104,13 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public async Task<ActionResult> Albums(int id)
+        public ActionResult Albums(int id)
         {
             using (_photoService)
             using (_albumService)
             using (_userService)
             {
-                var albums = await _albumService.GetUserAlbumsAsync(id);
+                var albums = _albumService.GetUserAlbums(id);
 
                 var currentUserId = 0;
                 if (User.Identity.IsAuthenticated)
@@ -225,7 +225,7 @@ namespace Zazz.Web.Controllers
 
             if (albumId.HasValue)
             {
-                var album = await _albumService.GetAlbumAsync(albumId.Value);
+                var album = _albumService.GetAlbum(albumId.Value);
 
                 if (album.UserId != userId)
                     throw new SecurityException();

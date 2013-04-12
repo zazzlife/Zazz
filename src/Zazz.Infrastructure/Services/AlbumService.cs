@@ -19,39 +19,39 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
-        public async Task<Album> GetAlbumAsync(int albumId)
+        public Album GetAlbum(int albumId)
         {
             return _uow.AlbumRepository.GetById(albumId);
         }
 
-        public Task<List<Album>> GetUserAlbumsAsync(int userId, int skip, int take)
+        public List<Album> GetUserAlbums(int userId, int skip, int take)
         {
-            return Task.Run(() => _uow.AlbumRepository.GetAll()
-                                      .Where(a => a.UserId == userId)
-                                      .OrderBy(a => a.Id)
-                                      .Skip(skip)
-                                      .Take(take).ToList());
+            return _uow.AlbumRepository.GetAll()
+                       .Where(a => a.UserId == userId)
+                       .OrderBy(a => a.Id)
+                       .Skip(skip)
+                       .Take(take).ToList();
         }
 
-        public Task<List<Album>> GetUserAlbumsAsync(int userId)
+        public List<Album> GetUserAlbums(int userId)
         {
-            return Task.Run(() => _uow.AlbumRepository.GetAll()
-                                      .Where(a => a.UserId == userId).ToList());
+            return _uow.AlbumRepository.GetAll()
+                       .Where(a => a.UserId == userId).ToList();
         }
 
-        public Task<int> GetUserAlbumsCountAsync(int userId)
+        public int GetUserAlbumsCount(int userId)
         {
-            return Task.Run(() => _uow.AlbumRepository.GetAll().Count(a => a.UserId == userId));
+            return _uow.AlbumRepository.GetAll().Count(a => a.UserId == userId);
         }
 
-        public async Task CreateAlbumAsync(Album album)
+        public void CreateAlbum(Album album)
         {
             _uow.AlbumRepository.InsertGraph(album);
             // there is a direct call to repository in FacebookService (get page photos)
             _uow.SaveChanges();
         }
 
-        public async Task UpdateAlbumAsync(Album album, int currentUserId)
+        public void UpdateAlbum(Album album, int currentUserId)
         {
             if (album.Id == 0)
                 throw new ArgumentException("Album id cannot be 0");
