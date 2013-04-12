@@ -8,7 +8,7 @@ $(document).on('mouseenter', '.event', function () {
         return;
     }
 
-    var imgHeight = 400;
+    var imgHeight = 300;
     var offset = self.offset();
     var elemWidth = self.width();
     var elemHeight = self.height();
@@ -22,7 +22,7 @@ $(document).on('mouseenter', '.event', function () {
     left = offset.left + elemWidth + 30;
 
     eventLargeImg = $('<img />', {
-        src: '/Images/placeholder.gif',
+        src: img,
     });
 
     eventLargeImg.css({
