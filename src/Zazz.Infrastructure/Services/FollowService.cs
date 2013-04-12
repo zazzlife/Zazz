@@ -30,7 +30,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task SendFollowRequestAsync(int fromUserId, int toUserId)
         {
-            var exists = await _uow.FollowRequestRepository.ExistsAsync(fromUserId, toUserId);
+            var exists = _uow.FollowRequestRepository.Exists(fromUserId, toUserId);
             if (exists)
                 return;
 
@@ -80,14 +80,14 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public Task<int> GetFollowRequestsCountAsync(int userId)
+        public async Task<int> GetFollowRequestsCountAsync(int userId)
         {
-            return _uow.FollowRequestRepository.GetReceivedRequestsCountAsync(userId);
+            return _uow.FollowRequestRepository.GetReceivedRequestsCount(userId);
         }
 
-        public Task<List<FollowRequest>> GetFollowRequestsAsync(int userId)
+        public async Task<List<FollowRequest>> GetFollowRequestsAsync(int userId)
         {
-            return _uow.FollowRequestRepository.GetReceivedRequestsAsync(userId);
+            return _uow.FollowRequestRepository.GetReceivedRequests(userId);
         }
 
         public void Dispose()

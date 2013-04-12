@@ -77,7 +77,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetReceivedRequestsCountAsync(userA.Id).Result;
+            var result = _repo.GetReceivedRequestsCount(userA.Id);
 
             //Assert
             Assert.AreEqual(2, result);
@@ -120,7 +120,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetReceivedRequestsAsync(userA.Id).Result;
+            var result = _repo.GetReceivedRequests(userA.Id);
 
             //Assert
             Assert.AreEqual(2, result.Count);
@@ -163,7 +163,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetSentRequestsAsync(userA.Id).Result;
+            var result = _repo.GetSentRequests(userA.Id);
             
             //Assert
             Assert.AreEqual(2, result.Count);
@@ -196,10 +196,10 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            _repo.RemoveAsync(userA.Id, userB.Id).Wait();
+            _repo.Remove(userA.Id, userB.Id);
             _context.SaveChanges();
 
-            var check = _repo.ExistsAsync(userA.Id, userB.Id).Result;
+            var check = _repo.Exists(userA.Id, userB.Id);
 
             //Assert
             Assert.IsFalse(check);
@@ -232,7 +232,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.ExistsAsync(userA.Id, userB.Id).Result;
+            var result = _repo.Exists(userA.Id, userB.Id);
 
             //Assert
             Assert.IsTrue(result);
@@ -265,7 +265,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.ExistsAsync(userB.Id, userA.Id).Result;
+            var result = _repo.Exists(userB.Id, userA.Id);
 
             //Assert
             Assert.IsFalse(result);

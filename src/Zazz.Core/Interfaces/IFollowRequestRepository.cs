@@ -6,14 +6,14 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFollowRequestRepository : IRepository<FollowRequest>
     {
-        Task<int> GetReceivedRequestsCountAsync(int userId);
+        int GetReceivedRequestsCount(int userId);
 
-        Task<List<FollowRequest>> GetReceivedRequestsAsync(int userId);
+        List<FollowRequest> GetReceivedRequests(int userId);
 
-        Task<List<FollowRequest>> GetSentRequestsAsync(int userId);
+        List<FollowRequest> GetSentRequests(int userId);
 
-        Task RemoveAsync(int fromUserId, int toUserId);
+        void Remove(int fromUserId, int toUserId);
 
-        Task<bool> ExistsAsync(int fromUserId, int toUserId);
+        bool Exists(int fromUserId, int toUserId);
     }
 }

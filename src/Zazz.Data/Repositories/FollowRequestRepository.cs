@@ -26,27 +26,27 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<int> GetReceivedRequestsCountAsync(int userId)
+        public int GetReceivedRequestsCount(int userId)
         {
-            return Task.Run(() => DbSet.Count(r => r.ToUserId == userId));
+            return DbSet.Count(r => r.ToUserId == userId);
         }
 
-        public Task<List<FollowRequest>> GetReceivedRequestsAsync(int userId)
+        public List<FollowRequest> GetReceivedRequests(int userId)
         {
-            return Task.Run(() => DbSet.Where(r => r.ToUserId == userId).ToList());
+            return DbSet.Where(r => r.ToUserId == userId).ToList();
         }
 
-        public Task<List<FollowRequest>> GetSentRequestsAsync(int userId)
+        public List<FollowRequest> GetSentRequests(int userId)
         {
-            return Task.Run(() => DbSet.Where(r => r.FromUserId == userId).ToList());
+            return DbSet.Where(r => r.FromUserId == userId).ToList();
         }
 
-        public async Task RemoveAsync(int fromUserId, int toUserId)
+        public void Remove(int fromUserId, int toUserId)
         {
-            var item = await Task.Run(() => DbSet
-                                                .Where(r => r.FromUserId == fromUserId)
-                                                .Where(r => r.ToUserId == toUserId)
-                                                .SingleOrDefault());
+            var item = DbSet
+                .Where(r => r.FromUserId == fromUserId)
+                .Where(r => r.ToUserId == toUserId)
+                .SingleOrDefault();
 
             if (item == null)
                 return;
@@ -54,11 +54,11 @@ namespace Zazz.Data.Repositories
             DbContext.Entry(item).State = EntityState.Deleted;
         }
 
-        public Task<bool> ExistsAsync(int fromUserId, int toUserId)
+        public bool Exists(int fromUserId, int toUserId)
         {
-            return Task.Run(() => DbSet.Where(r => r.FromUserId == fromUserId)
-                                       .Where(r => r.ToUserId == toUserId)
-                                       .Any());
+            return DbSet.Where(r => r.FromUserId == fromUserId)
+                        .Where(r => r.ToUserId == toUserId)
+                        .Any();
         }
     }
 }

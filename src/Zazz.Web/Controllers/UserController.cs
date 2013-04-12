@@ -109,8 +109,8 @@ namespace Zazz.Web.Controllers
 
                     if (!vm.IsCurrentUserFollowingTargetUser)
                     {
-                        vm.FollowRequestAlreadySent = await _uow.FollowRequestRepository
-                            .ExistsAsync(currentUserId, id);
+                        vm.FollowRequestAlreadySent = _uow.FollowRequestRepository
+                            .Exists(currentUserId, id);
                     }
                 }
 
