@@ -27,16 +27,16 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<OAuthAccount> GetUserAccountAsync(int userId, OAuthProvider provider)
+        public OAuthAccount GetUserAccount(int userId, OAuthProvider provider)
         {
-            return Task.Run(() => DbSet.Where(o => o.UserId == userId)
-                                       .Where(o => o.Provider == provider)
-                                       .SingleOrDefault());
+            return DbSet.Where(o => o.UserId == userId)
+                        .Where(o => o.Provider == provider)
+                        .SingleOrDefault();
         }
 
-        public Task<IEnumerable<OAuthAccount>> GetUserAccountsAsync(int userId)
+        public IEnumerable<OAuthAccount> GetUserAccounts(int userId)
         {
-            return Task.Run(() => DbSet.Where(o => o.UserId == userId).AsEnumerable());
+            return DbSet.Where(o => o.UserId == userId).AsEnumerable();
         }
 
         public OAuthAccount GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
@@ -46,11 +46,11 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public Task<bool> OAuthAccountExistsAsync(long providerUserId, OAuthProvider provider)
+        public bool OAuthAccountExists(long providerUserId, OAuthProvider provider)
         {
-            return Task.Run(() => DbSet.Where(o => o.ProviderUserId == providerUserId)
-                                       .Where(o => o.Provider == provider)
-                                       .Any());
+            return DbSet.Where(o => o.ProviderUserId == providerUserId)
+                        .Where(o => o.Provider == provider)
+                        .Any();
         }
 
         public string GetAccessToken(int userId, OAuthProvider provider)
@@ -62,9 +62,9 @@ namespace Zazz.Data.Repositories
                 .SingleOrDefault();
         }
 
-        public async Task RemoveAsync(int userId, OAuthProvider provider)
+        public void Remove(int userId, OAuthProvider provider)
         {
-            var item = await GetUserAccountAsync(userId, provider);
+            var item = GetUserAccount(userId, provider);
             if (item != null)
                 DbContext.Entry(item).State = EntityState.Deleted;
         }

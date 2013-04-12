@@ -93,7 +93,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetUserAccountAsync(user.Id, OAuthProvider.Facebook).Result;
+            var result = _repo.GetUserAccount(user.Id, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsNotNull(result);
@@ -121,7 +121,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetUserAccountAsync(user.Id, OAuthProvider.Twitter).Result;
+            var result = _repo.GetUserAccount(user.Id, OAuthProvider.Twitter);
 
             //Assert
             Assert.IsNull(result);
@@ -134,7 +134,7 @@ namespace Zazz.IntegrationTests.Repositories
             var user = AddUserWithOAuthAccounts();
 
             //Act
-            var result = _repo.GetUserAccountsAsync(user.Id).Result;
+            var result = _repo.GetUserAccounts(user.Id);
 
             //Assert
             Assert.AreEqual(user.LinkedAccounts.Count, result.Count());
@@ -148,11 +148,11 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = user.LinkedAccounts.First();
 
             //Act
-            _repo.RemoveAsync(user.Id, oauthAccount.Provider).Wait();
+            _repo.Remove(user.Id, oauthAccount.Provider);
             _context.SaveChanges();
 
             //Assert
-            var check = _repo.GetUserAccountAsync(user.Id, oauthAccount.Provider).Result;
+            var check = _repo.GetUserAccount(user.Id, oauthAccount.Provider);
             Assert.IsNull(check);
         }
 
@@ -195,7 +195,7 @@ namespace Zazz.IntegrationTests.Repositories
             var user = AddUser();
 
             //Act
-            var result = _repo.OAuthAccountExistsAsync(1234L, OAuthProvider.Facebook).Result;
+            var result = _repo.OAuthAccountExists(1234L, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsFalse(result);
@@ -223,7 +223,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.OAuthAccountExistsAsync(providerUserId, OAuthProvider.Facebook).Result;
+            var result = _repo.OAuthAccountExists(providerUserId, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsTrue(result);

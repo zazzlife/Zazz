@@ -12,14 +12,14 @@ namespace Zazz.Core.Interfaces
         /// <param name="userId">The User id on our site</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        Task<OAuthAccount> GetUserAccountAsync(int userId, OAuthProvider provider);
+        OAuthAccount GetUserAccount(int userId, OAuthProvider provider);
 
         /// <summary>
         /// Gets all of user OAuth Accounts
         /// </summary>
         /// <param name="userId">The User id on our site</param>
         /// <returns></returns>
-        Task<IEnumerable<OAuthAccount>> GetUserAccountsAsync(int userId);
+        IEnumerable<OAuthAccount> GetUserAccounts(int userId);
 
         /// <summary>
         /// Gets the OAuth Account by user's OAuth ID
@@ -35,10 +35,10 @@ namespace Zazz.Core.Interfaces
         /// <param name="providerUserId">OAuth Provider's User ID</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        Task<bool> OAuthAccountExistsAsync(long providerUserId, OAuthProvider provider);
+        bool OAuthAccountExists(long providerUserId, OAuthProvider provider);
 
         string GetAccessToken(int userId, OAuthProvider provider);
 
-        Task RemoveAsync(int userId, OAuthProvider provider);
+        void Remove(int userId, OAuthProvider provider);
     }
 }

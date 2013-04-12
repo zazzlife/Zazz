@@ -229,7 +229,7 @@ namespace Zazz.Infrastructure.Services
 
         public async Task<IEnumerable<FbPage>> GetUserPagesAsync(int userId)
         {
-            var oAuthAccount = await _uow.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook);
+            var oAuthAccount = _uow.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook);
 
             if (oAuthAccount == null)
                 throw new OAuthAccountNotFoundException();

@@ -320,8 +320,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                    AccessToken = "token"
                                };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook))
-                .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => null));
+            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
+                .Returns(() => null);
 
             //Act
             try
@@ -335,7 +335,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository
-                .GetUserAccountAsync(userId, OAuthProvider.Facebook), Times.Once());
+                .GetUserAccount(userId, OAuthProvider.Facebook), Times.Once());
             _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
         }
 
@@ -349,15 +349,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 AccessToken = "token"
             };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccountAsync(userId, OAuthProvider.Facebook))
-                .Returns(() => Task.Factory.StartNew<OAuthAccount>(() => oauthAccount));
+            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
+                .Returns(oauthAccount);
 
             //Act
             var result = await _sut.GetUserPagesAsync(userId);
 
             //Assert
             _uow.Verify(x => x.OAuthAccountRepository
-                .GetUserAccountAsync(userId, OAuthProvider.Facebook), Times.Once());
+                .GetUserAccount(userId, OAuthProvider.Facebook), Times.Once());
             _fbHelper.Verify(x => x.GetPages(oauthAccount.AccessToken), Times.Once());
         }
 
