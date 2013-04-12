@@ -24,7 +24,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public async Task<ActionResult> New(string message)
+        public ActionResult New(string message)
         {
             using (_userService)
             using (_photoService)
@@ -41,7 +41,7 @@ namespace Zazz.Web.Controllers
                                UserId = userId
                            };
 
-                await _postService.NewPostAsync(post);
+                _postService.NewPost(post);
 
                 var userPhotoUrl = _photoService.GetUserImageUrl(userId);
 
@@ -72,26 +72,26 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task Remove(int id)
+        public void Remove(int id)
         {
             using (_userService)
             using (_photoService)
             using (_postService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _postService.RemovePostAsync(id, userId);
+                _postService.RemovePost(id, userId);
             }
         }
 
         [Authorize, HttpPost]
-        public async Task Edit(int id, string text)
+        public void Edit(int id, string text)
         {
             using (_userService)
             using (_photoService)
             using (_postService)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
-                await _postService.EditPostAsync(id, text, userId);
+                _postService.EditPost(id, text, userId);
             }
         }
     }

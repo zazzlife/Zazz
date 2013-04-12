@@ -163,7 +163,7 @@ namespace Zazz.Infrastructure.Services
                                    PageId = page.Id
                                };
 
-                    _postService.NewPostAsync(post);
+                    _postService.NewPost(post);
                 }
             }
 
@@ -263,7 +263,7 @@ namespace Zazz.Infrastructure.Services
                 await _albumService.DeleteAlbumAsync(a, currentUserId);
 
             foreach (var p in pagePosts)
-                await _postService.RemovePostAsync(p, currentUserId);
+                _postService.RemovePost(p, currentUserId);
 
             foreach (var e in pageEvents)
                 _eventService.DeleteEvent(e, currentUserId);

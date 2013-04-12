@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Security;
-using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -15,7 +14,7 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public async Task NewPostAsync(Post post)
+        public void NewPost(Post post)
         {
             _uow.PostRepository.InsertGraph(post);
 
@@ -31,7 +30,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task EditPostAsync(int postId, string newText, int currentUserId)
+        public void EditPost(int postId, string newText, int currentUserId)
         {
             var post = _uow.PostRepository.GetById(postId);
             if (post == null)
@@ -45,7 +44,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public async Task RemovePostAsync(int postId, int currentUserId)
+        public void RemovePost(int postId, int currentUserId)
         {
             var post = _uow.PostRepository.GetById(postId);
             if (post == null)
@@ -54,7 +53,7 @@ namespace Zazz.Infrastructure.Services
             if (post.UserId != currentUserId)
                 throw new SecurityException();
             
-            _uow.PostRepository.Remove((Post) post);
+            _uow.PostRepository.Remove(post);
             _uow.FeedRepository.RemovePostFeeds(postId);
             _uow.CommentRepository.RemovePostComments(postId);
 

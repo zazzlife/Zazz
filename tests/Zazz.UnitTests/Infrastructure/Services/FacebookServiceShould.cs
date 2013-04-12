@@ -450,7 +450,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.GetPageEventIds(It.IsAny<int>()), Times.Never());
 
             _albumService.Verify(x => x.DeleteAlbumAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
-            _postService.Verify(x => x.RemovePostAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _postService.Verify(x => x.RemovePost(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
             _eventService.Verify(x => x.DeleteEvent(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
         }
 
@@ -482,9 +482,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _albumService.Setup(x => x.DeleteAlbumAsync(
                 It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId))
                          .Returns(() => Task.Run(() => { }));
-            _postService.Setup(x => x.RemovePostAsync(
-                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId))
-                .Returns(() => Task.Run(() => { }));
+            _postService.Setup(x => x.RemovePost(
+                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
                 It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId));
 
@@ -504,7 +503,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _albumService.Verify(x => x.DeleteAlbumAsync(
                 It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId),
                                  Times.Exactly(albumIds.Count));
-            _postService.Verify(x => x.RemovePostAsync(
+            _postService.Verify(x => x.RemovePost(
                 It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId),
                                 Times.Exactly(postIds.Count));
             _eventService.Verify(x => x.DeleteEvent(
@@ -765,7 +764,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetStatuses(It.IsAny<string>(), It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
-            _postService.Verify(x => x.NewPostAsync(It.IsAny<Post>()), Times.Never());
+            _postService.Verify(x => x.NewPost(It.IsAny<Post>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
@@ -796,8 +795,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
                 .Returns(() => null);
-            _postService.Setup(x => x.NewPostAsync(It.IsAny<Post>()))
-                        .Returns(() => Task.Run(() => { }));
+            _postService.Setup(x => x.NewPost(It.IsAny<Post>()));
 
 
             //Act
@@ -808,7 +806,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.UserRepository.WantsFbPostsSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetStatuses(page.AccessToken, limit), Times.Once());
             _uow.Verify(x => x.PostRepository.InsertGraph(It.IsAny<Post>()), Times.Never());
-            _postService.Verify(x => x.NewPostAsync(It.IsAny<Post>()), Times.Once());
+            _postService.Verify(x => x.NewPost(It.IsAny<Post>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 

@@ -6,10 +6,10 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPostService : IDisposable
     {
-        Task NewPostAsync(Post post);
+        void NewPost(Post post);
 
-        Task EditPostAsync(int postId, string newText, int currentUserId);
+        void EditPost(int postId, string newText, int currentUserId);
 
-        Task RemovePostAsync(int postId, int currentUserId);
+        void RemovePost(int postId, int currentUserId);
     }
 }

@@ -34,7 +34,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task CreateNewPostAndFeedAndShouldNotSetTimeHere_OnNewPost() 
+        public void CreateNewPostAndFeedAndShouldNotSetTimeHere_OnNewPost() 
             // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
@@ -42,7 +42,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
-            await _sut.NewPostAsync(_post);
+            _sut.NewPost(_post);
 
             //Assert
             Assert.AreEqual(DateTime.MinValue, _post.CreatedTime);
@@ -53,7 +53,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowWhenCurrentUserIdIsNotSameAsPostOwner_OnRemovePost()
+        public void ThrowWhenCurrentUserIdIsNotSameAsPostOwner_OnRemovePost()
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
@@ -62,7 +62,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.RemovePostAsync(_post.Id, 1);
+                _sut.RemovePost(_post.Id, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -77,7 +77,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task RemoveAndPostAndSaveWhenEverythingIsFine_OnRemove()
+        public void RemoveAndPostAndSaveWhenEverythingIsFine_OnRemove()
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
@@ -87,7 +87,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
 
             //Act
-            await _sut.RemovePostAsync(_post.Id, _post.UserId);
+            _sut.RemovePost(_post.Id, _post.UserId);
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -98,7 +98,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowWhenPostNotExists_OnEditPost()
+        public void ThrowWhenPostNotExists_OnEditPost()
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
@@ -107,7 +107,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.EditPostAsync(_post.Id, "new text", _post.UserId);
+                _sut.EditPost(_post.Id, "new text", _post.UserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception)
@@ -120,7 +120,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task ThrowWhenUserIdIsDifferent_OnEditPost()
+        public void ThrowWhenUserIdIsDifferent_OnEditPost()
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
@@ -129,7 +129,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                await _sut.EditPostAsync(_post.Id, "new text", 99);
+                _sut.EditPost(_post.Id, "new text", 99);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -142,7 +142,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SaveNewChanges_OnEditPost()
+        public void SaveNewChanges_OnEditPost()
         {
             //Arrange
             var newText = "Edited";
@@ -150,7 +150,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_post);
 
             //Act
-            await _sut.EditPostAsync(_post.Id, newText, _post.UserId);
+            _sut.EditPost(_post.Id, newText, _post.UserId);
 
             //Assert
             Assert.AreEqual(newText, _post.Message);
