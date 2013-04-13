@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
@@ -13,9 +14,9 @@ namespace Zazz.Core.Interfaces
 
         Photo GetPhoto(int id);
 
-        string GeneratePhotoUrl(int userId, int photoId);
+        PhotoLinks GeneratePhotoUrl(int userId, int photoId);
 
-        string GeneratePhotoFilePath(int userId, int photoId);
+        PhotoLinks GeneratePhotoFilePath(int userId, int photoId);
 
         string GetPhotoDescription(int photoId);
         
@@ -25,7 +26,7 @@ namespace Zazz.Core.Interfaces
 
         void UpdatePhoto(Photo photo, int currentUserId);
 
-        string GetUserImageUrl(int userId);
+        PhotoLinks GetUserImageUrl(int userId);
 
         void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea);
     }

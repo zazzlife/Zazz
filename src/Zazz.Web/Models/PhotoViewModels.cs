@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
@@ -39,7 +40,7 @@ namespace Zazz.Web.Models
 
         public string AlbumName { get; set; }
 
-        public string AlbumPicUrl { get; set; }
+        public PhotoLinks AlbumPicUrl { get; set; }
     }
 
     public class PhotoViewModel
@@ -48,7 +49,7 @@ namespace Zazz.Web.Models
 
         public string PhotoDescription { get; set; }
 
-        public string PhotoUrl { get; set; }
+        public PhotoLinks PhotoUrl { get; set; }
 
         public bool IsFromCurrentUser { get; set; }
 
@@ -56,6 +57,6 @@ namespace Zazz.Web.Models
 
         public string FromUserDisplayName { get; set; }
 
-        public string FromUserPhotoUrl { get; set; }
+        public PhotoLinks FromUserPhotoUrl { get; set; }
     }
 }

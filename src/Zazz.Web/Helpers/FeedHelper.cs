@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
 
@@ -117,7 +118,7 @@ namespace Zazz.Web.Helpers
                                                 PhotoId = feed.Event.PhotoId,
                                                 IsFacebookEvent = feed.Event.IsFacebookEvent,
                                                 ImageUrl = feed.Event.IsFacebookEvent
-                                                               ? feed.Event.FacebookPhotoLink
+                                                               ? new PhotoLinks(feed.Event.FacebookPhotoLink)
                                                                : null,
                                                 IsDateOnly = feed.Event.IsDateOnly,
                                                 FacebookEventId = feed.Event.FacebookEventId
@@ -150,7 +151,7 @@ namespace Zazz.Web.Helpers
                                          FromUserPhotoUrl = feedVm.UserImageUrl,
                                          FromUserId = feedVm.UserId,
                                          PhotoUrl = p.IsFacebookPhoto
-                                                        ? p.FacebookLink
+                                                        ? new PhotoLinks( p.FacebookLink)
                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
                                      }).ToList();
 

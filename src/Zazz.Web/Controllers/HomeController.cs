@@ -93,7 +93,7 @@ namespace Zazz.Web.Controllers
                     var autocompleteResponse = new AutocompleteResponse
                               {
                                   Id = u.id,
-                                  Img = _photoService.GetUserImageUrl(u.id)
+                                  Img = _photoService.GetUserImageUrl(u.id).VerySmallLink
                               };
 
                     if (!String.IsNullOrEmpty(u.clubname) &&

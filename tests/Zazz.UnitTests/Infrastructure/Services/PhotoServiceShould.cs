@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.DTOs;
 using Zazz.Infrastructure;
@@ -33,17 +34,25 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
         }
 
-        [TestCase("/picture/user/12/333.jpg", 12, 333)]
-        [TestCase("/picture/user/800/1203200.jpg", 800, 1203200)]
-        [TestCase("/picture/user/102/3330.jpg", 102, 3330)]
-        public void GenerateCorrectPath_OnGeneratePhotoUrl(string expected, int userId, int photoId)
+        [TestCase(12, 333)]
+        [TestCase(800, 1203200)]
+        [TestCase(102, 3330)]
+        public void GenerateCorrectPath_OnGeneratePhotoUrl(int userId, int photoId)
         {
             //Arrange
+            var expectedVerySmall = String.Format("/picture/user/{0}/{1}-vs.jpg", userId, photoId);
+            var expectedSmall = String.Format("/picture/user/{0}/{1}-s.jpg", userId, photoId);
+            var expectedMedium = String.Format("/picture/user/{0}/{1}-m.jpg", userId, photoId);
+            var expectedOriginal = String.Format("/picture/user/{0}/{1}.jpg", userId, photoId);
+
             //Act
             var result = _sut.GeneratePhotoUrl(userId, photoId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expectedVerySmall, result.VerySmallLink);
+            Assert.AreEqual(expectedSmall, result.SmallLink);
+            Assert.AreEqual(expectedMedium, result.MediumLink);
+            Assert.AreEqual(expectedOriginal, result.OriginalLink);
         }
 
         [TestCase(12, 333)]
@@ -52,13 +61,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void GenerateCorrectPath_OnGeneratePhotoFilePath(int userId, int photoId)
         {
             //Arrange
-            var expected = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _tempRootPath, userId, photoId);
+            var expectedVerySmall = String.Format(@"{0}\picture\user\{1}\{2}-vs.jpg", _tempRootPath, userId, photoId);
+            var expectedSmall = String.Format(@"{0}\picture\user\{1}\{2}-s.jpg", _tempRootPath, userId, photoId);
+            var expectedMedium = String.Format(@"{0}\picture\user\{1}\{2}-m.jpg", _tempRootPath, userId, photoId);
+            var expectedOriginal = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _tempRootPath, userId, photoId);
 
             //Act
             var result = _sut.GeneratePhotoFilePath(userId, photoId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expectedVerySmall, result.VerySmallLink);
+            Assert.AreEqual(expectedSmall, result.SmallLink);
+            Assert.AreEqual(expectedMedium, result.MediumLink);
+            Assert.AreEqual(expectedOriginal, result.OriginalLink);
         }
 
         [Test]
@@ -95,7 +110,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
             {
-                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
                    .Returns(() => Task.Run(() => { }));
 
                 //Act
@@ -107,7 +122,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
                 _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
                 _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
             }
@@ -138,7 +153,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
             {
-                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
                    .Returns(() => Task.Run(() => { }));
 
                 //Act
@@ -150,7 +165,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
                 _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
                 _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
             }
@@ -181,7 +196,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
             {
-                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
                    .Returns(() => Task.Run(() => { }));
 
                 //Act
@@ -193,7 +208,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
                 _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
                 _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
             }
@@ -224,7 +239,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
             {
-                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
                    .Returns(() => Task.Run(() => { }));
 
                 //Act
@@ -236,7 +251,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
                 _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
                 _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
                 Assert.IsNotNull(lastFeed.FeedPhotoIds.Single(p => p.PhotoId == photo.Id));
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
@@ -260,7 +275,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
             using (var ms = new MemoryStream())
             {
-                _fs.Setup(x => x.SaveFileAsync(path, ms))
+                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
                    .Returns(() => Task.Run(() => { }));
 
                 //Act
@@ -272,7 +287,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
                 _uow.Verify(x => x.SaveChanges(), Times.Once());
                 _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Never());
-                _fs.Verify(x => x.SaveFileAsync(path, ms));
+                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
                 Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
                 Assert.AreEqual(photo.Id, id);
             }
@@ -294,7 +309,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
 
-            _fs.Setup(x => x.SaveFileAsync(path, Stream.Null))
+            _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), Stream.Null))
                    .Returns(() => Task.Run(() => { }));
 
             //Act
@@ -378,7 +393,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _fs.Setup(x => x.RemoveFile(filePath));
+            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
@@ -396,7 +411,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+            _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
@@ -439,7 +454,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _fs.Setup(x => x.RemoveFile(filePath));
+            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
@@ -457,7 +472,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(0, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+            _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
@@ -500,7 +515,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _fs.Setup(x => x.RemoveFile(filePath));
+            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
@@ -518,7 +533,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+            _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
@@ -561,7 +576,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _fs.Setup(x => x.RemoveFile(filePath));
+            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
@@ -579,7 +594,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _fs.Verify(x => x.RemoveFile(filePath), Times.Once());
+            _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
@@ -813,7 +828,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FacebookPicUrl = "pic url"
             };
 
-            var expected = photo.FacebookPicUrl;
+            var expected = new PhotoLinks
+                           {
+                               MediumLink = photo.FacebookPicUrl,
+                               OriginalLink = photo.FacebookPicUrl,
+                               SmallLink = photo.FacebookPicUrl,
+                               VerySmallLink = photo.FacebookPicUrl
+                           };
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);

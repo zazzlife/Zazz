@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -10,19 +11,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
     {
         private Mock<ICacheSystem<string, int>> _userIdCache;
         private Mock<ICacheSystem<int, string>> _displayNameCache;
-        private Mock<ICacheSystem<int, string>> _photoUrlCache;
+        private Mock<ICacheSystem<int, PhotoLinks>> _photoUrlCache;
         private CacheService _sut;
         private string _username;
         private int _userId;
         private string _displayName;
-        private string _photoUrl;
+        private PhotoLinks _photoUrl;
 
         [SetUp]
         public void Init()
         {
             _userIdCache = new Mock<ICacheSystem<string, int>>();
             _displayNameCache = new Mock<ICacheSystem<int, string>>();
-            _photoUrlCache = new Mock<ICacheSystem<int, string>>();
+            _photoUrlCache = new Mock<ICacheSystem<int, PhotoLinks>>();
 
             _sut = new CacheService();
             CacheService.UserIdCache = _userIdCache.Object;
@@ -32,7 +33,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _username = "soroush";
             _userId = 1;
             _displayName = "display name";
-            _photoUrl = "photo";
+            _photoUrl = new PhotoLinks
+                        {
+                            OriginalLink = "photo",
+                            VerySmallLink = "vs",
+                            MediumLink = "m",
+                            SmallLink = "s"
+                        };
         }
 
         [Test]
@@ -115,7 +122,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetUserPhotoUrl(_userId);
 
             //Assert
-            Assert.AreEqual(_photoUrl, result);
+            Assert.AreEqual(_photoUrl.MediumLink, result.MediumLink);
+            Assert.AreEqual(_photoUrl.OriginalLink, result.OriginalLink);
+            Assert.AreEqual(_photoUrl.SmallLink, result.SmallLink);
+            Assert.AreEqual(_photoUrl.VerySmallLink, result.VerySmallLink);
             _photoUrlCache.Verify(x => x.TryGet(_userId), Times.Once());
         }
 

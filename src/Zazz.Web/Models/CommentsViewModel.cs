@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
@@ -8,7 +9,7 @@ namespace Zazz.Web.Models
     /// </summary>
     public class CommentsViewModel
     {
-        public string CurrentUserPhotoUrl { get; set; }
+        public PhotoLinks CurrentUserPhotoUrl { get; set; }
 
         /// <summary>
         /// This is id of the item that the user can comment on. (post/event/photo/...)

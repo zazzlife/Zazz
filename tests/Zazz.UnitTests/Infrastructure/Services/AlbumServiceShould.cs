@@ -142,7 +142,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var photoIds = new[] {1, 2, 3, 4};
             
             _album.Id = 123;
-            var dirPath = "c:\test";
             _album.UserId = _userId;
             _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
                 .Returns(_userId);
@@ -150,9 +149,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
                 .Returns(photoIds);
             _photoService.Setup(x => x.RemovePhoto(It.IsInRange(1, 4, Range.Inclusive), _userId));
-
-            _photoService.Setup(x => x.GeneratePhotoFilePath(_userId, 0))
-                         .Returns(dirPath);
 
             //Act
             _sut.DeleteAlbum(_album.Id, _userId);

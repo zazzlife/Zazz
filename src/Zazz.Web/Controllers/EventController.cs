@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models;
 
@@ -136,7 +137,7 @@ namespace Zazz.Web.Controllers
                                  Time = e.Time,
                                  PhotoId = e.PhotoId,
                                  IsFacebookEvent = e.IsFacebookEvent,
-                                 ImageUrl = e.IsFacebookEvent ? e.FacebookPhotoLink : null,
+                                 ImageUrl = e.IsFacebookEvent ? new PhotoLinks(e.FacebookPhotoLink) : null,
                                  IsDateOnly = e.IsDateOnly,
                                  FacebookEventId = e.FacebookEventId
                              }).ToList();
@@ -313,7 +314,7 @@ namespace Zazz.Web.Controllers
                     Longitude = zazzEvent.Longitude,
                     PhotoId = zazzEvent.PhotoId,
                     IsFacebookEvent = zazzEvent.IsFacebookEvent,
-                    ImageUrl = zazzEvent.IsFacebookEvent ? zazzEvent.FacebookPhotoLink : null,
+                    ImageUrl = zazzEvent.IsFacebookEvent ? new PhotoLinks(zazzEvent.FacebookPhotoLink) : null,
                     IsDateOnly = zazzEvent.IsDateOnly,
                     FacebookEventId = zazzEvent.FacebookEventId
                 };

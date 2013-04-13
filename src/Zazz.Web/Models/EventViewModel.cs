@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
@@ -56,7 +57,7 @@ namespace Zazz.Web.Models
         public float? Longitude { get; set; }
 
         [Display(AutoGenerateField = false)]
-        public string ImageUrl { get; set; }
+        public PhotoLinks ImageUrl { get; set; }
 
         [Display(AutoGenerateField = false)]
         public int? PhotoId { get; set; }

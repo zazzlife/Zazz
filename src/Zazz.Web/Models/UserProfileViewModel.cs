@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
@@ -7,7 +8,7 @@ namespace Zazz.Web.Models
     {
         public string CoverPhotoUrl { get; set; }
 
-        public string UserPhotoUrl { get; set; }
+        public PhotoLinks UserPhotoUrl { get; set; }
 
         public string Major { get; set; }
 

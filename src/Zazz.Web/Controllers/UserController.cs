@@ -70,7 +70,7 @@ namespace Zazz.Web.Controllers
                         }
                         else
                         {
-                            coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id);
+                            coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id).OriginalLink;
                         }
                     }
                 }
@@ -247,10 +247,10 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             {
                 if (!User.Identity.IsAuthenticated)
-                    return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+                    return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
                 var userId = _userService.GetUserId(User.Identity.Name);
-                return _photoService.GetUserImageUrl(userId);
+                return _photoService.GetUserImageUrl(userId).SmallLink;
             }
         }
 
@@ -260,7 +260,7 @@ namespace Zazz.Web.Controllers
             using (_userService)
             using (_photoService)
             {
-                return _photoService.GetUserImageUrl(userId);
+                return _photoService.GetUserImageUrl(userId).VerySmallLink;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
@@ -10,7 +11,7 @@ namespace Zazz.Web.Models
 
         public FeedType FeedType { get; set; }
 
-        public string UserImageUrl { get; set; }
+        public PhotoLinks UserImageUrl { get; set; }
 
         public int UserId { get; set; }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
@@ -16,6 +17,10 @@ namespace Zazz.Infrastructure.Services
         private readonly IFileService _fileService;
         private readonly string _rootPath;
         private readonly ICacheService _cacheService;
+
+        private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
+        private const string SMALL_IMAGE_SUFFIX = "s";
+        private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService, string rootPath, ICacheService cacheService)
         {
@@ -35,14 +40,32 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetById(id);
         }
 
-        public string GeneratePhotoUrl(int userId, int photoId)
+        public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
-            return String.Format("/picture/user/{0}/{1}.jpg", userId, photoId);
+            return new PhotoLinks
+                   {
+                       VerySmallLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
+                                                     userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
+                       SmallLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
+                                                 userId, photoId, SMALL_IMAGE_SUFFIX),
+                       MediumLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
+                                                  userId, photoId, MEDIUM_IMAGE_SUFFIX),
+                       OriginalLink = String.Format("/picture/user/{0}/{1}.jpg", userId, photoId)
+                   };
         }
 
-        public string GeneratePhotoFilePath(int userId, int photoId)
+        public PhotoLinks GeneratePhotoFilePath(int userId, int photoId)
         {
-            return String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId);
+            return new PhotoLinks
+                   {
+                       VerySmallLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
+                                                     _rootPath, userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
+                       SmallLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
+                                                 _rootPath, userId, photoId, SMALL_IMAGE_SUFFIX),
+                       MediumLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
+                                                  _rootPath, userId, photoId, MEDIUM_IMAGE_SUFFIX),
+                       OriginalLink = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId)
+                   };
         }
 
         public string GetPhotoDescription(int photoId)
@@ -89,12 +112,15 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
             }
 
-            var path = GeneratePhotoFilePath(photo.UserId, photo.Id);
-
             if (data != Stream.Null)
-                await _fileService.SaveFileAsync(path, data);
+                ResizeAndSaveImages(data);
 
             return photo.Id;
+        }
+
+        private void ResizeAndSaveImages(Stream data)
+        {
+            throw new NotImplementedException();
         }
 
         public void RemovePhoto(int photoId, int currentUserId)
@@ -128,8 +154,11 @@ namespace Zazz.Infrastructure.Services
             _uow.PhotoRepository.Remove((Photo) photo);
             _uow.SaveChanges();
 
-            var filePath = GeneratePhotoFilePath(photo.UserId, photo.Id);
-            _fileService.RemoveFile(filePath);
+            var paths = GeneratePhotoFilePath(photo.UserId, photo.Id);
+            _fileService.RemoveFile(paths.VerySmallLink);
+            _fileService.RemoveFile(paths.SmallLink);
+            _fileService.RemoveFile(paths.MediumLink);
+            _fileService.RemoveFile(paths.MediumLink);
         }
 
         public void UpdatePhoto(Photo photo, int currentUserId)
@@ -145,15 +174,15 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public string GetUserImageUrl(int userId)
+        public PhotoLinks GetUserImageUrl(int userId)
         {
             var cache = _cacheService.GetUserPhotoUrl(userId);
-            if (!String.IsNullOrEmpty(cache))
+            if (cache != null)
                 return cache;
 
             var photoId = _uow.UserRepository.GetUserPhotoId(userId);
 
-            var img = String.Empty;
+            var img = new PhotoLinks();
 
             if (photoId == 0)
             {
@@ -170,7 +199,13 @@ namespace Zazz.Infrastructure.Services
                 }
                 else if (photo.IsFacebookPhoto)
                 {
-                    img = photo.FacebookPicUrl;
+                    img = new PhotoLinks
+                          {
+                              OriginalLink = photo.FacebookPicUrl,
+                              MediumLink = photo.FacebookPicUrl,
+                              SmallLink = photo.FacebookPicUrl,
+                              VerySmallLink = photo.FacebookPicUrl
+                          };
                 }
                 else
                 {
@@ -186,17 +221,19 @@ namespace Zazz.Infrastructure.Services
         //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
         public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
         {
-            if (photo.UserId != currentUserId)
-                throw new SecurityException();
+            //TODO: fix crop photo
 
-            var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
+            //if (photo.UserId != currentUserId)
+            //    throw new SecurityException();
 
-            using (var bmp = new Bitmap(imgPath))
-            using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
-            {
-                bmp.Dispose();
-                croppedBmp.Save(imgPath);
-            }
+            //var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
+
+            //using (var bmp = new Bitmap(imgPath))
+            //using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
+            //{
+            //    bmp.Dispose();
+            //    croppedBmp.Save(imgPath);
+            //}
         }
 
         public void Dispose()

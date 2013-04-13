@@ -2,7 +2,6 @@
 {
     public class PhotoLinks
     {
-
         /// <summary>
         /// This one is for user image on comments and feeds and like that. It's around 55px
         /// </summary>
@@ -21,6 +20,17 @@
         /// <summary>
         /// This one is for when you show the image in full size, maximum size is around 1600px
         /// </summary>
-        public string NormalLink { get; set; }
+        public string OriginalLink { get; set; }
+
+        public PhotoLinks()
+        { }
+
+        public PhotoLinks(string defaultValue)
+        {
+            VerySmallLink = defaultValue;
+            SmallLink = defaultValue;
+            MediumLink = defaultValue;
+            OriginalLink = defaultValue;
+        }
     }
 }

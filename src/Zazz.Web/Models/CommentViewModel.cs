@@ -1,4 +1,5 @@
 ﻿using System;
+using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
@@ -11,7 +12,7 @@ namespace Zazz.Web.Models
 
         public int UserId { get; set; }
 
-        public string UserPhotoUrl { get; set; }
+        public PhotoLinks UserPhotoUrl { get; set; }
 
         public string UserDisplayName { get; set; }
 

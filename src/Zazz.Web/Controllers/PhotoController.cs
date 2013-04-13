@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
 using Zazz.Web.Models;
@@ -76,7 +77,7 @@ namespace Zazz.Web.Controllers
                                                       IsFromCurrentUser = p.userId == currentUserId,
                                                       PhotoId = p.id,
                                                       PhotoUrl = p.isFromFb
-                                                                     ? p.fbUrl
+                                                                     ? new PhotoLinks(p.fbUrl)
                                                                      : _photoService.GeneratePhotoUrl(p.userId, p.id),
                                                       FromUserId = id,
                                                       FromUserDisplayName = _userService.GetUserDisplayName(id),
@@ -133,7 +134,7 @@ namespace Zazz.Web.Controllers
                     else
                     {
                         album.AlbumPicUrl = photo.IsFacebookPhoto
-                                                ? photo.FacebookLink
+                                                ? new PhotoLinks(photo.FacebookLink)
                                                 : _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
                     }
 
@@ -212,7 +213,7 @@ namespace Zazz.Web.Controllers
                 var photo = await SaveImageAsync(image.InputStream, description, albumId);
                 response.PhotoId = photo.Id;
                 response.Success = true;
-                response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
+                response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
 
                 return new JsonNetResult(response);
             }
@@ -308,7 +309,7 @@ namespace Zazz.Web.Controllers
                 if (photo.UserId != userId)
                     throw new HttpException(401, "You are not authorized to crop this image.");
 
-                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
+                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
                 vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
                                ? 2.5 : 1;
 
@@ -336,7 +337,7 @@ namespace Zazz.Web.Controllers
                 if (photo.UserId != userId)
                     throw new HttpException(401, "You are not authorized to crop this image.");
 
-                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id);
+                vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
                 vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
                                ? 2.5 : 1;
                 
@@ -377,7 +378,7 @@ namespace Zazz.Web.Controllers
                 IsFromCurrentUser = p.userId == currentUserId,
                 PhotoId = p.id,
                 PhotoUrl = p.isFromFb
-                               ? p.fbUrl
+                               ? new PhotoLinks(p.fbUrl)
                                : _photoService.GeneratePhotoUrl(p.userId, p.id)
             })
                                  .ToList();

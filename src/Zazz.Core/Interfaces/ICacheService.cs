@@ -1,4 +1,6 @@
-﻿namespace Zazz.Core.Interfaces
+﻿using Zazz.Core.Models;
+
+namespace Zazz.Core.Interfaces
 {
     /// <summary>
     /// High level caching service. It should be a singleton
@@ -13,9 +15,9 @@
 
         string GetUserDisplayName(int userId);
 
-        void AddUserPhotoUrl(int userId, string photoUrl);
+        void AddUserPhotoUrl(int userId, PhotoLinks photoUrl);
 
-        string GetUserPhotoUrl(int userId);
+        PhotoLinks GetUserPhotoUrl(int userId);
 
         void RemoveUserCache(string username, int userId);
     }

@@ -1,11 +1,12 @@
 ﻿using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 
 namespace Zazz.Infrastructure.Services
 {
     public class CacheService : ICacheService
     {
         internal static ICacheSystem<string, int> UserIdCache = new CircularBufferCache<string, int>(200);
-        internal static ICacheSystem<int, string> PhotoUrlCache = new CircularBufferCache<int, string>(200);
+        internal static ICacheSystem<int, PhotoLinks> PhotoUrlCache = new CircularBufferCache<int, PhotoLinks>(200);
         internal static ICacheSystem<int, string> DisplayNameCache = new CircularBufferCache<int, string>(200);
 
         public void AddUserId(string username, int userId)
@@ -28,12 +29,12 @@ namespace Zazz.Infrastructure.Services
             return DisplayNameCache.TryGet(userId);
         }
 
-        public void AddUserPhotoUrl(int userId, string photoUrl)
+        public void AddUserPhotoUrl(int userId, PhotoLinks photoUrl)
         {
             PhotoUrlCache.Add(userId, photoUrl);
         }
 
-        public string GetUserPhotoUrl(int userId)
+        public PhotoLinks GetUserPhotoUrl(int userId)
         {
             return PhotoUrlCache.TryGet(userId);
         }
