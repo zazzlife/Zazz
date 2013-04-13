@@ -136,23 +136,22 @@ namespace Zazz.Infrastructure.Services
                 {
                     if (sourceImage.Width > image.Value.Width || sourceImage.Height > image.Value.Height)
                     {
-                        float nPercent = 0;
-                        float nPercentW = ((float)image.Value.Width / (float)sourceImage.Width);
-                        float nPercentH = ((float)image.Value.Height / (float)sourceImage.Height);
+                        // Figure out the ratio
+                        double ratioX = (double)image.Value.Width / (double)sourceImage.Width;
+                        double ratioY = (double)image.Value.Height / (double)sourceImage.Height;
+                        
+                        // use whichever multiplier is smaller
+                        var ratio = ratioX < ratioY ? ratioX : ratioY;
 
-                        if (nPercentH < nPercentW)
-                            nPercent = nPercentH;
-                        else
-                            nPercent = nPercentW;
+                        // now we can get the new height and width
+                        var newHeight = Convert.ToInt32(sourceImage.Height * ratio);
+                        var newWidth = Convert.ToInt32(sourceImage.Width * ratio);
 
-                        var destWidth = (int)(image.Value.Width * nPercent);
-                        var destHeight = (int)(image.Value.Height * nPercent);
-
-                        using (var b = new Bitmap(destWidth, destHeight))
+                        using (var b = new Bitmap(newWidth, newHeight))
                         using (var g = Graphics.FromImage(b))
                         {
-                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            g.DrawImage(sourceImage, 0, 0, destWidth, destHeight);
+                            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                            g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
                             b.Save(image.Key);
                         }
                     }
@@ -200,7 +199,7 @@ namespace Zazz.Infrastructure.Services
             _fileService.RemoveFile(paths.VerySmallLink);
             _fileService.RemoveFile(paths.SmallLink);
             _fileService.RemoveFile(paths.MediumLink);
-            _fileService.RemoveFile(paths.MediumLink);
+            _fileService.RemoveFile(paths.OriginalLink);
         }
 
         public void UpdatePhoto(Photo photo, int currentUserId)
