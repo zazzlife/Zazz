@@ -317,7 +317,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SetCoverPhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
+        public void SetCoverPhotoIdTo0AndNotResetCacheIfThePhotoIsCoverPhotoAndNotProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
 
@@ -346,14 +346,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetById(photoId))
                 .Returns(photo);
 
-            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
-
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
+                .Returns(false);
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
             _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
@@ -376,10 +375,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
             _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
+            _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Never());
         }
 
         [Test]
-        public void SetProfilePhotoIdTo0IfThePhotoIsCoverPhotoIdAndResetEventPhotoId_OnRemovePhoto()
+        public void SetProfilePhotoIdTo0AndResetCacheIfThePhotoIsProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
             var feedId = 12;
@@ -407,14 +407,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetById(photoId))
                 .Returns(photo);
 
-            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
-
             _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
                 .Returns(userId);
             _uow.Setup(x => x.PhotoRepository.Remove(photoId));
             _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
+                .Returns(true);
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
             _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
@@ -437,6 +436,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
             _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
+            _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Once());
         }
 
         [Test]
