@@ -218,7 +218,7 @@ namespace Zazz.Infrastructure.Services
                                     PageId = page.Id
                                 };
 
-                    _photoService.SavePhotoAsync(photo, Stream.Null, true);
+                    _photoService.SavePhoto(photo, Stream.Null, true);
                 }
             }
 

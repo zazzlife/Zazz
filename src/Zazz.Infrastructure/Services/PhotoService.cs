@@ -75,7 +75,7 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetDescription(photoId);
         }
 
-        public async Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed)
+        public int SavePhoto(Photo photo, Stream data, bool showInFeed)
         {
             photo.UploadDate = DateTime.UtcNow;
             _uow.PhotoRepository.InsertGraph(photo);

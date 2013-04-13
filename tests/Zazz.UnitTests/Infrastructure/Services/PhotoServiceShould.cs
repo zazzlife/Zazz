@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -115,7 +115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms, true);
+                var id = _sut.SavePhoto(photo, ms, true);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -129,7 +129,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsPhotoButItsOlderThan24HoursThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsPhotoButItsOlderThan24HoursThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
@@ -158,7 +158,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms, true);
+                var id = _sut.SavePhoto(photo, ms, true);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -172,7 +172,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNotPhotoThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNotPhotoThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
@@ -201,7 +201,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms, true);
+                var id = _sut.SavePhoto(photo, ms, true);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -215,7 +215,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
+        public void SavePhotoToDiskAndDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
@@ -244,7 +244,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms, true);
+                var id = _sut.SavePhoto(photo, ms, true);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -259,7 +259,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoToDiskAndDBAndNotCreateAFeedWhenIsSpecifiedThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDiskAndDBAndNotCreateAFeedWhenIsSpecifiedThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -280,7 +280,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
                 //Act
 
-                var id = await _sut.SavePhotoAsync(photo, ms, false);
+                var id = _sut.SavePhoto(photo, ms, false);
 
                 //Assert
                 _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -294,7 +294,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public async Task SavePhotoRecordToDbButNotCallSaveToDiskWhenStreamIsEmpty_OnSavePhoto()
+        public void SavePhotoRecordToDbButNotCallSaveToDiskWhenStreamIsEmpty_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -314,7 +314,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = await _sut.SavePhotoAsync(photo, Stream.Null, false);
+            var id = _sut.SavePhoto(photo, Stream.Null, false);
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());

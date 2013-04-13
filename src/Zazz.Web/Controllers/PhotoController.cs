@@ -174,7 +174,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public async Task<ActionResult> Upload(HttpPostedFileBase image, string description, int? albumId)
+        public ActionResult Upload(HttpPostedFileBase image, string description, int? albumId)
         {
             using (_photoService)
             using (_albumService)
@@ -187,13 +187,13 @@ namespace Zazz.Web.Controllers
                     return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
                 }
 
-                await SaveImageAsync(image.InputStream, description, albumId);
+                SaveImage(image.InputStream, description, albumId);
             }
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-        public async Task<JsonNetResult> AjaxUpload(string description, int? albumId, HttpPostedFileBase image)
+        public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image)
         {
             using (_photoService)
             using (_albumService)
@@ -210,7 +210,7 @@ namespace Zazz.Web.Controllers
                     return new JsonNetResult(response);
                 }
 
-                var photo = await SaveImageAsync(image.InputStream, description, albumId);
+                var photo = SaveImage(image.InputStream, description, albumId);
                 response.PhotoId = photo.Id;
                 response.Success = true;
                 response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
@@ -219,7 +219,7 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        private async Task<Photo> SaveImageAsync(Stream image, string description, int? albumId)
+        private Photo SaveImage(Stream image, string description, int? albumId)
         {
 
             var userId = _userService.GetUserId(User.Identity.Name);
@@ -239,7 +239,7 @@ namespace Zazz.Web.Controllers
                             UserId = userId
                         };
 
-            await _photoService.SavePhotoAsync(photo, image, true);
+            _photoService.SavePhoto(photo, image, true);
             return photo;
         }
 

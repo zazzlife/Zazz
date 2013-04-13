@@ -883,7 +883,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(It.IsAny<string>()), Times.Never());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+            _photoService.Verify(x => x.SavePhoto(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
                                  Times.Never());
         }
 
@@ -912,7 +912,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(It.IsAny<string>()), Times.Never());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+            _photoService.Verify(x => x.SavePhoto(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
                                  Times.Never());
         }
 
@@ -967,7 +967,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
+            _photoService.Verify(x => x.SavePhoto(It.IsAny<Photo>(), It.IsAny<Stream>(), It.IsAny<bool>()),
                                  Times.Never());
         }
 
@@ -1004,8 +1004,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
                 .Returns(() => null);
             _uow.Setup(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()));
-            _photoService.Setup(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true))
-                         .Returns(() => Task.Run(() => 1));
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true))
+                         .Returns(1);
 
             //Act
             _sut.UpdatePagePhotos(page.FacebookId, limit);
@@ -1017,7 +1017,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true),
+            _photoService.Verify(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true),
                                  Times.Once());
         }
 
@@ -1062,8 +1062,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
                 .Returns(album);
-            _photoService.Setup(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true))
-                         .Returns(() => Task.Run(() => 1));
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true))
+                         .Returns(1);
 
             //Act
             _sut.UpdatePagePhotos(page.FacebookId, limit);
@@ -1075,7 +1075,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id), Times.Once());
             _uow.Verify(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _photoService.Verify(x => x.SavePhotoAsync(It.IsAny<Photo>(), Stream.Null, true),
+            _photoService.Verify(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true),
                                  Times.Once());
         }
     }

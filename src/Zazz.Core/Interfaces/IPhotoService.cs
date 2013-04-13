@@ -20,7 +20,7 @@ namespace Zazz.Core.Interfaces
 
         string GetPhotoDescription(int photoId);
         
-        Task<int> SavePhotoAsync(Photo photo, Stream data, bool showInFeed);
+        int SavePhoto(Photo photo, Stream data, bool showInFeed);
 
         void RemovePhoto(int photoId, int currentUserId);
 
