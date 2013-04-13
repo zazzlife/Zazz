@@ -133,6 +133,11 @@ namespace Zazz.Infrastructure.Services
                              {pathes.OriginalLink, new Size(1600, 1600)}
                          };
 
+                ImageCodecInfo jpg = GetEncoder(ImageFormat.Jpeg);
+                EncoderParameters encoderParams = new EncoderParameters(1);
+                EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, 60L);
+                encoderParams.Param[0] = encoderParam;
+
                 foreach (var image in images)
                 {
                     if (sourceImage.Width > image.Value.Width || sourceImage.Height > image.Value.Height)
@@ -156,20 +161,14 @@ namespace Zazz.Infrastructure.Services
                             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                             g.CompositingQuality = CompositingQuality.HighQuality;
 
-                            ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
-                            EncoderParameters encoderParams = new EncoderParameters(1);
-                            EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, 60L);
-
-                            encoderParams.Param[0] = encoderParam;
-
                             g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
-                            b.Save(image.Key, jgpEncoder, encoderParams);
+                            b.Save(image.Key, jpg, encoderParams);
                         }
                     }
                     else
                     {
                         // resize is not needed because the image is already smaller
-                        sourceImage.Save(image.Key);
+                        sourceImage.Save(image.Key, jpg, encoderParams);
                     }
                 }
             }
@@ -233,7 +232,7 @@ namespace Zazz.Infrastructure.Services
             _uow.UserRepository.ResetPhotoId(photoId);
             _uow.CommentRepository.RemovePhotoComments(photoId);
 
-            _uow.PhotoRepository.Remove((Photo)photo);
+            _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();
 
             var paths = GeneratePhotoFilePath(photo.UserId, photo.Id);
