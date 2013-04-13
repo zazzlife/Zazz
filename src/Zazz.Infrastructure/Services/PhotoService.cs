@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -150,9 +151,19 @@ namespace Zazz.Infrastructure.Services
                         using (var b = new Bitmap(newWidth, newHeight))
                         using (var g = Graphics.FromImage(b))
                         {
-                            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            g.SmoothingMode = SmoothingMode.HighQuality;
+                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                            g.CompositingQuality = CompositingQuality.HighQuality;
+
+                            ImageCodecInfo jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+                            EncoderParameters encoderParams = new EncoderParameters(1);
+                            EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, 60L);
+
+                            encoderParams.Param[0] = encoderParam;
+
                             g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
-                            b.Save(image.Key);
+                            b.Save(image.Key, jgpEncoder, encoderParams);
                         }
                     }
                     else
@@ -162,6 +173,21 @@ namespace Zazz.Infrastructure.Services
                     }
                 }
             }
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
         }
 
         public void RemovePhoto(int photoId, int currentUserId)
