@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -113,14 +114,55 @@ namespace Zazz.Infrastructure.Services
             }
 
             if (data != Stream.Null)
-                ResizeAndSaveImages(data);
+                ResizeAndSaveImages(data, photo.UserId, photo.Id);
 
             return photo.Id;
         }
 
-        private void ResizeAndSaveImages(Stream data)
+        private void ResizeAndSaveImages(Stream data, int userId, int photoId)
         {
-            throw new NotImplementedException();
+            var pathes = GeneratePhotoFilePath(userId, photoId);
+            var images = new Dictionary<string, Size>
+                         {
+                             {pathes.VerySmallLink, new Size(55, 55)},
+                             {pathes.SmallLink, new Size(175, 175)},
+                             {pathes.MediumLink, new Size(500, 500)},
+                             {pathes.OriginalLink, new Size(1600, 1600)}
+                         };
+
+            using (var sourceImage = Image.FromStream(data))
+            {
+                foreach (var image in images)
+                {
+                    if (sourceImage.Width > image.Value.Width || sourceImage.Height > image.Value.Height)
+                    {
+                        float nPercent = 0;
+                        float nPercentW = ((float)image.Value.Width / (float)sourceImage.Width);
+                        float nPercentH = ((float)image.Value.Height / (float)sourceImage.Height);
+
+                        if (nPercentH < nPercentW)
+                            nPercent = nPercentH;
+                        else
+                            nPercent = nPercentW;
+
+                        var destWidth = (int)(image.Value.Width * nPercent);
+                        var destHeight = (int)(image.Value.Height * nPercent);
+
+                        using (var b = new Bitmap(destWidth, destHeight))
+                        using (var g = Graphics.FromImage(b))
+                        {
+                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            g.DrawImage(sourceImage, 0, 0, destWidth, destHeight);
+                            b.Save(image.Key);
+                        }
+                    }
+                    else
+                    {
+                        // resize is not needed because the image is already smaller
+                        sourceImage.Save(image.Key);
+                    }
+                }
+            }
         }
 
         public void RemovePhoto(int photoId, int currentUserId)
