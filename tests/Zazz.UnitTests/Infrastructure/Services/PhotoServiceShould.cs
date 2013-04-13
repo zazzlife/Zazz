@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -107,29 +107,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
                 .Returns(() => null);
 
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-            using (var ms = new MemoryStream())
-            {
-                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
-                   .Returns(() => Task.Run(() => { }));
+            //Act
 
-                //Act
+            var id = _sut.SavePhoto(photo, Stream.Null, true);
 
-                var id = _sut.SavePhoto(photo, ms, true);
-
-                //Assert
-                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
-                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
-                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-                Assert.AreEqual(photo.Id, id);
-            }
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
         }
 
         [Test]
-        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsPhotoButItsOlderThan24HoursThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedIsPhotoButItsOlderThan24HoursThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
@@ -150,72 +142,56 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
                 .Returns(lastFeed);
 
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-            using (var ms = new MemoryStream())
-            {
-                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
-                   .Returns(() => Task.Run(() => { }));
+            //Act
 
-                //Act
+            var id = _sut.SavePhoto(photo, Stream.Null, true);
 
-                var id = _sut.SavePhoto(photo, ms, true);
-
-                //Assert
-                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
-                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
-                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-                Assert.AreEqual(photo.Id, id);
-            }
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
         }
 
         [Test]
-        public void SavePhotoToDiskAndDBAndCreateAFeedRecordWhenLastFeedIsNotPhotoThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedIsNotPhotoThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
-            {
-                FeedType = FeedType.Event,
-                Time = DateTime.UtcNow.AddHours(-2)
-            };
+                           {
+                               FeedType = FeedType.Event,
+                               Time = DateTime.UtcNow.AddHours(-2)
+                           };
 
             var photo = new Photo
-            {
-                Id = 1234,
-                AlbumId = 12,
-                Description = "desc",
-                UserId = 17
-            };
+                        {
+                            Id = 1234,
+                            AlbumId = 12,
+                            Description = "desc",
+                            UserId = 17
+                        };
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
             _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
                 .Returns(lastFeed);
 
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-            using (var ms = new MemoryStream())
-            {
-                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
-                   .Returns(() => Task.Run(() => { }));
+            //Act
 
-                //Act
+            var id = _sut.SavePhoto(photo, Stream.Null, true);
 
-                var id = _sut.SavePhoto(photo, ms, true);
-
-                //Assert
-                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
-                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
-                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-                Assert.AreEqual(photo.Id, id);
-            }
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
         }
 
         [Test]
-        public void SavePhotoToDiskAndDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
+        public void SavePhotoDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
         {
             //Arrange
             var lastFeed = new Feed
@@ -236,30 +212,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
                 .Returns(lastFeed);
 
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-            using (var ms = new MemoryStream())
-            {
-                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
-                   .Returns(() => Task.Run(() => { }));
+            var id = _sut.SavePhoto(photo, Stream.Null, true);
 
-                //Act
-
-                var id = _sut.SavePhoto(photo, ms, true);
-
-                //Assert
-                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
-                _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
-                Assert.IsNotNull(lastFeed.FeedPhotoIds.Single(p => p.PhotoId == photo.Id));
-                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-                Assert.AreEqual(photo.Id, id);
-            }
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+            Assert.IsNotNull(lastFeed.FeedPhotoIds.Single(p => p.PhotoId == photo.Id));
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
         }
 
         [Test]
-        public void SavePhotoToDiskAndDBAndNotCreateAFeedWhenIsSpecifiedThenReturnPhotoId_OnSavePhoto()
+        public void SavePhotoDBAndNotCreateAFeedWhenIsSpecifiedThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -272,25 +238,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-            using (var ms = new MemoryStream())
-            {
-                _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), ms))
-                   .Returns(() => Task.Run(() => { }));
+            //Act
 
-                //Act
+            var id = _sut.SavePhoto(photo, Stream.Null, false);
 
-                var id = _sut.SavePhoto(photo, ms, false);
-
-                //Assert
-                _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-                _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
-                _uow.Verify(x => x.SaveChanges(), Times.Once());
-                _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Never());
-                _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), ms), Times.Exactly(4)); //TODO: try specifing the image path
-                Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-                Assert.AreEqual(photo.Id, id);
-            }
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Never());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
         }
 
         [Test]
@@ -723,12 +681,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.OriginalLink, result.OriginalLink);
+            Assert.AreEqual(expected.MediumLink, result.MediumLink);
+            Assert.AreEqual(expected.SmallLink, result.SmallLink);
+            Assert.AreEqual(expected.VerySmallLink, result.VerySmallLink);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(It.IsAny<int>()), Times.Never());
             _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()), Times.Once());
         }
 
         [Test]
@@ -762,12 +723,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.OriginalLink, result.OriginalLink);
+            Assert.AreEqual(expected.MediumLink, result.MediumLink);
+            Assert.AreEqual(expected.SmallLink, result.SmallLink);
+            Assert.AreEqual(expected.VerySmallLink, result.VerySmallLink);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(userId), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
             _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()), Times.Once());
         }
 
         [Test]
@@ -803,12 +767,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.OriginalLink, result.OriginalLink);
+            Assert.AreEqual(expected.MediumLink, result.MediumLink);
+            Assert.AreEqual(expected.SmallLink, result.SmallLink);
+            Assert.AreEqual(expected.VerySmallLink, result.VerySmallLink);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
             _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()), Times.Once());
         }
 
         [Test]
@@ -850,12 +817,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetUserImageUrl(userId);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.OriginalLink, result.OriginalLink);
+            Assert.AreEqual(expected.MediumLink, result.MediumLink);
+            Assert.AreEqual(expected.SmallLink, result.SmallLink);
+            Assert.AreEqual(expected.VerySmallLink, result.VerySmallLink);
             _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
             _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Once());
+            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()), Times.Once());
         }
 
         [Test]
