@@ -276,6 +276,9 @@ namespace Zazz.Infrastructure.Services
         {
             _uow.Dispose();
             _eventService.Dispose();
+            _photoService.Dispose();
+            _postService.Dispose();
+            _albumService.Dispose();
         }
     }
 }

@@ -85,6 +85,7 @@ namespace Zazz.Infrastructure.Services
         public void Dispose()
         {
             _uow.Dispose();
+            _photoService.Dispose();
         }
     }
 }
