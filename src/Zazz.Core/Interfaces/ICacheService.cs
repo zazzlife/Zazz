@@ -19,6 +19,8 @@ namespace Zazz.Core.Interfaces
 
         PhotoLinks GetUserPhotoUrl(int userId);
 
-        void RemoveUserCache(string username, int userId);
+        void RemoveUserDisplayName(int userId);
+
+        void RemoveUserPhotoUrl(int userId);
     }
 }

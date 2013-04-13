@@ -130,22 +130,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ShouldRemoveToAllCachingSystems_OnRemoveUserCache()
+        public void ShouldRemoveUserDisplayName_OnRemoveUserDisplayName()
         {
             //Arrange
-            _userIdCache.Setup(x => x.Remove(_username));
             _photoUrlCache.Setup(x => x.Remove(_userId));
             _displayNameCache.Setup(x => x.Remove(_userId));
 
             //Act
-            _sut.RemoveUserCache(_username, _userId);
+            _sut.RemoveUserDisplayName(_userId);
 
             //Assert
-            _userIdCache.Verify(x => x.Remove(_username), Times.Once());
-            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Once());
+            _userIdCache.Verify(x => x.Remove(_username), Times.Never());
+            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Never());
             _displayNameCache.Verify(x => x.Remove(_userId), Times.Once());
         }
 
+        [Test]
+        public void ShouldRemoveUserPhotoUrl_OnRemoveUserPhotoUrl()
+        {
+            //Arrange
+            _photoUrlCache.Setup(x => x.Remove(_userId));
+            _displayNameCache.Setup(x => x.Remove(_userId));
 
+            //Act
+            _sut.RemoveUserPhotoUrl(_userId);
+
+            //Assert
+            _userIdCache.Verify(x => x.Remove(_username), Times.Never());
+            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Once());
+            _displayNameCache.Verify(x => x.Remove(_userId), Times.Never());
+        }
     }
 }

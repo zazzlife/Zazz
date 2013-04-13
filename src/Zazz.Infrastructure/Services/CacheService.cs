@@ -39,10 +39,13 @@ namespace Zazz.Infrastructure.Services
             return PhotoUrlCache.TryGet(userId);
         }
 
-        public void RemoveUserCache(string username, int userId)
+        public void RemoveUserDisplayName(int userId)
         {
-            UserIdCache.Remove(username);
             DisplayNameCache.Remove(userId);
+        }
+
+        public void RemoveUserPhotoUrl(int userId)
+        {
             PhotoUrlCache.Remove(userId);
         }
     }

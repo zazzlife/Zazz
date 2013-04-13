@@ -203,7 +203,7 @@ namespace Zazz.Web.Controllers
 
                     _uow.SaveChanges();
 
-                    _cacheService.RemoveUserCache(user.Username, user.Id);
+                    _cacheService.RemoveUserDisplayName(user.Id);
                     ShowAlert("Your preferences has been updated.", AlertType.Success);
                 }
             }
@@ -222,7 +222,7 @@ namespace Zazz.Web.Controllers
                 user.UserDetail.ProfilePhotoId = id;
 
                 _uow.SaveChanges();
-                _cacheService.RemoveUserCache(user.Username, user.Id);
+                _cacheService.RemoveUserPhotoUrl(user.Id);
             }
         }
 
