@@ -35,7 +35,7 @@ namespace Zazz.Core.Interfaces
         
         string GetUserName(int userId);
 
-        void ResetPhotoId(int photoId);
+        bool ResetPhotoId(int photoId);
 
         bool WantsFbEventsSynced(int userId);
 

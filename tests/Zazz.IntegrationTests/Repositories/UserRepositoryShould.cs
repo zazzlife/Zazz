@@ -621,6 +621,42 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void ReturnTrueIfRemovedImageWasAProfilePic_OnResetPicture()
+        {
+            //Arrange
+            var photoId = 12;
+            var user = Mother.GetUser();
+            user.UserDetail.ProfilePhotoId = photoId;
+
+            _zazzDbContext.Users.Add(user);
+            _zazzDbContext.SaveChanges();
+
+            //Act
+            var result = _repo.ResetPhotoId(photoId);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+
+        [Test]
+        public void ReturnFalseIfRemovedImageWasAProfilePic_OnResetPicture()
+        {
+            //Arrange
+            var photoId = 12;
+            var user = Mother.GetUser();
+            user.UserDetail.ProfilePhotoId = 13;
+
+            _zazzDbContext.Users.Add(user);
+            _zazzDbContext.SaveChanges();
+
+            //Act
+            var result = _repo.ResetPhotoId(photoId);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+        [Test]
         public void ReturnCorrectValue_OnWantsFbEventsSynced()
         {
             //Arrange

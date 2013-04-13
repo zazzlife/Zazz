@@ -119,11 +119,14 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public void ResetPhotoId(int photoId)
+        public bool ResetPhotoId(int photoId)
         {
+            var photoIdWasProfilePic = false;
+
             var profilePhotos = DbContext.UserDetails.Where(u => u.ProfilePhotoId == photoId);
             foreach (var u in profilePhotos)
             {
+                photoIdWasProfilePic = true;
                 u.ProfilePhotoId = 0;
             }
 
@@ -132,6 +135,8 @@ namespace Zazz.Data.Repositories
             {
                 u.CoverPhotoId = 0;
             }
+
+            return photoIdWasProfilePic;
         }
 
         public bool WantsFbEventsSynced(int userId)
