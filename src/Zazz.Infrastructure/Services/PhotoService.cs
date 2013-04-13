@@ -115,15 +115,17 @@ namespace Zazz.Infrastructure.Services
             }
 
             if (data != Stream.Null)
-                ResizeAndSaveImages(data, photo.UserId, photo.Id);
+                ResizeAndSaveImages(Image.FromStream(data), photo.UserId, photo.Id);
 
             return photo.Id;
         }
 
-        private void ResizeAndSaveImages(Stream data, int userId, int photoId)
+        private void ResizeAndSaveImages(Image sourceImage, int userId, int photoId)
         {
-            var pathes = GeneratePhotoFilePath(userId, photoId);
-            var images = new Dictionary<string, Size>
+            using (sourceImage)
+            {
+                var pathes = GeneratePhotoFilePath(userId, photoId);
+                var images = new Dictionary<string, Size>
                          {
                              {pathes.VerySmallLink, new Size(55, 55)},
                              {pathes.SmallLink, new Size(175, 175)},
@@ -131,8 +133,6 @@ namespace Zazz.Infrastructure.Services
                              {pathes.OriginalLink, new Size(1600, 1600)}
                          };
 
-            using (var sourceImage = Image.FromStream(data))
-            {
                 foreach (var image in images)
                 {
                     if (sourceImage.Width > image.Value.Width || sourceImage.Height > image.Value.Height)
@@ -140,7 +140,7 @@ namespace Zazz.Infrastructure.Services
                         // Figure out the ratio
                         double ratioX = (double)image.Value.Width / (double)sourceImage.Width;
                         double ratioY = (double)image.Value.Height / (double)sourceImage.Height;
-                        
+
                         // use whichever multiplier is smaller
                         var ratio = ratioX < ratioY ? ratioX : ratioY;
 
@@ -190,6 +190,21 @@ namespace Zazz.Infrastructure.Services
             return null;
         }
 
+        public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
+        {
+            if (photo.UserId != currentUserId)
+                throw new SecurityException();
+
+            var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
+
+            using (var bmp = new Bitmap(imgPath.OriginalLink))
+            using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
+            {
+                bmp.Dispose();
+                ResizeAndSaveImages(croppedBmp, photo.UserId, photo.Id);
+            }
+        }
+
         public void RemovePhoto(int photoId, int currentUserId)
         {
             var photo = _uow.PhotoRepository.GetById(photoId);
@@ -218,7 +233,7 @@ namespace Zazz.Infrastructure.Services
             _uow.UserRepository.ResetPhotoId(photoId);
             _uow.CommentRepository.RemovePhotoComments(photoId);
 
-            _uow.PhotoRepository.Remove((Photo) photo);
+            _uow.PhotoRepository.Remove((Photo)photo);
             _uow.SaveChanges();
 
             var paths = GeneratePhotoFilePath(photo.UserId, photo.Id);
@@ -283,24 +298,6 @@ namespace Zazz.Infrastructure.Services
             _cacheService.AddUserPhotoUrl(userId, img);
 
             return img;
-        }
-
-        //http://tech.pro/tutorial/620/csharp-tutorial-image-editing-saving-cropping-and-resizing
-        public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
-        {
-            //TODO: fix crop photo
-
-            //if (photo.UserId != currentUserId)
-            //    throw new SecurityException();
-
-            //var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
-
-            //using (var bmp = new Bitmap(imgPath))
-            //using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
-            //{
-            //    bmp.Dispose();
-            //    croppedBmp.Save(imgPath);
-            //}
         }
 
         public void Dispose()
