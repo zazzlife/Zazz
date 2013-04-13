@@ -137,6 +137,7 @@
     <Compile Include="Models\Facebook\FbUserChangesEntry.cs" />
     <Compile Include="Models\Facebook\FbVenue.cs" />
     <Compile Include="Models\Facebook\PictureSize.cs" />
+    <Compile Include="Models\PhotoLinks.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
