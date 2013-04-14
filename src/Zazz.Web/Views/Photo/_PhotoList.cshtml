@@ -10,7 +10,7 @@
         {
             <button data-id="@p.PhotoId" class="btn btn-small remove-img icononly-btn" title="Remove"><i class="icon-remove"></i></button>
         }
-        <img data-toggle="lightbox" data-target="#photo-@p.PhotoId" src="@p.PhotoUrl"/>
+        <img data-toggle="lightbox" data-target="#photo-@p.PhotoId" src="@p.PhotoUrl.MediumLink"/>
     </div>
     @Html.Partial("_LightBoxPartial", p)
 }

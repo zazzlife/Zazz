@@ -89,7 +89,13 @@ namespace Zazz.Web.Controllers
                          Photos = photosVm,
                          UserId = id,
                          ViewType = PhotoViewType.Photos,
-                         UserDisplayName = _userService.GetUserDisplayName(id)
+                         UserDisplayName = _userService.GetUserDisplayName(id),
+                         CurrentUserDisplayName = currentUserId == 0
+                                                      ? String.Empty
+                                                      : _userService.GetUserDisplayName(currentUserId),
+                         CurrentUserPhoto = currentUserId == 0
+                                                ? DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
+                                                : _photoService.GetUserImageUrl(currentUserId)
                      };
 
             return View("MainView", vm);
@@ -138,7 +144,13 @@ namespace Zazz.Web.Controllers
                              Albums = albumsVm,
                              UserId = id,
                              ViewType = PhotoViewType.Albums,
-                             UserDisplayName = _userService.GetUserDisplayName(id)
+                             UserDisplayName = _userService.GetUserDisplayName(id),
+                             CurrentUserDisplayName = currentUserId == 0
+                                                      ? String.Empty
+                                                      : _userService.GetUserDisplayName(currentUserId),
+                             CurrentUserPhoto = currentUserId == 0
+                                                    ? DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
+                                                    : _photoService.GetUserImageUrl(currentUserId)
                          };
 
             return View("MainView", fullVm);
