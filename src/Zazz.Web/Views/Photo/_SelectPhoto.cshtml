@@ -7,7 +7,7 @@
         @foreach (var p in Model)
         {
                 <div class="img" style="width: 115px; height: 115px;">
-                    <img src="@p.PhotoUrl" title="Click on photo to select it"  data-selectPhoto="1" data-id="@p.PhotoId" data-url="@p.PhotoUrl" />
+                    <img src="@p.PhotoUrl.SmallLink" title="Click on photo to select it"  data-selectPhoto="1" data-id="@p.PhotoId" data-url="@p.PhotoUrl.SmallLink" />
                 </div>
         }
     
