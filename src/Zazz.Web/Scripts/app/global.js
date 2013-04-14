@@ -523,6 +523,7 @@ $(document).on('click', '#load-feeds', function () {
                 self.fadeOut(function () {
                     data.appendTo(lastFeed).hide().slideDown();
                     self.remove();
+                    applyPageStyles();
                 });
 
             } else {
