@@ -242,6 +242,7 @@
     <Compile Include="Models\CommentsViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\CropViewMOdel.cs" />
+    <Compile Include="Models\EventDetailsPageViewModel.cs" />
     <Compile Include="Models\EventListSideViewModel.cs" />
     <Compile Include="Models\EventListViewModel.cs" />
     <Compile Include="Models\FbPageViewModel.cs" />

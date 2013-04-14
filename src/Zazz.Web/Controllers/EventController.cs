@@ -216,11 +216,24 @@ namespace Zazz.Web.Controllers
             using (_photoService)
             {
                 ViewBag.FormAction = "Create";
-                return View("EditForm", new EventViewModel
-                                        {
-                                            Time = DateTime.UtcNow,
-                                            UtcTime = DateTime.UtcNow.ToString("s")
-                                        });
+
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var displayName = _userService.GetUserDisplayName(userId);
+                var userPhoto = _photoService.GetUserImageUrl(userId);
+
+                var vm = new EventDetailsPageViewModel
+                         {
+                             UserDisplayName = displayName,
+                             UserPhoto = userPhoto,
+                             EventViewModel = new EventViewModel
+                                              {
+                                                  Time = DateTime.UtcNow,
+                                                  UtcTime = DateTime.UtcNow.ToString("s"),
+                                                  ImageUrl = DefaultImageHelper.GetDefaultAlbumImage()
+                                              }
+                         };
+
+                return View("EditForm", vm);
             }
         }
 
