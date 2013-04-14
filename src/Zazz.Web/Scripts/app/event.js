@@ -8,27 +8,14 @@ $(document).on('mouseenter', '.event', function () {
         return;
     }
 
-    var imgHeight = 300;
+    var imgMaxHeight = 300;
     var offset = self.offset();
     var elemWidth = self.width();
     var elemHeight = self.height();
     var top, left;
+    var side = self.parent().parent().attr('data-eventImgSide');
     
     var centerY = offset.top + (elemHeight / 2);
-    top = centerY - (imgHeight / 2);
-
-    var side = self.parent().parent().attr('data-eventImgSide');
-    if (side == "left") {
-        
-        self.addClass('event-arrow-left');
-
-        left = offset.left - elemWidth - 60;
-
-    } else {
-        
-        self.addClass('event-arrow-right');
-        left = offset.left + elemWidth + 30;
-    }
 
     eventLargeImg = $('<img />', {
         src: img,
@@ -36,12 +23,30 @@ $(document).on('mouseenter', '.event', function () {
 
     eventLargeImg.css({
         'position': 'absolute',
-        'max-height': imgHeight + 'px',
-        'top': top,
-        'left': left
+        'max-height': imgMaxHeight + 'px'
     });
 
-    eventLargeImg.appendTo($('article'));
+    eventLargeImg.appendTo($('article')).hide();
+
+    eventLargeImg.ensureLoad(function () {
+        
+        if (side == "left") {
+            self.addClass('event-arrow-left');
+            left = offset.left - eventLargeImg.width() - 15;
+        } else {
+            self.addClass('event-arrow-right');
+            left = offset.left + elemWidth + 30;
+        }
+
+        top = (centerY - eventLargeImg.height() / 2);
+
+        eventLargeImg.css({
+            'left': left,
+            'top': top
+        });
+
+        eventLargeImg.show();
+    });
 });
 
 $(document).on('mouseleave', '.event', function () {
