@@ -125,26 +125,47 @@ namespace Zazz.Infrastructure.Services
             using (sourceImage)
             {
                 var pathes = GeneratePhotoFilePath(userId, photoId);
-                var images = new Dictionary<string, Size>
-                         {
-                             {pathes.VerySmallLink, new Size(55, 55)},
-                             {pathes.SmallLink, new Size(175, 175)},
-                             {pathes.MediumLink, new Size(500, 500)},
-                             {pathes.OriginalLink, new Size(1600, 1600)}
-                         };
+                var images = new[]
+                             {
+                                 new
+                                 {
+                                     path = pathes.VerySmallLink,
+                                     size = new Size(55, 55),
+                                     quality = 95L
+                                 },
+                                 new
+                                 {
+                                     path = pathes.SmallLink,
+                                     size = new Size(175, 175),
+                                     quality = 85L
+                                 },
+                                 new
+                                 {
+                                     path = pathes.MediumLink,
+                                     size = new Size(500, 500),
+                                     quality = 70L
+                                 },
+                                 new
+                                 {
+                                     path = pathes.OriginalLink,
+                                     size = new Size(1600, 1600),
+                                     quality = 60L
+                                 }
+                             };
 
                 ImageCodecInfo jpg = GetEncoder(ImageFormat.Jpeg);
                 EncoderParameters encoderParams = new EncoderParameters(1);
-                EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, 60L);
-                encoderParams.Param[0] = encoderParam;
 
                 foreach (var image in images)
                 {
-                    if (sourceImage.Width > image.Value.Width || sourceImage.Height > image.Value.Height)
+                    EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, image.quality);
+                    encoderParams.Param[0] = encoderParam;
+
+                    if (sourceImage.Width > image.size.Width || sourceImage.Height > image.size.Height)
                     {
                         // Figure out the ratio
-                        double ratioX = (double)image.Value.Width / (double)sourceImage.Width;
-                        double ratioY = (double)image.Value.Height / (double)sourceImage.Height;
+                        double ratioX = (double)image.size.Width / (double)sourceImage.Width;
+                        double ratioY = (double)image.size.Height / (double)sourceImage.Height;
 
                         // use whichever multiplier is smaller
                         var ratio = ratioX < ratioY ? ratioX : ratioY;
@@ -162,13 +183,13 @@ namespace Zazz.Infrastructure.Services
                             g.CompositingQuality = CompositingQuality.HighQuality;
 
                             g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
-                            b.Save(image.Key, jpg, encoderParams);
+                            b.Save(image.path, jpg, encoderParams);
                         }
                     }
                     else
                     {
                         // resize is not needed because the image is already smaller
-                        sourceImage.Save(image.Key, jpg, encoderParams);
+                        sourceImage.Save(image.path, jpg, encoderParams);
                     }
                 }
             }
