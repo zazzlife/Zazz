@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
-    public class UserProfileViewModel
+    public class UserProfileViewModel : BaseLayoutViewModel
     {
         public string CoverPhotoUrl { get; set; }
 

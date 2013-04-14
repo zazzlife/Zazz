@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
                 }
 
                 // User Name
-                var username = String.IsNullOrEmpty(user.UserDetail.FullName)
+                var displayName = String.IsNullOrEmpty(user.UserDetail.FullName)
                                       ? user.Username
                                       : user.UserDetail.FullName;
 
@@ -91,9 +91,11 @@ namespace Zazz.Web.Controllers
 
                 var vm = new UserProfileViewModel
                          {
+                             UserDisplayName = displayName,
+                             UserPhoto = profilePhotoUrl,
                              UserPhotoUrl = profilePhotoUrl,
                              CoverPhotoUrl = coverPhotoUrl,
-                             UserName = username,
+                             UserName = displayName,
                              IsSelf = user.Id == currentUserId,
                              FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
                              AccountType = user.AccountType,
