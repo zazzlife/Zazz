@@ -36,11 +36,12 @@ namespace Zazz.Web.Controllers
                     var user = _userService.GetUser(User.Identity.Name);
                     var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(user.Id);
 
-
                     var vm = new UserHomeViewModel
                              {
                                  AccountType = user.AccountType,
-                                 Feeds = feeds
+                                 Feeds = feeds,
+                                 UserDisplayName = _userService.GetUserDisplayName(user.Id),
+                                 UserPhoto = _photoService.GetUserImageUrl(user.Id)
                              };
 
                     return View("UserHome", vm);
