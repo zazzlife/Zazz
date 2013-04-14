@@ -25,5 +25,10 @@ namespace Zazz.Infrastructure
         {
             return new PhotoLinks("/Images/placeholder.gif");
         }
+
+        public static PhotoLinks GetDefaultEventImage()
+        {
+            return new PhotoLinks("/Images/placeholder.gif");
+        }
     }
 }

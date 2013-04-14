@@ -4,6 +4,7 @@ using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Helpers
@@ -129,9 +130,14 @@ namespace Zazz.Web.Helpers
                     if (feedVm.EventViewModel.PhotoId.HasValue)
                     {
                         var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
-                        feedVm.EventViewModel.ImageUrl =
-                            _photoService.GeneratePhotoUrl(photo.UserId,
-                                                           photo.Id);
+                        feedVm.EventViewModel.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId,
+                                                                                        photo.Id);
+                    }
+
+                    if (feedVm.EventViewModel.ImageUrl == null)
+                    {
+                        // this event doesn't have a picture
+                        feedVm.EventViewModel.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     }
 
                     feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
