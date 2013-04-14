@@ -39,9 +39,11 @@ namespace Zazz.Web.DependencyResolution
                                         scan.WithDefaultConventions();
                                     });
 
+                            x.For<ICacheService>().Singleton().Use<CacheService>();
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
-                            x.For<IUoW>().HttpContextScoped().Use<UoW>();
                             
+                            x.For<IUoW>().HttpContextScoped().Use<UoW>();
+
                             // Services
                             x.For<IAlbumService>().Use<AlbumService>();
                             x.For<IAuthService>().Use<AuthService>();
@@ -51,10 +53,10 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFollowService>().Use<FollowService>();
                             x.For<IPostService>().Use<PostService>();
                             x.For<IFacebookService>().Use<FacebookService>();
-                            x.For<ICacheService>().Use<CacheService>();
+                            
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory);
-                            x.For<IEventService>().Singleton().Use<EventService>();
+                            x.For<IEventService>().Use<EventService>();
                             x.For<IUserService>().Use<UserService>();
 
                             // Helpers
