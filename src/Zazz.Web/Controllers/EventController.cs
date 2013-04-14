@@ -50,8 +50,8 @@ namespace Zazz.Web.Controllers
 
             var vm = new EventListViewModel
                      {
-                         UserDisplayName = userDisplayName,
-                         UserPhoto = userPhoto,
+                         CurrentUserDisplayName = userDisplayName,
+                         CurrentUserPhoto = userPhoto,
                          MonthEvents = new EventListSideViewModel
                                        {
                                            Events = GetMonthEvents(),
@@ -194,8 +194,8 @@ namespace Zazz.Web.Controllers
 
             var vm = new EventDetailsPageViewModel
                      {
-                         UserDisplayName = displayName,
-                         UserPhoto = userPhoto,
+                         CurrentUserDisplayName = displayName,
+                         CurrentUserPhoto = userPhoto,
                          EventViewModel = new EventViewModel
                                           {
                                               Time = DateTime.UtcNow,
@@ -223,8 +223,8 @@ namespace Zazz.Web.Controllers
                 return Redirect("~/event/show/" + zazzEvent.Id);
             }
 
-            vm.UserDisplayName = _userService.GetUserDisplayName(userId);
-            vm.UserPhoto = _photoService.GetUserImageUrl(userId);
+            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(userId);
+            vm.CurrentUserPhoto = _photoService.GetUserImageUrl(userId);
 
             ViewBag.FormAction = "Create";
             return View("EditForm", vm);
@@ -242,8 +242,8 @@ namespace Zazz.Web.Controllers
             var vm = new EventDetailsPageViewModel
                      {
                          EventViewModel = eventVm,
-                         UserDisplayName = displayName,
-                         UserPhoto = userPhoto
+                         CurrentUserDisplayName = displayName,
+                         CurrentUserPhoto = userPhoto
                      };
 
             return View(vm);
@@ -259,8 +259,8 @@ namespace Zazz.Web.Controllers
             var vm = new EventDetailsPageViewModel
                      {
                          EventViewModel = GetEvent(id, true),
-                         UserDisplayName = displayName,
-                         UserPhoto = userPhoto
+                         CurrentUserDisplayName = displayName,
+                         CurrentUserPhoto = userPhoto
                      };
              
             ViewBag.FormAction = "Edit";
@@ -287,8 +287,8 @@ namespace Zazz.Web.Controllers
             var displayName = _userService.GetUserDisplayName(userId);
             var userPhoto = _photoService.GetUserImageUrl(userId);
 
-            vm.UserDisplayName = displayName;
-            vm.UserPhoto = userPhoto;
+            vm.CurrentUserDisplayName = displayName;
+            vm.CurrentUserPhoto = userPhoto;
 
             return View("EditForm", vm);
         }

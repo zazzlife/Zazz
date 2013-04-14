@@ -36,8 +36,8 @@ namespace Zazz.Web.Controllers
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             UserDisplayName = _userService.GetUserDisplayName(user.Id),
-                             UserPhoto = _photoService.GetUserImageUrl(user.Id)
+                             CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                             CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id)
                          };
 
                 return View("UserHome", vm);

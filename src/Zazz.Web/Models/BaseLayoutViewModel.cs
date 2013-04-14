@@ -7,8 +7,8 @@ namespace Zazz.Web.Models
     /// </summary>
     public abstract class BaseLayoutViewModel
     {
-        public string UserDisplayName { get; set; }
+        public string CurrentUserDisplayName { get; set; }
 
-        public PhotoLinks UserPhoto { get; set; }
+        public PhotoLinks CurrentUserPhoto { get; set; }
     }
 }
