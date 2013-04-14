@@ -252,26 +252,43 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Edit(int id)
         {
-            var vm = GetEvent(id, true);
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var displayName = _userService.GetUserDisplayName(userId);
+            var userPhoto = _photoService.GetUserImageUrl(userId);
+
+            var vm = new EventDetailsPageViewModel
+                     {
+                         EventViewModel = GetEvent(id, true),
+                         UserDisplayName = displayName,
+                         UserPhoto = userPhoto
+                     };
+             
             ViewBag.FormAction = "Edit";
 
             return View("EditForm", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, EventViewModel vm)
+        public ActionResult Edit(int id, EventDetailsPageViewModel vm)
         {
+            var userId = _userService.GetUserId(User.Identity.Name);
+
             if (ModelState.IsValid)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var post = EventViewModelToZazzEvent(vm, userId);
+                var post = EventViewModelToZazzEvent(vm.EventViewModel, userId);
                 post.Id = id;
-                post.CreatedDate = vm.CreatedDate.Value;
+                post.CreatedDate = vm.EventViewModel.CreatedDate.Value;
 
                 _eventService.UpdateEvent(post, userId);
 
                 return Redirect("~/event/show/" + id);
             }
+
+            var displayName = _userService.GetUserDisplayName(userId);
+            var userPhoto = _photoService.GetUserImageUrl(userId);
+
+            vm.UserDisplayName = displayName;
+            vm.UserPhoto = userPhoto;
 
             return View("EditForm", vm);
         }

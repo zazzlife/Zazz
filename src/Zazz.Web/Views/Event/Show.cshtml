@@ -16,7 +16,7 @@
     <div class="margin-ten">
         <strong class="pull-right">@Model.EventViewModel.Time</strong>
 
-        <img src="@Model.EventViewModel.ImageUrl" style="width: 128px;" />
+        <img src="@Model.EventViewModel.ImageUrl.SmallLink" style="width: 128px;" />
 
         <p class="event-detail">@Model.EventViewModel.Description</p>
         @if (Model.EventViewModel.Price.HasValue)
