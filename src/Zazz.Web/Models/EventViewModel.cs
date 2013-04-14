@@ -45,6 +45,9 @@ namespace Zazz.Web.Models
         public long? FacebookEventId { get; set; }
 
         [Display(AutoGenerateField = false)]
+        public string FacebookPhotoUrl { get; set; }
+
+        [Display(AutoGenerateField = false)]
         public bool IsDateOnly { get; set; }
 
         [Display(AutoGenerateField = false)]

@@ -42,7 +42,7 @@ namespace Zazz.Data.Repositories
             var query = DbSet.AsQueryable();
             
 
-            if (!from2.HasValue && to2.HasValue)
+            if (!from2.HasValue || !to2.HasValue)
             {
                 query = DbSet.Where(p => EntityFunctions.TruncateTime(p.TimeUtc) >= from)
                              .Where(p => EntityFunctions.TruncateTime(p.TimeUtc) <= to);

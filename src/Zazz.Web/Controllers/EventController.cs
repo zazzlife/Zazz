@@ -10,6 +10,7 @@ using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -33,49 +34,84 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("List");
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
+            {
+                return RedirectToAction("List");
+            }
         }
 
         public ActionResult List()
         {
-            var vm = new EventListViewModel
-                     {
-                         MonthEvents = new EventListSideViewModel
-                                       {
-                                           Events = GetMonthEvents(),
-                                           EventsRange = EventRange.Month
-                                       },
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
+            {
+                var userDisplayName = String.Empty;
+                var userPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+                if (Request.IsAuthenticated)
+                {
+                    var userId = _userService.GetUserId(User.Identity.Name);
+                    userDisplayName = _userService.GetUserDisplayName(userId);
+                    userPhoto = _photoService.GetUserImageUrl(userId);
+                }
 
-                         WeekEvents = new EventListSideViewModel
-                                      {
-                                          Events = GetWeekEvents(),
-                                          EventsRange = EventRange.Week
-                                      }
-                     };
+                var vm = new EventListViewModel
+                         {
+                             UserDisplayName = userDisplayName,
+                             UserPhoto = userPhoto,
+                             MonthEvents = new EventListSideViewModel
+                                           {
+                                               Events = GetMonthEvents(),
+                                               EventsRange = EventRange.Month
+                                           },
 
-            return View(vm);
+                             WeekEvents = new EventListSideViewModel
+                                          {
+                                              Events = GetWeekEvents(),
+                                              EventsRange = EventRange.Week
+                                          }
+                         };
+
+                return View(vm);
+            }
         }
 
         public ActionResult Week(int page)
         {
-            var vm = new EventListSideViewModel
-                     {
-                         Events = GetWeekEvents(page),
-                         EventsRange = EventRange.Week
-                     };
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
+            {
+                var vm = new EventListSideViewModel
+                         {
+                             Events = GetWeekEvents(page),
+                             EventsRange = EventRange.Week
+                         };
 
-            return View("_EventsListPartial", vm);
+                return View("_EventsListPartial", vm);
+            }
         }
 
         public ActionResult Month(int page)
         {
-            var vm = new EventListSideViewModel
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
             {
-                Events = GetMonthEvents(page),
-                EventsRange = EventRange.Month
-            };
+                var vm = new EventListSideViewModel
+                         {
+                             Events = GetMonthEvents(page),
+                             EventsRange = EventRange.Month
+                         };
 
-            return View("_EventsListPartial", vm);
+                return View("_EventsListPartial", vm);
+            }
         }
 
         private void GetThisWeek(out DateTime firstDayOfWeek, out DateTime lastDayOfWeek)
@@ -123,34 +159,45 @@ namespace Zazz.Web.Controllers
                              .Skip(skip)
                              .Take(PAGE_SIZE)
                              .Select(e => new EventViewModel
-                             {
-                                 City = e.City,
-                                 Id = e.Id,
-                                 CreatedDate = e.CreatedDate,
-                                 Description = e.Description,
-                                 Latitude = e.Latitude,
-                                 Longitude = e.Longitude,
-                                 Location = e.Location,
-                                 Name = e.Name,
-                                 Price = e.Price,
-                                 Street = e.Street,
-                                 Time = e.Time,
-                                 PhotoId = e.PhotoId,
-                                 IsFacebookEvent = e.IsFacebookEvent,
-                                 ImageUrl = e.IsFacebookEvent ? new PhotoLinks(e.FacebookPhotoLink) : null,
-                                 IsDateOnly = e.IsDateOnly,
-                                 FacebookEventId = e.FacebookEventId
-                             }).ToList();
+                                          {
+                                              City = e.City,
+                                              Id = e.Id,
+                                              CreatedDate = e.CreatedDate,
+                                              Description = e.Description,
+                                              Latitude = e.Latitude,
+                                              Longitude = e.Longitude,
+                                              Location = e.Location,
+                                              Name = e.Name,
+                                              Price = e.Price,
+                                              Street = e.Street,
+                                              Time = e.Time,
+                                              PhotoId = e.PhotoId,
+                                              IsFacebookEvent = e.IsFacebookEvent,
+                                              FacebookPhotoUrl = e.FacebookPhotoLink,
+                                              IsDateOnly = e.IsDateOnly,
+                                              FacebookEventId = e.FacebookEventId
+                                          }).ToList();
 
             foreach (var e in events)
             {
+                if (e.IsFacebookEvent)
+                {
+                    e.ImageUrl = new PhotoLinks(e.FacebookPhotoUrl);
+                    continue;
+                }
 
                 if (!e.PhotoId.HasValue)
+                {
+                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     continue;
+                }   
 
                 var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
                 if (photo == null)
+                {
+                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     continue;
+                }
 
                 e.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
             }
@@ -206,41 +253,59 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Show(int id)
         {
-            var vm = GetEventAsync(id, false);
-            return View(vm);
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
+            {
+                var vm = GetEvent(id, false);
+                return View(vm);
+            }
         }
 
         [HttpGet, Authorize]
         public ActionResult Edit(int id)
         {
-            var vm = GetEventAsync(id, true);
-            ViewBag.FormAction = "Edit";
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
+            {
+                var vm = GetEvent(id, true);
+                ViewBag.FormAction = "Edit";
 
-            return View("EditForm", vm);
+                return View("EditForm", vm);
+            }
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EventViewModel vm)
         {
-            if (ModelState.IsValid)
+            using (_userService)
+            using (_eventService)
+            using (_uow)
+            using (_photoService)
             {
-                using (_userService)
-                using (_eventService)
-                using (_uow)
-                using (_photoService)
+                if (ModelState.IsValid)
                 {
-                    var userId = _userService.GetUserId(User.Identity.Name);
-                    var post = EventViewModelToZazzEvent(vm, userId);
-                    post.Id = id;
-                    post.CreatedDate = vm.CreatedDate.Value;
+                    using (_userService)
+                    using (_eventService)
+                    using (_uow)
+                    using (_photoService)
+                    {
+                        var userId = _userService.GetUserId(User.Identity.Name);
+                        var post = EventViewModelToZazzEvent(vm, userId);
+                        post.Id = id;
+                        post.CreatedDate = vm.CreatedDate.Value;
 
-                    _eventService.UpdateEvent(post, userId);
+                        _eventService.UpdateEvent(post, userId);
+                    }
+
+                    return Redirect("~/event/show/" + id);
                 }
 
-                return Redirect("~/event/show/" + id);
+                return View("EditForm", vm);
             }
-
-            return View("EditForm", vm);
         }
 
         [Authorize]
@@ -281,7 +346,7 @@ namespace Zazz.Web.Controllers
             return post;
         }
 
-        public EventViewModel GetEventAsync(int id, bool ownerOnly)
+        private EventViewModel GetEvent(int id, bool ownerOnly)
         {
             using (_userService)
             using (_eventService)
