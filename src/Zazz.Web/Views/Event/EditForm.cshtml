@@ -25,11 +25,11 @@
                 </div>
                 @if (Model != null && Model.EventViewModel.PhotoId.HasValue)
                 {
-                    <input name="photoId" id="photoId" type="hidden" value="@Model.EventViewModel.PhotoId.Value"/>
+                    <input name="EventViewModel.PhotoId" id="photoId" type="hidden" value="@Model.EventViewModel.PhotoId.Value"/>
                 }
                 else
                 {
-                    <input name="photoId" id="photoId" type="hidden"/>
+                    <input name="EventViewModel.PhotoId" id="photoId" type="hidden"/>
                 }
 
                 <img src="@Model.EventViewModel.ImageUrl.SmallLink" id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
