@@ -238,29 +238,38 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
-        public ActionResult Create(EventViewModel vm)
+        public ActionResult Create(EventViewModel eventVm)
         {
             using (_userService)
             using (_eventService)
             using (_uow)
             using (_photoService)
             {
+                var userId = _userService.GetUserId(User.Identity.Name);
+                if (userId == 0)
+                    throw new HttpException(401, "Unauthorized");
+
                 if (ModelState.IsValid)
                 {
-                    var userId = _userService.GetUserId(User.Identity.Name);
-                    if (userId == 0)
-                        throw new HttpException(401, "Unauthorized");
-
-                    var zazzEvent = EventViewModelToZazzEvent(vm, userId);
+                    var zazzEvent = EventViewModelToZazzEvent(eventVm, userId);
                     zazzEvent.CreatedDate = DateTime.UtcNow;
 
                     _eventService.CreateEvent(zazzEvent);
                     return Redirect("~/event/show/" + zazzEvent.Id);
                 }
-            }
+                
+                var displayName = _userService.GetUserDisplayName(userId);
+                var userPhoto = _photoService.GetUserImageUrl(userId);
+                var vm = new EventDetailsPageViewModel
+                         {
+                             EventViewModel = eventVm,
+                             UserDisplayName = displayName,
+                             UserPhoto = userPhoto
+                         };
 
-            ViewBag.FormAction = "Create";
-            return View("EditForm");
+                ViewBag.FormAction = "Create";
+                return View("EditForm", vm);
+            }
         }
 
         [HttpGet, Authorize]
