@@ -9,8 +9,8 @@
         @* LEFT PANEL *@
         <section class="left-panel">
             <div class="user">
-                <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserImageUrl", "User")" />
-                <a href="~/user" class="username">@Html.Action("GetCurrentUserDisplayName", "User")</a>
+                <img class="user-img img-rounded img-polaroid" src="@Model.UserPhoto.VerySmallLink" />
+                <a href="~/user" class="username">@Model.UserDisplayName</a>
             </div>
             <ul class="nav nav-list">
                 <li class="divider"></li>
