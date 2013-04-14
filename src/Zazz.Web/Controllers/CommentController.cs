@@ -28,157 +28,132 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Get(int id, CommentType commentType, int lastComment)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                if (id == 0)
-                    throw new ArgumentException("Id cannot be 0", "id");
+            if (id == 0)
+                throw new ArgumentException("Id cannot be 0", "id");
 
-                if (lastComment == 0)
-                    throw new ArgumentException("Last Comment cannot be 0", "lastComment");
+            if (lastComment == 0)
+                throw new ArgumentException("Last Comment cannot be 0", "lastComment");
 
-                var userId = 0;
-                if (User.Identity.IsAuthenticated)
-                    userId = _userService.GetUserId(User.Identity.Name);
+            var userId = 0;
+            if (User.Identity.IsAuthenticated)
+                userId = _userService.GetUserId(User.Identity.Name);
 
-                var feedHelper = new FeedHelper(_uow, _userService, _photoService);
-                var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
-                return View("FeedItems/_CommentList", comments);
-            }
+            return View("FeedItems/_CommentList", comments);
         }
 
         [Authorize]
         public ActionResult LightboxComments(int id)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                if (id == 0)
-                    throw new ArgumentException("Id cannot be 0", "id");
+            if (id == 0)
+                throw new ArgumentException("Id cannot be 0", "id");
 
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
 
-                var vm = new CommentsViewModel
-                         {
-                             CommentType = CommentType.Photo,
-                             ItemId = id,
-                             CurrentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId),
-                             Comments = feedHelper.GetComments(id, CommentType.Photo, currentUserId)
-                         };
+            var vm = new CommentsViewModel
+                     {
+                         CommentType = CommentType.Photo,
+                         ItemId = id,
+                         CurrentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId),
+                         Comments = feedHelper.GetComments(id, CommentType.Photo, currentUserId)
+                     };
 
-                return View("FeedItems/_FeedComments", vm);
-            }
+            return View("FeedItems/_FeedComments", vm);
         }
 
         [Authorize, HttpPost]
         public ActionResult New(int id, CommentType commentType, string comment)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
+            if (String.IsNullOrEmpty(comment))
+                throw new ArgumentNullException("comment");
+
+            if (id == 0)
+                throw new ArgumentException("Id cannot be 0", "id");
+
+            var userId = _userService.GetUserId(User.Identity.Name);
+            if (userId == 0)
+                throw new SecurityException();
+
+            var c = new Comment
+                    {
+                        FromId = userId,
+                        Message = comment,
+                        Time = DateTime.UtcNow
+                    };
+
+            if (commentType == CommentType.Event)
             {
-                if (String.IsNullOrEmpty(comment))
-                    throw new ArgumentNullException("comment");
-
-                if (id == 0)
-                    throw new ArgumentException("Id cannot be 0", "id");
-
-                var userId = _userService.GetUserId(User.Identity.Name);
-                if (userId == 0)
-                    throw new SecurityException();
-
-                var c = new Comment
-                        {
-                            FromId = userId,
-                            Message = comment,
-                            Time = DateTime.UtcNow
-                        };
-
-                if (commentType == CommentType.Event)
-                {
-                    c.EventId = id;
-                }
-                else if (commentType == CommentType.Photo)
-                {
-                    c.PhotoId = id;
-                }
-                else if (commentType == CommentType.Post)
-                {
-                    c.PostId = id;
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid feed type", "commentType");
-                }
-
-                _uow.CommentRepository.InsertGraph(c);
-                _uow.SaveChanges();
-
-                var commentVm = new CommentViewModel
-                                {
-                                    CommentId = c.Id,
-                                    CommentText = c.Message,
-                                    IsFromCurrentUser = userId == c.FromId,
-                                    Time = c.Time,
-                                    UserId = c.FromId,
-                                    UserDisplayName = _userService.GetUserDisplayName(userId),
-                                    UserPhotoUrl = _photoService.GetUserImageUrl(userId)
-                                };
-
-                return View("FeedItems/_SingleComment", commentVm);
+                c.EventId = id;
             }
+            else if (commentType == CommentType.Photo)
+            {
+                c.PhotoId = id;
+            }
+            else if (commentType == CommentType.Post)
+            {
+                c.PostId = id;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid feed type", "commentType");
+            }
+
+            _uow.CommentRepository.InsertGraph(c);
+            _uow.SaveChanges();
+
+            var commentVm = new CommentViewModel
+                            {
+                                CommentId = c.Id,
+                                CommentText = c.Message,
+                                IsFromCurrentUser = userId == c.FromId,
+                                Time = c.Time,
+                                UserId = c.FromId,
+                                UserDisplayName = _userService.GetUserDisplayName(userId),
+                                UserPhotoUrl = _photoService.GetUserImageUrl(userId)
+                            };
+
+            return View("FeedItems/_SingleComment", commentVm);
         }
 
         [Authorize]
         public void Remove(int id)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                if (id == 0)
-                    throw new ArgumentException("Id cannot be 0", "id");
+            if (id == 0)
+                throw new ArgumentException("Id cannot be 0", "id");
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var comment = _uow.CommentRepository.GetById(id);
-                if (comment == null)
-                    return;
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var comment = _uow.CommentRepository.GetById(id);
+            if (comment == null)
+                return;
 
-                if (comment.FromId != userId)
-                    throw new SecurityException();
+            if (comment.FromId != userId)
+                throw new SecurityException();
 
-                _uow.CommentRepository.Remove((Comment) comment);
+            _uow.CommentRepository.Remove((Comment)comment);
 
-                _uow.SaveChanges();
-            }
+            _uow.SaveChanges();
         }
 
         [Authorize, HttpPost]
         public void Edit(int id, string comment)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                if (id == 0)
-                    throw new ArgumentException("Id cannot be 0", "id");
+            if (id == 0)
+                throw new ArgumentException("Id cannot be 0", "id");
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var c = _uow.CommentRepository.GetById(id);
-                if (c == null)
-                    return;
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var c = _uow.CommentRepository.GetById(id);
+            if (c == null)
+                return;
 
-                if (c.FromId != userId)
-                    throw new SecurityException();
+            if (c.FromId != userId)
+                throw new SecurityException();
 
-                c.Message = comment;
+            c.Message = comment;
 
-                _uow.SaveChanges();
-            }
+            _uow.SaveChanges();
         }
     }
 }

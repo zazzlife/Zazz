@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IUserService : IDisposable
+    public interface IUserService
     {
         AccountType GetUserAccountType(int userId);
 

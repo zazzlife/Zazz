@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using StructureMap;
 using log4net;
 
 namespace Zazz.Web
@@ -39,6 +40,11 @@ namespace Zazz.Web
             log.Info("Application Started");
             log.Info("=========================");
 
+        }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects();
         }
     }
 }

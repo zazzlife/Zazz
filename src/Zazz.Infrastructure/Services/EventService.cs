@@ -71,10 +71,5 @@ namespace Zazz.Infrastructure.Services
             _uow.EventRepository.Remove(eventId);
             _uow.SaveChanges();
         }
-
-        public void Dispose()
-        {
-            _uow.Dispose();
-        }
     }
 }

@@ -27,96 +27,82 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Index()
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
-                {
-                    var user = _userService.GetUser(User.Identity.Name);
-                    var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(user.Id);
+                var user = _userService.GetUser(User.Identity.Name);
+                var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(user.Id);
 
-                    var vm = new UserHomeViewModel
-                             {
-                                 AccountType = user.AccountType,
-                                 Feeds = feeds,
-                                 UserDisplayName = _userService.GetUserDisplayName(user.Id),
-                                 UserPhoto = _photoService.GetUserImageUrl(user.Id)
-                             };
+                var vm = new UserHomeViewModel
+                         {
+                             AccountType = user.AccountType,
+                             Feeds = feeds,
+                             UserDisplayName = _userService.GetUserDisplayName(user.Id),
+                             UserPhoto = _photoService.GetUserImageUrl(user.Id)
+                         };
 
-                    return View("UserHome", vm);
-                }
-                else
-                {
-                    return View("LandingPage");
-                }
+                return View("UserHome", vm);
+            }
+            else
+            {
+                return View("LandingPage");
             }
         }
 
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                var user = _userService.GetUser(User.Identity.Name);
-                var feeds = new FeedHelper(_uow, _userService, _photoService)
-                                      .GetFeeds(user.Id, lastFeedId);
 
-                return View("_FeedsPartial", feeds);
-            }
+            var user = _userService.GetUser(User.Identity.Name);
+            var feeds = new FeedHelper(_uow, _userService, _photoService)
+                                  .GetFeeds(user.Id, lastFeedId);
+
+            return View("_FeedsPartial", feeds);
         }
 
         public JsonNetResult Search(string q)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
+            var users = _uow.UserRepository.GetAll()
+                            .Where(u =>
+                                u.UserDetail.FullName.Contains(q) ||
+                                u.Username.Contains(q) ||
+                                u.ClubDetail.ClubName.Contains(q))
+                            .Select(u => new
+                                         {
+                                             id = u.Id,
+                                             username = u.Username,
+                                             fullname = u.UserDetail.FullName,
+                                             clubname = u.ClubDetail.ClubName
+                                         })
+                            .Take(5);
+
+            var response = new List<AutocompleteResponse>();
+
+            foreach (var u in users)
             {
-                var users = _uow.UserRepository.GetAll()
-                                .Where(u =>
-                                    u.UserDetail.FullName.Contains(q) || 
-                                    u.Username.Contains(q) ||
-                                    u.ClubDetail.ClubName.Contains(q))
-                                .Select(u => new
-                                             {
-                                                 id = u.Id,
-                                                 username = u.Username,
-                                                 fullname = u.UserDetail.FullName,
-                                                 clubname = u.ClubDetail.ClubName
-                                             })
-                                .Take(5);
+                var autocompleteResponse = new AutocompleteResponse
+                          {
+                              Id = u.id,
+                              Img = _photoService.GetUserImageUrl(u.id).VerySmallLink
+                          };
 
-                var response = new List<AutocompleteResponse>();
-
-                foreach (var u in users)
+                if (!String.IsNullOrEmpty(u.clubname) &&
+                    u.clubname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
                 {
-                    var autocompleteResponse = new AutocompleteResponse
-                              {
-                                  Id = u.id,
-                                  Img = _photoService.GetUserImageUrl(u.id).VerySmallLink
-                              };
-
-                    if (!String.IsNullOrEmpty(u.clubname) &&
-                        u.clubname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    {
-                        autocompleteResponse.Value = u.clubname;
-                    }
-                    else if (!String.IsNullOrEmpty(u.fullname) &&
-                             u.fullname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                    {
-                        autocompleteResponse.Value = u.fullname;
-                    }
-                    else
-                    {
-                        autocompleteResponse.Value = u.username;
-                    }
-
-                    response.Add(autocompleteResponse);
+                    autocompleteResponse.Value = u.clubname;
+                }
+                else if (!String.IsNullOrEmpty(u.fullname) &&
+                         u.fullname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                {
+                    autocompleteResponse.Value = u.fullname;
+                }
+                else
+                {
+                    autocompleteResponse.Value = u.username;
                 }
 
-                return new JsonNetResult(response);
+                response.Add(autocompleteResponse);
             }
+
+            return new JsonNetResult(response);
         }
 
         public class AutocompleteResponse

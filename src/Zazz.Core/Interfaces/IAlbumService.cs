@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IAlbumService : IDisposable
+    public interface IAlbumService
     {
         Album GetAlbum(int albumId);
 

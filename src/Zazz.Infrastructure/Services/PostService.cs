@@ -59,10 +59,5 @@ namespace Zazz.Infrastructure.Services
 
             _uow.SaveChanges();
         }
-
-        public void Dispose()
-        {
-            _uow.Dispose();
-        }
     }
 }

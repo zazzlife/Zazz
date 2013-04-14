@@ -6,7 +6,7 @@ using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IFacebookService : IDisposable
+    public interface IFacebookService
     {
         void HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
 

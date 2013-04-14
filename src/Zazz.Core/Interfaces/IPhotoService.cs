@@ -8,7 +8,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IPhotoService : IDisposable
+    public interface IPhotoService
     {
         IQueryable<Photo> GetAll();
 

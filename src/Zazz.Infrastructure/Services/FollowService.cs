@@ -89,10 +89,5 @@ namespace Zazz.Infrastructure.Services
         {
             return _uow.FollowRequestRepository.GetReceivedRequests(userId);
         }
-
-        public void Dispose()
-        {
-            _uow.Dispose();
-        }
     }
 }

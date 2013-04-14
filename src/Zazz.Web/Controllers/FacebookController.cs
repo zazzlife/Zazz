@@ -36,41 +36,37 @@ namespace Zazz.Web.Controllers
 
         public async Task<string> Update()
         {
-            using (_uow)
-            using (_facebookService)
+            var mode = Request.QueryString["hub.mode"];
+            if (!String.IsNullOrEmpty(mode) && mode.Equals("subscribe",
+                                                           StringComparison.InvariantCultureIgnoreCase))
+                return VerifySubscription(); // the request is for verifying subscription
+
+            //getting request body
+            Request.InputStream.Seek(0, SeekOrigin.Begin);
+            var body = await new StreamReader(Request.InputStream, Encoding.UTF8).ReadToEndAsync();
+
+            var providedSignature = Request.Headers["X-Hub-Signature"].Replace("sha1=", "");
+            var signature = _cryptoService.GenerateSignedSHA1Hash(
+                clearText: body,
+                key: ApiKeys.FACEBOOK_API_SECRET);
+
+            if (!providedSignature.Equals(signature, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityException();
+
+            dynamic changes = JObject.Parse(body);
+            var o = (string)changes.@object;
+            if (o.Equals("user", StringComparison.InvariantCultureIgnoreCase))
             {
-                var mode = Request.QueryString["hub.mode"];
-                if (!String.IsNullOrEmpty(mode) && mode.Equals("subscribe",
-                                                               StringComparison.InvariantCultureIgnoreCase))
-                    return VerifySubscription(); // the request is for verifying subscription
-
-                //getting request body
-                Request.InputStream.Seek(0, SeekOrigin.Begin);
-                var body = await new StreamReader(Request.InputStream, Encoding.UTF8).ReadToEndAsync();
-
-                var providedSignature = Request.Headers["X-Hub-Signature"].Replace("sha1=", "");
-                var signature = _cryptoService.GenerateSignedSHA1Hash(
-                    clearText: body,
-                    key: ApiKeys.FACEBOOK_API_SECRET);
-
-                if (!providedSignature.Equals(signature, StringComparison.InvariantCultureIgnoreCase))
-                    throw new SecurityException();
-
-                dynamic changes = JObject.Parse(body);
-                var o = (string)changes.@object;
-                if (o.Equals("user", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var userChanges = await JsonConvert.DeserializeObjectAsync<FbUserChanges>(body);
-                    _facebookService.HandleRealtimeUserUpdatesAsync(userChanges);
-                }
-                //else if (o.Equals("page", StringComparison.InvariantCultureIgnoreCase))
-                //{
-                //    var pageChanges = await JsonConvert.DeserializeObjectAsync<FbPageChanges>(body);
-                //    _facebookService.HandleRealtimePageUpdatesAsync(pageChanges);
-                //}
-
-                return String.Empty;
+                var userChanges = await JsonConvert.DeserializeObjectAsync<FbUserChanges>(body);
+                _facebookService.HandleRealtimeUserUpdatesAsync(userChanges);
             }
+            //else if (o.Equals("page", StringComparison.InvariantCultureIgnoreCase))
+            //{
+            //    var pageChanges = await JsonConvert.DeserializeObjectAsync<FbPageChanges>(body);
+            //    _facebookService.HandleRealtimePageUpdatesAsync(pageChanges);
+            //}
+
+            return String.Empty;
         }
 
         private string VerifySubscription()
@@ -87,91 +83,76 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult GetPages()
         {
-            using (_uow)
-            using (_facebookService)
+
+            var userId = _userService.GetUserId(User.Identity.Name);
+
+            var allPages = _facebookService.GetUserPages(userId);
+            var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
+
+            var vm = new List<FbPageViewModel>();
+            foreach (var fbPage in allPages)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-
-                var allPages = _facebookService.GetUserPages(userId);
-                var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
-
-                var vm = new List<FbPageViewModel>();
-                foreach (var fbPage in allPages)
-                {
-                    vm.Add(new FbPageViewModel
-                           {
-                               AcessToken = fbPage.AcessToken,
-                               Id = fbPage.Id,
-                               Name = fbPage.Name,
-                               IsLinked = existingPageIds.Contains(fbPage.Id)
-                           });
-                }
-
-                return View("_FacebookPagesList", vm);
+                vm.Add(new FbPageViewModel
+                       {
+                           AcessToken = fbPage.AcessToken,
+                           Id = fbPage.Id,
+                           Name = fbPage.Name,
+                           IsLinked = existingPageIds.Contains(fbPage.Id)
+                       });
             }
+
+            return View("_FacebookPagesList", vm);
         }
 
         [Authorize]
         public JsonNetResult LinkPage(string pageId)
         {
-            using (_uow)
-            using (_facebookService)
+            try
             {
-                try
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var allPages = _facebookService.GetUserPages(userId);
+
+                var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
+                if (wantedPage != null)
                 {
-                    var userId = _userService.GetUserId(User.Identity.Name);
-                    var allPages = _facebookService.GetUserPages(userId);
+                    var fbPage = new FacebookPage
+                                 {
+                                     AccessToken = wantedPage.AcessToken,
+                                     FacebookId = wantedPage.Id,
+                                     Name = wantedPage.Name,
+                                     UserId = userId
+                                 };
 
-                    var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
-                    if (wantedPage != null)
-                    {
-                        var fbPage = new FacebookPage
-                                     {
-                                         AccessToken = wantedPage.AcessToken,
-                                         FacebookId = wantedPage.Id,
-                                         Name = wantedPage.Name,
-                                         UserId = userId
-                                     };
-
-                        _facebookService.LinkPage(fbPage);
-                        _facebookService.UpdatePageEvents(fbPage.FacebookId);
-                    }
-
-                    return new JsonNetResult("ok");
+                    _facebookService.LinkPage(fbPage);
+                    _facebookService.UpdatePageEvents(fbPage.FacebookId);
                 }
-                catch (FacebookPageExistsException)
-                {
-                    var error = new JsonErrorModel
-                                {
-                                    Message = "This page is already linked to another account."
-                                };
 
-                    Response.StatusCode = 500;
-                    return new JsonNetResult(error);
-                }
+                return new JsonNetResult("ok");
+            }
+            catch (FacebookPageExistsException)
+            {
+                var error = new JsonErrorModel
+                            {
+                                Message = "This page is already linked to another account."
+                            };
+
+                Response.StatusCode = 500;
+                return new JsonNetResult(error);
             }
         }
 
         [Authorize]
         public void UnlinkPage(string pageId)
         {
-            using (_uow)
-            using (_facebookService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                _facebookService.UnlinkPage(pageId, userId);
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _facebookService.UnlinkPage(pageId, userId);
         }
 
         public void SyncPage(string pageId)
         {
-            using (_uow)
-            using (_facebookService)
-            {
-                _facebookService.UpdatePageEvents(pageId, 25);
-                _facebookService.UpdatePagePhotos(pageId);
-                _facebookService.UpdatePageStatuses(pageId);
-            }
+            _facebookService.UpdatePageEvents(pageId, 25);
+            _facebookService.UpdatePagePhotos(pageId);
+            _facebookService.UpdatePageStatuses(pageId);
         }
     }
 }

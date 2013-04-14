@@ -35,62 +35,47 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                using (_photoService)
-                using (_albumService)
-                using (_userService)
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var album = new Album
                 {
-                    var userId = _userService.GetUserId(User.Identity.Name);
-                    var album = new Album
-                    {
-                        Name = value,
-                        UserId = userId
-                    };
+                    Name = value,
+                    UserId = userId
+                };
 
-                    _albumService.CreateAlbum(album);
+                _albumService.CreateAlbum(album);
 
-                    var vm = new AlbumViewModel
-                             {
-                                 AlbumId = album.Id,
-                                 AlbumName = value,
-                                 AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
-                                 IsFromCurrentUser = true,
-                                 UserId = userId
-                             };
+                var vm = new AlbumViewModel
+                         {
+                             AlbumId = album.Id,
+                             AlbumName = value,
+                             AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
+                             IsFromCurrentUser = true,
+                             UserId = userId
+                         };
 
-                    return View("_SingleAlbum", vm);
-                }
+                return View("_SingleAlbum", vm);
             }
         }
 
         [Authorize]
         public void Remove(int id)
         {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                _albumService.DeleteAlbum(id, userId);
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _albumService.DeleteAlbum(id, userId);
         }
 
         [HttpGet]
         public JsonResult GetAlbums()
         {
-            using (_photoService)
-            using (_albumService)
-            using (_userService)
-            {
-                if (!User.Identity.IsAuthenticated)
-                    throw new HttpException(403, "");
+            if (!User.Identity.IsAuthenticated)
+                throw new HttpException(403, "");
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var albums = _albumService.GetUserAlbums(userId);
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var albums = _albumService.GetUserAlbums(userId);
 
-                var response = albums.Select(a => new { id = a.Id, name = a.Name });
+            var response = albums.Select(a => new { id = a.Id, name = a.Name });
 
-                return Json(response, JsonRequestBehavior.AllowGet);
-            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
     }
 }

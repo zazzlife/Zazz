@@ -26,73 +26,58 @@ namespace Zazz.Web.Controllers
         [Authorize, HttpPost]
         public ActionResult New(string message)
         {
-            using (_userService)
-            using (_photoService)
-            using (_postService)
-            {
-                if (String.IsNullOrEmpty(message))
-                    throw new ArgumentNullException("message");
+            if (String.IsNullOrEmpty(message))
+                throw new ArgumentNullException("message");
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var post = new Post
-                           {
-                               CreatedTime = DateTime.UtcNow,
-                               Message = message,
-                               UserId = userId
-                           };
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var post = new Post
+                       {
+                           CreatedTime = DateTime.UtcNow,
+                           Message = message,
+                           UserId = userId
+                       };
 
-                _postService.NewPost(post);
+            _postService.NewPost(post);
 
-                var userPhotoUrl = _photoService.GetUserImageUrl(userId);
+            var userPhotoUrl = _photoService.GetUserImageUrl(userId);
 
-                var vm = new FeedViewModel
-                         {
-                             IsFromCurrentUser = true,
-                             FeedType = FeedType.Post,
-                             UserId = userId,
-                             Time = post.CreatedTime,
-                             UserDisplayName = _userService.GetUserDisplayName(userId),
-                             UserImageUrl = userPhotoUrl,
-                             PostViewModel = new PostViewModel
+            var vm = new FeedViewModel
+                     {
+                         IsFromCurrentUser = true,
+                         FeedType = FeedType.Post,
+                         UserId = userId,
+                         Time = post.CreatedTime,
+                         UserDisplayName = _userService.GetUserDisplayName(userId),
+                         UserImageUrl = userPhotoUrl,
+                         PostViewModel = new PostViewModel
+                                         {
+                                             PostId = post.Id,
+                                             PostText = message
+                                         },
+                         CommentsViewModel = new CommentsViewModel
                                              {
-                                                 PostId = post.Id,
-                                                 PostText = message
-                                             },
-                             CommentsViewModel = new CommentsViewModel
-                                                 {
-                                                     Comments = new List<CommentViewModel>(),
-                                                     CurrentUserPhotoUrl = userPhotoUrl,
-                                                     CommentType = CommentType.Post,
-                                                     ItemId = post.Id
-                                                 }
-                         };
+                                                 Comments = new List<CommentViewModel>(),
+                                                 CurrentUserPhotoUrl = userPhotoUrl,
+                                                 CommentType = CommentType.Post,
+                                                 ItemId = post.Id
+                                             }
+                     };
 
-                return View("FeedItems/_PostFeedItem", vm);
-            }
+            return View("FeedItems/_PostFeedItem", vm);
         }
 
         [Authorize]
         public void Remove(int id)
         {
-            using (_userService)
-            using (_photoService)
-            using (_postService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                _postService.RemovePost(id, userId);
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _postService.RemovePost(id, userId);
         }
 
         [Authorize, HttpPost]
         public void Edit(int id, string text)
         {
-            using (_userService)
-            using (_photoService)
-            using (_postService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                _postService.EditPost(id, text, userId);
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _postService.EditPost(id, text, userId);
         }
     }
 }

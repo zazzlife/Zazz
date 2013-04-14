@@ -271,14 +271,5 @@ namespace Zazz.Infrastructure.Services
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();
         }
-
-        public void Dispose()
-        {
-            _uow.Dispose();
-            _eventService.Dispose();
-            _photoService.Dispose();
-            _postService.Dispose();
-            _albumService.Dispose();
-        }
     }
 }

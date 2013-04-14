@@ -40,7 +40,7 @@ namespace Zazz.Web.DependencyResolution
                                     });
 
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
-                            x.For<IUoW>().Use<UoW>();
+                            x.For<IUoW>().HttpContextScoped().Use<UoW>();
                             
                             // Services
                             x.For<IAlbumService>().Use<AlbumService>();

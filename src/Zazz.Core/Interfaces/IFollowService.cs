@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IFollowService : IDisposable
+    public interface IFollowService
     {
         void FollowClubAdmin(int fromUserId, int clubAdminUserId);
 

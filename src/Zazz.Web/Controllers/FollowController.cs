@@ -27,21 +27,16 @@ namespace Zazz.Web.Controllers
 
         public void FollowUser(int id)
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                var accountType = _userService.GetUserAccountType(id);
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var accountType = _userService.GetUserAccountType(id);
 
-                if (accountType == AccountType.User)
-                {
-                    _followService.SendFollowRequest(currentUserId, id);
-                }
-                else if (accountType == AccountType.ClubAdmin)
-                {
-                    _followService.FollowClubAdmin(currentUserId, id);
-                }
+            if (accountType == AccountType.User)
+            {
+                _followService.SendFollowRequest(currentUserId, id);
+            }
+            else if (accountType == AccountType.ClubAdmin)
+            {
+                _followService.FollowClubAdmin(currentUserId, id);
             }
         }
 
@@ -52,13 +47,8 @@ namespace Zazz.Web.Controllers
         /// <returns></returns>
         public void Unfollow(int id)
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                _followService.RemoveFollow(currentUserId, id);
-            }
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            _followService.RemoveFollow(currentUserId, id);
         }
 
         /// <summary>
@@ -68,81 +58,56 @@ namespace Zazz.Web.Controllers
         /// <returns></returns>
         public void StopFollow(int id)
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                _followService.RemoveFollow(id, currentUserId);
-            }
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            _followService.RemoveFollow(id, currentUserId);
         }
 
         public void AcceptFollow(int id)
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                _followService.AcceptFollowRequest(id, currentUserId);
-            }
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            _followService.AcceptFollowRequest(id, currentUserId);
         }
 
         public void RejectFollow(int id)
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var currentUserId = _userService.GetUserId(User.Identity.Name);
-                _followService.RejectFollowRequest(id, currentUserId);
-            }
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            _followService.RejectFollowRequest(id, currentUserId);
         }
 
         public ActionResult GetFollowRequests()
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var userFollows = _followService.GetFollowRequests(userId);
+
+            var vm = new List<FollowRequestViewModel>();
+
+            foreach (var followRequest in userFollows)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var userFollows = _followService.GetFollowRequests(userId);
+                var r = new FollowRequestViewModel
+                        {
+                            FromUserId = followRequest.FromUserId,
+                            FromUsername = followRequest.FromUser.Username,
+                            RequestId = followRequest.Id
+                        };
 
-                var vm = new List<FollowRequestViewModel>();
-
-                foreach (var followRequest in userFollows)
-                {
-                    var r = new FollowRequestViewModel
-                            {
-                                FromUserId = followRequest.FromUserId,
-                                FromUsername = followRequest.FromUser.Username,
-                                RequestId = followRequest.Id
-                            };
-
-                    vm.Add(r);
-                }
-
-                return View("_FollowRequestsPartial", vm);
+                vm.Add(r);
             }
+
+            return View("_FollowRequestsPartial", vm);
         }
 
         public string GetFollowRequestsCount()
         {
-            using (_followService)
-            using (_userService)
-            using (_photoService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var requestsCount = _followService.GetFollowRequestsCount(userId);
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var requestsCount = _followService.GetFollowRequestsCount(userId);
 
-                if (requestsCount == 0)
-                    return "";
-                else
-                {
-                    return
-                        "<span id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
-                        + requestsCount + "</span>";
-                }
+            if (requestsCount == 0)
+                return "";
+            else
+            {
+                return
+                    "<span id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
+                    + requestsCount + "</span>";
             }
         }
     }

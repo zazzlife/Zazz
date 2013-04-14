@@ -34,84 +34,60 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Index()
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                return RedirectToAction("List");
-            }
+            return RedirectToAction("List");
         }
 
         public ActionResult List()
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
+            var userDisplayName = String.Empty;
+            var userPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+            if (Request.IsAuthenticated)
             {
-                var userDisplayName = String.Empty;
-                var userPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
-                if (Request.IsAuthenticated)
-                {
-                    var userId = _userService.GetUserId(User.Identity.Name);
-                    userDisplayName = _userService.GetUserDisplayName(userId);
-                    userPhoto = _photoService.GetUserImageUrl(userId);
-                }
-
-                var vm = new EventListViewModel
-                         {
-                             UserDisplayName = userDisplayName,
-                             UserPhoto = userPhoto,
-                             MonthEvents = new EventListSideViewModel
-                                           {
-                                               Events = GetMonthEvents(),
-                                               EventsRange = EventRange.Month
-                                           },
-
-                             WeekEvents = new EventListSideViewModel
-                                          {
-                                              Events = GetWeekEvents(),
-                                              EventsRange = EventRange.Week
-                                          }
-                         };
-
-                return View(vm);
+                var userId = _userService.GetUserId(User.Identity.Name);
+                userDisplayName = _userService.GetUserDisplayName(userId);
+                userPhoto = _photoService.GetUserImageUrl(userId);
             }
+
+            var vm = new EventListViewModel
+                     {
+                         UserDisplayName = userDisplayName,
+                         UserPhoto = userPhoto,
+                         MonthEvents = new EventListSideViewModel
+                                       {
+                                           Events = GetMonthEvents(),
+                                           EventsRange = EventRange.Month
+                                       },
+
+                         WeekEvents = new EventListSideViewModel
+                                      {
+                                          Events = GetWeekEvents(),
+                                          EventsRange = EventRange.Week
+                                      }
+                     };
+
+            return View(vm);
         }
 
         public ActionResult Week(int page)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                var vm = new EventListSideViewModel
-                         {
-                             Events = GetWeekEvents(page),
-                             EventsRange = EventRange.Week
-                         };
+            var vm = new EventListSideViewModel
+                     {
+                         Events = GetWeekEvents(page),
+                         EventsRange = EventRange.Week
+                     };
 
-                return View("_EventsListPartial", vm);
-            }
+            return View("_EventsListPartial", vm);
         }
 
         public ActionResult Month(int page)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                var vm = new EventListSideViewModel
-                         {
-                             Events = GetMonthEvents(page),
-                             EventsRange = EventRange.Month
-                         };
+            var vm = new EventListSideViewModel
+                     {
+                         Events = GetMonthEvents(page),
+                         EventsRange = EventRange.Month
+                     };
 
-                return View("_EventsListPartial", vm);
-            }
+            return View("_EventsListPartial", vm);
         }
 
         private void GetThisWeek(out DateTime firstDayOfWeek, out DateTime lastDayOfWeek)
@@ -145,7 +121,7 @@ namespace Zazz.Web.Controllers
 
             var firstDayOfMonth = new DateTime(today.Year, today.Month, 1).Date;
             var lastDayOfMonth = new DateTime(today.Year, today.Month, daysInMonth).Date;
-            
+
 
             return GetEvents(firstDayOfMonth, firstDayOfWeek, lastDayOfWeek.AddDays(1), lastDayOfMonth, page);
         }
@@ -190,7 +166,7 @@ namespace Zazz.Web.Controllers
                 {
                     e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     continue;
-                }   
+                }
 
                 var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
                 if (photo == null)
@@ -210,143 +186,101 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Create()
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                ViewBag.FormAction = "Create";
+            ViewBag.FormAction = "Create";
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var displayName = _userService.GetUserDisplayName(userId);
-                var userPhoto = _photoService.GetUserImageUrl(userId);
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var displayName = _userService.GetUserDisplayName(userId);
+            var userPhoto = _photoService.GetUserImageUrl(userId);
 
-                var vm = new EventDetailsPageViewModel
-                         {
-                             UserDisplayName = displayName,
-                             UserPhoto = userPhoto,
-                             EventViewModel = new EventViewModel
-                                              {
-                                                  Time = DateTime.UtcNow,
-                                                  UtcTime = DateTime.UtcNow.ToString("s"),
-                                                  ImageUrl = DefaultImageHelper.GetDefaultAlbumImage()
-                                              }
-                         };
+            var vm = new EventDetailsPageViewModel
+                     {
+                         UserDisplayName = displayName,
+                         UserPhoto = userPhoto,
+                         EventViewModel = new EventViewModel
+                                          {
+                                              Time = DateTime.UtcNow,
+                                              UtcTime = DateTime.UtcNow.ToString("s"),
+                                              ImageUrl = DefaultImageHelper.GetDefaultAlbumImage()
+                                          }
+                     };
 
-                return View("EditForm", vm);
-            }
+            return View("EditForm", vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
         public ActionResult Create(EventDetailsPageViewModel vm)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
+            var userId = _userService.GetUserId(User.Identity.Name);
+            if (userId == 0)
+                throw new HttpException(401, "Unauthorized");
+
+            if (ModelState.IsValid)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                if (userId == 0)
-                    throw new HttpException(401, "Unauthorized");
+                var zazzEvent = EventViewModelToZazzEvent(vm.EventViewModel, userId);
+                zazzEvent.CreatedDate = DateTime.UtcNow;
 
-                if (ModelState.IsValid)
-                {
-                    var zazzEvent = EventViewModelToZazzEvent(vm.EventViewModel, userId);
-                    zazzEvent.CreatedDate = DateTime.UtcNow;
-
-                    _eventService.CreateEvent(zazzEvent);
-                    return Redirect("~/event/show/" + zazzEvent.Id);
-                }
-                
-                vm.UserDisplayName = _userService.GetUserDisplayName(userId);
-                vm.UserPhoto = _photoService.GetUserImageUrl(userId);
-
-                ViewBag.FormAction = "Create";
-                return View("EditForm", vm);
+                _eventService.CreateEvent(zazzEvent);
+                return Redirect("~/event/show/" + zazzEvent.Id);
             }
+
+            vm.UserDisplayName = _userService.GetUserDisplayName(userId);
+            vm.UserPhoto = _photoService.GetUserImageUrl(userId);
+
+            ViewBag.FormAction = "Create";
+            return View("EditForm", vm);
         }
 
         [HttpGet, Authorize]
         public ActionResult Show(int id)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                var eventVm = GetEvent(id, false);
+            var eventVm = GetEvent(id, false);
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var displayName = _userService.GetUserDisplayName(userId);
-                var userPhoto = _photoService.GetUserImageUrl(userId);
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var displayName = _userService.GetUserDisplayName(userId);
+            var userPhoto = _photoService.GetUserImageUrl(userId);
 
-                var vm = new EventDetailsPageViewModel
-                         {
-                             EventViewModel = eventVm,
-                             UserDisplayName = displayName,
-                             UserPhoto = userPhoto
-                         };
+            var vm = new EventDetailsPageViewModel
+                     {
+                         EventViewModel = eventVm,
+                         UserDisplayName = displayName,
+                         UserPhoto = userPhoto
+                     };
 
-                return View(vm);
-            }
+            return View(vm);
         }
 
         [HttpGet, Authorize]
         public ActionResult Edit(int id)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                var vm = GetEvent(id, true);
-                ViewBag.FormAction = "Edit";
+            var vm = GetEvent(id, true);
+            ViewBag.FormAction = "Edit";
 
-                return View("EditForm", vm);
-            }
+            return View("EditForm", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EventViewModel vm)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    using (_userService)
-                    using (_eventService)
-                    using (_uow)
-                    using (_photoService)
-                    {
-                        var userId = _userService.GetUserId(User.Identity.Name);
-                        var post = EventViewModelToZazzEvent(vm, userId);
-                        post.Id = id;
-                        post.CreatedDate = vm.CreatedDate.Value;
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var post = EventViewModelToZazzEvent(vm, userId);
+                post.Id = id;
+                post.CreatedDate = vm.CreatedDate.Value;
 
-                        _eventService.UpdateEvent(post, userId);
-                    }
+                _eventService.UpdateEvent(post, userId);
 
-                    return Redirect("~/event/show/" + id);
-                }
-
-                return View("EditForm", vm);
+                return Redirect("~/event/show/" + id);
             }
+
+            return View("EditForm", vm);
         }
 
         [Authorize]
         public ActionResult Remove(int id)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
-            {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                _eventService.DeleteEvent(id, userId);
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _eventService.DeleteEvent(id, userId);
 
             ShowAlert("The event has been deleted.", AlertType.Success);
             return Redirect("~/");

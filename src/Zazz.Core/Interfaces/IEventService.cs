@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IEventService : IDisposable
+    public interface IEventService
     {
         /// <summary>
         /// Creates an event

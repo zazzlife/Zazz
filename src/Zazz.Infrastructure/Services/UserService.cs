@@ -63,10 +63,5 @@ namespace Zazz.Infrastructure.Services
             var userId = GetUserId(username);
             return GetUserDisplayName(userId);
         }
-
-        public void Dispose()
-        {
-            _uoW.Dispose();
-        }
     }
 }

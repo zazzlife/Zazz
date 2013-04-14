@@ -40,179 +40,159 @@ namespace Zazz.Web.Controllers
         [ActionName("Profile")]
         public ActionResult ShowProfile(int id)
         {
-            using (_uow)
-            using (_photoService) 
-            using (_userService)
-            {
-                var user = _uow.UserRepository.GetById(id);
-                
-                // Profile Photo
-                var profilePhotoUrl = _photoService.GetUserImageUrl(id);
+            var user = _uow.UserRepository.GetById(id);
 
-                // Cover Photo
-                string coverPhotoUrl;
-                if (user.UserDetail.CoverPhotoId == 0)
+            // Profile Photo
+            var profilePhotoUrl = _photoService.GetUserImageUrl(id);
+
+            // Cover Photo
+            string coverPhotoUrl;
+            if (user.UserDetail.CoverPhotoId == 0)
+            {
+                coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
+            }
+            else
+            {
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.CoverPhotoId);
+                if (photo == null)
                 {
                     coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
                 }
                 else
                 {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.CoverPhotoId);
-                    if (photo == null)
+                    if (photo.IsFacebookPhoto)
                     {
-                        coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
+                        coverPhotoUrl = photo.FacebookPicUrl;
                     }
                     else
                     {
-                        if (photo.IsFacebookPhoto)
-                        {
-                            coverPhotoUrl = photo.FacebookPicUrl;
-                        }
-                        else
-                        {
-                            coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id).OriginalLink;
-                        }
+                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id).OriginalLink;
                     }
                 }
-
-                // User Name
-                var displayName = String.IsNullOrEmpty(user.UserDetail.FullName)
-                                      ? user.Username
-                                      : user.UserDetail.FullName;
-
-                var currentUserId = 0;
-                if (User.Identity.IsAuthenticated)
-                {
-                    currentUserId = _userService.GetUserId(User.Identity.Name);
-                }
-
-                // Feeds 
-                var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
-
-                var vm = new UserProfileViewModel
-                         {
-                             UserDisplayName = displayName,
-                             UserPhoto = profilePhotoUrl,
-                             UserPhotoUrl = profilePhotoUrl,
-                             CoverPhotoUrl = coverPhotoUrl,
-                             UserName = displayName,
-                             IsSelf = user.Id == currentUserId,
-                             FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
-                             AccountType = user.AccountType,
-                             UserId = id,
-                             IsClub = user.AccountType == AccountType.ClubAdmin,
-                             Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId)
-                         };
-
-                if (!vm.IsSelf && currentUserId != 0)
-                {
-                    vm.IsCurrentUserFollowingTargetUser = _uow.FollowRepository.Exists(currentUserId, id);
-                    vm.IsTargetUserFollowingCurrentUser = _uow.FollowRepository.Exists(id, currentUserId);
-
-                    if (!vm.IsCurrentUserFollowingTargetUser)
-                    {
-                        vm.FollowRequestAlreadySent = _uow.FollowRequestRepository
-                            .Exists(currentUserId, id);
-                    }
-                }
-
-                if (user.UserDetail.City != null)
-                    vm.City = user.UserDetail.City.Name;
-
-                if (user.UserDetail.School != null)
-                    vm.School = user.UserDetail.School.Name;
-
-                if (user.UserDetail.Major != null)
-                    vm.Major = user.UserDetail.Major.Name;
-
-                return View("Profile", vm);
             }
+
+            // User Name
+            var displayName = String.IsNullOrEmpty(user.UserDetail.FullName)
+                                  ? user.Username
+                                  : user.UserDetail.FullName;
+
+            var currentUserId = 0;
+            if (User.Identity.IsAuthenticated)
+            {
+                currentUserId = _userService.GetUserId(User.Identity.Name);
+            }
+
+            // Feeds 
+            var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
+
+            var vm = new UserProfileViewModel
+                     {
+                         UserDisplayName = displayName,
+                         UserPhoto = profilePhotoUrl,
+                         UserPhotoUrl = profilePhotoUrl,
+                         CoverPhotoUrl = coverPhotoUrl,
+                         UserName = displayName,
+                         IsSelf = user.Id == currentUserId,
+                         FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
+                         AccountType = user.AccountType,
+                         UserId = id,
+                         IsClub = user.AccountType == AccountType.ClubAdmin,
+                         Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId)
+                     };
+
+            if (!vm.IsSelf && currentUserId != 0)
+            {
+                vm.IsCurrentUserFollowingTargetUser = _uow.FollowRepository.Exists(currentUserId, id);
+                vm.IsTargetUserFollowingCurrentUser = _uow.FollowRepository.Exists(id, currentUserId);
+
+                if (!vm.IsCurrentUserFollowingTargetUser)
+                {
+                    vm.FollowRequestAlreadySent = _uow.FollowRequestRepository
+                        .Exists(currentUserId, id);
+                }
+            }
+
+            if (user.UserDetail.City != null)
+                vm.City = user.UserDetail.City.Name;
+
+            if (user.UserDetail.School != null)
+                vm.School = user.UserDetail.School.Name;
+
+            if (user.UserDetail.Major != null)
+                vm.Major = user.UserDetail.Major.Name;
+
+            return View("Profile", vm);
         }
 
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
-            using (_uow)
-            using (_photoService)
-            using (_userService)
-            {
-                var currentUserId = 0;
-                if (Request.IsAuthenticated)
-                    currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = 0;
+            if (Request.IsAuthenticated)
+                currentUserId = _userService.GetUserId(User.Identity.Name);
 
-                var user = _userService.GetUser(User.Identity.Name);
-                var feeds = new FeedHelper(_uow, _userService, _photoService)
-                                      .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
+            var user = _userService.GetUser(User.Identity.Name);
+            var feeds = new FeedHelper(_uow, _userService, _photoService)
+                                  .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
-                return View("_FeedsPartial", feeds);
-            }
+            return View("_FeedsPartial", feeds);
         }
 
         [HttpGet, Authorize]
         public ActionResult Edit()
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+
+            var vm = new EditProfileViewModel
             {
-                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+                UserDisplayName = _userService.GetUserDisplayName(user.Id),
+                UserPhoto = _photoService.GetUserImageUrl(user.Id),
+                Gender = user.UserDetail.Gender,
+                FullName = user.UserDetail.FullName,
+                CityId = user.UserDetail.CityId,
+                Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
+                SchoolId = user.UserDetail.SchoolId,
+                Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
+                MajorId = user.UserDetail.MajorId,
+                Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
+                Albums = new SelectList(user.Albums.ToList(), "id", "name"),
+                SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
+                SyncFbEvents = user.UserDetail.SyncFbEvents,
+                SyncFbPosts = user.UserDetail.SyncFbPosts,
+                SyncFbImages = user.UserDetail.SyncFbImages
+            };
 
-                var vm = new EditProfileViewModel
-                {
-                    UserDisplayName = _userService.GetUserDisplayName(user.Id),
-                    UserPhoto = _photoService.GetUserImageUrl(user.Id),
-                    Gender = user.UserDetail.Gender,
-                    FullName = user.UserDetail.FullName,
-                    CityId = user.UserDetail.CityId,
-                    Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
-                    SchoolId = user.UserDetail.SchoolId,
-                    Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
-                    MajorId = user.UserDetail.MajorId,
-                    Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
-                    Albums = new SelectList(user.Albums.ToList(), "id", "name"),
-                    SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
-                    SyncFbEvents = user.UserDetail.SyncFbEvents,
-                    SyncFbPosts = user.UserDetail.SyncFbPosts,
-                    SyncFbImages = user.UserDetail.SyncFbImages
-                };
-
-                return View(vm);
-            }
+            return View(vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult Edit(EditProfileViewModel vm)
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+
+            vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
+            vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
+            vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
+            vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
+
+            vm.UserDisplayName = _userService.GetUserDisplayName(user.Id);
+            vm.UserPhoto = _photoService.GetUserImageUrl(user.Id);
+
+            if (ModelState.IsValid)
             {
-                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+                user.UserDetail.Gender = vm.Gender;
+                user.UserDetail.FullName = vm.FullName;
+                user.UserDetail.SchoolId = (short)vm.SchoolId;
+                user.UserDetail.CityId = (short)vm.CityId;
+                user.UserDetail.MajorId = (byte)vm.MajorId;
+                user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
+                user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
+                user.UserDetail.SyncFbImages = vm.SyncFbImages;
+                user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
-                vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
-                vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
-                vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
-                vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
+                _uow.SaveChanges();
 
-                vm.UserDisplayName = _userService.GetUserDisplayName(user.Id);
-                vm.UserPhoto = _photoService.GetUserImageUrl(user.Id);
-
-                if (ModelState.IsValid)
-                {
-                    user.UserDetail.Gender = vm.Gender;
-                    user.UserDetail.FullName = vm.FullName;
-                    user.UserDetail.SchoolId = (short)vm.SchoolId;
-                    user.UserDetail.CityId = (short)vm.CityId;
-                    user.UserDetail.MajorId = (byte)vm.MajorId;
-                    user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
-                    user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
-                    user.UserDetail.SyncFbImages = vm.SyncFbImages;
-                    user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
-
-                    _uow.SaveChanges();
-
-                    _cacheService.RemoveUserDisplayName(user.Id);
-                    ShowAlert("Your preferences has been updated.", AlertType.Success);
-                }
+                _cacheService.RemoveUserDisplayName(user.Id);
+                ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
             return View(vm);
@@ -221,74 +201,44 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public void ChangeProfilePic(int id)
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
-                user.UserDetail.ProfilePhotoId = id;
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+            user.UserDetail.ProfilePhotoId = id;
 
-                _uow.SaveChanges();
-                _cacheService.RemoveUserPhotoUrl(user.Id);
-            }
+            _uow.SaveChanges();
+            _cacheService.RemoveUserPhotoUrl(user.Id);
         }
 
         [Authorize]
         public void ChangeCoverPic(int id)
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
-                user.UserDetail.CoverPhotoId = id;
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+            user.UserDetail.CoverPhotoId = id;
 
-                _uow.SaveChanges();
-            }
+            _uow.SaveChanges();
         }
 
         public string GetCurrentUserImageUrl()
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                if (!User.Identity.IsAuthenticated)
-                    return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
+            if (!User.Identity.IsAuthenticated)
+                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
-                var userId = _userService.GetUserId(User.Identity.Name);
-                return _photoService.GetUserImageUrl(userId).SmallLink;
-            }
+            var userId = _userService.GetUserId(User.Identity.Name);
+            return _photoService.GetUserImageUrl(userId).SmallLink;
         }
 
         public string GetUserImageUrl(int userId)
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                return _photoService.GetUserImageUrl(userId).VerySmallLink;
-            }
+            return _photoService.GetUserImageUrl(userId).VerySmallLink;
         }
 
         public string GetCurrentUserDisplayName()
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                return _userService.GetUserDisplayName(User.Identity.Name);
-            }
+            return _userService.GetUserDisplayName(User.Identity.Name);
         }
 
         public string GetUserDisplayName(int userId)
         {
-            using (_uow)
-            using (_userService)
-            using (_photoService)
-            {
-                return _userService.GetUserDisplayName(userId);
-            }
+            return _userService.GetUserDisplayName(userId);
         }
     }
 }

@@ -322,10 +322,5 @@ namespace Zazz.Infrastructure.Services
 
             return img;
         }
-
-        public void Dispose()
-        {
-            _uow.Dispose();
-        }
     }
 }
