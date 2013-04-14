@@ -238,7 +238,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize]
-        public ActionResult Create(EventViewModel eventVm)
+        public ActionResult Create(EventDetailsPageViewModel vm)
         {
             using (_userService)
             using (_eventService)
@@ -251,21 +251,15 @@ namespace Zazz.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var zazzEvent = EventViewModelToZazzEvent(eventVm, userId);
+                    var zazzEvent = EventViewModelToZazzEvent(vm.EventViewModel, userId);
                     zazzEvent.CreatedDate = DateTime.UtcNow;
 
                     _eventService.CreateEvent(zazzEvent);
                     return Redirect("~/event/show/" + zazzEvent.Id);
                 }
                 
-                var displayName = _userService.GetUserDisplayName(userId);
-                var userPhoto = _photoService.GetUserImageUrl(userId);
-                var vm = new EventDetailsPageViewModel
-                         {
-                             EventViewModel = eventVm,
-                             UserDisplayName = displayName,
-                             UserPhoto = userPhoto
-                         };
+                vm.UserDisplayName = _userService.GetUserDisplayName(userId);
+                vm.UserPhoto = _photoService.GetUserImageUrl(userId);
 
                 ViewBag.FormAction = "Create";
                 return View("EditForm", vm);
@@ -280,7 +274,19 @@ namespace Zazz.Web.Controllers
             using (_uow)
             using (_photoService)
             {
-                var vm = GetEvent(id, false);
+                var eventVm = GetEvent(id, false);
+
+                var userId = _userService.GetUserId(User.Identity.Name);
+                var displayName = _userService.GetUserDisplayName(userId);
+                var userPhoto = _photoService.GetUserImageUrl(userId);
+
+                var vm = new EventDetailsPageViewModel
+                         {
+                             EventViewModel = eventVm,
+                             UserDisplayName = displayName,
+                             UserPhoto = userPhoto
+                         };
+
                 return View(vm);
             }
         }
@@ -370,51 +376,47 @@ namespace Zazz.Web.Controllers
 
         private EventViewModel GetEvent(int id, bool ownerOnly)
         {
-            using (_userService)
-            using (_eventService)
-            using (_uow)
-            using (_photoService)
+            var userId = _userService.GetUserId(User.Identity.Name);
+
+            var zazzEvent = _eventService.GetEvent(id);
+            if (zazzEvent == null)
+                throw new HttpException(404, "The requested entry was not found");
+
+            if (ownerOnly && userId != zazzEvent.UserId)
+                throw new HttpException(401, "Unauthorized");
+
+            var vm = new EventViewModel
+                     {
+                         Id = zazzEvent.Id,
+                         City = zazzEvent.City,
+                         CreatedDate = zazzEvent.CreatedDate,
+                         Description = zazzEvent.Description,
+                         Location = zazzEvent.Location,
+                         Name = zazzEvent.Name,
+                         Price = zazzEvent.Price,
+                         Time = zazzEvent.Time,
+                         UtcTime = zazzEvent.TimeUtc.ToString("s"),
+                         Street = zazzEvent.Street,
+                         IsOwner = zazzEvent.UserId == userId,
+                         Latitude = zazzEvent.Latitude,
+                         Longitude = zazzEvent.Longitude,
+                         PhotoId = zazzEvent.PhotoId,
+                         IsFacebookEvent = zazzEvent.IsFacebookEvent,
+                         ImageUrl = zazzEvent.IsFacebookEvent
+                                        ? new PhotoLinks(zazzEvent.FacebookPhotoLink)
+                                        : DefaultImageHelper.GetDefaultAlbumImage(),
+                         IsDateOnly = zazzEvent.IsDateOnly,
+                         FacebookEventId = zazzEvent.FacebookEventId
+                     };
+
+            if (zazzEvent.PhotoId.HasValue)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-
-                var zazzEvent = _eventService.GetEvent(id);
-                if (zazzEvent == null)
-                    throw new HttpException(404, "The requested entry was not found");
-
-                if (ownerOnly && userId != zazzEvent.UserId)
-                    throw new HttpException(401, "Unauthorized");
-
-                var vm = new EventViewModel
-                {
-                    Id = zazzEvent.Id,
-                    City = zazzEvent.City,
-                    CreatedDate = zazzEvent.CreatedDate,
-                    Description = zazzEvent.Description,
-                    Location = zazzEvent.Location,
-                    Name = zazzEvent.Name,
-                    Price = zazzEvent.Price,
-                    Time = zazzEvent.Time,
-                    UtcTime = zazzEvent.TimeUtc.ToString("s"),
-                    Street = zazzEvent.Street,
-                    IsOwner = zazzEvent.UserId == userId,
-                    Latitude = zazzEvent.Latitude,
-                    Longitude = zazzEvent.Longitude,
-                    PhotoId = zazzEvent.PhotoId,
-                    IsFacebookEvent = zazzEvent.IsFacebookEvent,
-                    ImageUrl = zazzEvent.IsFacebookEvent ? new PhotoLinks(zazzEvent.FacebookPhotoLink) : null,
-                    IsDateOnly = zazzEvent.IsDateOnly,
-                    FacebookEventId = zazzEvent.FacebookEventId
-                };
-
-                if (zazzEvent.PhotoId.HasValue)
-                {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(zazzEvent.PhotoId.Value);
-                    if (photo != null)
-                        vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
-                }
-
-                return vm;
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(zazzEvent.PhotoId.Value);
+                if (photo != null)
+                    vm.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
             }
+
+            return vm;
         }
     }
 }

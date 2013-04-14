@@ -1,32 +1,32 @@
-﻿@model Zazz.Web.Models.EventViewModel
+﻿@model EventDetailsPageViewModel
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.EventViewModel.Name;
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 
-    var isMapAvailable = (Model != null && Model.Latitude.HasValue && Model.Longitude.HasValue);
+    var isMapAvailable = (Model != null && Model.EventViewModel.Latitude.HasValue && Model.EventViewModel.Longitude.HasValue);
 }
 
 
 <div>
     <div class="page-header">
-        <h3>@Model.Name</h3>
+        <h3>@Model.EventViewModel.Name</h3>
     </div>
 
     <div class="margin-ten">
-        <strong class="pull-right">@Model.Time</strong>
+        <strong class="pull-right">@Model.EventViewModel.Time</strong>
 
-        <img src="@Model.ImageUrl" style="width: 128px;" />
+        <img src="@Model.EventViewModel.ImageUrl" style="width: 128px;" />
 
-        <p class="event-detail">@Model.Description</p>
-        @if (Model.Price.HasValue)
+        <p class="event-detail">@Model.EventViewModel.Description</p>
+        @if (Model.EventViewModel.Price.HasValue)
         {
-            <p class="event-price"><strong>@Model.Price.Value.ToString("C")</strong></p>    
+            <p class="event-price"><strong>@Model.EventViewModel.Price.Value.ToString("C")</strong></p>    
         }
 
         <address>
-            <strong>@Model.Location</strong><br />
-            @Model.Street, @Model.City
+            <strong>@Model.EventViewModel.Location</strong><br />
+            @Model.EventViewModel.Street, @Model.EventViewModel.City
 
         </address>
 
@@ -47,7 +47,7 @@
 
     <div class="modal-footer">
         <a href="#" data-dismiss="modal" class="btn">No</a>
-        <a href="~/event/remove/@Model.Id" class="btn btn-primary">Yes</a>
+        <a href="~/event/remove/@Model.EventViewModel.Id" class="btn btn-primary">Yes</a>
     </div>
 </div>
 
@@ -56,15 +56,15 @@
 {
     <ul class="nav nav-list">
 
-        @if (Model.IsOwner)
+        @if (Model.EventViewModel.IsOwner)
         {
-            <li><a href="~/event/edit/@Model.Id"><i class="icon-pencil"></i>Edit Event</a></li>
+            <li><a href="~/event/edit/@Model.EventViewModel.Id"><i class="icon-pencil"></i>Edit Event</a></li>
             <li><a data-toggle="modal" data-target="#remove-event-modal" href="#"><i class="icon-remove"></i>Remove Event</a></li>
         }
 
-        @if (Model.FacebookEventId.HasValue)
+        @if (Model.EventViewModel.FacebookEventId.HasValue)
         {
-            <li class="disabled"><a href="https://www.facebook.com/events/@Model.FacebookEventId.Value" class="disabled"><i class="icon-facebook"></i>Facebook Link</a></li>
+            <li class="disabled"><a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="disabled"><i class="icon-facebook"></i>Facebook Link</a></li>
         }
     </ul>
 }
@@ -82,8 +82,8 @@
 
             $(function() {
                     
-                var lat = @Model.Latitude.Value;
-            var lng = @Model.Longitude.Value;
+                var lat = @Model.EventViewModel.Latitude.Value;
+            var lng = @Model.EventViewModel.Longitude.Value;
 
             var latlng = new google.maps.LatLng(lat, lng, false);
             initMap(lat, lng);
