@@ -7,13 +7,13 @@
         <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
     </div>
     <div class='lightbox-content'>
-        <img data-id="@Model.PhotoId" src="@Model.PhotoUrl"/>
+        <img data-id="@Model.PhotoId" src="@Model.PhotoUrl.OriginalLink"/>
         <div class="well pull-right no-padding lightbox-commentbox">
             
             <div class="photo-details">
                 <div style="margin-bottom: 15px;">
                     <a target="_blank" href="~/user/profile/@Model.FromUserId">
-                        <img src="@Model.FromUserPhotoUrl" class="img-small-rounded lightbox-commentbox-user-img"/>
+                        <img src="@Model.FromUserPhotoUrl.VerySmallLink" class="img-small-rounded lightbox-commentbox-user-img"/>
                         <strong>@Model.FromUserDisplayName</strong>
                     </a>
                 </div>

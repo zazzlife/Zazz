@@ -6,7 +6,8 @@
 
 <div class="feed-item" data-id="@Model.FeedId">
     <a href="~/user/profile/@Model.UserId">
-        <img title="@Model.UserDisplayName" src="@Model.UserImageUrl" class="feed-user-img img-small-rounded" />
+        <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
+            src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
     </a>
 
     <div class="feed-content well well-small no-padding">
