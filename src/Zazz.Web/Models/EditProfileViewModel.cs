@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
-    public class EditProfileViewModel
+    public class EditProfileViewModel : BaseUserPageLayoutViewModel
     {
         public Gender Gender { get; set; }
 

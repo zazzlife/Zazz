@@ -158,6 +158,8 @@ namespace Zazz.Web.Controllers
 
                 var vm = new EditProfileViewModel
                 {
+                    UserDisplayName = _userService.GetUserDisplayName(user.Id),
+                    UserPhoto = _photoService.GetUserImageUrl(user.Id),
                     Gender = user.UserDetail.Gender,
                     FullName = user.UserDetail.FullName,
                     CityId = user.UserDetail.CityId,
@@ -190,6 +192,9 @@ namespace Zazz.Web.Controllers
                 vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
                 vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
                 vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
+
+                vm.UserDisplayName = _userService.GetUserDisplayName(user.Id);
+                vm.UserPhoto = _photoService.GetUserImageUrl(user.Id);
 
                 if (ModelState.IsValid)
                 {
