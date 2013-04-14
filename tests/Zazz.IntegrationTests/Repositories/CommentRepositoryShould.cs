@@ -192,7 +192,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task RemoveAllEventsComments_OnRemoveEventComments()
+        public void RemoveAllEventsComments_OnRemoveEventComments()
         {
             //Arrange
             //Act
@@ -216,7 +216,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task RemoveAllPostsComments_OnRemoveEventComments()
+        public void RemoveAllPostsComments_OnRemoveEventComments()
         {
             //Arrange
             //Act
@@ -240,7 +240,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public async Task RemoveAllPhotosComments_OnRemoveEventComments()
+        public void RemoveAllPhotosComments_OnRemoveEventComments()
         {
             //Arrange
             //Act

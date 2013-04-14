@@ -11,7 +11,7 @@ namespace Zazz.IntegrationTests.WebServices
     public class FacebookHelperShould
     {
         [Test, Explicit("This test is only for manual checking")]
-        public async Task GetEvents_OnGetEvents()
+        public void GetEvents_OnGetEvents()
         {
             //Arrange
             var accessToken = "AAACEdEose0cBANC156cTAhp4X74G90XRQqZCulMIdwoQDkH6QDnumEwBhhXqezFSMhWbKaagvcQv8J4TZApZAZAfFIfCzFgrmWjM5wt7GzsK3dUm0B8O";
