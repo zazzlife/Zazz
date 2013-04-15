@@ -373,7 +373,11 @@
     <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\clear.png" />
+    <Content Include="Images\concorida.png" />
     <Content Include="Images\loading.gif" />
+    <Content Include="Images\mcgill.png" />
+    <Content Include="Images\ubc.png" />
+    <Content Include="Images\victoria-uni.png" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\comments.js" />
