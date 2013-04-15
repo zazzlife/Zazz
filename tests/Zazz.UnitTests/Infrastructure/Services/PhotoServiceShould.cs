@@ -562,6 +562,67 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotTryToRemoveFeedWhenTheFeedDoesntExists_OnRemovePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+            var coverPhotoId = 4;
+            var profilePhotoId = 2;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = userId,
+                User = new User
+                {
+                    UserDetail = new UserDetail
+                    {
+                        CoverPhotoId = coverPhotoId,
+                        ProfilePhotoId = profilePhotoId
+                    }
+                }
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
+                .Returns(photo);
+
+            var filePath = _sut.GeneratePhotoFilePath(userId, photoId);
+
+            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
+                .Returns(userId);
+            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
+            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
+            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+                .Returns(0);
+            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(It.IsAny<int>()))
+                .Returns(0);
+            _uow.Setup(x => x.FeedRepository.Remove(It.IsAny<int>()));
+
+
+            //Act
+            _sut.RemovePhoto(photoId, userId);
+
+            //Assert
+            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
+            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.FeedRepository.Remove(It.IsAny<int>()), Times.Never());
+        }
+
+        [Test]
         public void ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
         {
             //Arrange
