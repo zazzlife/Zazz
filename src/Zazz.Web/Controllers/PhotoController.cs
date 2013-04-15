@@ -166,7 +166,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Upload(HttpPostedFileBase image, string description, int? albumId)
+        public ActionResult Upload(HttpPostedFileBase image, string description, int? albumId, bool showInFeed)
         {
             var errorMessage = "Image was not valid";
             if (image == null || !ImageValidator.IsValid(image, out errorMessage))
@@ -175,12 +175,12 @@ namespace Zazz.Web.Controllers
                 return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
             }
 
-            SaveImage(image.InputStream, description, albumId);
+            SaveImage(image.InputStream, description, albumId, showInFeed);
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
-        public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image)
+        public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
             var response = new FineUploadResponse
                            {
@@ -193,7 +193,7 @@ namespace Zazz.Web.Controllers
                 return new JsonNetResult(response);
             }
 
-            var photo = SaveImage(image.InputStream, description, albumId);
+            var photo = SaveImage(image.InputStream, description, albumId, showInFeed);
             response.PhotoId = photo.Id;
             response.Success = true;
             response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
@@ -201,9 +201,8 @@ namespace Zazz.Web.Controllers
             return new JsonNetResult(response);
         }
 
-        private Photo SaveImage(Stream image, string description, int? albumId)
+        private Photo SaveImage(Stream image, string description, int? albumId, bool showInFeed)
         {
-
             var userId = _userService.GetUserId(User.Identity.Name);
 
             if (albumId.HasValue)
@@ -221,7 +220,7 @@ namespace Zazz.Web.Controllers
                             UserId = userId
                         };
 
-            _photoService.SavePhoto(photo, image, true);
+            _photoService.SavePhoto(photo, image, showInFeed);
             return photo;
         }
 

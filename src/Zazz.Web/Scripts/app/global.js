@@ -201,12 +201,14 @@ function initImgUploader(onComplete) {
 $(document).on('click', '#uploadImg', function () {
     var description = $('#Description').val();
     var albumId = $('#upload-albumSelect').val();
+    var showInFeed = $(this).data('feed');
 
     if (!imgUploader)
         return;
     imgUploader.setParams({
         albumId: albumId,
-        description: description
+        description: description,
+        showInFeed: showInFeed
     });
 
     imgUploader.uploadStoredFiles();
