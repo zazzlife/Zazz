@@ -1,4 +1,5 @@
-﻿@model EditProfileViewModel
+﻿@using Zazz.Core.Models.Data
+@model EditProfileViewModel
 
 @{
     ViewBag.Title = "Edit Profile";
@@ -126,18 +127,22 @@
                                     @Html.EditorFor(model => model.SyncFbEvents) Sync Facebook Events
                                 </label>
                             </div>
+                            
+                            @if (Model.AccountType == AccountType.ClubAdmin)
+                            {
+                                <div class="control-group">
+                                    <label class="checkbox">
+                                        @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
+                                    </label>
+                                    </div>
 
-                            <div class="control-group">
-                                <label class="checkbox">
-                                    @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
-                                </label>
-                            </div>
-
-                            <div class="control-group">
-                                <label class="checkbox">
-                                    @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
-                                </label>
-                            </div>
+                                <div class="control-group">
+                                    <label class="checkbox">
+                                        @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
+                                    </label>
+                                </div>
+                            }
+                            
                         </p>
                     </div>
                     <div class="tab-pane" id="notificationsTab">

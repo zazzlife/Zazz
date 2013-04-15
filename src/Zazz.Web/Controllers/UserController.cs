@@ -158,7 +158,8 @@ namespace Zazz.Web.Controllers
                 SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                 SyncFbEvents = user.UserDetail.SyncFbEvents,
                 SyncFbPosts = user.UserDetail.SyncFbPosts,
-                SyncFbImages = user.UserDetail.SyncFbImages
+                SyncFbImages = user.UserDetail.SyncFbImages,
+                AccountType = user.AccountType
             };
 
             return View(vm);

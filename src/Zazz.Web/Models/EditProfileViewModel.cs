@@ -9,6 +9,8 @@ namespace Zazz.Web.Models
     {
         public Gender Gender { get; set; }
 
+        public AccountType AccountType { get; set; }
+
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
