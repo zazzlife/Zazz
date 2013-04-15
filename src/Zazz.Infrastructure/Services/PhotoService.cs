@@ -183,6 +183,10 @@ namespace Zazz.Infrastructure.Services
                             g.CompositingQuality = CompositingQuality.HighQuality;
 
                             g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
+
+                            var path = _fileService.RemoveFileNameFromPath(image.path);
+                            _fileService.CreateDirIfNotExists(path); //TODO: instead of checking the path for every image try a better solution.
+
                             b.Save(image.path, jpg, encoderParams);
                         }
                     }
