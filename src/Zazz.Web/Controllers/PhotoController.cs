@@ -268,18 +268,23 @@ namespace Zazz.Web.Controllers
         [Authorize, HttpGet]
         public ActionResult Crop(int id, string @for)
         {
-            var vm = new CropViewModel();
+            var userId = _userService.GetUserId(User.Identity.Name);
             var photo = _photoService.GetPhoto(id);
+
+            if (photo.UserId != userId)
+                throw new HttpException(401, "You are not authorized to crop this image.");
+
+            var vm = new CropViewModel
+                     {
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(userId)
+                     };
 
             if (photo.IsFacebookPhoto)
             {
                 vm.IsFacebookPhoto = true;
                 return View(vm);
             }
-
-            var userId = _userService.GetUserId(User.Identity.Name);
-            if (photo.UserId != userId)
-                throw new HttpException(401, "You are not authorized to crop this image.");
 
             vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
             vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
@@ -303,6 +308,9 @@ namespace Zazz.Web.Controllers
             var userId = _userService.GetUserId(User.Identity.Name);
             if (photo.UserId != userId)
                 throw new HttpException(401, "You are not authorized to crop this image.");
+
+            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(userId);
+            vm.CurrentUserPhoto = _photoService.GetUserImageUrl(userId);
 
             vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
             vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
