@@ -180,7 +180,7 @@
             </div>
         </div>
 
-        @Html.Partial("_UploadPicModal", "uploadPicModalWithCrop")
+        @Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithCrop", CreateFeed = true })
         
 
     </div>

@@ -52,7 +52,7 @@ $('#uploadPicModalWithCrop').on('show', function () {
         '<div class="editor-field">' +
         '<input class="span4" data-val="true" data-val-length="The field Description must be a string with a maximum length of 250." data-val-length-max="250" id="Description" name="Description" placeholder="Description" type="text" value="" />                            <span class="field-validation-valid help-inline" data-valmsg-for="Description" data-valmsg-replace="true"></span>' +
         '</div></div></div>' +
-        '<p><button id="uploadImg" class="btn btn-primary">Submit</button></p>';
+        '<p><button id="uploadImg" data-feed="True" class="btn btn-primary">Submit</button></p>';
 
 
     $('#uploadPicModalWithCrop .modal-body').html(uploadModalContent);

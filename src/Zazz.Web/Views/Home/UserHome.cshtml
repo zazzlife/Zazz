@@ -18,7 +18,7 @@
 
 </div>
 
-@Html.Partial("_UploadPicModal", "uploadPicModalWithFeed")
+@Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithFeed", CreateFeed = true })
 
 <div class="modal hide fade" id="manageFbPagesModal">
     <div class="modal-header">

@@ -260,6 +260,7 @@
     <Compile Include="Models\OAuthLoginResponse.cs" />
     <Compile Include="Models\OAuthRegisterViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />
     <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
