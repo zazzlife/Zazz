@@ -20,5 +20,9 @@
         }
     }
     
-    <button data-url="@Url.Action("LoadMoreFeeds")" class="btn btn-block btn-inverse" id="load-feeds">Load More...</button>
+    @if (Model.Count() == 10)
+    {
+        <button data-url="@Url.Action("LoadMoreFeeds")" class="btn btn-block btn-inverse" id="load-feeds">Load More...</button>
+    }
+    
 </div>
