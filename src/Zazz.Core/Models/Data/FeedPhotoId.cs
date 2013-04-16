@@ -9,6 +9,9 @@ namespace Zazz.Core.Models.Data
 
         public int FeedId { get; set; }
 
+        [ForeignKey("PhotoId")]
+        public Photo Photo { get; set; }
+
         public int PhotoId { get; set; }
     }
 }

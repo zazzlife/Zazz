@@ -84,6 +84,11 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<FeedPhotoId>()
+                .HasRequired(i => i.Photo)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<FeedUserId>()
                 .HasRequired(i => i.User)
                 .WithMany()
