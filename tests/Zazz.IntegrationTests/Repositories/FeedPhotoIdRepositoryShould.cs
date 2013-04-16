@@ -13,6 +13,7 @@ namespace Zazz.IntegrationTests.Repositories
         private FeedPhotoIdRepository _repo;
         private User _user;
         private Feed _feed;
+        private Photo _photo;
 
         [SetUp]
         public void Init()
@@ -24,13 +25,21 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(_user);
             _context.SaveChanges();
 
+            _photo = new Photo
+                     {
+                         UserId = _user.Id,
+                         UploadDate = DateTime.UtcNow
+                     };
+
             _feed = new Feed
                       {
-                          UserId = _user.Id,
                           Time = DateTime.UtcNow
                       };
 
+            _feed.FeedUserIds.Add(new FeedUserId { UserId = _user.Id });
+
             _context.Feeds.Add(_feed);
+            _context.Photos.Add(_photo);
             _context.SaveChanges();
         }
 
@@ -38,12 +47,12 @@ namespace Zazz.IntegrationTests.Repositories
         public void RemovePhotoIdReocrdAndReturnCorrectFeedId_OnRemoveByPhotoId()
         {
             //Arrange
-            var photoId = 12;
+            
 
             var feedPhotoId = new FeedPhotoId
                               {
                                   FeedId = _feed.Id,
-                                  PhotoId = photoId
+                                  PhotoId = _photo.Id
                               };
 
             _context.FeedPhotoIds.Add(feedPhotoId);
@@ -52,7 +61,7 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(_repo.Exists(feedPhotoId.Id));
 
             //Act
-            var feedId = _repo.RemoveByPhotoIdAndReturnFeedId(photoId);
+            var feedId = _repo.RemoveByPhotoIdAndReturnFeedId(_photo.Id);
             _context.SaveChanges();
 
             //Assert
@@ -67,14 +76,14 @@ namespace Zazz.IntegrationTests.Repositories
             var feedPhotoId1 = new FeedPhotoId
                               {
                                   FeedId = _feed.Id,
-                                  PhotoId = 12
+                                  PhotoId = _photo.Id
                               };
 
 
             var feedPhotoId2 = new FeedPhotoId
                                {
                                    FeedId = _feed.Id,
-                                   PhotoId = 13
+                                   PhotoId = _photo.Id
                                };
 
             _context.FeedPhotoIds.Add(feedPhotoId1);

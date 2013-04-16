@@ -12,11 +12,6 @@ namespace Zazz.Core.Models.Data
             FeedUserIds = new HashSet<FeedUserId>();
         }
 
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
-
-        public int UserId { get; set; }
-
         [ForeignKey("EventId")]
         public ZazzEvent Event { get; set; }
 

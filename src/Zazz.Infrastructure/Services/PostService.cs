@@ -22,8 +22,12 @@ namespace Zazz.Infrastructure.Services
                        {
                            PostId = post.Id,
                            Time = post.CreatedTime,
-                           UserId = post.FromUserId
                        };
+
+            feed.FeedUserIds.Add(new FeedUserId
+                                 {
+                                     UserId = post.FromUserId
+                                 });
 
             _uow.FeedRepository.InsertGraph(feed);
 

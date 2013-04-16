@@ -100,8 +100,9 @@ namespace Zazz.Infrastructure.Services
                                {
                                    FeedType = FeedType.Picture,
                                    Time = photo.UploadDate,
-                                   UserId = photo.UserId
                                };
+
+                    feed.FeedUserIds.Add(new FeedUserId { UserId = photo.UserId });
 
                     feed.FeedPhotoIds.Add(new FeedPhotoId
                                           {

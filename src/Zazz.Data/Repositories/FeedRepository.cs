@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.EntityClient;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
 using Zazz.Core.Interfaces;
@@ -21,40 +23,63 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
-            return DbSet.Where(f => userIds.Contains(f.UserId))
-                        .Include(f => f.FeedPhotoIds)
-                        .Include(f => f.Post)
-                        .Include(f => f.Event);
+            return (from feed in DbSet
+                    from feedUserId in feed.FeedUserIds
+                    orderby feed.Time descending 
+                    where userIds.Contains(feedUserId.UserId)
+                    select feed)
+                .Distinct()
+                .Include(f => f.FeedPhotoIds)
+                .Include(f => f.Post)
+                .Include(f => f.Event);
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
         {
-            return DbSet.Where(f => f.UserId == userId)
-                        .Include(f => f.FeedPhotoIds)
-                        .Include(f => f.Post)
-                        .Include(f => f.Event);
+            return (from feed in DbSet
+                    from feedUserId in feed.FeedUserIds
+                    orderby feed.Time descending 
+                    where feedUserId.UserId == userId
+                    select feed)
+                .Distinct()
+                .Include(f => f.FeedPhotoIds)
+                .Include(f => f.Post)
+                .Include(f => f.Event);
         }
 
         public Feed GetUserLastFeed(int userId)
         {
-            return DbSet.Where(f => f.UserId == userId)
-                        .Include(f => f.FeedPhotoIds)
-                        .OrderByDescending(f => f.Time)
-                        .FirstOrDefault();
+            return (from feed in DbSet
+                    from feedUserId in feed.FeedUserIds
+                    orderby feed.Time descending
+                    where feedUserId.UserId == userId
+                    select feed)
+                .Include(f => f.FeedPhotoIds)
+                .FirstOrDefault();
         }
 
         public void RemoveEventFeeds(int eventId)
         {
-            var items = DbSet.Where(f => f.EventId == eventId);
-            foreach (var item in items)
-                Remove(item);
+            const string DELETE_COMMAND = "DELETE FROM dbo.Feeds WHERE EventId = @eventId";
+            var parameter = new SqlParameter
+                            {
+                                ParameterName = "eventId",
+                                Value = eventId
+                            };
+
+            DbContext.Database.ExecuteSqlCommand(DELETE_COMMAND, parameter);
         }
 
         public void RemovePostFeeds(int postId)
         {
-            var items = DbSet.Where(f => f.PostId == postId);
-            foreach (var item in items)
-                Remove(item);
+            const string DELETE_COMMAND = "DELETE FROM dbo.Feeds WHERE PostId = @postId";
+            var parameter = new SqlParameter
+            {
+                ParameterName = "postId",
+                Value = postId
+            };
+
+            DbContext.Database.ExecuteSqlCommand(DELETE_COMMAND, parameter);
         }
     }
 }

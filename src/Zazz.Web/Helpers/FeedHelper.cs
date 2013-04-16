@@ -81,16 +81,18 @@ namespace Zazz.Web.Helpers
             var vm = new List<FeedViewModel>();
 
             var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
+            throw new NotImplementedException();
+            //Fix commented lines
 
             foreach (var feed in feeds)
             {
                 var feedVm = new FeedViewModel
                              {
                                  FeedId = feed.Id,
-                                 UserId = feed.UserId,
-                                 UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
-                                 UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
-                                 IsFromCurrentUser = currentUserId == feed.UserId,
+                                 //UserId = feed.UserId,
+                                 //UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
+                                 //UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
+                                 //IsFromCurrentUser = currentUserId == feed.UserId,
                                  FeedType = feed.FeedType,
                                  Time = feed.Time,
                                  CommentsViewModel = new CommentsViewModel
@@ -108,7 +110,7 @@ namespace Zazz.Web.Helpers
                                                 CreatedDate = feed.Event.CreatedDate,
                                                 Description = feed.Event.Description,
                                                 Id = feed.Event.Id,
-                                                IsOwner = feed.UserId == currentUserId,
+                                                //IsOwner = feed.UserId == currentUserId,
                                                 Latitude = feed.Event.Latitude,
                                                 Location = feed.Event.Location,
                                                 Longitude = feed.Event.Longitude,

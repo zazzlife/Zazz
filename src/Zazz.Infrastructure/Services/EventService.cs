@@ -29,9 +29,10 @@ namespace Zazz.Infrastructure.Services
                        {
                            FeedType = FeedType.Event,
                            EventId = zazzEvent.Id,
-                           UserId = zazzEvent.UserId,
                            Time = zazzEvent.CreatedDate
                        };
+
+            feed.FeedUserIds.Add(new FeedUserId { UserId = zazzEvent.UserId });
 
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
