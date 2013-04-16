@@ -67,7 +67,7 @@ namespace Zazz.IntegrationTests.Repositories
                          CreatedTime = DateTime.UtcNow,
                          Message = "Dsadsad",
                          PageId = page.Id,
-                         UserId = user1.Id
+                         FromUserId = user1.Id
                      };
 
             var p2 = new Post
@@ -75,21 +75,21 @@ namespace Zazz.IntegrationTests.Repositories
                 CreatedTime = DateTime.UtcNow,
                 Message = "Dsadsad",
                 PageId = page.Id,
-                UserId = user1.Id
+                FromUserId = user1.Id
             };
 
             var p3 = new Post
             {
                 CreatedTime = DateTime.UtcNow,
                 Message = "Dsadsad",
-                UserId = user1.Id
+                FromUserId = user1.Id
             };
 
             var p4 = new Post
             {
                 CreatedTime = DateTime.UtcNow,
                 Message = "Dsadsad",
-                UserId = user2.Id
+                FromUserId = user2.Id
             };
 
 

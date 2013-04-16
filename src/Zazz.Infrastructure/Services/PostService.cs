@@ -22,7 +22,7 @@ namespace Zazz.Infrastructure.Services
                        {
                            PostId = post.Id,
                            Time = post.CreatedTime,
-                           UserId = post.UserId
+                           UserId = post.FromUserId
                        };
 
             _uow.FeedRepository.InsertGraph(feed);
@@ -36,7 +36,7 @@ namespace Zazz.Infrastructure.Services
             if (post == null)
                 throw new Exception("Not Found");
 
-            if (post.UserId != currentUserId)
+            if (post.FromUserId != currentUserId)
                 throw new SecurityException();
 
             post.Message = newText;
@@ -50,7 +50,7 @@ namespace Zazz.Infrastructure.Services
             if (post == null)
                 return;
 
-            if (post.UserId != currentUserId)
+            if (post.FromUserId != currentUserId)
                 throw new SecurityException();
             
             _uow.PostRepository.Remove(post);

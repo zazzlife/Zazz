@@ -833,7 +833,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                               FacebookId = fbStatus.Id,
                               Id = 1234,
                               Message = "old msg",
-                              UserId = page.UserId
+                              FromUserId = page.UserId
                           };
             var limit = 30;
 

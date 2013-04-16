@@ -29,7 +29,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         Id = 1234,
                         CreatedTime = DateTime.MinValue,
                         Message = "message",
-                        UserId = 12
+                        FromUserId = 12
                     };
         }
 
@@ -87,7 +87,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
 
             //Act
-            _sut.RemovePost(_post.Id, _post.UserId);
+            _sut.RemovePost(_post.Id, _post.FromUserId);
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -107,7 +107,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                _sut.EditPost(_post.Id, "new text", _post.UserId);
+                _sut.EditPost(_post.Id, "new text", _post.FromUserId);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception)
@@ -150,7 +150,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_post);
 
             //Act
-            _sut.EditPost(_post.Id, newText, _post.UserId);
+            _sut.EditPost(_post.Id, newText, _post.FromUserId);
 
             //Assert
             Assert.AreEqual(newText, _post.Message);

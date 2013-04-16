@@ -34,7 +34,7 @@ namespace Zazz.Web.Controllers
                        {
                            CreatedTime = DateTime.UtcNow,
                            Message = message,
-                           UserId = userId
+                           FromUserId = userId
                        };
 
             _postService.NewPost(post);

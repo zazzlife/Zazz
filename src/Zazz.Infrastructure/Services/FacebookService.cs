@@ -158,7 +158,7 @@ namespace Zazz.Infrastructure.Services
                                {
                                    FacebookId = s.Id,
                                    Message = s.Message,
-                                   UserId = page.UserId,
+                                   FromUserId = page.UserId,
                                    CreatedTime = s.Time.UnixTimestampToDateTime(),
                                    PageId = page.Id
                                };

@@ -6,10 +6,15 @@ namespace Zazz.Core.Models.Data
 {
     public class Post : BaseEntity
     {
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("FromUserId")]
+        public User FromUser { get; set; }
 
-        public int UserId { get; set; }
+        public int FromUserId { get; set; }
+
+        [ForeignKey("ToUserId")]
+        public User ToUser { get; set; }
+
+        public int? ToUserId { get; set; }
 
         public string Message { get; set; }
 

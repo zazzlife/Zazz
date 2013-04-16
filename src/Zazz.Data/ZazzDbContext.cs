@@ -78,6 +78,11 @@ namespace Zazz.Data
                 .WithMany(u => u.Photos)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Post>()
+                .HasOptional(p => p.ToUser)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
     }

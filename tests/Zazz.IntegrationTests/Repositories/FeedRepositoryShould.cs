@@ -188,7 +188,7 @@ namespace Zazz.IntegrationTests.Repositories
             var post = new Post
                        {
                            CreatedTime = DateTime.UtcNow,
-                           UserId = user.Id
+                           FromUserId = user.Id
                        };
 
             _dbContext.Posts.Add(post);

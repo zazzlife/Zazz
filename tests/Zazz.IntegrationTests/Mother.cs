@@ -38,7 +38,7 @@ namespace Zazz.IntegrationTests
             return new Post
                    {
                        CreatedTime = DateTime.UtcNow,
-                       UserId = userId
+                       FromUserId = userId
                    };
         }
 
