@@ -24,6 +24,7 @@ namespace Zazz.Data
         public IDbSet<Feed> Feeds { get; set; }
         public IDbSet<FacebookPage> FacebookPages { get; set; }
         public IDbSet<FeedPhotoId> FeedPhotoIds { get; set; }
+        public IDbSet<FeedUserId> FeedUserIds { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
 
 #if DEBUG
@@ -80,6 +81,11 @@ namespace Zazz.Data
 
             modelBuilder.Entity<Post>()
                 .HasOptional(p => p.ToUser)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<FeedUserId>()
+                .HasRequired(i => i.User)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
