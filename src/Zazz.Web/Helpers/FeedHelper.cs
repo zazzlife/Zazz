@@ -42,14 +42,14 @@ namespace Zazz.Web.Helpers
             followIds.Add(currentUserId);
 
             var query = _uow.FeedRepository.GetFeeds(followIds);
-            
+
             if (lastFeedId != 0)
                 query = query.Where(f => f.Id < lastFeedId);
 
 
             query = query.OrderByDescending(f => f.Time)
                          .Take(PageSize);
-            
+
 
             var feeds = query.ToList();
             return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
@@ -80,33 +80,33 @@ namespace Zazz.Web.Helpers
         {
             var vm = new List<FeedViewModel>();
 
-            var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
-
             foreach (var feed in feeds)
             {
+                var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
                 var feedVm = new FeedViewModel
-                             {
-                                 FeedId = feed.Id,
-                                 FeedType = feed.FeedType,
-                                 Time = feed.Time,
-                                 CommentsViewModel = new CommentsViewModel
-                                                     {
-                                                         CurrentUserPhotoUrl = currentUserPhotoUrl,
-                                                     }
-                             };
+                {
+                    FeedId = feed.Id,
+                    FeedType = feed.FeedType,
+                    Time = feed.Time,
+                    CommentsViewModel = new CommentsViewModel
+                    {
+                        CurrentUserPhotoUrl = currentUserPhotoUrl,
+                    }
+                };
 
+                #region Event
                 if (feed.FeedType == FeedType.Event)
                 {
                     // EVENT
-                    
-                    feedVm.UserId = feed.Event.UserId;
+
+                    FillUserDetails(ref feedVm, feed.Event.UserId, currentUserId);
+
                     feedVm.EventViewModel = new EventViewModel
                                             {
                                                 City = feed.Event.City,
                                                 CreatedDate = feed.Event.CreatedDate,
                                                 Description = feed.Event.Description,
                                                 Id = feed.Event.Id,
-                                                //IsOwner = feed.UserId == currentUserId,
                                                 Latitude = feed.Event.Latitude,
                                                 Location = feed.Event.Location,
                                                 Longitude = feed.Event.Longitude,
@@ -142,10 +142,20 @@ namespace Zazz.Web.Helpers
                     feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value,
                                                                     feedVm.CommentsViewModel.CommentType,
                                                                     currentUserId);
+
+                    #endregion
+
+                #region Photo
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
                     var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotoIds.Select(f => f.PhotoId)).ToList();
+
+                    if (photos.Count > 0)
+                    {
+                        FillUserDetails(ref feedVm, photos.First().UserId, currentUserId);
+                    }
+
                     feedVm.PhotoViewModel = photos
                         .Select(p => new PhotoViewModel
                                      {
@@ -155,16 +165,11 @@ namespace Zazz.Web.Helpers
                                          FromUserPhotoUrl = feedVm.UserImageUrl,
                                          FromUserId = p.UserId,
                                          PhotoUrl = p.IsFacebookPhoto
-                                                        ? new PhotoLinks( p.FacebookLink)
+                                                        ? new PhotoLinks(p.FacebookLink)
                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
                                      }).ToList();
 
                     feedVm.CommentsViewModel.CommentType = CommentType.Photo;
-
-                    if (photos.Count > 0)
-                    {
-                        feedVm.UserId = photos.First().UserId;
-                    }
 
                     if (photos.Count == 1)
                     {
@@ -174,17 +179,22 @@ namespace Zazz.Web.Helpers
                                                                         feedVm.CommentsViewModel.CommentType,
                                                                         currentUserId);
                     }
+
+                    #endregion
+
+                #region Post
+
                 }
                 else if (feed.FeedType == FeedType.Post)
                 {
+                    FillUserDetails(ref feedVm, feed.Post.FromUserId, currentUserId);
+
                     var post = _uow.PostRepository.GetById(feed.PostId.Value);
                     feedVm.PostViewModel = new PostViewModel
                                            {
                                                PostId = post.Id,
                                                PostText = post.Message
                                            };
-
-                    feedVm.UserId = post.FromUserId;
 
                     if (post.ToUserId.HasValue)
                     {
@@ -200,20 +210,26 @@ namespace Zazz.Web.Helpers
                     feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value,
                                                                     feedVm.CommentsViewModel.CommentType,
                                                                     currentUserId);
+
+                    #endregion
                 }
                 else
                 {
                     throw new NotImplementedException("Feed type is not implemented");
                 }
 
-                feedVm.UserDisplayName = _userService.GetUserDisplayName(feedVm.UserId);
-                feedVm.UserImageUrl = _photoService.GetUserImageUrl(feedVm.UserId);
-                feedVm.IsFromCurrentUser = feedVm.UserId == currentUserId;
-
                 vm.Add(feedVm);
             }
 
             return vm;
+        }
+
+        private void FillUserDetails(ref FeedViewModel feedVm, int userId, int currentUserId)
+        {
+            feedVm.UserId = userId;
+            feedVm.UserDisplayName = _userService.GetUserDisplayName(userId);
+            feedVm.UserImageUrl = _photoService.GetUserImageUrl(userId);
+            feedVm.IsFromCurrentUser = userId == currentUserId;
         }
 
         public List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId,
