@@ -1,9 +1,17 @@
-﻿namespace Zazz.Web.Models
+﻿using Zazz.Core.Models;
+
+namespace Zazz.Web.Models
 {
     public class PostViewModel
     {
         public int PostId { get; set; }
 
         public string PostText { get; set; }
+
+        public int ToUserId { get; set; }
+
+        public string ToUserDisplayName { get; set; }
+
+        public PhotoLinks ToUserPhotoUrl { get; set; }
     }
 }

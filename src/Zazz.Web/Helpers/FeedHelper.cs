@@ -81,18 +81,12 @@ namespace Zazz.Web.Helpers
             var vm = new List<FeedViewModel>();
 
             var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
-            throw new NotImplementedException();
-            //Fix commented lines
 
             foreach (var feed in feeds)
             {
                 var feedVm = new FeedViewModel
                              {
                                  FeedId = feed.Id,
-                                 //UserId = feed.UserId,
-                                 //UserDisplayName = _userService.GetUserDisplayName(feed.UserId),
-                                 //UserImageUrl = _photoService.GetUserImageUrl(feed.UserId),
-                                 //IsFromCurrentUser = currentUserId == feed.UserId,
                                  FeedType = feed.FeedType,
                                  Time = feed.Time,
                                  CommentsViewModel = new CommentsViewModel
@@ -104,6 +98,8 @@ namespace Zazz.Web.Helpers
                 if (feed.FeedType == FeedType.Event)
                 {
                     // EVENT
+                    
+                    feedVm.UserId = feed.Event.UserId;
                     feedVm.EventViewModel = new EventViewModel
                                             {
                                                 City = feed.Event.City,
@@ -157,13 +153,18 @@ namespace Zazz.Web.Helpers
                                          PhotoDescription = p.Description,
                                          FromUserDisplayName = feedVm.UserDisplayName,
                                          FromUserPhotoUrl = feedVm.UserImageUrl,
-                                         FromUserId = feedVm.UserId,
+                                         FromUserId = p.UserId,
                                          PhotoUrl = p.IsFacebookPhoto
                                                         ? new PhotoLinks( p.FacebookLink)
                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
                                      }).ToList();
 
                     feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+
+                    if (photos.Count > 0)
+                    {
+                        feedVm.UserId = photos.First().UserId;
+                    }
 
                     if (photos.Count == 1)
                     {
@@ -183,6 +184,16 @@ namespace Zazz.Web.Helpers
                                                PostText = post.Message
                                            };
 
+                    feedVm.UserId = post.FromUserId;
+
+                    if (post.ToUserId.HasValue)
+                    {
+                        var toUserId = post.ToUserId.Value;
+                        feedVm.PostViewModel.ToUserId = toUserId;
+                        feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
+                        feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserImageUrl(toUserId);
+                    }
+
                     feedVm.CommentsViewModel.CommentType = CommentType.Post;
 
                     feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
@@ -194,6 +205,10 @@ namespace Zazz.Web.Helpers
                 {
                     throw new NotImplementedException("Feed type is not implemented");
                 }
+
+                feedVm.UserDisplayName = _userService.GetUserDisplayName(feedVm.UserId);
+                feedVm.UserImageUrl = _photoService.GetUserImageUrl(feedVm.UserId);
+                feedVm.IsFromCurrentUser = feedVm.UserId == currentUserId;
 
                 vm.Add(feedVm);
             }
