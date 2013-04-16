@@ -10,10 +10,6 @@ namespace Zazz.Core.Models.Data
         public User()
         {
             LinkedAccounts = new List<OAuthAccount>();
-            Albums = new HashSet<Album>();
-            Photos = new HashSet<Photo>();
-            FollowingUsers = new HashSet<Follow>();
-            SentFollowRequests = new HashSet<FollowRequest>();
         }
 
         [MaxLength(50), Required]
@@ -34,16 +30,6 @@ namespace Zazz.Core.Models.Data
         public virtual ValidationToken ValidationToken { get; set; }
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
-
-        public virtual ICollection<Album> Albums  { get; set; }
-
-        public virtual ICollection<Photo> Photos { get; set; }
-
-        public virtual ICollection<Comment> Comments { get; set; }
-
-        public virtual ICollection<Follow> FollowingUsers { get; set; }
-
-        public virtual ICollection<FollowRequest> SentFollowRequests { get; set; }
 
         public virtual UserDetail UserDetail { get; set; }
 

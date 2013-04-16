@@ -154,7 +154,6 @@ namespace Zazz.Web.Controllers
                 Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
                 MajorId = user.UserDetail.MajorId,
                 Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
-                Albums = new SelectList(user.Albums.ToList(), "id", "name"),
                 SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                 SyncFbEvents = user.UserDetail.SyncFbEvents,
                 SyncFbPosts = user.UserDetail.SyncFbPosts,
@@ -173,7 +172,6 @@ namespace Zazz.Web.Controllers
             vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
             vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
             vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
-            vm.Albums = new SelectList(user.Albums.ToList(), "id", "name");
 
             vm.CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id);
             vm.CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id);

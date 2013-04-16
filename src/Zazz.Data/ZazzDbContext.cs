@@ -61,22 +61,22 @@ namespace Zazz.Data
 
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.From)
-                .WithMany(u => u.Comments)
+                .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Follow>()
                 .HasRequired(e => e.FromUser)
-                .WithMany(u => u.FollowingUsers)
+                .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<FollowRequest>()
                 .HasRequired(e => e.FromUser)
-                .WithMany(u => u.SentFollowRequests)
+                .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Photo>()
                 .HasRequired(i => i.User)
-                .WithMany(u => u.Photos)
+                .WithMany()
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Post>()
