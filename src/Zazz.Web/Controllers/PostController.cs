@@ -24,7 +24,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public ActionResult New(string message)
+        public ActionResult New(string message, int? toUser)
         {
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
@@ -34,7 +34,8 @@ namespace Zazz.Web.Controllers
                        {
                            CreatedTime = DateTime.UtcNow,
                            Message = message,
-                           FromUserId = userId
+                           FromUserId = userId,
+                           ToUserId = toUser
                        };
 
             _postService.NewPost(post);

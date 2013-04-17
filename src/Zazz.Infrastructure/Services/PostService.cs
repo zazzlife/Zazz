@@ -29,8 +29,15 @@ namespace Zazz.Infrastructure.Services
                                      UserId = post.FromUserId
                                  });
 
-            _uow.FeedRepository.InsertGraph(feed);
+            if (post.ToUserId.HasValue)
+            {
+                feed.FeedUserIds.Add(new FeedUserId
+                                     {
+                                         UserId = post.ToUserId.Value
+                                     });
+            }
 
+            _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
         }
 
