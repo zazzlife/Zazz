@@ -19,6 +19,8 @@ namespace Zazz.Web.Models
 
         public bool IsFromCurrentUser { get; set; }
 
+        public bool CurrentUserCanRemoveFeed { get; set; }
+
         public EventViewModel EventViewModel { get; set; }
 
         public List<PhotoViewModel> PhotoViewModel { get; set; }

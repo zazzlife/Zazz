@@ -26,10 +26,16 @@
 
     </div>
     <div class="feed-content well well-small no-padding">
-        @if (Model.IsFromCurrentUser)
+        @if (Model.IsFromCurrentUser || Model.CurrentUserCanRemoveFeed)
         {
             <div class="feed-actions btn-group">
-                <button title="Edit Post" type="button" class="btn editFeedBtn icononly-btn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
+                @if (Model.IsFromCurrentUser)
+                {
+                    <button title="Edit Post" type="button"
+                            class="btn editFeedBtn icononly-btn" data-id="@Model.PostViewModel.PostId">
+                        <i class="icon-pencil"></i>
+                    </button>
+                }
                 <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
                         class="btn removeFeedBtn icononly-btn">
                     <i class="icon-remove"></i>

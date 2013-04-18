@@ -202,6 +202,7 @@ namespace Zazz.Web.Helpers
                         feedVm.PostViewModel.ToUserId = toUserId;
                         feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
                         feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserImageUrl(toUserId);
+                        feedVm.CurrentUserCanRemoveFeed = post.ToUserId == currentUserId;
                     }
 
                     feedVm.CommentsViewModel.CommentType = CommentType.Post;
