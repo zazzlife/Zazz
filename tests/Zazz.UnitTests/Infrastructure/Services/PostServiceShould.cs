@@ -189,6 +189,29 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void TargetUserShouldNotBeAbleToEditPost_OnEditPost()
+        {
+            //Arrange
+            _post.ToUserId = 123;
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
+
+            //Act
+            try
+            {
+                _sut.EditPost(_post.Id, "new text", _post.ToUserId.Value);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            {
+            }
+
+            //Assert
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
         public void SaveNewChanges_OnEditPost()
         {
             //Arrange
