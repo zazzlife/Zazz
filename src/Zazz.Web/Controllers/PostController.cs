@@ -53,7 +53,14 @@ namespace Zazz.Web.Controllers
                          PostViewModel = new PostViewModel
                                          {
                                              PostId = post.Id,
-                                             PostText = message
+                                             PostText = message,
+                                             ToUserId = toUser.HasValue ? toUser.Value : 0,
+                                             ToUserDisplayName = toUser.HasValue
+                                                                     ? _userService.GetUserDisplayName(toUser.Value)
+                                                                     : "",
+                                             ToUserPhotoUrl = toUser.HasValue
+                                                                  ? _photoService.GetUserImageUrl(toUser.Value)
+                                                                  : null
                                          },
                          CommentsViewModel = new CommentsViewModel
                                              {
