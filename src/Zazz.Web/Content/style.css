@@ -366,8 +366,9 @@ hr.gold-line {
         font-weight: 600;
     }
 
-    .feed-item .feed-userimg-comtainer {
+    .feed-item .feed-userimg-container {
         float: left;
+        position: absolute;
     }
 
     .feed-item .feed-user-img {

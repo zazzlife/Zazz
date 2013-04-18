@@ -5,7 +5,7 @@
 }
 
 <div class="feed-item" data-id="@Model.FeedId">
-    <div class="feed-userimg-comtainer">
+    <div class="feed-userimg-container">
         <a href="~/user/profile/@Model.UserId">
             <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
                  src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
@@ -40,7 +40,7 @@
         <p class="post-feed-message">
             @Model.PostViewModel.PostText
         </p>
-
+        
         <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 
