@@ -339,6 +339,7 @@ $(document).on('click', '#submitPostBtn', function () {
 
     var self = $(this);
     var message = $('#postInput').val();
+    var toUser = self.data('touser');
 
     if (!message) {
         toastr.error("Post message cannot be empty!");
@@ -352,7 +353,8 @@ $(document).on('click', '#submitPostBtn', function () {
         url: url,
         type: 'POST',
         data: {
-            message: message
+            message: message,
+            toUser: toUser ? toUser : null
         },
         error: function () {
             toastr.error('An error occured, Please try again later.');
