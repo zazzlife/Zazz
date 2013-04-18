@@ -5,7 +5,7 @@
 }
 
 <div class="container" style="margin-top: 50px;">
-    @*COVET IMAGE*@
+    @*COVER IMAGE*@
     <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
 
     <div style="min-height: 120px;">
@@ -81,7 +81,14 @@
             @Html.Partial("_PostInputsPartial")
         </div>
     }
-
+    else
+    {
+        <div id="profileTabs">
+            <textarea placeholder="Post something on @Model.UserName's wall" id="postInput"></textarea>
+            <button type="button" class="btn btn-primary" id="submitPostBtn" data-id="@Model.UserId">Submit</button>
+        </div>
+    }
+    
     @* LEFT MENU *@
     <div id="leftMenu" class="well light-background">
         <div class="menu-title"><strong>MY CLUBS</strong></div>
