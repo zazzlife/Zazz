@@ -4,13 +4,16 @@
     Layout = null;
 }
 <div class="feed-item" data-id="@Model.FeedId">
-    <a href="~/user/profile/@Model.UserId">
-        <img title="@Model.UserDisplayName" alt="@Model.UserDisplayName"
-            src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
-    </a>
+    <div class="feed-userimg-comtainer">
+        <a href="~/user/profile/@Model.UserId">
+            <img title="@Model.UserDisplayName" alt="@Model.UserDisplayName"
+             src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+        </a>
+    </div>
+
 
     <div class="feed-content well well-small no-padding">
-        <div style="margin:10px;">
+        <div style="margin: 10px;">
             <p>
                 <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/event/show/@Model.EventViewModel.Id">event</a>
             </p>

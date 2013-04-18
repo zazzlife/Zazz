@@ -5,18 +5,33 @@
 }
 
 <div class="feed-item" data-id="@Model.FeedId">
-    <a href="~/user/profile/@Model.UserId">
-        <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
-            src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
-    </a>
+    <div class="feed-userimg-comtainer">
+        <a href="~/user/profile/@Model.UserId">
+            <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
+                 src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+        </a>
 
+        @if (Model.PostViewModel.ToUserId != 0)
+        {
+            <br/>
+            <div class="text-center"><i class="icon-caret-down icon-large" style="color: black;"></i></div>
+            <div>
+                <a href="~/user/profile/@Model.PostViewModel.ToUserId">
+                    <img alt="@Model.PostViewModel.ToUserDisplayName" title="@Model.PostViewModel.ToUserDisplayName" 
+                         src="@Model.PostViewModel.ToUserPhotoUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+                </a>
+            </div>
+            
+        }
+
+    </div>
     <div class="feed-content well well-small no-padding">
         @if (Model.IsFromCurrentUser)
         {
             <div class="feed-actions btn-group">
                 <button title="Edit Post" type="button" class="btn editFeedBtn icononly-btn" data-id="@Model.PostViewModel.PostId"><i class="icon-pencil"></i></button>
                 <button title="Remove Post" type="button" data-url="/post/remove/@Model.PostViewModel.PostId"
-                    class="btn removeFeedBtn icononly-btn">
+                        class="btn removeFeedBtn icononly-btn">
                     <i class="icon-remove"></i>
                 </button>
             </div>
@@ -25,7 +40,7 @@
         <p class="post-feed-message">
             @Model.PostViewModel.PostText
         </p>
-        
+
         <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 
