@@ -34,8 +34,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CreateNewPostAndFeedAndShouldNotSetTimeHere_OnNewPost() 
-            // we should not set created time here because facebook gives us its own time.
+        public void CreateNewPostAndFeedAndShouldNotSetTimeHere_OnNewPost()
+        // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
@@ -66,8 +66,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
-            {}
-            
+            { }
+
+            //Assert
+            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
+            _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
+            _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void ThrowWhenCurrentUserIdIsNotSameAsPostTarget_OnRemovePost()
+        {
+            //Arrange
+            _post.ToUserId = 12345;
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
+
+            //Act
+            try
+            {
+                _sut.RemovePost(_post.Id, 1);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (SecurityException)
+            { }
+
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
@@ -94,6 +119,28 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePostComments(_post.Id), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void AllowUserToRemovePostsIfTherAreNotTheOwnerButThePostIsOnTheirWall_OnRemovePost()
+        {
+            //Arrange
+            var post = new Post { FromUserId = 12, Id = 1, ToUserId = 333 };
+            _uow.Setup(x => x.PostRepository.GetById(post.Id))
+                .Returns(post);
+            _uow.Setup(x => x.PostRepository.Remove(post));
+            _uow.Setup(x => x.FeedRepository.RemovePostFeeds(post.Id));
+            _uow.Setup(x => x.CommentRepository.RemovePostComments(post.Id));
+
+            //Act
+            _sut.RemovePost(post.Id, post.ToUserId.Value);
+
+            //Assert
+            _uow.Verify(x => x.PostRepository.GetById(post.Id), Times.Once());
+            _uow.Verify(x => x.PostRepository.Remove(post), Times.Once());
+            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(post.Id), Times.Once());
+            _uow.Verify(x => x.CommentRepository.RemovePostComments(post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 

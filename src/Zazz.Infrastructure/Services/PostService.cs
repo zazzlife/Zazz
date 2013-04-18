@@ -62,7 +62,20 @@ namespace Zazz.Infrastructure.Services
                 return;
 
             if (post.FromUserId != currentUserId)
-                throw new SecurityException();
+            {
+                if (post.ToUserId.HasValue)
+                {
+                    if (post.ToUserId.Value != currentUserId)
+                    {
+                        throw new SecurityException();
+                    }
+                }
+                else
+                {
+                    throw new SecurityException();
+                }
+            }
+                
             
             _uow.PostRepository.Remove(post);
             _uow.FeedRepository.RemovePostFeeds(postId);
