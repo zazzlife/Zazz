@@ -354,9 +354,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
                 .Returns(false);
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
-            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
                 .Returns(1);
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
@@ -372,8 +372,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
             _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Never());
         }
@@ -415,9 +415,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
                 .Returns(true);
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
-            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
                 .Returns(1);
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
@@ -433,8 +433,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
             _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Once());
         }
@@ -477,9 +477,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
-            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
                 .Returns(0);
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
@@ -495,8 +495,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Once());
         }
 
@@ -538,9 +538,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
-            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(feedId))
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
                 .Returns(1);
             _uow.Setup(x => x.FeedRepository.Remove(feedId));
 
@@ -556,8 +556,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(feedId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
             _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
         }
 
@@ -598,9 +598,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
             _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId));
-            _uow.Setup(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
                 .Returns(0);
-            _uow.Setup(x => x.FeedPhotoIdRepository.GetCount(It.IsAny<int>()))
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(It.IsAny<int>()))
                 .Returns(0);
             _uow.Setup(x => x.FeedRepository.Remove(It.IsAny<int>()));
 
@@ -617,8 +617,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoIdRepository.GetCount(It.IsAny<int>()), Times.Never());
+            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
+            _uow.Verify(x => x.FeedPhotoRepository.GetCount(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.FeedRepository.Remove(It.IsAny<int>()), Times.Never());
         }
 

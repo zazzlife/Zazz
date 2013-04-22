@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -10,7 +11,7 @@ namespace Zazz.IntegrationTests.Repositories
     public class FeedPhotoIdRepositoryShould
     {
         private ZazzDbContext _context;
-        private FeedPhotoIdRepository _repo;
+        private FeedPhotoRepository _repo;
         private User _user;
         private Feed _feed;
         private Photo _photo;
@@ -19,7 +20,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new FeedPhotoIdRepository(_context);
+            _repo = new FeedPhotoRepository(_context);
 
             _user = Mother.GetUser();
             _context.Users.Add(_user);
@@ -49,45 +50,47 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             
 
-            var feedPhotoId = new FeedPhoto
+            var feedPhoto = new FeedPhoto
                               {
                                   FeedId = _feed.Id,
                                   PhotoId = _photo.Id
                               };
 
-            _context.FeedPhotoIds.Add(feedPhotoId);
+            _context.FeedPhotoIds.Add(feedPhoto);
             _context.SaveChanges();
 
-            Assert.IsTrue(_repo.Exists(feedPhotoId.Id));
+            Assert.IsTrue(_context.FeedPhotoIds.Any(f => f.FeedId == feedPhoto.FeedId &&
+                                                         f.PhotoId == feedPhoto.PhotoId));
 
             //Act
             var feedId = _repo.RemoveByPhotoIdAndReturnFeedId(_photo.Id);
             _context.SaveChanges();
 
             //Assert
-            Assert.IsFalse(_repo.Exists(feedPhotoId.Id));
-            Assert.AreEqual(feedPhotoId.FeedId, feedId);
+            Assert.IsFalse(_context.FeedPhotoIds.Any(f => f.FeedId == feedPhoto.FeedId &&
+                                                         f.PhotoId == feedPhoto.PhotoId));
+            Assert.AreEqual(feedPhoto.FeedId, feedId);
         }
 
         [Test]
         public void ReturnCount_OnGetCount()
         {
             //Arrange
-            var feedPhotoId1 = new FeedPhoto
+            var feedPhoto1 = new FeedPhoto
                               {
                                   FeedId = _feed.Id,
                                   PhotoId = _photo.Id
                               };
 
 
-            var feedPhotoId2 = new FeedPhoto
+            var feedPhoto2 = new FeedPhoto
                                {
                                    FeedId = _feed.Id,
                                    PhotoId = _photo.Id
                                };
 
-            _context.FeedPhotoIds.Add(feedPhotoId1);
-            _context.FeedPhotoIds.Add(feedPhotoId2);
+            _context.FeedPhotoIds.Add(feedPhoto1);
+            _context.FeedPhotoIds.Add(feedPhoto2);
             _context.SaveChanges();
 
             //Act

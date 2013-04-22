@@ -71,7 +71,7 @@
     <Compile Include="Interfaces\IFacebookPageRepository.cs" />
     <Compile Include="Interfaces\IFacebookSyncRetryRepository.cs" />
     <Compile Include="Interfaces\IFacebookService.cs" />
-    <Compile Include="Interfaces\IFeedPhotoIdRepository.cs" />
+    <Compile Include="Interfaces\IFeedPhotoRepository.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\IFollowService.cs" />
     <Compile Include="Interfaces\IErrorHandler.cs" />

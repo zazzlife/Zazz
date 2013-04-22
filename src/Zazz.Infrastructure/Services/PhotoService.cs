@@ -245,12 +245,12 @@ namespace Zazz.Infrastructure.Services
                 photo.User.UserDetail.CoverPhotoId = 0;
 
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
-            var feedId = _uow.FeedPhotoIdRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
+            var feedId = _uow.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
             _uow.SaveChanges();
             
             if (feedId != 0)
             {
-                var remainingPhotosCount = _uow.FeedPhotoIdRepository.GetCount(feedId);
+                var remainingPhotosCount = _uow.FeedPhotoRepository.GetCount(feedId);
                 if (remainingPhotosCount == 0)
                 {
                     _uow.FeedRepository.Remove(feedId);
