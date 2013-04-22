@@ -6,12 +6,12 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class FeedPhotoIdRepository : BaseRepository<FeedPhotoId>, IFeedPhotoIdRepository
+    public class FeedPhotoIdRepository : BaseRepository<FeedPhoto>, IFeedPhotoIdRepository
     {
         public FeedPhotoIdRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        protected override int GetItemId(FeedPhotoId item)
+        protected override int GetItemId(FeedPhoto item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the record, if it's new then use insert graph.");
         }

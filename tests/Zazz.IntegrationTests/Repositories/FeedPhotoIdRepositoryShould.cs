@@ -49,7 +49,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             
 
-            var feedPhotoId = new FeedPhotoId
+            var feedPhotoId = new FeedPhoto
                               {
                                   FeedId = _feed.Id,
                                   PhotoId = _photo.Id
@@ -73,14 +73,14 @@ namespace Zazz.IntegrationTests.Repositories
         public void ReturnCount_OnGetCount()
         {
             //Arrange
-            var feedPhotoId1 = new FeedPhotoId
+            var feedPhotoId1 = new FeedPhoto
                               {
                                   FeedId = _feed.Id,
                                   PhotoId = _photo.Id
                               };
 
 
-            var feedPhotoId2 = new FeedPhotoId
+            var feedPhotoId2 = new FeedPhoto
                                {
                                    FeedId = _feed.Id,
                                    PhotoId = _photo.Id

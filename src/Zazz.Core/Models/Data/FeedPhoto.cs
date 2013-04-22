@@ -2,7 +2,8 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class FeedPhotoId : BaseEntity
+    [Table("Feed_Photo")]
+    public class FeedPhoto : BaseEntity
     {
         [ForeignKey("FeedId")]
         public Feed Feed { get; set; }

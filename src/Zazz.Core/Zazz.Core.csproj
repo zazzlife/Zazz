@@ -101,7 +101,7 @@
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
-    <Compile Include="Models\Data\FeedPhotoId.cs" />
+    <Compile Include="Models\Data\FeedPhoto.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
     <Compile Include="Models\Data\FeedUserId.cs" />
     <Compile Include="Models\Data\Gender.cs" />
