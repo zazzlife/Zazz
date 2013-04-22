@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Zazz.Core.Models.Data
 {
     [Table("Feed_User")]
-    public class FeedUser : BaseEntity
+    public class FeedUser
     {
         [ForeignKey("FeedId")]
         public virtual Feed Feed { get; set; }
@@ -12,8 +12,10 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
+        [Key, Column(Order = 0)]
         public int FeedId { get; set; }
 
+        [Key, Column(Order = 1)]
         public int UserId { get; set; }
     }
 }
