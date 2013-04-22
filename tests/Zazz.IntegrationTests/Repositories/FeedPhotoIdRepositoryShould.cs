@@ -76,17 +76,25 @@ namespace Zazz.IntegrationTests.Repositories
         public void ReturnCount_OnGetCount()
         {
             //Arrange
+            var photo2 = new Photo
+                         {
+                             UserId = _user.Id,
+                             UploadDate = DateTime.UtcNow
+                         };
+
+            _context.Photos.Add(photo2);
+            _context.SaveChanges();
+
             var feedPhoto1 = new FeedPhoto
                               {
                                   FeedId = _feed.Id,
                                   PhotoId = _photo.Id
                               };
 
-
             var feedPhoto2 = new FeedPhoto
                                {
                                    FeedId = _feed.Id,
-                                   PhotoId = _photo.Id
+                                   PhotoId = photo2.Id
                                };
 
             _context.FeedPhotoIds.Add(feedPhoto1);
