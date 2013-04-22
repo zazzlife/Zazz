@@ -6,16 +6,18 @@ namespace Zazz.Core.Models.Data
     [Table("Feed_Photo")]
     public class FeedPhoto
     {
-        [ForeignKey("FeedId")]
-        public Feed Feed { get; set; }
-
-        [Key]
+        [Key, Column(Order = 0)]
         public int FeedId { get; set; }
 
-        [ForeignKey("PhotoId")]
-        public Photo Photo { get; set; }
-
-        [Key]
+        [Key, Column(Order = 1)]
         public int PhotoId { get; set; }
+
+        [ForeignKey("FeedId")]
+        public virtual Feed Feed { get; set; }
+
+        [ForeignKey("PhotoId")]
+        public virtual Photo Photo { get; set; }
+
+        
     }
 }
