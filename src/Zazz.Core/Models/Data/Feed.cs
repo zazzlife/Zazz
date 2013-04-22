@@ -9,7 +9,7 @@ namespace Zazz.Core.Models.Data
         public Feed()
         {
             FeedPhotos = new HashSet<FeedPhoto>();
-            FeedUsers = new HashSet<FeedUserId>();
+            FeedUsers = new HashSet<FeedUser>();
         }
 
         [ForeignKey("EventId")]
@@ -28,6 +28,6 @@ namespace Zazz.Core.Models.Data
 
         public ICollection<FeedPhoto> FeedPhotos { get; set; }
 
-        public ICollection<FeedUserId> FeedUsers { get; set; }
+        public ICollection<FeedUser> FeedUsers { get; set; }
     }
 }

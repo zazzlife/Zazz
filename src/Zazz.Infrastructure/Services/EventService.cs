@@ -32,7 +32,7 @@ namespace Zazz.Infrastructure.Services
                            Time = zazzEvent.CreatedDate
                        };
 
-            feed.FeedUsers.Add(new FeedUserId { UserId = zazzEvent.UserId });
+            feed.FeedUsers.Add(new FeedUser { UserId = zazzEvent.UserId });
 
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();

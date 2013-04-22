@@ -102,7 +102,7 @@ namespace Zazz.Infrastructure.Services
                                    Time = photo.UploadDate,
                                };
 
-                    feed.FeedUsers.Add(new FeedUserId { UserId = photo.UserId });
+                    feed.FeedUsers.Add(new FeedUser { UserId = photo.UserId });
 
                     feed.FeedPhotos.Add(new FeedPhoto
                                           {

@@ -37,7 +37,7 @@ namespace Zazz.IntegrationTests.Repositories
                           Time = DateTime.UtcNow
                       };
 
-            _feed.FeedUsers.Add(new FeedUserId { UserId = _user.Id });
+            _feed.FeedUsers.Add(new FeedUser { UserId = _user.Id });
 
             _context.Feeds.Add(_feed);
             _context.Photos.Add(_photo);
@@ -56,10 +56,10 @@ namespace Zazz.IntegrationTests.Repositories
                                   PhotoId = _photo.Id
                               };
 
-            _context.FeedPhotoIds.Add(feedPhoto);
+            _context.FeedPhotos.Add(feedPhoto);
             _context.SaveChanges();
 
-            Assert.IsTrue(_context.FeedPhotoIds.Any(f => f.FeedId == feedPhoto.FeedId &&
+            Assert.IsTrue(_context.FeedPhotos.Any(f => f.FeedId == feedPhoto.FeedId &&
                                                          f.PhotoId == feedPhoto.PhotoId));
 
             //Act
@@ -67,7 +67,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Assert
-            Assert.IsFalse(_context.FeedPhotoIds.Any(f => f.FeedId == feedPhoto.FeedId &&
+            Assert.IsFalse(_context.FeedPhotos.Any(f => f.FeedId == feedPhoto.FeedId &&
                                                          f.PhotoId == feedPhoto.PhotoId));
             Assert.AreEqual(feedPhoto.FeedId, feedId);
         }
@@ -97,8 +97,8 @@ namespace Zazz.IntegrationTests.Repositories
                                    PhotoId = photo2.Id
                                };
 
-            _context.FeedPhotoIds.Add(feedPhoto1);
-            _context.FeedPhotoIds.Add(feedPhoto2);
+            _context.FeedPhotos.Add(feedPhoto1);
+            _context.FeedPhotos.Add(feedPhoto2);
             _context.SaveChanges();
 
             //Act

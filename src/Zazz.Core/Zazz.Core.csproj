@@ -103,7 +103,7 @@
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedPhoto.cs" />
     <Compile Include="Models\Data\FeedType.cs" />
-    <Compile Include="Models\Data\FeedUserId.cs" />
+    <Compile Include="Models\Data\FeedUser.cs" />
     <Compile Include="Models\Data\Gender.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />

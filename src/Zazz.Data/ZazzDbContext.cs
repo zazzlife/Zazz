@@ -23,8 +23,8 @@ namespace Zazz.Data
         public IDbSet<FollowRequest> FollowRequests { get; set; }
         public IDbSet<Feed> Feeds { get; set; }
         public IDbSet<FacebookPage> FacebookPages { get; set; }
-        public IDbSet<FeedPhoto> FeedPhotoIds { get; set; }
-        public IDbSet<FeedUserId> FeedUserIds { get; set; }
+        public IDbSet<FeedPhoto> FeedPhotos { get; set; }
+        public IDbSet<FeedUser> FeedUsers { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
 
 #if DEBUG
@@ -89,7 +89,7 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<FeedUserId>()
+            modelBuilder.Entity<FeedUser>()
                 .HasRequired(i => i.User)
                 .WithMany()
                 .WillCascadeOnDelete(false);

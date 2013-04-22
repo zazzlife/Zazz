@@ -44,9 +44,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                           {
                               Time = DateTime.UtcNow,
-                              FeedUsers = new List<FeedUserId>
+                              FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userA.Id}
+                                                new FeedUser {UserId = userA.Id}
                                             }
 
                           });
@@ -57,9 +57,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                 {
                     Time = DateTime.UtcNow,
-                    FeedUsers = new List<FeedUserId>
+                    FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userB.Id}
+                                                new FeedUser {UserId = userB.Id}
                                             }
                 });
             }
@@ -69,9 +69,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                 {
                     Time = DateTime.UtcNow,
-                    FeedUsers = new List<FeedUserId>
+                    FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userC.Id}
+                                                new FeedUser {UserId = userC.Id}
                                             }
                 });
             }
@@ -81,9 +81,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                 {
                     Time = DateTime.UtcNow,
-                    FeedUsers = new List<FeedUserId>
+                    FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userD.Id}
+                                                new FeedUser {UserId = userD.Id}
                                             }
                 });
             }
@@ -125,12 +125,12 @@ namespace Zazz.IntegrationTests.Repositories
             var feeds = new List<Feed>();
             var feed1 = new Feed { Time = DateTime.UtcNow };
 
-            feed1.FeedUsers.Add(new FeedUserId { UserId = userA.Id });
-            feed1.FeedUsers.Add(new FeedUserId { UserId = userB.Id });
-            feed1.FeedUsers.Add(new FeedUserId { UserId = userC.Id });
+            feed1.FeedUsers.Add(new FeedUser { UserId = userA.Id });
+            feed1.FeedUsers.Add(new FeedUser { UserId = userB.Id });
+            feed1.FeedUsers.Add(new FeedUser { UserId = userC.Id });
 
             var feed2 = new Feed { Time = DateTime.UtcNow };
-            feed2.FeedUsers.Add(new FeedUserId { UserId = userD.Id });
+            feed2.FeedUsers.Add(new FeedUser { UserId = userD.Id });
 
             feeds.Add(feed1);
             feeds.Add(feed2);
@@ -172,9 +172,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                 {
                     Time = DateTime.UtcNow,
-                    FeedUsers = new List<FeedUserId>
+                    FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userA.Id}
+                                                new FeedUser {UserId = userA.Id}
                                             }
                 });
             }
@@ -184,9 +184,9 @@ namespace Zazz.IntegrationTests.Repositories
                 feeds.Add(new Feed
                 {
                     Time = DateTime.UtcNow,
-                    FeedUsers = new List<FeedUserId>
+                    FeedUsers = new List<FeedUser>
                                             {
-                                                new FeedUserId {UserId = userB.Id}
+                                                new FeedUser {UserId = userB.Id}
                                             }
                 });
             }
@@ -231,9 +231,9 @@ namespace Zazz.IntegrationTests.Repositories
 
             var feed = new Feed
                        {
-                           FeedUsers = new List<FeedUserId>
+                           FeedUsers = new List<FeedUser>
                                          {
-                                             new FeedUserId {UserId = user.Id}
+                                             new FeedUser {UserId = user.Id}
                                          },
                            EventId = zazzEvent.Id,
                            Time = DateTime.UtcNow
@@ -271,9 +271,9 @@ namespace Zazz.IntegrationTests.Repositories
 
             var feed = new Feed
                        {
-                           FeedUsers = new List<FeedUserId>
+                           FeedUsers = new List<FeedUser>
                                          {
-                                             new FeedUserId {UserId = user.Id}
+                                             new FeedUser {UserId = user.Id}
                                          },
                            PostId = post.Id,
                            Time = DateTime.UtcNow
@@ -303,18 +303,18 @@ namespace Zazz.IntegrationTests.Repositories
             var firstFeed = new Feed
                             {
                                 FeedType = FeedType.Picture,
-                                FeedUsers = new List<FeedUserId>
+                                FeedUsers = new List<FeedUser>
                                               {
-                                                  new FeedUserId {UserId = user.Id}
+                                                  new FeedUser {UserId = user.Id}
                                               },
                                 Time = DateTime.UtcNow
                             };
 
             var secondFeed = new Feed
                              {
-                                 FeedUsers = new List<FeedUserId>
+                                 FeedUsers = new List<FeedUser>
                                                {
-                                                   new FeedUserId {UserId = user.Id}
+                                                   new FeedUser {UserId = user.Id}
                                                },
                                  FeedType = FeedType.Post,
                                  Time = DateTime.UtcNow.AddHours(1)
