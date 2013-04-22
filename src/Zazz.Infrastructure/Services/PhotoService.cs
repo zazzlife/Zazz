@@ -89,7 +89,7 @@ namespace Zazz.Infrastructure.Services
                 if (lastFeed != null && lastFeed.FeedType == FeedType.Picture &&
                     lastFeed.Time >= DateTime.UtcNow.AddDays(-1))
                 {
-                    lastFeed.FeedPhotoIds.Add(new FeedPhoto
+                    lastFeed.FeedPhotos.Add(new FeedPhoto
                                               {
                                                   PhotoId = photo.Id
                                               });
@@ -102,9 +102,9 @@ namespace Zazz.Infrastructure.Services
                                    Time = photo.UploadDate,
                                };
 
-                    feed.FeedUserIds.Add(new FeedUserId { UserId = photo.UserId });
+                    feed.FeedUsers.Add(new FeedUserId { UserId = photo.UserId });
 
-                    feed.FeedPhotoIds.Add(new FeedPhoto
+                    feed.FeedPhotos.Add(new FeedPhoto
                                           {
                                               PhotoId = photo.Id
                                           });

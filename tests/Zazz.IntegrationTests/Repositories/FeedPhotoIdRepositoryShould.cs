@@ -37,7 +37,7 @@ namespace Zazz.IntegrationTests.Repositories
                           Time = DateTime.UtcNow
                       };
 
-            _feed.FeedUserIds.Add(new FeedUserId { UserId = _user.Id });
+            _feed.FeedUsers.Add(new FeedUserId { UserId = _user.Id });
 
             _context.Feeds.Add(_feed);
             _context.Photos.Add(_photo);

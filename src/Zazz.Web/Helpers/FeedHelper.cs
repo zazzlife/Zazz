@@ -149,7 +149,7 @@ namespace Zazz.Web.Helpers
                 }
                 else if (feed.FeedType == FeedType.Picture)
                 {
-                    var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotoIds.Select(f => f.PhotoId)).ToList();
+                    var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotos.Select(f => f.PhotoId)).ToList();
 
                     if (photos.Count > 0)
                     {

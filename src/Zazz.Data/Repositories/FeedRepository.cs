@@ -24,12 +24,12 @@ namespace Zazz.Data.Repositories
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
             return (from feed in DbSet
-                    from feedUserId in feed.FeedUserIds
+                    from feedUserId in feed.FeedUsers
                     orderby feed.Time descending 
                     where userIds.Contains(feedUserId.UserId)
                     select feed)
                 .Distinct()
-                .Include(f => f.FeedPhotoIds)
+                .Include(f => f.FeedPhotos)
                 .Include(f => f.Post)
                 .Include(f => f.Event);
         }
@@ -37,12 +37,12 @@ namespace Zazz.Data.Repositories
         public IQueryable<Feed> GetUserFeeds(int userId)
         {
             return (from feed in DbSet
-                    from feedUserId in feed.FeedUserIds
+                    from feedUserId in feed.FeedUsers
                     orderby feed.Time descending 
                     where feedUserId.UserId == userId
                     select feed)
                 .Distinct()
-                .Include(f => f.FeedPhotoIds)
+                .Include(f => f.FeedPhotos)
                 .Include(f => f.Post)
                 .Include(f => f.Event);
         }
@@ -50,11 +50,11 @@ namespace Zazz.Data.Repositories
         public Feed GetUserLastFeed(int userId)
         {
             return (from feed in DbSet
-                    from feedUserId in feed.FeedUserIds
+                    from feedUserId in feed.FeedUsers
                     orderby feed.Time descending
                     where feedUserId.UserId == userId
                     select feed)
-                .Include(f => f.FeedPhotoIds)
+                .Include(f => f.FeedPhotos)
                 .FirstOrDefault();
         }
 

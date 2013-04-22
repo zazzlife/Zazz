@@ -24,14 +24,14 @@ namespace Zazz.Infrastructure.Services
                            Time = post.CreatedTime,
                        };
 
-            feed.FeedUserIds.Add(new FeedUserId
+            feed.FeedUsers.Add(new FeedUserId
                                  {
                                      UserId = post.FromUserId
                                  });
 
             if (post.ToUserId.HasValue)
             {
-                feed.FeedUserIds.Add(new FeedUserId
+                feed.FeedUsers.Add(new FeedUserId
                                      {
                                          UserId = post.ToUserId.Value
                                      });

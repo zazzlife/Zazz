@@ -219,7 +219,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
-            Assert.IsNotNull(lastFeed.FeedPhotoIds.Single(p => p.PhotoId == photo.Id));
+            Assert.IsNotNull(lastFeed.FeedPhotos.Single(p => p.PhotoId == photo.Id));
             Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
             Assert.AreEqual(photo.Id, id);
         }
