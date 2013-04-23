@@ -105,6 +105,16 @@ namespace Zazz.Data
             }
         }
 
+        private INotificationRepository _notificationRepository;
+        public INotificationRepository NotificationRepository
+        {
+            get
+            {
+                return _notificationRepository
+                       ?? (_notificationRepository = new NotificationRepository(GetContext()));
+            }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)
