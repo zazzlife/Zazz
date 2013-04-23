@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using Zazz.Core.Interfaces;
@@ -23,37 +24,47 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<T> GetAll()
         {
-            throw new System.NotImplementedException();
+            return DbSet;
         }
 
         public void InsertGraph(T item)
         {
-            throw new System.NotImplementedException();
+            DbSet.Add(item);
         }
 
         public void InsertOrUpdate(T item)
         {
-            throw new System.NotImplementedException();
+            if (item.Id == 0)
+            {
+                throw new InvalidOperationException("You need to provide the id for updating the record, if you want to insert use InsertGraph instead");
+            }
+
+            DbContext.Entry(item).State = EntityState.Modified;
+
         }
 
         public T GetById(int id)
         {
-            throw new System.NotImplementedException();
+            return DbSet.Find(id);
         }
 
         public bool Exists(int id)
         {
-            throw new System.NotImplementedException();
+            return DbSet.Any(x => x.Id == id);
         }
 
         public void Remove(int id)
         {
-            throw new System.NotImplementedException();
+            var item = GetById(id);
+            if (item != null)
+            {
+                Remove(item);
+            }
         }
 
         public void Remove(T item)
         {
-            throw new System.NotImplementedException();
+            DbContext.Entry(item).State = EntityState.Deleted;
         }
     }
 }
