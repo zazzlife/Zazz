@@ -271,8 +271,6 @@ namespace Zazz.Web.Controllers
                 return View("Login");
             }
 
-            var oauthVersion = OAuthVersion.Two; //TODO : assign the correct version.
-
             OAuthProvider provider;
             if (!OAuthProvider.TryParse(result.Provider, true, out provider))
                 throw new Exception("Unable to validate the provider");
@@ -285,7 +283,6 @@ namespace Zazz.Web.Controllers
             var oauthAccount = new OAuthAccount
                                    {
                                        AccessToken = accessToken,
-                                       OAuthVersion = oauthVersion,
                                        Provider = provider,
                                        ProviderUserId = long.Parse(providerId)
                                    };
@@ -316,7 +313,6 @@ namespace Zazz.Web.Controllers
                         Name = name,
                         Provider = provider,
                         ProviderUserId = long.Parse(providerId),
-                        OAuthVersion = oauthVersion
                     };
 
                     TempData["oauthData"] = oauthData;
@@ -389,7 +385,6 @@ namespace Zazz.Web.Controllers
                                               new OAuthAccount
                                                   {
                                                       AccessToken = oauthData.AccessToken,
-                                                      OAuthVersion = oauthData.OAuthVersion,
                                                       Provider = oauthData.Provider,
                                                       ProviderUserId = oauthData.ProviderUserId
                                                   }

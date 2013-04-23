@@ -108,7 +108,6 @@
     <Compile Include="Models\Data\FeedPhoto.cs" />
     <Compile Include="Models\Data\FeedUser.cs" />
     <Compile Include="Models\Data\Major.cs" />
-    <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\User.cs" />

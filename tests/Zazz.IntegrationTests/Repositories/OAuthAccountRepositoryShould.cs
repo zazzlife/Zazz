@@ -34,7 +34,6 @@ namespace Zazz.IntegrationTests.Repositories
                                    {
                                        AccessToken = Guid.NewGuid().ToString(),
                                        Provider = OAuthProvider.Facebook,
-                                       OAuthVersion = OAuthVersion.Two,
                                        UserId = user.Id
                                    };
 
@@ -55,7 +54,6 @@ namespace Zazz.IntegrationTests.Repositories
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
-                OAuthVersion = OAuthVersion.Two,
                 UserId = user.Id
             };
 
@@ -83,7 +81,6 @@ namespace Zazz.IntegrationTests.Repositories
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
-                OAuthVersion = OAuthVersion.Two,
                 UserId = user.Id
             };
 
@@ -111,7 +108,6 @@ namespace Zazz.IntegrationTests.Repositories
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
-                OAuthVersion = OAuthVersion.Two,
                 UserId = user.Id
             };
 
@@ -166,14 +162,12 @@ namespace Zazz.IntegrationTests.Repositories
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Facebook,
-                                                  OAuthVersion = OAuthVersion.Two,
                                                   UserId = user.Id
                                               },
                                           new OAuthAccount
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Microsoft,
-                                                  OAuthVersion = OAuthVersion.Two,
                                                   UserId = user.Id
                                               }
                                       };
@@ -211,7 +205,6 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
                                    {
                                        AccessToken = "token",
-                                       OAuthVersion = OAuthVersion.Two,
                                        Provider = OAuthProvider.Facebook,
                                        ProviderUserId = providerUserId,
                                        UserId = user.Id
@@ -252,7 +245,6 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccount = new OAuthAccount
             {
                 AccessToken = "token",
-                OAuthVersion = OAuthVersion.Two,
                 Provider = OAuthProvider.Facebook,
                 ProviderUserId = providerUserId,
                 UserId = user.Id
@@ -281,7 +273,6 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccountA = new OAuthAccount
             {
                 AccessToken = "tokenA facebook",
-                OAuthVersion = OAuthVersion.Two,
                 Provider = OAuthProvider.Facebook,
                 ProviderUserId = 123,
                 UserId = userA.Id
@@ -290,7 +281,6 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccountB = new OAuthAccount
             {
                 AccessToken = "tokenA ms",
-                OAuthVersion = OAuthVersion.Two,
                 Provider = OAuthProvider.Microsoft,
                 ProviderUserId = 123,
                 UserId = userA.Id
@@ -299,7 +289,6 @@ namespace Zazz.IntegrationTests.Repositories
             var oauthAccountC = new OAuthAccount
             {
                 AccessToken = "tokenB facebook",
-                OAuthVersion = OAuthVersion.Two,
                 Provider = OAuthProvider.Facebook,
                 ProviderUserId = 1234,
                 UserId = userB.Id

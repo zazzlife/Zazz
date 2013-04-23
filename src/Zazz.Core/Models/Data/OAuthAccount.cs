@@ -18,7 +18,5 @@ namespace Zazz.Core.Models.Data
         public string AccessToken { get; set; }
 
         public OAuthProvider Provider { get; set; }
-
-        public OAuthVersion OAuthVersion { get; set; }
     }
 }
