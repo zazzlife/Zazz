@@ -50,6 +50,7 @@
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AlbumRepository.cs" />
+    <Compile Include="Repositories\BaseLongRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\FacebookPageRepository.cs" />
     <Compile Include="Repositories\FacebookSyncRetryRepository.cs" />
