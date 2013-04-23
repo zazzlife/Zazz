@@ -49,7 +49,7 @@ namespace Zazz.Data.Repositories
 
         public int GetUnreadNotificationsCount(int userId)
         {
-            throw new System.NotImplementedException();
+            return DbSet.Count(n => n.UserId == userId && !n.IsRead);
         }
     }
 }

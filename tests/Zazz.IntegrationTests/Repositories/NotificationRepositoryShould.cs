@@ -214,6 +214,23 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
         }
 
+        [Test]
+        public void RetrunCorrectNewNotificationsCount()
+        {
+            //Arrange
+            var randomNotification = _context.Notifications.First();
+            randomNotification.IsRead = true;
+
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUnreadNotificationsCount(_user.Id);
+
+            //Assert
+            Assert.AreEqual(5, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(5, result);
+        }
+
 
     }
 }
