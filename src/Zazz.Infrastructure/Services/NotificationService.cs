@@ -15,7 +15,7 @@ namespace Zazz.Infrastructure.Services
 
         public IQueryable<Notification> GetUserNotifications(int userId)
         {
-            throw new System.NotImplementedException();
+            return _uow.NotificationRepository.GetUserNotifications(userId);
         }
 
         public void CreateNotification(Notification notification, bool save = true)

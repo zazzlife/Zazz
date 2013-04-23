@@ -84,6 +84,48 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void ReturnCorrectUserNotifications_OnGetUserNotifications()
+        {
+            //Arrange
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var photo1Notification = Mother.GetNotification(user2.Id);
+            photo1Notification.PhotoId = _photo1.Id;
+
+            var photo2Notification = Mother.GetNotification(user2.Id);
+            photo2Notification.PhotoId = _photo2.Id;
+
+            var post1Notification = Mother.GetNotification(user2.Id);
+            post1Notification.PostId = _post1.Id;
+
+            var post2Notification = Mother.GetNotification(user2.Id);
+            post2Notification.PostId = _post2.Id;
+
+            var event1Notification = Mother.GetNotification(user2.Id);
+            event1Notification.EventId = _event1.Id;
+
+            var event2Notification = Mother.GetNotification(user2.Id);
+            event2Notification.EventId = _event2.Id;
+
+            _context.Notifications.Add(photo1Notification);
+            _context.Notifications.Add(photo2Notification);
+            _context.Notifications.Add(post1Notification);
+            _context.Notifications.Add(post2Notification);
+            _context.Notifications.Add(event1Notification);
+            _context.Notifications.Add(event2Notification);
+            _context.SaveChanges();
+
+            //Act
+            var notifications = _repo.GetUserNotifications(_user.Id);
+
+            //Assert
+            Assert.IsTrue(_context.Notifications.Count() > 6);
+            Assert.AreEqual(6, notifications.Count());
+        }
+
+        [Test]
         public void RemoveCorrectRecordsOn_RemoveByPhotoId()
         {
             //Arrange

@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -22,6 +24,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             _notification = new Notification();
+        }
+
+        [Test]
+        public void ReturnResultFromRepository_OnGetUserNotifications()
+        {
+            //Arrange
+            var userId = 13456;
+            var notifications = new List<Notification>();
+            _uow.Setup(x => x.NotificationRepository.GetUserNotifications(userId))
+                .Returns(notifications.AsQueryable());
+
+            //Act
+            var result = _sut.GetUserNotifications(userId);
+
+            //Assert
+            Assert.IsNotNull(result);
+            _uow.Verify(x => x.NotificationRepository.GetUserNotifications(userId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]

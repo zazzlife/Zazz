@@ -1,9 +1,12 @@
-﻿using Zazz.Core.Models.Data;
+﻿using System.Linq;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
     public interface INotificationRepository : IRepository<Notification>
     {
+        IQueryable<Notification> GetUserNotifications(int userId);
+
         void RemoveRecordsByPhotoId(int photoId);
 
         void RemoveRecordsByEventId(int eventId);

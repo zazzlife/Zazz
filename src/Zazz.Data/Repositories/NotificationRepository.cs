@@ -10,6 +10,16 @@ namespace Zazz.Data.Repositories
         public NotificationRepository(DbContext dbContext) : base(dbContext)
         {}
 
+        public IQueryable<Notification> GetUserNotifications(int userId)
+        {
+            return DbSet
+                .Include(n => n.Event)
+                .Include(n => n.Photo)
+                .Include(n => n.Post)
+                .Include(n => n.AcceptedFollowUser)
+                .Where(n => n.UserId == userId);
+        }
+
         public void RemoveRecordsByPhotoId(int photoId)
         {
             var notifications = DbSet.Where(n => n.PhotoId == photoId);
