@@ -24,7 +24,9 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByPostId(int postId)
         {
-            throw new System.NotImplementedException();
+            var notifications = DbSet.Where(n => n.PostId == postId);
+            foreach (var notification in notifications)
+                Remove(notification);
         }
 
         public void MarkUserNotificationsAsRead(int userId)
