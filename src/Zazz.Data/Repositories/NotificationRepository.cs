@@ -25,8 +25,7 @@ namespace Zazz.Data.Repositories
             foreach (var notification in notifications)
             {
                 Remove(notification);
-            }
-                
+            }   
         }
 
         public void RemoveRecordsByEventId(int eventId)
