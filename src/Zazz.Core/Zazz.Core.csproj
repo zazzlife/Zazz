@@ -100,6 +100,7 @@
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\Enums\AccountType.cs" />
     <Compile Include="Models\Data\Enums\FeedType.cs" />
+    <Compile Include="Models\Data\Enums\UserType.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedPhoto.cs" />
@@ -120,7 +121,6 @@
     <Compile Include="Models\Data\FollowRequest.cs" />
     <Compile Include="Models\Data\Photo.cs" />
     <Compile Include="Models\Data\UserDetail.cs" />
-    <Compile Include="Models\Data\UserType.cs" />
     <Compile Include="Models\Data\ValidationToken.cs" />
     <Compile Include="Models\Facebook\FbComment.cs" />
     <Compile Include="Models\Facebook\FbEvent.cs" />
