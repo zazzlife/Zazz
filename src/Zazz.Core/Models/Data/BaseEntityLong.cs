@@ -1,7 +1,7 @@
 ﻿namespace Zazz.Core.Models.Data
 {
-    public abstract class BaseEntityLong : BaseEntity
+    public abstract class BaseEntityLong
     {
-        public new long Id { get; set; }
+        public long Id { get; set; }
     }
 }
