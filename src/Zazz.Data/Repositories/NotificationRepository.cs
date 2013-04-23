@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -11,7 +12,9 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByPhotoId(int photoId)
         {
-            throw new System.NotImplementedException();
+            var notifications = DbSet.Where(n => n.PhotoId == photoId);
+            foreach (var notification in notifications)
+                Remove(notification);
         }
 
         public void RemoveRecordsByEventId(int eventId)

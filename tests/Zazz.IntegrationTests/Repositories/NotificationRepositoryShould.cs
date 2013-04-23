@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -86,13 +87,28 @@ namespace Zazz.IntegrationTests.Repositories
         public void RemoveCorrectRecordsOn_RemoveByPhotoId()
         {
             //Arrange
-            
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
 
             //Act
-
+            _repo.RemoveRecordsByPhotoId(_post1.Id);
+            _context.SaveChanges();
 
             //Assert
+            Assert.AreEqual(0, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
 
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
         }
 
 
