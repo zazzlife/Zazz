@@ -23,10 +23,6 @@ function applyPageStyles() {
     $('*[title]').tooltip('destroy');
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
-
-    $(document).on('click', '*[data-toggle]', function(e) {
-        e.preventDefault();
-    });
 }
 
 function showAjaxErrorMessage(res) {
@@ -540,6 +536,18 @@ $(document).on('click', '#load-feeds', function () {
             }
         }
     });
+
+});
+
+/********************************
+    Notifications
+*********************************/
+
+$(document).on('click', '#notifications-link', function(e) {
+    e.preventDefault();
+
+    $(this).next('.popover').css('width', '555px');
+    $(this).next('.popover').css('max-width', '555px');
 
 });
 
