@@ -51,5 +51,83 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.NotificationRepository.InsertGraph(_notification), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
+
+        [Test]
+        public void CallRemovePhotoRecordsOnRepository_OnRemovePhotoNotifications()
+        {
+            //Arrange
+            var photoId = 12;
+            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByPhotoId(photoId));
+
+            //Act
+            _sut.RemovePhotoNotifications(photoId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByPhotoId(photoId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CallRemovePostRecordsOnRepository_OnRemovePostNotifications()
+        {
+            //Arrange
+            var postId = 12;
+            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByPostId(postId));
+
+            //Act
+            _sut.RemovePostNotifications(postId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByPostId(postId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CallRemoveEventRecordsOnRepository_OnRemoveEventNotifications()
+        {
+            //Arrange
+            var eventId = 12;
+            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByEventId(eventId));
+
+            //Act
+            _sut.RemoveEventNotifications(eventId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByEventId(eventId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CallMarkNotificationsAsReadOnRepository_OnNotificationsAsRead()
+        {
+            //Arrange
+            var userId = 12;
+            _uow.Setup(x => x.NotificationRepository.MarkUserNotificationsAsRead(userId));
+
+            //Act
+            _sut.MarkUserNotificationsAsRead(userId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.MarkUserNotificationsAsRead(userId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void ReturnResutFromRepository_OnGetUnreadNotificationsCount()
+        {
+            //Arrange
+            var userId = 12;
+            var count = 3;
+            _uow.Setup(x => x.NotificationRepository.GetUnreadNotificationsCount(userId))
+                .Returns(count);
+
+            //Act
+            var result = _sut.GetUnreadNotificationsCount(userId);
+
+            //Assert
+            Assert.AreEqual(count, result);
+            _uow.Verify(x => x.NotificationRepository.GetUnreadNotificationsCount(userId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
     }
 }

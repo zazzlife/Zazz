@@ -28,27 +28,31 @@ namespace Zazz.Infrastructure.Services
 
         public void RemovePhotoNotifications(int photoId)
         {
-            throw new System.NotImplementedException();
+            _uow.NotificationRepository.RemoveRecordsByPhotoId(photoId);
+            _uow.SaveChanges();
         }
 
         public void RemovePostNotifications(int postId)
         {
-            throw new System.NotImplementedException();
+            _uow.NotificationRepository.RemoveRecordsByPostId(postId);
+            _uow.SaveChanges();
         }
 
         public void RemoveEventNotifications(int eventId)
         {
-            throw new System.NotImplementedException();
+            _uow.NotificationRepository.RemoveRecordsByEventId(eventId);
+            _uow.SaveChanges();
         }
 
         public void MarkUserNotificationsAsRead(int userId)
         {
-            throw new System.NotImplementedException();
+            _uow.NotificationRepository.MarkUserNotificationsAsRead(userId);
+            _uow.SaveChanges();
         }
 
         public int GetUnreadNotificationsCount(int userId)
         {
-            throw new System.NotImplementedException();
+            return _uow.NotificationRepository.GetUnreadNotificationsCount(userId);
         }
     }
 }
