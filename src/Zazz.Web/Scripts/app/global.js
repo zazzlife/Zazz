@@ -548,6 +548,7 @@ $(document).on('click', '#notifications-link', function(e) {
 
     $(this).next('.popover').css('width', '555px');
     $(this).next('.popover').css('max-width', '555px');
+    $(this).next('.popover').css('min-height', '90px');
 
 });
 
