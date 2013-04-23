@@ -77,6 +77,7 @@
     <Compile Include="Interfaces\IErrorHandler.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\INotificationRepository.cs" />
+    <Compile Include="Interfaces\INotificationService.cs" />
     <Compile Include="Interfaces\IOAuthAccountRepository.cs" />
     <Compile Include="Interfaces\IAlbumService.cs" />
     <Compile Include="Interfaces\IPhotoService.cs" />
