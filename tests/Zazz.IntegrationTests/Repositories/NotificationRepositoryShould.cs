@@ -166,5 +166,54 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(0, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
         }
+
+        [Test]
+        public void MarkCorrectRecordsAsRead_MarkUserNotificationsAsRead()
+        {
+            //Arrange
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var photo1Notification = Mother.GetNotification(user2.Id);
+            photo1Notification.PhotoId = _photo1.Id;
+
+            var photo2Notification = Mother.GetNotification(user2.Id);
+            photo2Notification.PhotoId = _photo2.Id;
+
+            var post1Notification = Mother.GetNotification(user2.Id);
+            post1Notification.PostId = _post1.Id;
+
+            var post2Notification = Mother.GetNotification(user2.Id);
+            post2Notification.PostId = _post2.Id;
+
+            var event1Notification = Mother.GetNotification(user2.Id);
+            event1Notification.EventId = _event1.Id;
+
+            var event2Notification = Mother.GetNotification(user2.Id);
+            event2Notification.EventId = _event2.Id;
+
+            _context.Notifications.Add(photo1Notification);
+            _context.Notifications.Add(photo2Notification);
+            _context.Notifications.Add(post1Notification);
+            _context.Notifications.Add(post2Notification);
+            _context.Notifications.Add(event1Notification);
+            _context.Notifications.Add(event2Notification);
+            _context.SaveChanges();
+
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
+
+            //Act
+            _repo.MarkUserNotificationsAsRead(_user.Id);
+            _context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && n.IsRead));
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
+        }
+
+
     }
 }
