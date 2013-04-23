@@ -100,12 +100,12 @@
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\Enums\AccountType.cs" />
     <Compile Include="Models\Data\Enums\FeedType.cs" />
+    <Compile Include="Models\Data\Enums\Gender.cs" />
     <Compile Include="Models\Data\Enums\UserType.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedPhoto.cs" />
     <Compile Include="Models\Data\FeedUser.cs" />
-    <Compile Include="Models\Data\Gender.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\OAuthVersion.cs" />
     <Compile Include="Models\Data\OAuthProvider.cs" />

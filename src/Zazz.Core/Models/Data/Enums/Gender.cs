@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Zazz.Core.Models.Data
+namespace Zazz.Core.Models.Data.Enums
 {
     public enum Gender : byte
     {
