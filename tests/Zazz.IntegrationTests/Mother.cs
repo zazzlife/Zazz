@@ -34,6 +34,19 @@ namespace Zazz.IntegrationTests
                        };
         }
 
+        public static ZazzEvent GetEvent(int userId)
+        {
+            return new ZazzEvent
+            {
+                Description = "some text",
+                CreatedDate = DateTime.Now,
+                Name = "Title",
+                Time = DateTime.UtcNow,
+                TimeUtc = DateTime.UtcNow,
+                UserId = userId
+            };
+        }
+
         public static Post GetPost(int userId)
         {
             return new Post
@@ -52,6 +65,15 @@ namespace Zazz.IntegrationTests
                    };
         }
 
+        public static Photo GetPhoto(int userId)
+        {
+            return new Photo
+                   {
+                       UserId = userId,
+                       UploadDate = DateTime.UtcNow
+                   };
+        }
+
         public static Photo GetPhoto(int albumId, int userId)
         {
             return new Photo
@@ -59,6 +81,15 @@ namespace Zazz.IntegrationTests
                        UploadDate = DateTime.UtcNow,
                        AlbumId = albumId,
                        UserId = userId
+                   };
+        }
+
+        public static Notification GetNotification(int userId)
+        {
+            return new Notification
+                   {
+                       UserId = userId,
+                       Time = DateTime.UtcNow
                    };
         }
     }
