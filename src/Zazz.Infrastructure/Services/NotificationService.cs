@@ -20,7 +20,10 @@ namespace Zazz.Infrastructure.Services
 
         public void CreateNotification(Notification notification, bool save = true)
         {
-            throw new System.NotImplementedException();
+            _uow.NotificationRepository.InsertGraph(notification);
+
+            if (save)
+                _uow.SaveChanges();
         }
 
         public void RemovePhotoNotifications(int photoId)

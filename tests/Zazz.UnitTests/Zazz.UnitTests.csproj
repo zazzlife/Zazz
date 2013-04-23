@@ -67,6 +67,7 @@
     <Compile Include="Infrastructure\Services\FacebookServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FileServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FollowServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\NotificationServiceShould.cs" />
     <Compile Include="Infrastructure\Services\PhotoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\EventServiceShould.cs" />
     <Compile Include="Infrastructure\Services\PostServiceShould.cs" />
