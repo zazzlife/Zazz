@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
 using Zazz.Web.Models;
 using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;

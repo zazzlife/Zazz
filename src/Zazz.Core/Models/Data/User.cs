@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Models.Data
 {
