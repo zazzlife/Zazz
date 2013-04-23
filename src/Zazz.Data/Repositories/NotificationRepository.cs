@@ -17,14 +17,16 @@ namespace Zazz.Data.Repositories
                 Remove(notification);
         }
 
-        public void RemoveRecordsByEventId(int eventId)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void RemoveRecordsByPostId(int postId)
         {
             var notifications = DbSet.Where(n => n.PostId == postId);
+            foreach (var notification in notifications)
+                Remove(notification);
+        }
+
+        public void RemoveRecordsByEventId(int eventId)
+        {
+            var notifications = DbSet.Where(n => n.EventId == eventId);
             foreach (var notification in notifications)
                 Remove(notification);
         }
