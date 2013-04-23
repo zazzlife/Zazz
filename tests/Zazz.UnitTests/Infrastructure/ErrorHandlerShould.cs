@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 
 namespace Zazz.UnitTests.Infrastructure

@@ -9,6 +9,7 @@ using Facebook;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Infrastructure.Services

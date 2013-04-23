@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
