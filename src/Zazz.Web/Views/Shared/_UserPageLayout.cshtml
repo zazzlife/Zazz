@@ -16,6 +16,15 @@
                 <li class="divider"></li>
 
                 <li class="nav-header">ACCOUNT</li>
+                <li>
+                    <a href="#" id="notifications-link" 
+                       data-toggle="popover" data-html="true" data-original-title="Notifications"
+                       data-title="Notifications"
+                       data-content="<i class='icon-refresh icon-spin'></i> Loading...">
+                        
+                        <i class="icon-globe"></i>Notifications 
+                    </a>
+                </li>
                 <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                 <li><a href="~/event/list"><i class="icon-calendar"></i>Events</a></li>
                 <li><a href="~/photo/"><i class="icon-camera"></i>Photos</a></li>

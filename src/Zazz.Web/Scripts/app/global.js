@@ -22,6 +22,11 @@ function applyPageStyles() {
     $('.datepicker').datetimepicker();
     $('*[title]').tooltip('destroy');
     $('*[title]').tooltip();
+    $('*[data-toggle="popover"]').popover();
+
+    $(document).on('click', '*[data-toggle]', function(e) {
+        e.preventDefault();
+    });
 }
 
 function showAjaxErrorMessage(res) {
