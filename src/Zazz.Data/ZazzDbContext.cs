@@ -26,6 +26,7 @@ namespace Zazz.Data
         public IDbSet<FeedPhoto> FeedPhotos { get; set; }
         public IDbSet<FeedUser> FeedUsers { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
+        public IDbSet<Notification> Notifications { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
