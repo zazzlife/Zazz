@@ -25,7 +25,7 @@ namespace Zazz.Core.Interfaces
 
         void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true);
 
-        void CreateNewEventNotification(int creatorUserId, bool save = true);
+        void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true);
 
         void RemovePhotoNotifications(int photoId);
         

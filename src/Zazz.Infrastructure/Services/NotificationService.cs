@@ -98,9 +98,28 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreateNewEventNotification(int creatorUserId, bool save = true)
+        public void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true)
         {
-            throw new System.NotImplementedException();
+            var followers = _uow.FollowRepository.GetUserFollowers(creatorUserId)
+                .Select(f => f.FromUserId); //TODO: change get user followers to return IQueryable
+
+            foreach (var followerId in followers)
+            {
+                var notification = new Notification
+                                   {
+                                       UserId = followerId,
+                                       UserBId = creatorUserId,
+                                       IsRead = false,
+                                       EventId = eventId,
+                                       Time = DateTime.UtcNow,
+                                       NotificationType = NotificationType.NewEvent
+                                   };
+
+                _uow.NotificationRepository.InsertGraph(notification);
+            }
+
+            if (save)
+                _uow.SaveChanges();
         }
 
         public void RemovePhotoNotifications(int photoId)

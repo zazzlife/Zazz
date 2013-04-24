@@ -213,6 +213,76 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CreateNotificationsForAllClubAdminFollowersAndSaveOnceWhenItsNotSpecified_OnCreateNewEventNotification()
+        {
+            //Arrange
+            var userId = 1234;
+            var eventId = 12;
+            var followers = new List<Follow>
+                        {
+                            new Follow
+                            {
+                                FromUserId = 1
+                            },
+                            new Follow
+                            {
+                                FromUserId = 2
+                            },
+                            new Follow
+                            {
+                                FromUserId = 3
+                            }
+                        };
+
+            _uow.Setup(x => x.FollowRepository.GetUserFollowers(userId))
+                .Returns(followers);
+            _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
+
+            //Act
+            _sut.CreateNewEventNotification(userId, eventId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()),
+                        Times.Exactly(followers.Count));
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CreateNotificationsForAllClubAdminFollowersAndNotSaveWhenItsFalse_OnCreateNewEventNotification()
+        {
+            //Arrange
+            var userId = 1234;
+            var eventId = 12;
+            var followers = new List<Follow>
+                        {
+                            new Follow
+                            {
+                                FromUserId = 1
+                            },
+                            new Follow
+                            {
+                                FromUserId = 2
+                            },
+                            new Follow
+                            {
+                                FromUserId = 3
+                            }
+                        };
+
+            _uow.Setup(x => x.FollowRepository.GetUserFollowers(userId))
+                .Returns(followers);
+            _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
+
+            //Act
+            _sut.CreateNewEventNotification(userId, eventId, false);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()),
+                        Times.Exactly(followers.Count));
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
         public void CallRemovePhotoRecordsOnRepository_OnRemovePhotoNotifications()
         {
             //Arrange
