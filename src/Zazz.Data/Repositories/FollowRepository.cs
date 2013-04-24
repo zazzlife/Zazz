@@ -26,9 +26,9 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public IEnumerable<Follow> GetUserFollowers(int toUserId)
+        public IQueryable<Follow> GetUserFollowers(int toUserId)
         {
-            return DbSet.Where(f => f.ToUserId == toUserId).AsEnumerable();
+            return DbSet.Where(f => f.ToUserId == toUserId);
         }
 
         public IEnumerable<Follow> GetUserFollows(int fromUserId)

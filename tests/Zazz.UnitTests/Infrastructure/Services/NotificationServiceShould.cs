@@ -235,7 +235,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         };
 
             _uow.Setup(x => x.FollowRepository.GetUserFollowers(userId))
-                .Returns(followers);
+                .Returns(followers.AsQueryable());
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
@@ -270,7 +270,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         };
 
             _uow.Setup(x => x.FollowRepository.GetUserFollowers(userId))
-                .Returns(followers);
+                .Returns(followers.AsQueryable());
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act

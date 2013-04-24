@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
@@ -10,7 +11,7 @@ namespace Zazz.Core.Interfaces
         /// Returns a list of users that follow the user
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Follow> GetUserFollowers(int toUserId);
+        IQueryable<Follow> GetUserFollowers(int toUserId);
 
         /// <summary>
         /// Returns a list of users that the user follows
