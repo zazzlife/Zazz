@@ -6,6 +6,7 @@ namespace Zazz.Core.Models.Data.Enums
         CommentOnPhoto,
         CommentOnPost,
         CommentOnEvent,
-        NewEvent
+        NewEvent,
+        WallPost
     }
 }
