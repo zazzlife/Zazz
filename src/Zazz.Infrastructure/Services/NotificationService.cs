@@ -45,20 +45,29 @@ namespace Zazz.Infrastructure.Services
         public void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true)
         {
             var notification = new Notification
-            {
-                UserId = photoOwnerUserId,
-                PhotoId = photoId,
-                Time = DateTime.UtcNow,
-                IsRead = false,
-                NotificationType = NotificationType.FollowRequestAccepted
-            };
+                               {
+                                   UserId = photoOwnerUserId,
+                                   PhotoId = photoId,
+                                   Time = DateTime.UtcNow,
+                                   IsRead = false,
+                                   NotificationType = NotificationType.FollowRequestAccepted
+                               };
 
             CreateNotification(notification, save);
         }
 
         public void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true)
         {
-            throw new System.NotImplementedException();
+            var notification = new Notification
+                               {
+                                   UserId = postOwnerUserId,
+                                   PostId = postId,
+                                   Time = DateTime.UtcNow,
+                                   IsRead = false,
+                                   NotificationType = NotificationType.FollowRequestAccepted
+                               };
+
+            CreateNotification(notification, save);
         }
 
         public void CreateEventCommentNotification(int eventId, int eventOwnerUserId, bool save = true)
