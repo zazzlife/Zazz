@@ -9,6 +9,18 @@ namespace Zazz.Core.Interfaces
 
         void CreateNotification(Notification notification, bool save = true);
 
+        void CreateFollowApprovedNotification(int fromUserId, int toUserId, bool save = true);
+
+        void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true);
+
+        void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true);
+
+        void CreateEventCommentNotification(int eventId, int eventOwnerUserId, bool save = true);
+
+        void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true);
+
+        void CreateNewEventNotification(int creatorUserId, bool save = true);
+
         void RemovePhotoNotifications(int photoId);
         
         void RemovePostNotifications(int postId);

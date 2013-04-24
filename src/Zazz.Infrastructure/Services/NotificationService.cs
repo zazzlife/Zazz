@@ -26,6 +26,36 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
         }
 
+        public void CreateFollowApprovedNotification(int fromUserId, int toUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreateEventCommentNotification(int eventId, int eventOwnerUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void CreateNewEventNotification(int creatorUserId, bool save = true)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void RemovePhotoNotifications(int photoId)
         {
             _uow.NotificationRepository.RemoveRecordsByPhotoId(photoId);
