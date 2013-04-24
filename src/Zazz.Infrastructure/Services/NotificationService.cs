@@ -50,7 +50,7 @@ namespace Zazz.Infrastructure.Services
                                    PhotoId = photoId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
-                                   NotificationType = NotificationType.FollowRequestAccepted
+                                   NotificationType = NotificationType.CommentOnPhoto
                                };
 
             CreateNotification(notification, save);
@@ -64,7 +64,7 @@ namespace Zazz.Infrastructure.Services
                                    PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
-                                   NotificationType = NotificationType.FollowRequestAccepted
+                                   NotificationType = NotificationType.CommentOnPost
                                };
 
             CreateNotification(notification, save);
@@ -78,7 +78,7 @@ namespace Zazz.Infrastructure.Services
                                    EventId = eventId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
-                                   NotificationType = NotificationType.FollowRequestAccepted
+                                   NotificationType = NotificationType.CommentOnEvent
                                };
 
             CreateNotification(notification, save);
