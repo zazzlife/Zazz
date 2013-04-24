@@ -53,18 +53,18 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFollowService>().Use<FollowService>();
                             x.For<IPostService>().Use<PostService>();
                             x.For<IFacebookService>().Use<FacebookService>();
-                            
-                            x.For<IPhotoService>().Use<PhotoService>()
-                             .Ctor<string>("rootPath").Is(rootDirectory);
                             x.For<IEventService>().Use<EventService>();
                             x.For<IUserService>().Use<UserService>();
+                            x.For<INotificationService>().Use<NotificationService>();
+
+                            x.For<IPhotoService>().Use<PhotoService>()
+                             .Ctor<string>("rootPath").Is(rootDirectory);
 
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
                             x.For<IFacebookHelper>().Use<FacebookHelper>();
+                            
                             x.For<ILogger>().Use<Logger>();
-
-                            // Cache
                             
 
 #if DEBUG
