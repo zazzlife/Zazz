@@ -25,6 +25,13 @@ namespace Zazz.Infrastructure.Services
 
                 _notificationService.CreatePhotoCommentNotification(photoId, photo.UserId, false);
             }
+            else if (commentType == CommentType.Post && comment.PostId.HasValue)
+            {
+                var postId = comment.PostId.Value;
+                var post = _uow.PostRepository.GetById(postId);
+                
+                _notificationService.CreatePostCommentNotification(postId, post.FromUserId, false);
+            }
 
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();

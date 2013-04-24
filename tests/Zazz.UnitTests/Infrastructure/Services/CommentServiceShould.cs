@@ -13,6 +13,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IUoW> _uow;
         private Mock<INotificationService> _notificationService;
         private CommentService _sut;
+        private int _ownerId;
+        private Comment _comment;
 
         [SetUp]
         public void Init()
@@ -22,41 +24,67 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut = new CommentService(_uow.Object, _notificationService.Object);
 
             _uow.Setup(x => x.SaveChanges());
+
+            _ownerId = 444;
+            _comment = new Comment
+            {
+                FromId = 1,
+                PhotoId = 2,
+                PostId = 3,
+                EventId = 4
+            };
         }
 
         [Test]
         public void CreateNotificationAndSaveCommentWhenCommentIsOnPhoto_OnCreateComment()
         {
             //Arrange
-            var ownerId = 444;
-            var comment = new Comment
-                          {
-                              FromId = 1,
-                              PhotoId = 2,
-                              PostId = 3,
-                              EventId = 4
-                          };
-
             var photo = new Photo
                         {
-                            UserId = ownerId
+                            UserId = _ownerId
                         };
 
-            _uow.Setup(x => x.CommentRepository.InsertGraph(It.IsAny<Comment>()));
-            _uow.Setup(x => x.PhotoRepository.GetById(comment.PhotoId.Value))
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoId.Value))
                 .Returns(photo);
 
-            _notificationService.Setup(x => x.CreatePhotoCommentNotification(comment.PhotoId.Value, ownerId, false));
+            _notificationService.Setup(x => x.CreatePhotoCommentNotification(_comment.PhotoId.Value, _ownerId, false));
 
             //Act
-            _sut.CreateComment(comment, CommentType.Photo);
+            _sut.CreateComment(_comment, CommentType.Photo);
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.InsertGraph(It.IsAny<Comment>()), Times.Once());
-            _uow.Verify(x => x.PhotoRepository.GetById(comment.PhotoId.Value), Times.Once());
-            _notificationService.Verify(x => x.CreatePhotoCommentNotification(comment.PhotoId.Value, ownerId, false),
+            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetById(_comment.PhotoId.Value), Times.Once());
+            _notificationService.Verify(x => x.CreatePhotoCommentNotification(_comment.PhotoId.Value, _ownerId, false),
                                         Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CreateNotificationAndSaveCommentWhenCommentIsOnPost_OnCreateComment()
+        {
+            //Arrange
+
+            var post = new Post
+                       {
+                           FromUserId = _ownerId
+                       };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.PostId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
+            _uow.Verify(x => x.PostRepository.GetById(_comment.PostId.Value), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.PostId.Value, _ownerId, false)
+                , Times.Once());
         }
     }
 }
