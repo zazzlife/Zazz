@@ -1,4 +1,4 @@
-﻿namespace Zazz.Web.Models
+﻿namespace Zazz.Core.Models.Data.Enums
 {
     public enum CommentType : byte
     {

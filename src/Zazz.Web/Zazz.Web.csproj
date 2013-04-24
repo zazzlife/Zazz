@@ -238,7 +238,6 @@
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Models\BaseLayoutViewModel.cs" />
     <Compile Include="Models\BaseUserPageLayoutViewModel.cs" />
-    <Compile Include="Models\CommentType.cs" />
     <Compile Include="Models\CommentsViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\CropViewMOdel.cs" />
