@@ -65,6 +65,7 @@
     <Compile Include="Services\AlbumService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\CommentService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\FacebookService.cs" />
     <Compile Include="Services\FileService.cs" />
