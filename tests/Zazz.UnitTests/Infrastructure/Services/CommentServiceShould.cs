@@ -65,7 +65,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void CreateNotificationAndSaveCommentWhenCommentIsOnPost_OnCreateComment()
         {
             //Arrange
-
             var post = new Post
                        {
                            FromUserId = _ownerId
@@ -85,6 +84,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Once());
             _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.PostId.Value, _ownerId, false)
                 , Times.Once());
+        }
+
+        [Test]
+        public void CreateNotificationAndSaveCommentWhenCommentIsOnEvent_OnCreateComment()
+        {
+            //Arrange
+            var zazzEvent = new ZazzEvent
+                            {
+                                UserId = _ownerId
+                            };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.EventRepository.GetById(_comment.EventId.Value))
+                .Returns(zazzEvent);
+            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.EventId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Event);
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetById(_comment.EventId.Value), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _notificationService.Verify(x => x.CreateEventCommentNotification(_comment.EventId.Value, _ownerId, false),
+                                        Times.Once());
         }
     }
 }

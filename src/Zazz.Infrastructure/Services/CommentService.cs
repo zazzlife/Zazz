@@ -32,6 +32,13 @@ namespace Zazz.Infrastructure.Services
                 
                 _notificationService.CreatePostCommentNotification(postId, post.FromUserId, false);
             }
+            else if (commentType == CommentType.Event && comment.EventId.HasValue)
+            {
+                var eventId = comment.EventId.Value;
+                var zazzEvent = _uow.EventRepository.GetById(eventId);
+
+                _notificationService.CreateEventCommentNotification(eventId, zazzEvent.UserId, false);
+            }
 
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
