@@ -56,6 +56,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IEventService>().Use<EventService>();
                             x.For<IUserService>().Use<UserService>();
                             x.For<INotificationService>().Use<NotificationService>();
+                            x.For<ICommentService>().Use<CommentService>();
 
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory);
