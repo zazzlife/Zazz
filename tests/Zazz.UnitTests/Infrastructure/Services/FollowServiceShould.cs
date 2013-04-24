@@ -19,12 +19,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _clubId;
         private int _userBId;
         private FollowRequest _followRequest;
+        private Mock<INotificationService> _notificationService;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
-            _sut = new FollowService(_uow.Object);
+            _notificationService = new Mock<INotificationService>();
+            _sut = new FollowService(_uow.Object, _notificationService.Object);
 
             _userAId = 12;
             _userBId = 15;
@@ -119,7 +121,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ThrowIfCurrentUserIsNotTheTargetUser_OnAcceptFollowRequest()
+        public void ThrowIfCurrentUserIsNotTheTargetUserAndNotCreateNotification_OnAcceptFollowRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -142,10 +144,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _notificationService.Verify(x => x.CreateFollowAcceptedNotification(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]
-        public void AddNewUserFollowAndDeleteRequest_OnAcceptFollowRequest()
+        public void AddNewUserFollowAndDeleteRequestAndCreateANotification_OnAcceptFollowRequest()
         {
             //Arrange
             var followRequestId = 555;
@@ -153,6 +157,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_followRequest);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+            _notificationService.Setup(x => x.CreateFollowAcceptedNotification(
+                _followRequest.FromUserId, _followRequest.ToUserId, false));
                 
             //Act
             _sut.AcceptFollowRequest(followRequestId, _userBId);
@@ -161,6 +167,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
             _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _notificationService.Verify(x => x.CreateFollowAcceptedNotification(
+                _followRequest.FromUserId, _followRequest.ToUserId, false), Times.Once());
         }
 
         [Test]

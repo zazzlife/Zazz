@@ -10,10 +10,12 @@ namespace Zazz.Infrastructure.Services
     public class FollowService : IFollowService
     {
         private readonly IUoW _uow;
+        private readonly INotificationService _notificationService;
 
-        public FollowService(IUoW uow)
+        public FollowService(IUoW uow, INotificationService notificationService)
         {
             _uow = uow;
+            _notificationService = notificationService;
         }
 
         public void FollowClubAdmin(int fromUserId, int clubAdminUserId)
@@ -56,7 +58,10 @@ namespace Zazz.Infrastructure.Services
 
             var userFollow = new Follow { FromUserId = followRequest.FromUserId, ToUserId = followRequest.ToUserId };
             _uow.FollowRepository.InsertGraph(userFollow);
-            _uow.FollowRequestRepository.Remove((FollowRequest) followRequest);
+            _uow.FollowRequestRepository.Remove(followRequest);
+
+            _notificationService.CreateFollowAcceptedNotification(followRequest.FromUserId,
+                                                                  followRequest.ToUserId, false);
 
             _uow.SaveChanges();
         }
