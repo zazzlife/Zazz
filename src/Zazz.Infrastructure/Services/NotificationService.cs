@@ -86,7 +86,16 @@ namespace Zazz.Infrastructure.Services
 
         public void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true)
         {
-            throw new System.NotImplementedException();
+            var notification = new Notification
+                               {
+                                   UserId = toUserId,
+                                   UserBId = fromUserId,
+                                   Time = DateTime.UtcNow,
+                                   IsRead = false,
+                                   NotificationType = NotificationType.WallPost
+                               };
+
+            CreateNotification(notification, save);
         }
 
         public void CreateNewEventNotification(int creatorUserId, bool save = true)
