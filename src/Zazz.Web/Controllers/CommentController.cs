@@ -19,12 +19,15 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
+        private readonly ICommentService _commentService;
 
-        public CommentController(IUoW uow, IPhotoService photoService, IUserService userService)
+        public CommentController(IUoW uow, IPhotoService photoService, IUserService userService,
+            ICommentService commentService)
         {
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
+            _commentService = commentService;
         }
 
         public ActionResult Get(int id, CommentType commentType, int lastComment)
@@ -102,12 +105,10 @@ namespace Zazz.Web.Controllers
                 throw new ArgumentException("Invalid feed type", "commentType");
             }
 
-            _uow.CommentRepository.InsertGraph(c);
-            _uow.SaveChanges();
-
+            var commentId = _commentService.CreateComment(c, commentType);
             var commentVm = new CommentViewModel
                             {
-                                CommentId = c.Id,
+                                CommentId = commentId,
                                 CommentText = c.Message,
                                 IsFromCurrentUser = userId == c.FromId,
                                 Time = c.Time,
