@@ -16,7 +16,7 @@ namespace Zazz.Data.Repositories
                 .Include(n => n.Event)
                 .Include(n => n.Photo)
                 .Include(n => n.Post)
-                .Include(n => n.AcceptedFollowUser)
+                .Include(n => n.UserB)
                 .Where(n => n.UserId == userId);
         }
 

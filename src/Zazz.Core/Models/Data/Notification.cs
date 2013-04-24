@@ -6,11 +6,17 @@ namespace Zazz.Core.Models.Data
 {
     public class Notification : BaseEntityLong
     {
+        /// <summary>
+        /// User that receives the notification.
+        /// </summary>
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
 
-        [ForeignKey("AcceptedFollowUserId")]
-        public User AcceptedFollowUser { get; set; }
+        /// <summary>
+        /// Use this property if you need to mention another user in the notification.
+        /// </summary>
+        [ForeignKey("UserBId")]
+        public User UserB { get; set; }
 
         [ForeignKey("PhotoId")]
         public Photo Photo { get; set; }
@@ -21,9 +27,15 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("EventId")]
         public ZazzEvent Event { get; set; }
 
+        /// <summary>
+        /// User that receives the notification.
+        /// </summary>
         public int UserId { get; set; }
 
-        public int? AcceptedFollowUserId { get; set; }
+        /// <summary>
+        /// Use this property if you need to mention another user in the notification.
+        /// </summary>
+        public int? UserBId { get; set; }
 
         public int? PhotoId { get; set; }
 
