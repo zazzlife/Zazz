@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -28,7 +30,16 @@ namespace Zazz.Infrastructure.Services
 
         public void CreateFollowApprovedNotification(int fromUserId, int toUserId, bool save = true)
         {
-            throw new System.NotImplementedException();
+            var notification = new Notification
+                               {
+                                   UserId = toUserId,
+                                   AcceptedFollowUserId = fromUserId,
+                                   Time = DateTime.UtcNow,
+                                   IsRead = false,
+                                   NotificationType = NotificationType.FollowRequestAccepted
+                               };
+
+            CreateNotification(notification, save);
         }
 
         public void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true)

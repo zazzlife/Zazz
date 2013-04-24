@@ -9,6 +9,12 @@ namespace Zazz.Core.Interfaces
 
         void CreateNotification(Notification notification, bool save = true);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromUserId">Id of the user that has requested the follow.</param>
+        /// <param name="toUserId">Id of the user that has accepted the follow.</param>
+        /// <param name="save"></param>
         void CreateFollowApprovedNotification(int fromUserId, int toUserId, bool save = true);
 
         void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true);
