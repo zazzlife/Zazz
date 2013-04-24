@@ -44,7 +44,16 @@ namespace Zazz.Infrastructure.Services
 
         public void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true)
         {
-            throw new System.NotImplementedException();
+            var notification = new Notification
+            {
+                UserId = photoOwnerUserId,
+                PhotoId = photoId,
+                Time = DateTime.UtcNow,
+                IsRead = false,
+                NotificationType = NotificationType.FollowRequestAccepted
+            };
+
+            CreateNotification(notification, save);
         }
 
         public void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true)

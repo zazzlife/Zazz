@@ -101,6 +101,34 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CreateNewNotificationAndSaveIfSaveIsNotDefined_OnCreatePhotoCommentNotification()
+        {
+            //Arrange
+            _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
+
+            //Act
+            _sut.CreatePhotoCommentNotification(1, 2);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CreateNewNotificationAndNotSaveIfSaveIsFalse_OnCreatePhotoCommentNotification()
+        {
+            //Arrange
+            _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
+
+            //Act
+            _sut.CreatePhotoCommentNotification(1, 2, false);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
         public void CallRemovePhotoRecordsOnRepository_OnRemovePhotoNotifications()
         {
             //Arrange
