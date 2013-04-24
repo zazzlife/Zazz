@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Security;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -109,6 +110,76 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Once());
             _notificationService.Verify(x => x.CreateEventCommentNotification(_comment.EventId.Value, _ownerId, false),
                                         Times.Once());
+        }
+
+        [Test]
+        public void NotThrowIfCommentDoesntExists_OnEditComment()
+        {
+            //Arrange
+            var commentId = 12;
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => null);
+
+
+            //Act
+            _sut.EditComment(commentId, 123, "");
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void ThrowIfTheUserIsNotTheOwner_OnEditComment()
+        {
+            //Arrange
+            var commentId = 12;
+            var userId = 123;
+
+            var comment = new Comment
+                          {
+                              Id = commentId,
+                              FromId = userId,
+                              Message = "Original Message"
+                          };
+
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => comment);
+
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.EditComment(commentId, 1, ""));
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
+        public void SaveNewCommentIfEverythingIsAlright_OnEditComment()
+        {
+            //Arrange
+            var commentId = 12;
+            var userId = 123;
+            var newMessage = "New Message";
+
+            var comment = new Comment
+                          {
+                              Id = commentId,
+                              FromId = userId,
+                              Message = "Original Message"
+                          };
+
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => comment);
+
+            //Act
+            _sut.EditComment(commentId, userId, newMessage);
+
+            //Assert
+            Assert.AreEqual(newMessage, comment.Message);
+            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }
 }

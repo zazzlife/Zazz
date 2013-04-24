@@ -125,7 +125,7 @@ namespace Zazz.Web.Controllers
         {
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
-
+             
             var userId = _userService.GetUserId(User.Identity.Name);
             var comment = _uow.CommentRepository.GetById(id);
             if (comment == null)

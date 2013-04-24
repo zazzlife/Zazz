@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -48,7 +49,16 @@ namespace Zazz.Infrastructure.Services
 
         public void EditComment(int commentId, int currentUserId, string newComment)
         {
-            throw new System.NotImplementedException();
+            var comment = _uow.CommentRepository.GetById(commentId);
+            if (comment == null)
+                return;
+
+            if (comment.FromId != currentUserId)
+                throw new SecurityException();
+
+            comment.Message = newComment;
+
+            _uow.SaveChanges();
         }
 
         public void RemoveComment(int commentId, int currentUserId)
