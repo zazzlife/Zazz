@@ -146,16 +146,7 @@ namespace Zazz.Web.Controllers
                 throw new ArgumentException("Id cannot be 0", "id");
 
             var userId = _userService.GetUserId(User.Identity.Name);
-            var c = _uow.CommentRepository.GetById(id);
-            if (c == null)
-                return;
-
-            if (c.FromId != userId)
-                throw new SecurityException();
-
-            c.Message = comment;
-
-            _uow.SaveChanges();
+            _commentService.EditComment(id, userId, comment);
         }
     }
 }
