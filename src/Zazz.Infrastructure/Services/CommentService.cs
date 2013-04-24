@@ -1,4 +1,6 @@
-﻿using Zazz.Core.Interfaces;
+﻿using System;
+using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
@@ -14,9 +16,20 @@ namespace Zazz.Infrastructure.Services
             _notificationService = notificationService;
         }
 
-        public void CreateComment(int itemId, CommentType commentType, string comment)
+        public int CreateComment(Comment comment, CommentType commentType)
         {
-            throw new System.NotImplementedException();
+            if (commentType == CommentType.Photo && comment.PhotoId.HasValue)
+            {
+                var photoId = comment.PhotoId.Value;
+                var photo = _uow.PhotoRepository.GetById(photoId);
+
+                _notificationService.CreatePhotoCommentNotification(photoId, photo.UserId, false);
+            }
+
+            _uow.CommentRepository.InsertGraph(comment);
+            _uow.SaveChanges();
+
+            return comment.Id;
         }
 
         public void EditComment(int commentId, int currentUserId, string newComment)

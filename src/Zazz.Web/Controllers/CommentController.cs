@@ -79,11 +79,11 @@ namespace Zazz.Web.Controllers
                 throw new SecurityException();
 
             var c = new Comment
-                    {
-                        FromId = userId,
-                        Message = comment,
-                        Time = DateTime.UtcNow
-                    };
+            {
+                FromId = userId,
+                Message = comment,
+                Time = DateTime.UtcNow
+            };
 
             if (commentType == CommentType.Event)
             {
