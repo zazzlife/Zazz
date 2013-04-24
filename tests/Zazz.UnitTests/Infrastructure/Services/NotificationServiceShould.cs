@@ -79,7 +79,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateFollowApprovedNotification(1, 2);
+            _sut.CreateFollowAcceptedNotification(1, 2);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -93,7 +93,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateFollowApprovedNotification(1, 2, false);
+            _sut.CreateFollowAcceptedNotification(1, 2, false);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());

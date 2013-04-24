@@ -28,7 +28,7 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
         }
 
-        public void CreateFollowApprovedNotification(int fromUserId, int toUserId, bool save = true)
+        public void CreateFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true)
         {
             var notification = new Notification
                                {
