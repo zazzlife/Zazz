@@ -101,7 +101,7 @@ namespace Zazz.Infrastructure.Services
         public void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true)
         {
             var followers = _uow.FollowRepository.GetUserFollowers(creatorUserId)
-                .Select(f => f.FromUserId); //TODO: change get user followers to return IQueryable
+                .Select(f => f.FromUserId);
 
             foreach (var followerId in followers)
             {
