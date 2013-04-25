@@ -21,19 +21,21 @@ namespace Zazz.Infrastructure.Services
         private readonly string _rootPath;
         private readonly ICacheService _cacheService;
         private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
         private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
         private const string SMALL_IMAGE_SUFFIX = "s";
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            INotificationService notificationService, string rootPath)
+            INotificationService notificationService, ICommentService commentService, string rootPath)
         {
             _uow = uow;
             _fileService = fileService;
             _rootPath = rootPath;
             _cacheService = cacheService;
             _notificationService = notificationService;
+            _commentService = commentService;
         }
 
         public IQueryable<Photo> GetAll()
