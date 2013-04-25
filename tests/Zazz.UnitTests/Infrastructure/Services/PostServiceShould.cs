@@ -147,6 +147,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CallRemovePostNotifications_OnRemovePost()
+        {
+            //Arrange
+            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
+                .Returns(_post);
+            _uow.Setup(x => x.PostRepository.Remove(_post));
+            _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
+            _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
+            _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
+
+            //Act
+            _sut.RemovePost(_post.Id, _post.FromUserId);
+
+            //Assert
+            _notificationService.Verify(x => x.RemovePostNotifications(_post.Id), Times.Once());
+        }
+
+        [Test]
         public void ThrowWhenPostNotExists_OnEditPost()
         {
             //Arrange

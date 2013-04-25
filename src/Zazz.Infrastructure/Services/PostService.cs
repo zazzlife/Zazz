@@ -77,11 +77,11 @@ namespace Zazz.Infrastructure.Services
                     throw new SecurityException();
                 }
             }
-                
             
             _uow.PostRepository.Remove(post);
             _uow.FeedRepository.RemovePostFeeds(postId);
             _uow.CommentRepository.RemovePostComments(postId);
+            _notificationService.RemovePostNotifications(postId);
 
             _uow.SaveChanges();
         }
