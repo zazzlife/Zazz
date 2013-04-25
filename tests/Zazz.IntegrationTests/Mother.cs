@@ -93,5 +93,14 @@ namespace Zazz.IntegrationTests
                        IsRead = isRead
                    };
         }
+
+        public static Comment GetComment(int userId)
+        {
+            return new Comment
+                   {
+                       FromId = userId,
+                       Time = DateTime.UtcNow
+                   };
+        }
     }
 }

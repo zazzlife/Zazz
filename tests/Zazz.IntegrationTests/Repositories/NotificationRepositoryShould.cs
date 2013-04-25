@@ -25,6 +25,10 @@ namespace Zazz.IntegrationTests.Repositories
         private Notification _post2Notification;
         private Notification _event1Notification;
         private Notification _event2Notification;
+        private Comment _comment1;
+        private Comment _comment2;
+        private Notification _comment1Notification;
+        private Notification _comment2Notification;
 
         [SetUp]
         public void Init()
@@ -54,6 +58,12 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Events.Add(_event1);
             _context.Events.Add(_event2);
 
+            _comment1 = Mother.GetComment(_user.Id);
+            _comment2 = Mother.GetComment(_user.Id);
+
+            _context.Comments.Add(_comment1);
+            _context.Comments.Add(_comment2);
+
             _context.SaveChanges();
 
             _photo1Notification = Mother.GetNotification(_user.Id);
@@ -74,12 +84,19 @@ namespace Zazz.IntegrationTests.Repositories
             _event2Notification = Mother.GetNotification(_user.Id);
             _event2Notification.EventId = _event2.Id;
 
+            _comment1Notification = Mother.GetNotification(_user.Id);
+            _comment1Notification.CommentId = _comment1.Id;
+            _comment2Notification = Mother.GetNotification(_user.Id);
+            _comment2Notification.CommentId = _comment2.Id;
+
             _context.Notifications.Add(_photo1Notification);
             _context.Notifications.Add(_photo2Notification);
             _context.Notifications.Add(_post1Notification);
             _context.Notifications.Add(_post2Notification);
             _context.Notifications.Add(_event1Notification);
             _context.Notifications.Add(_event2Notification);
+            _context.Notifications.Add(_comment1Notification);
+            _context.Notifications.Add(_comment2Notification);
             _context.SaveChanges();
         }
 
@@ -122,7 +139,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.IsTrue(_context.Notifications.Count() > 6);
-            Assert.AreEqual(6, notifications.Count());
+            Assert.AreEqual(8, notifications.Count());
         }
 
         [Test]
@@ -138,6 +155,9 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
 
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+
             //Act
             _repo.RemoveRecordsByPhotoId(_photo1.Id);
             _context.SaveChanges();
@@ -151,6 +171,9 @@ namespace Zazz.IntegrationTests.Repositories
 
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
         }
 
         [Test]
@@ -166,6 +189,9 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
 
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+
             //Act
             _repo.RemoveRecordsByPostId(_post1.Id);
             _context.SaveChanges();
@@ -179,6 +205,9 @@ namespace Zazz.IntegrationTests.Repositories
 
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
         }
 
         [Test]
@@ -194,6 +223,9 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
 
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+
             //Act
             _repo.RemoveRecordsByEventId(_event1.Id);
             _context.SaveChanges();
@@ -207,6 +239,9 @@ namespace Zazz.IntegrationTests.Repositories
 
             Assert.AreEqual(0, _context.Notifications.Count(n => n.EventId == _event1.Id));
             Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
+
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
+            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
         }
 
         [Test]
@@ -243,7 +278,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Notifications.Add(event2Notification);
             _context.SaveChanges();
 
-            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(8, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
             Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
 
             //Act
@@ -252,7 +287,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(0, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
-            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && n.IsRead));
+            Assert.AreEqual(8, _context.Notifications.Count(n => n.UserId == _user.Id && n.IsRead));
             Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
         }
 
@@ -269,8 +304,8 @@ namespace Zazz.IntegrationTests.Repositories
             var result = _repo.GetUnreadNotificationsCount(_user.Id);
 
             //Assert
-            Assert.AreEqual(5, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
-            Assert.AreEqual(5, result);
+            Assert.AreEqual(7, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(7, result);
         }
 
 

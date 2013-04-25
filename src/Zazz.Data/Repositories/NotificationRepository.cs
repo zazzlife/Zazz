@@ -39,6 +39,15 @@ namespace Zazz.Data.Repositories
             }   
         }
 
+        public void RemoveRecordsByCommentId(int commentId)
+        {
+            var notifications = DbSet.Where(n => n.CommentId == commentId);
+            foreach (var notification in notifications)
+            {
+                Remove(notification);
+            }
+        }
+
         public void RemoveRecordsByEventId(int eventId)
         {
             var notifications = DbSet.Where(n => n.EventId == eventId);
