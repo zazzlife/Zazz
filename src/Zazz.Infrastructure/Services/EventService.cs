@@ -71,6 +71,7 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FeedRepository.RemoveEventFeeds(eventId);
             _uow.CommentRepository.RemoveEventComments(eventId);
+            _notificationService.RemoveEventNotifications(eventId);
 
             _uow.EventRepository.Remove(eventId);
             _uow.SaveChanges();

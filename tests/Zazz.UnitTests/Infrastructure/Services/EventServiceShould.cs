@@ -209,6 +209,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Once());
         }
 
+        [Test]
+        public void CallRemoveNotifications_OnDelete()
+        {
+            //Arrange
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
+                .Returns(() => _zazzEvent.UserId);
+            _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
+            _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
+            _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));
+            _notificationService.Setup(x => x.RemoveEventNotifications(_zazzEvent.Id));
 
+            //Act
+            _sut.DeleteEvent(_zazzEvent.Id, _userId);
+
+            //Assert
+            _notificationService.Verify(x => x.RemoveEventNotifications(_zazzEvent.Id), Times.Once());
+        }
     }
 }
