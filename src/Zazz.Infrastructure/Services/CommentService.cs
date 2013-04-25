@@ -90,7 +90,13 @@ namespace Zazz.Infrastructure.Services
 
         public void RemovePostComments(int postId)
         {
-            throw new NotImplementedException();
+            var commentIds = _uow.CommentRepository.RemovePostComments(postId);
+            foreach (var commentId in commentIds)
+            {
+                _notificationService.RemoveCommentNotifications(commentId);
+            }
+
+            _uow.SaveChanges();
         }
 
         public void RemoveEventComments(int eventId)
