@@ -76,5 +76,20 @@ namespace Zazz.Infrastructure.Services
 
             _uow.SaveChanges();
         }
+
+        public void RemovePhotoComments(int photoId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemovePostComments(int postId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveEventComments(int eventId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
