@@ -320,6 +320,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Never());
             _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Never());
             _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Never());
+            _commentService.Verify(x => x.RemovePhotoComments(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
