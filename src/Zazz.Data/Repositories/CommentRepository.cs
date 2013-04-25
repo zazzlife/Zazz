@@ -42,7 +42,7 @@ namespace Zazz.Data.Repositories
             return comments.Select(c => c.Id);
         }
 
-        public IEnumerable<int> RemovePostComments(int postId) //TODO: make all callers to use this method from comment service.
+        public IEnumerable<int> RemovePostComments(int postId)
         {
             var comments = DbSet.Where(c => c.PostId == postId);
             foreach (var comment in comments)

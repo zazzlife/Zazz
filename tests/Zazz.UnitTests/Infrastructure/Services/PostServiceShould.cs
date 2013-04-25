@@ -156,7 +156,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_post);
             _uow.Setup(x => x.PostRepository.Remove(_post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
-            _uow.Setup(x => x.CommentRepository.RemovePostComments(_post.Id));
             _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
 
             //Act
