@@ -264,6 +264,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotCreateNotificationIfUserHasCommentedOnHisOwnEvent_OnCreateComment()
+        {
+            //Arrange
+            var zazzEvent = new ZazzEvent
+            {
+                UserId = _comment.FromId
+            };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.EventRepository.GetById(_comment.EventId.Value))
+                .Returns(zazzEvent);
+            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Event);
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetById(_comment.EventId.Value), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _notificationService.Verify(
+                x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, zazzEvent.UserId, false),
+                Times.Never());
+        }
+
+        [Test]
         public void NotThrowIfCommentDoesntExists_OnEditComment()
         {
             //Arrange

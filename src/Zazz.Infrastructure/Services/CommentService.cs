@@ -55,7 +55,11 @@ namespace Zazz.Infrastructure.Services
                 var eventId = comment.EventId.Value;
                 var zazzEvent = _uow.EventRepository.GetById(eventId);
 
-                _notificationService.CreateEventCommentNotification(comment.Id, eventId, zazzEvent.UserId, save: false);
+                if (comment.FromId != zazzEvent.UserId)
+                {
+                    _notificationService.CreateEventCommentNotification(comment.Id, eventId,
+                                                                        zazzEvent.UserId, save: false);
+                }
             }
 
             _uow.SaveChanges();
