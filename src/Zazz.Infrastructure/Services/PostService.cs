@@ -82,7 +82,7 @@ namespace Zazz.Infrastructure.Services
             
             _uow.PostRepository.Remove(post);
             _uow.FeedRepository.RemovePostFeeds(postId);
-            _uow.CommentRepository.RemovePostComments(postId);
+            _commentService.RemovePostComments(postId);
             _notificationService.RemovePostNotifications(postId);
 
             _uow.SaveChanges();
