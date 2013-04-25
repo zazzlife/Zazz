@@ -33,6 +33,8 @@ namespace Zazz.Core.Interfaces
         
         void RemoveEventNotifications(int eventId);
 
+        void RemoveCommentNotifications(int commentId);
+
         void MarkUserNotificationsAsRead(int userId);
 
         int GetUnreadNotificationsCount(int userId);
