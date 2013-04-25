@@ -10,10 +10,12 @@ namespace Zazz.Infrastructure.Services
     public class EventService : IEventService
     {
         private readonly IUoW _uow;
+        private readonly INotificationService _notificationService;
 
-        public EventService(IUoW uow)
+        public EventService(IUoW uow, INotificationService notificationService)
         {
             _uow = uow;
+            _notificationService = notificationService;
         }
 
         public void CreateEvent(ZazzEvent zazzEvent)

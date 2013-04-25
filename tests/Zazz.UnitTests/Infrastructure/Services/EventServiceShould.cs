@@ -16,12 +16,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private EventService _sut;
         private int _userId;
         private ZazzEvent _zazzEvent;
+        private Mock<INotificationService> _notificationService;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
-            _sut = new EventService(_uow.Object);
+            _notificationService = new Mock<INotificationService>();
+            _sut = new EventService(_uow.Object, _notificationService.Object);
             _userId = 21;
             _zazzEvent = new ZazzEvent {UserId = _userId};
 
