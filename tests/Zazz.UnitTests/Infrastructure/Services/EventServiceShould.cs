@@ -23,7 +23,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             _uow = new Mock<IUoW>();
             _notificationService = new Mock<INotificationService>();
-            _sut = new EventService(_uow.Object, _notificationService.Object);
+            var commentService = new Mock<ICommentService>();
+            _sut = new EventService(_uow.Object, _notificationService.Object, commentService.Object);
             _userId = 21;
             _zazzEvent = new ZazzEvent {UserId = _userId};
 

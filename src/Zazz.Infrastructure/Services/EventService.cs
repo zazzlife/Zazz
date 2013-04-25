@@ -11,11 +11,13 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
-        public EventService(IUoW uow, INotificationService notificationService)
+        public EventService(IUoW uow, INotificationService notificationService, ICommentService commentService)
         {
             _uow = uow;
             _notificationService = notificationService;
+            _commentService = commentService;
         }
 
         public void CreateEvent(ZazzEvent zazzEvent)

@@ -24,7 +24,7 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(c => c.EventId == eventId);
         }
 
-        public IEnumerable<int> RemovePhotoComments(int photoId) //TODO: make all callers to use this method from comment service.
+        public IEnumerable<int> RemovePhotoComments(int photoId)
         {
             var comments = DbSet.Where(c => c.PhotoId == photoId);
             foreach (var comment in comments)
