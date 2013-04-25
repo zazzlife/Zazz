@@ -17,6 +17,7 @@ namespace Zazz.Data.Repositories
                 .Include(n => n.Photo)
                 .Include(n => n.Post)
                 .Include(n => n.UserB)
+                .Include(n => n.Comment)
                 .Where(n => n.UserId == userId);
         }
 
