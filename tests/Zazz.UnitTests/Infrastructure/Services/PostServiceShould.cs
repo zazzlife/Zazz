@@ -16,13 +16,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private PostService _sut;
         private Post _post;
         private Mock<INotificationService> _notificationService;
+        private Mock<ICommentService> _commentService;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
             _notificationService = new Mock<INotificationService>();
-            _sut = new PostService(_uow.Object, _notificationService.Object);
+            _commentService = new Mock<ICommentService>();
+            _sut = new PostService(_uow.Object, _notificationService.Object, _commentService.Object);
 
             _uow.Setup(x => x.SaveChanges());
 

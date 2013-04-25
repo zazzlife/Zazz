@@ -222,7 +222,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => _zazzEvent.UserId);
             _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
             _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
-            _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));
             _notificationService.Setup(x => x.RemoveEventNotifications(_zazzEvent.Id));
 
             //Act

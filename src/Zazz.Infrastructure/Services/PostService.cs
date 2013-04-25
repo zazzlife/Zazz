@@ -9,11 +9,13 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly INotificationService _notificationService;
+        private readonly ICommentService _commentService;
 
-        public PostService(IUoW uow, INotificationService notificationService)
+        public PostService(IUoW uow, INotificationService notificationService, ICommentService commentService)
         {
             _uow = uow;
             _notificationService = notificationService;
+            _commentService = commentService;
         }
 
         public void NewPost(Post post)
