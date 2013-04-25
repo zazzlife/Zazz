@@ -23,21 +23,21 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(c => c.EventId == eventId);
         }
 
-        public void RemovePhotoComments(int photoId)
+        public void RemovePhotoComments(int photoId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.PhotoId == photoId);
             foreach (var comment in comments)
                 Remove(comment);
         }
 
-        public void RemoveEventComments(int eventId)
+        public void RemoveEventComments(int eventId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.EventId == eventId);
             foreach (var comment in comments)
                 Remove(comment);
         }
 
-        public void RemovePostComments(int postId)
+        public void RemovePostComments(int postId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.PostId == postId);
             foreach (var comment in comments)
