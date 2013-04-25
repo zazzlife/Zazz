@@ -304,5 +304,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
+
+        [Test]
+        public void CallRemoveEventCommentsOnRepositoryAndRemoveAllNotifications_OnRemoveEventComments()
+        {
+            //Arrange
+            var commentId1 = 1;
+            var commentId2 = 2;
+
+            var commentIds = new List<int> { commentId1, commentId2 };
+            var eventId = 1;
+            _uow.Setup(x => x.CommentRepository.RemoveEventComments(eventId))
+                .Returns(commentIds);
+
+            _notificationService.Setup(x => x.RemoveCommentNotifications(It.IsAny<int>()));
+
+            //Act
+            _sut.RemoveEventComments(eventId);
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.RemoveEventComments(eventId), Times.Once());
+
+            _notificationService.Verify(x => x.RemoveCommentNotifications(It.IsAny<int>()),
+                                        Times.Exactly(commentIds.Count));
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId1), Times.Once());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId2), Times.Once());
+
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
     }
 }

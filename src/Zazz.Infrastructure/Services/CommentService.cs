@@ -101,7 +101,13 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveEventComments(int eventId)
         {
-            throw new NotImplementedException();
+            var commentIds = _uow.CommentRepository.RemoveEventComments(eventId);
+            foreach (var commentId in commentIds)
+            {
+                _notificationService.RemoveCommentNotifications(commentId);
+            }
+
+            _uow.SaveChanges();
         }
     }
 }
