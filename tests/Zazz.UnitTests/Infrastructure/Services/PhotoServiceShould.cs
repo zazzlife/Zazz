@@ -23,6 +23,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private PhotoService _sut;
         private string _tempRootPath;
         private Mock<ICacheService> _cacheService;
+        private Mock<INotificationService> _notificationService;
 
         [SetUp]
         public void Init()
@@ -31,7 +32,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fs = new Mock<IFileService>();
             _cacheService = new Mock<ICacheService>();
             _tempRootPath = Path.GetTempPath();
-            _sut = new PhotoService(_uow.Object, _fs.Object, _tempRootPath, _cacheService.Object);
+            _notificationService = new Mock<INotificationService>();
+            _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object, _notificationService.Object,
+                                    _tempRootPath);
             _uow.Setup(x => x.SaveChanges());
         }
 
