@@ -67,6 +67,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotCreateNotificationIfUserHasCommentedOnHisOwnPhoto_OnCreateComment()
+        {
+            //Arrange
+            var photo = new Photo
+                        {
+                            UserId = _comment.FromId
+                        };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoId.Value))
+                .Returns(photo);
+
+            _notificationService.Setup(x => x.CreatePhotoCommentNotification(
+                _comment.Id, _comment.PhotoId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Photo);
+
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePhotoCommentNotification(It.IsAny<int>(),
+                                             It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
+        }
+
+        [Test]
         public void CreateNotificationAndSaveCommentWhenCommentIsOnPost_OnCreateComment()
         {
             //Arrange
