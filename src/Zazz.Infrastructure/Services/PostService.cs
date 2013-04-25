@@ -8,10 +8,12 @@ namespace Zazz.Infrastructure.Services
     public class PostService : IPostService
     {
         private readonly IUoW _uow;
+        private readonly INotificationService _notificationService;
 
-        public PostService(IUoW uow)
+        public PostService(IUoW uow, INotificationService notificationService)
         {
             _uow = uow;
+            _notificationService = notificationService;
         }
 
         public void NewPost(Post post)
