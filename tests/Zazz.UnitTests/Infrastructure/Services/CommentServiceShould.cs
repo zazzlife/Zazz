@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Collections.Generic;
+using System.Security;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -248,6 +249,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.SaveChanges(), Times.Once());
             _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Once());
+        }
+
+        [Test]
+        public void CallRemovePhotoCommentsOnRepositoryAndRemoveAllNotifications_OnRemovePhotoComments()
+        {
+            //Arrange
+            var commentId1 = 1;
+            var commentId2 = 2;
+
+            var commentIds = new List<int> { commentId1, commentId2 };
+            var photoId = 1;
+            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId))
+                .Returns(commentIds);
+
+            _notificationService.Setup(x => x.RemoveCommentNotifications(It.IsAny<int>()));
+
+            //Act
+            _sut.RemovePhotoComments(photoId);
+
+            //Assert
+            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(It.IsAny<int>()),
+                                        Times.Exactly(commentIds.Count));
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId1), Times.Once());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId2), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
     }
 }
