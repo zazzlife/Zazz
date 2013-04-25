@@ -64,7 +64,17 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveComment(int commentId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            var comment = _uow.CommentRepository.GetById(commentId);
+            if (comment == null)
+                return;
+
+            if (comment.FromId != currentUserId)
+                throw new SecurityException();
+
+            _notificationService.RemoveCommentNotifications(commentId);
+            _uow.CommentRepository.Remove(comment);
+
+            _uow.SaveChanges();
         }
     }
 }

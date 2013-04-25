@@ -182,5 +182,72 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
+
+        [Test]
+        public void NotThrowWhenCommentDoesnTExists_OnRemoveComment()
+        {
+            //Arrange
+            var commentId = 12;
+            var userId = 123;
+
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemoveComment(commentId, userId);
+
+            //Assert
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Never());
+        }
+
+        [Test]
+        public void ThrowIfCommentIsNotFromCurrentUser_OnRemoveComment()
+        {
+            //Arrange
+            var commentId = 12;
+            var userId = 123;
+
+            var comment = new Comment
+                          {
+                              Id = commentId,
+                              FromId = userId,
+                          };
+
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => comment);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.RemoveComment(commentId, 9));
+
+            //Assert
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Never());
+        }
+
+        [Test]
+        public void RemoveCommentAndItsNotificationsIfEverythingIsFine_OnRemoveComment()
+        {
+            //Arrange
+            var commentId = 12;
+            var userId = 123;
+
+            var comment = new Comment
+                          {
+                              Id = commentId,
+                              FromId = userId,
+                          };
+
+            _uow.Setup(x => x.CommentRepository.GetById(commentId))
+                .Returns(() => comment);
+            _notificationService.Setup(x => x.RemoveCommentNotifications(commentId));
+
+            //Act
+            _sut.RemoveComment(commentId, userId);
+
+            //Assert
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Once());
+        }
     }
 }
