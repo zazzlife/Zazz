@@ -72,7 +72,7 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
             _uow.FeedRepository.RemoveEventFeeds(eventId);
-            _uow.CommentRepository.RemoveEventComments(eventId);
+            _commentService.RemoveEventComments(eventId);
             _notificationService.RemoveEventNotifications(eventId);
 
             _uow.EventRepository.Remove(eventId);

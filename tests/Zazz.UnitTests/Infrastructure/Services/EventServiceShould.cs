@@ -17,14 +17,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userId;
         private ZazzEvent _zazzEvent;
         private Mock<INotificationService> _notificationService;
+        private Mock<ICommentService> _commentService;
 
         [SetUp]
         public void Init()
         {
             _uow = new Mock<IUoW>();
             _notificationService = new Mock<INotificationService>();
-            var commentService = new Mock<ICommentService>();
-            _sut = new EventService(_uow.Object, _notificationService.Object, commentService.Object);
+            _commentService = new Mock<ICommentService>();
+            _sut = new EventService(_uow.Object, _notificationService.Object, _commentService.Object);
             _userId = 21;
             _zazzEvent = new ZazzEvent {UserId = _userId};
 
@@ -160,6 +161,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Never());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Never());
+            _commentService.Verify(x => x.RemoveEventComments(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -187,6 +189,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Never());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Never());
+            _commentService.Verify(x => x.RemoveEventComments(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -198,7 +201,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => _zazzEvent.UserId);
             _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
             _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
-            _uow.Setup(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id));
+            _commentService.Setup(x => x.RemoveEventComments(_zazzEvent.Id));
 
             //Act
             _sut.DeleteEvent(_zazzEvent.Id, _userId);
@@ -207,7 +210,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
             _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Once());
-            _uow.Verify(x => x.CommentRepository.RemoveEventComments(_zazzEvent.Id), Times.Once());
+            _commentService.Verify(x => x.RemoveEventComments(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
