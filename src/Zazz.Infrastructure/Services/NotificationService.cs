@@ -47,6 +47,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = photoOwnerUserId,
+                                   CommentId = commentId,
                                    PhotoId = photoId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -61,6 +62,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
+                                   CommentId = commentId,
                                    PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -75,6 +77,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = eventOwnerUserId,
+                                   CommentId = commentId,
                                    EventId = eventId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
