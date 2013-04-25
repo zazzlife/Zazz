@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -55,6 +56,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_zazzEvent.UserId))
+                .Returns(AccountType.User);
 
             //Act
             _sut.CreateEvent(_zazzEvent);
@@ -63,6 +66,41 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.InsertGraph(_zazzEvent), Times.Once());
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+        }
+
+        [Test]
+        public void NotCreateNotificationIfUserIsNotClubAdmin_OnCreateEvent()
+        {
+            //Arrange
+            _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_zazzEvent.UserId))
+                .Returns(AccountType.User);
+
+            //Act
+            _sut.CreateEvent(_zazzEvent);
+
+            //Assert
+            _notificationService.Verify(x => x.CreateNewEventNotification(It.IsAny<int>(), It.IsAny<int>(), false),
+                                        Times.Never());
+        }
+
+        [Test]
+        public void CreateNotificationIfUserIsClubAdmin_OnCreateEvent()
+        {
+            //Arrange
+            _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_zazzEvent.UserId))
+                .Returns(AccountType.ClubAdmin);
+            _notificationService.Setup(x => x.CreateNewEventNotification(_zazzEvent.UserId, _zazzEvent.Id, false));
+
+            //Act
+            _sut.CreateEvent(_zazzEvent);
+
+            //Assert
+            _notificationService.Verify(x => x.CreateNewEventNotification(_zazzEvent.UserId, _zazzEvent.Id, false),
+                                        Times.Once());
         }
 
         [Test]

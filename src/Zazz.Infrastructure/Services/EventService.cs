@@ -39,6 +39,12 @@ namespace Zazz.Infrastructure.Services
 
             feed.FeedUsers.Add(new FeedUser { UserId = zazzEvent.UserId });
 
+            var userAccountType = _uow.UserRepository.GetUserAccountType(zazzEvent.UserId);
+            if (userAccountType == AccountType.ClubAdmin)
+            {
+                _notificationService.CreateNewEventNotification(zazzEvent.UserId, zazzEvent.Id, false);
+            }
+
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
         }
