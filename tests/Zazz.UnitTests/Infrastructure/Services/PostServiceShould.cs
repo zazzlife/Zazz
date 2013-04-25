@@ -53,7 +53,41 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.InsertGraph(_post), Times.Once());
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
 
+        [Test]
+        public void NotCreateNotificationIfPostIsOnHisOwnWall_OnNewPost()
+        {
+            //Arrange
+            _uow.Setup(x => x.PostRepository.InsertGraph(_post));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+
+            //Assert
+            _notificationService.Verify(x => x.CreateWallPostNotification(It.IsAny<int>(), It.IsAny<int>(), false),
+                                        Times.Never());
+        }
+
+        [Test]
+        public void CreateNotificationIfPostIsSomeoneElsesWall_OnNewPost()
+        {
+            //Arrange
+            _post.ToUserId = 9983;
+            _uow.Setup(x => x.PostRepository.InsertGraph(_post));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _notificationService.Setup(x => x.CreateWallPostNotification(_post.FromUserId,
+                                                                         _post.ToUserId.Value, false));
+
+            //Act
+            _sut.NewPost(_post);
+
+
+            //Assert
+            _notificationService.Verify(x => x.CreateWallPostNotification(_post.FromUserId, _post.ToUserId.Value,
+                                                                          false), Times.Once());
         }
 
         [Test]

@@ -39,6 +39,8 @@ namespace Zazz.Infrastructure.Services
                                      {
                                          UserId = post.ToUserId.Value
                                      });
+
+                _notificationService.CreateWallPostNotification(post.FromUserId, post.ToUserId.Value, false);
             }
 
             _uow.FeedRepository.InsertGraph(feed);
