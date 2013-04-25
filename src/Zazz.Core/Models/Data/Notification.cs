@@ -27,6 +27,9 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("EventId")]
         public ZazzEvent Event { get; set; }
 
+        [ForeignKey("CommentId")]
+        public Comment Comment { get; set; }
+
         /// <summary>
         /// User that receives the notification.
         /// </summary>
@@ -42,6 +45,8 @@ namespace Zazz.Core.Models.Data
         public int? PostId { get; set; }
 
         public int? EventId { get; set; }
+
+        public int? CommentId { get; set; }
 
         public NotificationType NotificationType { get; set; }
 
