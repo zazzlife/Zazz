@@ -19,31 +19,32 @@ namespace Zazz.Infrastructure.Services
 
         public int CreateComment(Comment comment, CommentType commentType)
         {
+            _uow.CommentRepository.InsertGraph(comment);
+            _uow.SaveChanges();
+
             if (commentType == CommentType.Photo && comment.PhotoId.HasValue)
             {
                 var photoId = comment.PhotoId.Value;
                 var photo = _uow.PhotoRepository.GetById(photoId);
 
-                _notificationService.CreatePhotoCommentNotification(photoId, photo.UserId, false);
+                _notificationService.CreatePhotoCommentNotification(comment.Id, photoId, photo.UserId, save: false);
             }
             else if (commentType == CommentType.Post && comment.PostId.HasValue)
             {
                 var postId = comment.PostId.Value;
                 var post = _uow.PostRepository.GetById(postId);
-                
-                _notificationService.CreatePostCommentNotification(postId, post.FromUserId, false);
+
+                _notificationService.CreatePostCommentNotification(comment.Id, postId, post.FromUserId, save: false);
             }
             else if (commentType == CommentType.Event && comment.EventId.HasValue)
             {
                 var eventId = comment.EventId.Value;
                 var zazzEvent = _uow.EventRepository.GetById(eventId);
 
-                _notificationService.CreateEventCommentNotification(eventId, zazzEvent.UserId, false);
+                _notificationService.CreateEventCommentNotification(comment.Id, eventId, zazzEvent.UserId, save: false);
             }
 
-            _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
-
             return comment.Id;
         }
 

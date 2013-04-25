@@ -42,7 +42,7 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true)
+        public void CreatePhotoCommentNotification(int commentId, int photoId, int photoOwnerUserId, bool save = true)
         {
             var notification = new Notification
                                {
@@ -56,7 +56,7 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true)
+        public void CreatePostCommentNotification(int commentId, int postId, int postOwnerUserId, bool save = true)
         {
             var notification = new Notification
                                {
@@ -70,7 +70,7 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreateEventCommentNotification(int eventId, int eventOwnerUserId, bool save = true)
+        public void CreateEventCommentNotification(int commentId, int eventId, int eventOwnerUserId, bool save = true)
         {
             var notification = new Notification
                                {

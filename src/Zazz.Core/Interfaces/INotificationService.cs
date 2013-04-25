@@ -17,11 +17,11 @@ namespace Zazz.Core.Interfaces
         /// <param name="save"></param>
         void CreateFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true);
 
-        void CreatePhotoCommentNotification(int photoId, int photoOwnerUserId, bool save = true);
+        void CreatePhotoCommentNotification(int commentId, int photoId, int photoOwnerUserId, bool save = true);
 
-        void CreatePostCommentNotification(int postId, int postOwnerUserId, bool save = true);
+        void CreatePostCommentNotification(int commentId, int postId, int postOwnerUserId, bool save = true);
 
-        void CreateEventCommentNotification(int eventId, int eventOwnerUserId, bool save = true);
+        void CreateEventCommentNotification(int commentId, int eventId, int eventOwnerUserId, bool save = true);
 
         void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true);
 
