@@ -13,7 +13,7 @@ namespace Zazz.Core.Models.Data
         public virtual User User { get; set; }
 
         /// <summary>
-        /// Use this property if you need to mention another user in the notification.
+        /// Use this property to mention another user in the notification.
         /// </summary>
         [ForeignKey("UserBId")]
         public User UserB { get; set; }
@@ -36,9 +36,9 @@ namespace Zazz.Core.Models.Data
         public int UserId { get; set; }
 
         /// <summary>
-        /// Use this property if you need to mention another user in the notification.
+        /// Use this property to mention another user in the notification.
         /// </summary>
-        public int? UserBId { get; set; }
+        public int UserBId { get; set; }
 
         public int? PhotoId { get; set; }
 

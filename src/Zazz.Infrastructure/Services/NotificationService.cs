@@ -42,11 +42,11 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePhotoCommentNotification(int commentId, int photoId, int photoOwnerUserId, bool save = true)
+        public void CreatePhotoCommentNotification(int commentId, int photoId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
-                                   UserId = photoOwnerUserId,
+                                   UserId = userToBeNotified,
                                    CommentId = commentId,
                                    PhotoId = photoId,
                                    Time = DateTime.UtcNow,
@@ -72,11 +72,11 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreateEventCommentNotification(int commentId, int eventId, int eventOwnerUserId, bool save = true)
+        public void CreateEventCommentNotification(int commentId, int eventId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
-                                   UserId = eventOwnerUserId,
+                                   UserId = userToBeNotified,
                                    CommentId = commentId,
                                    EventId = eventId,
                                    Time = DateTime.UtcNow,
