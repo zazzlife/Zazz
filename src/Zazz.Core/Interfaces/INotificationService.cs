@@ -19,7 +19,7 @@ namespace Zazz.Core.Interfaces
 
         void CreatePhotoCommentNotification(int commentId, int photoId, int photoOwnerUserId, bool save = true);
 
-        void CreatePostCommentNotification(int commentId, int postId, int postOwnerUserId, bool save = true);
+        void CreatePostCommentNotification(int commentId, int postId, int userToBeNotified, bool save = true);
 
         void CreateEventCommentNotification(int commentId, int eventId, int eventOwnerUserId, bool save = true);
 

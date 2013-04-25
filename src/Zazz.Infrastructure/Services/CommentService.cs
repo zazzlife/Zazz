@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -35,7 +36,19 @@ namespace Zazz.Infrastructure.Services
                 var postId = comment.PostId.Value;
                 var post = _uow.PostRepository.GetById(postId);
 
-                _notificationService.CreatePostCommentNotification(comment.Id, postId, post.FromUserId, save: false);
+                // Creating a list of users to notify, at this moment maximum is 2 people but this way I leave a room to grow easily
+                var usersToBeNotified = new List<int> { post.FromUserId };
+                if (post.ToUserId.HasValue)
+                    usersToBeNotified.Add(post.ToUserId.Value);
+
+                // Removing the person that commented from notification list
+                usersToBeNotified.Remove(comment.FromId);
+
+                foreach (var userId in usersToBeNotified)
+                {
+                    _notificationService.CreatePostCommentNotification(comment.Id, postId,
+                                                                       userId, save: false);
+                }
             }
             else if (commentType == CommentType.Event && comment.EventId.HasValue)
             {

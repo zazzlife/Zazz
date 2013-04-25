@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CreateNotificationAndSaveCommentWhenCommentIsOnPost_OnCreateComment()
+        public void SaveCommentWhenCommentIsOnPost_OnCreateComment()
         {
             //Arrange
             var post = new Post
@@ -112,7 +112,131 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
             _uow.Verify(x => x.PostRepository.GetById(_comment.PostId.Value), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false), Times.Once());
+        }
+
+        [Test]
+        public void NotCreateNotificationIfUserHasCommentedOnHisOwnPost_OnCreateComment()
+        {
+            //Arrange
+            var post = new Post
+                       {
+                           FromUserId = _comment.FromId
+                       };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePostCommentNotification(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
+        }
+
+        [Test]
+        public void NotifyOwnerIfTheCommenterIsSomeoneElse_OnCreateComment()
+        {
+            //Arrange
+            var post = new Post
+                       {
+                           Id = _comment.PostId.Value,
+                           FromUserId = _ownerId
+                       };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.FromUserId, false), Times.Once());
+        }
+
+        [Test]
+        public void NotifyBothFROM_USERAndTO_USERIfTheCommenterIsSomeoneElse_OnCreateComment()
+        {
+            //Arrange
+            var post = new Post
+            {
+                Id = _comment.PostId.Value,
+                FromUserId = _ownerId,
+                ToUserId = 888
+            };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+                _comment.PostId.Value, It.IsAny<int>(), false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.FromUserId, false), Times.Once());
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.ToUserId.Value, false), Times.Once());
+        }
+
+        [Test]
+        public void OnlyNotifyTO_USERIfCommentIsFromFROM_USER_OnCreateComment()
+        {
+            //Arrange
+            var post = new Post
+            {
+                Id = _comment.PostId.Value,
+                FromUserId = _comment.FromId,
+                ToUserId = 888
+            };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+                _comment.PostId.Value, It.IsAny<int>(), false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.FromUserId, false), Times.Never());
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.ToUserId.Value, false), Times.Once());
+        }
+
+        [Test]
+        public void OnlyNotifyFROM_USERIfCommentIsFromTO_USER_OnCreateComment()
+        {
+            //Arrange
+            var post = new Post
+            {
+                Id = _comment.PostId.Value,
+                FromUserId = _ownerId,
+                ToUserId = _comment.FromId
+            };
+
+            _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
+                .Returns(post);
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+                _comment.PostId.Value, It.IsAny<int>(), false));
+
+            //Act
+            _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.FromUserId, false), Times.Once());
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+                post.Id, post.ToUserId.Value, false), Times.Never());
         }
 
         [Test]

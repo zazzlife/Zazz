@@ -56,11 +56,11 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePostCommentNotification(int commentId, int postId, int postOwnerUserId, bool save = true)
+        public void CreatePostCommentNotification(int commentId, int postId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
-                                   UserId = postOwnerUserId,
+                                   UserId = userToBeNotified,
                                    PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
