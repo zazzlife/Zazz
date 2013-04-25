@@ -142,7 +142,8 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveCommentNotifications(int commentId)
         {
-            throw new NotImplementedException();
+            _uow.NotificationRepository.RemoveRecordsByCommentId(commentId);
+            _uow.SaveChanges();
         }
 
         public void MarkUserNotificationsAsRead(int userId)
