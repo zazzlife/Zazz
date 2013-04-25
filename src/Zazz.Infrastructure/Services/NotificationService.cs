@@ -42,12 +42,13 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePhotoCommentNotification(int commentId, int photoId, int userToBeNotified, bool save = true)
+        public void CreatePhotoCommentNotification(int commentId, int commenterId, int photoId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
+                                   UserBId = commentId,
                                    PhotoId = photoId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -57,12 +58,13 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreatePostCommentNotification(int commentId, int postId, int userToBeNotified, bool save = true)
+        public void CreatePostCommentNotification(int commentId, int commenterId, int postId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
+                                   UserBId = commentId,
                                    PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -72,12 +74,13 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreateEventCommentNotification(int commentId, int eventId, int userToBeNotified, bool save = true)
+        public void CreateEventCommentNotification(int commentId, int commenterId, int eventId, int userToBeNotified, bool save = true)
         {
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
+                                   UserBId = commentId,
                                    EventId = eventId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
