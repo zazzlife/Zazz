@@ -196,10 +196,13 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            _repo.RemoveEventComments(_event1.Id);
+            var ids = _repo.RemoveEventComments(_event1.Id).ToList();
             _context.SaveChanges();
 
             //Assert
+            Assert.AreEqual(2, ids.Count);
+            CollectionAssert.Contains(ids, _event1Comment1.Id);
+            CollectionAssert.Contains(ids, _event1Comment2.Id);
 
             Assert.IsFalse(_repo.Exists(_event1Comment1.Id));
             Assert.IsFalse(_repo.Exists(_event1Comment2.Id));
@@ -220,10 +223,13 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            _repo.RemovePostComments(_post1.Id);
+            var ids = _repo.RemovePostComments(_post1.Id).ToList();
             _context.SaveChanges();
 
             //Assert
+            Assert.AreEqual(2, ids.Count);
+            CollectionAssert.Contains(ids, _post1Comment1.Id);
+            CollectionAssert.Contains(ids, _post1Comment2.Id);
 
             Assert.IsTrue(_repo.Exists(_event1Comment1.Id));
             Assert.IsTrue(_repo.Exists(_event1Comment2.Id));
@@ -244,10 +250,13 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            _repo.RemovePhotoComments(_photo1.Id);
+            var ids = _repo.RemovePhotoComments(_photo1.Id).ToList();
             _context.SaveChanges();
 
             //Assert
+            Assert.AreEqual(2, ids.Count);
+            CollectionAssert.Contains(ids, _photo1Comment1.Id);
+            CollectionAssert.Contains(ids, _photo1Comment2.Id);
 
             Assert.IsTrue(_repo.Exists(_event1Comment1.Id));
             Assert.IsTrue(_repo.Exists(_event1Comment2.Id));

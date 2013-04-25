@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,25 +24,31 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(c => c.EventId == eventId);
         }
 
-        public void RemovePhotoComments(int photoId) //TODO: make all callers to use this method from comment service.
+        public IEnumerable<int> RemovePhotoComments(int photoId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.PhotoId == photoId);
             foreach (var comment in comments)
                 Remove(comment);
+
+            return comments.Select(c => c.Id);
         }
 
-        public void RemoveEventComments(int eventId) //TODO: make all callers to use this method from comment service.
+        public IEnumerable<int> RemoveEventComments(int eventId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.EventId == eventId);
             foreach (var comment in comments)
                 Remove(comment);
+
+            return comments.Select(c => c.Id);
         }
 
-        public void RemovePostComments(int postId) //TODO: make all callers to use this method from comment service.
+        public IEnumerable<int> RemovePostComments(int postId) //TODO: make all callers to use this method from comment service.
         {
             var comments = DbSet.Where(c => c.PostId == postId);
             foreach (var comment in comments)
                 Remove(comment);
+
+            return comments.Select(c => c.Id);
         }
     }
 }
