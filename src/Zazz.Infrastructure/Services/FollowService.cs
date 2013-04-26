@@ -82,6 +82,7 @@ namespace Zazz.Infrastructure.Services
         public void RemoveFollow(int fromUserId, int toUserId)
         {
             _uow.FollowRepository.Remove(fromUserId, toUserId);
+            _notificationService.RemoveFollowAcceptedNotification(fromUserId, toUserId, false);
             _uow.SaveChanges();
         }
 

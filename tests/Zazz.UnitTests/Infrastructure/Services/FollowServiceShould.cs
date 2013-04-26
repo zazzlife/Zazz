@@ -231,6 +231,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
+        [Test]
+        public void UseNotificationServiceToRemoveFollowNotification_OnRemoveFollow()
+        {
+            //Arrange
+            _uow.Setup(x => x.FollowRepository.Remove(_userAId, _userBId));
+            _notificationService.Setup(x => x.RemoveFollowAcceptedNotification(_userAId, _userBId, false));
+
+            //Act
+            _sut.RemoveFollow(_userAId, _userBId);
+
+            //Assert
+            _notificationService.Verify(x => x.RemoveFollowAcceptedNotification(_userAId, _userBId, false), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
 
 
         [Test]
