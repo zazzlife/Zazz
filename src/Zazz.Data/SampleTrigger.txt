@@ -1,0 +1,8 @@
+﻿CREATE TRIGGER dbo.Event_Feed_DELETE
+ON dbo.Event
+INSTEAD OF DELETE
+AS
+BEGIN;
+	DELETE FROM dbo.Feeds WHERE EventId IN(SELECT Id FROM deleted);
+	DELETE FROM dbo.Events Where Id IN(SELECT Id FROM deleted);
+END;
