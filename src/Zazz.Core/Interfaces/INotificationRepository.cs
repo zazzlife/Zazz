@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces
     {
         IQueryable<Notification> GetUserNotifications(int userId);
 
+        void RemoveFollowAcceptedNotification(int userId, int userBId);
+
         void RemoveRecordsByPhotoId(int photoId);
 
         void RemoveRecordsByEventId(int eventId);

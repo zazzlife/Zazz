@@ -21,6 +21,11 @@ namespace Zazz.Data.Repositories
                 .Where(n => n.UserId == userId);
         }
 
+        public void RemoveFollowAcceptedNotification(int userId, int userBId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void RemoveRecordsByPhotoId(int photoId)
         {
             var notifications = DbSet.Where(n => n.PhotoId == photoId);
