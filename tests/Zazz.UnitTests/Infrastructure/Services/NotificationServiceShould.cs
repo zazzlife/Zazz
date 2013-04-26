@@ -15,6 +15,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private NotificationService _sut;
         private Notification _notification;
         private int _commentId;
+        private int _commenterId;
 
         [SetUp]
         public void Init()
@@ -26,6 +27,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _notification = new Notification();
             _commentId = 12345;
+            _commenterId = 555;
         }
 
         [Test]
@@ -109,7 +111,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreatePhotoCommentNotification(_commentId, 1, 2);
+            _sut.CreatePhotoCommentNotification(_commentId, _commenterId, 1, 2);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -123,7 +125,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreatePhotoCommentNotification(_commentId, 1, 2, save: false);
+            _sut.CreatePhotoCommentNotification(_commentId, _commenterId, 1, 2, save: false);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -137,7 +139,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreatePostCommentNotification(_commentId, 1, 2);
+            _sut.CreatePostCommentNotification(_commentId, _commenterId, 1, 2);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -151,7 +153,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreatePostCommentNotification(_commentId, 1, 2, save: false);
+            _sut.CreatePostCommentNotification(_commentId, _commenterId, 1, 2, save: false);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -165,7 +167,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateEventCommentNotification(_commentId, 1, 2);
+            _sut.CreateEventCommentNotification(_commentId, _commenterId, 1, 2);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -179,7 +181,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateEventCommentNotification(_commentId, 1, 2, save: false);
+            _sut.CreateEventCommentNotification(_commentId, _commenterId, 1, 2, save: false);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());

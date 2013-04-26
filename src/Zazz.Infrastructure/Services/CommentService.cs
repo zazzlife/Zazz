@@ -29,7 +29,7 @@ namespace Zazz.Infrastructure.Services
                 var photo = _uow.PhotoRepository.GetById(photoId);
 
                 if (photo.UserId != comment.FromId)
-                    _notificationService.CreatePhotoCommentNotification(comment.Id, photoId, photo.UserId, save: false);
+                    _notificationService.CreatePhotoCommentNotification(comment.Id, comment.FromId, photoId, photo.UserId, save: false);
             }
             else if (commentType == CommentType.Post && comment.PostId.HasValue)
             {
@@ -46,7 +46,7 @@ namespace Zazz.Infrastructure.Services
 
                 foreach (var userId in usersToBeNotified)
                 {
-                    _notificationService.CreatePostCommentNotification(comment.Id, postId,
+                    _notificationService.CreatePostCommentNotification(comment.Id, comment.FromId, postId,
                                                                        userId, save: false);
                 }
             }
@@ -57,7 +57,7 @@ namespace Zazz.Infrastructure.Services
 
                 if (comment.FromId != zazzEvent.UserId)
                 {
-                    _notificationService.CreateEventCommentNotification(comment.Id, eventId,
+                    _notificationService.CreateEventCommentNotification(comment.Id, comment.FromId, eventId,
                                                                         zazzEvent.UserId, save: false);
                 }
             }

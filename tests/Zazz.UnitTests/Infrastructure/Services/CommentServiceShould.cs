@@ -52,7 +52,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(photo);
 
             _notificationService.Setup(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.PhotoId.Value, _ownerId, false));
+                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
@@ -61,7 +61,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
             _uow.Verify(x => x.PhotoRepository.GetById(_comment.PhotoId.Value), Times.Once());
             _notificationService.Verify(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.PhotoId.Value, _ownerId, false), Times.Once());
+                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false), Times.Once());
 
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
         }
@@ -80,14 +80,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(photo);
 
             _notificationService.Setup(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.PhotoId.Value, _ownerId, false));
+                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
 
 
             //Assert
-            _notificationService.Verify(x => x.CreatePhotoCommentNotification(It.IsAny<int>(),
+            _notificationService.Verify(x => x.CreatePhotoCommentNotification(It.IsAny<int>(), It.IsAny<int>(),
                                              It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
         }
 
@@ -103,7 +103,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false));
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId, _comment.PostId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
@@ -126,13 +126,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false));
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId, _comment.PostId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
+            _notificationService.Verify(x => x.CreatePostCommentNotification(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
         }
 
         [Test]
@@ -148,13 +148,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.PostId.Value, _ownerId, false));
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId, _comment.PostId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.FromUserId, false), Times.Once());
         }
 
@@ -172,16 +172,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 _comment.PostId.Value, It.IsAny<int>(), false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.FromUserId, false), Times.Once());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.ToUserId.Value, false), Times.Once());
         }
 
@@ -199,16 +199,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 _comment.PostId.Value, It.IsAny<int>(), false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.FromUserId, false), Times.Never());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.ToUserId.Value, false), Times.Once());
         }
 
@@ -226,16 +226,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostId.Value))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 _comment.PostId.Value, It.IsAny<int>(), false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.FromUserId, false), Times.Once());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id,
+            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.FromId,
                 post.Id, post.ToUserId.Value, false), Times.Never());
         }
 
@@ -251,7 +251,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.EventRepository.GetById(_comment.EventId.Value))
                 .Returns(zazzEvent);
-            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, _ownerId, false));
+            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.FromId, _comment.EventId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Event);
@@ -260,7 +260,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
             _uow.Verify(x => x.EventRepository.GetById(_comment.EventId.Value), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _notificationService.Verify(x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, _ownerId, false), Times.Once());
+            _notificationService.Verify(x => x.CreateEventCommentNotification(_comment.Id, _comment.FromId, _comment.EventId.Value, _ownerId, false), Times.Once());
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.EventRepository.GetById(_comment.EventId.Value))
                 .Returns(zazzEvent);
-            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, _ownerId, false));
+            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.FromId, _comment.EventId.Value, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Event);
@@ -285,7 +285,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.GetById(_comment.EventId.Value), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _notificationService.Verify(
-                x => x.CreateEventCommentNotification(_comment.Id, _comment.EventId.Value, zazzEvent.UserId, false),
+                x => x.CreateEventCommentNotification(_comment.Id, _comment.FromId, _comment.EventId.Value, zazzEvent.UserId, false),
                 Times.Never());
         }
 
