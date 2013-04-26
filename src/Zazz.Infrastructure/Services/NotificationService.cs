@@ -128,6 +128,11 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
         }
 
+        public void RemoveFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemovePhotoNotifications(int photoId)
         {
             _uow.NotificationRepository.RemoveRecordsByPhotoId(photoId);

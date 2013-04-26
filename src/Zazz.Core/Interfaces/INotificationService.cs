@@ -27,6 +27,8 @@ namespace Zazz.Core.Interfaces
 
         void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true);
 
+        void RemoveFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true);
+
         void RemovePhotoNotifications(int photoId);
         
         void RemovePostNotifications(int postId);
