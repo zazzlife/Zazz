@@ -95,6 +95,11 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Notification>()
+                .HasRequired(n => n.UserB)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
             base.OnModelCreating(modelBuilder);
         }
     }
