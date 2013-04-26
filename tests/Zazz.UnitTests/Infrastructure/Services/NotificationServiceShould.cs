@@ -287,6 +287,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CallRemoveFollowAcceptedNotificationOnRepo_OnRemoveFollowAcceptedNotification()
+        {
+            //Arrange
+            var fromId = 12;
+            var toId = 122;
+
+            _uow.Setup(x => x.NotificationRepository.RemoveFollowAcceptedNotification(fromId, toId));
+
+            //Act
+            _sut.RemoveFollowAcceptedNotification(fromId, toId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.RemoveFollowAcceptedNotification(fromId, toId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void CallRemoveFollowAcceptedNotificationOnRepoAndNotSaveIfSaveIsFalse_OnRemoveFollowAcceptedNotification()
+        {
+            //Arrange
+            var fromId = 12;
+            var toId = 122;
+
+            _uow.Setup(x => x.NotificationRepository.RemoveFollowAcceptedNotification(fromId, toId));
+
+            //Act
+            _sut.RemoveFollowAcceptedNotification(fromId, toId, false);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.RemoveFollowAcceptedNotification(fromId, toId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
+        }
+
+        [Test]
         public void CallRemovePhotoRecordsOnRepository_OnRemovePhotoNotifications()
         {
             //Arrange
