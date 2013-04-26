@@ -32,8 +32,8 @@ namespace Zazz.Infrastructure.Services
         {
             var notification = new Notification
                                {
-                                   UserId = toUserId,
-                                   UserBId = fromUserId,
+                                   UserId = fromUserId,
+                                   UserBId = toUserId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.FollowRequestAccepted
