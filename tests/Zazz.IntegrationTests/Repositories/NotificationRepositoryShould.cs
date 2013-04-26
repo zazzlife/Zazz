@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
 using Zazz.Data.Repositories;
 
@@ -29,6 +30,7 @@ namespace Zazz.IntegrationTests.Repositories
         private Comment _comment2;
         private Notification _comment1Notification;
         private Notification _comment2Notification;
+        private User _userB;
 
         [SetUp]
         public void Init()
@@ -37,7 +39,9 @@ namespace Zazz.IntegrationTests.Repositories
             _repo = new NotificationRepository(_context);
 
             _user = Mother.GetUser();
+            _userB = Mother.GetUser();
             _context.Users.Add(_user);
+            _context.Users.Add(_userB);
             _context.SaveChanges();
 
             _photo1 = Mother.GetPhoto(_user.Id);
@@ -66,27 +70,27 @@ namespace Zazz.IntegrationTests.Repositories
 
             _context.SaveChanges();
 
-            _photo1Notification = Mother.GetNotification(_user.Id);
+            _photo1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _photo1Notification.PhotoId = _photo1.Id;
 
-            _photo2Notification = Mother.GetNotification(_user.Id);
+            _photo2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _photo2Notification.PhotoId = _photo2.Id;
 
-            _post1Notification = Mother.GetNotification(_user.Id);
+            _post1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _post1Notification.PostId = _post1.Id;
 
-            _post2Notification = Mother.GetNotification(_user.Id);
+            _post2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _post2Notification.PostId = _post2.Id;
 
-            _event1Notification = Mother.GetNotification(_user.Id);
+            _event1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _event1Notification.EventId = _event1.Id;
 
-            _event2Notification = Mother.GetNotification(_user.Id);
+            _event2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _event2Notification.EventId = _event2.Id;
 
-            _comment1Notification = Mother.GetNotification(_user.Id);
+            _comment1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _comment1Notification.CommentId = _comment1.Id;
-            _comment2Notification = Mother.GetNotification(_user.Id);
+            _comment2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _comment2Notification.CommentId = _comment2.Id;
 
             _context.Notifications.Add(_photo1Notification);
@@ -108,22 +112,22 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(user2);
             _context.SaveChanges();
 
-            var photo1Notification = Mother.GetNotification(user2.Id);
+            var photo1Notification = Mother.GetNotification(user2.Id, _user.Id);
             photo1Notification.PhotoId = _photo1.Id;
 
-            var photo2Notification = Mother.GetNotification(user2.Id);
+            var photo2Notification = Mother.GetNotification(user2.Id, _user.Id);
             photo2Notification.PhotoId = _photo2.Id;
 
-            var post1Notification = Mother.GetNotification(user2.Id);
+            var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
             post1Notification.PostId = _post1.Id;
 
-            var post2Notification = Mother.GetNotification(user2.Id);
+            var post2Notification = Mother.GetNotification(user2.Id, _user.Id);
             post2Notification.PostId = _post2.Id;
 
-            var event1Notification = Mother.GetNotification(user2.Id);
+            var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
             event1Notification.EventId = _event1.Id;
 
-            var event2Notification = Mother.GetNotification(user2.Id);
+            var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
             event2Notification.EventId = _event2.Id;
 
             _context.Notifications.Add(photo1Notification);
@@ -140,6 +144,34 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsTrue(_context.Notifications.Count() > 6);
             Assert.AreEqual(8, notifications.Count());
+        }
+
+        [Test]
+        public void RemoveCorrectRecords_OnRemoveFollowAcceptedNotifications()
+        {
+            //Arrange
+            var notification = Mother.GetNotification(_user.Id, _userB.Id);
+            notification.NotificationType = NotificationType.FollowRequestAccepted;
+
+            _context.Notifications.Add(notification);
+            _context.SaveChanges();
+
+            Assert.IsTrue(_context.Notifications
+                                  .Where(n => n.NotificationType == NotificationType.FollowRequestAccepted)
+                                  .Where(n => n.UserId == _user.Id)
+                                  .Where(n => n.UserBId == _userB.Id)
+                                  .Any());
+
+            //Act
+            _repo.RemoveFollowAcceptedNotification(notification.UserId, notification.UserBId);
+            _context.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_context.Notifications
+                                  .Where(n => n.NotificationType == NotificationType.FollowRequestAccepted)
+                                  .Where(n => n.UserId == _user.Id)
+                                  .Where(n => n.UserBId == _userB.Id)
+                                  .Any());
         }
 
         [Test]
@@ -285,22 +317,22 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(user2);
             _context.SaveChanges();
 
-            var photo1Notification = Mother.GetNotification(user2.Id);
+            var photo1Notification = Mother.GetNotification(user2.Id, _user.Id);
             photo1Notification.PhotoId = _photo1.Id;
 
-            var photo2Notification = Mother.GetNotification(user2.Id);
+            var photo2Notification = Mother.GetNotification(user2.Id, _user.Id);
             photo2Notification.PhotoId = _photo2.Id;
 
-            var post1Notification = Mother.GetNotification(user2.Id);
+            var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
             post1Notification.PostId = _post1.Id;
 
-            var post2Notification = Mother.GetNotification(user2.Id);
+            var post2Notification = Mother.GetNotification(user2.Id, _user.Id);
             post2Notification.PostId = _post2.Id;
 
-            var event1Notification = Mother.GetNotification(user2.Id);
+            var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
             event1Notification.EventId = _event1.Id;
 
-            var event2Notification = Mother.GetNotification(user2.Id);
+            var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
             event2Notification.EventId = _event2.Id;
 
             _context.Notifications.Add(photo1Notification);

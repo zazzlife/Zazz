@@ -84,11 +84,12 @@ namespace Zazz.IntegrationTests
                    };
         }
 
-        public static Notification GetNotification(int userId, bool isRead = false)
+        public static Notification GetNotification(int userId, int userBId, bool isRead = false)
         {
             return new Notification
                    {
                        UserId = userId,
+                       UserBId =  userBId,
                        Time = DateTime.UtcNow,
                        IsRead = isRead
                    };

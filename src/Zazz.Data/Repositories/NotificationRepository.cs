@@ -2,6 +2,7 @@
 using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Data.Repositories
 {
@@ -23,7 +24,15 @@ namespace Zazz.Data.Repositories
 
         public void RemoveFollowAcceptedNotification(int userId, int userBId)
         {
-            throw new System.NotImplementedException();
+            var notifications = DbSet
+                .Where(n => n.NotificationType == NotificationType.FollowRequestAccepted)
+                .Where(n => n.UserId == userId)
+                .Where(n => n.UserBId == userBId);
+
+            foreach (var notification in notifications)
+            {
+                Remove(notification);
+            }
         }
 
         public void RemoveRecordsByPhotoId(int photoId)
