@@ -82,10 +82,10 @@ namespace Zazz.Infrastructure.Services
                 }
             }
             
-            _uow.PostRepository.Remove(post);
             _uow.FeedRepository.RemovePostFeeds(postId);
             _commentService.RemovePostComments(postId);
             _notificationService.RemovePostNotifications(postId);
+            _uow.PostRepository.Remove(post);
 
             _uow.SaveChanges();
         }
