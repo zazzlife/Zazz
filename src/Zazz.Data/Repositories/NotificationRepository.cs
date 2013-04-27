@@ -20,7 +20,7 @@ namespace Zazz.Data.Repositories
                 .Include(n => n.UserB)
                 .Include(n => n.Comment)
                 .Where(n => n.UserId == userId)
-                .OrderBy(n => n.Time);
+                .OrderByDescending(n => n.Time);
         }
 
         public void RemoveFollowAcceptedNotification(int userId, int userBId)
