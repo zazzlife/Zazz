@@ -48,7 +48,7 @@ namespace Zazz.Infrastructure.Services
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
-                                   UserBId = commentId,
+                                   UserBId = commenterId,
                                    PhotoId = photoId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -64,7 +64,7 @@ namespace Zazz.Infrastructure.Services
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
-                                   UserBId = commentId,
+                                   UserBId = commenterId,
                                    PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -80,7 +80,7 @@ namespace Zazz.Infrastructure.Services
                                {
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
-                                   UserBId = commentId,
+                                   UserBId = commenterId,
                                    EventId = eventId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
