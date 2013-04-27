@@ -224,6 +224,7 @@
     <Compile Include="Controllers\FollowController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsonNetResult.cs" />
+    <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -490,6 +491,8 @@
     <Content Include="Views\Shared\FeedItems\_PhotoFeedSinglePhoto.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedTwoPhotos.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
+    <Content Include="Views\Notification\List.cshtml" />
+    <Content Include="Views\Notification\_Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
