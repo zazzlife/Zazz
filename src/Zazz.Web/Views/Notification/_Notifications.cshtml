@@ -7,7 +7,7 @@
 <ul class="notification-list">
     @foreach (var n in Model)
     {
-        <li @(n.IsRead ? "" : "class='new-notification'")>
+        <li @(n.IsRead ? "" : "class=new-notification")>
             <img src="@n.UserPhoto.VerySmallLink" alt="@n.UserDisplayName" />
             <a href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
 
