@@ -1,15 +1,42 @@
-﻿@{
+﻿@using Zazz.Core.Models.Data.Enums
+@model IEnumerable<NotificationViewModel>
+@{
     Layout = null;
 }
 
 <ul class="notification-list">
-    @for (int i = 0; i < 5; i++)
+    @foreach (var n in Model)
     {
-        <li>
-            <img src="~/Images/placeholder.gif" alt="UserName" />
-            <a href="#"><strong>UserName</strong></a>
-            commented on
-                <a href="#"><strong>This post</strong></a>
+        <li @(n.IsRead ? "" : "class='new-notification'")>
+            <img src="@n.UserPhoto.VerySmallLink" alt="@n.UserDisplayName" />
+            <a href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
+
+            @if (n.NotificationType == NotificationType.CommentOnEvent)
+            {
+                @::commented on your event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+            }
+            else if (n.NotificationType == NotificationType.CommentOnPhoto)
+            {
+                //TODO: Add Lightbox
+                @::commented on your <a href="#">photo</a> 
+            }
+            else if (n.NotificationType == NotificationType.CommentOnPost)
+            {
+                @::commented on your <a href="~/post/show/@n.ItemId">post</a>
+            }
+            else if (n.NotificationType == NotificationType.FollowRequestAccepted)
+            {
+                @::accepted your follow request!
+            }
+            else if (n.NotificationType == NotificationType.NewEvent)
+            {
+                @::created a new event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+            }
+            else if (n.NotificationType == NotificationType.WallPost)
+            {
+                @::posted on wall. <a href="~/post/show/@n.ItemId">view post</a>
+            }
+
             <span class="font-verysmall pull-right time">1 hour ago</span>
         </li>
     }

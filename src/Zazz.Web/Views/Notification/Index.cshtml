@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<NotificationViewModel>
+@{
     ViewBag.Title = "Notifications";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
@@ -9,7 +10,7 @@
     </div>
     
     <div class="margin-ten">
-        @Html.Partial("_Notifications")
+        @Html.Partial("_Notifications", Model)
     </div>
 
 </div>
