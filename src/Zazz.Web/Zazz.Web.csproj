@@ -253,6 +253,7 @@
     <Compile Include="Models\AlertType.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
+    <Compile Include="Models\NotificationsPageViewModel.cs" />
     <Compile Include="Models\NotificationViewModel.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
     <Compile Include="Models\PostViewModel.cs" />
