@@ -40,7 +40,7 @@ namespace Zazz.Infrastructure.Services
                                          UserId = post.ToUserId.Value
                                      });
 
-                _notificationService.CreateWallPostNotification(post.FromUserId, post.ToUserId.Value, false);
+                _notificationService.CreateWallPostNotification(post.FromUserId, post.ToUserId.Value, post.Id, save: false);
             }
 
             _uow.FeedRepository.InsertGraph(feed);

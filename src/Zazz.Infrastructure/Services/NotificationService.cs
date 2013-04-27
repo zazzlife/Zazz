@@ -90,12 +90,13 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
-        public void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true)
+        public void CreateWallPostNotification(int fromUserId, int toUserId, int postId, bool save = true)
         {
             var notification = new Notification
                                {
                                    UserId = toUserId,
                                    UserBId = fromUserId,
+                                   PostId = postId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.WallPost

@@ -195,7 +195,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateWallPostNotification(1, 2);
+            _sut.CreateWallPostNotification(1, 2, 3);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());
@@ -209,7 +209,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()));
 
             //Act
-            _sut.CreateWallPostNotification(1, 2, false);
+            _sut.CreateWallPostNotification(1, 2, 3, save: false);
 
             //Assert
             _uow.Verify(x => x.NotificationRepository.InsertGraph(It.IsAny<Notification>()), Times.Once());

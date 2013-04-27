@@ -23,7 +23,7 @@ namespace Zazz.Core.Interfaces
 
         void CreateEventCommentNotification(int commentId, int commenterId, int eventId, int userToBeNotified, bool save = true);
 
-        void CreateWallPostNotification(int fromUserId, int toUserId, bool save = true);
+        void CreateWallPostNotification(int fromUserId, int toUserId, int postId, bool save = true);
 
         void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true);
 

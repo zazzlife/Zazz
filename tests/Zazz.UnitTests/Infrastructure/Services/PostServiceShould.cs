@@ -67,7 +67,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Assert
-            _notificationService.Verify(x => x.CreateWallPostNotification(It.IsAny<int>(), It.IsAny<int>(), false),
+            _notificationService.Verify(x => x.CreateWallPostNotification(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), false),
                                         Times.Never());
         }
 
@@ -79,15 +79,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
             _notificationService.Setup(x => x.CreateWallPostNotification(_post.FromUserId,
-                                                                         _post.ToUserId.Value, false));
+                                                                         _post.ToUserId.Value, _post.Id, false));
 
             //Act
             _sut.NewPost(_post);
 
 
             //Assert
-            _notificationService.Verify(x => x.CreateWallPostNotification(_post.FromUserId, _post.ToUserId.Value,
-                                                                          false), Times.Once());
+            _notificationService.Verify(
+                x => x.CreateWallPostNotification(_post.FromUserId, _post.ToUserId.Value, _post.Id,
+                                                  false), Times.Once());
         }
 
         [Test]
