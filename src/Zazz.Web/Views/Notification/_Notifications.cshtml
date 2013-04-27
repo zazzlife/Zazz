@@ -1,1 +1,16 @@
-﻿
+﻿@{
+    Layout = null;
+}
+
+<table class="notification-table">
+    @for (int i = 0; i < 5; i++)
+    {
+        <tr class="new-notification">
+            <td style="padding-bottom: 10px">
+                <img style="width: 38px; height: 38px; margin-right: 5px;" src="~/Images/placeholder.gif" alt="UserName" /></td>
+            <td style="padding-bottom: 10px"><a href="#"><strong>UserName</strong></a></td>
+            <td style="padding-bottom: 10px">commented on </td>
+            <td style="padding-bottom: 10px"><a href="#"><strong>This post</strong></a></td>
+        </tr>
+    }
+</table>

@@ -594,7 +594,6 @@ hr.gold-line {
 
 .event-arrow-right {
     border-right: 10px solid #11aa7f;
-    
     /*-moz-transition: border-right 50ms;
     -o-transition: border-right 50ms;
     -webkit-transition: border-right 50ms;
@@ -615,14 +614,12 @@ hr.gold-line {
         -o-transform: rotate(270deg);
         -webkit-transform: rotate(270deg);
         transform: rotate(270deg);
-
         margin-top: -15.5px;
         margin-left: 10px;
     }
 
-    .event-arrow-left {
+.event-arrow-left {
     border-left: 10px solid #11aa7f;
-    
     /*-moz-transition: border-right 50ms;
     -o-transition: border-right 50ms;
     -webkit-transition: border-right 50ms;
@@ -643,7 +640,6 @@ hr.gold-line {
         -o-transform: rotate(90deg);
         -webkit-transform: rotate(90deg);
         transform: rotate(90deg);
-
         margin-top: -15.5px;
         margin-left: 10px;
     }
@@ -853,6 +849,18 @@ ul.thumbnail-rows {
     .thumbnail-163 img {
         height: 100%;
     }
+
+/***************************************
+    Notifications
+***************************************/
+
+.notification-table {
+    width: 100%
+}
+
+tr.new-notification {
+    background-color: #fffde2;
+}
 
 /***************************************
     Footer

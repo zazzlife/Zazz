@@ -491,7 +491,7 @@
     <Content Include="Views\Shared\FeedItems\_PhotoFeedSinglePhoto.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedTwoPhotos.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
-    <Content Include="Views\Notification\List.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Notification\_Notifications.cshtml" />
   </ItemGroup>
   <ItemGroup>
