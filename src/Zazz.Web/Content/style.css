@@ -859,18 +859,18 @@ ul.thumbnail-rows {
     margin: 0;
 }
 
-.notification-list li {
+.notification-list .notification-row {
     padding-top: 8px;
     padding-bottom: 8px;
     border-bottom: 1px dashed gray;
     position: relative;
 }
 
-.notification-list li:first-child {
+.notification-list .notification-row:first-child {
     padding-top: 0;
 }
 
-.notification-list li:last-child {
+.notification-list .notification-row:last-child {
     padding-bottom: 0;
     border-bottom: 0;
 }
@@ -879,7 +879,7 @@ li.new-notification {
     background-color: #fffde2;
 }
 
-.notification-list img {
+.notification-user-img {
     width: 38px;
     height: 38px;
     margin-right: 5px;
