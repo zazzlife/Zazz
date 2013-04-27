@@ -860,12 +860,10 @@ ul.thumbnail-rows {
 }
 
 .notification-list li {
-    border-bottom: 1px dashed gray;
-}
-
-.notification-list li {
     padding-top: 8px;
     padding-bottom: 8px;
+    border-bottom: 1px dashed gray;
+    position: relative;
 }
 
 .notification-list li:first-child {
@@ -885,6 +883,12 @@ li.new-notification {
     width: 38px;
     height: 38px;
     margin-right: 5px;
+}
+
+.notification-list .time {
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 
 /***************************************
