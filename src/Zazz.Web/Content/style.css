@@ -858,6 +858,28 @@ ul.thumbnail-rows {
     width: 100%
 }
 
+.notification-table tr {
+    border-bottom: 1px dashed gray;
+}
+
+.notification-table tr:last-child {
+    border-bottom: 0;
+}
+
+.notification-table tr:first-child > td {
+    padding-top: 0;
+}
+
+.notification-table tr:last-child > td {
+    padding-bottom: 0;
+}
+
+.notification-table td {
+    float: left;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
 tr.new-notification {
     background-color: #fffde2;
 }
