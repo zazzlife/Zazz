@@ -854,34 +854,37 @@ ul.thumbnail-rows {
     Notifications
 ***************************************/
 
-.notification-table {
-    width: 100%
+.notification-list {
+    list-style: none;
+    margin: 0;
 }
 
-.notification-table tr {
+.notification-list li {
     border-bottom: 1px dashed gray;
 }
 
-.notification-table tr:last-child {
-    border-bottom: 0;
-}
-
-.notification-table tr:first-child > td {
-    padding-top: 0;
-}
-
-.notification-table tr:last-child > td {
-    padding-bottom: 0;
-}
-
-.notification-table td {
-    float: left;
+.notification-list li {
     padding-top: 8px;
     padding-bottom: 8px;
 }
 
-tr.new-notification {
+.notification-list li:first-child {
+    padding-top: 0;
+}
+
+.notification-list li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+li.new-notification {
     background-color: #fffde2;
+}
+
+.notification-list img {
+    width: 38px;
+    height: 38px;
+    margin-right: 5px;
 }
 
 /***************************************

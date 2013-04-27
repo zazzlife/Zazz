@@ -2,14 +2,14 @@
     Layout = null;
 }
 
-<table class="notification-table">
+<ul class="notification-list">
     @for (int i = 0; i < 5; i++)
     {
-        <tr class="new-notification">
-            <td><img style="width: 38px; height: 38px; margin-right: 5px;" src="~/Images/placeholder.gif" alt="UserName" /></td>
-            <td><a href="#"><strong>UserName</strong></a></td>
-            <td>commented on </td>
-            <td><a href="#"><strong>This post</strong></a></td>
-        </tr>
+        <li>
+            <img src="~/Images/placeholder.gif" alt="UserName" />
+            <a href="#"><strong>UserName</strong></a>
+            commented on
+            <a href="#"><strong>This post</strong></a>
+        </li>
     }
-</table>
+</ul>
