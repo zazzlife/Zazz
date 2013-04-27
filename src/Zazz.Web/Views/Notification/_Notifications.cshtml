@@ -13,28 +13,28 @@
 
             @if (n.NotificationType == NotificationType.CommentOnEvent)
             {
-                @::commented on your event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+                @:commented on your event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
             }
             else if (n.NotificationType == NotificationType.CommentOnPhoto)
             {
-                @::commented on your <a data-toggle="lightbox" data-target="#photo-@n.ItemId" href="@n.PhotoViewModel.PhotoUrl.OriginalLink">photo</a> 
+                @:commented on your <a data-toggle="lightbox" data-target="#photo-@n.ItemId" href="@n.PhotoViewModel.PhotoUrl.OriginalLink">photo</a> 
                 @Html.Partial("_LightBoxPartial", n.PhotoViewModel)
             }
             else if (n.NotificationType == NotificationType.CommentOnPost)
             {
-                @::commented on your <a href="~/post/show/@n.ItemId">post</a>
+                @:commented on your <a href="~/post/show/@n.ItemId">post</a>
             }
             else if (n.NotificationType == NotificationType.FollowRequestAccepted)
             {
-                @::accepted your follow request!
+                @:accepted your follow request!
             }
             else if (n.NotificationType == NotificationType.NewEvent)
             {
-                @::created a new event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+                @:created a new event <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
             }
             else if (n.NotificationType == NotificationType.WallPost)
             {
-                @::posted on wall. <a href="~/post/show/@n.ItemId">view post</a>
+                @:posted on wall. <a href="~/post/show/@n.ItemId">view post</a>
             }
 
             <span class="font-verysmall pull-right time">1 hour ago</span>
