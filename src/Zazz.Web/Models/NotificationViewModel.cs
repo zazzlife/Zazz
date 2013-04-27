@@ -19,7 +19,9 @@ namespace Zazz.Web.Models
         public bool IsRead { get; set; }
 
         public string EventName { get; set; }
-        
+
+        public PhotoViewModel PhotoViewModel { get; set; }
+
         public DateTime Time { get; set; }
     }
 }

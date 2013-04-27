@@ -17,8 +17,8 @@
             }
             else if (n.NotificationType == NotificationType.CommentOnPhoto)
             {
-                //TODO: Add Lightbox
-                @::commented on your <a href="#">photo</a> 
+                @::commented on your <a data-toggle="lightbox" data-target="#photo-@n.ItemId" href="@n.PhotoViewModel.PhotoUrl.OriginalLink">photo</a> 
+                @Html.Partial("_LightBoxPartial", n.PhotoViewModel)
             }
             else if (n.NotificationType == NotificationType.CommentOnPost)
             {
