@@ -7,7 +7,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public abstract class BaseLongRepository<T> : IRepository<T> where T : BaseEntityLong
+    public abstract class BaseLongRepository<T> : ILongRepository<T> where T : BaseEntityLong
     {
         protected DbContext DbContext { get; set; }
 
@@ -43,17 +43,17 @@ namespace Zazz.Data.Repositories
 
         }
 
-        public T GetById(int id)
+        public T GetById(long id)
         {
             return DbSet.Find(id);
         }
 
-        public bool Exists(int id)
+        public bool Exists(long id)
         {
             return DbSet.Any(x => x.Id == id);
         }
 
-        public void Remove(int id)
+        public void Remove(long id)
         {
             var item = GetById(id);
             if (item != null)

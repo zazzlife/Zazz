@@ -3,7 +3,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface INotificationRepository : IRepository<Notification>
+    public interface INotificationRepository : ILongRepository<Notification>
     {
         IQueryable<Notification> GetUserNotifications(int userId);
 
