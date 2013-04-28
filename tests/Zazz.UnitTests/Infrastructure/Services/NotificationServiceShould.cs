@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -439,17 +440,37 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                    Id = 7
                                };
             _uow.Setup(x => x.NotificationRepository.GetById(notification.Id))
-
-
-
+                .Returns(notification);
 
             //Act
-
+            Assert.Throws<SecurityException>(() => _sut.Remove(notification.Id, 90));
 
             //Assert
-
+            _uow.Verify(x => x.NotificationRepository.GetById(notification.Id), Times.Once());
+            _uow.Verify(x => x.NotificationRepository.Remove(It.IsAny<Notification>()), Times.Never());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
+        [Test]
+        public void Remove_OnRemove()
+        {
+            //Arrange
+            var notification = new Notification
+            {
+                UserId = 12,
+                Id = 7
+            };
+            _uow.Setup(x => x.NotificationRepository.GetById(notification.Id))
+                .Returns(notification);
+            _uow.Setup(x => x.NotificationRepository.Remove(notification));
 
+            //Act
+            _sut.Remove(notification.Id, notification.UserId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.GetById(notification.Id), Times.Once());
+            _uow.Verify(x => x.NotificationRepository.Remove(notification), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
     }
 }

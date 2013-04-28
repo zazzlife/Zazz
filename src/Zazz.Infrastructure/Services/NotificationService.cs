@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -161,11 +162,17 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void Remove(int notificationId, int currentUserId)
+        public void Remove(long notificationId, int currentUserId)
         {
             var notification = _uow.NotificationRepository.GetById(notificationId);
             if (notification == null)
                 return;
+
+            if (notification.UserId != currentUserId)
+                throw new SecurityException();
+
+            _uow.NotificationRepository.Remove(notification);
+            _uow.SaveChanges();
         }
 
         public void MarkUserNotificationsAsRead(int userId)
