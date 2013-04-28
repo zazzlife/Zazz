@@ -22,13 +22,15 @@ $('#notifications-link').popover({
     html: true,
     trigger: 'manual'
 }).click(function (e) {
-    $(this).popover('show');
+
+    var self = $(this);
+    self.popover('show');
     clickedAwayFromPopout = false;
     isPopoutVisible = true;
 
     e.preventDefault();
 
-    var popover = $(this).next('.popover');
+    var popover = self.next('.popover');
 
     popover.css('width', '555px');
     popover.css('max-width', '555px');
@@ -54,6 +56,20 @@ $('#notifications-link').popover({
         },
         success: function (res) {
             popoverContent.html(res);
+            
+            // calculating the new position of the popover
+            var linkPosition = self.parent('li').offset();
+            var linkWidth = self.parent('li').width();
+            var linkHeight = self.parent('li').height();
+
+            var left = linkPosition.left + linkWidth;
+            var top = (linkPosition.top + (linkHeight / 2)) - (popover.height() / 2);
+
+            popover.css({
+                top: top,
+                left: left
+            });
+
         }
     });
 });
