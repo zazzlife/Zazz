@@ -537,7 +537,7 @@ $(document).on('click', '#load-feeds', function () {
                 });
 
             } else {
-                self.text('Not available');
+                self.text("That's all!");
             }
         }
     });
