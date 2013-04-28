@@ -412,5 +412,44 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.NotificationRepository.GetUnreadNotificationsCount(userId), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
+
+        [Test]
+        public void NotThrowIfNotificationDoesntExists_OnRemove()
+        {
+            //Arrange
+            var id = 123;
+            var currentUserId = 1;
+            _uow.Setup(x => x.NotificationRepository.GetById(id))
+                .Returns(() => null);
+
+            //Act
+            _sut.Remove(id, currentUserId);
+
+            //Assert
+            _uow.Verify(x => x.NotificationRepository.GetById(id), Times.Once());
+        }
+
+        [Test]
+        public void ThrowIfCurrentUserIsNotTheOwner_OnRemove()
+        {
+            //Arrange
+            var notification = new Notification
+                               {
+                                   UserId = 12,
+                                   Id = 7
+                               };
+            _uow.Setup(x => x.NotificationRepository.GetById(notification.Id))
+
+
+
+
+            //Act
+
+
+            //Assert
+
+        }
+
+
     }
 }

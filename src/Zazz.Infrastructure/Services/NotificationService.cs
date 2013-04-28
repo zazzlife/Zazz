@@ -161,6 +161,13 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
+        public void Remove(int notificationId, int currentUserId)
+        {
+            var notification = _uow.NotificationRepository.GetById(notificationId);
+            if (notification == null)
+                return;
+        }
+
         public void MarkUserNotificationsAsRead(int userId)
         {
             _uow.NotificationRepository.MarkUserNotificationsAsRead(userId);
