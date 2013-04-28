@@ -72,7 +72,7 @@ $('#notifications-link').popover({
                 top: top,
                 left: left
             });
-
+            applyPageStyles();
             markAllNotificationsAsRead();
         }
     });
@@ -165,6 +165,7 @@ $(document).on('click', '#load-notifications', function() {
 
                     var container = $('.notification-list');
                     $(li).appendTo(container).hide().fadeIn();
+                    applyPageStyles();
                 } else {
                     hideBtnBusy(self, "That's all!");
                     setBtnDisabled(self);
