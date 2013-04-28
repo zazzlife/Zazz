@@ -47,6 +47,13 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.Event);
         }
 
+        public Feed GetPostFeed(int postId)
+        {
+            return DbSet
+                .Include(f => f.Post)
+                .FirstOrDefault(f => f.PostId == postId);
+        }
+
         public Feed GetUserLastFeed(int userId)
         {
             return (from feed in DbSet

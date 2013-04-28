@@ -332,6 +332,40 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(result.Id, secondFeed.Id);
         }
 
+        [Test]
+        public void ReturnCorrectFeed_OnGetPostFeed()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
 
+            var post = new Post
+                       {
+                           CreatedTime = DateTime.UtcNow,
+                           FromUserId = user.Id,
+                           Message = "Adsa",
+                       };
+
+            _dbContext.Posts.Add(post);
+            _dbContext.SaveChanges();
+
+            var feed = new Feed
+                       {
+                           Time = DateTime.UtcNow,
+                           PostId = post.Id
+                       };
+
+            _dbContext.Feeds.Add(feed);
+            _dbContext.SaveChanges();
+
+            //Act
+            var result = _repo.GetPostFeed(post.Id);
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Post);
+            Assert.AreEqual(post.Id, result.PostId);
+        }
     }
 }
