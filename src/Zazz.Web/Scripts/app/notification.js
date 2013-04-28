@@ -26,11 +26,37 @@ $('#notifications-link').popover({
     clickedAwayFromPopout = false;
     isPopoutVisible = true;
 
-    $(this).next('.popover').css('width', '555px');
-    $(this).next('.popover').css('max-width', '555px');
-    $(this).next('.popover').css('min-height', '90px');
-
     e.preventDefault();
+
+    var popover = $(this).next('.popover');
+
+    popover.css('width', '555px');
+    popover.css('max-width', '555px');
+    popover.css('min-height', '90px');
+
+    var popoverContent = popover.children('.popover-content');
+
+    var url = "/notification/get";
+    var take = 5;
+
+    $.ajax({
+        url: url,
+        cache: false,
+        data: {
+            take: take
+        },
+        error: function() {
+            toastr.error("failed to get notifications, please try again later.");
+        },
+        success: function (res) {
+            var content = '<div>' +
+                                '<div>' + res + '</div>' +
+                                '<div><a href="/notification">See all</a></div>' +
+                            '</div>';
+
+            popoverContent.html(content);
+        }
+    });
 });
 
 $(document).click(function (e) {
