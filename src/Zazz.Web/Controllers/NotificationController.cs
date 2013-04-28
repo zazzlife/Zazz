@@ -103,7 +103,7 @@ namespace Zazz.Web.Controllers
             var newNotificationsCount = _notificationService.GetUnreadNotificationsCount(userId);
 
             if (newNotificationsCount == 0)
-                return "";
+                return String.Empty;
             else
             {
                 return

@@ -22,7 +22,7 @@
                        data-title="Notifications"
                        data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
                         
-                        <i class="icon-globe"></i>Notifications 
+                        <i class="icon-globe"></i>Notifications @Html.Action("GetNewNotificationsCount", "Notification")
                     </a>
                 </li>
                 <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
