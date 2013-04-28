@@ -10,6 +10,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
+    [Authorize]
     public class NotificationController : Controller
     {
         private readonly IUserService _userService;
@@ -24,7 +25,6 @@ namespace Zazz.Web.Controllers
             _notificationService = notificationService;
         }
 
-        [Authorize]
         public ActionResult Index()
         {
             var currentUserId = _userService.GetUserId(User.Identity.Name);
@@ -83,6 +83,12 @@ namespace Zazz.Web.Controllers
         public ActionResult Get(int id, int? lastNotification)
         {
             return View("_Notifications");
+        }
+
+        public void Remove(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _notificationService.Remove(id, userId);
         }
     }
 }
