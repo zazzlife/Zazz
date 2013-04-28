@@ -18,6 +18,11 @@ namespace Zazz.Infrastructure.Services
             _commentService = commentService;
         }
 
+        public Post GetPost(int postId)
+        {
+            return _uow.PostRepository.GetById(postId);
+        }
+
         public void NewPost(Post post)
         {
             _uow.PostRepository.InsertGraph(post);

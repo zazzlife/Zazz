@@ -6,6 +6,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPostService
     {
+        Post GetPost(int postId);
+
         void NewPost(Post post);
 
         void EditPost(int postId, string newText, int currentUserId);

@@ -38,6 +38,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CallGetByIdOnRepository_OnGetPost()
+        {
+            //Arrange
+            var id = 444;
+            var post = new Post();
+            _uow.Setup(x => x.PostRepository.GetById(id))
+                .Returns(post);
+
+            //Act
+            var result = _sut.GetPost(id);
+
+            //Assert
+            Assert.AreSame(post, result);
+            _uow.Verify(x => x.PostRepository.GetById(id), Times.Once());
+        }
+
+        [Test]
         public void CreateNewPostAndFeedAndShouldNotSetTimeHere_OnNewPost()
         // we should not set created time here because facebook gives us its own time.
         {
