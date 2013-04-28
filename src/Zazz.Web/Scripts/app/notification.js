@@ -36,8 +36,8 @@ $('#notifications-link').popover({
 
     var popoverContent = popover.children('.popover-content');
 
+    popover.children('.notification-popover-footer').remove();
     var allNotificationsLink = $('<div class="notification-popover-footer"><a>See all</a></div>');
-
     allNotificationsLink.appendTo(popover);
 
     var url = "/notification/get";
