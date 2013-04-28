@@ -1,4 +1,17 @@
 ﻿/********************************
+    Mark As Read
+*********************************/
+
+function markAllNotificationsAsRead() {
+    var url = "/notification/markall";
+
+    $.ajax({
+        url: url,
+        cache: false
+    });
+}
+
+/********************************
     Popover
 *********************************/
 
