@@ -18,6 +18,11 @@ function hideBtnBusy(btn, originalText) {
     $(btn).html(originalText);
 }
 
+function setBtnDisabled(btn) {
+    btn.addClass('disabled');
+    btn.attr('disabled', 'disabled');
+}
+
 function applyPageStyles() {
     $('.datepicker').datetimepicker();
     $('*[title]').tooltip('destroy');

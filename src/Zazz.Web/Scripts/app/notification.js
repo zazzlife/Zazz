@@ -158,13 +158,17 @@ $(document).on('click', '#load-notifications', function() {
         success: function (res) {
             if (res) {
                 var data = res.trim();
-                if (data != "") {
-
-                    //since the server returns ul i have to remove it here.
-                    var li = $(data).children('li');
+                //since the server returns ul i have to remove it here.
+                var li = $(data).children('li');
+                
+                if (li.length > 0) {
 
                     var container = $('.notification-list');
                     $(li).appendTo(container).hide().fadeIn();
+                } else {
+                    hideBtnBusy(self, "That's all!");
+                    setBtnDisabled(self);
+                    return;
                 }
             }
             
