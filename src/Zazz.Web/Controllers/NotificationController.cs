@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers
             var currentUserId = _userService.GetUserId(User.Identity.Name);
             const int PAGE_SIZE = 30;
 
-            var notificationsVm = GetNotifications(currentUserId, 0, PAGE_SIZE);
+            var notificationsVm = GetNotifications(currentUserId, PAGE_SIZE);
 
             var vm = new NotificationsPageViewModel
                      {
@@ -42,15 +42,17 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        public ActionResult Get(int id, int? lastNotification)
+        public ActionResult Get(long? lastNotification, int take = 5)
         {
-            return View("_Notifications");
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var notifications = GetNotifications(userId, take, lastNotification);
+
+            return View("_Notifications", notifications);
         }
 
-        private IEnumerable<NotificationViewModel> GetNotifications(int userId, int skip, int take)
+        private IEnumerable<NotificationViewModel> GetNotifications(int userId, int take, long? lastNotificationId = null)
         {
-            var notifications = _notificationService.GetUserNotifications(userId, null)
-                .Skip(skip)
+            var notifications = _notificationService.GetUserNotifications(userId, lastNotificationId)
                 .Take(take)
                 .ToList();
 
@@ -87,7 +89,6 @@ namespace Zazz.Web.Controllers
                         ? new PhotoLinks(n.Photo.FacebookLink)
                         : _photoService.GeneratePhotoUrl(n.Photo.UserId, n.Photo.Id)
                     }
-
                 });
 
             return notificationsVm;
