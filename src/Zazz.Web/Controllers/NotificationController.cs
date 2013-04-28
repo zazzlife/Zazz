@@ -17,6 +17,8 @@ namespace Zazz.Web.Controllers
         private readonly IPhotoService _photoService;
         private readonly INotificationService _notificationService;
 
+        public const byte NOTIFICATIONS_PAGE_SIZE = 30;
+
         public NotificationController(IUserService userService, IPhotoService photoService,
             INotificationService notificationService)
         {
@@ -28,9 +30,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Index()
         {
             var currentUserId = _userService.GetUserId(User.Identity.Name);
-            const int PAGE_SIZE = 30;
-
-            var notificationsVm = GetNotifications(currentUserId, PAGE_SIZE);
+            var notificationsVm = GetNotifications(currentUserId, NOTIFICATIONS_PAGE_SIZE);
 
             var vm = new NotificationsPageViewModel
                      {

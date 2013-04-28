@@ -1,4 +1,5 @@
-﻿@model NotificationsPageViewModel
+﻿@using Zazz.Web.Controllers
+@model NotificationsPageViewModel
 @{
     ViewBag.Title = "Notifications";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -12,7 +13,11 @@
     <div class="margin-ten">
         @Html.Partial("_Notifications", Model.Notifications)
         
-        <button id="load-notifications" style="margin-top: 25px;" type="button" class="btn btn-inverse btn-block">Show more...</button>
+        @if (Model.Notifications.Count() == NotificationController.NOTIFICATIONS_PAGE_SIZE)
+        {
+            <button id="load-notifications" style="margin-top: 25px;" type="button" class="btn btn-inverse btn-block">Show more...</button>
+        }
+        
     </div>
 
 </div>
