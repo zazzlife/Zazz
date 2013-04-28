@@ -11,12 +11,12 @@
         <li class="notification-row @(n.IsRead ? "" : "new-notification")">
             <button title="Remove" data-removeNotification="1" data-id="@n.NotificationId" type="button" class="close">&times;</button>
             <img class="notification-user-img" src="@n.UserPhoto.VerySmallLink" alt="@n.UserDisplayName" />
-            <a href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
+            <a target="_blank" href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
 
             @if (n.NotificationType == NotificationType.CommentOnEvent)
             {
                 @:commented on your event
-                <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+                <a target="_blank" href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
             }
             else if (n.NotificationType == NotificationType.CommentOnPhoto)
             {
@@ -26,7 +26,7 @@
             else if (n.NotificationType == NotificationType.CommentOnPost)
             {
                 @:commented on your
-                <a href="~/post/show/@n.ItemId">post</a>
+                <a target="_blank" href="~/post/show/@n.ItemId">post</a>
             }
             else if (n.NotificationType == NotificationType.FollowRequestAccepted)
             {
@@ -35,12 +35,12 @@
             else if (n.NotificationType == NotificationType.NewEvent)
             {
                 @:created a new event:
-                <a href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
+                <a target="_blank" href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
             }
             else if (n.NotificationType == NotificationType.WallPost)
             {
                 @:posted on your wall.
-                <a href="~/post/show/@n.ItemId">view post</a>
+                <a target="_blank" href="~/post/show/@n.ItemId">view post</a>
             }
 
             <span title="@n.Time.ToLongDateString() - @n.Time.ToShortTimeString()"
