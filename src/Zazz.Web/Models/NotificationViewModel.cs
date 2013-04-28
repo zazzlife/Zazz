@@ -6,6 +6,8 @@ namespace Zazz.Web.Models
 {
     public class NotificationViewModel
     {
+        public long NotificationId { get; set; }
+
         public int UserId { get; set; }
 
         public string UserDisplayName { get; set; }

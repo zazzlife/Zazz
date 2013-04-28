@@ -9,6 +9,7 @@
     @foreach (var n in Model)
     {
         <li class="notification-row @(n.IsRead ? "" : "new-notification")">
+            <button title="Remove" data-removeNotification="1" data-id="@n.NotificationId" type="button" class="close">&times;</button>
             <img class="notification-user-img" src="@n.UserPhoto.VerySmallLink" alt="@n.UserDisplayName" />
             <a href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
 
@@ -43,7 +44,7 @@
             }
 
             <span title="@n.Time.ToLongDateString() - @n.Time.ToShortTimeString()"
-              class="font-verysmall pull-right time">@n.Time.ToRelativeTime()</span>
+                  class="font-verysmall pull-right time">@n.Time.ToRelativeTime()</span>
         </li>
     }
 </ul>

@@ -37,6 +37,7 @@ namespace Zazz.Web.Controllers
             var notificationsVm = notifications
                 .Select(n => new NotificationViewModel
                              {
+                                 NotificationId = n.Id,
                                  UserId = n.UserBId,
                                  Time = n.Time,
                                  IsRead = n.IsRead,
