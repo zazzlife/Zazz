@@ -87,7 +87,8 @@ namespace Zazz.Web.Controllers
 
         public void MarkAll()
         {
-            
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _notificationService.MarkUserNotificationsAsRead(userId);
         }
 
         public void Remove(int id)
