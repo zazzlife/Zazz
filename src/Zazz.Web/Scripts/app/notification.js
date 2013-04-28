@@ -146,6 +146,10 @@ $(document).on('click', '#load-notifications', function() {
 
     $.ajax({
         url: url,
+        data: {
+            take: take,
+            lastNotification: lastNotificationId
+        },
         cache: false,
         error: function() {
             toastr.error('Failed to get notifications, please try again later.');
