@@ -1,0 +1,10 @@
+﻿@model PostPageViewModel
+@{
+    ViewBag.Title = "Post";
+    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
+}
+
+<div class="margin-ten" style="margin-top: 15px;">
+    @Html.Partial("FeedItems/_PostFeedItem", Model.FeedViewModel)
+</div>
+

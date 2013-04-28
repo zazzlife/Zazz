@@ -497,6 +497,7 @@
     <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Notification\_Notifications.cshtml" />
+    <Content Include="Views\Post\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
