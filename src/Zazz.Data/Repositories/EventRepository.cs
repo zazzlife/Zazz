@@ -67,7 +67,7 @@ namespace Zazz.Data.Repositories
 
         public void ResetPhotoId(int photoId)
         {
-            var events = DbSet.Where(p => p.PhotoId == photoId);
+            var events = DbSet.Where(p => p.PhotoId == photoId).ToList();
             foreach (var e in events)
             {
                 e.PhotoId = null;

@@ -32,7 +32,8 @@ namespace Zazz.Data.Repositories
             var notifications = DbSet
                 .Where(n => n.NotificationType == NotificationType.FollowRequestAccepted)
                 .Where(n => n.UserId == userId)
-                .Where(n => n.UserBId == userBId);
+                .Where(n => n.UserBId == userBId)
+                .ToList();
 
             foreach (var notification in notifications)
             {
@@ -42,7 +43,7 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByPhotoId(int photoId)
         {
-            var notifications = DbSet.Where(n => n.PhotoId == photoId);
+            var notifications = DbSet.Where(n => n.PhotoId == photoId).ToList();
             foreach (var notification in notifications)
             {
                 Remove(notification);
@@ -51,7 +52,7 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByPostId(int postId)
         {
-            var notifications = DbSet.Where(n => n.PostId == postId);
+            var notifications = DbSet.Where(n => n.PostId == postId).ToList();
             foreach (var notification in notifications)
             {
                 Remove(notification);
@@ -60,7 +61,7 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByCommentId(int commentId)
         {
-            var notifications = DbSet.Where(n => n.CommentId == commentId);
+            var notifications = DbSet.Where(n => n.CommentId == commentId).ToList();
             foreach (var notification in notifications)
             {
                 Remove(notification);
@@ -69,7 +70,7 @@ namespace Zazz.Data.Repositories
 
         public void RemoveRecordsByEventId(int eventId)
         {
-            var notifications = DbSet.Where(n => n.EventId == eventId);
+            var notifications = DbSet.Where(n => n.EventId == eventId).ToList();
             foreach (var notification in notifications)
             {
                 Remove(notification);
@@ -78,7 +79,7 @@ namespace Zazz.Data.Repositories
 
         public void MarkUserNotificationsAsRead(int userId)
         {
-            var notifications = DbSet.Where(n => n.UserId == userId && !n.IsRead);
+            var notifications = DbSet.Where(n => n.UserId == userId && !n.IsRead).ToList();
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;

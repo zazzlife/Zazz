@@ -26,7 +26,7 @@ namespace Zazz.Data.Repositories
 
         public IEnumerable<int> RemovePhotoComments(int photoId)
         {
-            var comments = DbSet.Where(c => c.PhotoId == photoId);
+            var comments = DbSet.Where(c => c.PhotoId == photoId).ToList();
             foreach (var comment in comments)
                 Remove(comment);
 
@@ -35,7 +35,7 @@ namespace Zazz.Data.Repositories
 
         public IEnumerable<int> RemoveEventComments(int eventId)
         {
-            var comments = DbSet.Where(c => c.EventId == eventId);
+            var comments = DbSet.Where(c => c.EventId == eventId).ToList();
             foreach (var comment in comments)
                 Remove(comment);
 
@@ -44,7 +44,7 @@ namespace Zazz.Data.Repositories
 
         public IEnumerable<int> RemovePostComments(int postId)
         {
-            var comments = DbSet.Where(c => c.PostId == postId);
+            var comments = DbSet.Where(c => c.PostId == postId).ToList();
             foreach (var comment in comments)
                 Remove(comment);
 
