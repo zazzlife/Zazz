@@ -34,3 +34,30 @@ $(document).click(function (e) {
     Remove
 *********************************/
 
+$(document).on('click', '*[data-removeNotification]', function() {
+
+    var url = "/notification/remove";
+    var self = $(this);
+    var li = self.parent();
+
+    var id = self.data('id');
+    if (!id) {
+        return;
+    }
+
+    li.css('opacity', '0.6');
+    $.ajax({
+        url: url,
+        cache: false,
+        data: {
+            id: id
+        },
+        error: function() {
+            toastr.error('An error occured, please try again later.');
+            li.css('opacity', '1');
+        },
+        success: function() {
+            li.fadeOut();
+        }
+    });
+})
