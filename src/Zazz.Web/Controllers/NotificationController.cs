@@ -96,5 +96,20 @@ namespace Zazz.Web.Controllers
             var userId = _userService.GetUserId(User.Identity.Name);
             _notificationService.Remove(id, userId);
         }
+
+        public string GetNewNotificationsCount()
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            var newNotificationsCount = _notificationService.GetUnreadNotificationsCount(userId);
+
+            if (newNotificationsCount == 0)
+                return "";
+            else
+            {
+                return
+                    "<span id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
+                    + newNotificationsCount + "</span>";
+            }
+        }
     }
 }
