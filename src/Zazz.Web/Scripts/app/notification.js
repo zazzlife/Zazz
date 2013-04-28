@@ -122,4 +122,47 @@ $(document).on('click', '*[data-removeNotification]', function() {
             li.fadeOut();
         }
     });
-})
+});
+
+/********************************
+    Load more
+*********************************/
+
+$(document).on('click', '#load-notifications', function() {
+
+    var self = $(this);
+
+    var lastNotification = $('.notification-row:last-child');
+    var lastNotificationId = lastNotification.data('id');
+
+    if (!lastNotification) {
+        return;
+    }
+
+    var btnText = showBtnBusy(self);
+
+    var url = "/notification/get";
+    var take = 30;
+
+    $.ajax({
+        url: url,
+        cache: false,
+        error: function() {
+            toastr.error('Failed to get notifications, please try again later.');
+            hideBtnBusy(self, btnText);
+        },
+        success: function (res) {
+            if (!res) {
+                var data = res.trim();
+                if (data != "") {
+
+                    var container = $('.notification-list');
+                    $(data).appendTo(container);
+
+                }
+            }
+            
+            hideBtnBusy(self, btnText);
+        }
+    });
+});

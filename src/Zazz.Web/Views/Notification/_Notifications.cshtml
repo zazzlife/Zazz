@@ -8,7 +8,7 @@
 <ul class="notification-list">
     @foreach (var n in Model)
     {
-        <li class="notification-row @(n.IsRead ? "" : "new-notification")">
+        <li class="notification-row @(n.IsRead ? "" : "new-notification")" data-id="@n.NotificationId">
             <button title="Remove" data-removeNotification="1" data-id="@n.NotificationId" type="button" class="close">&times;</button>
             <img class="notification-user-img" src="@n.UserPhoto.VerySmallLink" alt="@n.UserDisplayName" />
             <a target="_blank" href="~/user/profile/@n.UserId"><strong>@n.UserDisplayName</strong></a>
