@@ -152,13 +152,15 @@ $(document).on('click', '#load-notifications', function() {
             hideBtnBusy(self, btnText);
         },
         success: function (res) {
-            if (!res) {
+            if (res) {
                 var data = res.trim();
                 if (data != "") {
 
-                    var container = $('.notification-list');
-                    $(data).appendTo(container);
+                    //since the server returns ul i have to remove it here.
+                    var li = $(data).children('li');
 
+                    var container = $('.notification-list');
+                    $(li).appendTo(container).hide().fadeIn();
                 }
             }
             
