@@ -37,15 +37,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var userId = 13456;
             var notifications = new List<Notification>();
-            _uow.Setup(x => x.NotificationRepository.GetUserNotifications(userId))
+            _uow.Setup(x => x.NotificationRepository.GetUserNotifications(userId, null))
                 .Returns(notifications.AsQueryable());
 
             //Act
-            var result = _sut.GetUserNotifications(userId);
+            var result = _sut.GetUserNotifications(userId, null);
 
             //Assert
             Assert.IsNotNull(result);
-            _uow.Verify(x => x.NotificationRepository.GetUserNotifications(userId), Times.Once());
+            _uow.Verify(x => x.NotificationRepository.GetUserNotifications(userId, null), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 

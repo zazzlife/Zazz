@@ -11,16 +11,20 @@ namespace Zazz.Data.Repositories
         public NotificationRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        public IQueryable<Notification> GetUserNotifications(int userId)
+        public IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId)
         {
-            return DbSet
+            var query = DbSet
                 .Include(n => n.Event)
                 .Include(n => n.Photo)
                 .Include(n => n.Post)
                 .Include(n => n.UserB)
                 .Include(n => n.Comment)
-                .Where(n => n.UserId == userId)
-                .OrderByDescending(n => n.Time);
+                .Where(n => n.UserId == userId);
+
+            if (lastNotificationId.HasValue)
+                query = query.Where(n => n.Id < lastNotificationId);
+
+            return query.OrderByDescending(n => n.Time);
         }
 
         public void RemoveFollowAcceptedNotification(int userId, int userBId)

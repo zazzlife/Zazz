@@ -5,7 +5,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface INotificationService
     {
-        IQueryable<Notification> GetUserNotifications(int userId);
+        IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId);
 
         void CreateNotification(Notification notification, bool save = true);
 

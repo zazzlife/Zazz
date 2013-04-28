@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers
 
         private IEnumerable<NotificationViewModel> GetNotifications(int userId, int skip, int take)
         {
-            var notifications = _notificationService.GetUserNotifications(userId)
+            var notifications = _notificationService.GetUserNotifications(userId, null)
                 .Skip(skip)
                 .Take(take)
                 .ToList();

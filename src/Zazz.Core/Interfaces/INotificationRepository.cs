@@ -5,7 +5,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface INotificationRepository : ILongRepository<Notification>
     {
-        IQueryable<Notification> GetUserNotifications(int userId);
+        IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId);
 
         void RemoveFollowAcceptedNotification(int userId, int userBId);
 

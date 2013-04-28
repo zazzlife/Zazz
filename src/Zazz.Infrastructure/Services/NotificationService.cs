@@ -16,9 +16,9 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public IQueryable<Notification> GetUserNotifications(int userId)
+        public IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId)
         {
-            return _uow.NotificationRepository.GetUserNotifications(userId);
+            return _uow.NotificationRepository.GetUserNotifications(userId, lastNotificationId);
         }
 
         public void CreateNotification(Notification notification, bool save = true)

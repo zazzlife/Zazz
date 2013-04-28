@@ -139,7 +139,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var notifications = _repo.GetUserNotifications(_user.Id);
+            var notifications = _repo.GetUserNotifications(_user.Id, null);
 
             //Assert
             Assert.IsTrue(_context.Notifications.Count() > 6);
@@ -373,6 +373,19 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(7, result);
         }
 
+        [Test]
+        public void ReturnNotificationsWithSmallerIdThanTheProvidedLastNotificationId_OnGetUserNotifications()
+        {
+            //Arrange
+            var notificationWithLargestId = _context.Notifications
+                                                    .OrderByDescending(n => n.Id)
+                                                    .First();
 
+            //Act
+            var result = _repo.GetUserNotifications(_user.Id, notificationWithLargestId.Id);
+
+            //Assert
+            CollectionAssert.DoesNotContain(result, notificationWithLargestId);
+        }
     }
 }
