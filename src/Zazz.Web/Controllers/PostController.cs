@@ -38,7 +38,7 @@ namespace Zazz.Web.Controllers
             if (feed == null)
                 throw new HttpException(404, "Post not found.");
 
-            var vm = new PostPageViewModel
+            var vm = new ShowPostViewModel
                      {
                          CurrentUserDisplayName = _userService.GetUserDisplayName(currentUserId),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),

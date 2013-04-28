@@ -1,6 +1,6 @@
 ﻿namespace Zazz.Web.Models
 {
-    public class PostPageViewModel : BaseUserPageLayoutViewModel
+    public class ShowPostViewModel : BaseUserPageLayoutViewModel
     {
         public FeedViewModel FeedViewModel { get; set; }
     }
