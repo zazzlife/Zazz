@@ -74,6 +74,10 @@ $('#notifications-link').popover({
     });
 });
 
+$(document).on('click', '.popover', function() {
+    clickedAwayFromPopout = false;
+});
+
 $(document).click(function (e) {
     if (isPopoutVisible & clickedAwayFromPopout) {
         $('#notifications-link').popover('hide');
