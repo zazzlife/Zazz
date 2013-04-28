@@ -12,10 +12,19 @@ namespace Zazz.Web.Models
 
         public FeedType FeedType { get; set; }
 
+        /// <summary>
+        /// Image url of owner of the feed. Not necessarily the current user.
+        /// </summary>
         public PhotoLinks UserImageUrl { get; set; }
 
+        /// <summary>
+        /// Owner of this feed. Not necessarily the current user.
+        /// </summary>
         public int UserId { get; set; }
 
+        /// <summary>
+        /// Display name of owner of the feed. Not necessarily the current user.
+        /// </summary>
         public string UserDisplayName { get; set; }
 
         public bool IsFromCurrentUser { get; set; }

@@ -77,153 +77,168 @@ namespace Zazz.Web.Helpers
             return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
+        public FeedViewModel GetSinglePostFeed(int postId, int currentUserId)
+        {
+            var feed = _uow.FeedRepository.GetPostFeed(postId);
+
+            if (feed == null)
+                return null;
+
+            return ConvertFeedToFeedViewModel(feed, currentUserId);
+        }
+
         private List<FeedViewModel> ConvertFeedsToFeedsViewModel(IEnumerable<Feed> feeds, int currentUserId)
         {
             var vm = new List<FeedViewModel>();
 
             foreach (var feed in feeds)
             {
-                var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
-                var feedVm = new FeedViewModel
-                {
-                    FeedId = feed.Id,
-                    FeedType = feed.FeedType,
-                    Time = feed.Time,
-                    CommentsViewModel = new CommentsViewModel
-                    {
-                        CurrentUserPhotoUrl = currentUserPhotoUrl,
-                    }
-                };
-
-                #region Event
-                if (feed.FeedType == FeedType.Event)
-                {
-                    // EVENT
-
-                    FillUserDetails(ref feedVm, feed.Event.UserId, currentUserId);
-
-                    feedVm.EventViewModel = new EventViewModel
-                                            {
-                                                City = feed.Event.City,
-                                                CreatedDate = feed.Event.CreatedDate,
-                                                Description = feed.Event.Description,
-                                                Id = feed.Event.Id,
-                                                Latitude = feed.Event.Latitude,
-                                                Location = feed.Event.Location,
-                                                Longitude = feed.Event.Longitude,
-                                                Name = feed.Event.Name,
-                                                Price = feed.Event.Price,
-                                                Time = feed.Event.Time,
-                                                Street = feed.Event.Street,
-                                                PhotoId = feed.Event.PhotoId,
-                                                IsFacebookEvent = feed.Event.IsFacebookEvent,
-                                                ImageUrl = feed.Event.IsFacebookEvent
-                                                               ? new PhotoLinks(feed.Event.FacebookPhotoLink)
-                                                               : null,
-                                                IsDateOnly = feed.Event.IsDateOnly,
-                                                FacebookEventId = feed.Event.FacebookEventId
-                                            };
-
-                    feedVm.CommentsViewModel.CommentType = CommentType.Event;
-
-                    if (feedVm.EventViewModel.PhotoId.HasValue)
-                    {
-                        var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
-                        feedVm.EventViewModel.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId,
-                                                                                        photo.Id);
-                    }
-
-                    if (feedVm.EventViewModel.ImageUrl == null)
-                    {
-                        // this event doesn't have a picture
-                        feedVm.EventViewModel.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
-                    }
-
-                    feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value,
-                                                                    feedVm.CommentsViewModel.CommentType,
-                                                                    currentUserId);
-
-                    #endregion
-
-                #region Photo
-                }
-                else if (feed.FeedType == FeedType.Picture)
-                {
-                    var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotos.Select(f => f.PhotoId)).ToList();
-
-                    if (photos.Count > 0)
-                    {
-                        FillUserDetails(ref feedVm, photos.First().UserId, currentUserId);
-                    }
-
-                    feedVm.PhotoViewModel = photos
-                        .Select(p => new PhotoViewModel
-                                     {
-                                         PhotoId = p.Id,
-                                         PhotoDescription = p.Description,
-                                         FromUserDisplayName = feedVm.UserDisplayName,
-                                         FromUserPhotoUrl = feedVm.UserImageUrl,
-                                         FromUserId = p.UserId,
-                                         PhotoUrl = p.IsFacebookPhoto
-                                                        ? new PhotoLinks(p.FacebookLink)
-                                                        : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                     }).ToList();
-
-                    feedVm.CommentsViewModel.CommentType = CommentType.Photo;
-
-                    if (photos.Count == 1)
-                    {
-                        var photoId = photos.First().Id;
-                        feedVm.CommentsViewModel.ItemId = photoId;
-                        feedVm.CommentsViewModel.Comments = GetComments(photoId,
-                                                                        feedVm.CommentsViewModel.CommentType,
-                                                                        currentUserId);
-                    }
-
-                    #endregion
-
-                #region Post
-
-                }
-                else if (feed.FeedType == FeedType.Post)
-                {
-                    FillUserDetails(ref feedVm, feed.Post.FromUserId, currentUserId);
-
-                    var post = _uow.PostRepository.GetById(feed.PostId.Value);
-                    feedVm.PostViewModel = new PostViewModel
-                                           {
-                                               PostId = post.Id,
-                                               PostText = post.Message
-                                           };
-
-                    if (post.ToUserId.HasValue)
-                    {
-                        var toUserId = post.ToUserId.Value;
-                        feedVm.PostViewModel.ToUserId = toUserId;
-                        feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
-                        feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserImageUrl(toUserId);
-                        feedVm.CurrentUserCanRemoveFeed = post.ToUserId == currentUserId;
-                    }
-
-                    feedVm.CommentsViewModel.CommentType = CommentType.Post;
-
-                    feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                    feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value,
-                                                                    feedVm.CommentsViewModel.CommentType,
-                                                                    currentUserId);
-
-                    #endregion
-                }
-                else
-                {
-                    throw new NotImplementedException("Feed type is not implemented");
-                }
-
-                vm.Add(feedVm);
+                vm.Add(ConvertFeedToFeedViewModel(feed, currentUserId));
             }
 
             return vm;
+        }
+
+        private FeedViewModel ConvertFeedToFeedViewModel(Feed feed, int currentUserId)
+        {
+            var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
+            var feedVm = new FeedViewModel
+            {
+                FeedId = feed.Id,
+                FeedType = feed.FeedType,
+                Time = feed.Time,
+                CommentsViewModel = new CommentsViewModel
+                {
+                    CurrentUserPhotoUrl = currentUserPhotoUrl,
+                }
+            };
+
+            #region Event
+            if (feed.FeedType == FeedType.Event)
+            {
+                // EVENT
+
+                FillUserDetails(ref feedVm, feed.Event.UserId, currentUserId);
+
+                feedVm.EventViewModel = new EventViewModel
+                {
+                    City = feed.Event.City,
+                    CreatedDate = feed.Event.CreatedDate,
+                    Description = feed.Event.Description,
+                    Id = feed.Event.Id,
+                    Latitude = feed.Event.Latitude,
+                    Location = feed.Event.Location,
+                    Longitude = feed.Event.Longitude,
+                    Name = feed.Event.Name,
+                    Price = feed.Event.Price,
+                    Time = feed.Event.Time,
+                    Street = feed.Event.Street,
+                    PhotoId = feed.Event.PhotoId,
+                    IsFacebookEvent = feed.Event.IsFacebookEvent,
+                    ImageUrl = feed.Event.IsFacebookEvent
+                                   ? new PhotoLinks(feed.Event.FacebookPhotoLink)
+                                   : null,
+                    IsDateOnly = feed.Event.IsDateOnly,
+                    FacebookEventId = feed.Event.FacebookEventId
+                };
+
+                feedVm.CommentsViewModel.CommentType = CommentType.Event;
+
+                if (feedVm.EventViewModel.PhotoId.HasValue)
+                {
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
+                    feedVm.EventViewModel.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId,
+                                                                                    photo.Id);
+                }
+
+                if (feedVm.EventViewModel.ImageUrl == null)
+                {
+                    // this event doesn't have a picture
+                    feedVm.EventViewModel.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
+                }
+
+                feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
+                feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value,
+                                                                feedVm.CommentsViewModel.CommentType,
+                                                                currentUserId);
+
+            #endregion
+
+                #region Photo
+            }
+            else if (feed.FeedType == FeedType.Picture)
+            {
+                var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotos.Select(f => f.PhotoId)).ToList();
+
+                if (photos.Count > 0)
+                {
+                    FillUserDetails(ref feedVm, photos.First().UserId, currentUserId);
+                }
+
+                feedVm.PhotoViewModel = photos
+                    .Select(p => new PhotoViewModel
+                    {
+                        PhotoId = p.Id,
+                        PhotoDescription = p.Description,
+                        FromUserDisplayName = feedVm.UserDisplayName,
+                        FromUserPhotoUrl = feedVm.UserImageUrl,
+                        FromUserId = p.UserId,
+                        PhotoUrl = p.IsFacebookPhoto
+                                       ? new PhotoLinks(p.FacebookLink)
+                                       : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                    }).ToList();
+
+                feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+
+                if (photos.Count == 1)
+                {
+                    var photoId = photos.First().Id;
+                    feedVm.CommentsViewModel.ItemId = photoId;
+                    feedVm.CommentsViewModel.Comments = GetComments(photoId,
+                                                                    feedVm.CommentsViewModel.CommentType,
+                                                                    currentUserId);
+                }
+
+                #endregion
+
+                #region Post
+
+            }
+            else if (feed.FeedType == FeedType.Post)
+            {
+                FillUserDetails(ref feedVm, feed.Post.FromUserId, currentUserId);
+
+                var post = _uow.PostRepository.GetById(feed.PostId.Value);
+                feedVm.PostViewModel = new PostViewModel
+                {
+                    PostId = post.Id,
+                    PostText = post.Message
+                };
+
+                if (post.ToUserId.HasValue)
+                {
+                    var toUserId = post.ToUserId.Value;
+                    feedVm.PostViewModel.ToUserId = toUserId;
+                    feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
+                    feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserImageUrl(toUserId);
+                    feedVm.CurrentUserCanRemoveFeed = post.ToUserId == currentUserId;
+                }
+
+                feedVm.CommentsViewModel.CommentType = CommentType.Post;
+
+                feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
+                feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value,
+                                                                feedVm.CommentsViewModel.CommentType,
+                                                                currentUserId);
+
+                #endregion
+            }
+            else
+            {
+                throw new NotImplementedException("Feed type is not implemented");
+            }
+
+            return feedVm;
         }
 
         private void FillUserDetails(ref FeedViewModel feedVm, int userId, int currentUserId)

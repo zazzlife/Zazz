@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -16,12 +17,35 @@ namespace Zazz.Web.Controllers
         private readonly IPostService _postService;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IUoW _uow;
 
-        public PostController(IPostService postService, IUserService userService, IPhotoService photoService)
+        public PostController(IPostService postService, IUserService userService,
+            IPhotoService photoService, IUoW uow)
         {
             _postService = postService;
             _userService = userService;
             _photoService = photoService;
+            _uow = uow;
+        }
+
+        [Authorize]
+        public ActionResult Show(int id)
+        {
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var feed = new FeedHelper(_uow, _userService, _photoService)
+                .GetSinglePostFeed(id, currentUserId);
+
+            if (feed == null)
+                throw new HttpException(404, "Post not found.");
+
+            var vm = new PostPageViewModel
+                     {
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(currentUserId),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
+                         FeedViewModel = feed
+                     };
+
+            return View(vm);
         }
 
         [Authorize, HttpPost]

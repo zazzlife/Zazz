@@ -256,6 +256,7 @@
     <Compile Include="Models\NotificationsPageViewModel.cs" />
     <Compile Include="Models\NotificationViewModel.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
+    <Compile Include="Models\PostPageViewModel.cs" />
     <Compile Include="Models\PostViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
