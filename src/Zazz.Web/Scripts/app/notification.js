@@ -7,7 +7,10 @@ function markAllNotificationsAsRead() {
 
     $.ajax({
         url: url,
-        cache: false
+        cache: false,
+        success: function() {
+            $('#new-notifications-count').fadeOut('slow');
+        }
     });
 }
 
@@ -70,6 +73,7 @@ $('#notifications-link').popover({
                 left: left
             });
 
+            markAllNotificationsAsRead();
         }
     });
 });
