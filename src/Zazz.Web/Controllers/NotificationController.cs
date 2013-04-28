@@ -30,45 +30,7 @@ namespace Zazz.Web.Controllers
             var currentUserId = _userService.GetUserId(User.Identity.Name);
             const int PAGE_SIZE = 30;
 
-            var notifications = _notificationService.GetUserNotifications(currentUserId)
-                .Take(PAGE_SIZE)
-                .ToList();
-
-            var notificationsVm = notifications
-                .Select(n => new NotificationViewModel
-                             {
-                                 NotificationId = n.Id,
-                                 UserId = n.UserBId,
-                                 Time = n.Time,
-                                 IsRead = n.IsRead,
-                                 EventName = n.Event != null
-                                                 ? n.Event.Name
-                                                 : String.Empty,
-                                 ItemId = n.PhotoId.HasValue
-                                              ? n.PhotoId.Value
-                                              : n.PostId.HasValue
-                                                    ? n.PostId.Value
-                                                    : n.EventId.HasValue
-                                                          ? n.EventId.Value
-                                                          : 0,
-                                 NotificationType = n.NotificationType,
-                                 UserDisplayName = _userService.GetUserDisplayName(n.UserBId),
-                                 UserPhoto = _photoService.GetUserImageUrl(n.UserBId),
-                                 PhotoViewModel = !n.PhotoId.HasValue ? null
-                                 : new PhotoViewModel
-                                   {
-                                       FromUserDisplayName = _userService.GetUserDisplayName(n.Photo.UserId),
-                                       FromUserId = n.Photo.UserId,
-                                       FromUserPhotoUrl = _photoService.GetUserImageUrl(n.Photo.UserId),
-                                       IsFromCurrentUser = currentUserId == n.Photo.UserId,
-                                       PhotoDescription = n.Photo.Description,
-                                       PhotoId = n.Photo.Id,
-                                       PhotoUrl = n.Photo.IsFacebookPhoto
-                                       ? new PhotoLinks(n.Photo.FacebookLink)
-                                       : _photoService.GeneratePhotoUrl(n.Photo.UserId, n.Photo.Id)
-                                   }
-
-                             });
+            var notificationsVm = GetNotifications(currentUserId, 0, PAGE_SIZE);
 
             var vm = new NotificationsPageViewModel
                      {
@@ -83,6 +45,52 @@ namespace Zazz.Web.Controllers
         public ActionResult Get(int id, int? lastNotification)
         {
             return View("_Notifications");
+        }
+
+        private IEnumerable<NotificationViewModel> GetNotifications(int userId, int skip, int take)
+        {
+            var notifications = _notificationService.GetUserNotifications(userId)
+                .Skip(skip)
+                .Take(take)
+                .ToList();
+
+            var notificationsVm = notifications
+                .Select(n => new NotificationViewModel
+                {
+                    NotificationId = n.Id,
+                    UserId = n.UserBId,
+                    Time = n.Time,
+                    IsRead = n.IsRead,
+                    EventName = n.Event != null
+                                    ? n.Event.Name
+                                    : String.Empty,
+                    ItemId = n.PhotoId.HasValue
+                                 ? n.PhotoId.Value
+                                 : n.PostId.HasValue
+                                       ? n.PostId.Value
+                                       : n.EventId.HasValue
+                                             ? n.EventId.Value
+                                             : 0,
+                    NotificationType = n.NotificationType,
+                    UserDisplayName = _userService.GetUserDisplayName(n.UserBId),
+                    UserPhoto = _photoService.GetUserImageUrl(n.UserBId),
+                    PhotoViewModel = !n.PhotoId.HasValue ? null
+                    : new PhotoViewModel
+                    {
+                        FromUserDisplayName = _userService.GetUserDisplayName(n.Photo.UserId),
+                        FromUserId = n.Photo.UserId,
+                        FromUserPhotoUrl = _photoService.GetUserImageUrl(n.Photo.UserId),
+                        IsFromCurrentUser = userId == n.Photo.UserId,
+                        PhotoDescription = n.Photo.Description,
+                        PhotoId = n.Photo.Id,
+                        PhotoUrl = n.Photo.IsFacebookPhoto
+                        ? new PhotoLinks(n.Photo.FacebookLink)
+                        : _photoService.GeneratePhotoUrl(n.Photo.UserId, n.Photo.Id)
+                    }
+
+                });
+
+            return notificationsVm;
         }
 
         public void MarkAll()
