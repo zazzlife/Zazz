@@ -36,6 +36,10 @@ $('#notifications-link').popover({
 
     var popoverContent = popover.children('.popover-content');
 
+    var allNotificationsLink = $('<div class="notification-popover-footer"><a>See all</a></div>');
+
+    allNotificationsLink.appendTo(popover);
+
     var url = "/notification/get";
     var take = 5;
 
@@ -49,12 +53,7 @@ $('#notifications-link').popover({
             toastr.error("failed to get notifications, please try again later.");
         },
         success: function (res) {
-            var content = '<div>' +
-                                '<div>' + res + '</div>' +
-                                '<div><a href="/notification">See all</a></div>' +
-                            '</div>';
-
-            popoverContent.html(content);
+            popoverContent.html(res);
         }
     });
 });
