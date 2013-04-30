@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,11 @@ namespace Zazz.Core.Models.Data
 {
     public class Post : BaseEntity
     {
+        public Post()
+        {
+            Tags = new HashSet<Tag>();
+        }
+
         [ForeignKey("FromUserId")]
         public User FromUser { get; set; }
 
@@ -26,5 +32,7 @@ namespace Zazz.Core.Models.Data
         public int? PageId { get; set; }
 
         public DateTime CreatedTime { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
