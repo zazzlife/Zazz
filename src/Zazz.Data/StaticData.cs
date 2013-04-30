@@ -34,5 +34,13 @@ namespace Zazz.Data
             yield return new School { Id = 4, Name = "McGill University" };
             yield return new School { Id = 5, Name = "University of Montreal" };
         }
+
+        public static IEnumerable<Tag> GetTags()
+        {
+            yield return new Tag { Id = 1, Name = "Blackout" };
+            yield return new Tag { Id = 2, Name = "Beerpong" };
+            yield return new Tag { Id = 3, Name = "Free-Entry" };
+            yield return new Tag { Id = 4, Name = "Houseparty" };
+        }
     }
 }

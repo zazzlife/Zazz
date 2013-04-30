@@ -15,6 +15,9 @@ namespace Zazz.Data
             foreach (var school in StaticData.GetSchools())
                 context.Schools.Add(school);
 
+            foreach (var tag in StaticData.GetTags())
+                context.Tags.Add(tag);
+
             base.Seed(context);
         }
     }
