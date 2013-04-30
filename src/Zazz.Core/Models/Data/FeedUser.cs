@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    [Table("Feed_User")]
+    [Table("Feeds_Users")]
     public class FeedUser
     {
         [ForeignKey("FeedId")]
