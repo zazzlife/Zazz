@@ -118,6 +118,7 @@
     <Compile Include="Models\Data\Notification.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\School.cs" />
+    <Compile Include="Models\Data\Tag.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
