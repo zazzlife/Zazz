@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,6 +8,11 @@ namespace Zazz.Core.Models.Data
     [Table("Events")]
     public class ZazzEvent : BaseEntity
     {
+        public ZazzEvent()
+        {
+            Tags = new HashSet<Tag>();
+        }
+
         [ForeignKey("UserId")]
         public User User { get; set; }
 
@@ -56,5 +62,7 @@ namespace Zazz.Core.Models.Data
         public FacebookPage Page { get; set; }
 
         public int? PageId { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }
