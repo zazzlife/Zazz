@@ -17,8 +17,11 @@ namespace Zazz.Data
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
+        public IDbSet<PhotoTag> PhotoTags { get; set; }
         public IDbSet<ZazzEvent> Events { get; set; }
+        public IDbSet<EventTag> EventTags { get; set; }
         public IDbSet<Post> Posts { get; set; }
+        public IDbSet<PostTag> PostTags { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }

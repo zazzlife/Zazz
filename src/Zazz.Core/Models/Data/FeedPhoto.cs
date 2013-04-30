@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    [Table("Feeds_Photos")]
+    [Table("Feed_Photos")]
     public class FeedPhoto
     {
         [Key, Column(Order = 0)]
