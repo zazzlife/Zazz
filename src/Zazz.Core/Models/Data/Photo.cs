@@ -10,7 +10,7 @@ namespace Zazz.Core.Models.Data
         public Photo()
         {
             Comments = new HashSet<Comment>();
-            Tags = new HashSet<Tag>();
+            Tags = new HashSet<PhotoTag>();
         }
 
         [ForeignKey("UserId")]
@@ -43,6 +43,6 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<Comment> Comments { get; set; }
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<PhotoTag> Tags { get; set; }
     }
 }

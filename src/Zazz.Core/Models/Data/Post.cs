@@ -9,7 +9,7 @@ namespace Zazz.Core.Models.Data
     {
         public Post()
         {
-            Tags = new HashSet<Tag>();
+            Tags = new HashSet<PostTag>();
         }
 
         [ForeignKey("FromUserId")]
@@ -33,6 +33,6 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedTime { get; set; }
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<PostTag> Tags { get; set; }
     }
 }
