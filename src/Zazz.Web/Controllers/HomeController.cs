@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
@@ -63,18 +64,8 @@ namespace Zazz.Web.Controllers
 
         public string GetAllTags()
         {
-            //TODO: find a cleaner way.
-
-            var tags = "[";
-
-            foreach (var t in _staticDataRepository.GetTags().Select(t => t.Name))
-            {
-                tags += String.Format("\"{0}\"", t);
-            }
-
-            tags += "]";
-
-            return String.Format("[{0}]", tags);
+            var tags = _staticDataRepository.GetTags().Select(t => t.Name);
+            return JsonConvert.SerializeObject(tags, Formatting.None);
         }
 
         public JsonNetResult Search(string q)
