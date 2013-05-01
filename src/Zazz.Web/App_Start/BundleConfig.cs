@@ -54,15 +54,9 @@ namespace Zazz.Web
             bootstrapOrder.Files.Add("bootstrap-lightbox.js");
             bootstrapOrder.Files.Add("bootstrap-editable.js");
 
-            var underscoreDependentOrder = new BundleFileSetOrdering("UnderscoreOrder");
-            underscoreDependentOrder.Files.Add("underscore.js");
-            underscoreDependentOrder.Files.Add("jquery.mentionsInput.js");
-
-
             bundles.FileSetOrderList.Add(fineUploadOrder);
             bundles.FileSetOrderList.Add(cssOrder);
             bundles.FileSetOrderList.Add(bootstrapOrder);
-            bundles.FileSetOrderList.Add(underscoreDependentOrder);
 
             bundles.Add(css);
             bundles.Add(jqueryUiCss);
