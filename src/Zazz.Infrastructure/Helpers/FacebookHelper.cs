@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Facebook;
 using Microsoft.CSharp.RuntimeBinder;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
 
-namespace Zazz.Infrastructure
+namespace Zazz.Infrastructure.Helpers
 {
     public class FacebookHelper : IFacebookHelper
     {

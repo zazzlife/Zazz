@@ -13,6 +13,7 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services

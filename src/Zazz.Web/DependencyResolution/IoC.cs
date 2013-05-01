@@ -21,6 +21,7 @@ using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.Web.DependencyResolution 

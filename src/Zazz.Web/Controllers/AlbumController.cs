@@ -8,6 +8,7 @@ using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers

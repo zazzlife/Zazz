@@ -1,6 +1,6 @@
 using System;
 
-namespace Zazz.Infrastructure
+namespace Zazz.Infrastructure.Helpers
 {
     public static class DateTimeHelpers
     {

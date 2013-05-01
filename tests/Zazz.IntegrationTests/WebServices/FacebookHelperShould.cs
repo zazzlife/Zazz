@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.IntegrationTests.WebServices
 {

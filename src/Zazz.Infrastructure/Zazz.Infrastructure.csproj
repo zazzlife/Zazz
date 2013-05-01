@@ -55,11 +55,11 @@
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
     <Compile Include="CircularBufferCache.cs" />
-    <Compile Include="DateTimeHelpers.cs" />
-    <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
-    <Compile Include="FacebookHelper.cs" />
     <Compile Include="FakeEMailService.cs" />
+    <Compile Include="Helpers\DateTimeHelpers.cs" />
+    <Compile Include="Helpers\DefaultImageHelper.cs" />
+    <Compile Include="Helpers\FacebookHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="EmailMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
