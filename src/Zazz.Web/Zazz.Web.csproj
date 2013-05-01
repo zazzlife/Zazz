@@ -283,6 +283,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
+    <Content Include="Content\jquery.atwho.css" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
@@ -390,6 +391,8 @@
     <Content Include="Scripts\app\scroll-pagination.js" />
     <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\bootstrap-editable.js" />
+    <Content Include="Scripts\jquery.atwho.js" />
+    <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.extends.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\auth-icons.png" />
