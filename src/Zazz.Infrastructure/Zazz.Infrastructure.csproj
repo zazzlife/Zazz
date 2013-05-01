@@ -60,6 +60,7 @@
     <Compile Include="Helpers\DateTimeHelpers.cs" />
     <Compile Include="Helpers\DefaultImageHelper.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
+    <Compile Include="Helpers\RegexHelper.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="EmailMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
