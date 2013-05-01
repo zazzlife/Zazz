@@ -572,7 +572,7 @@
 					if ( !support.rgba && value._rgba[ 3 ] !== 1 ) {
 						curElem = hook === "backgroundColor" ? elem.parentNode : elem;
 						do {
-							backgroundColor = jQuery.css( curElem, "backgroundColor" );
+							backgroundColor = $(curElem).css("backgroundColor");
 						} while (
 							( backgroundColor === "" || backgroundColor === "transparent" ) &&
 							( curElem = curElem.parentNode ) &&
