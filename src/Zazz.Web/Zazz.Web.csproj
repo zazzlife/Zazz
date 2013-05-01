@@ -391,7 +391,7 @@
     <Content Include="Scripts\app\scroll-pagination.js" />
     <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\bootstrap-editable.js" />
-    <Content Include="Scripts\jquery.mentionsInput.js.js" />
+    <Content Include="Scripts\jquery.mentionsInput.js" />
     <Content Include="Scripts\jquery.extends.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\auth-icons.png" />
