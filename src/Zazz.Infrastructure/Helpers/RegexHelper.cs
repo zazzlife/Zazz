@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Zazz.Infrastructure.Helpers
 {
@@ -7,7 +9,8 @@ namespace Zazz.Infrastructure.Helpers
     {
         public IEnumerable<string> ExtractTags(string text)
         {
-            throw new NotImplementedException();
+            return from Match match in Regex.Matches(text, @"(?<!\w)#\w+(-?\w+)")
+                   select match.Value;
         }
     }
 }
