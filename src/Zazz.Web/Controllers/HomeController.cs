@@ -17,12 +17,15 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
+        private readonly IStaticDataRepository _staticDataRepository;
 
-        public HomeController(IUoW uow, IPhotoService photoService, IUserService userService)
+        public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
+            IStaticDataRepository staticDataRepository)
         {
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
+            _staticDataRepository = staticDataRepository;
         }
 
         public ActionResult Index()
@@ -56,6 +59,22 @@ namespace Zazz.Web.Controllers
                                   .GetFeeds(user.Id, lastFeedId);
 
             return View("_FeedsPartial", feeds);
+        }
+
+        public string GetAllTags()
+        {
+            //TODO: find a cleaner way.
+
+            var tags = "[";
+
+            foreach (var t in _staticDataRepository.GetTags().Select(t => t.Name))
+            {
+                tags += String.Format("\"{0}\"", t);
+            }
+
+            tags += "]";
+
+            return String.Format("[{0}]", tags);
         }
 
         public JsonNetResult Search(string q)

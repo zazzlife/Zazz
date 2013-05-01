@@ -20,5 +20,10 @@ namespace Zazz.Data
         {
             return StaticData.GetMajors();
         }
+
+        public IEnumerable<Tag> GetTags()
+        {
+            return StaticData.GetTags();
+        }
     }
 }

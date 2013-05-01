@@ -8,5 +8,6 @@ namespace Zazz.Core.Interfaces
         IEnumerable<School> GetSchools();
         IEnumerable<City> GetCities();
         IEnumerable<Major> GetMajors();
+        IEnumerable<Tag> GetTags();
     }
 }
