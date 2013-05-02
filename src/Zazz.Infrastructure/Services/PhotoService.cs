@@ -318,7 +318,7 @@ namespace Zazz.Infrastructure.Services
             if (!String.IsNullOrEmpty(updatedPhoto.Description))
             {
                 var extractedTags = _stringHelper.ExtractTags(updatedPhoto.Description);
-                foreach (var t in extractedTags.Distinct())
+                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
                     var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
