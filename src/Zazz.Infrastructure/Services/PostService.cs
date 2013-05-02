@@ -33,7 +33,7 @@ namespace Zazz.Infrastructure.Services
         public void NewPost(Post post)
         {
             var extractedTags = _stringHelper.ExtractTags(post.Message);
-            foreach (var t in extractedTags.Distinct())
+            foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)
