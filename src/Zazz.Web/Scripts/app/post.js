@@ -52,7 +52,7 @@ $(document).on('click', '.editFeedBtn', function () {
     self.parent('.feed-actions').hide();
 
 
-    var editHtml = '<textarea id="editPostInput-' + id + '" style="margin-top: 25px; width: 82%; height: 70px;font-size: 12px;font-style: italic;"></textarea>';
+    var editHtml = '<textarea data-tag="1" id="editPostInput-' + id + '" style="margin-top: 25px; width: 82%; height: 70px;font-size: 12px;font-style: italic;"></textarea>';
     editHtml += '<button data-id="' + id + '" style="float:right;margin-top: 11px;" type="button" class="btn btn-small btn-success submitPostEdit">Submit</button>';
     editHtml += '<button style="float:right;margin-top: 45px;margin-right: -65px;width: 67px;" type="button" class="btn btn-small cancelPostEdit">Cancel</button>';
 
@@ -64,6 +64,7 @@ $(document).on('click', '.editFeedBtn', function () {
 
     p.fadeIn('fast', function () {
         editElem.focus();
+        initInputTags();
     });
 
 });
