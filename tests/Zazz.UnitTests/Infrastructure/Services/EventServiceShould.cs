@@ -335,6 +335,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotAddDuplicate_OnUpdateEvent()
+        {
+            //Arrange
+            _zazzEvent.Id = 5;
+            _zazzEvent.Description = "sample description";
+            _zazzEvent.Tags = new List<EventTag> { new EventTag(), new EventTag(), new EventTag() };
+            var updatedEvent = new ZazzEvent
+            {
+                Id = _zazzEvent.Id,
+                Description = "new Description"
+            };
+
+            var tag1 = "#tag1";
+            var tag1Duplicate = tag1;
+            var tag2 = "#tag2";
+            var unavailableTag = "#dsadas";
+
+            var tag1Object = new Tag { Id = 1 };
+            var tag2Object = new Tag { Id = 2 };
+
+            _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
+                         .Returns(new List<string> { tag1, tag2, unavailableTag, tag1Duplicate });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+                           .Returns(tag1Object);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+                           .Returns(tag2Object);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+                           .Returns(() => null);
+            _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
+                .Returns(_zazzEvent);
+
+            //Act
+            _sut.UpdateEvent(updatedEvent, _zazzEvent.UserId);
+
+            //Assert
+            Assert.AreEqual(2, _zazzEvent.Tags.Count);
+            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.TagId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.TagId == tag2Object.Id));
+        }
+
+        [Test]
         public void ShouldThrowIfEventIdIs0_OnDelete()
         {
             //Arrange
