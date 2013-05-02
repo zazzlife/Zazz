@@ -28,9 +28,10 @@ namespace Zazz.Data
             return StaticData.GetTags();
         }
 
-        public bool TagExists(string tag)
+        public Tag GetTagIfExists(string tagName)
         {
-            return StaticData.GetTags().Any(t => t.Name.Equals(tag, StringComparison.InvariantCultureIgnoreCase));
+            return StaticData.GetTags()
+                .FirstOrDefault(t => t.Name.Equals(tagName, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

@@ -10,6 +10,6 @@ namespace Zazz.Core.Interfaces
         IEnumerable<Major> GetMajors();
         IEnumerable<Tag> GetTags();
 
-        bool TagExists(string tag);
+        Tag GetTagIfExists(string tagName);
     }
 }
