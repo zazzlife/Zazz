@@ -389,6 +389,7 @@
     <Content Include="Scripts\app\event.js" />
     <Content Include="Scripts\app\input-mention.js" />
     <Content Include="Scripts\app\notification.js" />
+    <Content Include="Scripts\app\post.js" />
     <Content Include="Scripts\app\scroll-pagination.js" />
     <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\bootstrap-editable.js" />
