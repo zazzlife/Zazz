@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Infrastructure\CircularBufferCacheShould.cs" />
     <Compile Include="Infrastructure\ErrorHandlerShould.cs" />
-    <Compile Include="Infrastructure\Helpers\RegexHelperShould.cs" />
+    <Compile Include="Infrastructure\Helpers\StringHelperShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CacheServiceShould.cs" />

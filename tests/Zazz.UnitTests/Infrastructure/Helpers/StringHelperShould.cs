@@ -6,14 +6,14 @@ using Zazz.Infrastructure.Helpers;
 namespace Zazz.UnitTests.Infrastructure.Helpers
 {
     [TestFixture]
-    public class RegexHelperShould
+    public class StringHelperShould
     {
-        private RegexHelper _sut;
+        private StringHelper _sut;
 
         [SetUp]
         public void Init()
         {
-            _sut = new RegexHelper();
+            _sut = new StringHelper();
         }
 
         [Test]

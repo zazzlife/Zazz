@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Zazz.Infrastructure.Helpers
 {
-    public class RegexHelper
+    public class StringHelper
     {
         public IEnumerable<string> ExtractTags(string text)
         {
