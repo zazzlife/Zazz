@@ -180,6 +180,46 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotBeCaseSensitiveOnDuplicateTagsCheck_OnSavePhoto()
+        {
+            //Arrange
+            var tag1 = "#tag1";
+            var duplicateTag1 = "#TAG1";
+            var tag2 = "#tag2";
+            var notAvailableTag = "#tag3";
+
+            var tagObject1 = new Tag { Id = 1 };
+            var tagObject2 = new Tag { Id = 2 };
+
+            var photo = new Photo
+            {
+                Id = 1234,
+                Description = String.Format("some text + {0} and {1} and {2} and duplicate {3}", tag1, tag2,
+                notAvailableTag, duplicateTag1)
+            };
+
+            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
+                         .Returns(new List<string> { tag1, tag2, duplicateTag1 });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(duplicateTag1.Replace("#", "")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+                           .Returns(tagObject2);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+                           .Returns(() => null);
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+
+            //Act
+            _sut.SavePhoto(photo, Stream.Null, false);
+
+            //Assert
+            Assert.AreEqual(2, photo.Tags.Count);
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+        }
+
+        [Test]
         public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
