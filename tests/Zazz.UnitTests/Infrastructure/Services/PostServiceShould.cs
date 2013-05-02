@@ -18,6 +18,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<INotificationService> _notificationService;
         private Mock<ICommentService> _commentService;
         private Mock<IStringHelper> _stringHelper;
+        private Mock<IStaticDataRepository> _staticDataRepo;
 
         [SetUp]
         public void Init()
@@ -26,8 +27,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _notificationService = new Mock<INotificationService>();
             _commentService = new Mock<ICommentService>();
             _stringHelper = new Mock<IStringHelper>();
+            _staticDataRepo = new Mock<IStaticDataRepository>();
+
             _sut = new PostService(_uow.Object, _notificationService.Object, _commentService.Object,
-                _stringHelper.Object);
+                _stringHelper.Object, _staticDataRepo.Object);
 
             _uow.Setup(x => x.SaveChanges());
 
