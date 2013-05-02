@@ -87,6 +87,7 @@
     <Compile Include="Interfaces\IPostService.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
+    <Compile Include="Interfaces\IStringHelper.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\ICommentRepository.cs" />
     <Compile Include="Interfaces\IEventRepository.cs" />
