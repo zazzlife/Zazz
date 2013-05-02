@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -90,21 +91,15 @@ namespace Zazz.Infrastructure.Services
             if (post == null)
                 return;
 
-            if (post.FromUserId != currentUserId)
-            {
-                if (post.ToUserId.HasValue)
-                {
-                    if (post.ToUserId.Value != currentUserId)
-                    {
-                        throw new SecurityException();
-                    }
-                }
-                else
-                {
-                    throw new SecurityException();
-                }
-            }
-            
+            var usersWithRemovePermission = new List<int>();
+
+            usersWithRemovePermission.Add(post.FromUserId);
+            if (post.ToUserId.HasValue)
+                usersWithRemovePermission.Add(post.ToUserId.Value);
+
+            if (!usersWithRemovePermission.Contains(currentUserId))
+                throw new SecurityException();
+
             _uow.FeedRepository.RemovePostFeeds(postId);
             _commentService.RemovePostComments(postId);
             _notificationService.RemovePostNotifications(postId);
