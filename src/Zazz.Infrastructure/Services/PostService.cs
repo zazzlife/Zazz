@@ -83,7 +83,7 @@ namespace Zazz.Infrastructure.Services
 
             post.Tags.Clear();
             var extractedTags = _stringHelper.ExtractTags(newText);
-            foreach (var t in extractedTags)
+            foreach (var t in extractedTags.Distinct())
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)
