@@ -61,7 +61,7 @@
                     @Html.LabelFor(model => model.EventViewModel.Description, new { @class = "control-label" })
                 </div>
                 <div class="editor-field">
-                    @Html.TextAreaFor(model => model.EventViewModel.Description, new { @class = "span4", @style = "height: 180px;" })
+                    @Html.TextAreaFor(model => model.EventViewModel.Description, new { @class = "span4", @style = "height: 180px;", @data_tag = "1" })
                     @Html.ValidationMessageFor(model => model.EventViewModel.Description, null, new { @class = "help-inline" })
                 </div>
             </div>
