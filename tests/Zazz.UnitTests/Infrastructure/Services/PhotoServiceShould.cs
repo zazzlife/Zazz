@@ -124,7 +124,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2 });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#","")))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
             _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
@@ -763,8 +763,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = 890
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
-                .Returns(photo.UserId);
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
 
             //Act
             try
@@ -777,11 +777,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
         }
 
         [Test]
-        public void UpdateAndSave_OnUpdatePhoto()
+        public void Save_OnUpdatePhoto()
         {
             //Arrange
             var photoId = 124;
@@ -795,17 +795,89 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
-                .Returns(photo.UserId);
-            _uow.Setup(x => x.PhotoRepository.InsertOrUpdate(photo));
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
 
             //Act
             _sut.UpdatePhoto(photo, userId);
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Once());
-            _uow.Verify(x => x.PhotoRepository.InsertOrUpdate(photo), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        [Test]
+        public void UpdateDescription_OnUpdatePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+
+            var oldPhoto = new Photo
+                           {
+                               Id = photoId,
+                               Description = "old desc",
+                               UserId = userId
+                           };
+
+            var newPhoto = new Photo
+                           {
+                               Id = photoId,
+                               Description = "new Desc",
+                               UserId = userId,
+                               AlbumId = 12
+                           };
+            _stringHelper.Setup(x => x.ExtractTags(It.IsAny<string>()))
+                         .Returns(Enumerable.Empty<string>);
+            _uow.Setup(x => x.PhotoRepository.GetById(newPhoto.Id))
+                .Returns(oldPhoto);
+
+            //Act
+            _sut.UpdatePhoto(newPhoto, userId);
+
+            //Assert
+            Assert.AreEqual(oldPhoto.Description, newPhoto.Description);
+            Assert.AreEqual(oldPhoto.AlbumId, newPhoto.AlbumId);
+        }
+
+        [Test]
+        public void UpdateTags_OnUpdatePhoto()
+        {
+            //Arrange
+            var currentUser = 444;
+            var tag1 = "#tag1";
+            var tag2 = "#tag2";
+            var notAvailableTag = "#tag3";
+
+            var tagObject1 = new Tag { Id = 1 };
+            var tagObject2 = new Tag { Id = 2 };
+
+            var photo = new Photo
+            {
+                Id = 1234,
+                UserId = currentUser,
+                Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
+            };
+
+            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
+                         .Returns(new List<string> { tag1, tag2 });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+                           .Returns(tagObject2);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+                           .Returns(() => null);
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            //Act
+            _sut.UpdatePhoto(photo, currentUser);
+
+            //Assert
+            Assert.AreEqual(2, photo.Tags.Count);
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
         }
 
         [Test]

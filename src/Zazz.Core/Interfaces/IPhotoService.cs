@@ -24,7 +24,7 @@ namespace Zazz.Core.Interfaces
 
         void RemovePhoto(int photoId, int currentUserId);
 
-        void UpdatePhoto(Photo photo, int currentUserId);
+        void UpdatePhoto(Photo updatedPhoto, int currentUserId);
 
         PhotoLinks GetUserImageUrl(int userId);
 

@@ -304,16 +304,36 @@ namespace Zazz.Infrastructure.Services
             _fileService.RemoveFile(paths.OriginalLink);
         }
 
-        public void UpdatePhoto(Photo photo, int currentUserId)
+        public void UpdatePhoto(Photo updatedPhoto, int currentUserId)
         {
-            if (photo.Id == 0)
+            if (updatedPhoto.Id == 0)
                 throw new ArgumentException();
 
-            var ownerId = _uow.PhotoRepository.GetOwnerId(photo.Id);
-            if (ownerId != currentUserId)
+            var photo = _uow.PhotoRepository.GetById(updatedPhoto.Id);
+            if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            _uow.PhotoRepository.InsertOrUpdate(photo);
+            photo.Tags.Clear();
+
+            if (!String.IsNullOrEmpty(updatedPhoto.Description))
+            {
+                var extractedTags = _stringHelper.ExtractTags(updatedPhoto.Description);
+                foreach (var t in extractedTags)
+                {
+                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    if (tag != null)
+                    {
+                        photo.Tags.Add(new PhotoTag
+                                       {
+                                           TagId = tag.Id
+                                       });
+                    }
+                }
+            }
+
+            photo.Description = updatedPhoto.Description;
+            photo.AlbumId = updatedPhoto.AlbumId;
+            
             _uow.SaveChanges();
         }
 
