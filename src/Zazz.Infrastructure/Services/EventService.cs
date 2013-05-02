@@ -71,17 +71,31 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UpdateEvent(ZazzEvent zazzEvent, int currentUserId)
+        public void UpdateEvent(ZazzEvent updatedEvent, int currentUserId)
         {
-            if (zazzEvent.Id == 0)
+            if (updatedEvent.Id == 0)
                 throw new ArgumentException();
 
-            var currentOwner = _uow.EventRepository.GetOwnerId(zazzEvent.Id);
-            if (currentOwner != currentUserId)
+            var e = _uow.EventRepository.GetById(updatedEvent.Id);
+            if (e == null)
+                return;
+
+            if (e.UserId != currentUserId)
                 throw new SecurityException();
 
-            // if you want to set update datetime later, the place would be here!
-            _uow.EventRepository.InsertOrUpdate(zazzEvent);
+            e.City = updatedEvent.City;
+            e.Description = updatedEvent.Description;
+            e.IsDateOnly = updatedEvent.IsDateOnly;
+            e.Latitude = updatedEvent.Latitude;
+            e.Location = updatedEvent.Location;
+            e.Longitude = updatedEvent.Longitude;
+            e.Name = updatedEvent.Name;
+            e.PhotoId = updatedEvent.PhotoId;
+            e.Price = updatedEvent.Price;
+            e.Street = updatedEvent.Street;
+            e.Time = updatedEvent.Time;
+            e.TimeUtc = updatedEvent.TimeUtc;
+
             _uow.SaveChanges();
         }
 

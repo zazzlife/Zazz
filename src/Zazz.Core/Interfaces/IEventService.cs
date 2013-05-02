@@ -16,10 +16,10 @@ namespace Zazz.Core.Interfaces
         /// <summary>
         /// Updates an event.
         /// </summary>
-        /// <param name="zazzEvent">The event to update. (Id is required)</param>
+        /// <param name="updatedEvent">The event to update. (Id is required)</param>
         /// <param name="currentUserId">UserId of the current user. (Used for security check)</param>
         /// <returns></returns>
-        void UpdateEvent(ZazzEvent zazzEvent, int currentUserId);
+        void UpdateEvent(ZazzEvent updatedEvent, int currentUserId);
 
         /// <summary>
         /// Gets an entry

@@ -260,11 +260,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
-                .Returns(() => 123);
+            _zazzEvent.UserId = 10;
+            _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
+                .Returns(_zazzEvent);
 
             //Act
-
             try
             {
                 _sut.UpdateEvent(_zazzEvent, _userId);
@@ -275,7 +275,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Once());
+            _uow.Verify(x => x.EventRepository.GetById(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
@@ -283,14 +283,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
-                .Returns(() => _zazzEvent.UserId);
+            _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
+                .Returns(() => _zazzEvent);
 
             //Act
             _sut.UpdateEvent(_zazzEvent, _userId);
 
             //Assert
-            _uow.Verify(x => x.EventRepository.InsertOrUpdate(_zazzEvent), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
 
         }
