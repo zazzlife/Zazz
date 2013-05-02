@@ -23,13 +23,16 @@ namespace Zazz.Infrastructure.Services
         private readonly ICacheService _cacheService;
         private readonly INotificationService _notificationService;
         private readonly ICommentService _commentService;
+        private readonly IStringHelper _stringHelper;
+        private readonly IStaticDataRepository _staticDataRepository;
 
         private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
         private const string SMALL_IMAGE_SUFFIX = "s";
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            INotificationService notificationService, ICommentService commentService, string rootPath)
+            INotificationService notificationService, ICommentService commentService,
+            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, string rootPath)
         {
             _uow = uow;
             _fileService = fileService;
@@ -37,6 +40,8 @@ namespace Zazz.Infrastructure.Services
             _cacheService = cacheService;
             _notificationService = notificationService;
             _commentService = commentService;
+            _stringHelper = stringHelper;
+            _staticDataRepository = staticDataRepository;
         }
 
         public IQueryable<Photo> GetAll()
@@ -84,6 +89,22 @@ namespace Zazz.Infrastructure.Services
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed)
         {
+            if (!String.IsNullOrEmpty(photo.Description))
+            {
+                var extractedTags = _stringHelper.ExtractTags(photo.Description);
+                foreach (var t in extractedTags)
+                {
+                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    if (tag != null)
+                    {
+                        photo.Tags.Add(new PhotoTag
+                                       {
+                                           TagId = tag.Id
+                                       });
+                    }
+                }
+            }
+
             photo.UploadDate = DateTime.UtcNow;
             _uow.PhotoRepository.InsertGraph(photo);
             _uow.SaveChanges();

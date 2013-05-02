@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -26,6 +27,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<ICacheService> _cacheService;
         private Mock<INotificationService> _notificationService;
         private Mock<ICommentService> _commentService;
+        private Mock<IStringHelper> _stringHelper;
+        private Mock<IStaticDataRepository> _staticDataRepo;
 
         [SetUp]
         public void Init()
@@ -36,8 +39,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _tempRootPath = Path.GetTempPath();
             _notificationService = new Mock<INotificationService>();
             _commentService = new Mock<ICommentService>();
+            _stringHelper = new Mock<IStringHelper>();
+            _staticDataRepo = new Mock<IStaticDataRepository>();
+
             _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object,
-                                    _notificationService.Object, _commentService.Object, _tempRootPath);
+                                    _notificationService.Object, _commentService.Object, _stringHelper.Object,
+                                    _staticDataRepo.Object, _tempRootPath);
             _uow.Setup(x => x.SaveChanges());
         }
 
@@ -96,6 +103,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetDescription(id), Times.Once());
+        }
+
+        [Test]
+        public void ExtractTagsFromDescriptionAndSaveWithImage_OnSavePhoto()
+        {
+            //Arrange
+            var tag1 = "#tag1";
+            var tag2 = "#tag2";
+            var notAvailableTag = "#tag3";
+
+            var tagObject1 = new Tag { Id = 1 };
+            var tagObject2 = new Tag { Id = 2 };
+
+            var photo = new Photo
+                        {
+                            Id = 1234,
+                            Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
+                        };
+
+            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
+                         .Returns(new List<string> { tag1, tag2 });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#","")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+                           .Returns(tagObject2);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+                           .Returns(() => null);
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+
+            //Act
+            _sut.SavePhoto(photo, Stream.Null, false);
+
+            //Assert
+            Assert.AreEqual(2, photo.Tags.Count);
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
         }
 
         [Test]
@@ -878,7 +921,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(() => null);
             _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
 
-            
+
             //Act
             var result = _sut.GetUserImageUrl(userId);
 
