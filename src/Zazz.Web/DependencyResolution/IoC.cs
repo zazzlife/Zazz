@@ -41,6 +41,7 @@ namespace Zazz.Web.DependencyResolution
                                     });
 
                             x.For<ICacheService>().Singleton().Use<CacheService>();
+                            x.For<IStringHelper>().Singleton().Use<StringHelper>();
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
