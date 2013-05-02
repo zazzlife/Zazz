@@ -437,5 +437,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void DuplicateTagsCheckShouldNotBeCaseSensitive_OnEditPost()
+        {
+            //Arrange
+            var post = new Post
+            {
+                Id = 17,
+                FromUserId = 123,
+                ToUserId = 1234,
+                Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
+                Message = "m"
+            };
+
+            var tag = "#new-edit";
+            var duplicateTag = "#NEW-edit";
+            var newText = tag + " Edited " + duplicateTag;
+            var tagObject = new Tag { Id = 3, Name = "new-edit" };
+
+            _uow.Setup(x => x.PostRepository.GetById(post.Id))
+                .Returns(post);
+            _stringHelper.Setup(x => x.ExtractTags(newText))
+                         .Returns(new[] { tag, duplicateTag });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
+
+            //Act
+            _sut.EditPost(post.Id, newText, post.FromUserId);
+
+            //Assert
+            Assert.AreEqual(newText, post.Message);
+            Assert.AreEqual(1, post.Tags.Count);
+            Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
+            _mockRepo.VerifyAll();
+        }
     }
 }
