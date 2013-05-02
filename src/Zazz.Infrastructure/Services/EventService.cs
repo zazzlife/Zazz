@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
@@ -33,7 +34,7 @@ namespace Zazz.Infrastructure.Services
             if (!String.IsNullOrEmpty(zazzEvent.Description))
             {
                 var extractedTags = _stringHelper.ExtractTags(zazzEvent.Description);
-                foreach (var t in extractedTags)
+                foreach (var t in extractedTags.Distinct())
                 {
                     var tag = _staticDataRepository.GetTagIfExists(t);
                     if (tag != null)
