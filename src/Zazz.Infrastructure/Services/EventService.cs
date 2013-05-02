@@ -83,6 +83,23 @@ namespace Zazz.Infrastructure.Services
             if (e.UserId != currentUserId)
                 throw new SecurityException();
 
+            e.Tags.Clear();
+            if (!String.IsNullOrEmpty(updatedEvent.Description))
+            {
+                var extractedTags = _stringHelper.ExtractTags(updatedEvent.Description);
+                foreach (var t in extractedTags)
+                {
+                    var tag = _staticDataRepository.GetTagIfExists(t);
+                    if (tag != null)
+                    {
+                        e.Tags.Add(new EventTag
+                                   {
+                                       TagId = tag.Id
+                                   });
+                    }
+                }
+            }
+
             e.City = updatedEvent.City;
             e.Description = updatedEvent.Description;
             e.IsDateOnly = updatedEvent.IsDateOnly;
