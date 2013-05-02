@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Moq;
@@ -19,15 +20,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<ICommentService> _commentService;
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _uow = new Mock<IUoW>();
-            _notificationService = new Mock<INotificationService>();
-            _commentService = new Mock<ICommentService>();
-            _stringHelper = new Mock<IStringHelper>();
-            _staticDataRepo = new Mock<IStaticDataRepository>();
+
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+
+            _uow = _mockRepo.Create<IUoW>();
+            _notificationService = _mockRepo.Create<INotificationService>();
+            _commentService = _mockRepo.Create<ICommentService>();
+            _stringHelper = _mockRepo.Create<IStringHelper>();
+            _staticDataRepo = _mockRepo.Create<IStaticDataRepository>();
 
             _sut = new PostService(_uow.Object, _notificationService.Object, _commentService.Object,
                 _stringHelper.Object, _staticDataRepo.Object);
@@ -67,6 +72,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(Enumerable.Empty<string>);
 
             //Act
             _sut.NewPost(_post);
@@ -84,6 +91,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(Enumerable.Empty<string>);
 
             //Act
             _sut.NewPost(_post);
@@ -103,6 +112,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
             _notificationService.Setup(x => x.CreateWallPostNotification(_post.FromUserId,
                                                                          _post.ToUserId.Value, _post.Id, false));
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(Enumerable.Empty<string>);
 
             //Act
             _sut.NewPost(_post);
@@ -112,6 +123,37 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _notificationService.Verify(
                 x => x.CreateWallPostNotification(_post.FromUserId, _post.ToUserId.Value, _post.Id,
                                                   false), Times.Once());
+        }
+
+        [Test]
+        public void AddTagsIfExists_OnNewPost()
+        {
+            //Arrange
+            var tag1 = "#test1";
+            var tag2 = "#test2";
+
+            var tagObject1 = new Tag { Id = 1, Name = "test1" };
+            var tagObject2 = new Tag { Id = 2, Name = "test2" };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new[] { tag1, tag2 });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+                           .Returns(tagObject2);
+
+            _uow.Setup(x => x.PostRepository
+                .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
+                    && post.Tags.Any(p => p.TagId == tagObject1.Id)
+                    && post.Tags.Any(p => p.TagId == tagObject2.Id)))));
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -172,6 +214,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.Remove(_post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
             _commentService.Setup(x => x.RemovePostComments(_post.Id));
+            _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
 
             //Act
             _sut.RemovePost(_post.Id, _post.FromUserId);
@@ -193,6 +236,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _uow.Setup(x => x.PostRepository.Remove(post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(post.Id));
+            _notificationService.Setup(x => x.RemovePostNotifications(post.Id));
             _commentService.Setup(x => x.RemovePostComments(post.Id));
 
             //Act
@@ -215,6 +259,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.Remove(_post));
             _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
             _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
+            _commentService.Setup(x => x.RemovePostComments(_post.Id));
 
             //Act
             _sut.RemovePost(_post.Id, _post.FromUserId);

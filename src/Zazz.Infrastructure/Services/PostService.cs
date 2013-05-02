@@ -30,6 +30,19 @@ namespace Zazz.Infrastructure.Services
 
         public void NewPost(Post post)
         {
+            var extractTags = _stringHelper.ExtractTags(post.Message);
+            foreach (var t in extractTags)
+            {
+                var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                if (tag != null)
+                {
+                    post.Tags.Add(new PostTag
+                                  {
+                                      TagId = tag.Id
+                                  });
+                }
+            }
+
             _uow.PostRepository.InsertGraph(post);
 
             var feed = new Feed
