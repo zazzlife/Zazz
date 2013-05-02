@@ -31,8 +31,8 @@ namespace Zazz.Infrastructure.Services
 
         public void NewPost(Post post)
         {
-            var extractTags = _stringHelper.ExtractTags(post.Message);
-            foreach (var t in extractTags)
+            var extractedTags = _stringHelper.ExtractTags(post.Message);
+            foreach (var t in extractedTags)
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)
@@ -80,8 +80,21 @@ namespace Zazz.Infrastructure.Services
             if (post.FromUserId != currentUserId)
                 throw new SecurityException();
 
-            post.Message = newText;
+            post.Tags.Clear();
+            var extractedTags = _stringHelper.ExtractTags(newText);
+            foreach (var t in extractedTags)
+            {
+                var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                if (tag != null)
+                {
+                    post.Tags.Add(new PostTag
+                                  {
+                                      TagId = tag.Id
+                                  });
+                }
+            }
 
+            post.Message = newText;
             _uow.SaveChanges();
         }
 

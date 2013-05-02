@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
@@ -339,17 +341,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void SaveNewChanges_OnEditPost()
         {
             //Arrange
-            var newText = "Edited";
-            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
-                .Returns(_post);
+            var post = new Post
+                       {
+                           Id = 17,
+                           FromUserId = 123,
+                           ToUserId = 1234,
+                           Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
+                           Message = "m"
+                       };
+            var tag = "#new-edit";
+            var newText = "Edited " + tag;
+            var tagObject = new Tag { Id = 3, Name = "new-edit" };
+
+            _uow.Setup(x => x.PostRepository.GetById(post.Id))
+                .Returns(post);
+            _stringHelper.Setup(x => x.ExtractTags(newText))
+                         .Returns(new[] { tag });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
 
             //Act
-            _sut.EditPost(_post.Id, newText, _post.FromUserId);
+            _sut.EditPost(post.Id, newText, post.FromUserId);
 
             //Assert
-            Assert.AreEqual(newText, _post.Message);
-            _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            Assert.AreEqual(newText, post.Message);
+            Assert.AreEqual(1, post.Tags.Count);
+            Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
+            _mockRepo.VerifyAll();
         }
     }
 }
