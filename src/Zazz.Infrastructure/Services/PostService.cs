@@ -10,12 +10,15 @@ namespace Zazz.Infrastructure.Services
         private readonly IUoW _uow;
         private readonly INotificationService _notificationService;
         private readonly ICommentService _commentService;
+        private readonly IStringHelper _stringHelper;
 
-        public PostService(IUoW uow, INotificationService notificationService, ICommentService commentService)
+        public PostService(IUoW uow, INotificationService notificationService, ICommentService commentService,
+            IStringHelper stringHelper)
         {
             _uow = uow;
             _notificationService = notificationService;
             _commentService = commentService;
+            _stringHelper = stringHelper;
         }
 
         public Post GetPost(int postId)
