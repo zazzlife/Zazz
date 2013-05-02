@@ -125,11 +125,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -162,11 +162,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, tag1Duplicate, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -199,13 +199,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, tag1Duplicate, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -316,11 +316,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
@@ -357,11 +357,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag, tag1Duplicate });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
@@ -398,13 +398,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag, tag1Duplicate });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);

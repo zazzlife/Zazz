@@ -36,7 +36,7 @@ namespace Zazz.Infrastructure.Services
                 var extractedTags = _stringHelper.ExtractTags(zazzEvent.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t);
+                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
                         zazzEvent.Tags.Add(new EventTag
@@ -89,7 +89,7 @@ namespace Zazz.Infrastructure.Services
                 var extractedTags = _stringHelper.ExtractTags(updatedEvent.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t);
+                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
                         e.Tags.Add(new EventTag
