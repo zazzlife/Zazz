@@ -87,7 +87,7 @@ namespace Zazz.Infrastructure.Services
             if (!String.IsNullOrEmpty(updatedEvent.Description))
             {
                 var extractedTags = _stringHelper.ExtractTags(updatedEvent.Description);
-                foreach (var t in extractedTags.Distinct())
+                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
                     var tag = _staticDataRepository.GetTagIfExists(t);
                     if (tag != null)
