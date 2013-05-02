@@ -30,6 +30,22 @@ namespace Zazz.Infrastructure.Services
             if (zazzEvent.UserId == 0)
                 throw new ArgumentException("User id cannot be 0");
 
+            if (!String.IsNullOrEmpty(zazzEvent.Description))
+            {
+                var extractedTags = _stringHelper.ExtractTags(zazzEvent.Description);
+                foreach (var t in extractedTags)
+                {
+                    var tag = _staticDataRepository.GetTagIfExists(t);
+                    if (tag != null)
+                    {
+                        zazzEvent.Tags.Add(new EventTag
+                                           {
+                                               TagId = tag.Id
+                                           });
+                    }
+                }
+            }
+
             zazzEvent.CreatedDate = DateTime.UtcNow;
             _uow.EventRepository.InsertGraph(zazzEvent);
 
