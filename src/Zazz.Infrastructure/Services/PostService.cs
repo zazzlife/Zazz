@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -32,7 +33,7 @@ namespace Zazz.Infrastructure.Services
         public void NewPost(Post post)
         {
             var extractedTags = _stringHelper.ExtractTags(post.Message);
-            foreach (var t in extractedTags)
+            foreach (var t in extractedTags.Distinct())
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)

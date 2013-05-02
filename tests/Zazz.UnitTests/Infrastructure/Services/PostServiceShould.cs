@@ -159,6 +159,38 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotAddDuplicateTags_OnNewPost()
+        {
+            //Arrange
+            var tag1 = "#test1";
+            var duplicateTag1 = "#test1";
+            var tag2 = "#test2";
+
+            var tagObject1 = new Tag { Id = 1, Name = "test1" };
+            var tagObject2 = new Tag { Id = 2, Name = "test2" };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new[] { tag1, tag2, duplicateTag1 });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+                           .Returns(tagObject1);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+                           .Returns(tagObject2);
+
+            _uow.Setup(x => x.PostRepository
+                .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
+                    && post.Tags.Any(p => p.TagId == tagObject1.Id)
+                    && post.Tags.Any(p => p.TagId == tagObject2.Id)))));
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ThrowWhenCurrentUserIdIsNotSameAsPostOwner_OnRemovePost()
         {
             //Arrange
