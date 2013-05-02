@@ -22,6 +22,12 @@ namespace Zazz.Data.Repositories
             return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbPostId));
         }
 
+        public override Post GetById(int id)
+        {
+            return DbSet.Include(p => p.Tags)
+                        .SingleOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<int> GetPagePostIds(int pageId)
         {
             return DbSet.Where(p => p.PageId == pageId)
