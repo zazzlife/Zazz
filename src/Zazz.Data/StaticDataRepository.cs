@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -24,6 +26,11 @@ namespace Zazz.Data
         public IEnumerable<Tag> GetTags()
         {
             return StaticData.GetTags();
+        }
+
+        public bool TagExists(string tag)
+        {
+            return StaticData.GetTags().Any(t => t.Name.Equals(tag, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
