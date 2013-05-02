@@ -184,6 +184,45 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotBeCaseSensitiveWhenCheckingForDuplicates_OnCreateEvent()
+        {
+            //Arrange
+            _zazzEvent.Description = "sample description";
+
+            var tag1 = "#tag1";
+            var tag1Duplicate = "#TAG1";
+            var tag2 = "#tag2";
+            var unavailableTag = "#dsadas";
+
+            var tag1Object = new Tag { Id = 1 };
+            var tag2Object = new Tag { Id = 2 };
+
+            _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
+                         .Returns(new List<string> { tag1, tag2, tag1Duplicate, unavailableTag });
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1))
+                           .Returns(tag1Object);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate))
+                           .Returns(tag1Object);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2))
+                           .Returns(tag2Object);
+            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag))
+                           .Returns(() => null);
+
+            _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_zazzEvent.UserId))
+                .Returns(AccountType.User);
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.CreateEvent(_zazzEvent);
+
+            //Assert
+            Assert.AreEqual(2, _zazzEvent.Tags.Count);
+            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.TagId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.TagId == tag2Object.Id));
+        }
+
+        [Test]
         public void CallGetById_OnGetEvent()
         {
             //Arrange
