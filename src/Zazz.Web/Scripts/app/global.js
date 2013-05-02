@@ -28,6 +28,8 @@ function applyPageStyles() {
     $('*[title]').tooltip('destroy');
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
+
+    initInputTags();
 }
 
 function showAjaxErrorMessage(res) {

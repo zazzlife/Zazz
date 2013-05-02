@@ -349,6 +349,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
                            Message = "m"
                        };
+
             var tag = "#new-edit";
             var newText = "Edited " + tag;
             var tagObject = new Tag { Id = 3, Name = "new-edit" };

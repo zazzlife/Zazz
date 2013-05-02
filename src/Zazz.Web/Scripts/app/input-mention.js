@@ -1,4 +1,4 @@
-﻿$(function() {
+﻿function initInputTags() {
     if (availableTags) {
 
         $('*[data-tag]').each(function () {
@@ -6,6 +6,6 @@
                 data: availableTags
             });
         });
-        
+
     }
-})
+}
