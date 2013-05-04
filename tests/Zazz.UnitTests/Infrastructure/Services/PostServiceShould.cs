@@ -223,6 +223,41 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void AddANewTagUsersRecordAndIncrementWhenUserIsNotCounted_OnNewPost()
+        {
+            //Arrange
+            var tag = "#tag1";
+            var tagObject = new Tag {Id = 1};
+
+            var tagStat = new TagStat
+                          {
+                              Id = 25,
+                              TagId = tagObject.Id,
+                              Date = DateTime.UtcNow
+                          };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new [] {tag});
+
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
+
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(tagObject.Id))
+                .Returns(tagStat);
+
+            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
+            Assert.AreEqual(1, tagStat.TagUsers.Count);
+            Assert.AreEqual(_post.FromUserId, tagStat.TagUsers.First().UserId);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ThrowWhenCurrentUserIdIsNotSameAsPostOwner_OnRemovePost()
         {
             //Arrange

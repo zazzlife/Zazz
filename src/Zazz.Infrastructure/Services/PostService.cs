@@ -42,6 +42,16 @@ namespace Zazz.Infrastructure.Services
                                   {
                                       TagId = tag.Id
                                   });
+
+                    var tagStat = _uow.TagStatRepository.GetLastestTagStat(tag.Id);
+                    if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
+                    {
+                        tagStat.TagUsers.Add(new TagUser
+                                             {
+                                                 UserId = post.FromUserId
+                                             });
+                    }
+
                 }
             }
 
