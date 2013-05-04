@@ -239,7 +239,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var tag = "#tag1";
-            var tagObject = new Tag {Id = 1};
+            var tagObject = new Tag { Id = 1 };
 
             var tagStat = new TagStat
                           {
@@ -249,7 +249,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                           };
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
-                         .Returns(new [] {tag});
+                         .Returns(new[] { tag });
 
             _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
                            .Returns(tagObject);
@@ -301,6 +301,44 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.NewPost(_post);
 
             //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void NotChangeCountOrAddUserWhenExists_OnNewPost()
+        {
+            //Arrange
+            var tag = "#tag1";
+            var tagObject = new Tag { Id = 1 };
+            var count = 444;
+
+            var tagStat = new TagStat
+                          {
+                              Id = 25,
+                              TagId = tagObject.Id,
+                              Date = DateTime.UtcNow,
+                              UsersCount = count,
+                              TagUsers = new List<TagUser> { new TagUser { UserId = _post.FromUserId } }
+                          };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new[] { tag });
+
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
+
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(tagObject.Id))
+                .Returns(tagStat);
+
+            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
+            Assert.AreEqual(1, tagStat.TagUsers.Count);
+            Assert.AreEqual(count, tagStat.UsersCount);
             _mockRepo.VerifyAll();
         }
 

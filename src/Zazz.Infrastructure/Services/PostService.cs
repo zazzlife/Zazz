@@ -59,9 +59,9 @@ namespace Zazz.Infrastructure.Services
                     }
                     else
                     {
-                        tagStatId = tagStat.Id;
                         if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
                         {
+                            tagStatId = tagStat.Id; //don't move this line out of the if statement.
                             tagStat.TagUsers.Add(new TagUser
                             {
                                 UserId = post.FromUserId
