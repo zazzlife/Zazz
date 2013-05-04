@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
+    [Table("Tag_Users")]
     public class TagUser
     {
         [Key, Column(Order = 0)]

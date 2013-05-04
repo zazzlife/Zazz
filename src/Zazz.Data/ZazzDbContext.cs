@@ -31,6 +31,8 @@ namespace Zazz.Data
         public IDbSet<FeedUser> FeedUsers { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
         public IDbSet<Notification> Notifications { get; set; }
+        public IDbSet<TagStat> TagStats { get; set; }
+        public IDbSet<TagUser> TagUsers { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
