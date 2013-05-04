@@ -5,6 +5,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface ITagStatRepository : IRepository<TagStat>
     {
-        TagStat GetByDate(DateTime date);
+        TagStat GetLastestTagStat(byte tagId);
     }
 }

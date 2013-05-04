@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -12,12 +13,15 @@ namespace Zazz.Data.Repositories
 
         protected override int GetItemId(TagStat item)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("You must provide Id to update an entity, if you want to insert, user InsertGraph");
         }
 
-        public TagStat GetByDate(DateTime date)
+        public TagStat GetLastestTagStat(byte tagId)
         {
-            throw new NotImplementedException();
+            return DbSet.Include(t => t.TagUsers)
+                        .Where(t => t.TagId == tagId)
+                        .OrderByDescending(t => t.Date)
+                        .FirstOrDefault();
         }
     }
 }

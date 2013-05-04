@@ -71,6 +71,7 @@
     <Compile Include="Repositories\FollowRepositoryShould.cs" />
     <Compile Include="Repositories\FollowRequestRepositoryShould.cs" />
     <Compile Include="Repositories\PostRepositoryShould.cs" />
+    <Compile Include="Repositories\TagStatRepositoryShould.cs" />
     <Compile Include="Repositories\UserRepositoryShould.cs" />
     <Compile Include="Repositories\ValidationTokenRepositoryShould.cs" />
     <Compile Include="WebServices\FacebookHelperShould.cs" />

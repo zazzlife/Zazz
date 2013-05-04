@@ -10,7 +10,7 @@ namespace Zazz.Core.Models.Data
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         
-        public int TagId { get; set; }
+        public byte TagId { get; set; }
 
         [ForeignKey("TagId")]
         public virtual Tag Tag { get; set; }
