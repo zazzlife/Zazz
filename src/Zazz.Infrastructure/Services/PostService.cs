@@ -33,7 +33,8 @@ namespace Zazz.Infrastructure.Services
         public void NewPost(Post post)
         {
             var extractedTags = _stringHelper.ExtractTags(post.Message);
-            int? tagStatId = null;
+            var updatedTagStats = new List<int>();
+
             foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
@@ -61,7 +62,7 @@ namespace Zazz.Infrastructure.Services
                     {
                         if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
                         {
-                            tagStatId = tagStat.Id; //don't move this line out of the if statement.
+                            updatedTagStats.Add(tagStat.Id); //don't move this line out of the if statement.
                             tagStat.TagUsers.Add(new TagUser
                             {
                                 UserId = post.FromUserId
@@ -97,8 +98,8 @@ namespace Zazz.Infrastructure.Services
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
 
-            if (tagStatId != null)
-                _uow.TagStatRepository.UpdateUsersCount(tagStatId.Value);
+            foreach (var tagStatId in updatedTagStats)
+                _uow.TagStatRepository.UpdateUsersCount(tagStatId);
         }
 
         public void EditPost(int postId, string newText, int currentUserId)
