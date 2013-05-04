@@ -44,7 +44,11 @@ namespace Zazz.Data.Repositories
 
         public int GetUsersCount(int tagId)
         {
-            throw new NotImplementedException();
+            return DbSet
+                .Where(t => t.TagId == tagId)
+                .OrderByDescending(t => t.Date)
+                .Select(t => t.UsersCount)
+                .FirstOrDefault();
         }
     }
 }
