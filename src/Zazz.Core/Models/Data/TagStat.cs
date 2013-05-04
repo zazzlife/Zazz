@@ -17,6 +17,6 @@ namespace Zazz.Core.Models.Data
 
         public int UsersCount { get; set; }
 
-        public virtual ICollection<TagUser> TagUsers { get; set; }
+        public ICollection<TagUser> TagUsers { get; set; }
     }
 }
