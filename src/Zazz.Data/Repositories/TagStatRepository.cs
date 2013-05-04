@@ -23,5 +23,15 @@ namespace Zazz.Data.Repositories
                         .OrderByDescending(t => t.Date)
                         .FirstOrDefault();
         }
+
+        public void IncrementUsersCount(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetUsersCount(int tagId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
