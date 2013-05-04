@@ -115,6 +115,13 @@ namespace Zazz.Data
             }
         }
 
+        private ITagStatRepository _tagStatRepository;
+        public ITagStatRepository TagStatRepository
+        {
+            get { return _tagStatRepository ?? (_tagStatRepository = new TagStatRepository(GetContext())); }
+        }
+
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)
