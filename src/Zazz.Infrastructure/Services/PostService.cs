@@ -45,7 +45,7 @@ namespace Zazz.Infrastructure.Services
                                   });
 
                     var tagStat = _uow.TagStatRepository.GetLastestTagStat(tag.Id);
-                    if (tagStat == null)
+                    if (tagStat == null || tagStat.Date < DateTime.UtcNow.AddDays(-5))
                     {
                         tagStat = new TagStat
                                   {

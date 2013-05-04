@@ -145,7 +145,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            .Returns(tagObject2);
 
             _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
-                .Returns(new TagStat());
+                .Returns(new TagStat { Date = DateTime.UtcNow });
             _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
 
             _uow.Setup(x => x.PostRepository
@@ -181,7 +181,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            .Returns(tagObject2);
 
             _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
-                .Returns(new TagStat());
+                .Returns(new TagStat { Date = DateTime.UtcNow });
             _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
 
             _uow.Setup(x => x.PostRepository
@@ -217,7 +217,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            .Returns(tagObject2);
 
             _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
-                .Returns(new TagStat());
+                .Returns(new TagStat { Date = DateTime.UtcNow });
             _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
 
             _uow.Setup(x => x.PostRepository
@@ -293,6 +293,48 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     (t.TagUsers.Count == 1) &&
                     (t.TagUsers.Single().UserId == _post.FromUserId)
                 )));
+
+            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewTagStatRecordIfTheLastOneIsOlderThan5Days_OnNewPost()
+        {
+            //Arrange
+            var tag = "#tag1";
+            var tagObject = new Tag { Id = 1 };
+
+            var tagStat = new TagStat
+                          {
+                              Id = 25,
+                              TagId = tagObject.Id,
+                              Date = DateTime.UtcNow.AddDays(-6)
+                          };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new[] { tag });
+
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
+
+            _uow.Setup(x => x.TagStatRepository.InsertGraph(It.Is<TagStat>(t =>
+                                                                           (t.Date.Date == DateTime.UtcNow.Date) &&
+                                                                           (t.TagId == tagObject.Id) &&
+                                                                           (t.UsersCount == 1) &&
+                                                                           (t.TagUsers.Count == 1) &&
+                                                                           (t.TagUsers.Single().UserId ==
+                                                                            _post.FromUserId)
+                                                                )));
+
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(tagObject.Id))
+                .Returns(tagStat);
 
             _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
