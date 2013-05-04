@@ -31,6 +31,12 @@ namespace Zazz.Data.Repositories
             DbContext.Entry(zazzEvent).State = EntityState.Deleted;
         }
 
+        public override ZazzEvent GetById(int id)
+        {
+            return DbSet.Include(e => e.Tags)
+                        .SingleOrDefault(e => e.Id == id);
+        }
+
         public int GetOwnerId(int eventId)
         {
             return DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault();
