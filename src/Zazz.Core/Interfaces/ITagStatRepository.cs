@@ -6,7 +6,7 @@ namespace Zazz.Core.Interfaces
     {
         TagStat GetLastestTagStat(byte tagId);
 
-        void IncrementUsersCount(int id);
+        void UpdateUsersCount(int id);
 
         int GetUsersCount(int tagId);
     }

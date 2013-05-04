@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -45,6 +47,43 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(tagStat2.Id, response.Id);
+        }
+
+        [Test]
+        public void UpdateUsersCountToTag_UsersTableCount_OnUpdateUsersCount()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            var tagStat = new TagStat
+                          {
+                              Date = DateTime.UtcNow,
+                              UsersCount = 0,
+                              TagId = 1,
+                          };
+
+            _context.Users.Add(user);
+            _context.TagStats.Add(tagStat);
+            _context.SaveChanges();
+
+            var check1 = _context.TagStats.Single(t => t.Id == tagStat.Id);
+            Assert.AreEqual(0, check1.UsersCount);
+            Assert.AreEqual(0, check1.TagUsers.Count);
+
+            //Act
+            tagStat.TagUsers.Add(new TagUser
+                                 {
+                                     UserId = user.Id
+                                 });
+            
+            _context.SaveChanges();
+            _repo.UpdateUsersCount(tagStat.Id);
+            _context.SaveChanges();
+
+            //Assert
+            var check2 = _context.TagStats.Single(t => t.Id == tagStat.Id);
+            Assert.AreEqual(1, check2.UsersCount);
+            Assert.AreEqual(1, check2.TagUsers.Count);
         }
     }
 }

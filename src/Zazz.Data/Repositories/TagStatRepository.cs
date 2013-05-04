@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -8,6 +9,8 @@ namespace Zazz.Data.Repositories
 {
     public class TagStatRepository : BaseRepository<TagStat>, ITagStatRepository
     {
+        private static readonly object LockToken = new object();
+
         public TagStatRepository(DbContext dbContext) : base(dbContext)
         {}
 
@@ -24,9 +27,19 @@ namespace Zazz.Data.Repositories
                         .FirstOrDefault();
         }
 
-        public void IncrementUsersCount(int id)
+        public void UpdateUsersCount(int id)
         {
-            throw new NotImplementedException();
+            lock (LockToken) //NOTE: if you move the app to a web farm this lock won't help much.
+            {
+                var record = DbSet
+                    .Include(t => t.TagUsers)
+                    .FirstOrDefault(t => t.Id == id);
+
+                if (record == null)
+                    return;
+
+                record.UsersCount = record.TagUsers.Count;
+            }
         }
 
         public int GetUsersCount(int tagId)
