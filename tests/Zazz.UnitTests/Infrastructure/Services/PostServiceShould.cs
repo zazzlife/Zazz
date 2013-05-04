@@ -144,6 +144,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
 
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
+                .Returns(new TagStat());
+            _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
+
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
                     && post.Tags.Any(p => p.TagId == tagObject1.Id)
@@ -176,6 +180,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
 
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
+                .Returns(new TagStat());
+            _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
+
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
                     && post.Tags.Any(p => p.TagId == tagObject1.Id)
@@ -207,6 +215,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            .Returns(tagObject1);
             _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
+
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(It.IsAny<byte>()))
+                .Returns(new TagStat());
+            _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(It.IsAny<int>()));
 
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
@@ -247,6 +259,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.TagStatRepository.UpdateUsersCount(tagStat.Id));
 
             //Act
             _sut.NewPost(_post);
@@ -254,6 +267,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(1, tagStat.TagUsers.Count);
             Assert.AreEqual(_post.FromUserId, tagStat.TagUsers.First().UserId);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void AddANewTagStatAndTagUsersRecordsWhenRecordIsNotExistsAndNotCallUpdateUsersCount_OnNewPost()
+        {
+            //Arrange
+            var tag = "#tag1";
+            var tagObject = new Tag { Id = 1 };
+
+            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
+                         .Returns(new[] { tag });
+
+            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+                           .Returns(tagObject);
+
+            _uow.Setup(x => x.TagStatRepository.GetLastestTagStat(tagObject.Id))
+                .Returns(() => null);
+
+            _uow.Setup(x => x.TagStatRepository.InsertGraph(It.Is<TagStat>(t =>
+                    (t.Date.Date == DateTime.UtcNow.Date) &&
+                    (t.TagId == tagObject.Id) &&
+                    (t.UsersCount == 1) &&
+                    (t.TagUsers.Count == 1) &&
+                    (t.TagUsers.Single().UserId == _post.FromUserId)
+                )));
+
+            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+
+            //Act
+            _sut.NewPost(_post);
+
+            //Assert
             _mockRepo.VerifyAll();
         }
 

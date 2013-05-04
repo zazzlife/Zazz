@@ -33,6 +33,7 @@ namespace Zazz.Infrastructure.Services
         public void NewPost(Post post)
         {
             var extractedTags = _stringHelper.ExtractTags(post.Message);
+            int? tagStatId = null;
             foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
@@ -44,14 +45,29 @@ namespace Zazz.Infrastructure.Services
                                   });
 
                     var tagStat = _uow.TagStatRepository.GetLastestTagStat(tag.Id);
-                    if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
+                    if (tagStat == null)
                     {
-                        tagStat.TagUsers.Add(new TagUser
-                                             {
-                                                 UserId = post.FromUserId
-                                             });
-                    }
+                        tagStat = new TagStat
+                                  {
+                                      Date = DateTime.UtcNow.Date,
+                                      TagId = tag.Id,
+                                      UsersCount = 1,
+                                  };
+                        tagStat.TagUsers.Add(new TagUser {UserId = post.FromUserId});
 
+                        _uow.TagStatRepository.InsertGraph(tagStat);
+                    }
+                    else
+                    {
+                        tagStatId = tagStat.Id;
+                        if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
+                        {
+                            tagStat.TagUsers.Add(new TagUser
+                            {
+                                UserId = post.FromUserId
+                            });
+                        }
+                    }
                 }
             }
 
@@ -80,6 +96,9 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
+
+            if (tagStatId != null)
+                _uow.TagStatRepository.UpdateUsersCount(tagStatId.Value);
         }
 
         public void EditPost(int postId, string newText, int currentUserId)
