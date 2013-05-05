@@ -169,6 +169,8 @@ SubmissionInfo
 AppPackages
 
 # Log files
+[Aa]pp_[Ll]ogs
+[Aa]pp_[Ll]og
 *.log
 
 # Uploaded Pictures
