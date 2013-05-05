@@ -98,8 +98,13 @@ namespace Zazz.Infrastructure.Services
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
 
-            foreach (var tagStatId in updatedTagStats)
-                _uow.TagStatRepository.UpdateUsersCount(tagStatId);
+            if (updatedTagStats.Any())
+            {
+                foreach (var tagStatId in updatedTagStats)
+                    _uow.TagStatRepository.UpdateUsersCount(tagStatId);
+
+                _uow.SaveChanges();
+            }
         }
 
         public void EditPost(int postId, string newText, int currentUserId)
