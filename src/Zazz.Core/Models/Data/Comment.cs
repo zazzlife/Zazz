@@ -11,15 +11,12 @@ namespace Zazz.Core.Models.Data
 
         public int FromId { get; set; }
 
+        public virtual PhotoComment PhotoComment { get; set; }
+
         [ForeignKey("EventId")]
         public virtual ZazzEvent Event { get; set; }
 
         public int? EventId { get; set; }
-
-        [ForeignKey("PhotoId")]
-        public virtual Photo Photo { get; set; }
-
-        public int? PhotoId { get; set; }
 
         [ForeignKey("PostId")]
         public virtual Post Post { get; set; }

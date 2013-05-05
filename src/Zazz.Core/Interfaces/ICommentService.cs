@@ -11,8 +11,6 @@ namespace Zazz.Core.Interfaces
 
         void RemoveComment(int commentId, int currentUserId);
 
-        void RemovePhotoComments(int photoId);
-
         void RemovePostComments(int postId);
 
         void RemoveEventComments(int eventId);

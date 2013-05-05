@@ -10,12 +10,6 @@ namespace Zazz.Core.Interfaces
         IQueryable<Comment> GetComments(int eventId);
 
         /// <summary>
-        /// Sets the entity status of all commentes with the given photo id as deleted and returns their ids
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<int> RemovePhotoComments(int photoId);
-
-        /// <summary>
         /// Sets the entity status of all commentes with the given event id as deleted and returns their ids
         /// </summary>
         /// <returns></returns>

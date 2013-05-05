@@ -289,7 +289,6 @@ namespace Zazz.Infrastructure.Services
 
             _uow.EventRepository.ResetPhotoId(photoId);
             var picWasProfilePic = _uow.UserRepository.ResetPhotoId(photoId);
-            _commentService.RemovePhotoComments(photoId);
 
             _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();

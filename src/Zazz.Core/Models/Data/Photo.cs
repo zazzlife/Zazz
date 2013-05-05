@@ -9,7 +9,6 @@ namespace Zazz.Core.Models.Data
     {
         public Photo()
         {
-            Comments = new HashSet<Comment>();
             Tags = new HashSet<PhotoTag>();
         }
 
@@ -40,8 +39,6 @@ namespace Zazz.Core.Models.Data
         public FacebookPage Page { get; set; }
 
         public int? PageId { get; set; }
-
-        public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<PhotoTag> Tags { get; set; }
     }

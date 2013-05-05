@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers
             }
             else if (commentType == CommentType.Photo)
             {
-                c.PhotoId = id;
+                c.PhotoComment = new PhotoComment { PhotoId = id };
             }
             else if (commentType == CommentType.Post)
             {
@@ -125,7 +125,7 @@ namespace Zazz.Web.Controllers
         {
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
-             
+
             var userId = _userService.GetUserId(User.Identity.Name);
             _commentService.RemoveComment(id, userId);
         }

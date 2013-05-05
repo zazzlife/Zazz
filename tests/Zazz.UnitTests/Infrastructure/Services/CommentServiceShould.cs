@@ -32,7 +32,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 Id = 12345,
                 FromId = 1,
-                PhotoId = 2,
+                PhotoComment = new PhotoComment {PhotoId = 2},
                 PostId = 3,
                 EventId = 4
             };
@@ -48,20 +48,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         };
 
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
-            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoId.Value))
+            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId))
                 .Returns(photo);
 
             _notificationService.Setup(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false));
+                _comment.Id, _comment.FromId, _comment.PhotoComment.PhotoId, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
 
             //Assert
             _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
-            _uow.Verify(x => x.PhotoRepository.GetById(_comment.PhotoId.Value), Times.Once());
+            _uow.Verify(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId), Times.Once());
             _notificationService.Verify(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false), Times.Once());
+                _comment.Id, _comment.FromId, _comment.PhotoComment.PhotoId, _ownerId, false), Times.Once());
 
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
         }
@@ -76,11 +76,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         };
 
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
-            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoId.Value))
+            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId))
                 .Returns(photo);
 
             _notificationService.Setup(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.FromId, _comment.PhotoId.Value, _ownerId, false));
+                _comment.Id, _comment.FromId, _comment.PhotoComment.PhotoId, _ownerId, false));
 
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
@@ -427,32 +427,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemovePhotoCommentsOnRepositoryAndRemoveAllNotifications_OnRemovePhotoComments()
-        {
-            //Arrange
-            var commentId1 = 1;
-            var commentId2 = 2;
-
-            var commentIds = new List<int> { commentId1, commentId2 };
-            var photoId = 1;
-            _uow.Setup(x => x.CommentRepository.RemovePhotoComments(photoId))
-                .Returns(commentIds);
-
-            _notificationService.Setup(x => x.RemoveCommentNotifications(It.IsAny<int>()));
-
-            //Act
-            _sut.RemovePhotoComments(photoId);
-
-            //Assert
-            _uow.Verify(x => x.CommentRepository.RemovePhotoComments(photoId), Times.Once());
-            _notificationService.Verify(x => x.RemoveCommentNotifications(It.IsAny<int>()),
-                                        Times.Exactly(commentIds.Count));
-            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId1), Times.Once());
-            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId2), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
         public void CallRemovePostCommentsOnRepositoryAndRemoveAllNotifications_OnRemovePostComments()
         {
             //Arrange
@@ -471,7 +445,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.CommentRepository.RemovePostComments(postId), Times.Once());
-            
+
             _notificationService.Verify(x => x.RemoveCommentNotifications(It.IsAny<int>()),
                                         Times.Exactly(commentIds.Count));
             _notificationService.Verify(x => x.RemoveCommentNotifications(commentId1), Times.Once());

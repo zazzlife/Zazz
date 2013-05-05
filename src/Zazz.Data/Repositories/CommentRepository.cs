@@ -24,15 +24,6 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(c => c.EventId == eventId);
         }
 
-        public IEnumerable<int> RemovePhotoComments(int photoId)
-        {
-            var comments = DbSet.Where(c => c.PhotoId == photoId).ToList();
-            foreach (var comment in comments)
-                Remove(comment);
-
-            return comments.Select(c => c.Id);
-        }
-
         public IEnumerable<int> RemoveEventComments(int eventId)
         {
             var comments = DbSet.Where(c => c.EventId == eventId).ToList();

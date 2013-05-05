@@ -23,9 +23,9 @@ namespace Zazz.Infrastructure.Services
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
 
-            if (commentType == CommentType.Photo && comment.PhotoId.HasValue)
+            if (commentType == CommentType.Photo)
             {
-                var photoId = comment.PhotoId.Value;
+                var photoId = comment.PhotoComment.PhotoId;
                 var photo = _uow.PhotoRepository.GetById(photoId);
 
                 if (photo.UserId != comment.FromId)
@@ -91,17 +91,6 @@ namespace Zazz.Infrastructure.Services
 
             _notificationService.RemoveCommentNotifications(commentId);
             _uow.CommentRepository.Remove(comment);
-
-            _uow.SaveChanges();
-        }
-
-        public void RemovePhotoComments(int photoId)
-        {
-            var commentIds = _uow.CommentRepository.RemovePhotoComments(photoId);
-            foreach (var commentId in commentIds)
-            {
-                _notificationService.RemoveCommentNotifications(commentId);
-            }
 
             _uow.SaveChanges();
         }

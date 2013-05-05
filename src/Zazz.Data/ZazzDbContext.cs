@@ -106,6 +106,11 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Comment>()
+                .HasOptional(c => c.PhotoComment)
+                .WithRequired(p => p.Comment)
+                .WillCascadeOnDelete(true);
+
             base.OnModelCreating(modelBuilder);
         }
     }
