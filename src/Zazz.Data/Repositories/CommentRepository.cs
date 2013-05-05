@@ -32,14 +32,5 @@ namespace Zazz.Data.Repositories
 
             return comments.Select(c => c.Id);
         }
-
-        public IEnumerable<int> RemovePostComments(int postId)
-        {
-            var comments = DbSet.Where(c => c.PostId == postId).ToList();
-            foreach (var comment in comments)
-                Remove(comment);
-
-            return comments.Select(c => c.Id);
-        }
     }
 }

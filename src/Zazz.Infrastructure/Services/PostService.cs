@@ -153,7 +153,6 @@ namespace Zazz.Infrastructure.Services
                 post.Tags.Clear();
 
             _uow.FeedRepository.RemovePostFeeds(postId);
-            _commentService.RemovePostComments(postId);
             _notificationService.RemovePostNotifications(postId);
             _uow.PostRepository.Remove(post);
 

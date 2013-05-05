@@ -98,7 +98,7 @@ namespace Zazz.Web.Controllers
             }
             else if (commentType == CommentType.Post)
             {
-                c.PostId = id;
+                c.PostComment = new PostComments { PostId = id };
             }
             else
             {

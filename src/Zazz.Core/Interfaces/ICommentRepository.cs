@@ -14,11 +14,5 @@ namespace Zazz.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         IEnumerable<int> RemoveEventComments(int eventId);
-
-        /// <summary>
-        /// Sets the entity status of all commentes with the given post id as deleted and returns their ids
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<int> RemovePostComments(int postId);
     }
 }
