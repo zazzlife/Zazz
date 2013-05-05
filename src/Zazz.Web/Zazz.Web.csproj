@@ -272,7 +272,9 @@
     <Compile Include="ValidateImageAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Triggers.sql" />
+    <Content Include="App_Data\dbo.TRIGGER_EventComments_DELETE.sql" />
+    <Content Include="App_Data\dbo.TRIGGER_PhotoComments_DELETE.sql" />
+    <Content Include="App_Data\dbo.TRIGGER_PostComments_DELETE.sql" />
     <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-lightbox.css" />
     <Content Include="Content\bootstrap-overrides.css" />
