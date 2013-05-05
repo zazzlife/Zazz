@@ -54,7 +54,7 @@ namespace Zazz.Infrastructure.Services
                                       TagId = tag.Id,
                                       UsersCount = 1,
                                   };
-                        tagStat.TagUsers.Add(new TagUser {UserId = post.FromUserId});
+                        tagStat.TagUsers.Add(new TagStatUser {UserId = post.FromUserId});
 
                         _uow.TagStatRepository.InsertGraph(tagStat);
                     }
@@ -63,7 +63,7 @@ namespace Zazz.Infrastructure.Services
                         if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
                         {
                             updatedTagStats.Add(tagStat.Id); //don't move this line out of the if statement.
-                            tagStat.TagUsers.Add(new TagUser
+                            tagStat.TagUsers.Add(new TagStatUser
                             {
                                 UserId = post.FromUserId
                             });

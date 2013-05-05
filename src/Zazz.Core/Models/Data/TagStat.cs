@@ -9,10 +9,10 @@ namespace Zazz.Core.Models.Data
     {
         public TagStat()
         {
-            TagUsers = new HashSet<TagUser>();
+            TagUsers = new HashSet<TagStatUser>();
         }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "Date")]
         public DateTime Date { get; set; }
         
         public byte TagId { get; set; }
@@ -22,6 +22,6 @@ namespace Zazz.Core.Models.Data
 
         public int UsersCount { get; set; }
 
-        public ICollection<TagUser> TagUsers { get; set; }
+        public ICollection<TagStatUser> TagUsers { get; set; }
     }
 }

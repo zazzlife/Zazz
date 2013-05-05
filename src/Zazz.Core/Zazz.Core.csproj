@@ -124,7 +124,7 @@
     <Compile Include="Models\Data\PostTag.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Tag.cs" />
-    <Compile Include="Models\Data\TagUser.cs" />
+    <Compile Include="Models\Data\TagStatUser.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\OAuthAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />

@@ -360,7 +360,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                               TagId = tagObject.Id,
                               Date = DateTime.UtcNow,
                               UsersCount = count,
-                              TagUsers = new List<TagUser> { new TagUser { UserId = _post.FromUserId } }
+                              TagUsers = new List<TagStatUser> { new TagStatUser { UserId = _post.FromUserId } }
                           };
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))

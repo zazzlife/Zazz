@@ -71,7 +71,7 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(0, check1.TagUsers.Count);
 
             //Act
-            tagStat.TagUsers.Add(new TagUser
+            tagStat.TagUsers.Add(new TagStatUser
                                  {
                                      UserId = user.Id
                                  });

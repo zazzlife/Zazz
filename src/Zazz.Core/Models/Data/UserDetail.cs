@@ -49,7 +49,7 @@ namespace Zazz.Core.Models.Data
 
         public DateTime? LasySyncErrorEmailSent { get; set; }
 
-        [DataType(DataType.Date)]
+        [Column(TypeName = "Date")]
         public DateTime JoinedDate { get; set; }
     }
 }

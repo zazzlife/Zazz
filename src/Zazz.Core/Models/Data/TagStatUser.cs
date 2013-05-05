@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    [Table("Tag_Users")]
-    public class TagUser
+    [Table("TagStat_Users")]
+    public class TagStatUser
     {
         [Key, Column(Order = 0)]
         public int TagStatId { get; set; }
