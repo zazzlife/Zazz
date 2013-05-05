@@ -22,6 +22,8 @@ namespace Zazz.Data
 
 
             var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"App_Data", "*.sql");
+            foreach (var sqlFile in sqlFiles)
+                context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));
 
             base.Seed(context);
         }
