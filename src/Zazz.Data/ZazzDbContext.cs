@@ -128,8 +128,11 @@ namespace Zazz.Data
                 .HasOptional(f => f.PostFeed)
                 .WithRequired(p => p.Feed)
                 .WillCascadeOnDelete();
-
-
+            
+            modelBuilder.Entity<Feed>()
+                .HasOptional(f => f.EventFeed)
+                .WithRequired(e => e.Feed)
+                .WillCascadeOnDelete();
 
             base.OnModelCreating(modelBuilder);
         }

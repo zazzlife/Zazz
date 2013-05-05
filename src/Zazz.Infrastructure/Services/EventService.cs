@@ -55,7 +55,7 @@ namespace Zazz.Infrastructure.Services
             var feed = new Feed
                        {
                            FeedType = FeedType.Event,
-                           EventId = zazzEvent.Id,
+                           EventFeed = new EventFeed { EventId = zazzEvent.Id },
                            Time = zazzEvent.CreatedDate
                        };
 
@@ -130,9 +130,7 @@ namespace Zazz.Infrastructure.Services
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            _uow.FeedRepository.RemoveEventFeeds(eventId);
             _notificationService.RemoveEventNotifications(eventId);
-
             _uow.EventRepository.Remove(eventId);
             _uow.SaveChanges();
         }

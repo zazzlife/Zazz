@@ -31,7 +31,7 @@ namespace Zazz.Data.Repositories
                 .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
-                .Include(f => f.Event);
+                .Include(f => f.EventFeed.Event);
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
@@ -44,7 +44,7 @@ namespace Zazz.Data.Repositories
                 .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
-                .Include(f => f.Event);
+                .Include(f => f.EventFeed.Event);
         }
 
         public Feed GetPostFeed(int postId)
@@ -63,18 +63,6 @@ namespace Zazz.Data.Repositories
                     select feed)
                 .Include(f => f.FeedPhotos)
                 .FirstOrDefault();
-        }
-
-        public void RemoveEventFeeds(int eventId)
-        {
-            const string DELETE_COMMAND = "DELETE FROM dbo.Feeds WHERE EventId = @eventId";
-            var parameter = new SqlParameter
-                            {
-                                ParameterName = "eventId",
-                                Value = eventId
-                            };
-
-            DbContext.Database.ExecuteSqlCommand(DELETE_COMMAND, parameter);
         }
     }
 }

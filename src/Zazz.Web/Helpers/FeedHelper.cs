@@ -115,32 +115,32 @@ namespace Zazz.Web.Helpers
             };
 
             #region Event
-            if (feed.FeedType == FeedType.Event)
+            if (feed.FeedType == FeedType.Event && feed.EventFeed != null)
             {
                 // EVENT
 
-                FillUserDetails(ref feedVm, feed.Event.UserId, currentUserId);
+                FillUserDetails(ref feedVm, feed.EventFeed.Event.UserId, currentUserId);
 
                 feedVm.EventViewModel = new EventViewModel
                 {
-                    City = feed.Event.City,
-                    CreatedDate = feed.Event.CreatedDate,
-                    Description = feed.Event.Description,
-                    Id = feed.Event.Id,
-                    Latitude = feed.Event.Latitude,
-                    Location = feed.Event.Location,
-                    Longitude = feed.Event.Longitude,
-                    Name = feed.Event.Name,
-                    Price = feed.Event.Price,
-                    Time = feed.Event.Time,
-                    Street = feed.Event.Street,
-                    PhotoId = feed.Event.PhotoId,
-                    IsFacebookEvent = feed.Event.IsFacebookEvent,
-                    ImageUrl = feed.Event.IsFacebookEvent
-                                   ? new PhotoLinks(feed.Event.FacebookPhotoLink)
+                    City = feed.EventFeed.Event.City,
+                    CreatedDate = feed.EventFeed.Event.CreatedDate,
+                    Description = feed.EventFeed.Event.Description,
+                    Id = feed.EventFeed.Event.Id,
+                    Latitude = feed.EventFeed.Event.Latitude,
+                    Location = feed.EventFeed.Event.Location,
+                    Longitude = feed.EventFeed.Event.Longitude,
+                    Name = feed.EventFeed.Event.Name,
+                    Price = feed.EventFeed.Event.Price,
+                    Time = feed.EventFeed.Event.Time,
+                    Street = feed.EventFeed.Event.Street,
+                    PhotoId = feed.EventFeed.Event.PhotoId,
+                    IsFacebookEvent = feed.EventFeed.Event.IsFacebookEvent,
+                    ImageUrl = feed.EventFeed.Event.IsFacebookEvent
+                                   ? new PhotoLinks(feed.EventFeed.Event.FacebookPhotoLink)
                                    : null,
-                    IsDateOnly = feed.Event.IsDateOnly,
-                    FacebookEventId = feed.Event.FacebookEventId
+                    IsDateOnly = feed.EventFeed.Event.IsDateOnly,
+                    FacebookEventId = feed.EventFeed.Event.FacebookEventId
                 };
 
                 feedVm.CommentsViewModel.CommentType = CommentType.Event;
@@ -158,8 +158,8 @@ namespace Zazz.Web.Helpers
                     feedVm.EventViewModel.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                 }
 
-                feedVm.CommentsViewModel.ItemId = feed.EventId.Value;
-                feedVm.CommentsViewModel.Comments = GetComments(feed.EventId.Value,
+                feedVm.CommentsViewModel.ItemId = feed.EventFeed.EventId;
+                feedVm.CommentsViewModel.Comments = GetComments(feed.EventFeed.EventId,
                                                                 feedVm.CommentsViewModel.CommentType,
                                                                 currentUserId);
 

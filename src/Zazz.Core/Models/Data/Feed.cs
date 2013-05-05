@@ -15,10 +15,7 @@ namespace Zazz.Core.Models.Data
 
         public virtual PostFeed PostFeed { get; set; }
 
-        [ForeignKey("EventId")]
-        public ZazzEvent Event { get; set; }
-
-        public int? EventId { get; set; }
+        public virtual EventFeed EventFeed { get; set; }
 
         public DateTime Time { get; set; }
 

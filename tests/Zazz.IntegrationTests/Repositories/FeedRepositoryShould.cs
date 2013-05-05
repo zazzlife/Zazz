@@ -209,50 +209,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RemoveRecord_OnRemoveEventFeed()
-        {
-            //Arrange
-            var user = Mother.GetUser();
-
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
-
-            var zazzEvent = new ZazzEvent
-                            {
-                                CreatedDate = DateTime.UtcNow,
-                                Time = DateTime.Now,
-                                TimeUtc = DateTime.UtcNow,
-                                Name = "title",
-                                Description = "message",
-                                UserId = user.Id
-                            };
-
-            _dbContext.Events.Add(zazzEvent);
-            _dbContext.SaveChanges();
-
-            var feed = new Feed
-                       {
-                           FeedUsers = new List<FeedUser>
-                                         {
-                                             new FeedUser {UserId = user.Id}
-                                         },
-                           EventId = zazzEvent.Id,
-                           Time = DateTime.UtcNow
-                       };
-
-            _dbContext.Feeds.Add(feed);
-            _dbContext.SaveChanges();
-
-            Assert.IsTrue(_repo.Exists(feed.Id));
-            //Act
-            _repo.RemoveEventFeeds(zazzEvent.Id);
-            _dbContext.SaveChanges();
-
-            //Assert
-            Assert.IsFalse(_repo.Exists(feed.Id));
-        }
-
-        [Test]
         public void ReturnLastFeed_OnGetLastFeed()
         {
             //Arrange

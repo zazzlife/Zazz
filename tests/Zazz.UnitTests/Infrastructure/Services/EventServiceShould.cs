@@ -439,7 +439,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
         }
 
         [Test]
@@ -465,7 +464,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.GetOwnerId(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Never());
         }
 
         [Test]
@@ -476,7 +474,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
                 .Returns(() => _zazzEvent.UserId);
             _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
-            _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
 
             //Act
             _sut.DeleteEvent(_zazzEvent.Id, _userId);
@@ -484,7 +481,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
@@ -495,7 +491,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
                 .Returns(() => _zazzEvent.UserId);
             _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
-            _uow.Setup(x => x.FeedRepository.RemoveEventFeeds(_zazzEvent.Id));
             _notificationService.Setup(x => x.RemoveEventNotifications(_zazzEvent.Id));
 
             //Act
