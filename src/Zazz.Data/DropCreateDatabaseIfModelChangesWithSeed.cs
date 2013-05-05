@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Data.Entity;
+using System.IO;
 
 namespace Zazz.Data
 {
     public class DropCreateDatabaseIfModelChangesWithSeed : DropCreateDatabaseIfModelChanges<ZazzDbContext>
     {
-        private readonly List<string> _sqlCommands;
-
-        public DropCreateDatabaseIfModelChangesWithSeed()
-        {
-            _sqlCommands = new List<string>();
-        }
-
         protected override void Seed(ZazzDbContext context)
         {
             foreach (var city in StaticData.GetCities())
@@ -26,8 +20,8 @@ namespace Zazz.Data
             foreach (var tag in StaticData.GetTags())
                 context.Tags.Add(tag);
 
-            foreach (var sqlCommand in _sqlCommands)
-                context.Database.ExecuteSqlCommand(sqlCommand);
+
+            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"App_Data", "*.sql");
 
             base.Seed(context);
         }

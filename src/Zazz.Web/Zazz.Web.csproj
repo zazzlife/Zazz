@@ -272,6 +272,7 @@
     <Compile Include="ValidateImageAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Triggers.sql" />
     <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-lightbox.css" />
     <Content Include="Content\bootstrap-overrides.css" />
@@ -506,7 +507,7 @@
     <Content Include="Views\Post\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Logs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
