@@ -149,6 +149,9 @@ namespace Zazz.Infrastructure.Services
             if (!usersWithRemovePermission.Contains(currentUserId))
                 throw new SecurityException();
 
+            if (post.Tags.Any())
+                post.Tags.Clear();
+
             _uow.FeedRepository.RemovePostFeeds(postId);
             _commentService.RemovePostComments(postId);
             _notificationService.RemovePostNotifications(postId);
