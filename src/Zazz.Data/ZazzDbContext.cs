@@ -67,7 +67,7 @@ namespace Zazz.Data
                         .WithRequired(c => c.User);
 
             modelBuilder.Entity<Comment>()
-                .HasRequired(e => e.From)
+                .HasRequired(e => e.User)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 

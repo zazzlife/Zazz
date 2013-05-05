@@ -99,7 +99,7 @@ namespace Zazz.IntegrationTests
         {
             return new Comment
                    {
-                       FromId = userId,
+                       UserId = userId,
                        Time = DateTime.UtcNow
                    };
         }

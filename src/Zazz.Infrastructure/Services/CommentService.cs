@@ -28,8 +28,8 @@ namespace Zazz.Infrastructure.Services
                 var photoId = comment.PhotoComment.PhotoId;
                 var photo = _uow.PhotoRepository.GetById(photoId);
 
-                if (photo.UserId != comment.FromId)
-                    _notificationService.CreatePhotoCommentNotification(comment.Id, comment.FromId, photoId, photo.UserId, save: false);
+                if (photo.UserId != comment.UserId)
+                    _notificationService.CreatePhotoCommentNotification(comment.Id, comment.UserId, photoId, photo.UserId, save: false);
             }
             else if (commentType == CommentType.Post && comment.PostId.HasValue)
             {
@@ -42,11 +42,11 @@ namespace Zazz.Infrastructure.Services
                     usersToBeNotified.Add(post.ToUserId.Value);
 
                 // Removing the person that commented from notification list
-                usersToBeNotified.Remove(comment.FromId);
+                usersToBeNotified.Remove(comment.UserId);
 
                 foreach (var userId in usersToBeNotified)
                 {
-                    _notificationService.CreatePostCommentNotification(comment.Id, comment.FromId, postId,
+                    _notificationService.CreatePostCommentNotification(comment.Id, comment.UserId, postId,
                                                                        userId, save: false);
                 }
             }
@@ -55,9 +55,9 @@ namespace Zazz.Infrastructure.Services
                 var eventId = comment.EventId.Value;
                 var zazzEvent = _uow.EventRepository.GetById(eventId);
 
-                if (comment.FromId != zazzEvent.UserId)
+                if (comment.UserId != zazzEvent.UserId)
                 {
-                    _notificationService.CreateEventCommentNotification(comment.Id, comment.FromId, eventId,
+                    _notificationService.CreateEventCommentNotification(comment.Id, comment.UserId, eventId,
                                                                         zazzEvent.UserId, save: false);
                 }
             }
@@ -72,7 +72,7 @@ namespace Zazz.Infrastructure.Services
             if (comment == null)
                 return;
 
-            if (comment.FromId != currentUserId)
+            if (comment.UserId != currentUserId)
                 throw new SecurityException();
 
             comment.Message = newComment;
@@ -86,7 +86,7 @@ namespace Zazz.Infrastructure.Services
             if (comment == null)
                 return;
 
-            if (comment.FromId != currentUserId)
+            if (comment.UserId != currentUserId)
                 throw new SecurityException();
 
             _notificationService.RemoveCommentNotifications(commentId);

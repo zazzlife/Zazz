@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers
 
             var c = new Comment
             {
-                FromId = userId,
+                UserId = userId,
                 Message = comment,
                 Time = DateTime.UtcNow
             };
@@ -110,9 +110,9 @@ namespace Zazz.Web.Controllers
                             {
                                 CommentId = commentId,
                                 CommentText = c.Message,
-                                IsFromCurrentUser = userId == c.FromId,
+                                IsFromCurrentUser = userId == c.UserId,
                                 Time = c.Time,
-                                UserId = c.FromId,
+                                UserId = c.UserId,
                                 UserDisplayName = _userService.GetUserDisplayName(userId),
                                 UserPhotoUrl = _photoService.GetUserImageUrl(userId)
                             };

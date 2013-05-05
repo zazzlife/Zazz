@@ -7,9 +7,9 @@ namespace Zazz.Core.Models.Data
     public class Comment : BaseEntity
     {
         [ForeignKey("FromId")]
-        public User From { get; set; }
+        public User User { get; set; }
 
-        public int FromId { get; set; }
+        public int UserId { get; set; }
 
         public virtual PhotoComment PhotoComment { get; set; }
 

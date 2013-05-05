@@ -285,11 +285,11 @@ namespace Zazz.Web.Helpers
                                      {
                                          CommentId = c.Id,
                                          CommentText = c.Message,
-                                         IsFromCurrentUser = c.FromId == currentUserId,
+                                         IsFromCurrentUser = c.UserId == currentUserId,
                                          Time = c.Time,
-                                         UserDisplayName = _userService.GetUserDisplayName(c.FromId),
-                                         UserId = c.FromId,
-                                         UserPhotoUrl = _photoService.GetUserImageUrl(c.FromId)
+                                         UserDisplayName = _userService.GetUserDisplayName(c.UserId),
+                                         UserId = c.UserId,
+                                         UserPhotoUrl = _photoService.GetUserImageUrl(c.UserId)
                                      }).ToList();
         }
     }
