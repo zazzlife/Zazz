@@ -54,7 +54,7 @@ namespace Zazz.Infrastructure.Services
                                       TagId = tag.Id,
                                       UsersCount = 1,
                                   };
-                        tagStat.TagUsers.Add(new TagStatUser {UserId = post.FromUserId});
+                        tagStat.TagUsers.Add(new TagStatUser { UserId = post.FromUserId });
 
                         _uow.TagStatRepository.InsertGraph(tagStat);
                     }
@@ -76,7 +76,7 @@ namespace Zazz.Infrastructure.Services
 
             var feed = new Feed
                        {
-                           PostId = post.Id,
+                           PostFeed = new PostFeed { PostId = post.Id },
                            Time = post.CreatedTime,
                        };
 
@@ -152,7 +152,6 @@ namespace Zazz.Infrastructure.Services
             if (post.Tags.Any())
                 post.Tags.Clear();
 
-            _uow.FeedRepository.RemovePostFeeds(postId);
             _notificationService.RemovePostNotifications(postId);
             _uow.PostRepository.Remove(post);
 

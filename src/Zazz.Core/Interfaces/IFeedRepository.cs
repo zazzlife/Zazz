@@ -15,7 +15,5 @@ namespace Zazz.Core.Interfaces
         Feed GetUserLastFeed(int userId);
 
         void RemoveEventFeeds(int eventId);
-
-        void RemovePostFeeds(int postId);
     }
 }

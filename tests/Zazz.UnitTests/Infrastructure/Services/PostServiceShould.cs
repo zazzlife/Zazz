@@ -402,7 +402,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
@@ -426,7 +425,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Never());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
@@ -438,7 +436,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
                 .Returns(_post);
             _uow.Setup(x => x.PostRepository.Remove(_post));
-            _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
             _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
 
             //Act
@@ -447,7 +444,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
             _uow.Verify(x => x.PostRepository.Remove(_post), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(_post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
@@ -459,7 +455,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
             _uow.Setup(x => x.PostRepository.Remove(post));
-            _uow.Setup(x => x.FeedRepository.RemovePostFeeds(post.Id));
             _notificationService.Setup(x => x.RemovePostNotifications(post.Id));
 
             //Act
@@ -468,7 +463,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(post.Id), Times.Once());
             _uow.Verify(x => x.PostRepository.Remove(post), Times.Once());
-            _uow.Verify(x => x.FeedRepository.RemovePostFeeds(post.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 
@@ -479,7 +473,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
                 .Returns(_post);
             _uow.Setup(x => x.PostRepository.Remove(_post));
-            _uow.Setup(x => x.FeedRepository.RemovePostFeeds(_post.Id));
             _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
 
             //Act

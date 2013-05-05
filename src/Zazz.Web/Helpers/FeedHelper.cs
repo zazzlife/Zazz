@@ -207,9 +207,9 @@ namespace Zazz.Web.Helpers
             }
             else if (feed.FeedType == FeedType.Post)
             {
-                FillUserDetails(ref feedVm, feed.Post.FromUserId, currentUserId);
+                FillUserDetails(ref feedVm, feed.PostFeed.Post.FromUserId, currentUserId);
 
-                var post = _uow.PostRepository.GetById(feed.PostId.Value);
+                var post = feed.PostFeed.Post;
                 feedVm.PostViewModel = new PostViewModel
                 {
                     PostId = post.Id,
@@ -227,8 +227,8 @@ namespace Zazz.Web.Helpers
 
                 feedVm.CommentsViewModel.CommentType = CommentType.Post;
 
-                feedVm.CommentsViewModel.ItemId = feed.PostId.Value;
-                feedVm.CommentsViewModel.Comments = GetComments(feed.PostId.Value,
+                feedVm.CommentsViewModel.ItemId = feed.PostFeed.PostId;
+                feedVm.CommentsViewModel.Comments = GetComments(feed.PostFeed.PostId,
                                                                 feedVm.CommentsViewModel.CommentType,
                                                                 currentUserId);
 

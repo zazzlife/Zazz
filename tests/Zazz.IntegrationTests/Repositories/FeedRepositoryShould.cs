@@ -253,46 +253,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RemoveRecord_OnRemovePostFeed()
-        {
-            //Arrange
-            var user = Mother.GetUser();
-
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
-
-            var post = new Post
-                       {
-                           CreatedTime = DateTime.UtcNow,
-                           FromUserId = user.Id
-                       };
-
-            _dbContext.Posts.Add(post);
-            _dbContext.SaveChanges();
-
-            var feed = new Feed
-                       {
-                           FeedUsers = new List<FeedUser>
-                                         {
-                                             new FeedUser {UserId = user.Id}
-                                         },
-                           PostId = post.Id,
-                           Time = DateTime.UtcNow
-                       };
-
-            _dbContext.Feeds.Add(feed);
-            _dbContext.SaveChanges();
-
-            Assert.IsTrue(_repo.Exists(feed.Id));
-            //Act
-            _repo.RemovePostFeeds(post.Id);
-            _dbContext.SaveChanges();
-
-            //Assert
-            Assert.IsFalse(_repo.Exists(feed.Id));
-        }
-
-        [Test]
         public void ReturnLastFeed_OnGetLastFeed()
         {
             //Arrange
@@ -353,7 +313,7 @@ namespace Zazz.IntegrationTests.Repositories
             var feed = new Feed
                        {
                            Time = DateTime.UtcNow,
-                           PostId = post.Id
+                           PostFeed = new PostFeed { PostId = post.Id },
                        };
 
             _dbContext.Feeds.Add(feed);
@@ -364,8 +324,8 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Post);
-            Assert.AreEqual(post.Id, result.PostId);
+            Assert.IsNotNull(result.PostFeed);
+            Assert.AreEqual(post.Id, result.PostFeed.PostId);
         }
     }
 }

@@ -124,6 +124,7 @@
     <Compile Include="Models\Data\PhotoTag.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\PostComment.cs" />
+    <Compile Include="Models\Data\PostFeed.cs" />
     <Compile Include="Models\Data\PostTag.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Tag.cs" />

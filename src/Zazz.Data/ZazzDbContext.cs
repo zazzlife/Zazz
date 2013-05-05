@@ -106,20 +106,30 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+
+            // new db design:
+
             modelBuilder.Entity<Comment>()
                 .HasOptional(c => c.PhotoComment)
                 .WithRequired(p => p.Comment)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Comment>()
                 .HasOptional(c => c.PostComment)
                 .WithRequired(p => p.Comment)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<Comment>()
                 .HasOptional(c => c.EventComment)
                 .WithRequired(e => e.Comment)
-                .WillCascadeOnDelete(true);
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<Feed>()
+                .HasOptional(f => f.PostFeed)
+                .WithRequired(p => p.Feed)
+                .WillCascadeOnDelete();
+
+
 
             base.OnModelCreating(modelBuilder);
         }
