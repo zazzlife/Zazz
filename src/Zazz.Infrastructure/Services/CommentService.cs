@@ -50,9 +50,9 @@ namespace Zazz.Infrastructure.Services
                                                                        userId, save: false);
                 }
             }
-            else if (commentType == CommentType.Event && comment.EventId.HasValue)
+            else if (commentType == CommentType.Event && comment.EventComment != null)
             {
-                var eventId = comment.EventId.Value;
+                var eventId = comment.EventComment.EventId;
                 var zazzEvent = _uow.EventRepository.GetById(eventId);
 
                 if (comment.UserId != zazzEvent.UserId)
@@ -91,17 +91,6 @@ namespace Zazz.Infrastructure.Services
 
             _notificationService.RemoveCommentNotifications(commentId);
             _uow.CommentRepository.Remove(comment);
-
-            _uow.SaveChanges();
-        }
-
-        public void RemoveEventComments(int eventId)
-        {
-            var commentIds = _uow.CommentRepository.RemoveEventComments(eventId);
-            foreach (var commentId in commentIds)
-            {
-                _notificationService.RemoveCommentNotifications(commentId);
-            }
 
             _uow.SaveChanges();
         }

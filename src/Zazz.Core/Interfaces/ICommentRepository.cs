@@ -7,12 +7,5 @@ namespace Zazz.Core.Interfaces
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        IQueryable<Comment> GetComments(int eventId);
-
-        /// <summary>
-        /// Sets the entity status of all commentes with the given event id as deleted and returns their ids
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<int> RemoveEventComments(int eventId);
     }
 }

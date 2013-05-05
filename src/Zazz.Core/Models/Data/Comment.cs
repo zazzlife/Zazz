@@ -13,12 +13,9 @@ namespace Zazz.Core.Models.Data
 
         public virtual PhotoComment PhotoComment { get; set; }
 
-        public virtual PostComments PostComment { get; set; }
+        public virtual PostComment PostComment { get; set; }
 
-        [ForeignKey("EventId")]
-        public virtual ZazzEvent Event { get; set; }
-
-        public int? EventId { get; set; }
+        public virtual EventComment EventComment { get; set; }
 
         [MaxLength(4000)]
         public string Message { get; set; }

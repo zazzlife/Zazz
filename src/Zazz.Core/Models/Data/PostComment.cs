@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class PostComments
+    public class PostComment
     {
         [Key]
         public int CommentId { get; set; }

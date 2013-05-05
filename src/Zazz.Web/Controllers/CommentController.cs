@@ -90,7 +90,7 @@ namespace Zazz.Web.Controllers
 
             if (commentType == CommentType.Event)
             {
-                c.EventId = id;
+                c.EventComment = new EventComment { EventId = id };
             }
             else if (commentType == CommentType.Photo)
             {
@@ -98,7 +98,7 @@ namespace Zazz.Web.Controllers
             }
             else if (commentType == CommentType.Post)
             {
-                c.PostComment = new PostComments { PostId = id };
+                c.PostComment = new PostComment { PostId = id };
             }
             else
             {

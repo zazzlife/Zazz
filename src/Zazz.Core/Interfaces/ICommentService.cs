@@ -10,7 +10,5 @@ namespace Zazz.Core.Interfaces
         void EditComment(int commentId, int currentUserId, string newComment);
 
         void RemoveComment(int commentId, int currentUserId);
-
-        void RemoveEventComments(int eventId);
     }
 }

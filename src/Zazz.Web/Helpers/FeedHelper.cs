@@ -257,7 +257,7 @@ namespace Zazz.Web.Helpers
 
             if (commentType == CommentType.Event)
             {
-                query = query.Where(c => c.EventId == id);
+                query = query.Where(c => c.EventComment.EventId == id);
             }
             else if (commentType == CommentType.Photo)
             {

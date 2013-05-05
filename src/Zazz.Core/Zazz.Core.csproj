@@ -112,6 +112,7 @@
     <Compile Include="Models\Data\Enums\NotificationType.cs" />
     <Compile Include="Models\Data\Enums\OAuthProvider.cs" />
     <Compile Include="Models\Data\Enums\UserType.cs" />
+    <Compile Include="Models\Data\EventComment.cs" />
     <Compile Include="Models\Data\EventTag.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="Models\Data\PhotoComment.cs" />
     <Compile Include="Models\Data\PhotoTag.cs" />
     <Compile Include="Models\Data\Post.cs" />
-    <Compile Include="Models\Data\PostComments.cs" />
+    <Compile Include="Models\Data\PostComment.cs" />
     <Compile Include="Models\Data\PostTag.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Tag.cs" />
