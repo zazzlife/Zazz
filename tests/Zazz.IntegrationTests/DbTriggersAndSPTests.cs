@@ -9,6 +9,37 @@ namespace Zazz.IntegrationTests
     public class DbTriggersAndSPTests
     {
         [Test]
+        public void RemoveCommentsWhenPhotoIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var photo = Mother.GetPhoto(user.Id);
+            context.Photos.Add(photo);
+            context.SaveChanges();
+
+            var comment = Mother.GetComment(user.Id);
+            comment.PhotoComment = new PhotoComment { PhotoId = photo.Id };
+            context.Comments.Add(comment);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Comments.Count());
+
+            //Act
+            context.Photos.Remove(photo);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Comments.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
         public void RemoveCommentsWhenPostIsRemoved()
         {
             //Arrange
