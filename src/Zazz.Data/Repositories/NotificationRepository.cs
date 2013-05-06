@@ -16,9 +16,12 @@ namespace Zazz.Data.Repositories
             var query = DbSet
                 .Include(n => n.Event)
                 .Include(n => n.Photo)
-                .Include(n => n.Post)
+                .Include(n => n.PostNotification)
                 .Include(n => n.UserB)
                 .Include(n => n.Comment)
+                .Include(n => n.Comment.PhotoComment)
+                .Include(n => n.Comment.PostComment)
+                .Include(n => n.Comment.EventComment)
                 .Where(n => n.UserId == userId);
 
             if (lastNotificationId.HasValue)
@@ -48,15 +51,6 @@ namespace Zazz.Data.Repositories
             {
                 Remove(notification);
             }
-        }
-
-        public void RemoveRecordsByPostId(int postId)
-        {
-            var notifications = DbSet.Where(n => n.PostId == postId).ToList();
-            foreach (var notification in notifications)
-            {
-                Remove(notification);
-            }   
         }
 
         public void RemoveRecordsByCommentId(int commentId)

@@ -436,7 +436,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(_post.Id))
                 .Returns(_post);
             _uow.Setup(x => x.PostRepository.Remove(_post));
-            _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
 
             //Act
             _sut.RemovePost(_post.Id, _post.FromUserId);
@@ -455,7 +454,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
             _uow.Setup(x => x.PostRepository.Remove(post));
-            _notificationService.Setup(x => x.RemovePostNotifications(post.Id));
 
             //Act
             _sut.RemovePost(post.Id, post.ToUserId.Value);
@@ -464,22 +462,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PostRepository.GetById(post.Id), Times.Once());
             _uow.Verify(x => x.PostRepository.Remove(post), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
-        public void CallRemovePostNotifications_OnRemovePost()
-        {
-            //Arrange
-            _uow.Setup(x => x.PostRepository.GetById(_post.Id))
-                .Returns(_post);
-            _uow.Setup(x => x.PostRepository.Remove(_post));
-            _notificationService.Setup(x => x.RemovePostNotifications(_post.Id));
-
-            //Act
-            _sut.RemovePost(_post.Id, _post.FromUserId);
-
-            //Assert
-            _notificationService.Verify(x => x.RemovePostNotifications(_post.Id), Times.Once());
         }
 
         [Test]

@@ -13,8 +13,6 @@ namespace Zazz.Core.Interfaces
 
         void RemoveRecordsByEventId(int eventId);
 
-        void RemoveRecordsByPostId(int postId);
-
         void RemoveRecordsByCommentId(int commentId);
 
         void MarkUserNotificationsAsRead(int userId);

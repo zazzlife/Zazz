@@ -152,9 +152,7 @@ namespace Zazz.Infrastructure.Services
             if (post.Tags.Any())
                 post.Tags.Clear();
 
-            _notificationService.RemovePostNotifications(postId);
             _uow.PostRepository.Remove(post);
-
             _uow.SaveChanges();
         }
     }

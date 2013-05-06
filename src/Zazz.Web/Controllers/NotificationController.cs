@@ -68,8 +68,8 @@ namespace Zazz.Web.Controllers
                                     : String.Empty,
                     ItemId = n.PhotoId.HasValue
                                  ? n.PhotoId.Value
-                                 : n.PostId.HasValue
-                                       ? n.PostId.Value
+                                 : n.PostNotification != null
+                                       ? n.PostNotification.PostId
                                        : n.EventId.HasValue
                                              ? n.EventId.Value
                                              : 0,

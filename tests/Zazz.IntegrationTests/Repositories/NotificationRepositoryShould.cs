@@ -77,10 +77,10 @@ namespace Zazz.IntegrationTests.Repositories
             _photo2Notification.PhotoId = _photo2.Id;
 
             _post1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _post1Notification.PostId = _post1.Id;
+            _post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
 
             _post2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _post2Notification.PostId = _post2.Id;
+            _post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             _event1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _event1Notification.EventId = _event1.Id;
@@ -119,10 +119,10 @@ namespace Zazz.IntegrationTests.Repositories
             photo2Notification.PhotoId = _photo2.Id;
 
             var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            post1Notification.PostId = _post1.Id;
+            post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
 
             var post2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            post2Notification.PostId = _post2.Id;
+            post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
             event1Notification.EventId = _event1.Id;
@@ -175,141 +175,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RemoveCorrectRecordsOn_RemoveByPhotoId()
-        {
-            //Arrange
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-
-            //Act
-            _repo.RemoveRecordsByPhotoId(_photo1.Id);
-            _context.SaveChanges();
-
-            //Assert
-            Assert.AreEqual(0, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-        }
-
-        [Test]
-        public void RemoveCorrectRecordsOn_RemoveByPostId()
-        {
-            //Arrange
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-
-            //Act
-            _repo.RemoveRecordsByPostId(_post1.Id);
-            _context.SaveChanges();
-
-            //Assert
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(0, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-        }
-
-        [Test]
-        public void RemoveCorrectRecordsOn_RemoveByEventId()
-        {
-            //Arrange
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-
-            //Act
-            _repo.RemoveRecordsByEventId(_event1.Id);
-            _context.SaveChanges();
-
-            //Assert
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(0, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-        }
-
-        [Test]
-        public void RemoveCorrectRecordsOn_RemoveByCommentId()
-        {
-            //Arrange
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-
-            //Act
-            _repo.RemoveRecordsByCommentId(_comment1.Id);
-            _context.SaveChanges();
-
-            //Assert
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PhotoId == _photo2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.PostId == _post2.Id));
-
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.EventId == _event2.Id));
-
-            Assert.AreEqual(0, _context.Notifications.Count(n => n.CommentId == _comment1.Id));
-            Assert.AreEqual(1, _context.Notifications.Count(n => n.CommentId == _comment2.Id));
-        }
-
-        [Test]
         public void MarkCorrectRecordsAsRead_MarkUserNotificationsAsRead()
         {
             //Arrange
@@ -324,10 +189,10 @@ namespace Zazz.IntegrationTests.Repositories
             photo2Notification.PhotoId = _photo2.Id;
 
             var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            post1Notification.PostId = _post1.Id;
+            post1Notification.PostNotification = new PostNotification { PostId = _post1.Id };
 
             var post2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            post2Notification.PostId = _post2.Id;
+            post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
             event1Notification.EventId = _event1.Id;

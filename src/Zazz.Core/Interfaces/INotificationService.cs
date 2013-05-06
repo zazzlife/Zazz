@@ -31,8 +31,6 @@ namespace Zazz.Core.Interfaces
 
         void RemovePhotoNotifications(int photoId);
         
-        void RemovePostNotifications(int postId);
-        
         void RemoveEventNotifications(int eventId);
 
         void RemoveCommentNotifications(int commentId);

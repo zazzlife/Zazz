@@ -18,11 +18,10 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("UserBId")]
         public User UserB { get; set; }
 
+        public PostNotification PostNotification { get; set; }
+
         [ForeignKey("PhotoId")]
         public Photo Photo { get; set; }
-
-        [ForeignKey("PostId")]
-        public Post Post { get; set; }
 
         [ForeignKey("EventId")]
         public ZazzEvent Event { get; set; }
@@ -41,8 +40,6 @@ namespace Zazz.Core.Models.Data
         public int UserBId { get; set; }
 
         public int? PhotoId { get; set; }
-
-        public int? PostId { get; set; }
 
         public int? EventId { get; set; }
 

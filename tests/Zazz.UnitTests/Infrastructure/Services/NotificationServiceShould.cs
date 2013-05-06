@@ -337,21 +337,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemovePostRecordsOnRepository_OnRemovePostNotifications()
-        {
-            //Arrange
-            var postId = 12;
-            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByPostId(postId));
-
-            //Act
-            _sut.RemovePostNotifications(postId);
-
-            //Assert
-            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByPostId(postId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
         public void CallRemoveCommentRecordsOnRepository_OnRemoveCommentNotifications()
         {
             //Arrange

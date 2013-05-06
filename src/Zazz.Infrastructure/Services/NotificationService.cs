@@ -66,7 +66,7 @@ namespace Zazz.Infrastructure.Services
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
                                    UserBId = commenterId,
-                                   PostId = postId,
+                                   PostNotification = new PostNotification { PostId = postId },
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.CommentOnPost
@@ -97,7 +97,7 @@ namespace Zazz.Infrastructure.Services
                                {
                                    UserId = toUserId,
                                    UserBId = fromUserId,
-                                   PostId = postId,
+                                   PostNotification = new PostNotification { PostId = postId },
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.WallPost
@@ -141,12 +141,6 @@ namespace Zazz.Infrastructure.Services
         public void RemovePhotoNotifications(int photoId)
         {
             _uow.NotificationRepository.RemoveRecordsByPhotoId(photoId);
-            _uow.SaveChanges();
-        }
-
-        public void RemovePostNotifications(int postId)
-        {
-            _uow.NotificationRepository.RemoveRecordsByPostId(postId);
             _uow.SaveChanges();
         }
 
