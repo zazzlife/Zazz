@@ -21,8 +21,6 @@ namespace Zazz.Infrastructure.Services
         private readonly IFileService _fileService;
         private readonly string _rootPath;
         private readonly ICacheService _cacheService;
-        private readonly INotificationService _notificationService;
-        private readonly ICommentService _commentService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
 
@@ -31,15 +29,12 @@ namespace Zazz.Infrastructure.Services
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            INotificationService notificationService, ICommentService commentService,
             IStringHelper stringHelper, IStaticDataRepository staticDataRepository, string rootPath)
         {
             _uow = uow;
             _fileService = fileService;
             _rootPath = rootPath;
             _cacheService = cacheService;
-            _notificationService = notificationService;
-            _commentService = commentService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
         }

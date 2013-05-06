@@ -20,7 +20,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userId;
         private ZazzEvent _zazzEvent;
         private Mock<INotificationService> _notificationService;
-        private Mock<ICommentService> _commentService;
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
 
@@ -29,10 +28,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             _uow = new Mock<IUoW>();
             _notificationService = new Mock<INotificationService>();
-            _commentService = new Mock<ICommentService>();
             _stringHelper = new Mock<IStringHelper>();
             _staticDataRepo = new Mock<IStaticDataRepository>();
-            _sut = new EventService(_uow.Object, _notificationService.Object, _commentService.Object,
+            _sut = new EventService(_uow.Object, _notificationService.Object,
                 _stringHelper.Object, _staticDataRepo.Object);
             _userId = 21;
             _zazzEvent = new ZazzEvent { UserId = _userId };
