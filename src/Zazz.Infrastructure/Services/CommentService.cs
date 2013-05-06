@@ -89,9 +89,7 @@ namespace Zazz.Infrastructure.Services
             if (comment.UserId != currentUserId)
                 throw new SecurityException();
 
-            _notificationService.RemoveCommentNotifications(commentId);
             _uow.CommentRepository.Remove(comment);
-
             _uow.SaveChanges();
         }
     }

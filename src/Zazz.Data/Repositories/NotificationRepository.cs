@@ -18,13 +18,13 @@ namespace Zazz.Data.Repositories
                 .Include(n => n.EventNotification.Event)
                 .Include(n => n.PostNotification)
                 .Include(n => n.UserB)
-                .Include(n => n.Comment)
-                .Include(n => n.Comment.PhotoComment)
-                .Include(n => n.Comment.PostComment)
-                .Include(n => n.Comment.EventComment)
-                .Include(n => n.Comment.PhotoComment.Photo)
-                .Include(n => n.Comment.PostComment.Post)
-                .Include(n => n.Comment.EventComment.Event)
+                .Include(n => n.CommentNotification)
+                .Include(n => n.CommentNotification.Comment.PhotoComment)
+                .Include(n => n.CommentNotification.Comment.PostComment)
+                .Include(n => n.CommentNotification.Comment.EventComment)
+                .Include(n => n.CommentNotification.Comment.PhotoComment.Photo)
+                .Include(n => n.CommentNotification.Comment.PostComment.Post)
+                .Include(n => n.CommentNotification.Comment.EventComment.Event)
                 .Where(n => n.UserId == userId);
 
             if (lastNotificationId.HasValue)
@@ -41,15 +41,6 @@ namespace Zazz.Data.Repositories
                 .Where(n => n.UserBId == userBId)
                 .ToList();
 
-            foreach (var notification in notifications)
-            {
-                Remove(notification);
-            }
-        }
-
-        public void RemoveRecordsByCommentId(int commentId)
-        {
-            var notifications = DbSet.Where(n => n.CommentId == commentId).ToList();
             foreach (var notification in notifications)
             {
                 Remove(notification);

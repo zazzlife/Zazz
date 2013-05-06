@@ -374,7 +374,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Never());
         }
 
         [Test]
@@ -398,11 +397,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Never());
         }
 
         [Test]
-        public void RemoveCommentAndItsNotificationsIfEverythingIsFine_OnRemoveComment()
+        public void RemoveCommentIfEverythingIsFine_OnRemoveComment()
         {
             //Arrange
             var commentId = 12;
@@ -416,14 +414,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.CommentRepository.GetById(commentId))
                 .Returns(() => comment);
-            _notificationService.Setup(x => x.RemoveCommentNotifications(commentId));
 
             //Act
             _sut.RemoveComment(commentId, userId);
 
             //Assert
             _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _notificationService.Verify(x => x.RemoveCommentNotifications(commentId), Times.Once());
         }
     }
 }

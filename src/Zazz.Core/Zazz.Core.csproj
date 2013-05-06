@@ -104,6 +104,7 @@
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
     <Compile Include="Models\Data\ClubDetail.cs" />
+    <Compile Include="Models\Data\CommentNotification.cs" />
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\Enums\AccountType.cs" />
     <Compile Include="Models\Data\Enums\CommentType.cs" />

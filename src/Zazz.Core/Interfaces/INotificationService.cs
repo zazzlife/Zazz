@@ -29,8 +29,6 @@ namespace Zazz.Core.Interfaces
 
         void RemoveFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true);
 
-        void RemoveCommentNotifications(int commentId);
-
         void Remove(long notificationId, int currentUserId);
 
         void MarkUserNotificationsAsRead(int userId);

@@ -322,21 +322,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemoveCommentRecordsOnRepository_OnRemoveCommentNotifications()
-        {
-            //Arrange
-            var commentId = 1234;
-            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByCommentId(commentId));
-
-            //Act
-            _sut.RemoveCommentNotifications(commentId);
-
-            //Assert
-            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByCommentId(commentId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
         public void CallMarkNotificationsAsReadOnRepository_OnNotificationsAsRead()
         {
             //Arrange

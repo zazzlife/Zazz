@@ -48,7 +48,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
-                                   CommentId = commentId,
+                                   CommentNotification = new CommentNotification { CommentId = commentId },
                                    UserBId = commenterId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -63,7 +63,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
-                                   CommentId = commentId,
+                                   CommentNotification = new CommentNotification { CommentId = commentId },
                                    UserBId = commenterId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -78,7 +78,7 @@ namespace Zazz.Infrastructure.Services
             var notification = new Notification
                                {
                                    UserId = userToBeNotified,
-                                   CommentId = commentId,
+                                   CommentNotification = new CommentNotification { CommentId = commentId },
                                    UserBId = commenterId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
@@ -133,12 +133,6 @@ namespace Zazz.Infrastructure.Services
 
             if (save)
                 _uow.SaveChanges();
-        }
-
-        public void RemoveCommentNotifications(int commentId)
-        {
-            _uow.NotificationRepository.RemoveRecordsByCommentId(commentId);
-            _uow.SaveChanges();
         }
 
         public void Remove(long notificationId, int currentUserId)

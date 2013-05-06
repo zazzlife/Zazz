@@ -149,6 +149,11 @@ namespace Zazz.Data
                 .WithRequired(e => e.Notification)
                 .WillCascadeOnDelete();
 
+            modelBuilder.Entity<Notification>()
+                .HasOptional(n => n.CommentNotification)
+                .WithRequired(c => c.Notification)
+                .WillCascadeOnDelete();
+
             base.OnModelCreating(modelBuilder);
         }
     }

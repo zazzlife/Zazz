@@ -66,39 +66,46 @@ namespace Zazz.Web.Controllers
                     EventName = n.NotificationType == NotificationType.NewEvent
                                 ? n.EventNotification.Event.Name
                                 : String.Empty,
-                    ItemId = 
-                                n.NotificationType == NotificationType.WallPost 
+                    ItemId =
+                                n.NotificationType == NotificationType.WallPost
                                 ? n.PostNotification.PostId
-                                
+
                                 : n.NotificationType == NotificationType.NewEvent
                                 ? n.EventNotification.EventId
 
                                 : n.NotificationType == NotificationType.CommentOnPhoto
-                                ? n.Comment.PhotoComment.PhotoId
+                                ? n.CommentNotification.Comment.PhotoComment.PhotoId
 
                                 : n.NotificationType == NotificationType.CommentOnPost
-                                ? n.Comment.PostComment.PostId
-                                
-                                : n.NotificationType == NotificationType.CommentOnEvent 
-                                ? n.Comment.EventComment.EventId
+                                ? n.CommentNotification.Comment.PostComment.PostId
 
-                                :0,
-                                
+                                : n.NotificationType == NotificationType.CommentOnEvent
+                                ? n.CommentNotification.Comment.EventComment.EventId
+
+                                : 0,
+
                     NotificationType = n.NotificationType,
                     UserDisplayName = _userService.GetUserDisplayName(n.UserBId),
                     UserPhoto = _photoService.GetUserImageUrl(n.UserBId),
                     PhotoViewModel = n.NotificationType != NotificationType.CommentOnPhoto ? null
                     : new PhotoViewModel
                     {
-                        FromUserDisplayName = _userService.GetUserDisplayName(n.Comment.PhotoComment.Photo.UserId),
-                        FromUserId = n.Comment.PhotoComment.Photo.UserId,
-                        FromUserPhotoUrl = _photoService.GetUserImageUrl(n.Comment.PhotoComment.Photo.UserId),
-                        IsFromCurrentUser = userId == n.Comment.PhotoComment.Photo.UserId,
-                        PhotoDescription = n.Comment.PhotoComment.Photo.Description,
-                        PhotoId = n.Comment.PhotoComment.PhotoId,
-                        PhotoUrl = n.Comment.PhotoComment.Photo.IsFacebookPhoto
-                        ? new PhotoLinks(n.Comment.PhotoComment.Photo.FacebookLink)
-                        : _photoService.GeneratePhotoUrl(n.Comment.PhotoComment.Photo.UserId, n.Comment.PhotoComment.PhotoId)
+                        FromUserDisplayName = _userService.GetUserDisplayName(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
+
+                        FromUserId = n.CommentNotification.Comment.PhotoComment.Photo.UserId,
+
+                        FromUserPhotoUrl = _photoService.GetUserImageUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
+
+                        IsFromCurrentUser = userId == n.CommentNotification.Comment.PhotoComment.Photo.UserId,
+
+                        PhotoDescription = n.CommentNotification.Comment.PhotoComment.Photo.Description,
+
+                        PhotoId = n.CommentNotification.Comment.PhotoComment.PhotoId,
+
+                        PhotoUrl = n.CommentNotification.Comment.PhotoComment.Photo.IsFacebookPhoto
+
+                        ? new PhotoLinks(n.CommentNotification.Comment.PhotoComment.Photo.FacebookLink)
+                        : _photoService.GeneratePhotoUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId, n.CommentNotification.Comment.PhotoComment.PhotoId)
                     }
                 });
 

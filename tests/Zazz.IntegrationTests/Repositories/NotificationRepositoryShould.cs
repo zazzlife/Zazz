@@ -81,9 +81,9 @@ namespace Zazz.IntegrationTests.Repositories
             _event2Notification.EventNotification.EventId = _event2.Id;
 
             _comment1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _comment1Notification.CommentId = _comment1.Id;
+            _comment1Notification.CommentNotification.CommentId = _comment1.Id;
             _comment2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _comment2Notification.CommentId = _comment2.Id;
+            _comment2Notification.CommentNotification.CommentId = _comment2.Id;
 
             _context.Notifications.Add(_post1Notification);
             _context.Notifications.Add(_post2Notification);
