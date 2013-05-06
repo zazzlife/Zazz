@@ -737,55 +737,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemovePhotoNotifications_OnRemovePhoto()
-        {
-            //Arrange
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = 4;
-            var profilePhotoId = 2;
-            var feedId = 888;
-
-            var photo = new Photo
-            {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
-                User = new User
-                {
-                    UserDetail = new UserDetail
-                    {
-                        CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
-                    }
-                }
-            };
-
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _fs.Setup(x => x.RemoveFile(It.IsAny<string>()));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(1);
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
-            _notificationService.Setup(x => x.RemovePhotoNotifications(photo.Id));
-
-            //Act
-            _sut.RemovePhoto(photoId, userId);
-
-            //Assert
-            _notificationService.Verify(x => x.RemovePhotoNotifications(photo.Id), Times.Once());
-        }
-
-        [Test]
         public void ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
         {
             //Arrange

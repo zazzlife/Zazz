@@ -272,8 +272,6 @@ namespace Zazz.Infrastructure.Services
             if (photo.Id == userDetail.CoverPhotoId)
                 photo.User.UserDetail.CoverPhotoId = 0;
 
-            _notificationService.RemovePhotoNotifications(photoId);
-
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
             var feedId = _uow.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
             _uow.SaveChanges();

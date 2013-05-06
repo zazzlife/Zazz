@@ -20,9 +20,6 @@ namespace Zazz.Core.Models.Data
 
         public PostNotification PostNotification { get; set; }
 
-        [ForeignKey("PhotoId")]
-        public Photo Photo { get; set; }
-
         [ForeignKey("EventId")]
         public ZazzEvent Event { get; set; }
 
@@ -38,8 +35,6 @@ namespace Zazz.Core.Models.Data
         /// Use this property to mention another user in the notification.
         /// </summary>
         public int UserBId { get; set; }
-
-        public int? PhotoId { get; set; }
 
         public int? EventId { get; set; }
 

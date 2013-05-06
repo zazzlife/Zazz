@@ -9,8 +9,6 @@ namespace Zazz.Core.Interfaces
 
         void RemoveFollowAcceptedNotification(int userId, int userBId);
 
-        void RemoveRecordsByPhotoId(int photoId);
-
         void RemoveRecordsByEventId(int eventId);
 
         void RemoveRecordsByCommentId(int commentId);

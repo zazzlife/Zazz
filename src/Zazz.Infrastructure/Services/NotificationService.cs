@@ -50,7 +50,6 @@ namespace Zazz.Infrastructure.Services
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
                                    UserBId = commenterId,
-                                   PhotoId = photoId,
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.CommentOnPhoto
@@ -136,12 +135,6 @@ namespace Zazz.Infrastructure.Services
 
             if (save)
                 _uow.SaveChanges();
-        }
-
-        public void RemovePhotoNotifications(int photoId)
-        {
-            _uow.NotificationRepository.RemoveRecordsByPhotoId(photoId);
-            _uow.SaveChanges();
         }
 
         public void RemoveEventNotifications(int eventId)

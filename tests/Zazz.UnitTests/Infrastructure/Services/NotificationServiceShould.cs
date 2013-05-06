@@ -322,21 +322,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemovePhotoRecordsOnRepository_OnRemovePhotoNotifications()
-        {
-            //Arrange
-            var photoId = 12;
-            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByPhotoId(photoId));
-
-            //Act
-            _sut.RemovePhotoNotifications(photoId);
-
-            //Assert
-            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
         public void CallRemoveCommentRecordsOnRepository_OnRemoveCommentNotifications()
         {
             //Arrange

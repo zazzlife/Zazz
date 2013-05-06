@@ -20,8 +20,6 @@ namespace Zazz.IntegrationTests.Repositories
         private Post _post2;
         private ZazzEvent _event1;
         private ZazzEvent _event2;
-        private Notification _photo1Notification;
-        private Notification _photo2Notification;
         private Notification _post1Notification;
         private Notification _post2Notification;
         private Notification _event1Notification;
@@ -70,12 +68,6 @@ namespace Zazz.IntegrationTests.Repositories
 
             _context.SaveChanges();
 
-            _photo1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _photo1Notification.PhotoId = _photo1.Id;
-
-            _photo2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _photo2Notification.PhotoId = _photo2.Id;
-
             _post1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
 
@@ -93,8 +85,6 @@ namespace Zazz.IntegrationTests.Repositories
             _comment2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _comment2Notification.CommentId = _comment2.Id;
 
-            _context.Notifications.Add(_photo1Notification);
-            _context.Notifications.Add(_photo2Notification);
             _context.Notifications.Add(_post1Notification);
             _context.Notifications.Add(_post2Notification);
             _context.Notifications.Add(_event1Notification);
@@ -112,12 +102,6 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(user2);
             _context.SaveChanges();
 
-            var photo1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            photo1Notification.PhotoId = _photo1.Id;
-
-            var photo2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            photo2Notification.PhotoId = _photo2.Id;
-
             var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
             post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
 
@@ -130,8 +114,6 @@ namespace Zazz.IntegrationTests.Repositories
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
             event2Notification.EventId = _event2.Id;
 
-            _context.Notifications.Add(photo1Notification);
-            _context.Notifications.Add(photo2Notification);
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);
             _context.Notifications.Add(event1Notification);
@@ -182,12 +164,6 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(user2);
             _context.SaveChanges();
 
-            var photo1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            photo1Notification.PhotoId = _photo1.Id;
-
-            var photo2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            photo2Notification.PhotoId = _photo2.Id;
-
             var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
             post1Notification.PostNotification = new PostNotification { PostId = _post1.Id };
 
@@ -200,8 +176,6 @@ namespace Zazz.IntegrationTests.Repositories
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
             event2Notification.EventId = _event2.Id;
 
-            _context.Notifications.Add(photo1Notification);
-            _context.Notifications.Add(photo2Notification);
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);
             _context.Notifications.Add(event1Notification);
