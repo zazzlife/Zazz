@@ -274,6 +274,7 @@
   <ItemGroup>
     <Content Include="App_Data\dbo.TRIGGER_EventComments_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_EventFeeds_DELETE.sql" />
+    <Content Include="App_Data\dbo.TRIGGER_EventNotifications_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_PhotoComments_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_PostComments_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_PostFeeds_DELETE.sql" />
