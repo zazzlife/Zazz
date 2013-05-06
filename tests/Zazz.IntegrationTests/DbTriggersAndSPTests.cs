@@ -177,6 +177,49 @@ namespace Zazz.IntegrationTests
         }
 
         [Test]
+        public void RemoveNotificationsWhenPostIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            var userB = Mother.GetUser();
+            context.Users.Add(user);
+            context.Users.Add(userB);
+            context.SaveChanges();
+
+            var post = Mother.GetPost(user.Id);
+            context.Posts.Add(post);
+            context.SaveChanges();
+
+            var notification = new Notification
+            {
+                Time = DateTime.UtcNow,
+                UserId = user.Id,
+                UserBId = userB.Id,
+                NotificationType = NotificationType.WallPost,
+                PostNotification = new PostNotification()
+                {
+                    PostId = post.Id
+                }
+            };
+
+            context.Notifications.Add(notification);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Notifications.Count());
+
+            //Act
+            context.Posts.Remove(post);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Notifications.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
         public void RemoveNotificationsWhenEventIsRemoved()
         {
             //Arrange
