@@ -104,6 +104,42 @@ namespace Zazz.IntegrationTests
         }
 
         [Test]
+        public void RemoveFeedWhenPostIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var post = Mother.GetPost(user.Id);
+            context.Posts.Add(post);
+            context.SaveChanges();
+
+            var feed = new Feed
+            {
+                FeedUsers = new List<FeedUser> { new FeedUser { UserId = user.Id } },
+                Time = DateTime.UtcNow,
+                PostFeed = new PostFeed { PostId = post.Id }
+            };
+
+            context.Feeds.Add(feed);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Feeds.Count());
+
+            //Act
+            context.Posts.Remove(post);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Feeds.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
         public void RemoveFeedWhenEventIsRemoved()
         {
             //Arrange
