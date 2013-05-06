@@ -69,5 +69,36 @@ namespace Zazz.IntegrationTests
 
             context.Dispose();
         }
+
+        [Test]
+        public void RemoveCommentsWhenEventIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var zazzEvent = Mother.GetEvent(user.Id);
+            context.Events.Add(zazzEvent);
+            context.SaveChanges();
+
+            var comment = Mother.GetComment(user.Id);
+            comment.EventComment = new EventComment { EventId = zazzEvent.Id };
+            context.Comments.Add(comment);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Comments.Count());
+
+            //Act
+            context.Events.Remove(zazzEvent);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Comments.Count());
+
+            context.Dispose();
+        }
     }
 }
