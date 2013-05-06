@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
 
 namespace Zazz.IntegrationTests
@@ -171,6 +172,49 @@ namespace Zazz.IntegrationTests
 
             //Assert
             Assert.AreEqual(0, context.Feeds.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
+        public void RemoveNotificationsWhenEventIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            var userB = Mother.GetUser();
+            context.Users.Add(user);
+            context.Users.Add(userB);
+            context.SaveChanges();
+
+            var zazzEvent = Mother.GetEvent(user.Id);
+            context.Events.Add(zazzEvent);
+            context.SaveChanges();
+
+            var notification = new Notification
+                               {
+                                   Time = DateTime.UtcNow,
+                                   UserId = user.Id,
+                                   UserBId = userB.Id,
+                                   NotificationType = NotificationType.NewEvent,
+                                   EventNotification = new EventNotification
+                                                       {
+                                                           EventId = zazzEvent.Id
+                                                       }
+                               };
+
+            context.Notifications.Add(notification);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Notifications.Count());
+
+            //Act
+            context.Events.Remove(zazzEvent);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Notifications.Count());
 
             context.Dispose();
         }
