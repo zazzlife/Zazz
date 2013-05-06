@@ -13,6 +13,7 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId)
         {
+            //TODO: this query can be optimized, it's reading a lot of data that won't be used.
             var query = DbSet
                 .Include(n => n.EventNotification)
                 .Include(n => n.EventNotification.Event)
