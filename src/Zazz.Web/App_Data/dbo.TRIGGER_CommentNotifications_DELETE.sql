@@ -1,9 +1,9 @@
 ﻿---------------------------------------------------
--- PhotoNotifications
+-- CommentNotifications
 --------------------------------------------------
 
-CREATE TRIGGER dbo.TRIGGER_PhotoNotifications_DELETE
-ON dbo.PhotoNotifications
+CREATE TRIGGER dbo.TRIGGER_CommentNotifications_DELETE
+ON dbo.CommentNotifications
 AFTER DELETE
 AS
 BEGIN
