@@ -130,7 +130,6 @@ namespace Zazz.Infrastructure.Services
             if (ownerId != currentUserId)
                 throw new SecurityException();
 
-            _notificationService.RemoveEventNotifications(eventId);
             _uow.EventRepository.Remove(eventId);
             _uow.SaveChanges();
         }

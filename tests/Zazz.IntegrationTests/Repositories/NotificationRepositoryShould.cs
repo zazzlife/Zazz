@@ -75,10 +75,10 @@ namespace Zazz.IntegrationTests.Repositories
             _post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             _event1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _event1Notification.EventId = _event1.Id;
+            _event1Notification.EventNotification.EventId = _event1.Id;
 
             _event2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _event2Notification.EventId = _event2.Id;
+            _event2Notification.EventNotification.EventId = _event2.Id;
 
             _comment1Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _comment1Notification.CommentId = _comment1.Id;
@@ -109,10 +109,10 @@ namespace Zazz.IntegrationTests.Repositories
             post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event1Notification.EventId = _event1.Id;
+            event1Notification.EventNotification.EventId = _event1.Id;
 
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event2Notification.EventId = _event2.Id;
+            event2Notification.EventNotification.EventId = _event2.Id;
 
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);
@@ -171,10 +171,10 @@ namespace Zazz.IntegrationTests.Repositories
             post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event1Notification.EventId = _event1.Id;
+            event1Notification.EventNotification.EventId = _event1.Id;
 
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event2Notification.EventId = _event2.Id;
+            event2Notification.EventNotification.EventId = _event2.Id;
 
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);

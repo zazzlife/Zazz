@@ -81,7 +81,7 @@ namespace Zazz.Infrastructure.Services
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
                                    UserBId = commenterId,
-                                   EventId = eventId,
+                                   EventNotification = new EventNotification { EventId = eventId },
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.CommentOnEvent
@@ -117,7 +117,7 @@ namespace Zazz.Infrastructure.Services
                                        UserId = followerId,
                                        UserBId = creatorUserId,
                                        IsRead = false,
-                                       EventId = eventId,
+                                       EventNotification = new EventNotification { EventId = eventId },
                                        Time = DateTime.UtcNow,
                                        NotificationType = NotificationType.NewEvent
                                    };
@@ -135,12 +135,6 @@ namespace Zazz.Infrastructure.Services
 
             if (save)
                 _uow.SaveChanges();
-        }
-
-        public void RemoveEventNotifications(int eventId)
-        {
-            _uow.NotificationRepository.RemoveRecordsByEventId(eventId);
-            _uow.SaveChanges();
         }
 
         public void RemoveCommentNotifications(int commentId)

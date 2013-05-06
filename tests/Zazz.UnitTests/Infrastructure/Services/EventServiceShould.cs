@@ -482,22 +482,5 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.EventRepository.Remove(_zazzEvent.Id), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
-
-        [Test]
-        public void CallRemoveNotifications_OnDelete()
-        {
-            //Arrange
-            _zazzEvent.Id = 444;
-            _uow.Setup(x => x.EventRepository.GetOwnerId(_zazzEvent.Id))
-                .Returns(() => _zazzEvent.UserId);
-            _uow.Setup(x => x.EventRepository.Remove(_zazzEvent.Id));
-            _notificationService.Setup(x => x.RemoveEventNotifications(_zazzEvent.Id));
-
-            //Act
-            _sut.DeleteEvent(_zazzEvent.Id, _userId);
-
-            //Assert
-            _notificationService.Verify(x => x.RemoveEventNotifications(_zazzEvent.Id), Times.Once());
-        }
     }
 }

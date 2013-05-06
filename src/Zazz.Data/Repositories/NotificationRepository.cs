@@ -14,7 +14,8 @@ namespace Zazz.Data.Repositories
         public IQueryable<Notification> GetUserNotifications(int userId, long? lastNotificationId)
         {
             var query = DbSet
-                .Include(n => n.Event)
+                .Include(n => n.EventNotification)
+                .Include(n => n.EventNotification.Event)
                 .Include(n => n.PostNotification)
                 .Include(n => n.UserB)
                 .Include(n => n.Comment)
@@ -53,15 +54,6 @@ namespace Zazz.Data.Repositories
             {
                 Remove(notification);
             }
-        }
-
-        public void RemoveRecordsByEventId(int eventId)
-        {
-            var notifications = DbSet.Where(n => n.EventId == eventId).ToList();
-            foreach (var notification in notifications)
-            {
-                Remove(notification);
-            }   
         }
 
         public void MarkUserNotificationsAsRead(int userId)

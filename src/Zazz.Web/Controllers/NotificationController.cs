@@ -63,16 +63,15 @@ namespace Zazz.Web.Controllers
                     UserId = n.UserBId,
                     Time = n.Time,
                     IsRead = n.IsRead,
-                    EventName = n.Event != null
-                                    ? n.Event.Name
-                                    : String.Empty,
-
+                    EventName = n.NotificationType == NotificationType.NewEvent
+                                ? n.EventNotification.Event.Name
+                                : String.Empty,
                     ItemId = 
                                 n.NotificationType == NotificationType.WallPost 
                                 ? n.PostNotification.PostId
                                 
                                 : n.NotificationType == NotificationType.NewEvent
-                                ? n.EventId.Value
+                                ? n.EventNotification.EventId
 
                                 : n.NotificationType == NotificationType.CommentOnPhoto
                                 ? n.Comment.PhotoComment.PhotoId

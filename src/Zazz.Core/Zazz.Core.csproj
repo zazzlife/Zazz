@@ -114,6 +114,7 @@
     <Compile Include="Models\Data\Enums\UserType.cs" />
     <Compile Include="Models\Data\EventComment.cs" />
     <Compile Include="Models\Data\EventFeed.cs" />
+    <Compile Include="Models\Data\EventNotification.cs" />
     <Compile Include="Models\Data\EventTag.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />

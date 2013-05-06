@@ -337,21 +337,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CallRemoveEventRecordsOnRepository_OnRemoveEventNotifications()
-        {
-            //Arrange
-            var eventId = 12;
-            _uow.Setup(x => x.NotificationRepository.RemoveRecordsByEventId(eventId));
-
-            //Act
-            _sut.RemoveEventNotifications(eventId);
-
-            //Assert
-            _uow.Verify(x => x.NotificationRepository.RemoveRecordsByEventId(eventId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
-
-        [Test]
         public void CallMarkNotificationsAsReadOnRepository_OnNotificationsAsRead()
         {
             //Arrange
