@@ -156,9 +156,9 @@ namespace Zazz.IntegrationTests
 
             var feed = new Feed
                        {
-                           FeedUsers = new List<FeedUser> {new FeedUser {UserId = user.Id}},
+                           FeedUsers = new List<FeedUser> { new FeedUser { UserId = user.Id } },
                            Time = DateTime.UtcNow,
-                           EventFeed = new EventFeed {EventId = zazzEvent.Id}
+                           EventFeed = new EventFeed { EventId = zazzEvent.Id }
                        };
 
             context.Feeds.Add(feed);
@@ -246,6 +246,55 @@ namespace Zazz.IntegrationTests
                                                            EventId = zazzEvent.Id
                                                        }
                                };
+
+            context.Notifications.Add(notification);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Notifications.Count());
+
+            //Act
+            context.Events.Remove(zazzEvent);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Notifications.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
+        public void RemoveNotificationsWhenCommentIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            var userB = Mother.GetUser();
+            context.Users.Add(user);
+            context.Users.Add(userB);
+            context.SaveChanges();
+
+            var zazzEvent = Mother.GetEvent(user.Id);
+            context.Events.Add(zazzEvent);
+            context.SaveChanges();
+
+            var comment = Mother.GetComment(user.Id);
+            comment.EventComment = new EventComment { EventId = zazzEvent.Id };
+
+            context.Comments.Add(comment);
+            context.SaveChanges();
+
+            var notification = new Notification
+            {
+                Time = DateTime.UtcNow,
+                UserId = user.Id,
+                UserBId = userB.Id,
+                NotificationType = NotificationType.CommentOnEvent,
+                CommentNotification = new CommentNotification
+                                      {
+                                          CommentId = comment.Id
+                                      }
+            };
 
             context.Notifications.Add(notification);
             context.SaveChanges();
