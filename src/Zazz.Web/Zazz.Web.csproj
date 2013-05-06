@@ -277,6 +277,7 @@
     <Content Include="App_Data\dbo.TRIGGER_PhotoComments_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_PostComments_DELETE.sql" />
     <Content Include="App_Data\dbo.TRIGGER_PostFeeds_DELETE.sql" />
+    <Content Include="App_Data\dbo.TRIGGER_PostNotifications_DELETE.sql" />
     <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-lightbox.css" />
     <Content Include="Content\bootstrap-overrides.css" />
