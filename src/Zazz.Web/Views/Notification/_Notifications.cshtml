@@ -16,7 +16,7 @@
 
             @if (n.NotificationType == NotificationType.CommentOnEvent)
             {
-                @:commented on your event
+                @:commented on your event:
                 <a target="_blank" href="~/event/show/@n.ItemId"><strong>@n.EventName</strong></a>
             }
             else if (n.NotificationType == NotificationType.CommentOnPhoto)
