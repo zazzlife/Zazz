@@ -65,7 +65,6 @@ namespace Zazz.Infrastructure.Services
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
                                    UserBId = commenterId,
-                                   PostNotification = new PostNotification { PostId = postId },
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.CommentOnPost
@@ -81,7 +80,6 @@ namespace Zazz.Infrastructure.Services
                                    UserId = userToBeNotified,
                                    CommentId = commentId,
                                    UserBId = commenterId,
-                                   EventNotification = new EventNotification { EventId = eventId },
                                    Time = DateTime.UtcNow,
                                    IsRead = false,
                                    NotificationType = NotificationType.CommentOnEvent
