@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -97,6 +99,42 @@ namespace Zazz.IntegrationTests
 
             //Assert
             Assert.AreEqual(0, context.Comments.Count());
+
+            context.Dispose();
+        }
+
+        [Test]
+        public void RemoveFeedWhenEventIsRemoved()
+        {
+            //Arrange
+            var context = new ZazzDbContext(true);
+
+            var user = Mother.GetUser();
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var zazzEvent = Mother.GetEvent(user.Id);
+            context.Events.Add(zazzEvent);
+            context.SaveChanges();
+
+            var feed = new Feed
+                       {
+                           FeedUsers = new List<FeedUser> {new FeedUser {UserId = user.Id}},
+                           Time = DateTime.UtcNow,
+                           EventFeed = new EventFeed {EventId = zazzEvent.Id}
+                       };
+
+            context.Feeds.Add(feed);
+            context.SaveChanges();
+
+            Assert.AreEqual(1, context.Feeds.Count());
+
+            //Act
+            context.Events.Remove(zazzEvent);
+            context.SaveChanges();
+
+            //Assert
+            Assert.AreEqual(0, context.Feeds.Count());
 
             context.Dispose();
         }
