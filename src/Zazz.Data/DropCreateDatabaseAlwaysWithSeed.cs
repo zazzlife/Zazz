@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.IO;
 
 namespace Zazz.Data
 {
@@ -17,6 +19,10 @@ namespace Zazz.Data
 
             foreach (var tag in StaticData.GetTags())
                 context.Tags.Add(tag);
+
+            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
+            foreach (var sqlFile in sqlFiles)
+                context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));
 
             base.Seed(context);
         }
