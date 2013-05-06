@@ -11,16 +11,14 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly INotificationService _notificationService;
-        private readonly ICommentService _commentService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
 
-        public PostService(IUoW uow, INotificationService notificationService, ICommentService commentService,
-            IStringHelper stringHelper, IStaticDataRepository staticDataRepository)
+        public PostService(IUoW uow, INotificationService notificationService, IStringHelper stringHelper,
+            IStaticDataRepository staticDataRepository)
         {
             _uow = uow;
             _notificationService = notificationService;
-            _commentService = commentService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
         }

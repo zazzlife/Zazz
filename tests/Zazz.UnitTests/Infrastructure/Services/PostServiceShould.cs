@@ -19,7 +19,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private PostService _sut;
         private Post _post;
         private Mock<INotificationService> _notificationService;
-        private Mock<ICommentService> _commentService;
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
         private MockRepository _mockRepo;
@@ -32,11 +31,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow = _mockRepo.Create<IUoW>();
             _notificationService = _mockRepo.Create<INotificationService>();
-            _commentService = _mockRepo.Create<ICommentService>();
             _stringHelper = _mockRepo.Create<IStringHelper>();
             _staticDataRepo = _mockRepo.Create<IStaticDataRepository>();
 
-            _sut = new PostService(_uow.Object, _notificationService.Object, _commentService.Object,
+            _sut = new PostService(_uow.Object, _notificationService.Object,
                 _stringHelper.Object, _staticDataRepo.Object);
 
             _uow.Setup(x => x.SaveChanges());
