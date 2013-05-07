@@ -46,12 +46,25 @@ namespace Zazz.Infrastructure.Services
                 var uniqueUsers = Enumerable.Union(photoUsers, postUsers);
                 uniqueUsers = uniqueUsers.Union(eventUsers);
 
-                var tagStat = new TagStat
+
+                var tagStat = _uow.TagStatRepository.GetTagStat(tag.Id);
+                if (tagStat == null)
+                {
+                    tagStat = new TagStat
                               {
                                   Date = DateTime.UtcNow,
                                   TagId = tag.Id,
                                   UsersCount = uniqueUsers.Count()
                               };
+
+                    _uow.TagStatRepository.InsertGraph(tagStat);
+                }
+                else
+                {
+                    tagStat.UsersCount = uniqueUsers.Count();
+                }
+
+                _uow.SaveChanges();
             }
         }
     }
