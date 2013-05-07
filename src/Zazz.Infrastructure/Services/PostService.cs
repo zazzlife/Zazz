@@ -31,8 +31,6 @@ namespace Zazz.Infrastructure.Services
         public void NewPost(Post post)
         {
             var extractedTags = _stringHelper.ExtractTags(post.Message);
-            var updatedTagStats = new List<int>();
-
             foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
@@ -42,31 +40,6 @@ namespace Zazz.Infrastructure.Services
                                   {
                                       TagId = tag.Id
                                   });
-
-                    var tagStat = _uow.TagStatRepository.GetLastestTagStat(tag.Id);
-                    if (tagStat == null || tagStat.Date < DateTime.UtcNow.AddDays(-5))
-                    {
-                        tagStat = new TagStat
-                                  {
-                                      Date = DateTime.UtcNow.Date,
-                                      TagId = tag.Id,
-                                      UsersCount = 1,
-                                  };
-                        tagStat.TagUsers.Add(new TagStatUser { UserId = post.FromUserId });
-
-                        _uow.TagStatRepository.InsertGraph(tagStat);
-                    }
-                    else
-                    {
-                        if (!tagStat.TagUsers.Any(tu => tu.UserId == post.FromUserId))
-                        {
-                            updatedTagStats.Add(tagStat.Id); //don't move this line out of the if statement.
-                            tagStat.TagUsers.Add(new TagStatUser
-                            {
-                                UserId = post.FromUserId
-                            });
-                        }
-                    }
                 }
             }
 
@@ -95,14 +68,6 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FeedRepository.InsertGraph(feed);
             _uow.SaveChanges();
-
-            if (updatedTagStats.Any())
-            {
-                foreach (var tagStatId in updatedTagStats)
-                    _uow.TagStatRepository.UpdateUsersCount(tagStatId);
-
-                _uow.SaveChanges();
-            }
         }
 
         public void EditPost(int postId, string newText, int currentUserId)

@@ -4,9 +4,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface ITagStatRepository : IRepository<TagStat>
     {
-        TagStat GetLastestTagStat(byte tagId);
-
-        void UpdateUsersCount(int id);
+        TagStat GetTagStat(byte tagId);
 
         int GetUsersCount(int tagId);
     }

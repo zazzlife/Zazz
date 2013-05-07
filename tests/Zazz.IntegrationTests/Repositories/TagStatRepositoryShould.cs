@@ -22,10 +22,11 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void OrderTagsByDateAndReturnTheLatestOne_OnGetLastTag()
+        public void ReturnCorrectTag_OnGetLastTag()
         {
             //Arrange
             byte tagId = 1;
+            byte tag2Id = 2;
             var tagStat1 = new TagStat
                            {
                                Date = DateTime.UtcNow.AddDays(-10),
@@ -35,7 +36,7 @@ namespace Zazz.IntegrationTests.Repositories
             var tagStat2 = new TagStat
                            {
                                Date = DateTime.UtcNow.AddDays(-5),
-                               TagId = tagId
+                               TagId = tag2Id
                            };
 
             _context.TagStats.Add(tagStat1);
@@ -43,47 +44,10 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var response = _repo.GetLastestTagStat(tagId);
+            var response = _repo.GetTagStat(tagId);
 
             //Assert
-            Assert.AreEqual(tagStat2.Id, response.Id);
-        }
-
-        [Test]
-        public void UpdateUsersCountToTag_UsersTableCount_OnUpdateUsersCount()
-        {
-            //Arrange
-            var user = Mother.GetUser();
-
-            var tagStat = new TagStat
-                          {
-                              Date = DateTime.UtcNow,
-                              UsersCount = 0,
-                              TagId = 1,
-                          };
-
-            _context.Users.Add(user);
-            _context.TagStats.Add(tagStat);
-            _context.SaveChanges();
-
-            var check1 = _context.TagStats.Single(t => t.Id == tagStat.Id);
-            Assert.AreEqual(0, check1.UsersCount);
-            Assert.AreEqual(0, check1.TagUsers.Count);
-
-            //Act
-            tagStat.TagUsers.Add(new TagStatUser
-                                 {
-                                     UserId = user.Id
-                                 });
-
-            _context.SaveChanges();
-            _repo.UpdateUsersCount(tagStat.Id);
-            _context.SaveChanges();
-
-            //Assert
-            var check2 = _context.TagStats.Single(t => t.Id == tagStat.Id);
-            Assert.AreEqual(1, check2.UsersCount);
-            Assert.AreEqual(1, check2.TagUsers.Count);
+            Assert.AreEqual(tagStat1.Id, response.Id);
         }
 
         [Test]
@@ -93,6 +57,7 @@ namespace Zazz.IntegrationTests.Repositories
             var tag1Count = 50;
             var tag2Count = 33;
             byte tagId = 1;
+            byte tag2Id = 2;
 
             var tag1 = new TagStat
                        {
@@ -104,14 +69,14 @@ namespace Zazz.IntegrationTests.Repositories
             var tag2 = new TagStat
                        {
                            Date = DateTime.UtcNow.AddDays(-5),
-                           TagId = tagId,
+                           TagId = tag2Id,
                            UsersCount = tag2Count
                        };
 
             var unrelatedTag = new TagStat
                                {
                                    Date = DateTime.UtcNow.AddDays(-2),
-                                   TagId = 2,
+                                   TagId = 3,
                                    UsersCount = 4322
                                };
 
@@ -124,7 +89,7 @@ namespace Zazz.IntegrationTests.Repositories
             var result = _repo.GetUsersCount(tagId);
 
             //Assert
-            Assert.AreEqual(tag2Count, result);
+            Assert.AreEqual(tag1Count, result);
         }
     }
 }

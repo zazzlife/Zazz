@@ -19,34 +19,15 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You must provide Id to update an entity, if you want to insert, user InsertGraph");
         }
 
-        public TagStat GetLastestTagStat(byte tagId)
+        public TagStat GetTagStat(byte tagId)
         {
-            return DbSet.Include(t => t.TagUsers)
-                        .Where(t => t.TagId == tagId)
-                        .OrderByDescending(t => t.Date)
-                        .FirstOrDefault();
-        }
-
-        public void UpdateUsersCount(int id)
-        {
-            lock (LockToken) //NOTE: if you move the app to a web farm this lock won't help much.
-            {
-                var record = DbSet
-                    .Include(t => t.TagUsers)
-                    .FirstOrDefault(t => t.Id == id);
-
-                if (record == null)
-                    return;
-
-                record.UsersCount = record.TagUsers.Count;
-            }
+            return DbSet.SingleOrDefault(t => t.TagId == tagId);
         }
 
         public int GetUsersCount(int tagId)
         {
             return DbSet
                 .Where(t => t.TagId == tagId)
-                .OrderByDescending(t => t.Date)
                 .Select(t => t.UsersCount)
                 .FirstOrDefault();
         }

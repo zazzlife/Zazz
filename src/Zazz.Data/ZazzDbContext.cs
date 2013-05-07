@@ -32,7 +32,6 @@ namespace Zazz.Data
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
         public IDbSet<Notification> Notifications { get; set; }
         public IDbSet<TagStat> TagStats { get; set; }
-        public IDbSet<TagStatUser> TagUsers { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)

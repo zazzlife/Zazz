@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
+    [Table("TagStatistics")]
     public class TagStat : BaseEntity
     {
-        public TagStat()
-        {
-            TagUsers = new HashSet<TagStatUser>();
-        }
-
         [Column(TypeName = "Date")]
         public DateTime Date { get; set; }
         
@@ -21,7 +15,5 @@ namespace Zazz.Core.Models.Data
         public virtual Tag Tag { get; set; }
 
         public int UsersCount { get; set; }
-
-        public ICollection<TagStatUser> TagUsers { get; set; }
     }
 }
