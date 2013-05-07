@@ -16,12 +16,22 @@ namespace Zazz.BackgroundServices
 
         public TagStatisticsService()
         {
+
+#if DEBUG
+            if (!System.Diagnostics.Debugger.IsAttached)
+                System.Diagnostics.Debugger.Launch();
+#endif
+
             //TODO: Move this initializations to an IoC container.
             _uow = new UoW();
             _staticDataRepo = new StaticDataRepository();
             _tagService = new TagService(_uow, _staticDataRepo);
 
             _timer.Elapsed += OnTimerElapsed;
+
+            CanPauseAndContinue = true;
+            CanStop = true;
+            _timer.AutoReset = false;
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
