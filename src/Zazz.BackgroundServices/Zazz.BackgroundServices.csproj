@@ -44,10 +44,29 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TagStatisticsService.cs" />
+    <Compile Include="TagStatisticsService.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Zazz.Core\Zazz.Core.csproj">
+      <Project>{a2879224-80d7-402d-a263-81b66b720f4c}</Project>
+      <Name>Zazz.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zazz.Data\Zazz.Data.csproj">
+      <Project>{0c41e54b-be21-40fb-b478-d1521dea1cf4}</Project>
+      <Name>Zazz.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Zazz.Infrastructure\Zazz.Infrastructure.csproj">
+      <Project>{c86d475a-5d4b-4d53-8067-7f534f18319f}</Project>
+      <Name>Zazz.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
