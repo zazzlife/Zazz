@@ -69,21 +69,28 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             _post1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
+            _post1Notification.PostNotification = new PostNotification { PostId = _post1.Id };
+            _post1Notification.NotificationType = NotificationType.WallPost;
 
             _post2Notification = Mother.GetNotification(_user.Id, _userB.Id);
             _post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
+            _post2Notification.NotificationType = NotificationType.WallPost;
 
             _event1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _event1Notification.EventNotification.EventId = _event1.Id;
+            _event1Notification.EventNotification = new EventNotification { EventId = _event1.Id };
+            _event1Notification.NotificationType = NotificationType.NewEvent;
 
             _event2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _event2Notification.EventNotification.EventId = _event2.Id;
+            _event2Notification.EventNotification = new EventNotification { EventId = _event2.Id };
+            _event2Notification.NotificationType = NotificationType.NewEvent;
 
             _comment1Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _comment1Notification.CommentNotification.CommentId = _comment1.Id;
+            _comment1Notification.CommentNotification = new CommentNotification { CommentId = _comment1.Id };
+            _comment1Notification.NotificationType = NotificationType.CommentOnEvent;
+
             _comment2Notification = Mother.GetNotification(_user.Id, _userB.Id);
-            _comment2Notification.CommentNotification.CommentId = _comment2.Id;
+            _comment2Notification.CommentNotification = new CommentNotification { CommentId = _comment2.Id };
+            _comment2Notification.NotificationType = NotificationType.CommentOnPost;
 
             _context.Notifications.Add(_post1Notification);
             _context.Notifications.Add(_post2Notification);
@@ -103,16 +110,16 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             var post1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            post1Notification.PostNotification = new PostNotification {PostId = _post1.Id};
+            post1Notification.PostNotification = new PostNotification { PostId = _post1.Id };
 
             var post2Notification = Mother.GetNotification(user2.Id, _user.Id);
             post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event1Notification.EventNotification.EventId = _event1.Id;
+            event1Notification.EventNotification = new EventNotification {EventId = _event1.Id};
 
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event2Notification.EventNotification.EventId = _event2.Id;
+            event2Notification.EventNotification = new EventNotification {EventId = _event2.Id};
 
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);
@@ -125,7 +132,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.IsTrue(_context.Notifications.Count() > 6);
-            Assert.AreEqual(8, notifications.Count());
+            Assert.AreEqual(6, notifications.Count());
         }
 
         [Test]
@@ -171,10 +178,10 @@ namespace Zazz.IntegrationTests.Repositories
             post2Notification.PostNotification = new PostNotification { PostId = _post2.Id };
 
             var event1Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event1Notification.EventNotification.EventId = _event1.Id;
+            event1Notification.EventNotification = new EventNotification {EventId = _event1.Id};
 
             var event2Notification = Mother.GetNotification(user2.Id, _user.Id);
-            event2Notification.EventNotification.EventId = _event2.Id;
+            event2Notification.EventNotification = new EventNotification {EventId = _event2.Id};
 
             _context.Notifications.Add(post1Notification);
             _context.Notifications.Add(post2Notification);
@@ -182,8 +189,8 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Notifications.Add(event2Notification);
             _context.SaveChanges();
 
-            Assert.AreEqual(8, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
-            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(4, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
 
             //Act
             _repo.MarkUserNotificationsAsRead(_user.Id);
@@ -191,8 +198,8 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(0, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
-            Assert.AreEqual(8, _context.Notifications.Count(n => n.UserId == _user.Id && n.IsRead));
-            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
+            Assert.AreEqual(6, _context.Notifications.Count(n => n.UserId == _user.Id && n.IsRead));
+            Assert.AreEqual(4, _context.Notifications.Count(n => n.UserId == user2.Id && !n.IsRead));
         }
 
         [Test]
@@ -208,8 +215,8 @@ namespace Zazz.IntegrationTests.Repositories
             var result = _repo.GetUnreadNotificationsCount(_user.Id);
 
             //Assert
-            Assert.AreEqual(7, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
-            Assert.AreEqual(7, result);
+            Assert.AreEqual(5, _context.Notifications.Count(n => n.UserId == _user.Id && !n.IsRead));
+            Assert.AreEqual(5, result);
         }
 
         [Test]
