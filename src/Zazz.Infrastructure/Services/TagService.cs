@@ -56,7 +56,7 @@ namespace Zazz.Infrastructure.Services
                 {
                     tagStat = new TagStat
                               {
-                                  Date = DateTime.UtcNow,
+                                  LastUpdate = DateTime.UtcNow,
                                   TagId = tag.Id,
                                   UsersCount = uniqueUsers.Count()
                               };
@@ -65,6 +65,7 @@ namespace Zazz.Infrastructure.Services
                 }
                 else
                 {
+                    tagStat.LastUpdate = DateTime.UtcNow;
                     tagStat.UsersCount = uniqueUsers.Count();
                 }
 

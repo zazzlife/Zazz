@@ -7,7 +7,7 @@ namespace Zazz.Core.Models.Data
     public class TagStat : BaseEntity
     {
         [Column(TypeName = "Date")]
-        public DateTime Date { get; set; }
+        public DateTime LastUpdate { get; set; }
         
         public byte TagId { get; set; }
 

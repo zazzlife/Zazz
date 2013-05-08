@@ -29,13 +29,13 @@ namespace Zazz.IntegrationTests.Repositories
             byte tag2Id = 2;
             var tagStat1 = new TagStat
                            {
-                               Date = DateTime.UtcNow.AddDays(-10),
+                               LastUpdate = DateTime.UtcNow.AddDays(-10),
                                TagId = tagId
                            };
 
             var tagStat2 = new TagStat
                            {
-                               Date = DateTime.UtcNow.AddDays(-5),
+                               LastUpdate = DateTime.UtcNow.AddDays(-5),
                                TagId = tag2Id
                            };
 
@@ -61,21 +61,21 @@ namespace Zazz.IntegrationTests.Repositories
 
             var tag1 = new TagStat
                        {
-                           Date = DateTime.UtcNow.AddDays(-7),
+                           LastUpdate = DateTime.UtcNow.AddDays(-7),
                            TagId = tagId,
                            UsersCount = tag1Count
                        };
 
             var tag2 = new TagStat
                        {
-                           Date = DateTime.UtcNow.AddDays(-5),
+                           LastUpdate = DateTime.UtcNow.AddDays(-5),
                            TagId = tag2Id,
                            UsersCount = tag2Count
                        };
 
             var unrelatedTag = new TagStat
                                {
-                                   Date = DateTime.UtcNow.AddDays(-2),
+                                   LastUpdate = DateTime.UtcNow.AddDays(-2),
                                    TagId = 3,
                                    UsersCount = 4322
                                };
