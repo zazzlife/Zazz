@@ -64,7 +64,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Tags(string tags)
+        public ActionResult Tags(string @select)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
 
@@ -72,6 +72,12 @@ namespace Zazz.Web.Controllers
                      {
                          CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(userId),
+                         AvailableTags = _staticDataRepository.GetTags()
+                                                              .Select(t => t.Name),
+                         SelectedTags = String.IsNullOrEmpty(@select)
+                                            ? Enumerable.Empty<string>()
+                                            : @select.Split(',')
+
                      };
 
             return View(vm);
