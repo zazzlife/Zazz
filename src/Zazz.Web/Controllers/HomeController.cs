@@ -19,14 +19,16 @@ namespace Zazz.Web.Controllers
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly ITagService _tagService;
 
         public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
-            IStaticDataRepository staticDataRepository)
+            IStaticDataRepository staticDataRepository, ITagService tagService)
         {
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
             _staticDataRepository = staticDataRepository;
+            _tagService = tagService;
         }
 
         public ActionResult Index()
@@ -36,12 +38,20 @@ namespace Zazz.Web.Controllers
                 var user = _userService.GetUser(User.Identity.Name);
                 var feeds = new FeedHelper(_uow, _userService, _photoService).GetFeeds(user.Id);
 
+                var tagStats = _tagService.GetAllTagStats().ToList();
                 var vm = new UserHomeViewModel
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
                              CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
-                             CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id)
+                             CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
+                             TagStats = tagStats
+                                 .Select(t => new TagStatViewModel
+                                              {
+                                                  TagName = t.Tag.Name,
+                                                  UsersCount = t.UsersCount
+                                              }),
+                             LastTagStatsUpdate = tagStats.First().Date
                          };
 
                 return View("UserHome", vm);
