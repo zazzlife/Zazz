@@ -31,7 +31,6 @@ namespace Zazz.BackgroundServices
 
             CanPauseAndContinue = true;
             CanStop = true;
-            _timer.AutoReset = false;
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
