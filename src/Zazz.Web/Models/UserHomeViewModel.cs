@@ -7,6 +7,9 @@ namespace Zazz.Web.Models
     public class UserHomeViewModel : BaseUserPageLayoutViewModel
     {
         public AccountType AccountType { get; set; }
+        
         public IEnumerable<FeedViewModel> Feeds { get; set; }
+
+        public IEnumerable<TagStat> TagStats { get; set; }
     }
 }
