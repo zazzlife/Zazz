@@ -14,6 +14,11 @@ namespace Zazz.Data.Repositories
         public TagStatRepository(DbContext dbContext) : base(dbContext)
         {}
 
+        public override IQueryable<TagStat> GetAll()
+        {
+            return DbSet.Include(t => t.Tag);
+        }
+
         protected override int GetItemId(TagStat item)
         {
             throw new InvalidOperationException("You must provide Id to update an entity, if you want to insert, user InsertGraph");

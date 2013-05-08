@@ -23,7 +23,7 @@ namespace Zazz.Data.Repositories
             DbSet = DbContext.Set<T>();
         }
 
-        public IQueryable<T> GetAll()
+        public virtual IQueryable<T> GetAll()
         {
             return DbSet;
         }
