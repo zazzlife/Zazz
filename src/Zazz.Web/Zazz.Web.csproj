@@ -295,6 +295,7 @@
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\select2.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
@@ -457,6 +458,7 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Content\modernizr-2.6.2.js" />
     <Content Include="Scripts\mvc-bootstrap-integration.js" />
+    <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Scripts\underscore.min.js" />
