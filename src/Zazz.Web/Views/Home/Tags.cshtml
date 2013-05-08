@@ -3,12 +3,22 @@
     ViewBag.Title = "Tags";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
-
-<p>Tags:
-    <select multiple="multiple">
+    
+<div class="margin-ten">
+    <select multiple="multiple" id="tagsSelect" style="width: 100%;">
         @foreach (var t in Model.AvailableTags)
         {
-            <option value="@t" @(Model.SelectedTags.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty )>#@t</option>
+            <option value="@t" @(Model.SelectedTags.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
         }
     </select>
-</p>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#tagsSelect').select2();
+        });
+    </script>
+}
