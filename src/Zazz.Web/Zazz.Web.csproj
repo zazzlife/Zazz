@@ -264,6 +264,7 @@
     <Compile Include="Models\OAuthLoginResponse.cs" />
     <Compile Include="Models\OAuthRegisterViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\TagsPageViewModel.cs" />
     <Compile Include="Models\TagStatViewModel.cs" />
     <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />
@@ -518,6 +519,7 @@
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Notification\_Notifications.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
+    <Content Include="Views\Home\Tags.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />

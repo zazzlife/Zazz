@@ -63,6 +63,20 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        [Authorize]
+        public ActionResult Tags(string tags)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+
+            var vm = new TagsPageViewModel
+                     {
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(userId),
+                     };
+
+            return View(vm);
+        }
+
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
 
