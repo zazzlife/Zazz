@@ -296,6 +296,7 @@
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
