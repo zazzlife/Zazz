@@ -50,7 +50,7 @@ namespace Zazz.Web.Controllers
                                                                  TagName = t.Tag.Name,
                                                                  UsersCount = t.UsersCount
                                                              }),
-                             LastTagStatsUpdate = tagStats.FirstOrDefault() == null 
+                             LastTagStatsUpdate = tagStats.FirstOrDefault() == null
                              ? DateTime.MinValue
                              : tagStats.First().LastUpdate
                          };
@@ -76,8 +76,8 @@ namespace Zazz.Web.Controllers
                                                               .Select(t => t.Name),
                          SelectedTags = String.IsNullOrEmpty(@select)
                                             ? Enumerable.Empty<string>()
-                                            : @select.Split(',')
-
+                                            : @select.Split(','),
+                         Feeds = Enumerable.Empty<FeedViewModel>()
                      };
 
             return View(vm);
