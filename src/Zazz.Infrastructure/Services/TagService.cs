@@ -17,6 +17,11 @@ namespace Zazz.Infrastructure.Services
             _staticDataRepository = staticDataRepository;
         }
 
+        public IEnumerable<TagStat> GetAllTagStats()
+        {
+            return _uow.TagStatRepository.GetAll();
+        }
+
         public void UpdateTagStatistics()
         {
             const int DAYS_AGO = -5;
