@@ -50,7 +50,9 @@ namespace Zazz.Web.Controllers
                                                                  TagName = t.Tag.Name,
                                                                  UsersCount = t.UsersCount
                                                              }),
-                             LastTagStatsUpdate = tagStats.First().LastUpdate
+                             LastTagStatsUpdate = tagStats.FirstOrDefault() == null 
+                             ? DateTime.MinValue
+                             : tagStats.First().LastUpdate
                          };
 
                 return View("UserHome", vm);
