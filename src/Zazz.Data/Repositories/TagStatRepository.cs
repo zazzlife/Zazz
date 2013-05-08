@@ -9,8 +9,6 @@ namespace Zazz.Data.Repositories
 {
     public class TagStatRepository : BaseRepository<TagStat>, ITagStatRepository
     {
-        private static readonly object LockToken = new object();
-
         public TagStatRepository(DbContext dbContext) : base(dbContext)
         {}
 
