@@ -88,6 +88,7 @@
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
     <Compile Include="Interfaces\IStringHelper.cs" />
+    <Compile Include="Interfaces\ITagService.cs" />
     <Compile Include="Interfaces\ITagStatRepository.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\ICommentRepository.cs" />

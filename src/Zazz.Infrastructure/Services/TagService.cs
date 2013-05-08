@@ -6,7 +6,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
 {
-    public class TagService
+    public class TagService : ITagService
     {
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
