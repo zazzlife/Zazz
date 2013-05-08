@@ -10,9 +10,6 @@ namespace Zazz.BackgroundServices
     public class TagStatisticsService : ServiceBase
     {
         private readonly Timer _timer = new Timer(1000 * 60 * 5);
-        private readonly IUoW _uow;
-        private readonly IStaticDataRepository _staticDataRepo;
-        private readonly TagService _tagService;
 
         public TagStatisticsService()
         {
@@ -21,12 +18,6 @@ namespace Zazz.BackgroundServices
             if (!System.Diagnostics.Debugger.IsAttached)
                 System.Diagnostics.Debugger.Launch();
 #endif
-
-            //TODO: Move this initializations to an IoC container.
-            _uow = new UoW();
-            _staticDataRepo = new StaticDataRepository();
-            _tagService = new TagService(_uow, _staticDataRepo);
-
             _timer.Elapsed += OnTimerElapsed;
 
             CanPauseAndContinue = true;
@@ -35,7 +26,12 @@ namespace Zazz.BackgroundServices
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            _tagService.UpdateTagStatistics();
+            using (var uow = new UoW())
+            {
+                var staticDataRepo = new StaticDataRepository();
+                var tagService = new TagService(uow, staticDataRepo);
+                tagService.UpdateTagStatistics();
+            }
         }
 
         protected override void OnPause()
