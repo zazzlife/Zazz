@@ -902,6 +902,32 @@ li.new-notification {
 }
 
 /***************************************
+    Tags
+***************************************/
+
+.tag-stats {
+    margin-top: 100px;
+    list-style: none;
+    text-align: center;
+    margin-left: 0;
+}
+
+.tag-stats li {
+    text-align: center;
+}
+
+.tag-stats .tag-header {
+    font-weight: 600;
+    font-size: 14px;
+    color: black;
+    margin-top: 15px;
+}
+
+.tag-stats .tag-header a {
+    text-decoration: none;
+}
+
+/***************************************
     Footer
 ***************************************/
 footer {
