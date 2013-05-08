@@ -391,6 +391,9 @@
     <Content Include="Images\concorida.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\mcgill.png" />
+    <Content Include="Images\select2-spinner.gif" />
+    <Content Include="Images\select2.png" />
+    <Content Include="Images\select2x2.png" />
     <Content Include="Images\ubc.png" />
     <Content Include="Images\victoria-uni.png" />
     <Content Include="Scripts\app\ajax-link.js" />
