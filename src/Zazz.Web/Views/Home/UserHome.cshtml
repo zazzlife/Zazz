@@ -53,7 +53,7 @@
             @foreach (var t in Model.TagStats)
             {
                 <li class="tag-header"><a href="#" data-tag="@t.TagName">#@t.TagName</a></li>
-                <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount.ToString() + " people are" ) talking about this.</li>
+                <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
             }
             <li class="tags-lastupdate">last update: <strong>@Model.LastTagStatsUpdate.ToRelativeTime()</strong></li>
         </ul>
