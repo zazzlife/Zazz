@@ -4,24 +4,25 @@
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
     
-<div class="page-header" style="margin-top: 43px; padding-left: 0;">
+<div>
+    <div class="page-header" style="margin-top: 43px; padding-left: 0;">
     
+        <div class="margin-ten">
+            <select multiple="multiple" id="tagsSelect" style="width: 100%;">
+                @foreach (var t in Model.AvailableTags)
+                {
+                    <option value="@t" @(Model.SelectedTags.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
+                }
+            </select>
+        </div>
+    </div>
     <div class="margin-ten">
-        <select multiple="multiple" id="tagsSelect" style="width: 100%;">
-            @foreach (var t in Model.AvailableTags)
-            {
-                <option value="@t" @(Model.SelectedTags.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
-            }
-        </select>
+    
+    
+        @Html.Partial("_FeedsPartial", Model.Feeds)
+
     </div>
 </div>
-<div class="margin-ten">
-    
-    
-    @Html.Partial("_FeedsPartial", Model.Feeds)
-
-</div>
-
 
 @section Scripts
 {

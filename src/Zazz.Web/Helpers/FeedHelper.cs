@@ -18,18 +18,23 @@ namespace Zazz.Web.Helpers
         private readonly IPhotoService _photoService;
         public int PageSize { get; set; }
 
-        /// <summary>
-        /// IMPORTANT: This class does not dispose any of the injected resources.
-        /// </summary>
-        /// <param name="uow"></param>
-        /// <param name="userService"></param>
-        /// <param name="photoService"></param>
         public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService)
         {
             _uow = uow;
             _userService = userService;
             _photoService = photoService;
             PageSize = 10;
+        }
+
+        /// <summary>
+        /// Retruns all recent feeds that contain the provided tags.
+        /// </summary>
+        /// <param name="currentUserId"></param>
+        /// <param name="tagIds"></param>
+        /// <returns></returns>
+        public List<FeedViewModel> GetTaggedFeeds(int currentUserId, IEnumerable<int> tagIds)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

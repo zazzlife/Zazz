@@ -21,6 +21,26 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You need to provide the id for updating this record, Use InsertGraph for inserting new record");
         }
 
+        public IQueryable<Feed> GetAllFeedsWithTags(List<byte> tags)
+        {
+            var query = (from feed in DbSet
+                         from photoTag in feed.FeedPhotos.SelectMany(p => p.Photo.Tags).DefaultIfEmpty()
+                         from postTag in feed.PostFeed.Post.Tags.DefaultIfEmpty()
+                         from eventTag in feed.EventFeed.Event.Tags.DefaultIfEmpty()
+                         orderby feed.Time descending
+                         where
+                             tags.Contains(photoTag.TagId) ||
+                             tags.Contains(postTag.TagId) ||
+                             tags.Contains(eventTag.TagId)
+                         select feed)
+                .Include(f => f.FeedPhotos)
+                .Include(f => f.PostFeed.Post)
+                .Include(f => f.EventFeed.Event);
+
+
+            return query;
+        }
+
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
             return (from feed in DbSet
