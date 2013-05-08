@@ -45,12 +45,11 @@ namespace Zazz.Web.Controllers
                              Feeds = feeds,
                              CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
                              CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
-                             TagStats = tagStats
-                                 .Select(t => new TagStatViewModel
-                                              {
-                                                  TagName = t.Tag.Name,
-                                                  UsersCount = t.UsersCount
-                                              }),
+                             TagStats = tagStats.Select(t => new TagStatViewModel
+                                                             {
+                                                                 TagName = t.Tag.Name,
+                                                                 UsersCount = t.UsersCount
+                                                             }),
                              LastTagStatsUpdate = tagStats.First().Date
                          };
 

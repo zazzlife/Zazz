@@ -912,19 +912,22 @@ li.new-notification {
     margin-left: 0;
 }
 
-.tag-stats li {
-    text-align: center;
-}
-
-.tag-stats .tag-header {
+.tag-header {
     font-weight: 600;
     font-size: 14px;
     color: black;
     margin-top: 15px;
 }
 
-.tag-stats .tag-header a {
+.tag-header a {
     text-decoration: none;
+}
+
+.tags-lastupdate {
+    font-size: 12px;
+    text-align: right;
+    margin-top: 15px;
+    color: black;
 }
 
 /***************************************

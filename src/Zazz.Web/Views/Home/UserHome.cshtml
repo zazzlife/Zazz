@@ -1,5 +1,6 @@
 ﻿@using Zazz.Core.Models.Data
 @using Zazz.Core.Models.Data.Enums
+@using Zazz.Infrastructure.Helpers
 @model UserHomeViewModel
 @{
     ViewBag.Title = "Home page";
@@ -47,9 +48,11 @@
     </ul>
     
     <ul class="tag-stats">
-        <li class="tag-header"><a href="#" data-tag="blackout">#Blackout</a></li> 
-        <li>31 people are talking about this.</li>
-        <li class="tag-header"><a href="#" data-tag="beerpong">#Beerpong</a></li> 
-        <li>11 people are talking about this.</li>
+        @foreach (var t in Model.TagStats)
+        {
+            <li class="tag-header"><a href="#" data-tag="@t.TagName">#@t.TagName</a></li> 
+            <li>@t.UsersCount people are talking about this.</li>
+        }
+        <li class="tags-lastupdate">last update: <strong>@Model.LastTagStatsUpdate.ToRelativeTime()</strong></li>
     </ul>
 }
