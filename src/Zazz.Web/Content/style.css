@@ -905,6 +905,11 @@ li.new-notification {
     Tags
 ***************************************/
 
+a.tag {
+    text-decoration: none;
+    color: black;
+}
+
 .tag-stats {
     margin-top: 100px;
     list-style: none;
