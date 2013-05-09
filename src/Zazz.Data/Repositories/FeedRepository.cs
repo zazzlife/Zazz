@@ -33,6 +33,7 @@ namespace Zazz.Data.Repositories
                              tags.Contains(postTag.TagId) ||
                              tags.Contains(eventTag.TagId)
                          select feed)
+                .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
                 .Include(f => f.EventFeed.Event);
