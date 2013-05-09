@@ -31,6 +31,12 @@ namespace Zazz.Web.Controllers
             _tagService = tagService;
         }
 
+        public ActionResult UpdateTags()
+        {
+            _tagService.UpdateTagStatistics();
+            return Redirect(Request.UrlReferrer.AbsolutePath);
+        }
+
         public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
