@@ -4,15 +4,13 @@
 
 function replaceTagsWithAnchorTags() {
     if (availableTags) {
-
-        var TAGS_REGEX = "#[a-zA-z0-9-]+";
-
+        
         $('*[data-containsTags]').each(function () {
 
             var self = $(this);
             var text = self.html();
 
-            var allTags = text.match(TAGS_REGEX);
+            var allTags = text.match(/#\w*/gi);
             var baseAddress = "/home/tags?select=";
 
             for (var i = 0; i < allTags.length; i++) {
