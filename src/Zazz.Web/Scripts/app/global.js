@@ -29,6 +29,8 @@ function applyPageStyles() {
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
 
+    replaceTagsWithAnchorTags();
+
     initInputTags();
 }
 
