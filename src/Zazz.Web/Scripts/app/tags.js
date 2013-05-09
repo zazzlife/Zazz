@@ -11,6 +11,10 @@ function replaceTagsWithAnchorTags() {
             var text = self.html();
 
             var allTags = text.match(/#\w*/gi);
+            if (!allTags) {
+                return;
+            }
+
             var baseAddress = "/home/tags?select=";
 
             for (var i = 0; i < allTags.length; i++) {
