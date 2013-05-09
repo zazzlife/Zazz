@@ -60,6 +60,12 @@ $('#notifications-link').popover({
         success: function (res) {
             popoverContent.html(res);
             
+            //moving lightbox markups out of the notification popover
+            $('.popover-content .lightbox').each(function() {
+                var article = $('article');
+                $(this).appendTo(article);
+            });
+
             // calculating the new position of the popover
             var linkPosition = self.parent('li').offset();
             var linkWidth = self.parent('li').width();
