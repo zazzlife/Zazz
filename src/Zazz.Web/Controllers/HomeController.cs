@@ -78,6 +78,10 @@ namespace Zazz.Web.Controllers
 
             var feeds = new FeedHelper(_uow, _userService, _photoService).GetTaggedFeeds(userId,
                                                                                          selectedTagsIds.ToList());
+
+            if (Request.IsAjaxRequest())
+                return View("_FeedsPartial", feeds);
+
             var vm = new TagsPageViewModel
                      {
                          CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
