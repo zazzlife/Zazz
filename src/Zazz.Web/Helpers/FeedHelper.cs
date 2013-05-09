@@ -29,12 +29,21 @@ namespace Zazz.Web.Helpers
         /// <summary>
         /// Retruns all recent feeds that contain the provided tags.
         /// </summary>
-        /// <param name="currentUserId"></param>
-        /// <param name="tagIds"></param>
+        /// <param name="currentUserId">Current User Id</param>
+        /// <param name="tagIds">List of tag ids to filter feeds.</param>
+        /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public List<FeedViewModel> GetTaggedFeeds(int currentUserId, IEnumerable<int> tagIds)
+        public List<FeedViewModel> GetTaggedFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0)
         {
-            throw new NotImplementedException();
+            var query = _uow.FeedRepository.GetFeedsWithTags(tagIds);
+
+            if (lastFeedId != 0)
+                query = query.Where(f => f.Id < lastFeedId);
+
+            query = query.Take(PageSize);
+
+            var feeds = query.ToList();
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
         /// <summary>

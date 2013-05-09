@@ -112,7 +112,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetAllFeedsWithTags(requestTags).ToList();
+            var result = _repo.GetFeedsWithTags(requestTags).ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);

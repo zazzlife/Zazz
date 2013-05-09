@@ -6,6 +6,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFeedRepository : IRepository<Feed>
     {
+        IQueryable<Feed> GetFeedsWithTags(List<byte> tags);
+
         IQueryable<Feed> GetFeeds(IEnumerable<int> userIds);
 
         IQueryable<Feed> GetUserFeeds(int userId);
