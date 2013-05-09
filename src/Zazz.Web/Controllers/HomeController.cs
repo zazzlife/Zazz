@@ -67,17 +67,24 @@ namespace Zazz.Web.Controllers
         public ActionResult Tags(string @select)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
+            var availableTags = _staticDataRepository.GetTags().ToList();
+            var selectedTags = String.IsNullOrEmpty(@select)
+                                   ? Enumerable.Empty<string>()
+                                   : @select.Split(',');
 
+            var selectedTagsIds =
+                availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
+                .Select(t => t.Id);
+
+            var feeds = new FeedHelper(_uow, _userService, _photoService).GetTaggedFeeds(userId,
+                                                                                         selectedTagsIds.ToList());
             var vm = new TagsPageViewModel
                      {
                          CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(userId),
-                         AvailableTags = _staticDataRepository.GetTags()
-                                                              .Select(t => t.Name),
-                         SelectedTags = String.IsNullOrEmpty(@select)
-                                            ? Enumerable.Empty<string>()
-                                            : @select.Split(','),
-                         Feeds = Enumerable.Empty<FeedViewModel>()
+                         AvailableTags = availableTags.Select(t => t.Name),
+                         SelectedTags = selectedTags,
+                         Feeds = feeds
                      };
 
             return View(vm);
