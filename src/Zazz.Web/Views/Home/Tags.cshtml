@@ -30,6 +30,32 @@
     <script type="text/javascript">
         $(function () {
             $('#tagsSelect').select2();
+
+            $('#tagsSelect').on('change', function(e) {
+                
+                var url = "/home/tags";
+                var container = $('#feedsContainer');
+                container.css('opacity', '0.6');
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        select: e.val
+                    },
+                    error: function() {
+                        toastr.error("Failed to load the feeds, please try again later.");
+                        container.css('opacity', '1');
+                    },
+                    success: function(res) {
+                        container.css('opacity', '1');
+                        container.fadeOut(function() {
+                            container.html(res);
+                            container.fadeIn();
+                        });
+                    }
+                });
+
+            });
         });
     </script>
 }
