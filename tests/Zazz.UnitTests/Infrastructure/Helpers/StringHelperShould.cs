@@ -45,7 +45,7 @@ namespace Zazz.UnitTests.Infrastructure.Helpers
         }
 
         [TestCase("this is #test", "this is <a class='tag' href='/home/tags?select=test'>#test</a>")]
-        [TestCase("this is #test-2 with #new #tags", "this is <a class='tag' href='/home/tags?select=test-2'>#test-2</a>")]
+        [TestCase("this is #test-2 with #new #tags ", "this is <a class='tag' href='/home/tags?select=test-2'>#test-2</a> with <a class='tag' href='/home/tags?select=new'>#new</a> <a class='tag' href='/home/tags?select=tags'>#tags</a> ")]
         public void CreateCorrectText_OnWrapTagsInAnchorTag(string text, string expected)
         {
             //Act
