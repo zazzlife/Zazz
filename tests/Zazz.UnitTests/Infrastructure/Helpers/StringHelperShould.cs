@@ -43,16 +43,5 @@ namespace Zazz.UnitTests.Infrastructure.Helpers
             CollectionAssert.Contains(result, tag6);
             CollectionAssert.Contains(result, tag7);
         }
-
-        [TestCase("this is #test", "this is <a class='tag' href='/home/tags?select=test'>#test</a>")]
-        [TestCase("this is #test-2 with #new #tags ", "this is <a class='tag' href='/home/tags?select=test-2'>#test-2</a> with <a class='tag' href='/home/tags?select=new'>#new</a> <a class='tag' href='/home/tags?select=tags'>#tags</a> ")]
-        public void CreateCorrectText_OnWrapTagsInAnchorTag(string text, string expected)
-        {
-            //Act
-            var result = _sut.WrapTagsInAnchorTag(text);
-
-            //Assert
-            Assert.AreEqual(expected, result);
-        }
     }
 }

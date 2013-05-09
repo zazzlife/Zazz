@@ -7,37 +7,11 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using Zazz.Core.Interfaces;
-using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.Helpers
 {
     public static class HtmlHelpers
     {
-        private static readonly IStringHelper StringHelper = new StringHelper();
-
-        public static MvcHtmlString WrapTagsInAnchorTags(this HtmlHelper htmlHelper, string text)
-        {
-            var tags = StringHelper.ExtractTags(text);
-            const string BASE_ADDRESS = "/home/tags?select=";
-            
-            var tagBuilder = new TagBuilder("a");
-            tagBuilder.AddCssClass("tag");
-            
-            foreach (var tag in tags)
-            {
-                var link = BASE_ADDRESS + tag.Replace("#", "");
-                
-                tagBuilder.MergeAttribute("href", link);
-                tagBuilder.SetInnerText(tag);
-
-                text = text.Replace(tag, tagBuilder.ToString());
-            }
-
-            var t = MvcHtmlString.Create(text);
-            return t;
-        }
-
         public static MvcHtmlString MenuLink(
            this HtmlHelper htmlHelper,
            string linkText,
