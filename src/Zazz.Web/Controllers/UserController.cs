@@ -123,7 +123,7 @@ namespace Zazz.Web.Controllers
             if (user.UserDetail.Major != null)
                 vm.Major = user.UserDetail.Major.Name;
 
-            return View("Profile", vm);
+            return View(user.AccountType == AccountType.User ? "UserProfile" : "Profile", vm);
         }
 
         public ActionResult LoadMoreFeeds(int lastFeedId)
