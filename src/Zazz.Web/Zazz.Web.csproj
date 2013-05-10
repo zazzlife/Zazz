@@ -522,6 +522,7 @@
     <Content Include="Views\Notification\_Notifications.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
     <Content Include="Views\Home\Tags.cshtml" />
+    <Content Include="Views\User\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />
