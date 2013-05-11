@@ -17,7 +17,7 @@
             
             @if (!Model.IsSelf)
             {
-                if (Model.IsCurrentUserFollowingTargetUser )
+                if (Model.IsCurrentUserFollowingTargetUser)
                 {
                     <button  data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
                          title="un-follow user" data-placement="right" class="btn icon-plus btn-follow btn-info"></button>
@@ -35,10 +35,10 @@
 
                 <div class="clearfix"></div>
 
-                 if (Model.IsTargetUserFollowingCurrentUser)
-                 {
+                if (Model.IsTargetUserFollowingCurrentUser)
+                {
                      <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
-                 }
+                }
             }
             
             
@@ -46,9 +46,20 @@
         @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
         {
             <ul class="well well-small user-info">
-                @(String.IsNullOrEmpty(Model.City) ? String.Empty : "<li><i class=\"icon-home\"></i>Montreal</li>")
-                @(String.IsNullOrEmpty(Model.School) ? String.Empty : "<li><i class=\"icon-building\"></i>Concorida University</li>")
-                @(String.IsNullOrEmpty(Model.Major) ? String.Empty : "<li><i class=\"icon-book\"></i>Major: Getting Backout</li>")
+                @if (!String.IsNullOrEmpty(Model.City))
+                {
+                    <li><i class="icon-home"></i>Montreal</li>
+                }
+
+                @if (!String.IsNullOrEmpty(Model.School))
+                {
+                    <li><i class="icon-building"></i>Concorida University</li>
+                }
+
+                @if (!String.IsNullOrEmpty(Model.Major))
+                {
+                    <li><i class="icon-book"></i>Major: Getting Backout</li>
+                }
             </ul>
         }
 
