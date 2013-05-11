@@ -51,14 +51,17 @@ namespace Zazz.Web.Controllers
                              Feeds = feeds,
                              CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
                              CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
-                             TagStats = tagStats.Select(t => new TagStatViewModel
-                                                             {
-                                                                 TagName = t.Tag.Name,
-                                                                 UsersCount = t.UsersCount
-                                                             }),
-                             LastTagStatsUpdate = tagStats.FirstOrDefault() == null
-                             ? DateTime.MinValue
-                             : tagStats.First().LastUpdate
+                             TagStats = new TagStatsWidgetViewModel
+                                        {
+                                            Tags = tagStats.Select(t => new TagStatViewModel
+                                                                        {
+                                                                            TagName = t.Tag.Name,
+                                                                            UsersCount = t.UsersCount
+                                                                        }),
+                                            LastUpdate = tagStats.FirstOrDefault() == null
+                                                             ? DateTime.MinValue
+                                                             : tagStats.First().LastUpdate
+                                        }
                          };
 
                 return View("UserHome", vm);

@@ -11,8 +11,6 @@ namespace Zazz.Web.Models
         
         public IEnumerable<FeedViewModel> Feeds { get; set; }
 
-        public IEnumerable<TagStatViewModel> TagStats { get; set; }
-
-        public DateTime LastTagStatsUpdate { get; set; }
+        public TagStatsWidgetViewModel TagStats { get; set; }
     }
 }
