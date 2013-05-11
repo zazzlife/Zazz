@@ -21,15 +21,17 @@ namespace Zazz.Web.Controllers
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
         private readonly ICacheService _cacheService;
+        private readonly ITagService _tagService;
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
-            IUserService userService, ICacheService cacheService)
+            IUserService userService, ICacheService cacheService, ITagService tagService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
             _cacheService = cacheService;
+            _tagService = tagService;
         }
 
         [Authorize]
@@ -87,6 +89,10 @@ namespace Zazz.Web.Controllers
             // Feeds 
             var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
 
+            // Tags stats
+
+            var tagStats = _tagService.GetAllTagStats().ToList();
+
             var vm = new UserProfileViewModel
                      {
                          CurrentUserDisplayName = displayName,
@@ -99,7 +105,18 @@ namespace Zazz.Web.Controllers
                          AccountType = user.AccountType,
                          UserId = id,
                          IsClub = user.AccountType == AccountType.ClubAdmin,
-                         Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId)
+                         Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId),
+                         TagsStats = new TagStatsWidgetViewModel
+                                     {
+                                         Tags = tagStats.Select(t => new TagStatViewModel
+                                                                     {
+                                                                         TagName = t.Tag.Name,
+                                                                         UsersCount = t.UsersCount
+                                                                     }),
+                                         LastUpdate = tagStats.FirstOrDefault() == null
+                                                          ? DateTime.MinValue
+                                                          : tagStats.First().LastUpdate
+                                     }
                      };
 
             if (!vm.IsSelf && currentUserId != 0)

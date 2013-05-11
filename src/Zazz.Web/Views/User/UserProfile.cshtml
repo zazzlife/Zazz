@@ -49,6 +49,8 @@
             @Html.Partial("_FeedsPartial", Model.Feeds)
         </div>
     </section>
-    <section class="right-panel"></section>
+    <section class="right-panel">
+        @Html.Partial("_TagStatsWidget", Model.TagsStats)
+    </section>
 
 </div>

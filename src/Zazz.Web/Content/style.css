@@ -911,7 +911,6 @@ a.tag {
 }
 
 .tag-stats {
-    margin-top: 100px;
     list-style: none;
     text-align: center;
     margin-left: 0;
@@ -949,12 +948,16 @@ a.tag {
 #user-profile-container .left-panel {
     text-align: center;
     color: #333333;
-    margin-right: 25px;
+    margin-right: 20px;
 }
 
 #user-profile-container .middle-panel {
     margin-top: -31px;
     border-left: 0;
+}
+
+#user-profile-container .right-panel {
+    width: 198px;
 }
 
 #user-profile-container .username {

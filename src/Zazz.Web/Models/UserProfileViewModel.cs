@@ -36,6 +36,8 @@ namespace Zazz.Web.Models
         public bool IsClub { get; set; }
 
         public List<FeedViewModel> Feeds { get; set; }
+
+        public TagStatsWidgetViewModel TagsStats { get; set; }
     }
 
 }
