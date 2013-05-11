@@ -43,12 +43,14 @@
             
             
         </div>
-
-        <ul class="well well-small user-info">
-            <li><i class="icon-home"></i>Montreal</li>
-            <li><i class="icon-building"></i>Concorida University</li>
-            <li><i class="icon-book"></i>Major: Getting Backout</li>
-        </ul>
+        @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
+        {
+            <ul class="well well-small user-info">
+                @(String.IsNullOrEmpty(Model.City) ? String.Empty : "<li><i class=\"icon-home\"></i>Montreal</li>")
+                @(String.IsNullOrEmpty(Model.School) ? String.Empty : "<li><i class=\"icon-building\"></i>Concorida University</li>")
+                @(String.IsNullOrEmpty(Model.Major) ? String.Empty : "<li><i class=\"icon-book\"></i>Major: Getting Backout</li>")
+            </ul>
+        }
 
         <div class="well pics-widget">
             <h6>Party pics</h6>
