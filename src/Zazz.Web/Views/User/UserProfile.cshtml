@@ -5,25 +5,41 @@
 }
 
 <div class="container" id="user-profile-container">
-    
+
     <section class="left-panel">
-        
+
         <img id="user-profile-image" src="~/Images/placeholder.gif" />
         <div class="username">Soroush Mirzaei</div>
-        
+
         <div class="party-web">
             <div class="followers-box">68</div>
             <div>Party Web</div>
         </div>
-        
+
         <ul class="well well-small user-info">
-            <li><i class="icon-home"></i> Montreal</li>
+            <li><i class="icon-home"></i>Montreal</li>
             <li><i class="icon-building"></i>Concorida University</li>
             <li><i class="icon-book"></i>Major: Getting Backout</li>
         </ul>
 
+        <div class="well pics-widget">
+            <h6>Party pics</h6>
+            <ul>
+                @for (int i = 0; i < 15; i++)
+                {
+                <li><a href="#"><img src="~/Images/placeholder.gif" /></a></li>
+                }
+            </ul>
+            <div class="clearfix"></div>
+            
+            <div class="text-center" style="margin-top: 10px;">
+                <a href="#">See more...</a>
+            </div>
+            
+        </div>
+</section>
+    <section class="middle-panel">
     </section>
-    <section class="middle-panel"></section>
-    <section class="right-panel"></section>
+<section class="right-panel"></section>
 
 </div>
