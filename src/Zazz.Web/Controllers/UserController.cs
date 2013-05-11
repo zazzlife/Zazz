@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
@@ -89,6 +90,10 @@ namespace Zazz.Web.Controllers
             // Feeds 
             var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
 
+            // Latest Photos
+            const int PHOTOS_COUNT = 15;
+            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, PHOTOS_COUNT);
+
             // Tags stats
 
             var tagStats = _tagService.GetAllTagStats().ToList();
@@ -116,7 +121,19 @@ namespace Zazz.Web.Controllers
                                          LastUpdate = tagStats.FirstOrDefault() == null
                                                           ? DateTime.MinValue
                                                           : tagStats.First().LastUpdate
-                                     }
+                                     },
+                        Photos = photos.Select(p => new PhotoViewModel
+                                                    {
+                                                        FromUserDisplayName = displayName,
+                                                        FromUserId = user.Id,
+                                                        FromUserPhotoUrl = profilePhotoUrl,
+                                                        IsFromCurrentUser = currentUserId == user.Id,
+                                                        PhotoDescription = p.Description,
+                                                        PhotoId = p.Id,
+                                                        PhotoUrl = p.IsFacebookPhoto 
+                                                        ? new PhotoLinks(p.FacebookLink)
+                                                        : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                                    })
                      };
 
             if (!vm.IsSelf && currentUserId != 0)

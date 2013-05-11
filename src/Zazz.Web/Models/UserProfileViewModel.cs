@@ -38,6 +38,8 @@ namespace Zazz.Web.Models
         public List<FeedViewModel> Feeds { get; set; }
 
         public TagStatsWidgetViewModel TagsStats { get; set; }
+
+        public IEnumerable<PhotoViewModel> Photos { get; set; }
     }
 
 }
