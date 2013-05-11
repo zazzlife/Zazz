@@ -2,12 +2,12 @@
 
 /* Follow or Unfollow */
 $(document).on('click', '.btn-follow', function () {
-    var btn = $(this);
-    var action = btn.data('action');
-    var originalBtnText = showBtnBusy(btn);
-    var id = btn.data('id');
+    var self = $(this);
+    var action = self.data('action');
+    var originalBtnText = showBtnBusy(self, true);
+    var id = self.data('id');
 
-    var url = btn.data('url');
+    var url = self.data('url');
 
     var options = {
         url: url,
@@ -19,24 +19,17 @@ $(document).on('click', '.btn-follow', function () {
 
     $.ajax(options).done(function () {
 
-        var btnContainer = $('#followRequestBtnContainer');
-        var btn;
-
-        if (action == "followRequest") {
-            btn = '<button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>';
-        } else if (action == "follow") {
-            btn = '<button data-id="' + id + '" data-url="/follow/unfollow/' + id + '" data-action="unfollow" class="btn btn-large pull-right btn-info btn-follow">Unfollow</button>';
+        if (action == "follow") {
+            self.attr('title', 'Follow request has been sent.');
+            setBtnDisabled(self);
+            self.html("<i class='icon-ok'></i>");
         } else if (action == "unfollow") {
-            var isClub = $('#isClub').val().toLowerCase() === 'true';
-            if (isClub) {
-                btn = '<button data-id="' + id + '" data-url="/follow/followuser/' + id + '" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>';
-            } else {
-                btn = '<button data-id=' + id + '" data-url="/follow/followuser/' + id + '" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>';
-            }
+            hideBtnBusy(self, "<i class='icon-plus'></i>");
+            self.attr('url', 'data-url="/follow/followuser/');
+            self.attr("action", "follow");
         }
-
-        btnContainer.html(btn);
-
+        
+        applyPageStyles();
     });
 });
 

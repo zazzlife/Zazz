@@ -1,9 +1,13 @@
 ﻿var LOADING_INDICATOR = '<i class="icon-spin icon-refresh"></i>';
 
-function showBtnBusy(btn) {
+function showBtnBusy(btn, showIconOnly) {
     var originalText = $(btn).html();
+    
+    var textWithSpinner = '<i style="margin-right:5px;" class="icon-refresh icon-spin"></i>';
+    if (!showIconOnly) {
+        textWithSpinner += originalText;
+    }
 
-    var textWithSpinner = '<i style="margin-right:5px;" class="icon-refresh icon-spin"></i>' + originalText;
 
     $(btn).attr('disabled', 'disabled');
     $(btn).addClass('disabled');
