@@ -90,6 +90,13 @@
                 @Html.Partial("_PostInputsPartial")
                 @Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithFeed", CreateFeed = true })
             }
+            else
+            {
+                <div id="profileTabs">
+                    <textarea data-tag="1" placeholder="Post something on @Model.UserName's wall" id="postInput"></textarea>
+                    <button type="button" class="btn btn-primary" id="submitPostBtn" data-touser="@Model.UserId">Submit</button>
+                </div>
+            }
             
         </div>
 
