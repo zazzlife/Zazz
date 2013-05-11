@@ -939,6 +939,29 @@ a.tag {
 }
 
 /***************************************
+    User Profile Page
+***************************************/
+
+#user-profile-container {
+    margin-top: 30px;
+}
+
+#user-profile-container .left-panel {
+    text-align: center;
+}
+
+#user-profile-container .middle-panel {
+    margin-top: -31px;
+    border-left: 0;
+}
+
+#user-profile-container .username {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+/***************************************
     Footer
 ***************************************/
 footer {
