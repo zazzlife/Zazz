@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = Model.UserName;
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var photoLightboxes = String.Empty;
 }
 
 <div class="container" id="user-profile-container">
@@ -66,10 +67,12 @@
         <div class="well pics-widget">
             <h6>Party pics</h6>
             <ul>
-                @for (int i = 0; i < 15; i++)
+                @foreach (var p in Model.Photos)
                 {
-                    <li><a href="#">
-                        <img src="~/Images/placeholder.gif" /></a></li>
+                    <li>
+                        <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink"><img src="@p.PhotoUrl.VerySmallLink" /></a>
+                        @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
+                    </li>
                 }
             </ul>
             <div class="clearfix"></div>
@@ -93,5 +96,7 @@
     <section class="right-panel">
         @Html.Partial("_TagStatsWidget", Model.TagsStats)
     </section>
+    
+    @Html.Raw(photoLightboxes)
 
 </div>

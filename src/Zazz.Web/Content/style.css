@@ -1086,7 +1086,7 @@ a.tag {
     margin: 2px;
 }
 
-#user-profile-container .pics-widget img {
+#user-profile-container .pics-widget li > a > img {
     width: 58px;
     height: 58px;
 }

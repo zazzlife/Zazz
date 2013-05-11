@@ -92,7 +92,7 @@ namespace Zazz.Web.Controllers
 
             // Latest Photos
             const int PHOTOS_COUNT = 15;
-            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, PHOTOS_COUNT);
+            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, PHOTOS_COUNT).ToList();
 
             // Tags stats
 
