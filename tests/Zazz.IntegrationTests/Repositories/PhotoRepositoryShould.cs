@@ -11,14 +11,58 @@ namespace Zazz.IntegrationTests.Repositories
     [TestFixture]
     public class PhotoRepositoryShould
     {
-        private ZazzDbContext _dbContext;
+        private ZazzDbContext _context;
         private PhotoRepository _repo;
 
         [SetUp]
         public void Init()
         {
-            _dbContext = new ZazzDbContext(true);
-            _repo = new PhotoRepository(_dbContext);
+            _context = new ZazzDbContext(true);
+            _repo = new PhotoRepository(_context);
+        }
+
+        [Test]
+        public void ReturnCorrectRecords_OnGetLatestUserPhotos()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var photo1 = Mother.GetPhoto(user.Id);
+            photo1.UploadDate = DateTime.UtcNow.AddDays(-10);
+            var photo2 = Mother.GetPhoto(user.Id);
+            photo2.UploadDate = DateTime.UtcNow.AddDays(-8);
+            var photo3 = Mother.GetPhoto(user.Id);
+            photo3.UploadDate = DateTime.UtcNow.AddDays(-5);
+            var photo4 = Mother.GetPhoto(user.Id);
+            photo4.UploadDate = DateTime.UtcNow.AddDays(-2);
+
+            var photo5 = Mother.GetPhoto(user2.Id);
+            photo5.UploadDate = DateTime.UtcNow;
+
+            _context.Photos.Add(photo1);
+            _context.Photos.Add(photo2);
+            _context.Photos.Add(photo3);
+            _context.Photos.Add(photo4);
+            _context.Photos.Add(photo5);
+            _context.SaveChanges();
+
+            Assert.AreEqual(5, _context.Photos.Count());
+            Assert.AreEqual(4, _context.Photos.Count(p => p.UserId == user.Id));
+
+            var count = 2;
+
+            //Act
+            var result = _repo.GetLatestUserPhotos(user.Id, count).ToList();
+
+            //Assert
+            Assert.AreEqual(count, result.Count);
+            Assert.IsTrue(result.Any(p => p.Id == photo4.Id));
+            Assert.IsTrue(result.Any(p => p.Id == photo3.Id));
+            Assert.AreEqual(photo4.Id, result[0].Id);
         }
 
         [Test]
@@ -157,8 +201,8 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             var photo1 = new Photo
                          {
@@ -178,10 +222,10 @@ namespace Zazz.IntegrationTests.Repositories
                 UserId = user.Id,
             };
 
-            _dbContext.Photos.Add(photo1);
-            _dbContext.Photos.Add(photo2);
-            _dbContext.Photos.Add(photo3);
-            _dbContext.SaveChanges();
+            _context.Photos.Add(photo1);
+            _context.Photos.Add(photo2);
+            _context.Photos.Add(photo3);
+            _context.SaveChanges();
 
             var ids = new int[] {photo1.Id, photo2.Id};
 
