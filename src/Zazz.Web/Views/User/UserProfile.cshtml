@@ -12,12 +12,36 @@
         <div class="username"><a href="~/user/profile/@Model.UserId">@Model.UserName</a></div>
 
         <div class="party-web">
-            <div class="followers-box">68</div>
+            <div class="followers-box">@Model.FollowersCount</div>
             <div>Party Web</div>
-            <button title="Add user" data-placement="right" class="btn icon-plus follow-btn btn-info"></button>
-            <div class="clearfix"></div>
             
-            <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
+            @if (!Model.IsSelf)
+            {
+                if (Model.IsCurrentUserFollowingTargetUser )
+                {
+                    <button  data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
+                         title="un-follow user" data-placement="right" class="btn icon-plus btn-follow btn-info"></button>
+                }
+                else if (Model.FollowRequestAlreadySent)
+                {
+                    <button title="Follow request has been sent before. You must wait for the user to accept your request."
+                         class="btn icon-plus btn-follow btn-info disabled" disabled="disabled"></button>
+                }
+                else
+                {
+                    <button  data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" 
+                         title="follow user" data-placement="right" class="btn icon-plus btn-follow btn-info"></button>
+                }
+
+                <div class="clearfix"></div>
+
+                 if (Model.IsTargetUserFollowingCurrentUser)
+                 {
+                     <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
+                 }
+            }
+            
+            
         </div>
 
         <ul class="well well-small user-info">
