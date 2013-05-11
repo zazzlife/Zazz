@@ -27,19 +27,28 @@
             <ul>
                 @for (int i = 0; i < 15; i++)
                 {
-                <li><a href="#"><img src="~/Images/placeholder.gif" /></a></li>
+                    <li><a href="#">
+                        <img src="~/Images/placeholder.gif" /></a></li>
                 }
             </ul>
             <div class="clearfix"></div>
-            
+
             <div class="text-center" style="margin-top: 10px;">
                 <a href="#">See more...</a>
             </div>
-            
+
         </div>
-</section>
-    <section class="middle-panel">
     </section>
-<section class="right-panel"></section>
+    <section class="middle-panel">
+        <div style="margin-top: -9px">
+            @Html.Partial("_PostInputsPartial")
+        </div>
+
+        <div class="margin-ten">
+
+            @Html.Partial("_FeedsPartial", Model.Feeds)
+        </div>
+    </section>
+    <section class="right-panel"></section>
 
 </div>
