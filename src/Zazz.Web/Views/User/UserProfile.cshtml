@@ -85,7 +85,12 @@
     </section>
     <section class="middle-panel">
         <div style="margin-top: -9px">
-            @Html.Partial("_PostInputsPartial")
+            @if (Model.IsSelf)
+            {
+                @Html.Partial("_PostInputsPartial")
+                @Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithFeed", CreateFeed = true })
+            }
+            
         </div>
 
         <div class="margin-ten">
