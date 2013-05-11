@@ -948,6 +948,7 @@ a.tag {
 
 #user-profile-container .left-panel {
     text-align: center;
+    color: #333333;
 }
 
 #user-profile-container .middle-panel {
@@ -958,8 +959,68 @@ a.tag {
 #user-profile-container .username {
     font-weight: 600;
     font-size: 16px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
+
+#user-profile-container .party-web {
+    margin-top: 25px;
+}
+
+#user-profile-container .party-web div {
+    margin-top: 10px;
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+.followers-box {
+    position: relative;
+    display: inline-block;
+    padding: 13px 26px 14px 26px;
+    margin-left: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 24px;
+    color: #333333;
+    vertical-align: middle;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+}
+
+    .followers-box:before {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border: 6px solid #ccc;
+        border-color: transparent black transparent transparent;
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        top: 100%;
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
+
+    .followers-box:after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border: 6px solid #fafafa;
+        border-color: transparent #fafafa transparent transparent;
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        top: 100%;
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        transform: rotate(270deg);
+    }
 
 /***************************************
     Footer
