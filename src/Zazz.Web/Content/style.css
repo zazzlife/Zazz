@@ -960,11 +960,23 @@ a.tag {
     width: 198px;
 }
 
+#user-profile-container #user-profile-image {
+    width: 175px
+}
+
 #user-profile-container .username {
     font-weight: 600;
     font-size: 16px;
     margin-top: 10px;
 }
+
+    #user-profile-container .username a {
+        color: black;
+    }
+
+    #user-profile-container .username a:hover {
+        text-decoration: none;
+    }
 
 #user-profile-container .party-web {
     margin-top: 25px;

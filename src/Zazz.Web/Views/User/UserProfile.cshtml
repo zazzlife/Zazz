@@ -8,8 +8,8 @@
 
     <section class="left-panel">
 
-        <img id="user-profile-image" class="img-polaroid img-small-rounded" src="~/Images/placeholder.gif" />
-        <div class="username">Soroush Mirzaei</div>
+        <img id="user-profile-image" class="img-polaroid img-small-rounded" src="@Model.UserPhotoUrl.SmallLink" />
+        <div class="username"><a href="~/user/profile/@Model.UserId">@Model.UserName</a></div>
 
         <div class="party-web">
             <div class="followers-box">68</div>
