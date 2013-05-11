@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPhotoRepository : IRepository<Photo>
     {
-        IQueryable<PhotoMinimalDTO> GetLatestUserPhotos(int userId, int count);
+        IQueryable<Photo> GetLatestUserPhotos(int userId, int count);
 
         IQueryable<Photo> GetPhotos(IEnumerable<int> photoIds);
 

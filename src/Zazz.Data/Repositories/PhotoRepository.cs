@@ -20,19 +20,11 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the image, if it's new then use insert graph.");
         }
 
-        public IQueryable<PhotoMinimalDTO> GetLatestUserPhotos(int userId, int count)
+        public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
         {
             return DbSet.Where(p => p.UserId == userId)
                         .OrderByDescending(p => p.UploadDate)
-                        .Take(count)
-                        .Select(p => new PhotoMinimalDTO
-                                     {
-                                         AlbumId = p.AlbumId,
-                                         FacebookPicUrl = p.FacebookLink,
-                                         Id = p.Id,
-                                         IsFacebookPhoto = p.IsFacebookPhoto,
-                                         UserId = p.UserId
-                                     });
+                        .Take(count);
         }
 
         public IQueryable<Photo> GetPhotos(IEnumerable<int> photoIds)
