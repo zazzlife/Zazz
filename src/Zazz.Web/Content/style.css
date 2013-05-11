@@ -1039,9 +1039,16 @@ a.tag {
         transform: rotate(270deg);
     }
 
+    .follow-btn {
+        width: 80px;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+
 #user-profile-container .user-info {
     padding: 5px;
-    margin: 15px 0;
+    margin: 50px 0 15px 0;
     text-align: left;
     font-size: 14px;
     list-style: none;
