@@ -673,6 +673,11 @@ hr.gold-line {
     font-weight: 400;
 }
 
+.club-party-web-info .btn-follow {
+    width: 100px;
+    margin: 10px 0;
+}
+
 #coverImg {
     margin-bottom: 25px;
     width: 100%;
