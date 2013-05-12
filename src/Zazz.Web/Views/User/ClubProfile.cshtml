@@ -1,7 +1,7 @@
 ﻿@using Zazz.Core.Models.Data.Enums
 @model UserProfileViewModel
 @{
-    ViewBag.Title = "Profile";
+    ViewBag.Title = Model.UserName;
 }
 
 <div class="container">
@@ -32,49 +32,15 @@
 
         @*RIGHT ITEMS*@
         <div class="pull-right">
-            <span class="pull-right followers-text">Party Web Followers: @Model.FollowersCount</span>
-            <br />
+            
+            <div class="club-party-web-info text-center">
+                
+                <i class="badge badge-info followers-count">5</i>
+                <br/>
+                <span>Party Web</span>
+            </div>
+            
 
-            @if (Model.IsTargetUserFollowingCurrentUser)
-            {
-                <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
-                <div class="clearfix"></div>
-            }
-
-            @if (Model.IsSelf)
-            {
-
-            }
-            else
-            {
-                <input type="hidden" id="isClub" value="@Model.IsClub.ToString()"/>
-                <div id="followRequestBtnContainer">
-                    @if (!Model.IsCurrentUserFollowingTargetUser)
-                    {
-                        if (Model.AccountType == AccountType.ClubAdmin)
-                        {
-                            <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" class="btn btn-large pull-right btn-info btn-follow">Follow</button>
-                        }
-                        else
-                        {
-                            if (Model.FollowRequestAlreadySent)
-                            {
-                                <button title="Follow request has been sent before. You must wait for the user to accept your request." class="btn btn-large pull-right btn-info disabled" disabled="disabled">Follow Request Sent</button>
-                            }
-                            else
-                            {
-                                <button data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="followRequest" class="btn btn-large pull-right btn-info btn-follow">Send Follow Request</button>
-                            }
-                        }
-                    }
-                    else
-                    {
-                        <button data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow" class="btn btn-large pull-right btn-info btn-follow">Unfollow</button>
-                    }
-                </div>
-            }
-
-            <div class="clearfix"></div>
         </div>
 
         @*CENTER ITEMS*@

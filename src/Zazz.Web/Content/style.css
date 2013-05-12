@@ -660,12 +660,17 @@ hr.gold-line {
     padding-bottom: 5px;
 }
 
-.followers-text {
-    margin: 0;
-    padding: 0;
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 10px;
+.club-party-web-info {
+    font-size: 22px;
+}
+
+.club-party-web-info .followers-count {
+    font-size: 24px;
+    padding: 15px;
+    margin-bottom: 5px;
+    border-radius: 25px;
+    font-style: normal;
+    font-weight: 400;
 }
 
 #coverImg {
@@ -724,10 +729,6 @@ hr.gold-line {
     float: left;
     margin-left: 25px;
     width: 715px;
-}
-
-#followRequestBtnContainer button {
-    font-size: 16px;
 }
 
 /***************************************
