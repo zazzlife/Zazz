@@ -694,7 +694,7 @@ hr.gold-line {
 .weeklies-text div {
     font-family: 'Alfa Slab One';
     font-size: 33px;
-    padding: 35px 5px 35px 0;
+    padding: 35px 15px 35px 0;
     border-right: 2px solid;
     margin-top: 14px;
 }
@@ -705,14 +705,19 @@ hr.gold-line {
     padding: 0;
     float: left;
     padding-top: 14px;
-    padding-left: 5px;
+    padding-left: 29px;
+    padding-right: 29px;
 }
 
 .weekly {
     float: left;
     text-align: center;
     font-weight: 600;
-    margin-right: 4px;
+    margin-right: 10px;
+}
+
+.weekly:last-child {
+    margin: 0;
 }
 
 .weekly img {
@@ -723,6 +728,12 @@ hr.gold-line {
 
 .special-events {
     float: right;
+    font-family: 'Alfa Slab One';
+    font-size: 33px;
+    text-align: center;
+    margin-top: 14px;
+    padding: 15px 0 20px 15px;
+    border-left: 2px solid;
 }
 
 #coverImg {
