@@ -4,7 +4,7 @@
     ViewBag.Title = "Profile";
 }
 
-<div class="container" style="margin-top: 50px;">
+<div class="container">
     @*COVER IMAGE*@
     <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
 
@@ -12,9 +12,22 @@
 
         @*LEFT ITEMS*@
         <div class="pull-left">
-            <h4>Major: @Model.Major</h4>
-            <h4>@Model.School</h4>
-            <h5 class="uppercase">@Model.City</h5>
+            <table class="club-details">
+                <tbody>
+                    <tr>
+                        <td><i class="icon-glass"></i></td>
+                        <td>Night Club</td>
+                    </tr>
+                    <tr>
+                        <td><i class="icon-building"></i></td>
+                        <td>Victoria B.C.</td>
+                    </tr>
+                    <tr>
+                        <td><i class="icon-map-marker" style="margin-left: 1px;"></i></td>
+                        <td>751 View street</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         @*RIGHT ITEMS*@

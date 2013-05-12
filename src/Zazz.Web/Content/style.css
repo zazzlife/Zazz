@@ -648,6 +648,18 @@ hr.gold-line {
         Profile Page
 ***************************************/
 
+.club-details {
+    font-size: 16px;
+}
+
+.club-details i {
+    margin-right: 5px;
+}
+
+.club-details td {
+    padding-bottom: 5px;
+}
+
 .followers-text {
     margin: 0;
     padding: 0;
