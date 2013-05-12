@@ -57,11 +57,19 @@
     
     <div class="weeklies-container">
         <div class="weeklies-text">
-            <a href="#">add...</a>
+            <a href="#" style="position: absolute;">add...</a>
             <div>Weeklies</div>
-
         </div>
-        <div class="weeklies-items"></div>
+        <ul class="weeklies-items">
+            
+            @for (int i = 0; i < 7; i++)
+            {
+                <li class="weekly">
+                    <img src="~/Images/placeholder.gif"/>
+                    <div>Mon</div>
+                </li>
+            }
+        </ul>
         <div class="special-events"></div>
     </div>
     <div class="clearfix"></div>
