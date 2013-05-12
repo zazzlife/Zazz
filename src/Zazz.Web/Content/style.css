@@ -678,6 +678,33 @@ hr.gold-line {
     margin: 10px 0;
 }
 
+.weeklies-container {
+    height: 120px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+}
+
+.weeklies-text {
+    float: left;
+}
+
+.weeklies-text div {
+    font-family: 'Alfa Slab One';
+    font-size: 33px;
+    padding: 30px 10px 30px 0;
+    border-right: 2px solid;
+}
+
+.weeklies-items {
+    float: left;
+}
+
+.special-events {
+    float: right;
+}
+
 #coverImg {
     margin-bottom: 25px;
     width: 100%;
