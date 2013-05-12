@@ -95,26 +95,19 @@
         </div>
     }
     
-    @* LEFT MENU *@
-    <div id="leftMenu" class="well light-background">
-        <div class="menu-title"><strong>MY CLUBS</strong></div>
-        <ul>
-            <li><a href="#">Club A</a></li>
-            <li><a href="#">Club B</a></li>
-            <li><a href="#">Club C</a></li>
-            <li><a href="#">Club D</a></li>
+    @* Photos List *@
+    
+    <div class="well party-albums">
+        <h6>Party Albums</h6>
+        <strong>@DateTime.UtcNow.ToLongDateString()</strong>
+        <ul class="party-images">
+            @for (int i = 0; i < 15; i++)
+            {
+                <li><img src="~/Images/placeholder.gif"/></li>
+            }
         </ul>
-        <a href="#" style="font-size: 12px;">MORE...</a>
-
-        <div class="menu-title" style="margin-top: 25px;"><strong>PEOPLE TO PARTY WITH</strong></div>
-        <ul>
-            <li><a href="#">Person A</a></li>
-            <li><a href="#">Person B</a></li>
-            <li><a href="#">Person C</a></li>
-            <li><a href="#">Person D</a></li>
-        </ul>
-        <a href="#" style="font-size: 12px;">MORE...</a>
     </div>
+
 
     @* FEEDS *@
 

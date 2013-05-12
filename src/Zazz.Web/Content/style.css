@@ -776,33 +776,43 @@ hr.gold-line {
     font-size: 12px;
 }
 
-#leftMenu {
-    width: 180px;
-    height: 100%;
-    float: left;
-}
-
-    #leftMenu .menu-title {
-        text-align: center;
-    }
-
-    #leftMenu ul {
-        margin: 10px 0;
-        list-style: none;
-    }
-
-    #leftMenu li {
-        margin-top: 5px;
-    }
-
 #followsYouSign:hover {
     cursor: pointer;
+}
+
+.party-albums {
+    float: left;
+    width: 400px;
+    padding: 6px;
+    padding-right: 0;
+}
+
+.party-albums h6 {
+    margin: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+    border-bottom: 1px solid;
+}
+
+.party-images {
+    list-style: none;
+    margin: 0;
+    margin-left: -3px;
+}
+
+.party-images li {
+    float: left;
+    margin: 2px;
+}
+
+.party-images li img {
+    width: 96px;
+    height: 96px;
 }
 
 #feedContent {
     float: left;
     margin-left: 25px;
-    width: 715px;
 }
 
 /***************************************
