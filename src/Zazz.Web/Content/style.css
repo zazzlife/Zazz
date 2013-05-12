@@ -728,12 +728,23 @@ hr.gold-line {
 
 .special-events {
     float: right;
-    font-family: 'Alfa Slab One';
-    font-size: 33px;
     text-align: center;
     margin-top: 14px;
     padding: 15px 0 20px 15px;
     border-left: 2px solid;
+}
+
+.special-events .special-events-text {
+    font-family: 'Alfa Slab One';
+    font-size: 33px;
+}
+
+.special-events .special-events-count {
+    position: absolute;
+    right: -16px;
+    top: -1px;
+    font-size: 14px;
+    padding: 5px 8px;
 }
 
 #coverImg {
