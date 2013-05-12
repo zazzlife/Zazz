@@ -99,13 +99,19 @@
     
     <div class="well party-albums">
         <h6>Party Albums</h6>
-        <strong>@DateTime.UtcNow.ToLongDateString()</strong>
-        <ul class="party-images">
-            @for (int i = 0; i < 13; i++)
-            {
-                <li><img src="~/Images/placeholder.gif"/></li>
-            }
-        </ul>
+        
+        @for (int i = 0; i < 3; i++)
+        {
+            <strong>@DateTime.UtcNow.AddDays(i * -1).ToLongDateString()</strong>
+            <ul class="party-images">
+                @for (int j = 0; j < 13; j++)
+                {
+                    <li><img src="~/Images/placeholder.gif"/></li>
+                }
+            </ul>
+        }
+        
+        <div class="text-center"><a href="#">See more...</a></div>
     </div>
 
 
