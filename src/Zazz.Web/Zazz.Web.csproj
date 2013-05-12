@@ -424,7 +424,6 @@
     <Content Include="Scripts\app\crop.js" />
     <Content Include="Scripts\app\edit-event.js" />
     <Content Include="Scripts\app\edit-profile.js" />
-    <Content Include="Scripts\app\follow.js" />
     <Content Include="Scripts\app\global.js" />
     <Content Include="Scripts\app\map.js" />
     <Content Include="Scripts\app\profile.js" />
