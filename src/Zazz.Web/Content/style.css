@@ -810,6 +810,11 @@ hr.gold-line {
     height: 96px;
 }
 
+.party-images li:first-child img {
+    width: 196px;
+    height: 196px;
+}
+
 #feedContent {
     float: left;
     margin-left: 25px;
