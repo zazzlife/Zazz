@@ -63,25 +63,29 @@
                 }
             </ul>
         }
+        
+        @if (Model.Photos.Any())
+        {
+            <div class="well pics-widget">
+                <h6>Party pics</h6>
+                <ul>
+                    @foreach (var p in Model.Photos)
+                    {
+                        <li>
+                            <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink"><img src="@p.PhotoUrl.VerySmallLink" /></a>
+                            @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
+                        </li>
+                    }
+                </ul>
+                <div class="clearfix"></div>
 
-        <div class="well pics-widget">
-            <h6>Party pics</h6>
-            <ul>
-                @foreach (var p in Model.Photos)
-                {
-                    <li>
-                        <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink"><img src="@p.PhotoUrl.VerySmallLink" /></a>
-                        @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
-                    </li>
-                }
-            </ul>
-            <div class="clearfix"></div>
+                <div class="text-center" style="margin-top: 10px;">
+                    <a href="~/photo/list/@Model.UserId">See more...</a>
+                </div>
 
-            <div class="text-center" style="margin-top: 10px;">
-                <a href="~/photo/list/@Model.UserId">See more...</a>
             </div>
+        }
 
-        </div>
     </section>
     <section class="middle-panel">
         <div style="margin-top: -9px">
@@ -92,7 +96,7 @@
             }
             else
             {
-                <div id="profileTabs">
+                <div id="profileTabs" class="margin-ten">
                     <textarea data-tag="1" placeholder="Post something on @Model.UserName's wall" id="postInput"></textarea>
                     <button type="button" class="btn btn-primary" id="submitPostBtn" data-touser="@Model.UserId">Submit</button>
                 </div>
