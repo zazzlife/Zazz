@@ -67,6 +67,7 @@
     <Compile Include="Repositories\TagStatRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
+    <Compile Include="Repositories\WeeklyRepository.cs" />
     <Compile Include="StaticData.cs" />
     <Compile Include="StaticDataRepository.cs" />
     <Compile Include="UoW.cs" />
