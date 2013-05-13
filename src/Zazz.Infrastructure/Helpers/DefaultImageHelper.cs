@@ -7,13 +7,7 @@ namespace Zazz.Infrastructure.Helpers
     {
         public static PhotoLinks GetUserDefaultImage(Gender gender)
         {
-            return new PhotoLinks
-                   {
-                       VerySmallLink = "/Images/placeholder.gif",
-                       SmallLink = "/Images/placeholder.gif",
-                       MediumLink = "/Images/placeholder.gif",
-                       OriginalLink = "/Images/placeholder.gif",
-                   };
+            return new PhotoLinks("/Images/placeholder.gif");
         }
 
         public static string GetDefaultCoverImage()
@@ -27,6 +21,11 @@ namespace Zazz.Infrastructure.Helpers
         }
 
         public static PhotoLinks GetDefaultEventImage()
+        {
+            return new PhotoLinks("/Images/placeholder.gif");
+        }
+
+        public static PhotoLinks GetDefaultWeeklyImage()
         {
             return new PhotoLinks("/Images/placeholder.gif");
         }

@@ -528,6 +528,7 @@
     <Content Include="Views\Shared\_TagStatsWidget.cshtml" />
     <Content Include="Views\User\_WeeklyEditForm.cshtml" />
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
+    <Content Include="Views\Shared\_WeeklyItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />

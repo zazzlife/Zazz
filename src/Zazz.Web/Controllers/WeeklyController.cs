@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -15,14 +16,16 @@ namespace Zazz.Web.Controllers
     {
         private readonly IUoW _uow;
         private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
 
-        public WeeklyController(IUoW uow, IUserService userService)
+        public WeeklyController(IUoW uow, IUserService userService, IPhotoService photoService)
         {
             _uow = uow;
             _userService = userService;
+            _photoService = photoService;
         }
 
-        public void New(WeeklyViewModel vm)
+        public ActionResult New(WeeklyViewModel vm)
         {
             var user = _userService.GetUser(User.Identity.Name,
                 includeDetails: false,
@@ -40,7 +43,12 @@ namespace Zazz.Web.Controllers
                                   PhotoId = vm.PhotoId
                               });
 
-            //_uow.SaveChanges();
+            vm.PhotoLinks = vm.PhotoId.HasValue
+                                ? _photoService.GeneratePhotoUrl(user.Id, vm.PhotoId.Value)
+                                : DefaultImageHelper.GetDefaultWeeklyImage();
+
+            _uow.SaveChanges();
+            return View("_WeeklyItem", vm);
         }
 
         public void Edit(WeeklyViewModel vm)
