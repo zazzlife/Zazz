@@ -17,6 +17,11 @@
     border-radius: 0;
 }
 
+.popover {
+    min-width: 100px;
+    text-align: center;
+}
+
 .well {
     /*background-color: #2e2e2e;
     border: 1px solid #646464;*/

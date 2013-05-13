@@ -211,5 +211,9 @@ $(function() {
 
         addWeeklyContent.remove();
     }
+
+    $('.weekly').each(function () {
+        $(this).popover();
+    });
 });
 

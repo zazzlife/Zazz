@@ -2,7 +2,8 @@
 @{
     Layout = null;
 }
-<li class="weekly">
+<li class="weekly" data-content="@Model.Description" data-placement="top"
+     data-trigger="hover" data-title="@Model.Name">
     <img src="@Model.PhotoLinks.SmallLink"/>
     <div>@Model.DayOfTheWeek</div>
 </li>
