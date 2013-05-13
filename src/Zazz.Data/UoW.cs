@@ -121,6 +121,12 @@ namespace Zazz.Data
             get { return _tagStatRepository ?? (_tagStatRepository = new TagStatRepository(GetContext())); }
         }
 
+        private IWeeklyRepository _weeklyRepository;
+        public IWeeklyRepository WeeklyRepository
+        {
+            get { return _weeklyRepository ?? (_weeklyRepository = new WeeklyRepository(GetContext())); }
+        }
+
 
         private ZazzDbContext GetContext()
         {
