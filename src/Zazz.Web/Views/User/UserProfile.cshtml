@@ -92,7 +92,6 @@
             @if (Model.IsSelf)
             {
                 @Html.Partial("_PostInputsPartial")
-                @Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithFeed", CreateFeed = true })
             }
             else
             {

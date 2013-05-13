@@ -13,8 +13,10 @@
                 <button type="button" class="btn btn-primary" id="submitPostBtn">Submit</button>
             </div>
             <div class="tab-pane margin-ten" id="tab2">
-                <p><button data-toggle="modal" data-target="#uploadPicModalWithFeed" class="btn btn-info">Upload Photo</button></p>
+                <p><button data-toggle="modal" data-target="#uploadPicModal" data-callback="uploadPicWithFeed"
+                     class="btn btn-info">Upload Photo</button></p>
             </div>
         </div>
     </div>
 </div>
+@Html.Partial("_UploadPicModal", true)

@@ -1,6 +1,4 @@
-﻿@using Zazz.Core.Models.Data
-@using Zazz.Core.Models.Data.Enums
-@using Zazz.Infrastructure.Helpers
+﻿@using Zazz.Core.Models.Data.Enums
 @model UserHomeViewModel
 @{
     ViewBag.Title = "Home page";
@@ -19,8 +17,6 @@
     @Html.Partial("_FeedsPartial", Model.Feeds)
 
 </div>
-
-@Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadPicModalWithFeed", CreateFeed = true })
 
 <div class="modal hide fade" id="manageFbPagesModal">
     <div class="modal-header">

@@ -266,42 +266,21 @@ $(document).on('show', '#uploadPicModal', function () {
 
 });
 
-$(document).on('show', '#uploadPicModalWithFeed', function () {
-    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
-    initImgUploader(function (id, name, response) {
-
-        if (!response.success) {
-            toastr.error(response.error);
-        } else {
-
-            $.ajax({
-                url: '/photo/feed/' + response.photoId,
-                error: function () {
-                    toastr.error('Image was uploaded but failed to get the feed. Please refresh the page.');
-
-                    $('#uploadPicModalWithFeed').modal('hide');
-                    if (imgUploadBtn) {
-                        hideBtnBusy(imgUploadBtn, "Upload");
-                    }
-                },
-                success: function (res) {
-                    $('#uploadPicModalWithFeed').modal('hide');
-                    if (imgUploadBtn) {
-                        hideBtnBusy(imgUploadBtn, "Upload");
-                    }
-
-                    var feed = $(res.trim());
-                    feed.prependTo($('#feedsContainer')).hide().slideDown();
-                    applyPageStyles();
-                }
-            });
-        }
-
-    });
-
-});
-
 /////////////////////////////////////////////////////////////////////////
+
+function uploadPicWithFeed(photoId) {
+    $.ajax({
+        url: '/photo/feed/' + photoId,
+        error: function () {
+            toastr.error('Image was uploaded but failed to get the feed. Please refresh the page.');
+        },
+        success: function (res) {
+            var feed = $(res.trim());
+            feed.prependTo($('#feedsContainer')).hide().slideDown();
+            applyPageStyles();
+        }
+    });
+}
 
 /********************************
     Search Autocomplete
