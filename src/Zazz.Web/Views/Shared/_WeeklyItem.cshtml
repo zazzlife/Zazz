@@ -2,8 +2,20 @@
 @{
     Layout = null;
 }
-<li class="weekly" data-content="@Model.Description" data-placement="top"
-     data-trigger="hover" data-title="@Model.Name">
-    <img src="@Model.PhotoLinks.SmallLink"/>
-    <div>@Model.DayOfTheWeek</div>
+
+<li class="weekly" data-editable="@(Model.OwnerUserId == Model.CurrentUserId ? "1" : "0")"
+    data-popover-holder="@Model.Id">
+    
+    @if (Model.OwnerUserId == Model.CurrentUserId)
+    {
+        <div class="hidden weekly-edit-form">
+            @Html.Partial("_WeeklyEditForm", Model)
+        </div>
+    }
+
+    <div class="weekly-description" data-content="@Model.Description" data-placement="top"
+         data-trigger="hover" data-title="@Model.Name">
+        <img src="@Model.PhotoLinks.SmallLink"/>
+        <div>@Model.DayOfTheWeek</div>
+    </div>
 </li>

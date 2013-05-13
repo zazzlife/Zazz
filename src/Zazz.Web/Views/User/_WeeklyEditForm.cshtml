@@ -32,6 +32,13 @@
     </div>
     <div class="text-right">
         <button type="button" class="btn btn-primary saveWeeklyBtn" data-id="@Model.Id">Save</button>
+        
+        @if (Model.Id > 0)
+        {
+            <button style="margin-right: 20px;" type="button" class="btn btn-danger removeWeeklyBtn" data-id="@Model.Id">Remove</button>
+        }
+
         <button type="button" class="btn" data-close-popover="@Model.Id">Cancel</button>
     </div>
+    <div class="clearfix"></div>
 </form>

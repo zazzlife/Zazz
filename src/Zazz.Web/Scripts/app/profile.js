@@ -212,8 +212,24 @@ $(function() {
         addWeeklyContent.remove();
     }
 
-    $('.weekly').each(function () {
+    $('.weekly-description').each(function () {
         $(this).popover();
+    });
+
+    $('.weekly[data-editable="1"]').each(function() {
+
+        var self = $(this);
+        var editForm = self.find('.weekly-edit-form');
+
+        self.popover({
+            html: true,
+            placement: 'top',
+            title: 'Edit Weekly',
+            content: editForm.html()
+        });
+
+        editForm.remove();
+
     });
 });
 
