@@ -141,6 +141,10 @@ $(document).on('click', 'button[data-close-popover]', function() {
 
 });
 
+function weeklyPhotoSelected(photoId, photoUrl) {
+    alert(photoId + photoUrl);
+}
+
 // initializing
 $(function() {
 
