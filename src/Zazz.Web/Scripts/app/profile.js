@@ -131,6 +131,16 @@ $(document).on('click', '.btn-followrequest-action', function () {
     Weeklies
 *********************************/
 
+// Closing the correct popover
+
+$(document).on('click', 'button[data-close-popover]', function() {
+
+    var popoverId = $(this).attr('data-close-popover');
+    var popoverHolder = $('*[data-popover-holder="' + popoverId + '"]');
+    popoverHolder.popover('hide');
+
+});
+
 // initializing
 $(function() {
 
@@ -141,7 +151,7 @@ $(function() {
             html: true,
             placement: 'top',
             title: 'New Weekly',
-            content: 'dsadsa'
+            content: $('#add-weekly-content').html()
         });
     }
 });

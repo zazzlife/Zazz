@@ -5,7 +5,7 @@
 <div>
     <input type="hidden" name="photoId" id="photoId" value="@Model.PhotoId" />
 
-    <img src="@(Model.PhotoLinks == null ? "~/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 
+    <img src="@(Model.PhotoLinks == null ? "/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 
         id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;" />
 
     <div class="btn-group">
@@ -14,8 +14,8 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="#" data-toggle="modal" data-target="#pg-modal">From gallery</a></li>
-            <li><a href="#" data-toggle="modal" data-target="#uploadWeeklyPicModal">Upload picture</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="weeklyPhotoSelected">From gallery</a></li>
+            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="weeklyPhotoSelected">Upload picture</a></li>
         </ul>
     </div>
 </div>
@@ -27,6 +27,6 @@
          class="span3" style="height: 100px;"></textarea>
 </div>
 <div class="text-right">
-    <button class="btn btn-primary">Save</button>
-    <button class="btn">Cancel</button>
+    <button class="btn btn-primary saveWeeklyBtn">Save</button>
+    <button class="btn" data-close-popover="@Model.Id">Cancel</button>
 </div>

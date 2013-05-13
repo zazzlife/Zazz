@@ -57,14 +57,14 @@
     
 
         
-    <div id="add-weekly-content">
-        
+    <div id="add-weekly-content" class="hidden">
+        @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
     </div>
     
     @*Weeklies*@
     <div class="weeklies-container">
         <div class="weeklies-text-container">
-            <a id="add-weekly" href="#" style="position: absolute;"><strong>Add</strong></a>
+            <button id="add-weekly" style="position: absolute;" class="btn-link" data-popover-holder="0"><strong>Add</strong></button>
             
             <div class="weeklies-text">Weeklies</div>
         </div>
