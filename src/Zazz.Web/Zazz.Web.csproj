@@ -526,7 +526,7 @@
     <Content Include="Views\Home\Tags.cshtml" />
     <Content Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\Shared\_TagStatsWidget.cshtml" />
-    <Content Include="Views\User\_WeeklyEditForm.cshtml" />
+    <Content Include="Views\Shared\_WeeklyEditForm.cshtml" />
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
   </ItemGroup>
