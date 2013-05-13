@@ -184,6 +184,8 @@ $(document).on('click', '.saveWeeklyBtn', function() {
         },
         success: function(res) {
             hideBtnBusy(self, "Save");
+            closeWeeklyPopover(id);
+
             var li = $(res.trim());
             var ul = $('.weeklies-items');
             li.appendTo(ul).hide().fadeIn();
