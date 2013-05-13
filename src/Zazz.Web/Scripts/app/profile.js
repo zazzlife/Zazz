@@ -206,6 +206,33 @@ $(document).on('click', '.saveWeeklyBtn', function() {
 
 });
 
+// Remove
+
+$(document).on('click', '.removeWeeklyBtn', function() {
+
+    var self = $(this);
+    var id = self.data('id');
+    var url = '/weekly/remove/' + id;
+
+    showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        error: function() {
+            toastr.error('An error occured, Please try again later');
+            hideBtnBusy(self, "Remove");
+        },
+        success: function() {
+            hideBtnBusy(self, "Remove");
+
+            var li = $('.weekly[data-id="' + id + '"]');
+            li.popover('hide');
+            li.fadeOut();
+        }
+    });
+
+});
+
 // initializing
 
 function initWeeklies() {
