@@ -40,8 +40,8 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#" data-toggle="modal" data-target="#pg-modal">From gallery</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#uploadEventPicModal">Upload picture</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="eventPhotoSelected">From gallery</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="eventPhotoSelected">Upload picture</a></li>
                     </ul>
                 </div>
             </div>
@@ -162,7 +162,7 @@
         </div>
     </div>
 
-@Html.Partial("_UploadPicModal", new UploadPicModalModel { ModalId = "uploadEventPicModal", CreateFeed = false })
+@Html.Partial("_UploadPicModal", false)
 
 
 

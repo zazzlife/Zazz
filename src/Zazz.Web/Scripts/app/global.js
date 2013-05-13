@@ -42,6 +42,8 @@ function showAjaxErrorMessage(res) {
     toastr.error(res.message);
 }
 
+// Getting follow requests
+
 $('#party-web-link').click(function () {
     var url = "/follow/GetFollowRequests";
 
@@ -62,7 +64,15 @@ $('#party-web-link').click(function () {
 
 });
 
-/////////////// SELECT IMAGE FROM GALLERY ////////////////
+/********************************
+   Select Images From gallery
+*********************************/
+
+var photoGalleryModalSuccessCallBack;
+
+$(document).on('click', 'a[data-target="#pg-modal"]', function() {
+    photoGalleryModalSuccessCallBack = $(this).data('callback');
+});
 
 function loadAlbumsDropDownAsync(dropdownElem) {
 
@@ -154,22 +164,28 @@ $(document).on('click', '#pg-modal *[data-selectPhoto]', function (e) {
     var id = $(this).data('id');
     var imgUrl = $(this).data('url');
 
-    $('#photoId').val(id);
-    $('#selectedImg-thumbnail').attr('src', imgUrl);
+    if (photoGalleryModalSuccessCallBack) {
+        window[photoGalleryModalSuccessCallBack](id, imgUrl);
+    }
 
     $('#pg-modal').modal('hide');
 });
-
-
 
 $(document).on('change', '#pg-albumSelect', function () {
     loadPGPhotos();
 });
 
-///////////////////////UPLOAD PHOTO MODAL////////////////////////////////
+/********************************
+   Upload photo modal
+*********************************/
 
 var imgUploader;
 var imgUploadBtn;
+var uploadModalSuccessCallback;
+
+$(document).on('click', '*[data-target="#uploadPicModal"]', function () {
+    uploadModalSuccessCallback = $(this).data('callback');
+});
 
 function initImgUploader(onComplete) {
 
@@ -229,6 +245,25 @@ $(document).on('click', '#uploadImg', function () {
 
     showBtnBusy($(this));
     imgUploadBtn = $(this);
+});
+
+$(document).on('show', '#uploadPicModal', function () {
+    loadAlbumsDropDownAsync(document.getElementById("upload-albumSelect"));
+    initImgUploader(function (id, name, response) {
+
+        if (!response.success) {
+            toastr.error(response.error);
+        } else {
+            window[uploadModalSuccessCallback](response.photoId, response.photoUrl);
+
+            $('#uploadPicModal').modal('hide');
+            if (imgUploadBtn) {
+                hideBtnBusy(imgUploadBtn, "Upload");
+            }
+        }
+
+    });
+
 });
 
 $(document).on('show', '#uploadPicModalWithFeed', function () {

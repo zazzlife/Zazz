@@ -1,8 +1,7 @@
-﻿@model UploadPicModalModel
-@{
+﻿@{
     Layout = null;
 }
-<div class="modal hide fade" id="@Model.ModalId">
+<div class="modal hide fade" id="uploadPicModal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Upload Photo</h3>
@@ -41,7 +40,7 @@
         </div>
 
         <p>
-            <button id="uploadImg" data-feed="@Model.CreateFeed" class="btn btn-primary">Submit</button>
+            <button id="uploadImg" data-feed="@Model" class="btn btn-primary">Submit</button>
         </p>
 
     </div>
