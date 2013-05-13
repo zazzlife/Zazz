@@ -192,6 +192,9 @@ $(document).on('click', '.saveWeeklyBtn', function() {
             
             if (action === 'new') {
                 li.appendTo(ul).hide().fadeIn();
+                
+                li.find('.weekly-description').popover();
+                createWeeklyEditable(li);
             } else {
                 var oldItem = $('.weekly[data-id="' + id + '"]');
                 oldItem.popover('destroy');
@@ -199,11 +202,11 @@ $(document).on('click', '.saveWeeklyBtn', function() {
                 oldItem.fadeOut(function() {
                     oldItem.html(li.html());
                     oldItem.fadeIn();
+                    
+                    oldItem.find('.weekly-description').popover();
+                    createWeeklyEditable(oldItem);
                 });
             }
-
-            li.find('.weekly-description').popover();
-            createWeeklyEditable(li);
         }
     });
 
