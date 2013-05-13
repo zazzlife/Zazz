@@ -59,5 +59,11 @@ namespace Zazz.Web.Controllers
                                           PhotoId = vm.PhotoId,
                                       }, userId);
         }
+
+        public void Remove(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _weeklyService.RemoveWeekly(id, userId);
+        }
     }
 }
