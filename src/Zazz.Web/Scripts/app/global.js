@@ -36,6 +36,7 @@ function applyPageStyles() {
     replaceTagsWithAnchorTags();
 
     initInputTags();
+    initWeeklies();
 }
 
 function showAjaxErrorMessage(res) {

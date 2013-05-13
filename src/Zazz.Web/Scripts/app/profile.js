@@ -161,13 +161,14 @@ function weeklyPhotoSelected(photoId, photoUrl) {
     idHolderElem.val(photoId);
 }
 
-//saving
+// Create / Edit
 $(document).on('click', '.saveWeeklyBtn', function() {
 
     var self = $(this);
     var id = self.data('id');
 
-    var url = id === 0 ? '/weekly/new' : '/weekly/edit';
+    var action = id === 0 ? 'new' : 'edit';
+    var url = action === 'new' ? '/weekly/new' : '/weekly/edit';
     
     var form = self.closest('form');
     var formData = form.serialize();
@@ -188,15 +189,26 @@ $(document).on('click', '.saveWeeklyBtn', function() {
 
             var li = $(res.trim());
             var ul = $('.weeklies-items');
-            li.appendTo(ul).hide().fadeIn();
+            
+            if (action === 'new') {
+                li.appendTo(ul).hide().fadeIn();
+            } else {
+                var oldItem = ul.find('li[data-id="' + id + '"]');
+                oldItem.fadeOut(function() {
+                    oldItem.html(li.html());
+                    oldItem.fadeIn();
+                });
+            }
+
+            applyPageStyles();
         }
     });
 
 });
 
 // initializing
-$(function() {
 
+function initWeeklies() {
     var addWeekly = $('#add-weekly');
     if (addWeekly) {
 
@@ -216,7 +228,7 @@ $(function() {
         $(this).popover();
     });
 
-    $('.weekly[data-editable="1"]').each(function() {
+    $('.weekly[data-editable="1"]').each(function () {
 
         var self = $(this);
         var editForm = self.find('.weekly-edit-form');
@@ -231,5 +243,4 @@ $(function() {
         editForm.remove();
 
     });
-});
-
+}

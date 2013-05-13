@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-<li class="weekly" data-editable="@(Model.OwnerUserId == Model.CurrentUserId ? "1" : "0")"
+<li class="weekly" data-id="@Model.Id" data-editable="@(Model.OwnerUserId == Model.CurrentUserId ? "1" : "0")"
     data-popover-holder="@Model.Id">
     
     @if (Model.OwnerUserId == Model.CurrentUserId)
