@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -26,7 +28,19 @@ namespace Zazz.Infrastructure.Services
 
         public void EditWeekly(Weekly weekly, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            var dbRecord = _uow.WeeklyRepository.GetById(weekly.Id);
+            if (dbRecord == null)
+                throw new NotFoundException();
+
+            if (dbRecord.UserId != currentUserId)
+                throw new SecurityException();
+
+            dbRecord.Name = weekly.Name;
+            dbRecord.DayOfTheWeek = weekly.DayOfTheWeek;
+            dbRecord.Description = weekly.Description;
+            dbRecord.PhotoId = weekly.PhotoId;
+
+            _uow.SaveChanges();
         }
 
         public void RemoveWeekly(int id, int currentUserId)

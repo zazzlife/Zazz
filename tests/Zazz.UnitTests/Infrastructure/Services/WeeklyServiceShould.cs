@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Security;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -70,6 +72,80 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(1, user.Weeklies.Count);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundExceptionIfWeeklyDoesntExists_OnEdit()
+        {
+            //Arrange
+            var weekly = new Weekly
+                         {
+                             Id = 5,
+                             UserId = 2
+                         };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(() => null);
+
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.EditWeekly(weekly, weekly.UserId));
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIsNotTheOwner_OnEdit()
+        {
+            //Arrange
+            var weekly = new Weekly
+                         {
+                             Id = 5,
+                             UserId = 2
+                         };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(weekly);
+
+            //Act & Assert
+            Assert.Throws<SecurityException>(() => _sut.EditWeekly(weekly, weekly.UserId + 1));
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void UpdateTheRecordAndSave_OnEdit()
+        {
+            //Arrange
+            var oldWeekly = new Weekly
+                         {
+                             Id = 5,
+                             UserId = 2
+                         };
+
+            var newWeekly = new Weekly
+                            {
+                                Id = 5,
+                                UserId = 2,
+                                Description = "new desc",
+                                DayOfTheWeek = DayOfTheWeek.Saturday,
+                                Name = "new name",
+                                PhotoId = 32,
+                            };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(oldWeekly.Id))
+                .Returns(oldWeekly);
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.EditWeekly(newWeekly, newWeekly.UserId);
+
+            //Assert
+            Assert.AreEqual(oldWeekly.Id, newWeekly.Id);
+            Assert.AreEqual(oldWeekly.UserId, newWeekly.UserId);
+            Assert.AreEqual(oldWeekly.Description, newWeekly.Description);
+            Assert.AreEqual(oldWeekly.DayOfTheWeek, newWeekly.DayOfTheWeek);
+            Assert.AreEqual(oldWeekly.Name, newWeekly.Name);
+            Assert.AreEqual(oldWeekly.PhotoId, newWeekly.PhotoId);
+            _mockRepo.VerifyAll();
         }
     }
 }
