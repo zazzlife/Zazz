@@ -23,6 +23,9 @@
     <input type="text" name="name" id="weeklyName" class="span3" placeholder="Name" value="@Model.Name"/>
 </div>
 <div>
+    @Html.DropDownList("dayOfTheWeek", Model.DayOfTheWeek.EnumToSelectList())
+</div>
+<div>
     <textarea name="description" id="weeklyDescription" placeholder="Description"
          class="span3" style="height: 100px;"></textarea>
 </div>
