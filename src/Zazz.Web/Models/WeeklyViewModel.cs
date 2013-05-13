@@ -11,7 +11,7 @@ namespace Zazz.Web.Models
 
         public string Description { get; set; }
 
-        public int PhotoId { get; set; }
+        public int? PhotoId { get; set; }
 
         public PhotoLinks PhotoLinks { get; set; }
 

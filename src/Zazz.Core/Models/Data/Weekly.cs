@@ -14,7 +14,7 @@ namespace Zazz.Core.Models.Data
         public string Name { get; set; }
 
         [ForeignKey("Photo")]
-        public int PhotoId { get; set; }
+        public int? PhotoId { get; set; }
 
         [MaxLength(4000)]
         public string Description { get; set; }
