@@ -83,7 +83,7 @@ namespace Zazz.Web.Helpers
             return MvcHtmlString.Create(sb.ToString());
         }
  
-        public static SelectList ToSelectList<TEnum>(this TEnum enumobj)
+        public static SelectList EnumToSelectList<TEnum>(this TEnum enumobj)
         {
             var values = from TEnum e in Enum.GetValues(typeof (TEnum))
                          select new { Id = e, Name = e.ToString() };
