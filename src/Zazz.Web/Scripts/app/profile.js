@@ -141,8 +141,20 @@ $(document).on('click', 'button[data-close-popover]', function() {
 
 });
 
+// Weekly photo select
+
+var weeklyId;
+
 function weeklyPhotoSelected(photoId, photoUrl) {
-    alert(photoId + photoUrl);
+    var id = '#weekly-' + weeklyId;
+    var thumbnailId = id + '-thumbnail';
+    var idHolderId = id + '-photoId';
+    
+    var thumbnailElem = $(thumbnailId);
+    var idHolderElem = $(idHolderId);
+
+    thumbnailElem.attr('src', photoUrl);
+    idHolderElem.val(photoId);
 }
 
 // initializing
@@ -151,12 +163,16 @@ $(function() {
     var addWeekly = $('#add-weekly');
     if (addWeekly) {
 
+        var addWeeklyContent = $('#add-weekly-content');
+
         addWeekly.popover({
             html: true,
             placement: 'top',
             title: 'New Weekly',
-            content: $('#add-weekly-content').html()
+            content: addWeeklyContent.html()
         });
+
+        addWeeklyContent.remove();
     }
 });
 

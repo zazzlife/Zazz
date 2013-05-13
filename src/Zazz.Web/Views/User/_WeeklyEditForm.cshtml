@@ -3,10 +3,10 @@
     Layout = null;
 }
 <div>
-    <input type="hidden" name="photoId" id="photoId" value="@Model.PhotoId" />
+    <input type="hidden" name="photoId" id="weekly-@Model.Id-photoId" value="@Model.PhotoId" />
 
     <img src="@(Model.PhotoLinks == null ? "/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 
-        id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;" />
+        id="weekly-@Model.Id-thumbnail" class="img-polaroid" style="width: 64px;" />
 
     <div class="btn-group">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
@@ -14,8 +14,8 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="weeklyPhotoSelected">From gallery</a></li>
-            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="weeklyPhotoSelected">Upload picture</a></li>
+            <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#pg-modal" data-callback="weeklyPhotoSelected">From gallery</a></li>
+            <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#uploadPicModal" data-callback="weeklyPhotoSelected">Upload picture</a></li>
         </ul>
     </div>
 </div>
