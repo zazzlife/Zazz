@@ -270,6 +270,7 @@
     <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />
     <Compile Include="Models\UserProfileViewModel.cs" />
+    <Compile Include="Models\WeeklyViewModel.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidateImageAttribute.cs" />

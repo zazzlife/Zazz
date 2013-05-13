@@ -38,8 +38,7 @@ namespace Zazz.Web.Helpers
         }
 
         public static MvcHtmlString RadioButtonForEnum<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-        Expression<Func<TModel, TProperty>> expression
-    )
+        Expression<Func<TModel, TProperty>> expression)
         {
             var metaData = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             if (!metaData.ModelType.IsEnum)
@@ -82,6 +81,14 @@ namespace Zazz.Web.Helpers
                 );
             }
             return MvcHtmlString.Create(sb.ToString());
-        } 
+        }
+ 
+        public static SelectList ToSelectList<TEnum>(this TEnum enumobj)
+        {
+            var values = from TEnum e in Enum.GetValues(typeof (TEnum))
+                         select new { Id = e, Name = e.ToString() };
+
+            return new SelectList(values, "Id", "Name", enumobj);
+        }
     }
 }
