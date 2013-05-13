@@ -102,6 +102,7 @@
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
+    <Compile Include="Interfaces\IWeeklyService.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
