@@ -147,5 +147,67 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(oldWeekly.PhotoId, newWeekly.PhotoId);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotThrowIfRecordDoesntExists_OnRemove()
+        {
+            //Arrange
+            var weekly = new Weekly
+                         {
+                             Id = 5,
+                             UserId = 2
+                         };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemoveWeekly(weekly.Id, weekly.UserId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIsNotOwner_OnRemove()
+        {
+            //Arrange
+            var weekly = new Weekly
+            {
+                Id = 5,
+                UserId = 2
+            };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(weekly);
+
+            //Act & Assert
+            Assert.Throws<SecurityException>(() => _sut.RemoveWeekly(weekly.Id, weekly.UserId + 1));
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemoveAndSave_OnRemove()
+        {
+            //Arrange
+            var weekly = new Weekly
+            {
+                Id = 5,
+                UserId = 2
+            };
+
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(weekly);
+            _uow.Setup(x => x.WeeklyRepository.Remove(weekly));
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.RemoveWeekly(weekly.Id, weekly.UserId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }

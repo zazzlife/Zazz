@@ -45,7 +45,15 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveWeekly(int id, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            var weekly = _uow.WeeklyRepository.GetById(id);
+            if (weekly == null)
+                return;
+
+            if (weekly.UserId != currentUserId)
+                throw new SecurityException();
+
+            _uow.WeeklyRepository.Remove(weekly);
+            _uow.SaveChanges();
         }
     }
 }
