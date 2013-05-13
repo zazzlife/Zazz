@@ -48,7 +48,7 @@ namespace Zazz.Web.Controllers
             return View("_WeeklyItem", vm);
         }
 
-        public void Edit(WeeklyViewModel vm)
+        public ActionResult Edit(WeeklyViewModel vm)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
             _weeklyService.EditWeekly(new Weekly
@@ -58,6 +58,15 @@ namespace Zazz.Web.Controllers
                                           Name = vm.Name,
                                           PhotoId = vm.PhotoId,
                                       }, userId);
+
+            vm.OwnerUserId = userId;
+            vm.CurrentUserId = userId;
+
+            vm.PhotoLinks = vm.PhotoId.HasValue
+                                ? _photoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
+                                : DefaultImageHelper.GetDefaultWeeklyImage();
+
+            return View("_WeeklyItem", vm);
         }
 
         public void Remove(int id)
