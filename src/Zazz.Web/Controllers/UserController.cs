@@ -45,6 +45,7 @@ namespace Zazz.Web.Controllers
         [ActionName("Profile")]
         public ActionResult ShowProfile(int id)
         {
+            //TODO: compeletely separate users and clubs.
             var user = _uow.UserRepository.GetById(id);
 
             // Profile Photo
