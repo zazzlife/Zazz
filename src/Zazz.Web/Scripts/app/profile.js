@@ -1,4 +1,6 @@
-﻿
+﻿/********************************
+    Follows You Sign
+*********************************/
 var isFollowSignClicked = false;
 $('#followsYouSign').hover(
     function mouseIn() {
@@ -50,9 +52,12 @@ $('#followsYouSign').click(function(e) {
     });
 });
 
+/********************************
+    Follow / Unfollow
+*********************************/
+
 // Try to not move the follow ajax calls into ajax.js, it becomes worse.
 
-/* Follow or Unfollow */
 $(document).on('click', '.btn-follow', function () {
     var self = $(this);
     var action = self.data('action');
@@ -86,7 +91,9 @@ $(document).on('click', '.btn-follow', function () {
 });
 
 
-/* Accept or Reject */
+/********************************
+    Accept / Reject Follow
+*********************************/
 
 $(document).on('click', '.btn-followrequest-action', function () {
     var btn = $(this);
@@ -119,3 +126,23 @@ $(document).on('click', '.btn-followrequest-action', function () {
     });
 
 });
+
+/********************************
+    Weeklies
+*********************************/
+
+// initializing
+$(function() {
+
+    var addWeekly = $('#add-weekly');
+    if (addWeekly) {
+
+        addWeekly.popover({
+            html: true,
+            placement: 'top',
+            title: 'New Weekly',
+            content: 'dsadsa'
+        });
+    }
+});
+
