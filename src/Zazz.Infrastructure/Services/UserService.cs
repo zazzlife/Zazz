@@ -34,9 +34,10 @@ namespace Zazz.Infrastructure.Services
             return userId;
         }
 
-        public User GetUser(string username)
+        public User GetUser(string username, bool includeDetails = false, bool includeClubDetails = false,
+                     bool includeWeeklies = false)
         {
-            return _uoW.UserRepository.GetByUsername(username);
+            return _uoW.UserRepository.GetByUsername(username, includeDetails, includeClubDetails, includeWeeklies);
         }
 
         public string GetUserDisplayName(int userId)

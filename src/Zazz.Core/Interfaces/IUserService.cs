@@ -11,7 +11,8 @@ namespace Zazz.Core.Interfaces
 
         int GetUserId(string username);
 
-        User GetUser(string username);
+        User GetUser(string username, bool includeDetails = false, bool includeClubDetails = false,
+                     bool includeWeeklies = false);
 
         string GetUserDisplayName(int userId);
 

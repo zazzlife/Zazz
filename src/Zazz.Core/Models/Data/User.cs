@@ -10,7 +10,8 @@ namespace Zazz.Core.Models.Data
     {
         public User()
         {
-            LinkedAccounts = new List<OAuthAccount>();
+            LinkedAccounts = new HashSet<OAuthAccount>();
+            Weeklies = new HashSet<Weekly>();
         }
 
         [MaxLength(50), Required]
@@ -35,5 +36,7 @@ namespace Zazz.Core.Models.Data
         public virtual UserDetail UserDetail { get; set; }
 
         public virtual ClubDetail ClubDetail { get; set; }
+
+        public virtual ICollection<Weekly> Weeklies { get; set; }
     }
 }

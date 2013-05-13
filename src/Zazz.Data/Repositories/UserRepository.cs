@@ -26,9 +26,21 @@ namespace Zazz.Data.Repositories
             return DbSet.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public User GetByUsername(string username)
+        public User GetByUsername(string username, bool includeDetails = false, bool includeClubDetails = false,
+                     bool includeWeeklies = false)
         {
-            return DbSet.SingleOrDefault(u => u.Username.Equals(username,
+            var query = DbSet.AsQueryable();
+
+            if (includeDetails)
+                query = query.Include(u => u.UserDetail);
+
+            if (includeClubDetails)
+                query = query.Include(u => u.ClubDetail);
+
+            if (includeWeeklies)
+                query = query.Include(u => u.Weeklies);
+
+            return query.SingleOrDefault(u => u.Username.Equals(username,
                                                                 StringComparison.InvariantCultureIgnoreCase));
         }
 
