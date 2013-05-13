@@ -50,7 +50,14 @@ namespace Zazz.Web.Controllers
 
         public void Edit(WeeklyViewModel vm)
         {
-
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _weeklyService.EditWeekly(new Weekly
+                                      {
+                                          DayOfTheWeek = vm.DayOfTheWeek,
+                                          Description = vm.Description,
+                                          Name = vm.Name,
+                                          PhotoId = vm.PhotoId,
+                                      }, userId);
         }
     }
 }
