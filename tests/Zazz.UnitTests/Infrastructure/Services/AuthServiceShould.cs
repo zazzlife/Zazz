@@ -33,7 +33,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var pass = "password";
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(() => new User { Password = pass });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
@@ -52,7 +53,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var username = "username";
             var pass = "pass";
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(username))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(username,
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(() => new User { Password = pass });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
@@ -60,14 +62,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.Login(username, pass);
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.GetByUsername(username), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetByUsername(username,
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
         public void ThrowUserNotExist_WhenUserNotExists_OnLogin()
         {
             //Arrange
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(() => null);
 
             //Act
@@ -87,7 +91,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
         {
             //Arrange
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(() => new User { Password = "password" });
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns("invalidPass");
@@ -110,7 +115,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var pass = "pass";
             var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(user);
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
                        .Returns(pass);
@@ -128,7 +134,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var pass = "pass";
             var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>()))
+            _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(user);
 
             _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
