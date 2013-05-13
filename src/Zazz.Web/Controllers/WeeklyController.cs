@@ -40,8 +40,11 @@ namespace Zazz.Web.Controllers
                                   Description = vm.Description,
                                   DayOfTheWeek = vm.DayOfTheWeek,
                                   Name = vm.Name,
-                                  PhotoId = vm.PhotoId
+                                  PhotoId = vm.PhotoId,
                               });
+
+            vm.OwnerUserId = user.Id;
+            vm.CurrentUserId = user.Id;
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? _photoService.GeneratePhotoUrl(user.Id, vm.PhotoId.Value)

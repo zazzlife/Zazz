@@ -143,6 +143,8 @@ namespace Zazz.Web.Controllers
                                                             Id = w.Id,
                                                             Name = w.Name,
                                                             PhotoId = w.PhotoId,
+                                                            OwnerUserId = w.UserId,
+                                                            CurrentUserId = currentUserId,
                                                             PhotoLinks = w.PhotoId.HasValue 
                                                             ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
                                                             : DefaultImageHelper.GetDefaultWeeklyImage()

@@ -16,5 +16,9 @@ namespace Zazz.Web.Models
         public PhotoLinks PhotoLinks { get; set; }
 
         public DayOfTheWeek DayOfTheWeek { get; set; }
+
+        public int OwnerUserId { get; set; }
+
+        public int CurrentUserId { get; set; }
     }
 }
