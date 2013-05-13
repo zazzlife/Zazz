@@ -687,11 +687,11 @@ hr.gold-line {
     border-bottom: 1px solid;
 }
 
-.weeklies-text {
+.weeklies-text-container {
     float: left;
 }
 
-.weeklies-text div {
+.weeklies-text {
     font-family: 'Alfa Slab One';
     font-size: 33px;
     padding: 35px 15px 35px 0;
@@ -706,7 +706,6 @@ hr.gold-line {
     float: left;
     padding-top: 14px;
     padding-left: 29px;
-    padding-right: 29px;
 }
 
 .weekly {
