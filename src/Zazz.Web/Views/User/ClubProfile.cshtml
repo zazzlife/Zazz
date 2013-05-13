@@ -69,9 +69,10 @@
             <div class="weeklies-text">Weeklies</div>
         </div>
         <ul class="weeklies-items">
-            
-            @*WEEKLY ITEMS HERE*@
-
+            @foreach (var w in Model.Weeklies)
+            {
+                @Html.Partial("_WeeklyItem", w)
+            }
         </ul>
         <div class="special-events">
             <div class="special-events-count badge badge-important">5</div>

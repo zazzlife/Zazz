@@ -40,6 +40,8 @@ namespace Zazz.Web.Models
         public TagStatsWidgetViewModel TagsStats { get; set; }
 
         public IEnumerable<PhotoViewModel> Photos { get; set; }
+
+        public IEnumerable<WeeklyViewModel> Weeklies { get; set; }
     }
 
 }

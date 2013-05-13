@@ -97,6 +97,7 @@ namespace Zazz.Web.Controllers
             // Tags stats
 
             var tagStats = _tagService.GetAllTagStats().ToList();
+            var weeklies = user.Weeklies.ToList();
 
             var vm = new UserProfileViewModel
                      {
@@ -133,7 +134,18 @@ namespace Zazz.Web.Controllers
                                                         PhotoUrl = p.IsFacebookPhoto 
                                                         ? new PhotoLinks(p.FacebookLink)
                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                                    })
+                                                    }),
+                        Weeklies = weeklies.Select(w => new WeeklyViewModel
+                                                        {
+                                                            DayOfTheWeek = w.DayOfTheWeek,
+                                                            Description = w.Description,
+                                                            Id = w.Id,
+                                                            Name = w.Name,
+                                                            PhotoId = w.PhotoId,
+                                                            PhotoLinks = w.PhotoId.HasValue 
+                                                            ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
+                                                            : DefaultImageHelper.GetDefaultWeeklyImage()
+                                                        })
                      };
 
             if (!vm.IsSelf && currentUserId != 0)
