@@ -53,6 +53,7 @@ namespace Zazz.Web.Controllers
             var userId = _userService.GetUserId(User.Identity.Name);
             _weeklyService.EditWeekly(new Weekly
                                       {
+                                          Id = vm.Id,
                                           DayOfTheWeek = vm.DayOfTheWeek,
                                           Description = vm.Description,
                                           Name = vm.Name,

@@ -4,6 +4,7 @@
 }
 <form>
     <div>
+        @Html.HiddenFor(x => x.Id)
         <input type="hidden" name="PhotoId" id="weekly-@Model.Id-photoId" value="@Model.PhotoId" />
 
         <img src="@(Model.PhotoLinks == null ? "/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 

@@ -193,7 +193,7 @@ $(document).on('click', '.saveWeeklyBtn', function() {
             if (action === 'new') {
                 li.appendTo(ul).hide().fadeIn();
             } else {
-                var oldItem = ul.find('li[data-id="' + id + '"]');
+                var oldItem = $('.weekly[data-id="' + id + '"]');
                 oldItem.fadeOut(function() {
                     oldItem.html(li.html());
                     oldItem.fadeIn();
