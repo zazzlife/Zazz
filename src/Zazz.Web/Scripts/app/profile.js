@@ -194,13 +194,16 @@ $(document).on('click', '.saveWeeklyBtn', function() {
                 li.appendTo(ul).hide().fadeIn();
             } else {
                 var oldItem = $('.weekly[data-id="' + id + '"]');
+                oldItem.popover('destroy');
+                oldItem.find('.weekly-description').popover('destroy');
                 oldItem.fadeOut(function() {
                     oldItem.html(li.html());
                     oldItem.fadeIn();
                 });
             }
 
-            applyPageStyles();
+            li.find('.weekly-description').popover();
+            createWeeklyEditable(li);
         }
     });
 
@@ -235,6 +238,18 @@ $(document).on('click', '.removeWeeklyBtn', function() {
 
 // initializing
 
+function createWeeklyEditable(elem) {
+    var editForm = elem.find('.weekly-edit-form');
+    elem.popover({
+        html: true,
+        placement: 'top',
+        title: 'Edit Weekly',
+        content: editForm.html()
+    });
+
+    editForm.remove();
+}
+
 function initWeeklies() {
     var addWeekly = $('#add-weekly');
     if (addWeekly) {
@@ -258,16 +273,7 @@ function initWeeklies() {
     $('.weekly[data-editable="1"]').each(function () {
 
         var self = $(this);
-        var editForm = self.find('.weekly-edit-form');
-
-        self.popover({
-            html: true,
-            placement: 'top',
-            title: 'Edit Weekly',
-            content: editForm.html()
-        });
-
-        editForm.remove();
+        createWeeklyEditable(self);
 
     });
 }
