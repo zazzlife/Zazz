@@ -2,34 +2,36 @@
 @{
     Layout = null;
 }
-<div>
-    <input type="hidden" name="photoId" id="weekly-@Model.Id-photoId" value="@Model.PhotoId" />
+<form>
+    <div>
+        <input type="hidden" name="PhotoId" id="weekly-@Model.Id-photoId" value="@Model.PhotoId" />
 
-    <img src="@(Model.PhotoLinks == null ? "/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 
-        id="weekly-@Model.Id-thumbnail" class="img-polaroid" style="width: 64px;" />
+        <img src="@(Model.PhotoLinks == null ? "/Images/placeholder.gif" : Model.PhotoLinks.SmallLink )" 
+             id="weekly-@Model.Id-thumbnail" class="img-polaroid" style="width: 64px;" />
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#pg-modal" data-callback="weeklyPhotoSelected">From gallery</a></li>
-            <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#uploadPicModal" data-callback="weeklyPhotoSelected">Upload picture</a></li>
-        </ul>
+        <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#pg-modal" data-callback="weeklyPhotoSelected">From gallery</a></li>
+                <li><a href="#" onclick="weeklyId = @Model.Id" data-toggle="modal" data-target="#uploadPicModal" data-callback="weeklyPhotoSelected">Upload picture</a></li>
+            </ul>
+        </div>
     </div>
-</div>
-<div style="margin-top: 10px;">
-    <input type="text" name="name" id="weeklyName" class="span3" placeholder="Name" value="@Model.Name"/>
-</div>
-<div>
-    @Html.DropDownList("dayOfTheWeek", Model.DayOfTheWeek.EnumToSelectList())
-</div>
-<div>
-    <textarea name="description" id="weeklyDescription" placeholder="Description"
-         class="span3" style="height: 100px;"></textarea>
-</div>
-<div class="text-right">
-    <button class="btn btn-primary saveWeeklyBtn">Save</button>
-    <button class="btn" data-close-popover="@Model.Id">Cancel</button>
-</div>
+    <div style="margin-top: 10px;">
+        <input type="text" name="Name" id="weeklyName" class="span3" placeholder="Name" value="@Model.Name"/>
+    </div>
+    <div>
+        @Html.DropDownList("dayOfTheWeek", Model.DayOfTheWeek.EnumToSelectList())
+    </div>
+    <div>
+        <textarea name="Description" id="weeklyDescription" placeholder="Description"
+                  class="span3" style="height: 100px;"></textarea>
+    </div>
+    <div class="text-right">
+        <button type="button" class="btn btn-primary saveWeeklyBtn" data-id="@Model.Id">Save</button>
+        <button type="button" class="btn" data-close-popover="@Model.Id">Cancel</button>
+    </div>
+</form>

@@ -133,11 +133,15 @@ $(document).on('click', '.btn-followrequest-action', function () {
 
 // Closing the correct popover
 
+function closeWeeklyPopover(weeklyId) {
+    var popoverOwner = $('*[data-popover-holder="' + weeklyId + '"]');
+    popoverOwner.popover('hide');
+}
+
 $(document).on('click', 'button[data-close-popover]', function() {
 
     var popoverId = $(this).attr('data-close-popover');
-    var popoverHolder = $('*[data-popover-holder="' + popoverId + '"]');
-    popoverHolder.popover('hide');
+    closeWeeklyPopover(popoverId);
 
 });
 
@@ -156,6 +160,37 @@ function weeklyPhotoSelected(photoId, photoUrl) {
     thumbnailElem.attr('src', photoUrl);
     idHolderElem.val(photoId);
 }
+
+//saving
+$(document).on('click', '.saveWeeklyBtn', function() {
+
+    var self = $(this);
+    var id = self.data('id');
+
+    var url = id === 0 ? '/weekly/new' : '/weekly/edit';
+    
+    var form = self.closest('form');
+    var formData = form.serialize();
+
+    showBtnBusy(self);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        error: function() {
+            toastr.error('An error occured, Please try again.');
+            hideBtnBusy(self, "Save");
+        },
+        success: function(res) {
+            hideBtnBusy(self, "Save");
+            var li = $(res.trim());
+            var ul = $('.weeklies-items');
+            li.appendTo(ul).hide().fadeIn();
+        }
+    });
+
+});
 
 // initializing
 $(function() {

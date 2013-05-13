@@ -13,10 +13,12 @@ namespace Zazz.Web.Controllers
     [Authorize]
     public class WeeklyController : Controller
     {
+        private readonly IUoW _uow;
         private readonly IUserService _userService;
 
-        public WeeklyController(IUserService userService)
+        public WeeklyController(IUoW uow, IUserService userService)
         {
+            _uow = uow;
             _userService = userService;
         }
 
@@ -37,6 +39,8 @@ namespace Zazz.Web.Controllers
                                   Name = vm.Name,
                                   PhotoId = vm.PhotoId
                               });
+
+            //_uow.SaveChanges();
         }
 
         public void Edit(WeeklyViewModel vm)
