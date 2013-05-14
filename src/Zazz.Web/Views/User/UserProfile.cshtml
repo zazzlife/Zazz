@@ -20,7 +20,7 @@
             {
                 if (Model.IsCurrentUserFollowingTargetUser)
                 {
-                    <button  data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
+                    <button data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
                          title="un-follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-remove"></i></button>
                 }
                 else if (Model.FollowRequestAlreadySent)

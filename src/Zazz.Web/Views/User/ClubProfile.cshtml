@@ -37,8 +37,21 @@
                 <i class="badge badge-info followers-count">@Model.FollowersCount</i>
                 <br/>
                 <div>Party Web</div>
-                <button data-action="follow" data-id="@Model.UserId"
-                        class="btn btn-info btn-follow"><i class="icon-plus"></i></button>
+                
+                @if (!Model.IsSelf)
+                {
+                     if (Model.IsCurrentUserFollowingTargetUser)
+                     {
+                         <button data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
+                         title="un-follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-remove"></i></button>
+                     }
+                     else
+                     {
+                         <button  data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" 
+                         title="follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-plus"></i></button>
+                     }
+                    
+                }
             </div>
             
 
@@ -52,9 +65,6 @@
     </div>
 
     <div class="clearfix"></div>
-    
-    
-
         
     <div id="add-weekly-content" class="hidden">
         @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
@@ -63,7 +73,11 @@
     @*Weeklies*@
     <div class="weeklies-container">
         <div class="weeklies-text-container">
-            <button id="add-weekly" style="position: absolute;" class="btn-link" data-popover-holder="0"><strong>Add</strong></button>
+            @if (Model.IsSelf)
+            {
+                <button id="add-weekly" style="position: absolute;" class="btn-link" data-popover-holder="0"><strong>Add</strong></button>
+            }
+            
             
             <div class="weeklies-text">Weeklies</div>
         </div>
