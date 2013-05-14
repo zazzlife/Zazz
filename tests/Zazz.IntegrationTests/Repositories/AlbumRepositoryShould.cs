@@ -12,14 +12,14 @@ namespace Zazz.IntegrationTests.Repositories
     [TestFixture]
     public class AlbumRepositoryShould
     {
-        private ZazzDbContext _dbContext;
+        private ZazzDbContext _context;
         private AlbumRepository _repo;
 
         [SetUp]
         public void Init()
         {
-            _dbContext = new ZazzDbContext(true);
-            _repo = new AlbumRepository(_dbContext);
+            _context = new ZazzDbContext(true);
+            _repo = new AlbumRepository(_context);
         }
 
         [Test]
@@ -51,8 +51,8 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             var album = new Album
                         {
@@ -75,8 +75,8 @@ namespace Zazz.IntegrationTests.Repositories
             album.Photos.Add(photo1);
             album.Photos.Add(photo2);
 
-            _dbContext.Albums.Add(album);
-            _dbContext.SaveChanges();
+            _context.Albums.Add(album);
+            _context.SaveChanges();
 
             //Act
             var ids = _repo.GetAlbumPhotoIds(album.Id).ToList();
@@ -92,8 +92,8 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             var album = new Album
             {
@@ -103,8 +103,8 @@ namespace Zazz.IntegrationTests.Repositories
                 Photos = new List<Photo>()
             };
 
-            _dbContext.Albums.Add(album);
-            _dbContext.SaveChanges();
+            _context.Albums.Add(album);
+            _context.SaveChanges();
 
             //Act
             var result = _repo.GetByFacebookId(album.FacebookId);
@@ -120,9 +120,9 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user1 = Mother.GetUser();
             var user2 = Mother.GetUser();
-            _dbContext.Users.Add(user1);
-            _dbContext.Users.Add(user2);
-            _dbContext.SaveChanges();
+            _context.Users.Add(user1);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
 
             var page = new FacebookPage
                        {
@@ -132,8 +132,8 @@ namespace Zazz.IntegrationTests.Repositories
                            UserId = user1.Id
                        };
 
-            _dbContext.FacebookPages.Add(page);
-            _dbContext.SaveChanges();
+            _context.FacebookPages.Add(page);
+            _context.SaveChanges();
 
             var album1 = new Album
             {
@@ -161,11 +161,11 @@ namespace Zazz.IntegrationTests.Repositories
                 Name = "Dsadasb",
             };
 
-            _dbContext.Albums.Add(album1);
-            _dbContext.Albums.Add(album2);
-            _dbContext.Albums.Add(album3);
-            _dbContext.Albums.Add(album4);
-            _dbContext.SaveChanges();
+            _context.Albums.Add(album1);
+            _context.Albums.Add(album2);
+            _context.Albums.Add(album3);
+            _context.Albums.Add(album4);
+            _context.SaveChanges();
 
             //Act
             var result = _repo.GetPageAlbumIds(page.Id).ToList();
@@ -176,6 +176,51 @@ namespace Zazz.IntegrationTests.Repositories
             CollectionAssert.Contains(result, album2.Id);
         }
 
+        [Test]
+        public void ReturnCorrectAlbumsAndItsPhotos_OnGetLatestAlbums()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            
+            _context.Users.Add(user);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
 
+            var album1 = Mother.GetAlbum(user.Id);
+            album1.CreatedDate = DateTime.UtcNow.AddDays(-5);
+            var photo1 = Mother.GetPhoto(user.Id);
+            var photo2 = Mother.GetPhoto(user.Id);
+
+            album1.Photos.Add(photo1);
+            album1.Photos.Add(photo2);
+
+            var album2 = Mother.GetAlbum(user.Id);
+            album2.CreatedDate = DateTime.UtcNow.AddDays(-2);
+            var photo3 = Mother.GetPhoto(user.Id);
+
+            album2.Photos.Add(photo3);
+
+            var album3 = Mother.GetAlbum(user2.Id);
+            var photo4 = Mother.GetPhoto(user2.Id);
+
+            album3.Photos.Add(photo4);
+
+            _context.Albums.Add(album1);
+            _context.Albums.Add(album2);
+            _context.Albums.Add(album3);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetLatestAlbums(user.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.All(a => a.UserId == user.Id));
+            Assert.AreEqual(album2.Id, result[0].Id);
+            Assert.AreEqual(album2.Photos.Count, result[0].Photos.Count);
+            Assert.AreEqual(album1.Id, result[1].Id);
+            Assert.AreEqual(album1.Photos.Count, result[1].Photos.Count);
+        }
     }
 }

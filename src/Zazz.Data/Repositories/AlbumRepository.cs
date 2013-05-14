@@ -19,6 +19,34 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the album, if it's new then use insert graph.");
         }
 
+        public IEnumerable<Album> GetLatestAlbums(int userId, int albumsCount = 3, int photosCount = 13)
+        {
+            var query = (from album in DbSet
+                         where album.UserId == userId
+                         orderby album.CreatedDate descending
+                         select new
+                                {
+                                    album,
+                                    photos = album.Photos
+                                                  .OrderByDescending(p => p.UploadDate)
+                                                  .Take(photosCount)
+                                })
+                .Take(albumsCount)
+                .ToList();
+
+            var albums = new List<Album>();
+
+            foreach (var a in query)
+            {
+                var album = a.album;
+                album.Photos = a.photos.ToList();
+
+                albums.Add(album);
+            }
+
+            return albums;
+        }
+
         public int GetOwnerId(int albumId)
         {
             return DbSet.Where(a => a.Id == albumId)
