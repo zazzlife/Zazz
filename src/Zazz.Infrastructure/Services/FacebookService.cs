@@ -201,7 +201,8 @@ namespace Zazz.Infrastructure.Services
                                     IsFacebookAlbum = true,
                                     Name = _facebookHelper.GetAlbumName(fbPhoto.AlbumId, page.AccessToken),
                                     UserId = page.UserId,
-                                    PageId = page.Id
+                                    PageId = page.Id,
+                                    CreatedDate = DateTime.UtcNow // TODO: use the facebook time instead.
                                 };
 
                         _uow.AlbumRepository.InsertGraph(album);

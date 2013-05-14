@@ -61,7 +61,8 @@ namespace Zazz.IntegrationTests
             return new Album
                    {
                        Name = "album name",
-                       UserId = userId
+                       UserId = userId,
+                       CreatedDate = DateTime.UtcNow
                    };
         }
 

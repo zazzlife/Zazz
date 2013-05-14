@@ -46,6 +46,9 @@ namespace Zazz.Infrastructure.Services
 
         public void CreateAlbum(Album album)
         {
+            if (album.CreatedDate == default (DateTime))
+                album.CreatedDate = DateTime.UtcNow;
+
             _uow.AlbumRepository.InsertGraph(album);
             // there is a direct call to repository in FacebookService (get page photos)
             _uow.SaveChanges();

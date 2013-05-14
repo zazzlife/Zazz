@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,5 +31,8 @@ namespace Zazz.Core.Models.Data
         public int? PageId { get; set; }
 
         public virtual ICollection<Photo> Photos { get; set; }
+
+        [Column(TypeName = "DATE")]
+        public DateTime CreatedDate { get; set; }
     }
 }
