@@ -124,31 +124,34 @@ namespace Zazz.Web.Controllers
                                                           ? DateTime.MinValue
                                                           : tagStats.First().LastUpdate
                                      },
-                        Photos = photos.Select(p => new PhotoViewModel
-                                                    {
-                                                        FromUserDisplayName = displayName,
-                                                        FromUserId = user.Id,
-                                                        FromUserPhotoUrl = profilePhotoUrl,
-                                                        IsFromCurrentUser = currentUserId == user.Id,
-                                                        PhotoDescription = p.Description,
-                                                        PhotoId = p.Id,
-                                                        PhotoUrl = p.IsFacebookPhoto 
-                                                        ? new PhotoLinks(p.FacebookLink)
-                                                        : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                                    }),
-                        Weeklies = weeklies.Select(w => new WeeklyViewModel
-                                                        {
-                                                            DayOfTheWeek = w.DayOfTheWeek,
-                                                            Description = w.Description,
-                                                            Id = w.Id,
-                                                            Name = w.Name,
-                                                            PhotoId = w.PhotoId,
-                                                            OwnerUserId = w.UserId,
-                                                            CurrentUserId = currentUserId,
-                                                            PhotoLinks = w.PhotoId.HasValue 
-                                                            ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
-                                                            : DefaultImageHelper.GetDefaultWeeklyImage()
-                                                        })
+                         Photos = photos.Select(p => new PhotoViewModel
+                                                     {
+                                                         FromUserDisplayName = displayName,
+                                                         FromUserId = user.Id,
+                                                         FromUserPhotoUrl = profilePhotoUrl,
+                                                         IsFromCurrentUser = currentUserId == user.Id,
+                                                         PhotoDescription = p.Description,
+                                                         PhotoId = p.Id,
+                                                         PhotoUrl = p.IsFacebookPhoto
+                                                         ? new PhotoLinks(p.FacebookLink)
+                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                                     }),
+                         Weeklies = weeklies.Select(w => new WeeklyViewModel
+                                                         {
+                                                             DayOfTheWeek = w.DayOfTheWeek,
+                                                             Description = w.Description,
+                                                             Id = w.Id,
+                                                             Name = w.Name,
+                                                             PhotoId = w.PhotoId,
+                                                             OwnerUserId = w.UserId,
+                                                             CurrentUserId = currentUserId,
+                                                             PhotoLinks = w.PhotoId.HasValue
+                                                             ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
+                                                             : DefaultImageHelper.GetDefaultWeeklyImage()
+                                                         }),
+                         SpecialEventsCount = user.AccountType == AccountType.User
+                                     ? 0
+                                     : _uow.EventRepository.GetUpcomingEventsCount(user.Id)
                      };
 
             if (!vm.IsSelf && currentUserId != 0)
