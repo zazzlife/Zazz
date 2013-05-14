@@ -222,5 +222,43 @@ namespace Zazz.IntegrationTests.Repositories
             CollectionAssert.Contains(result, e1.Id);
             CollectionAssert.Contains(result, e2.Id);
         }
+
+        [Test]
+        public void ReturnCorrectCount_OnGetUpcomingEventsCount()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var user2 = Mother.GetUser();
+
+            _context.Users.Add(user);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var event1 = Mother.GetEvent(user.Id);
+            event1.TimeUtc = DateTime.UtcNow;
+
+            var event2 = Mother.GetEvent(user.Id);
+            event2.TimeUtc = DateTime.UtcNow.AddDays(1);
+
+            var event3 = Mother.GetEvent(user.Id);
+            event3.TimeUtc = DateTime.UtcNow.AddDays(-1);
+
+            var event4 = Mother.GetEvent(user2.Id);
+            event4.TimeUtc = DateTime.UtcNow.AddDays(1);
+
+            _context.Events.Add(event1);
+            _context.Events.Add(event2);
+            _context.Events.Add(event3);
+            _context.Events.Add(event4);
+            _context.SaveChanges();
+
+            Assert.IsTrue(_context.Events.Count() >= 4);
+
+            //Act
+            var result = _repo.GetUpcomingEventsCount(user.Id);
+
+            //Assert
+            Assert.AreEqual(2, result);
+        }
     }
 }

@@ -37,6 +37,16 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault(e => e.Id == id);
         }
 
+        public int GetUpcomingEventsCount(int userId)
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return DbSet
+                .Where(e => e.UserId == userId)
+                .Where(e => EntityFunctions.TruncateTime(e.TimeUtc) >= today)
+                .Count();
+        }
+
         public int GetOwnerId(int eventId)
         {
             return DbSet.Where(e => e.Id == eventId).Select(e => e.UserId).SingleOrDefault();
@@ -50,16 +60,16 @@ namespace Zazz.Data.Repositories
 
             if (!from2.HasValue || !to2.HasValue)
             {
-                query = DbSet.Where(p => EntityFunctions.TruncateTime(p.TimeUtc) >= from)
-                             .Where(p => EntityFunctions.TruncateTime(p.TimeUtc) <= to);
+                query = DbSet.Where(e => EntityFunctions.TruncateTime(e.TimeUtc) >= from)
+                             .Where(e => EntityFunctions.TruncateTime(e.TimeUtc) <= to);
             }
             else
             {
-                query = query.Where(p =>
-                                    (EntityFunctions.TruncateTime(p.TimeUtc) >= from &&
-                                     EntityFunctions.TruncateTime(p.TimeUtc) <= to) ||
-                                    (EntityFunctions.TruncateTime(p.TimeUtc) >= from2 &&
-                                     EntityFunctions.TruncateTime(p.TimeUtc) <= to2));
+                query = query.Where(e =>
+                                    (EntityFunctions.TruncateTime(e.TimeUtc) >= from &&
+                                     EntityFunctions.TruncateTime(e.TimeUtc) <= to) ||
+                                    (EntityFunctions.TruncateTime(e.TimeUtc) >= from2 &&
+                                     EntityFunctions.TruncateTime(e.TimeUtc) <= to2));
             }
             
 
@@ -73,7 +83,7 @@ namespace Zazz.Data.Repositories
 
         public void ResetPhotoId(int photoId)
         {
-            var events = DbSet.Where(p => p.PhotoId == photoId).ToList();
+            var events = DbSet.Where(e => e.PhotoId == photoId).ToList();
             foreach (var e in events)
             {
                 e.PhotoId = null;

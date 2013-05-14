@@ -8,6 +8,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IEventRepository : IRepository<ZazzEvent>
     {
+        int GetUpcomingEventsCount(int userId);
+
         int GetOwnerId(int eventId);
 
         IQueryable<ZazzEvent> GetEventRange(DateTime from, DateTime to, DateTime? from2, DateTime? to2);
