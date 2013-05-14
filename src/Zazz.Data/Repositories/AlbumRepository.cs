@@ -23,6 +23,7 @@ namespace Zazz.Data.Repositories
         {
             var query = (from album in DbSet
                          where album.UserId == userId
+                         where album.Photos.Any()
                          orderby album.CreatedDate descending
                          select new
                                 {
