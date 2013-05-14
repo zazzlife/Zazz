@@ -42,6 +42,8 @@ namespace Zazz.Web.Models
         public IEnumerable<PhotoViewModel> Photos { get; set; }
 
         public IEnumerable<WeeklyViewModel> Weeklies { get; set; }
+
+        public int SpecialEventsCount { get; set; }
     }
 
 }

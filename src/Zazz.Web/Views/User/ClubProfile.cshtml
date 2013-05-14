@@ -1,5 +1,4 @@
-﻿@using Zazz.Core.Models.Data.Enums
-@model UserProfileViewModel
+﻿@model UserProfileViewModel
 @{
     ViewBag.Title = Model.UserName;
 }
@@ -75,7 +74,11 @@
             }
         </ul>
         <div class="special-events">
-            <div class="special-events-count badge badge-important">5</div>
+            @if (Model.SpecialEventsCount > 0)
+            {
+                <div class="special-events-count badge badge-important">@Model.SpecialEventsCount</div>
+            }
+            
             <div class="special-events-text" style="margin-bottom: 18px;">Special</div>
             <div class="special-events-text">Events</div>
 
