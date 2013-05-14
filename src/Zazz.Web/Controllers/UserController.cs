@@ -157,6 +157,8 @@ namespace Zazz.Web.Controllers
                          : _uow.AlbumRepository.GetLatestAlbums(user.Id)
                            .Select(a => new PartyAlbumViewModel
                                         {
+                                            AlbumId = a.Id,
+                                            AlbumName = a.Name,
                                             CreatedDate = a.CreatedDate,
                                             Photos = a.Photos.Select(p => new PhotoViewModel
                                                                           {

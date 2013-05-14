@@ -123,7 +123,7 @@
         
         @foreach (var a in Model.PartyAlbums)
         {
-            <strong>@a.CreatedDate.ToLongDateString()</strong>
+            <strong><a href="@String.Format("/photo/list/{0}/1?albumId={1}", Model.UserId, a.AlbumId)">@a.CreatedDate.ToLongDateString()</a> </strong>
             <ul class="party-images">
                 
                 @foreach (var p in a.Photos)
