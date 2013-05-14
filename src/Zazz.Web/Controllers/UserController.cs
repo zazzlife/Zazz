@@ -151,7 +151,26 @@ namespace Zazz.Web.Controllers
                                                          }),
                          SpecialEventsCount = user.AccountType == AccountType.User
                                      ? 0
-                                     : _uow.EventRepository.GetUpcomingEventsCount(user.Id)
+                                     : _uow.EventRepository.GetUpcomingEventsCount(user.Id),
+                         PartyAlbums = user.AccountType == AccountType.User
+                         ? null
+                         : _uow.AlbumRepository.GetLatestAlbums(user.Id)
+                           .Select(a => new PartyAlbumViewModel
+                                        {
+                                            CreatedDate = a.CreatedDate,
+                                            Photos = a.Photos.Select(p => new PhotoViewModel
+                                                                          {
+                                                                              FromUserDisplayName = displayName,
+                                                                              FromUserId = user.Id,
+                                                                              FromUserPhotoUrl = profilePhotoUrl,
+                                                                              IsFromCurrentUser = currentUserId == user.Id,
+                                                                              PhotoDescription = p.Description,
+                                                                              PhotoId = p.Id,
+                                                                              PhotoUrl = p.IsFacebookPhoto 
+                                                                              ? new PhotoLinks(p.FacebookLink) 
+                                                                              : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                                                          })
+                                        })
                      };
 
             if (!vm.IsSelf && currentUserId != 0)

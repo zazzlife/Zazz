@@ -257,6 +257,7 @@
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\NotificationsPageViewModel.cs" />
     <Compile Include="Models\NotificationViewModel.cs" />
+    <Compile Include="Models\PartyAlbumViewModel.cs" />
     <Compile Include="Models\PhotoViewModels.cs" />
     <Compile Include="Models\ShowPostViewModel.cs" />
     <Compile Include="Models\PostViewModel.cs" />
