@@ -121,21 +121,29 @@
     <div class="well party-albums">
         <h6>Party Albums</h6>
         
-        @foreach (var a in Model.PartyAlbums)
+        @if (Model.PartyAlbums.Any())
         {
-            <strong><a href="@String.Format("/photo/list/{0}/1?albumId={1}", Model.UserId, a.AlbumId)">@a.CreatedDate.ToLongDateString()</a> </strong>
-            <ul class="party-images">
+            foreach (var a in Model.PartyAlbums)
+            {
+                <strong><a href="@String.Format("/photo/list/{0}/1?albumId={1}", Model.UserId, a.AlbumId)">@a.CreatedDate.ToLongDateString()</a> </strong>
+                <ul class="party-images">
                 
-                @foreach (var p in a.Photos)
-                {
-                    <li><a href="#" data-toggle="lightbox" data-target="#photo-@p.PhotoId"><img src="@p.PhotoUrl.SmallLink"/></a></li>
-                    @Html.Partial("_LightBoxPartial", p)
-                }
-            </ul>
-            <div class="clearfix"></div>
+                    @foreach (var p in a.Photos)
+                    {
+                        <li><a href="#" data-toggle="lightbox" data-target="#photo-@p.PhotoId"><img src="@p.PhotoUrl.SmallLink"/></a></li>
+                        @Html.Partial("_LightBoxPartial", p)
+                    }
+                </ul>
+                <div class="clearfix"></div>
+            }
+
+            <div class="text-center"><a href="~/photo/list/@Model.UserId/1">See more...</a></div>
+        }
+        else
+        {
+            <div class="text-center"><strong>No party album is uploaded yet!</strong></div>
         }
         
-        <div class="text-center"><a href="~/photo/list/@Model.UserId/1">See more...</a></div>
     </div>
 
 
