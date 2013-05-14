@@ -107,15 +107,18 @@
     <div class="well party-albums">
         <h6>Party Albums</h6>
         
-        @for (int i = 0; i < 3; i++)
+        @foreach (var a in Model.PartyAlbums)
         {
-            <strong>@DateTime.UtcNow.AddDays(i * -1).ToLongDateString()</strong>
+            <strong>@a.CreatedDate.ToLongDateString()</strong>
             <ul class="party-images">
-                @for (int j = 0; j < 13; j++)
+                
+                @foreach (var p in a.Photos)
                 {
-                    <li><img src="~/Images/placeholder.gif"/></li>
+                    <li><a href="#" data-toggle="lightbox" data-target="#photo-@p.PhotoId"><img src="@p.PhotoUrl.SmallLink"/></a></li>
+                    @Html.Partial("_LightBoxPartial", p)
                 }
             </ul>
+            <div class="clearfix"></div>
         }
         
         <div class="text-center"><a href="#">See more...</a></div>
