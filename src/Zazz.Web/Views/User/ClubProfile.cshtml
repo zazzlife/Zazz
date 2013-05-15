@@ -1,4 +1,4 @@
-﻿@model UserProfileViewModel
+﻿@model ClubProfileViewModel
 @{
     ViewBag.Title = Model.UserName;
 }
@@ -40,7 +40,7 @@
                 
                 @if (!Model.IsSelf)
                 {
-                     if (Model.IsCurrentUserFollowingTargetUser)
+                     if (Model.IsCurrentUserFollowingTheClub)
                      {
                          <button data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
                          title="un-follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-remove"></i></button>
@@ -59,7 +59,7 @@
 
         @*CENTER ITEMS*@
         <div class="profile-center">
-            <img id="profilePic" class="img-polaroid img-rounded" src="@Model.UserPhotoUrl.SmallLink" />
+            <img id="profilePic" class="img-polaroid img-rounded" src="@Model.UserPhoto.SmallLink" />
             <h3>@Model.UserName</h3>
         </div>
     </div>

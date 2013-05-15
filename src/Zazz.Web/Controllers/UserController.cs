@@ -45,158 +45,142 @@ namespace Zazz.Web.Controllers
         [ActionName("Profile")]
         public ActionResult ShowProfile(int id)
         {
-            //TODO: compeletely separate users and clubs.
             var user = _uow.UserRepository.GetById(id);
 
-            // Profile Photo
-            var profilePhotoUrl = _photoService.GetUserImageUrl(id);
-
-            // Cover Photo
-            string coverPhotoUrl;
-            if (user.UserDetail.CoverPhotoId == 0)
-            {
-                coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
-            }
-            else
-            {
-                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(user.UserDetail.CoverPhotoId);
-                if (photo == null)
-                {
-                    coverPhotoUrl = DefaultImageHelper.GetDefaultCoverImage();
-                }
-                else
-                {
-                    if (photo.IsFacebookPhoto)
-                    {
-                        coverPhotoUrl = photo.FacebookPicUrl;
-                    }
-                    else
-                    {
-                        coverPhotoUrl = _photoService.GeneratePhotoUrl(id, photo.Id).OriginalLink;
-                    }
-                }
-            }
-
-            // User Name
-            var displayName = String.IsNullOrEmpty(user.UserDetail.FullName)
-                                  ? user.Username
-                                  : user.UserDetail.FullName;
-
             var currentUserId = 0;
+            var currentUserPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+            var currentUserDisplayName = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
                 currentUserId = _userService.GetUserId(User.Identity.Name);
+                currentUserPhoto = _photoService.GetUserImageUrl(currentUserId);
+                currentUserDisplayName = _userService.GetUserDisplayName(currentUserId);
             }
 
-            // Feeds 
-            var feedsHelper = new FeedHelper(_uow, _userService, _photoService);
+            if (user.AccountType == AccountType.User)
+            {
+                return LoadUserProfile(user, currentUserId, currentUserDisplayName, currentUserPhoto);
+            }
+            else
+            {
+                return LoadClubProfile(user, currentUserId, currentUserDisplayName, currentUserPhoto);
+            }
+        }
 
-            // Latest Photos
-            const int PHOTOS_COUNT = 15;
-            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, PHOTOS_COUNT).ToList();
-
-            // Tags stats
-
-            var tagStats = _tagService.GetAllTagStats().ToList();
+        private ActionResult LoadClubProfile(User user, int currentUserId,
+            string currentUserDisplayName, PhotoLinks currentUserPhoto)
+        {
             var weeklies = user.Weeklies.ToList();
+            var displayName = _userService.GetUserDisplayName(user.Id);
+            var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
+
+            var vm = new ClubProfileViewModel
+                     {
+                         UserId = user.Id,
+                         UserName = displayName,
+                         CurrentUserDisplayName = currentUserDisplayName,
+                         CurrentUserPhoto = currentUserPhoto,
+                         UserPhoto = profilePhotoUrl,
+                         IsSelf = currentUserId == user.Id,
+                         CoverPhotoUrl = _photoService.GeneratePhotoUrl(user.Id, user.UserDetail.CoverPhotoId).OriginalLink,
+                         FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
+                         SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
+                         IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
+                         Feeds = new FeedHelper(_uow, _userService, _photoService).GetUserActivityFeed(user.Id, currentUserId),
+                         Weeklies = weeklies.Select(w => new WeeklyViewModel
+                         {
+                             DayOfTheWeek = w.DayOfTheWeek,
+                             Description = w.Description,
+                             Id = w.Id,
+                             Name = w.Name,
+                             PhotoId = w.PhotoId,
+                             OwnerUserId = w.UserId,
+                             CurrentUserId = currentUserId,
+                             PhotoLinks = w.PhotoId.HasValue
+                             ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
+                             : DefaultImageHelper.GetDefaultWeeklyImage()
+                         }),
+                         PartyAlbums = _uow.AlbumRepository.GetLatestAlbums(user.Id)
+                           .Select(a => new PartyAlbumViewModel
+                           {
+                               AlbumId = a.Id,
+                               AlbumName = a.Name,
+                               CreatedDate = a.CreatedDate,
+                               Photos = a.Photos.Select(p => new PhotoViewModel
+                               {
+                                   FromUserDisplayName = displayName,
+                                   FromUserId = user.Id,
+                                   FromUserPhotoUrl = profilePhotoUrl,
+                                   IsFromCurrentUser = currentUserId == user.Id,
+                                   PhotoDescription = p.Description,
+                                   PhotoId = p.Id,
+                                   PhotoUrl = p.IsFacebookPhoto
+                                   ? new PhotoLinks(p.FacebookLink)
+                                   : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                               })
+                           })
+                     };
+
+            return View("ClubProfile", vm);
+        }
+
+        private ActionResult LoadUserProfile(User user, int currentUserId,
+            string currentUserDisplayName, PhotoLinks currentUserPhoto)
+        {
+            var displayName = _userService.GetUserDisplayName(user.Id);
+            var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
+
+            const int PHOTOS_COUNT = 15;
+            var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
+            var tagStats = _tagService.GetAllTagStats().ToList();
 
             var vm = new UserProfileViewModel
                      {
-                         CurrentUserDisplayName = displayName,
-                         CurrentUserPhoto = profilePhotoUrl,
-                         UserPhotoUrl = profilePhotoUrl,
-                         CoverPhotoUrl = coverPhotoUrl,
+                         UserId = user.Id,
                          UserName = displayName,
-                         IsSelf = user.Id == currentUserId,
-                         FollowersCount = _uow.FollowRepository.GetFollowersCount(id),
-                         AccountType = user.AccountType,
-                         UserId = id,
-                         IsClub = user.AccountType == AccountType.ClubAdmin,
-                         Feeds = feedsHelper.GetUserActivityFeed(user.Id, currentUserId),
-                         TagsStats = new TagStatsWidgetViewModel
-                                     {
-                                         Tags = tagStats.Select(t => new TagStatViewModel
-                                                                     {
-                                                                         TagName = t.Tag.Name,
-                                                                         UsersCount = t.UsersCount
-                                                                     }),
-                                         LastUpdate = tagStats.FirstOrDefault() == null
-                                                          ? DateTime.MinValue
-                                                          : tagStats.First().LastUpdate
-                                     },
+                         CurrentUserDisplayName = currentUserDisplayName,
+                         CurrentUserPhoto = currentUserPhoto,
+                         UserPhoto = profilePhotoUrl,
+                         IsSelf = currentUserId == user.Id,
+                         Feeds = new FeedHelper(_uow, _userService, _photoService).GetUserActivityFeed(user.Id, 
+                         currentUserId),
+                         FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          Photos = photos.Select(p => new PhotoViewModel
-                                                     {
-                                                         FromUserDisplayName = displayName,
-                                                         FromUserId = user.Id,
-                                                         FromUserPhotoUrl = profilePhotoUrl,
-                                                         IsFromCurrentUser = currentUserId == user.Id,
-                                                         PhotoDescription = p.Description,
-                                                         PhotoId = p.Id,
-                                                         PhotoUrl = p.IsFacebookPhoto
-                                                         ? new PhotoLinks(p.FacebookLink)
-                                                         : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                                     }),
-                         Weeklies = weeklies.Select(w => new WeeklyViewModel
-                                                         {
-                                                             DayOfTheWeek = w.DayOfTheWeek,
-                                                             Description = w.Description,
-                                                             Id = w.Id,
-                                                             Name = w.Name,
-                                                             PhotoId = w.PhotoId,
-                                                             OwnerUserId = w.UserId,
-                                                             CurrentUserId = currentUserId,
-                                                             PhotoLinks = w.PhotoId.HasValue
-                                                             ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
-                                                             : DefaultImageHelper.GetDefaultWeeklyImage()
-                                                         }),
-                         SpecialEventsCount = user.AccountType == AccountType.User
-                                     ? 0
-                                     : _uow.EventRepository.GetUpcomingEventsCount(user.Id),
-                         PartyAlbums = user.AccountType == AccountType.User
-                         ? null
-                         : _uow.AlbumRepository.GetLatestAlbums(user.Id)
-                           .Select(a => new PartyAlbumViewModel
-                                        {
-                                            AlbumId = a.Id,
-                                            AlbumName = a.Name,
-                                            CreatedDate = a.CreatedDate,
-                                            Photos = a.Photos.Select(p => new PhotoViewModel
-                                                                          {
-                                                                              FromUserDisplayName = displayName,
-                                                                              FromUserId = user.Id,
-                                                                              FromUserPhotoUrl = profilePhotoUrl,
-                                                                              IsFromCurrentUser = currentUserId == user.Id,
-                                                                              PhotoDescription = p.Description,
-                                                                              PhotoId = p.Id,
-                                                                              PhotoUrl = p.IsFacebookPhoto 
-                                                                              ? new PhotoLinks(p.FacebookLink) 
-                                                                              : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                                                          })
-                                        })
+                         {
+                             FromUserDisplayName = displayName,
+                             FromUserId = user.Id,
+                             FromUserPhotoUrl = profilePhotoUrl,
+                             IsFromCurrentUser = currentUserId == user.Id,
+                             PhotoDescription = p.Description,
+                             PhotoId = p.Id,
+                             PhotoUrl = p.IsFacebookPhoto
+                             ? new PhotoLinks(p.FacebookLink)
+                             : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                         }),
+                         TagsStats = new TagStatsWidgetViewModel
+                         {
+                             Tags = tagStats.Select(t => new TagStatViewModel
+                             {
+                                 TagName = t.Tag.Name,
+                                 UsersCount = t.UsersCount
+                             }),
+                             LastUpdate = tagStats.FirstOrDefault() == null
+                                              ? DateTime.MinValue
+                                              : tagStats.First().LastUpdate
+                         },
+                         City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
+                         Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
+                         School = user.UserDetail.School == null ? null : user.UserDetail.School.Name
                      };
 
             if (!vm.IsSelf && currentUserId != 0)
             {
-                vm.IsCurrentUserFollowingTargetUser = _uow.FollowRepository.Exists(currentUserId, id);
-                vm.IsTargetUserFollowingCurrentUser = _uow.FollowRepository.Exists(id, currentUserId);
-
-                if (!vm.IsCurrentUserFollowingTargetUser)
-                {
-                    vm.FollowRequestAlreadySent = _uow.FollowRequestRepository
-                        .Exists(currentUserId, id);
-                }
+                vm.IsCurrentUserFollowingTargetUser = _uow.FollowRepository.Exists(currentUserId, user.Id);
+                vm.IsTargetUserFollowingCurrentUser = _uow.FollowRepository.Exists(user.Id, currentUserId);
+                vm.FollowRequestAlreadySent = _uow.FollowRequestRepository.Exists(currentUserId, user.Id);
             }
 
-            if (user.UserDetail.City != null)
-                vm.City = user.UserDetail.City.Name;
-
-            if (user.UserDetail.School != null)
-                vm.School = user.UserDetail.School.Name;
-
-            if (user.UserDetail.Major != null)
-                vm.Major = user.UserDetail.Major.Name;
-
-            return View(user.AccountType == AccountType.User ? "UserProfile" : "ClubProfile", vm);
+            return View("UserProfile", vm);
         }
 
         public ActionResult LoadMoreFeeds(int lastFeedId)
