@@ -82,7 +82,10 @@ namespace Zazz.Web.Controllers
                          CurrentUserPhoto = currentUserPhoto,
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
-                         CoverPhotoUrl = _photoService.GeneratePhotoUrl(user.Id, user.UserDetail.CoverPhotoId).OriginalLink,
+                         CoverPhotoUrl = user.UserDetail.CoverPhotoId == 0 
+                         ? DefaultImageHelper.GetDefaultCoverImage()
+                         : _photoService.GeneratePhotoUrl(user.Id, user.UserDetail.CoverPhotoId).OriginalLink,
+
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
