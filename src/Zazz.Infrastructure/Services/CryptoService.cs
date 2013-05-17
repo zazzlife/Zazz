@@ -82,20 +82,22 @@ namespace Zazz.Infrastructure.Services
 
         public string GenerateSignedSHA1Hash(string clearText, string key)
         {
-            var hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key));
-            var hash = hmacsha1.ComputeHash(Encoding.UTF8.GetBytes(clearText));
-
-            return BitConverter.ToString(hash).Replace("-", "");
+            using (var hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key)))
+            {
+                var hash = hmacsha1.ComputeHash(Encoding.UTF8.GetBytes(clearText));
+                return BitConverter.ToString(hash).Replace("-", "");
+            }
         }
 
         private string ComputeSHA1SignedHash(byte[] secretKey, string clearText)
         {
-            var hmacsha1 = new HMACSHA1(secretKey);
-            var textBytes = Encoding.UTF8.GetBytes(clearText);
+            using (var hmacsha1 = new HMACSHA1(secretKey))
+            {
+                var textBytes = Encoding.UTF8.GetBytes(clearText);
+                var hash = hmacsha1.ComputeHash(textBytes);
 
-            var hash = hmacsha1.ComputeHash(textBytes);
-
-            return Convert.ToBase64String(hash);
+                return Convert.ToBase64String(hash);
+            }
         }
 
 
