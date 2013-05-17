@@ -23,6 +23,30 @@ namespace Zazz.Infrastructure.Services
             }; //128 bit
         //Base64: bRFj2Dk3wfSY1n4lsak60w==
 
+        private RijndaelManaged CreateCipher(byte[] key)
+        {
+            var cipher = new RijndaelManaged
+                         {
+                             BlockSize = 128,
+                             KeySize = key.Length,
+                             Key = key,
+                             Mode = CipherMode.CBC,
+                             Padding = PaddingMode.ISO10126
+                         };
+
+            return cipher;
+        }
+
+        public string EncryptText(string text, byte[] key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string DecryptText(string cipherText, byte[] key)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GeneratePasswordHash(string password)
         {
             if (String.IsNullOrEmpty(password))
