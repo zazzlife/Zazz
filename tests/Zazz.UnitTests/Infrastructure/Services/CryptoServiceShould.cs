@@ -89,5 +89,25 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(expected, hash);
         }
+
+        [Test]
+        public void TestingEncryption()
+        {
+            //Arrange
+            var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var key = new byte[32];
+            rngCryptoServiceProvider.GetNonZeroBytes(key);
+
+            var text = "Soroush";
+            var iv = String.Empty;
+
+            //Act
+            var cipherText = _sut.EncryptText(text, key, out iv);
+            var clearText = _sut.DecryptText(cipherText, iv, key);
+
+            //Assert
+            Assert.AreNotEqual(text, cipherText);
+            Assert.AreEqual(text, clearText);
+        }
     }
 }

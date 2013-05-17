@@ -28,7 +28,6 @@ namespace Zazz.Infrastructure.Services
             var cipher = new RijndaelManaged
                          {
                              BlockSize = 128,
-                             KeySize = key.Length,
                              Key = key,
                              Mode = CipherMode.CBC,
                              Padding = PaddingMode.ISO10126
@@ -37,14 +36,32 @@ namespace Zazz.Infrastructure.Services
             return cipher;
         }
 
-        public string EncryptText(string text, byte[] key)
+        public string EncryptText(string text, byte[] key, out string iv)
         {
-            throw new NotImplementedException();
+            using (var cipher = CreateCipher(key))
+            using (var cryptoTransform = cipher.CreateEncryptor())
+            {
+                iv = Convert.ToBase64String(cipher.IV);
+                var textBytes = Encoding.UTF8.GetBytes(text);
+                var cipherText = cryptoTransform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+
+                return Convert.ToBase64String(cipherText);
+            }
         }
 
-        public string DecryptText(string cipherText, byte[] key)
+        public string DecryptText(string cipherText, string iv, byte[] key)
         {
-            throw new NotImplementedException();
+            using (var cipher = CreateCipher(key))
+            {
+                cipher.IV = Convert.FromBase64String(iv);
+                using (var cryptoTransform = cipher.CreateDecryptor())
+                {
+                    var cipherBytes = Convert.FromBase64String(cipherText);
+                    var textBytes = cryptoTransform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+
+                    return Encoding.UTF8.GetString(textBytes);
+                }
+            }
         }
 
         public string GeneratePasswordHash(string password)

@@ -2,9 +2,9 @@
 {
     public interface ICryptoService
     {
-        string EncryptText(string text, byte[] key);
+        string EncryptText(string text, byte[] key, out string iv);
 
-        string DecryptText(string cipherText, byte[] key);
+        string DecryptText(string cipherText, string iv, byte[] key);
 
         string GeneratePasswordHash(string password);
 
