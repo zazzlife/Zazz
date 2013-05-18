@@ -11,5 +11,7 @@
         string GenerateTextSignature(string clearText);
 
         string GenerateSignedSHA1Hash(string clearText, string key);
+
+        byte[] GenerateKey(int keySizeInBits, bool generateNonZero = false);
     }
 }

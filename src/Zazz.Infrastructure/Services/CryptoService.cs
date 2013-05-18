@@ -89,6 +89,25 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
+        public byte[] GenerateKey(int keySizeInBits, bool generateNonZero = false)
+        {
+            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                var key = new byte[keySizeInBits/8];
+
+                if (generateNonZero)
+                {
+                    rngCryptoServiceProvider.GetNonZeroBytes(key);
+                }
+                else
+                {
+                    rngCryptoServiceProvider.GetBytes(key);
+                }
+
+                return key;
+            }
+        }
+
         private string ComputeSHA1SignedHash(byte[] secretKey, string clearText)
         {
             using (var hmacsha1 = new HMACSHA1(secretKey))

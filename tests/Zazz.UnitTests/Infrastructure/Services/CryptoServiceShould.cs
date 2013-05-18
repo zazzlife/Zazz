@@ -109,5 +109,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreNotEqual(text, cipherText);
             Assert.AreEqual(text, clearText);
         }
+
+        [TestCase(512, 64)]
+        [TestCase(256, 32)]
+        [TestCase(128, 16)]
+        [TestCase(64, 8)]
+        public void ReturnCorrectKeySize_OnGenerateKey(int keySizeInBites, int keySizeInBytes)
+        {
+            //Arrange
+            //Act
+            var result = _sut.GenerateKey(keySizeInBites);
+
+            //Assert
+            Assert.AreEqual(keySizeInBytes, result.Length);
+        }
+
+        [Test]
+        public void GenerateKeyWithNoZeroesWhenSpecified_OnGenerateKey()
+        {
+            //Arrange
+            //Act
+            var result = _sut.GenerateKey(512, true);
+
+            //Assert
+            CollectionAssert.DoesNotContain(result, 0);
+        }
     }
 }
