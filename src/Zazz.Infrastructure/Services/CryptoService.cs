@@ -118,18 +118,5 @@ namespace Zazz.Infrastructure.Services
                 return Convert.ToBase64String(hash);
             }
         }
-
-
-        /*KEYS FOR LATER USE
-         
-         * 128 bit
-         * Wmk9XcunbkZerlTkIPX8ng==
-         * {90, 105, 61, 93, 203, 167, 110, 70, 94, 174, 84, 228, 32, 245, 252, 158}
-         
-         * 64 bit
-         * eQCCZ7vEAwE=
-         * {121, 0, 130, 103, 187, 196, 3, 1}
-         
-         */
     }
 }
