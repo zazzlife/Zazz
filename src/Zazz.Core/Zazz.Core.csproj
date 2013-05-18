@@ -62,7 +62,9 @@
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />
+    <Compile Include="Interfaces\IAccessTokenRepository.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
+    <Compile Include="Interfaces\IAppRepository.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICacheService.cs" />
     <Compile Include="Interfaces\ICacheSystem.cs" />
