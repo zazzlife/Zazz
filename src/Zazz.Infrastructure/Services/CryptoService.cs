@@ -36,6 +36,16 @@ namespace Zazz.Infrastructure.Services
             return cipher;
         }
 
+        public byte[] EncryptPassword(string text)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] DecryptPassword(byte[] cipher)
+        {
+            throw new NotImplementedException();
+        }
+
         public string EncryptText(string text, byte[] key, out string iv)
         {
             using (var cipher = CreateCipher(key))
