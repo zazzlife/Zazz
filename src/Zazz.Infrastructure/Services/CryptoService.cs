@@ -23,6 +23,8 @@ namespace Zazz.Infrastructure.Services
             }; //128 bit
         //Base64: bRFj2Dk3wfSY1n4lsak60w==
 
+        private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
+
         private RijndaelManaged CreateCipher(byte[] key)
         {
             var cipher = new RijndaelManaged
@@ -36,14 +38,31 @@ namespace Zazz.Infrastructure.Services
             return cipher;
         }
 
-        public byte[] EncryptPassword(string text)
+        public byte[] EncryptPassword(string password, out string iv)
         {
-            throw new NotImplementedException();
+            var key = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
+
+            using (var cipher = CreateCipher(key))
+            using (var cryptoTransform = cipher.CreateEncryptor())
+            {
+                iv = Convert.ToBase64String(cipher.IV);
+                var textBytes = Encoding.UTF8.GetBytes(password);
+                return cryptoTransform.TransformFinalBlock(textBytes, 0, password.Length);
+            }
         }
 
-        public byte[] DecryptPassword(byte[] cipher)
+        public byte[] DecryptPassword(byte[] cipherBytes, byte[] iv)
         {
-            throw new NotImplementedException();
+            var key = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
+
+            using (var cipher = CreateCipher(key))
+            {
+                cipher.IV = iv;
+                using (var cryptoTransform = cipher.CreateDecryptor())
+                {
+                    return cryptoTransform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                }
+            }
         }
 
         public string EncryptText(string text, byte[] key, out string iv)

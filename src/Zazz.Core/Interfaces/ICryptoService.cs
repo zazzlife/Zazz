@@ -2,9 +2,9 @@
 {
     public interface ICryptoService
     {
-        byte[] EncryptPassword(string text);
+        byte[] EncryptPassword(string password, out string iv);
 
-        byte[] DecryptPassword(byte[] cipher);
+        byte[] DecryptPassword(byte[] cipherBytes, byte[] iv);
 
         string EncryptText(string text, byte[] key, out string iv);
 

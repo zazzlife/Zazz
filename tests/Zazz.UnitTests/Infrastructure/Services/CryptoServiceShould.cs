@@ -134,5 +134,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             CollectionAssert.DoesNotContain(result, 0);
         }
+
+        [TestCase("Soroush")]
+        [TestCase("Password")]
+        [TestCase("P@$$wo0rd")]
+        [TestCase("ALongPassword ALongPassword")]
+        public void CorrectlyEncryptAndDecryptPasswords(string password)
+        {
+            //Arrange
+            //Act & Assert
+            var iv = String.Empty;
+            var cipher = _sut.EncryptPassword(password, out iv);
+
+            var ivBytes = Convert.FromBase64String(iv);
+            var decryptedBytes = _sut.DecryptPassword(cipher, ivBytes);
+            var decryptedPassword = Encoding.UTF8.GetString(decryptedBytes);
+
+            Assert.AreEqual(password, decryptedPassword);
+
+        }
     }
 }
