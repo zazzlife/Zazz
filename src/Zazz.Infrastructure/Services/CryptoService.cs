@@ -10,8 +10,7 @@ namespace Zazz.Infrastructure.Services
         /// <summary>
         /// This key should be used to sign passwords in DB, using SHA1 (HMACSHA1)
         /// </summary>
-        private static readonly byte[] PasswordHashSecret = { 4, 166, 67, 133, 113, 2, 184, 158 }; //64 bit
-        //Base64: BKZDhXECuJ4=
+        private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
 
         /// <summary>
         /// This key should be used to sign a string to make sure it's not tampered with later.
@@ -22,8 +21,6 @@ namespace Zazz.Infrastructure.Services
                 177, 169, 58, 211
             }; //128 bit
         //Base64: bRFj2Dk3wfSY1n4lsak60w==
-
-        private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
 
         private RijndaelManaged CreateCipher(byte[] key)
         {
@@ -92,14 +89,6 @@ namespace Zazz.Infrastructure.Services
                     return Encoding.UTF8.GetString(textBytes);
                 }
             }
-        }
-
-        public string GeneratePasswordHash(string password)
-        {
-            if (String.IsNullOrEmpty(password))
-                throw new ArgumentNullException("password");
-
-            return ComputeSHA1SignedHash(PasswordHashSecret, password);
         }
 
         public string GenerateTextSignature(string clearText)
