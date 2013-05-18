@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
     {
         void Login(string username, string password);
 
-        User Register(User user, bool createToken);
+        User Register(User user,string password, bool createToken);
 
         ValidationToken GenerateResetPasswordToken(string email);
 

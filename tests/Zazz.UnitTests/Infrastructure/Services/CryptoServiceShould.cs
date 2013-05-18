@@ -147,8 +147,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var cipher = _sut.EncryptPassword(password, out iv);
 
             var ivBytes = Convert.FromBase64String(iv);
-            var decryptedBytes = _sut.DecryptPassword(cipher, ivBytes);
-            var decryptedPassword = Encoding.UTF8.GetString(decryptedBytes);
+            var decryptedPassword = _sut.DecryptPassword(cipher, ivBytes);
 
             Assert.AreEqual(password, decryptedPassword);
 

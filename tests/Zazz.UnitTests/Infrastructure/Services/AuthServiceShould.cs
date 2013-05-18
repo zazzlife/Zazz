@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -16,10 +17,26 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IUoW> _uowMock;
         private Mock<ICryptoService> _cryptoMock;
         private AuthService _sut;
+        private byte[] _password;
+        private byte[] _iv;
+        private User _user;
+        private string _pass;
 
         [SetUp]
         public void Init()
         {
+            _pass = "pass";
+            _password = new byte[] {1, 2, 3, 4, 5, 6};
+            _iv = new byte[] { 1, 2, 3, 3, 4, 5 };
+            _user = new User
+                    {
+                        Id = 22,
+                        Username = "username",
+                        Email = "email",
+                        Password = _password,
+                        PasswordIV = _iv,
+                    };
+
             _uowMock = new Mock<IUoW>();
             _cryptoMock = new Mock<ICryptoService>();
             _sut = new AuthService(_uowMock.Object, _cryptoMock.Object);
@@ -29,14 +46,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #region Login
         [Test]
-        public void GetHashOfPassword_OnLogin()
+        public void DecryptUserPassword_OnLogin()
         {
             //Arrange
             var pass = "password";
+            
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
-                    .Returns(() => new User { Password = pass });
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                    .Returns(_user);
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
 
 
@@ -44,26 +62,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.Login("user", pass);
 
             //Assert
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(pass), Times.Once());
-        }
-
-        [Test]
-        public void GetUserPasswordFromDB_OnLogin()
-        {
-            //Arrange
-            var username = "username";
-            var pass = "pass";
-            _uowMock.Setup(x => x.UserRepository.GetByUsername(username,
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
-                    .Returns(() => new User { Password = pass });
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
-                       .Returns(pass);
-            //Act
-            _sut.Login(username, pass);
-
-            //Assert
-            _uowMock.Verify(x => x.UserRepository.GetByUsername(username,
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+            _cryptoMock.Verify(x => x.DecryptPassword(_user.Password, _user.PasswordIV), Times.Once());
         }
 
         [Test]
@@ -93,9 +92,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
-                    .Returns(() => new User { Password = "password" });
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
-                       .Returns("invalidPass");
+                    .Returns(_user);
+
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
+                       .Returns("valid pass");
+
             //Act
             try
             {
@@ -114,18 +115,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var pass = "pass";
-            var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
+            _user.LastActivity = DateTime.MaxValue;
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
-                    .Returns(user);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+                    .Returns(_user);
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
 
             //Act
             _sut.Login("user", pass);
 
             //Assert
-            Assert.IsTrue(user.LastActivity <= DateTime.UtcNow);
+            Assert.IsTrue(_user.LastActivity <= DateTime.UtcNow);
         }
 
         [Test]
@@ -133,12 +134,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var pass = "pass";
-            var user = new User { Password = pass, LastActivity = DateTime.MaxValue };
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
-                    .Returns(user);
+                    .Returns(_user);
 
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(It.IsAny<string>()))
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
 
             //Act
@@ -150,57 +150,52 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #endregion
 
         #region Register
-
         [Test]
-        public void ThrowWhenUserDetailIsNull_OnRegister()
+        public void CheckForExistingUsername_OnRegister()
         {
             //Arrange
-            var user = new User();
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
+                    .Returns(false);
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
+                    .Returns(false);
 
             //Act
-            try
-            {
-                _sut.Register(user, false);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (ArgumentNullException)
-            {
-            }
+            _sut.Register(_user, _pass, false);
 
             //Assert
+            _uowMock.Verify(x => x.UserRepository.ExistsByUsername(_user.Username), Times.Once());
         }
 
         [Test]
-        public void CheckForExistingUser_OnRegister()
+        public void CheckForExistingEmail_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
 
             //Act
-            _sut.Register(user, false);
+            _sut.Register(_user, _pass, false);
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.ExistsByUsername(user.Username), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.ExistsByEmail(_user.Email), Times.Once());
         }
 
         [Test]
         public void ThrowIfUsernameExists_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(true);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
 
             //Act
             try
             {
-                _sut.Register(user, false);
+                _sut.Register(_user, _pass, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (UsernameExistsException e)
@@ -211,37 +206,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CheckForExistingEmail_OnRegister()
-        {
-            //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
-                    .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
-                    .Returns(false);
-
-            //Act
-            _sut.Register(user, false);
-
-            //Assert
-            _uowMock.Verify(x => x.UserRepository.ExistsByEmail(user.Email), Times.Once());
-
-        }
-
-        [Test]
         public void ThrowIfEmailExists_OnRegister()
         {
             //Arrange
-            var user = new User { Email = "email", Username = "username", Password = "pass", UserDetail = new UserDetail() };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(true);
 
             //Act
             try
             {
-                _sut.Register(user, false);
+                _sut.Register(_user, _pass, false);
                 Assert.Fail("Expected exception wasn't thrown");
             }
             catch (EmailExistsException e)
@@ -252,116 +228,71 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void HashThePassword_OnRegister()
+        public void EncryptThePassword_OnRegister()
         {
             //Arrange
-            var clearPass = "pass";
-            var hashedPass = "hashedPassword";
-
-            var user = new User { Email = "email", Username = "username", Password = clearPass, UserDetail = new UserDetail() };
-
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
-                       .Returns(hashedPass);
+
+            var ivBuffer = new byte[] { 1, 2 };
+            var iv = Convert.ToBase64String(ivBuffer);
+            var encryptedPass = new byte[] {7, 8, 9};
+            
+
+            _cryptoMock.Setup(x => x.EncryptPassword(_pass, out iv))
+                       .Returns(encryptedPass);
 
             //Act
-            _sut.Register(user, false);
+            _sut.Register(_user, _pass, false);
 
             //Assert
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(clearPass), Times.Once());
-            Assert.AreEqual(user.Password, hashedPass);
-        }
-
-        [Test]
-        public void AssignUTCDateTimeAsRegiterDate_OnRegister()
-        {
-            //Arrange
-            var user = new User
-            {
-                Email = "email",
-                Username = "username",
-                Password = "pass",
-                UserDetail = new UserDetail
-                                 {
-                                     JoinedDate = DateTime.MaxValue
-                                 }
-            };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
-                    .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
-                    .Returns(false);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
-                       .Returns(user.Password);
-
-            //Act
-            _sut.Register(user, false);
-
-            //Assert
-            Assert.IsTrue(user.UserDetail.JoinedDate <= DateTime.UtcNow);
+            _cryptoMock.Verify(x => x.EncryptPassword(_pass, out iv), Times.Once());
+            CollectionAssert.AreEqual(encryptedPass, _user.Password);
+            CollectionAssert.AreEqual(Convert.FromBase64String(iv), _user.PasswordIV);
         }
 
         [Test]
         public void GenerateValidationTokenIfRequested_OnRegister()
         {
             //Arrange
-            var user = new User
-            {
-                Email = "email",
-                Username = "username",
-                Password = "pass",
-                UserDetail = new UserDetail
-                                 {
-                                     JoinedDate = DateTime.MaxValue
-                                 }
-            };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
-                       .Returns(user.Password);
+            
+            var iv = String.Empty;
+            _cryptoMock.Setup(x => x.EncryptPassword(_pass, out iv))
+                       .Returns(_password);
 
 
             //Act
-            _sut.Register(user, true);
+            _sut.Register(_user, _pass, true);
 
             //Assert
-            Assert.IsNotNull(user.ValidationToken);
-            Assert.AreEqual(DateTime.UtcNow.AddYears(1).Date, user.ValidationToken.ExpirationDate.Date);
-            Assert.IsNotNull(user.ValidationToken.Token);
+            Assert.IsNotNull(_user.ValidationToken);
+            Assert.AreEqual(DateTime.UtcNow.AddYears(1).Date, _user.ValidationToken.ExpirationDate.Date);
+            Assert.IsNotNull(_user.ValidationToken.Token);
         }
-
-
 
         [Test]
         public void SaveUserWhenEverythingIsOk_OnRegister()
         {
             //Arrange
-            var user = new User
-            {
-                Email = "email",
-                Username = "username",
-                Password = "pass",
-                UserDetail = new UserDetail
-                {
-                    JoinedDate = DateTime.MaxValue
-                }
-            };
-            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(user.Username))
+            _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(false);
-            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(user.Email))
+            _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(user.Password))
-                       .Returns(user.Password);
+            var iv = String.Empty;
+            _cryptoMock.Setup(x => x.EncryptPassword(_pass, out iv))
+                       .Returns(_password);
 
             //Act
-            _sut.Register(user, false);
+            _sut.Register(_user, _pass, false);
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.InsertGraph(user), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.InsertGraph(_user), Times.Once());
             _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
         #endregion
@@ -575,26 +506,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void HashTheNewPassword_OnResetPassword()
+        public void EncryptTheNewPassword_OnResetPassword()
         {
             //Arrange
             var newPass = "newpass";
-            var newPassHash = "hash";
-            var user = new User { Password = "pass" };
+            var newPassBuffer = new byte[] {12, 34, 45};
+            var iv = new byte[] {67, 89};
+            var ivText = Convert.ToBase64String(iv);
+
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPass))
-                       .Returns(() => newPassHash);
+
+            _cryptoMock.Setup(x => x.EncryptPassword(newPass, out ivText))
+                       .Returns(() => newPassBuffer);
+
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                 .Returns(token);
             _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
-                    .Returns(user);
-            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
+                    .Returns(_user);
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
             //Act
             _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(newPass));
+            _cryptoMock.Verify(x => x.EncryptPassword(newPass, out ivText), Times.Once());
         }
 
         [Test]
@@ -602,24 +537,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var newPass = "newpass";
-            var newPassHash = "hash";
-            var user = new User { Password = "pass" };
+            var newPassBuffer = new byte[] { 12, 34, 45 };
+            var iv = new byte[] { 67, 89 };
+            var ivText = Convert.ToBase64String(iv);
+
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
 
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPass))
-                       .Returns(() => newPassHash);
+            _cryptoMock.Setup(x => x.EncryptPassword(newPass, out ivText))
+                       .Returns(() => newPassBuffer);
+
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
-                    .Returns(token);
-
+                .Returns(token);
             _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
-                    .Returns(user);
+                    .Returns(_user);
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
-            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
             //Act
             _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
-            Assert.AreEqual(newPassHash, user.Password);
+            CollectionAssert.AreEqual(newPassBuffer, _user.Password);
+            CollectionAssert.AreEqual(iv, _user.PasswordIV);
             _uowMock.Verify(x => x.SaveChanges(), Times.Once());
         }
 
@@ -628,27 +566,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var newPass = "newpass";
-            var newPassHash = "hash";
-            var user = new User { Password = "pass" };
+            var newPassBuffer = new byte[] { 12, 34, 45 };
+            var iv = new byte[] { 67, 89 };
+            var ivText = Convert.ToBase64String(iv);
+
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
 
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPass))
-                       .Returns(() => newPassHash);
+            _cryptoMock.Setup(x => x.EncryptPassword(newPass, out ivText))
+                       .Returns(() => newPassBuffer);
+
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
-                    .Returns(token);
-
+                .Returns(token);
             _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
-                    .Returns(user);
-
-            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(user.Id));
+                    .Returns(_user);
+            _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
             //Act
             _sut.ResetPassword(token.Id, token.Token, newPass);
 
             //Assert
-            Assert.AreEqual(newPassHash, user.Password);
             _uowMock.Verify(x => x.SaveChanges(), Times.Once());
-            _uowMock.Verify(x => x.ValidationTokenRepository.Remove(user.Id));
+            _uowMock.Verify(x => x.ValidationTokenRepository.Remove(_user.Id));
         }
 
         #endregion
@@ -656,121 +594,86 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Change Password
 
         [Test]
-        public void HashTheCurrentPasswordBeforeComparing_OnChangePassword()
-        {
-            //Arrange
-            var userId = 12;
-            var newPassword = "newPass";
-            var newPassHash = "hashpass";
-            var oldPassHash = "oldHash";
-            var oldPass = "oldPass";
-            var user = new User { Password = oldPassHash };
-
-            _uowMock.Setup(x => x.UserRepository.GetById(userId))
-                    .Returns(user);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
-                       .Returns(newPassHash);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
-                       .Returns(oldPassHash);
-
-            //Act
-            _sut.ChangePassword(userId, oldPass, newPassword);
-
-            //Assert
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
-        }
-
-        [Test]
         public void ThrowInvalidPasswordIfCurrentPasswordIsNotCorrect_OnChangePassword()
         {
             //Arrange
-            var userId = 12;
-            var newPassword = "newPass";
-            var newPassHash = "hashpass";
-            var oldPassHash = "oldHash";
-            var oldPass = "oldPass";
-            var invalidPass = "invalid pass";
-            var invalidPassHash = "invalid pass hash";
-
-            var user = new User { Password = oldPassHash };
-
-            _uowMock.Setup(x => x.UserRepository.GetById(userId))
-                    .Returns(user);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
-                       .Returns(newPassHash);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(invalidPass))
-                       .Returns(invalidPassHash);
+            var pass = "pass";
+            var newPass = "newPass";
+            var invalidPass = "invalid";
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+                    .Returns(_user);
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
+                       .Returns(pass);
 
             //Act
             try
             {
-                _sut.ChangePassword(userId, invalidPass, newPassword);
+                _sut.ChangePassword(_user.Id, invalidPass, newPass);
                 Assert.Fail("Expected Exception Wasn't thrown");
             }
             catch (InvalidPasswordException e)
             {
                 //Assert
                 Assert.IsInstanceOf<InvalidPasswordException>(e);
-                _uowMock.Verify(x => x.UserRepository.GetById(userId), Times.Once());
-                _cryptoMock.Verify(x => x.GeneratePasswordHash(invalidPass), Times.Once());
+                _uowMock.Verify(x => x.UserRepository.GetById(_user.Id), Times.Once());
+                _cryptoMock.Verify(x => x.DecryptPassword(_user.Password, _user.PasswordIV), Times.Once());
             }
         }
 
         [Test]
-        public void HashTheNewPasswordIfEverythingIsFine_OnChangePassword()
+        public void EncryptTheNewPasswordIfEverythingIsFine_OnChangePassword()
         {
             //Arrange
-            var userId = 12;
-            var newPassword = "newPass";
-            var newPassHash = "hashpass";
-            var oldPassHash = "oldHash";
-            var oldPass = "oldPass";
-            var user = new User { Password = oldPassHash };
+            var oldPassBuffer = _user.Password;
+            var oldPassIv = _user.PasswordIV;
 
-            _uowMock.Setup(x => x.UserRepository.GetById(userId))
-                    .Returns(user);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
-                       .Returns(newPassHash);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
-                       .Returns(oldPassHash);
+            var pass = "pass";
+            var newPass = "newPass";
+            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
+            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
+            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
+
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+                    .Returns(_user);
+            _cryptoMock.Setup(x => x.DecryptPassword(oldPassBuffer, oldPassIv))
+                       .Returns(pass);
+            _cryptoMock.Setup(x => x.EncryptPassword(newPass, out newPassIv))
+                       .Returns(newPassBuffer);
 
             //Act
-            _sut.ChangePassword(userId, oldPass, newPassword);
+            _sut.ChangePassword(_user.Id, pass, newPass);
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.GetById(userId), Times.Once());
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(newPassword), Times.Once());
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetById(_user.Id), Times.Once());
+            _cryptoMock.Verify(x => x.DecryptPassword(oldPassBuffer, oldPassIv), Times.Once());
+            _cryptoMock.Verify(x => x.EncryptPassword(newPass, out newPassIv), Times.Once());
+            
         }
 
         [Test]
         public void SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
         {
             //Arrange
-            var userId = 12;
-            var newPassword = "newPass";
-            var newPassHash = "hashpass";
-            var oldPassHash = "oldHash";
-            var oldPass = "oldPass";
-            var user = new User { Password = oldPassHash };
+            var pass = "pass";
+            var newPass = "newPass";
+            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
+            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
+            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
 
-            _uowMock.Setup(x => x.UserRepository.GetById(userId))
-                    .Returns(user);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(newPassword))
-                       .Returns(newPassHash);
-            _cryptoMock.Setup(x => x.GeneratePasswordHash(oldPass))
-                       .Returns(oldPassHash);
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+                    .Returns(_user);
+            _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
+                       .Returns(pass);
+            _cryptoMock.Setup(x => x.EncryptPassword(newPass, out newPassIv))
+                       .Returns(newPassBuffer);
 
             //Act
-            _sut.ChangePassword(userId, oldPass, newPassword);
+            _sut.ChangePassword(_user.Id, pass, newPass);
 
             //Assert
-
-            Assert.AreEqual(newPassHash, user.Password);
+            CollectionAssert.AreEqual(newPassBuffer, _user.Password);
+            CollectionAssert.AreEqual(newPassIvBuffer, _user.PasswordIV);
             _uowMock.Verify(x => x.SaveChanges());
-            _uowMock.Verify(x => x.UserRepository.GetById(userId), Times.Once());
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(newPassword), Times.Once());
-            _cryptoMock.Verify(x => x.GeneratePasswordHash(oldPass), Times.Once());
         }
 
         #endregion

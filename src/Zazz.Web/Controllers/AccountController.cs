@@ -113,7 +113,6 @@ namespace Zazz.Web.Controllers
                                    Email = registerVm.Email,
                                    IsConfirmed = false,
                                    LastActivity = DateTime.UtcNow,
-                                   Password = registerVm.Password,
                                    Username = registerVm.UserName,
                                    AccountType = registerVm.AccountType,
                                    UserDetail = new UserDetail
@@ -135,10 +134,7 @@ namespace Zazz.Web.Controllers
 
                 try
                 {
-                    _authService.Register(user, true);
-
-                    //TODO: send welcome email.
-
+                    _authService.Register(user, registerVm.Password, true);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
                     return RedirectToAction("Index", "Home");
@@ -364,7 +360,6 @@ namespace Zazz.Web.Controllers
                     Email = oauthData.Email,
                     IsConfirmed = true,
                     LastActivity = DateTime.UtcNow,
-                    Password = registerVm.Password,
                     Username = registerVm.UserName,
                     AccountType = registerVm.AccountType,
                     UserDetail = new UserDetail
@@ -394,10 +389,7 @@ namespace Zazz.Web.Controllers
                     user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
                 try
                 {
-                    _authService.Register(user, false);
-
-                    //TODO: send welcome email.
-
+                    _authService.Register(user, registerVm.Password, false);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
                     return RedirectToAction("Index", "Home");

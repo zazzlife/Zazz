@@ -13,7 +13,8 @@ namespace Zazz.IntegrationTests
                             Email = "test@test.com",
                             LastActivity = DateTime.UtcNow,
                             Username = "username",
-                            Password = "password",
+                            Password = new byte[] {1,2,3,4,5},
+                            PasswordIV = new byte[] {6,7,8,9},
                             UserDetail = new UserDetail
                                          {
                                              Gender = Gender.Female,

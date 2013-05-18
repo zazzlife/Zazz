@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -19,13 +20,12 @@ namespace Zazz.Infrastructure.Services
 
         public void Login(string username, string password)
         {
-            var passwordHash = _cryptoService.GeneratePasswordHash(password);
             var user = _uow.UserRepository.GetByUsername(username);
-
             if (user == null)
                 throw new UserNotExistsException();
 
-            if (passwordHash != user.Password)
+            var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
+            if (decryptedPassword != password)
                 throw new InvalidPasswordException();
 
             user.LastActivity = DateTime.UtcNow;
@@ -33,11 +33,8 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public User Register(User user, bool createToken)
+        public User Register(User user, string password, bool createToken)
         {
-            if (user.UserDetail == null)
-                throw new ArgumentNullException();
-
             var usernameExists = _uow.UserRepository.ExistsByUsername(user.Username);
             if (usernameExists)
                 throw new UsernameExistsException();
@@ -45,11 +42,10 @@ namespace Zazz.Infrastructure.Services
             var emailExists = _uow.UserRepository.ExistsByEmail(user.Email);
             if (emailExists)
                 throw new EmailExistsException();
-
-            var hashedPassword = _cryptoService.GeneratePasswordHash(user.Password);
-            user.Password = hashedPassword;
-
-            user.UserDetail.JoinedDate = DateTime.UtcNow;
+            
+            var iv = String.Empty;
+            user.Password = _cryptoService.EncryptPassword(password, out iv);
+            user.PasswordIV = Convert.FromBase64String(iv);
 
             if (createToken)
             {
@@ -61,7 +57,6 @@ namespace Zazz.Infrastructure.Services
             }
 
             _uow.UserRepository.InsertGraph(user);
-
             _uow.SaveChanges();
 
             return user;
@@ -109,9 +104,10 @@ namespace Zazz.Infrastructure.Services
                 throw new InvalidTokenException();
 
             var user = _uow.UserRepository.GetById(userId);
-            var newPassHash = _cryptoService.GeneratePasswordHash(newPassword);
+            string iv;
+            user.Password = _cryptoService.EncryptPassword(newPassword, out iv);
+            user.PasswordIV = Convert.FromBase64String(iv);
 
-            user.Password = newPassHash;
             _uow.ValidationTokenRepository.Remove(user.Id);
             _uow.SaveChanges();
         }
@@ -120,13 +116,13 @@ namespace Zazz.Infrastructure.Services
         {
             var user = _uow.UserRepository.GetById(userId);
 
-            var currentPassHash = _cryptoService.GeneratePasswordHash(currentPassword);
-            if (currentPassHash != user.Password)
+            var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
+            if (currentPassword != decryptedPassword)
                 throw new InvalidPasswordException();
 
-            var newPasshash = _cryptoService.GeneratePasswordHash(newPassword);
-
-            user.Password = newPasshash;
+            string iv;
+            user.Password = _cryptoService.EncryptPassword(newPassword, out iv);
+            user.PasswordIV = Convert.FromBase64String(iv);
 
             _uow.SaveChanges();
         }

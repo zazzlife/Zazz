@@ -51,7 +51,7 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public byte[] DecryptPassword(byte[] cipherBytes, byte[] iv)
+        public string DecryptPassword(byte[] cipherBytes, byte[] iv)
         {
             var key = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
 
@@ -60,7 +60,8 @@ namespace Zazz.Infrastructure.Services
                 cipher.IV = iv;
                 using (var cryptoTransform = cipher.CreateDecryptor())
                 {
-                    return cryptoTransform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                    return Encoding.UTF8.GetString(cryptoTransform
+                        .TransformFinalBlock(cipherBytes, 0, cipherBytes.Length));
                 }
             }
         }
