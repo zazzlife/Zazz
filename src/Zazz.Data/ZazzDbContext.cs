@@ -33,8 +33,6 @@ namespace Zazz.Data
         public IDbSet<Notification> Notifications { get; set; }
         public IDbSet<TagStat> TagStats { get; set; }
         public IDbSet<Weekly> Weeklies { get; set; }
-        public IDbSet<AccessToken> AccessTokens { get; set; }
-        public IDbSet<App> Apps { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -149,11 +147,6 @@ namespace Zazz.Data
                 .HasOptional(n => n.CommentNotification)
                 .WithRequired(c => c.Notification)
                 .WillCascadeOnDelete();
-
-            modelBuilder.Entity<App>()
-                .HasRequired(a => a.User)
-                .WithMany()
-                .WillCascadeOnDelete(false);
 
             base.OnModelCreating(modelBuilder);
         }
