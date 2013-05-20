@@ -54,7 +54,7 @@ namespace Zazz.UnitTests.Web.Filters
 
         private IContainer SetupIoC()
         {
-            ObjectFactory.Configure(x =>
+            return new Container(x =>
                                     {
                                         x.Scan(s =>
                                                {
@@ -67,7 +67,20 @@ namespace Zazz.UnitTests.Web.Filters
                                         x.For<IApiAppRepository>().Use(_appRespo.Object);
                                     });
 
-            return ObjectFactory.Container;
+            //ObjectFactory.Configure(x =>
+            //                        {
+            //                            x.Scan(s =>
+            //                                   {
+            //                                       s.TheCallingAssembly();
+            //                                       s.WithDefaultConventions();
+            //                                   });
+                                        
+            //                            x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
+            //                            x.For<ICryptoService>().Use(_cryptoService.Object);
+            //                            x.For<IApiAppRepository>().Use(_appRespo.Object);
+            //                        });
+
+            //return ObjectFactory.Container;
         }
 
         [Test]
