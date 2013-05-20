@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -80,6 +81,22 @@ namespace Zazz.UnitTests.Web.Filters
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
             _client.DefaultRequestHeaders.Authorization = null;
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+        }
+
+        [TestCase("basic")]
+        [TestCase("digest")]
+        [TestCase("somethingelse")]
+        public async Task Return403IfAuthorizationHeaderIsNotZazzApi(string authorizationScheme)
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authorizationScheme);
 
             //Act
             var result = await _client.GetAsync("");

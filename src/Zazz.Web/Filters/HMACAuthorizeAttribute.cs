@@ -59,7 +59,8 @@ namespace Zazz.Web.Filters
 
             // Authorization Header
             var authorization = actionContext.Request.Headers.Authorization;
-            if (authorization == null)
+            if (authorization == null ||
+                !authorization.Scheme.Equals("ZazzApi", StringComparison.InvariantCultureIgnoreCase))
             {
                 isAuthorized = false;
             }
