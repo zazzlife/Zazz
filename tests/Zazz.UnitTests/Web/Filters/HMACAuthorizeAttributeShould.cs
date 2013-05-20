@@ -346,6 +346,32 @@ namespace Zazz.UnitTests.Web.Filters
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return403IfRequestSignatureIsInvalidForDeleteRequest()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, "invalidSign", _usreId, _passwordSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "DELETE" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/?id=25" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+            //Act
+            var result = await _client.DeleteAsync("/?id=25");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
 
         [TearDown]
         public void Cleanup()
