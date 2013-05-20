@@ -46,7 +46,9 @@ namespace Zazz.Web.Filters
         {
             var date = actionContext.Request.Headers.Date;
 
-            if (!date.HasValue || date.Value < DateTimeOffset.UtcNow.AddMinutes(-1))
+            if (!date.HasValue ||
+                date.Value < DateTimeOffset.UtcNow.AddMinutes(-1) ||
+                date.Value > DateTimeOffset.UtcNow)
             {
                 return false;
             }

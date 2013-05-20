@@ -61,7 +61,18 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
         }
 
+        [Test]
+        public async Task Return403IfDateIsGreaterThanUTCNow()
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(2);
 
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+        }
 
 
         [TearDown]
