@@ -108,7 +108,7 @@ namespace Zazz.UnitTests.Web.Filters
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public async Task Return403IfAuthorizationHeaderIsMissingAppId(string authorizationParam)
+        public async Task Return403IfAuthorizationHeaderValueIsMissing(string authorizationParam)
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
@@ -120,6 +120,27 @@ namespace Zazz.UnitTests.Web.Filters
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
         }
+
+        [TestCase("a")]
+        [TestCase("a:b")]
+        [TestCase("a:b:C")]
+        public async Task Return403IfAuthorizationHeaderValueIsMissingAnyOfTheRequiredParameters(string auth)
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", auth);
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+
+        }
+
+
+
+
 
         [TearDown]
         public void Cleanup()

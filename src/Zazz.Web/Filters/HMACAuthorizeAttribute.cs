@@ -64,6 +64,12 @@ namespace Zazz.Web.Filters
                 return false;
             }
 
+            var authSegments = authorization.Parameter.Split(':');
+            if (authSegments.Length != 4)
+            {
+                return false;
+            }
+
             return true;
         }
 
