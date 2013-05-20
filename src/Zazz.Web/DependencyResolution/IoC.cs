@@ -43,13 +43,13 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ICacheService>().Singleton().Use<CacheService>();
                             x.For<IStringHelper>().Singleton().Use<StringHelper>();
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
-                            
+                            x.For<ICryptoService>().Singleton().Use<CryptoService>();
+
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
 
                             // Services
                             x.For<IAlbumService>().Use<AlbumService>();
                             x.For<IAuthService>().Use<AuthService>();
-                            x.For<ICryptoService>().Use<CryptoService>();
                             x.For<IFacebookService>().Use<FacebookService>();
                             x.For<IFileService>().Use<FileService>();
                             x.For<IFollowService>().Use<FollowService>();

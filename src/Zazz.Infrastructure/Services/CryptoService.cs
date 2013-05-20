@@ -11,7 +11,8 @@ namespace Zazz.Infrastructure.Services
         /// This key should be used to sign passwords in DB, using SHA1 (HMACSHA1)
         /// </summary>
         private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
-
+        private readonly byte[] _passwordCipherKeyBuffer;
+        
         /// <summary>
         /// This key should be used to sign a string to make sure it's not tampered with later.
         /// </summary>
@@ -21,6 +22,11 @@ namespace Zazz.Infrastructure.Services
                 177, 169, 58, 211
             }; //128 bit
         //Base64: bRFj2Dk3wfSY1n4lsak60w==
+
+        public CryptoService()
+        {
+            _passwordCipherKeyBuffer = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
+        }
 
         private RijndaelManaged CreateCipher(byte[] key)
         {
@@ -37,9 +43,7 @@ namespace Zazz.Infrastructure.Services
 
         public byte[] EncryptPassword(string password, out string iv)
         {
-            var key = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
-
-            using (var cipher = CreateCipher(key))
+            using (var cipher = CreateCipher(_passwordCipherKeyBuffer))
             using (var cryptoTransform = cipher.CreateEncryptor())
             {
                 iv = Convert.ToBase64String(cipher.IV);
@@ -50,9 +54,7 @@ namespace Zazz.Infrastructure.Services
 
         public string DecryptPassword(byte[] cipherBytes, byte[] iv)
         {
-            var key = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
-
-            using (var cipher = CreateCipher(key))
+            using (var cipher = CreateCipher(_passwordCipherKeyBuffer))
             {
                 cipher.IV = iv;
                 using (var cryptoTransform = cipher.CreateDecryptor())
