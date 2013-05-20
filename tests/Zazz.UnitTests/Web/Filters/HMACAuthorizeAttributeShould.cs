@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -13,6 +14,7 @@ using Moq;
 using NUnit.Framework;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.DependencyResolution;
 using Zazz.Web.Filters;
 
@@ -26,15 +28,24 @@ namespace Zazz.UnitTests.Web.Filters
         private HttpClient _client;
         private MockRepository _mockRepo;
         private Mock<ICryptoService> _cryptoService;
-        private Mock<IApiAppRepository> _appRespo;
+        private Mock<IApiAppRepository> _appRepo;
+        private int _appId;
+        private string _requestSignature;
+        private int _usreId;
+        private string _passwordSignature;
+        private byte[] _passwordSigningKey;
+        private byte[] _requestSigningKey;
+        private ApiApp _app;
         private const string BASE_ADDRESS = "http://localhost:8080";
+        private const string AUTH_SCHEME = "ZazzApi";
+
 
         [SetUp]
         public void Init()
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _cryptoService = _mockRepo.Create<ICryptoService>();
-            _appRespo = _mockRepo.Create<IApiAppRepository>();
+            _appRepo = _mockRepo.Create<IApiAppRepository>();
 
             var container = SetupIoC();
             _config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -50,6 +61,21 @@ namespace Zazz.UnitTests.Web.Filters
 
             _server = new HttpSelfHostServer(_config);
             _client = new HttpClient(_server) { BaseAddress = new Uri(BASE_ADDRESS) };
+
+            _appId = 12;
+            _requestSignature = "requestSign";
+            _usreId = 1000;
+            _passwordSignature = "passSign";
+            _requestSigningKey = new byte[] {1, 2};
+            _passwordSigningKey = new byte[] { 3, 4 };
+
+            _app = new ApiApp
+                   {
+                       Id = _appId,
+                       Name = "test",
+                       PasswordSigningKey = _passwordSigningKey,
+                       RequestSigningKey = _requestSigningKey
+                   };
         }
 
         private IContainer SetupIoC()
@@ -64,7 +90,7 @@ namespace Zazz.UnitTests.Web.Filters
                                         
                                         x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                                         x.For<ICryptoService>().Use(_cryptoService.Object);
-                                        x.For<IApiAppRepository>().Use(_appRespo.Object);
+                                        x.For<IApiAppRepository>().Use(_appRepo.Object);
                                     });
         }
 
@@ -149,7 +175,7 @@ namespace Zazz.UnitTests.Web.Filters
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", authorizationParam);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authorizationParam);
 
             //Act
             var result = await _client.GetAsync("");
@@ -166,7 +192,7 @@ namespace Zazz.UnitTests.Web.Filters
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", auth);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
             var result = await _client.GetAsync("");
@@ -183,7 +209,7 @@ namespace Zazz.UnitTests.Web.Filters
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", auth);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
             var result = await _client.GetAsync("");
@@ -200,7 +226,7 @@ namespace Zazz.UnitTests.Web.Filters
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", auth);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
             var result = await _client.GetAsync("");
@@ -209,6 +235,56 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return403IfAppNotExists()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, "invalidSign", _usreId, _passwordSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(() => null);
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return403IfRequestSignatureIsInvalidForGetRequest()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, "invalidSign", _usreId, _passwordSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
 
         [TearDown]
         public void Cleanup()

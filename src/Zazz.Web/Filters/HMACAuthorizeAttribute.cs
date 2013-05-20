@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using StructureMap.Attributes;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Filters
 {
@@ -19,6 +21,10 @@ namespace Zazz.Web.Filters
         [SetterProperty]
         public ICryptoService CryptoService { get; set; }
 
+        /* HTTP Date Header:
+         * Should be in RFC1123 format not greater than UtcNow() and not less than UtcNow() -1 minute
+         */
+
         /* HTTP Authorization Header:
          *  Authorization: ZazzApi {AppId}:{RequestSignature}:{UserId}:{UserPasswordHash}
          */
@@ -27,16 +33,16 @@ namespace Zazz.Web.Filters
          * HMAC-SHA512 Hash of the request using the application RequestSigningKey.
          * It should generated from the following items:
          * 
-         *      Signature = HttpVerb + "\n" +
-         *                  Date + "\n" +
-         *                  UrlPath
+         *      Signature = Base64(HMAC-SHA512(UTF8-Encoding( HttpVerb + "\n" +
+         *                                                      Date + "\n" +
+         *                                                      UrlPath + "\n")))
          * 
          * In POST and PUT methods it should also contains the body:
          * 
-         *      Signature = HttpVerb + "\n" +
-         *                  Date + "\n" +
-         *                  UrlPath + "\n" +
-         *                  Body
+         *      Signature = Base64(HMAC-SHA512(UTF8-Encoding( HttpVerb + "\n" +
+         *                                                      Date + "\n" +
+         *                                                      UrlPath + "\n" +
+         *                                                      body)))
          * 
          */
 
@@ -91,9 +97,33 @@ namespace Zazz.Web.Filters
             // Password Hash
             var passwordHash = authSegments[3];
 
+            var app = ApiAppRepository.GetById(appId);
+            if (app == null)
+                return false;
 
+            var isSignatureValid = ValidateRequestSignature(app, requestSignature, actionContext.Request);
+            if (!isSignatureValid)
+                return false;
 
             return true;
+        }
+
+        private bool ValidateRequestSignature(ApiApp app, string requestSignature, HttpRequestMessage request)
+        {
+            var content = request.Content == null
+                                   ? null
+                                   : request.Content.ReadAsStringAsync().Result;
+
+            var stringToSign = request.Method.Method + "\n" +
+                               request.Headers.Date.Value.ToString("r") + "\n" +
+                               request.RequestUri.AbsolutePath + "\n" +
+                               content;
+
+
+            var signatureBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            var signature = CryptoService.GenerateHMACSHA512Hash(signatureBuffer, app.RequestSigningKey);
+
+            return requestSignature == signature;
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
