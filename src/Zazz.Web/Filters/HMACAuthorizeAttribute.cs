@@ -45,8 +45,6 @@ namespace Zazz.Web.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            var isAuthorized = true;
-
             // Checking Date Header
 
             var date = actionContext.Request.Headers.Date;
@@ -54,19 +52,19 @@ namespace Zazz.Web.Filters
                 date.Value < DateTimeOffset.UtcNow.AddMinutes(-1) ||
                 date.Value > DateTimeOffset.UtcNow)
             {
-                isAuthorized = false;
+                return false;
             }
 
             // Authorization Header
             var authorization = actionContext.Request.Headers.Authorization;
             if (authorization == null ||
-                !authorization.Scheme.Equals("ZazzApi", StringComparison.InvariantCultureIgnoreCase))
+                !authorization.Scheme.Equals("ZazzApi", StringComparison.InvariantCultureIgnoreCase) ||
+                String.IsNullOrWhiteSpace(authorization.Parameter))
             {
-                isAuthorized = false;
+                return false;
             }
 
-
-            return isAuthorized;
+            return true;
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
