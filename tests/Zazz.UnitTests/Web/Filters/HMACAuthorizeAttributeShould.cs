@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -34,6 +35,20 @@ namespace Zazz.UnitTests.Web.Filters
             _client = new HttpClient(_server) { BaseAddress = new Uri(BASE_ADDRESS) };
         }
 
+        [Test]
+        public async Task ShouldReturn403IfDateHeaderIsNotProvided()
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = null;
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+        }
+
+
         [TearDown]
         public void Cleanup()
         {
@@ -44,6 +59,7 @@ namespace Zazz.UnitTests.Web.Filters
 
     public class DummyController : ApiController
     {
+        [HMACAuthorize]
         public string Get()
         {
             return String.Empty;

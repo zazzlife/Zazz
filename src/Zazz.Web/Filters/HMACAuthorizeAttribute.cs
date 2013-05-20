@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,18 @@ namespace Zazz.Web.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            return base.IsAuthorized(actionContext);
+            if (!actionContext.Request.Headers.Date.HasValue)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
+        {
+            base.HandleUnauthorizedRequest(actionContext);
+            actionContext.Response.StatusCode = HttpStatusCode.Forbidden;
         }
     }
 }
