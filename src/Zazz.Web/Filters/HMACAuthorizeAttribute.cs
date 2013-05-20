@@ -113,10 +113,10 @@ namespace Zazz.Web.Filters
             var content = request.Content == null
                                    ? null
                                    : request.Content.ReadAsStringAsync().Result;
-
+            
             var stringToSign = request.Method.Method + "\n" +
                                request.Headers.Date.Value.ToString("r") + "\n" +
-                               request.RequestUri.AbsolutePath + "\n" +
+                               request.RequestUri.PathAndQuery + "\n" +
                                content;
 
 
