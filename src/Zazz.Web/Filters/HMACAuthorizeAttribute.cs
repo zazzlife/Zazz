@@ -44,7 +44,9 @@ namespace Zazz.Web.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            if (!actionContext.Request.Headers.Date.HasValue)
+            var date = actionContext.Request.Headers.Date;
+
+            if (!date.HasValue || date.Value < DateTimeOffset.UtcNow.AddMinutes(-1))
             {
                 return false;
             }

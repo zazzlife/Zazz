@@ -36,7 +36,7 @@ namespace Zazz.UnitTests.Web.Filters
         }
 
         [Test]
-        public async Task ShouldReturn403IfDateHeaderIsNotProvided()
+        public async Task Return403IfDateHeaderIsNotProvided()
         {
             //Arrange
             _client.DefaultRequestHeaders.Date = null;
@@ -47,6 +47,21 @@ namespace Zazz.UnitTests.Web.Filters
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
         }
+
+        [Test]
+        public async Task Return403IfDateIsLessThanOneMinutesAgo()
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-1);
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+        }
+
+
 
 
         [TearDown]
