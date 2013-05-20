@@ -16,6 +16,9 @@ namespace Zazz.Web.Filters
         [SetterProperty]
         public IApiAppRepository ApiAppRepository { get; set; }
 
+        [SetterProperty]
+        public ICryptoService CryptoService { get; set; }
+
         /* HTTP Authorization Header:
          *  Authorization: ZazzApi {AppId}:{RequestSignature}:{UserId}:{UserPasswordHash}
          */

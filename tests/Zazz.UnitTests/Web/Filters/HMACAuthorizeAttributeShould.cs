@@ -66,21 +66,6 @@ namespace Zazz.UnitTests.Web.Filters
                                         x.For<ICryptoService>().Use(_cryptoService.Object);
                                         x.For<IApiAppRepository>().Use(_appRespo.Object);
                                     });
-
-            //ObjectFactory.Configure(x =>
-            //                        {
-            //                            x.Scan(s =>
-            //                                   {
-            //                                       s.TheCallingAssembly();
-            //                                       s.WithDefaultConventions();
-            //                                   });
-                                        
-            //                            x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
-            //                            x.For<ICryptoService>().Use(_cryptoService.Object);
-            //                            x.For<IApiAppRepository>().Use(_appRespo.Object);
-            //                        });
-
-            //return ObjectFactory.Container;
         }
 
         [Test]
@@ -94,6 +79,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -107,6 +93,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -120,6 +107,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -134,6 +122,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [TestCase("basic")]
@@ -150,6 +139,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [TestCase(null)]
@@ -166,6 +156,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
         }
 
         [TestCase("a")]
@@ -182,7 +173,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-
+            _mockRepo.VerifyAll();
         }
 
         [TestCase("text:sign:1:sign")]
@@ -199,7 +190,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-
+            _mockRepo.VerifyAll();
         }
 
         [TestCase("1:sign:0:sign")]
@@ -216,7 +207,7 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-
+            _mockRepo.VerifyAll();
         }
 
         [TearDown]
