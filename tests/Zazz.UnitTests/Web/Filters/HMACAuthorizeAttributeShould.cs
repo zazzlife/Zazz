@@ -286,6 +286,34 @@ namespace Zazz.UnitTests.Web.Filters
         }
 
         [Test]
+        public async Task Return403IfRequestSignatureIsInvalidForGetWithQueryStringRequest()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, "invalidSign", _usreId, _passwordSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/?id=25" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+
+            //Act
+            var result = await _client.GetAsync("/?id=25");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public async Task Return403IfRequestSignatureIsInvalidForPostRequest()
         {
             //Arrange
