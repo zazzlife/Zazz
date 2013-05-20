@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using StructureMap.Attributes;
 using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.Filters
 {
     public class HMACAuthorizeAttribute : AuthorizeAttribute
     {
+        [SetterProperty]
+        public IApiAppRepository ApiAppRepository { get; set; }
+
         /* HTTP Authorization Header:
          *  Authorization: ZazzApi {AppId}:{RequestSignature}:{UserId}:{UserPasswordHash}
          */
@@ -79,6 +83,12 @@ namespace Zazz.Web.Filters
             int userId;
             if (!int.TryParse(authSegments[2], out userId) || userId < 1)
                 return false;
+
+            
+            // Password Hash
+            var passwordHash = authSegments[3];
+
+
 
             return true;
         }

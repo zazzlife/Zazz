@@ -17,6 +17,7 @@
 
 
 using System.Web.Hosting;
+using System.Web.Http.Filters;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
@@ -72,7 +73,13 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFacebookHelper>().Use<FacebookHelper>();
                             
                             x.For<ILogger>().Use<Logger>();
-                            
+
+                            x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
+                            x.SetAllProperties(p =>
+                                               {
+                                                   p.OfType<IApiAppRepository>();
+                                                   p.OfType<ICryptoService>();
+                                               });
 
 #if DEBUG
                             x.For<IEmailService>().Use<FakeEmailService>();
