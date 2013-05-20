@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.Filters
 {
@@ -44,16 +45,27 @@ namespace Zazz.Web.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            var date = actionContext.Request.Headers.Date;
+            var isAuthorized = true;
 
+            // Checking Date Header
+
+            var date = actionContext.Request.Headers.Date;
             if (!date.HasValue ||
                 date.Value < DateTimeOffset.UtcNow.AddMinutes(-1) ||
                 date.Value > DateTimeOffset.UtcNow)
             {
-                return false;
+                isAuthorized = false;
             }
 
-            return true;
+            // Authorization Header
+            var authorization = actionContext.Request.Headers.Authorization;
+            if (authorization == null)
+            {
+                isAuthorized = false;
+            }
+
+
+            return isAuthorized;
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)

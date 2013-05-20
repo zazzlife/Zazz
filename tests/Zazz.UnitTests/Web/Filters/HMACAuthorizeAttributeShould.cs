@@ -74,6 +74,19 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
         }
 
+        [Test]
+        public async Task Return403IfAuthorizationHeaderIsMissing()
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = null;
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+        }
 
         [TearDown]
         public void Cleanup()
