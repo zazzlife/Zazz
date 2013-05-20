@@ -63,6 +63,7 @@
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
+    <Compile Include="Interfaces\IApiAppRepository.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICacheService.cs" />
     <Compile Include="Interfaces\ICacheSystem.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
+    <Compile Include="Models\Data\ApiApp.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
     <Compile Include="Models\Data\City.cs" />
     <Compile Include="Models\Data\BaseEntity.cs" />
