@@ -66,9 +66,11 @@ namespace Zazz.Web.Filters
 
             var authSegments = authorization.Parameter.Split(':');
             if (authSegments.Length != 4)
-            {
                 return false;
-            }
+
+            int appId;
+            if (!int.TryParse(authSegments[0], out appId) || appId < 1)
+                return false;
 
             return true;
         }

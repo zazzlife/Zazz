@@ -138,7 +138,22 @@ namespace Zazz.UnitTests.Web.Filters
 
         }
 
+        [TestCase("text:sign:1:sign")]
+        [TestCase("0:sign:1:sign")]
+        [TestCase("-1:sign:1:sign")]
+        public async Task Return403IfAppIdIsNotValidInteger(string auth)
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("ZazzApi", auth);
 
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+
+        }
 
 
 
