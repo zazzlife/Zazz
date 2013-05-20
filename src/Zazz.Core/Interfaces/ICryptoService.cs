@@ -14,6 +14,8 @@
 
         string GenerateSignedSHA1Hash(string clearText, string key);
 
+        string GenerateHMACSHA512Hash(byte[] text, byte[] key);
+
         byte[] GenerateKey(int keySizeInBits, bool generateNonZero = false);
     }
 }

@@ -110,6 +110,15 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
+        public string GenerateHMACSHA512Hash(byte[] text, byte[] key)
+        {
+            using (var hmacsha512 = new HMACSHA512(key))
+            {
+                var hash = hmacsha512.ComputeHash(text);
+                return Convert.ToBase64String(hash);
+            }
+        }
+
         public byte[] GenerateKey(int keySizeInBits, bool generateNonZero = false)
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())

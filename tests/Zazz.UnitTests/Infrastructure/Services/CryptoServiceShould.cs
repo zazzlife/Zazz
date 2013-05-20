@@ -115,6 +115,28 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         }
 
+        [Test]
+        public void GenerateCorrectHash_OnGenerateHMACSHA512()
+        {
+            //Arrange
+            var key = _sut.GenerateKey(128*8);
+            var expected = String.Empty;
+            var text = Encoding.UTF8.GetBytes("Soroush");
+
+            using (var h = new HMACSHA512(key))
+                expected = Convert.ToBase64String(h.ComputeHash(text));
+
+
+            //Act
+            var result = _sut.GenerateHMACSHA512Hash(text, key);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+
+
+
         [Test, Explicit("This is not a test, using it only for generating keys")]
         public void ThisIsOnlyForGeneratingKeys()
         {
@@ -127,7 +149,5 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Debug.WriteLine(base64);
 
         }
-
-
     }
 }
