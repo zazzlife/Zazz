@@ -67,9 +67,17 @@ namespace Zazz.Web.Filters
             var authSegments = authorization.Parameter.Split(':');
             if (authSegments.Length != 4)
                 return false;
-
+            
+            // App Id
             int appId;
             if (!int.TryParse(authSegments[0], out appId) || appId < 1)
+                return false;
+
+            var requestSignature = authSegments[1];
+
+            // User Id
+            int userId;
+            if (!int.TryParse(authSegments[2], out userId) || userId < 1)
                 return false;
 
             return true;
