@@ -20,6 +20,7 @@ using System.Web.Hosting;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Data;
+using Zazz.Data.Repositories;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
@@ -44,6 +45,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IStringHelper>().Singleton().Use<StringHelper>();
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             x.For<ICryptoService>().Singleton().Use<CryptoService>();
+                            x.For<IApiAppRepository>().Singleton().Use<InMemoryApiAppRepository>();
 
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
 
