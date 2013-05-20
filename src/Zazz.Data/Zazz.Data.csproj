@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repositories\InMemoryApiAppRepository.cs" />
     <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

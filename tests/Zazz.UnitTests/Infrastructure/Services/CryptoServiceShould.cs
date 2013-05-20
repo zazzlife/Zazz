@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
@@ -113,5 +114,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(password, decryptedPassword);
 
         }
+
+        [Test, Explicit("This is not a test, using it only for generating keys")]
+        public void ThisIsOnlyForGeneratingKeys()
+        {
+            const int KEY_SIZE = 128*8;
+
+            var keyBuffer = _sut.GenerateKey(KEY_SIZE, generateNonZero: true);
+            //var keyBuffer = _sut.GenerateKey(KEY_SIZE);
+
+            var base64 = Convert.ToBase64String(keyBuffer);
+            Debug.WriteLine(base64);
+
+        }
+
+
     }
 }

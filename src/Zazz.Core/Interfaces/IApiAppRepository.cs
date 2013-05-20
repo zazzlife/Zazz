@@ -2,8 +2,8 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IApiAppRepository : IRepository<ApiApp>
+    public interface IApiAppRepository
     {
-         
+        ApiApp GetById(int id);
     }
 }
