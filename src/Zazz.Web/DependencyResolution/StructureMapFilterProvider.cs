@@ -18,20 +18,18 @@ namespace Zazz.Web.DependencyResolution
 
         public IEnumerable<FilterInfo> GetFilters(HttpConfiguration configuration, HttpActionDescriptor actionDescriptor)
         {
-            var controllerFilters = actionDescriptor.ControllerDescriptor.GetFilters();
-            //    .Select(instance => new FilterInfo(instance, FilterScope.Controller));
+            var controllerFilters = actionDescriptor.ControllerDescriptor.GetFilters()
+                .Select(instance => new FilterInfo(instance, FilterScope.Controller));
 
-            var actionFilters = actionDescriptor.GetFilters();
-                //.Select(instance => new FilterInfo(instance, FilterScope.Action));
+            var actionFilters = actionDescriptor.GetFilters()
+                .Select(instance => new FilterInfo(instance, FilterScope.Action));
 
-            var allFilters = controllerFilters.Concat(actionFilters);
-
+            var allFilters = controllerFilters.Concat(actionFilters).ToList();
+            
             foreach (var filter in allFilters)
                 _container.BuildUp(filter);
 
-            return controllerFilters
-                .Select(i => new FilterInfo(i, FilterScope.Controller))
-                .Concat(actionFilters.Select(i => new FilterInfo(i, FilterScope.Action)));
+            return allFilters;
         }
     }
 }
