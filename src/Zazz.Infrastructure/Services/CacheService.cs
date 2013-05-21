@@ -39,6 +39,16 @@ namespace Zazz.Infrastructure.Services
             return PhotoUrlCache.TryGet(userId);
         }
 
+        public void AddUserPassword(int userId, byte[] password)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public byte[] GetUserPassword(int userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void RemoveUserDisplayName(int userId)
         {
             DisplayNameCache.Remove(userId);
