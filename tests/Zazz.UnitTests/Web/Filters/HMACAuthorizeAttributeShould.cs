@@ -261,34 +261,6 @@ namespace Zazz.UnitTests.Web.Filters
         }
 
         [Test]
-        public async Task Return200IfSignatureIsValidWithUserIdAndPassIgnored()
-        {
-            //Arrange
-            var authHeader = String.Format("{0}:{1}"
-                , _appId, _requestSignature);
-
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
-
-            var stringToSign = "GET" + "\n" +
-                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
-                               "/NoUserIdAndPassword" + "\n";
-
-            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
-            _appRepo.Setup(x => x.GetById(_appId))
-                    .Returns(_app);
-            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
-                          .Returns(_requestSignature);
-
-            //Act
-            var result = await _client.GetAsync("/NoUserIdAndPassword");
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
         public async Task Return403IfRequestSignatureIsInvalidForGetRequest()
         {
             //Arrange
@@ -492,6 +464,67 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200IfSignatureIsValidWithUserIdAndPassIgnored()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}"
+                , _appId, _requestSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/NoUserIdAndPassword" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+
+            //Act
+            var result = await _client.GetAsync("/NoUserIdAndPassword");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200OKWhenEverythingIsOKWhenRequestRequiresUserAndPass()
+        {
+            //Arrange
+            var password = new byte[] { 20, 30 };
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, _requestSignature, _usreId, Convert.ToBase64String(password));
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/" + "\n";
+            
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+            _userService.Setup(x => x.GetUserPassword(_usreId))
+                        .Returns(password);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(password, _app.PasswordSigningKey))
+                          .Returns(Convert.ToBase64String(password));
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             _mockRepo.VerifyAll();
         }
 
