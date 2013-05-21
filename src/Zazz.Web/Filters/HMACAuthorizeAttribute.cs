@@ -112,7 +112,7 @@ namespace Zazz.Web.Filters
             var requestSignature = authSegments[1];
 
             // User Id
-            int userId;
+            var userId = 0;
             if (!IgnoreUserIdAndPassword)
             {
                 if (!int.TryParse(authSegments[2], out userId) || userId < 1)
@@ -120,7 +120,7 @@ namespace Zazz.Web.Filters
             }
             
             // Password Hash
-            string passwordHash;
+            string passwordHash = null;
             if (!IgnoreUserIdAndPassword)
                 passwordHash = authSegments[3];
 
@@ -133,7 +133,24 @@ namespace Zazz.Web.Filters
             if (!isSignatureValid)
                 return false;
 
+            if (!IgnoreUserIdAndPassword)
+            {
+                var isPasswordSignatureValid = ValidatePasswordSignature(app, userId, passwordHash);
+                if (!isPasswordSignatureValid)
+                    return false;
+            }
+
             // if we've reached this far it means the request has passed all the tests.
+            return true;
+        }
+
+        private bool ValidatePasswordSignature(ApiApp app, int userId, string passwordHash)
+        {
+            var password = UserService.GetUserPassword(userId);
+            if (password == default(byte[]))
+                return false;
+
+
             return true;
         }
 
