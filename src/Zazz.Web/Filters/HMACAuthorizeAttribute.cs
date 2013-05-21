@@ -152,11 +152,9 @@ namespace Zazz.Web.Filters
                 _errorStatusCode = UserNotFoundStatusCode;
                 return false;
             }
-                
 
             var serverPasswordHash = CryptoService.GenerateHMACSHA512Hash(password, app.PasswordSigningKey);
             return serverPasswordHash == clientPasswordHash;
-
         }
 
         private bool ValidateRequestSignature(ApiApp app, string requestSignature, HttpRequestMessage request)
