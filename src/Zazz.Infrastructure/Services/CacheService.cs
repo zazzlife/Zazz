@@ -5,9 +5,11 @@ namespace Zazz.Infrastructure.Services
 {
     public class CacheService : ICacheService
     {
+        //These properties should be internal so they are accessable by unit test project.
         internal static ICacheSystem<string, int> UserIdCache = new CircularBufferCache<string, int>(200);
         internal static ICacheSystem<int, PhotoLinks> PhotoUrlCache = new CircularBufferCache<int, PhotoLinks>(200);
         internal static ICacheSystem<int, string> DisplayNameCache = new CircularBufferCache<int, string>(200);
+        internal static ICacheSystem<int, byte[]> PasswordCache = new CircularBufferCache<int, byte[]>(200);
 
         public void AddUserId(string username, int userId)
         {
@@ -41,12 +43,12 @@ namespace Zazz.Infrastructure.Services
 
         public void AddUserPassword(int userId, byte[] password)
         {
-            throw new System.NotImplementedException();
+            PasswordCache.Add(userId, password);
         }
 
         public byte[] GetUserPassword(int userId)
         {
-            throw new System.NotImplementedException();
+            return PasswordCache.TryGet(userId);
         }
 
         public void RemoveUserDisplayName(int userId)
