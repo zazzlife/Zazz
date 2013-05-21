@@ -40,6 +40,11 @@ namespace Zazz.Infrastructure.Services
             return _uoW.UserRepository.GetByUsername(username, includeDetails, includeClubDetails, includeWeeklies);
         }
 
+        public byte[] GetUserPassword(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetUserDisplayName(int userId)
         {
             var cache = _cacheService.GetUserDisplayName(userId);
