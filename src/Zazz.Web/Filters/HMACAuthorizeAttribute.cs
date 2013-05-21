@@ -134,11 +134,7 @@ namespace Zazz.Web.Filters
                 return false;
 
             if (!IgnoreUserIdAndPassword)
-            {
-                var isPasswordSignatureValid = ValidatePasswordSignature(app, userId, passwordHash);
-                if (!isPasswordSignatureValid)
-                    return false;
-            }
+                return ValidatePasswordSignature(app, userId, passwordHash);
 
             // if we've reached this far it means the request has passed all the tests.
             return true;
