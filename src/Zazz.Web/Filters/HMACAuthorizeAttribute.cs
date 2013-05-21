@@ -21,6 +21,25 @@ namespace Zazz.Web.Filters
         [SetterProperty]
         public ICryptoService CryptoService { get; set; }
 
+        /// <summary>
+        /// Set this to true for some requests such as register page when there is no user id and password.
+        /// </summary>
+        public bool IgnoreUserIdAndPassword { get; set; }
+
+        public HMACAuthorizeAttribute()
+        {
+            IgnoreUserIdAndPassword = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ignoreUserIdAndPassword">Set this to true for some requests such as register page when there is no user id and password.</param>
+        public HMACAuthorizeAttribute(bool ignoreUserIdAndPassword)
+        {
+            IgnoreUserIdAndPassword = ignoreUserIdAndPassword;
+        }
+
         /* HTTP Date Header:
          * Should be in RFC1123 format not greater than UtcNow() and not less than UtcNow() -1 minute
          */
