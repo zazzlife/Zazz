@@ -462,7 +462,38 @@ namespace Zazz.UnitTests.Web.Filters
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return403IfTheUserPasswordSignatureIsInvalidAndRequestRequiresUserAndPass()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, _requestSignature, _usreId, _passwordSignature);
 
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/" + "\n";
+
+            var password = new byte[] {20, 30};
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+            _userService.Setup(x => x.GetUserPassword(_usreId))
+                        .Returns(password);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(password, _app.PasswordSigningKey))
+                          .Returns(Convert.ToBase64String(password));
+
+            //Act
+            var result = await _client.GetAsync("");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
 
         [TearDown]
         public void Cleanup()

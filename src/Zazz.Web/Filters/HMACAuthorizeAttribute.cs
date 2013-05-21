@@ -144,14 +144,15 @@ namespace Zazz.Web.Filters
             return true;
         }
 
-        private bool ValidatePasswordSignature(ApiApp app, int userId, string passwordHash)
+        private bool ValidatePasswordSignature(ApiApp app, int userId, string clientPasswordHash)
         {
             var password = UserService.GetUserPassword(userId);
             if (password == default(byte[]))
                 return false;
 
+            var serverPasswordHash = CryptoService.GenerateHMACSHA512Hash(password, app.PasswordSigningKey);
+            return serverPasswordHash == clientPasswordHash;
 
-            return true;
         }
 
         private bool ValidateRequestSignature(ApiApp app, string requestSignature, HttpRequestMessage request)
