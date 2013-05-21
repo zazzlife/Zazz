@@ -433,4 +433,29 @@ namespace Zazz.UnitTests.Web.Filters
         {
         }
     }
+
+    public class NoUserIdAndPasswordController : ApiController
+    {
+        [HMACAuthorize(true)]
+        public string Get()
+        {
+            return String.Empty;
+        }
+
+        [HMACAuthorize(true)]
+        public int Post()
+        {
+            return 1;
+        }
+
+        [HMACAuthorize(true)]
+        public void Put()
+        {
+        }
+
+        [HMACAuthorize(true)]
+        public void Delete()
+        {
+        }
+    }
 }

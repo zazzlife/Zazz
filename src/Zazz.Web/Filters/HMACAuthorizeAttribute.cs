@@ -97,7 +97,8 @@ namespace Zazz.Web.Filters
             }
 
             var authSegments = authorization.Parameter.Split(':');
-            if (authSegments.Length != 4)
+            if ((!IgnoreUserIdAndPassword && authSegments.Length != 4) ||
+                (IgnoreUserIdAndPassword && authSegments.Length < 2))
                 return false;
             
             // App Id
@@ -109,12 +110,17 @@ namespace Zazz.Web.Filters
 
             // User Id
             int userId;
-            if (!int.TryParse(authSegments[2], out userId) || userId < 1)
-                return false;
-
+            if (!IgnoreUserIdAndPassword)
+            {
+                if (!int.TryParse(authSegments[2], out userId) || userId < 1)
+                    return false;
+            }
             
             // Password Hash
-            var passwordHash = authSegments[3];
+            string passwordHash;
+            if (!IgnoreUserIdAndPassword)
+                passwordHash = authSegments[3];
+
 
             var app = ApiAppRepository.GetById(appId);
             if (app == null)
