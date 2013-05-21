@@ -528,6 +528,36 @@ namespace Zazz.UnitTests.Web.Filters
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task ReturnCustomStatusCodeForUserNotFound()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}:{2}:{3}"
+                , _appId, _requestSignature, _usreId, _passwordSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/UserNotFound" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+            _userService.Setup(x => x.GetUserPassword(_usreId))
+                        .Returns(() => null);
+
+            //Act
+            var result = await _client.GetAsync("/UserNotFound");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
         [TearDown]
         public void Cleanup()
         {
@@ -558,6 +588,15 @@ namespace Zazz.UnitTests.Web.Filters
         [HMACAuthorize]
         public void Delete()
         {
+        }
+    }
+
+    public class UserNotFoundController : ApiController
+    {
+        [HMACAuthorize(UserNotFoundStatusCode = HttpStatusCode.NotFound)]
+        public string Get()
+        {
+            return String.Empty;
         }
     }
 

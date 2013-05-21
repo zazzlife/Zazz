@@ -24,15 +24,18 @@ namespace Zazz.Web.Filters
         [SetterProperty]
         public IUserService UserService { get; set; }
 
+        public HttpStatusCode UserNotFoundStatusCode { get; set; }
+
+        private HttpStatusCode _errorStatusCode = HttpStatusCode.Forbidden;
+
         /// <summary>
         /// Set this to true for some requests such as register page when there is no user id and password.
         /// </summary>
         public bool IgnoreUserIdAndPassword { get; set; }
 
         public HMACAuthorizeAttribute()
-        {
-            IgnoreUserIdAndPassword = false;
-        }
+            : this(false)
+        { }
 
         /// <summary>
         /// 
@@ -41,6 +44,7 @@ namespace Zazz.Web.Filters
         public HMACAuthorizeAttribute(bool ignoreUserIdAndPassword)
         {
             IgnoreUserIdAndPassword = ignoreUserIdAndPassword;
+            UserNotFoundStatusCode = HttpStatusCode.Forbidden;
         }
 
         /* HTTP Date Header:
@@ -103,7 +107,7 @@ namespace Zazz.Web.Filters
             if ((!IgnoreUserIdAndPassword && authSegments.Length != 4) ||
                 (IgnoreUserIdAndPassword && authSegments.Length < 2))
                 return false;
-            
+
             // App Id
             int appId;
             if (!int.TryParse(authSegments[0], out appId) || appId < 1)
@@ -118,7 +122,7 @@ namespace Zazz.Web.Filters
                 if (!int.TryParse(authSegments[2], out userId) || userId < 1)
                     return false;
             }
-            
+
             // Password Hash
             string passwordHash = null;
             if (!IgnoreUserIdAndPassword)
@@ -144,7 +148,11 @@ namespace Zazz.Web.Filters
         {
             var password = UserService.GetUserPassword(userId);
             if (password == default(byte[]))
+            {
+                _errorStatusCode = UserNotFoundStatusCode;
                 return false;
+            }
+                
 
             var serverPasswordHash = CryptoService.GenerateHMACSHA512Hash(password, app.PasswordSigningKey);
             return serverPasswordHash == clientPasswordHash;
@@ -156,7 +164,7 @@ namespace Zazz.Web.Filters
             var content = request.Content == null
                                    ? null
                                    : request.Content.ReadAsStringAsync().Result;
-            
+
             var stringToSign = request.Method.Method + "\n" +
                                request.Headers.Date.Value.ToString("r") + "\n" +
                                request.RequestUri.PathAndQuery + "\n" +
@@ -172,7 +180,7 @@ namespace Zazz.Web.Filters
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
             base.HandleUnauthorizedRequest(actionContext);
-            actionContext.Response.StatusCode = HttpStatusCode.Forbidden;
+            actionContext.Response.StatusCode = _errorStatusCode;
         }
     }
 }
