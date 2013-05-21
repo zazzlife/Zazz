@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -10,11 +12,13 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uoW;
         private readonly ICacheService _cacheService;
+        private readonly ICryptoService _cryptoService;
 
-        public UserService(IUoW uoW, ICacheService cacheService)
+        public UserService(IUoW uoW, ICacheService cacheService, ICryptoService cryptoService)
         {
             _uoW = uoW;
             _cacheService = cacheService;
+            _cryptoService = cryptoService;
         }
 
         public AccountType GetUserAccountType(int userId)
@@ -42,7 +46,20 @@ namespace Zazz.Infrastructure.Services
 
         public byte[] GetUserPassword(int userId)
         {
-            throw new NotImplementedException();
+            var cache = _cacheService.GetUserPassword(userId);
+            if (cache != default (byte[]))
+                return cache;
+
+            var user = _uoW.UserRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException();
+
+            var password = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
+            var passwordBuffer = Encoding.UTF8.GetBytes(password);
+
+            _cacheService.AddUserPassword(userId, passwordBuffer);
+
+            return passwordBuffer;
         }
 
         public string GetUserDisplayName(int userId)

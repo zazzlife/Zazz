@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -14,13 +17,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IUoW> _uow;
         private UserService _sut;
         private Mock<ICacheService> _cacheService;
+        private Mock<ICryptoService> _cryptoService;
 
         [SetUp]
         public void Init()
         {
             _cacheService = new Mock<ICacheService>();
-            _uow = new Mock<IUoW>();
-            _sut = new UserService(_uow.Object, _cacheService.Object);
+            _cryptoService = new Mock<ICryptoService>(MockBehavior.Strict);
+            _uow = new Mock<IUoW>(MockBehavior.Strict);
+            _sut = new UserService(_uow.Object, _cacheService.Object, _cryptoService.Object);
         }
 
         [Test]
@@ -151,7 +156,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username),Times.Once());
+            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
             _uow.Verify(x => x.UserRepository.GetUserFullName(It.IsAny<int>()), Times.Never());
             _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
             _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
@@ -263,5 +268,76 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
             _cacheService.Verify(x => x.AddUserDiplayName(user.Id, user.Username), Times.Once());
         }
+
+        [Test]
+        public void ReturnCacheValueIfItExistsInCacheAndNotMakeDbCall_OnGetPassword()
+        {
+            //Arrange
+            var userId = 12;
+            var password = new byte[] { 1, 2, 3 };
+
+            _cacheService.Setup(x => x.GetUserPassword(userId))
+                         .Returns(password);
+
+            //Act
+            var result = _sut.GetUserPassword(userId);
+
+            //Assert
+            CollectionAssert.AreEqual(password, result);
+            _cacheService.Verify(x => x.GetUserPassword(userId), Times.Once());
+            _cacheService.Verify(x => x.AddUserPassword(It.IsAny<int>(), It.IsAny<byte[]>()), Times.Never());
+            _uow.VerifyAll();
+        }
+
+        [Test]
+        public void GetPasswordFromDbAndDecryptItAndSaveItToCacheIfItsNotInCache_OnGetPassword()
+        {
+            //Arrange
+            var userId = 12;
+            var password = new byte[] { 1, 2, 3 };
+
+            var user = new User
+                       {
+                           Id = userId,
+                           Password = new byte[] { 4, 5, 6 },
+                           PasswordIV = new byte[] { 7, 8, 9 }
+                       };
+
+            _cacheService.Setup(x => x.GetUserPassword(userId))
+                         .Returns(() => null);
+            _uow.Setup(x => x.UserRepository.GetById(userId))
+                .Returns(user);
+            _cryptoService.Setup(x => x.DecryptPassword(user.Password, user.PasswordIV))
+                          .Returns(Encoding.UTF8.GetString(password));
+
+            _cacheService.Setup(x => x.AddUserPassword(userId, password));
+
+            //Act
+            var result = _sut.GetUserPassword(userId);
+
+            //Assert
+            CollectionAssert.AreEqual(password, result);
+            _uow.VerifyAll();
+            _cryptoService.VerifyAll();
+            _cacheService.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundExceptionWhenUserIsNotExists_OnGetPassword()
+        {
+            //Arrange
+            var userId = 12;
+            _cacheService.Setup(x => x.GetUserPassword(userId))
+                         .Returns(() => null);
+            _uow.Setup(x => x.UserRepository.GetById(userId))
+                .Returns(() => null);
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.GetUserPassword(userId));
+            _uow.VerifyAll();
+            _cryptoService.VerifyAll();
+            _cacheService.VerifyAll();
+        }
+
+
     }
 }
