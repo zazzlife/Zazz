@@ -36,6 +36,7 @@ namespace Zazz.UnitTests.Web.Filters
         private byte[] _passwordSigningKey;
         private byte[] _requestSigningKey;
         private ApiApp _app;
+        private Mock<IUserService> _userServiceMock;
         private const string BASE_ADDRESS = "http://localhost:8080";
         private const string AUTH_SCHEME = "ZazzApi";
 
@@ -46,6 +47,7 @@ namespace Zazz.UnitTests.Web.Filters
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _cryptoService = _mockRepo.Create<ICryptoService>();
             _appRepo = _mockRepo.Create<IApiAppRepository>();
+            _userServiceMock = _mockRepo.Create<IUserService>();
 
             var container = SetupIoC();
             _config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -91,6 +93,7 @@ namespace Zazz.UnitTests.Web.Filters
                                         x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                                         x.For<ICryptoService>().Use(_cryptoService.Object);
                                         x.For<IApiAppRepository>().Use(_appRepo.Object);
+                                        x.For<IUserService>().Use(_userServiceMock.Object);
                                     });
         }
 
@@ -254,6 +257,34 @@ namespace Zazz.UnitTests.Web.Filters
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200IfSignatureIsValidWithUserIdAndPassIgnored()
+        {
+            //Arrange
+            var authHeader = String.Format("{0}:{1}"
+                , _appId, _requestSignature);
+
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+
+            var stringToSign = "GET" + "\n" +
+                               _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
+                               "/NoUserIdAndPassword" + "\n";
+
+            var signBuffer = Encoding.UTF8.GetBytes(stringToSign);
+            _appRepo.Setup(x => x.GetById(_appId))
+                    .Returns(_app);
+            _cryptoService.Setup(x => x.GenerateHMACSHA512Hash(signBuffer, _requestSigningKey))
+                          .Returns(_requestSignature);
+
+            //Act
+            var result = await _client.GetAsync("/NoUserIdAndPassword");
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             _mockRepo.VerifyAll();
         }
 

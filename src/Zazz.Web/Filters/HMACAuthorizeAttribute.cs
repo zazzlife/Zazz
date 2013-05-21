@@ -21,6 +21,9 @@ namespace Zazz.Web.Filters
         [SetterProperty]
         public ICryptoService CryptoService { get; set; }
 
+        [SetterProperty]
+        public IUserService UserService { get; set; }
+
         /// <summary>
         /// Set this to true for some requests such as register page when there is no user id and password.
         /// </summary>
@@ -130,6 +133,7 @@ namespace Zazz.Web.Filters
             if (!isSignatureValid)
                 return false;
 
+            // if we've reached this far it means the request has passed all the tests.
             return true;
         }
 
