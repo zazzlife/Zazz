@@ -25,21 +25,25 @@ namespace Zazz.Web.Controllers.Api
             _photoService = photoService;
         }
 
+        // GET api/v1/feeds
         public IEnumerable<object> GetHomeFeeds()
         {
             throw new NotImplementedException();
         }
 
+        // GET api/v1/feeds?lastFeed=
         public IEnumerable<object> GetHomeFeeds(int lastFeed)
         {
             throw new NotImplementedException();
         }
 
+        // GET api/v1/feeds?id=
         public IEnumerable<object> GetUserFeeds(int id)
         {
             throw new NotImplementedException();
         }
 
+        // GET api/v1/feeds?id=&lastFeed=
         public IEnumerable<object> GetUserFeeds(int id, int lastFeed)
         {
             throw new NotImplementedException();

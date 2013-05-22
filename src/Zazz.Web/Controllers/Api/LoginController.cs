@@ -28,6 +28,7 @@ namespace Zazz.Web.Controllers.Api
             _photoService = photoService;
         }
 
+        // POST api/v1/login
         [HMACAuthorize(IgnoreUserIdAndPassword = true)]
         public LoginApiResponse Post(LoginApiRequest request)
         {
