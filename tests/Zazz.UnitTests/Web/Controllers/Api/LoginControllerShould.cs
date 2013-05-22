@@ -8,12 +8,14 @@ using System.Web.Http.Filters;
 using System.Web.Http.SelfHost;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
 using Zazz.Web.DependencyResolution;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -26,10 +28,11 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private string _password;
         private string _loginUrl;
         private MockRepository _mockRepo;
-        private Mock<ICryptoService> _cryptoService;
         private Mock<IUserService> _userService;
         private Mock<IApiAppRepository> _appRepo;
         private ApiApp _testApp;
+        private CryptoService _cryptoService;
+        private LoginApiRequest _loginRequest;
         private const string BASE_ADDRESS = "http://localhost:8080";
         private const string AUTH_SCHEME = "ZazzApi";
 
@@ -61,9 +64,18 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var iocContainer = BuildIoC();
             config.DependencyResolver = new StructureMapDependencyResolver(iocContainer);
 
+            _cryptoService = new CryptoService();
+
             _username = "Soroush";
             _password = "123";
             _loginUrl = "/api/v1/login";
+
+            _loginRequest = new LoginApiRequest
+                            {
+                                AppId = _testApp.Id,
+                                Password = _password,
+                                Username = _username
+                            };
         }
 
         private IContainer BuildIoC()
@@ -77,20 +89,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                  });
         }
 
-        private void AddUserNameAndPassToUrl(string username, string password)
+        private string CreateRequestSignature(string body)
         {
-            _loginUrl += String.Format("?username={0}&password={1}", username, password);
-        }
-
-        private string CreateRequestSignature()
-        {
-            var stringToSign = "GET" + "\n" +
+            var stringToSign = "POST" + "\n" +
                                _client.DefaultRequestHeaders.Date.Value.ToString("r") + "\n" +
-                               _loginUrl + "\n";
+                               _loginUrl + "\n" +
+                               body;
 
             var utf8Buffer = Encoding.UTF8.GetBytes(stringToSign);
-            var cryptoService = new CryptoService();
-            var signature = cryptoService.GenerateHMACSHA512Hash(utf8Buffer, _testApp.RequestSigningKey);
+            var signature = _cryptoService.GenerateHMACSHA512Hash(utf8Buffer, _testApp.RequestSigningKey);
             return String.Format("{0}:{1}", _testApp.Id, signature);
         }
 
@@ -98,10 +105,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAuthorizationHeaderIsMissing()
         {
             //Arrange
-            AddUserNameAndPassToUrl(_username, _password);
+            var postContent = new StringContent(JsonConvert.SerializeObject(_loginRequest));
 
             //Act
-            var response = await _client.GetAsync(_loginUrl);
+            var response = await _client.PostAsync(_loginUrl, postContent);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
@@ -112,8 +119,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return404IfRequestSignatureIsOkButUserDoesNotExists()
         {
             //Arrange
-            AddUserNameAndPassToUrl(_username, _password);
-            var authSignature = CreateRequestSignature();
+            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+
+            var authSignature = CreateRequestSignature(bodyContent);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
 
             _appRepo.Setup(x => x.GetById(_testApp.Id))
@@ -122,12 +130,76 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                         .Returns(() => null);
 
             //Act
-            var response = await _client.GetAsync(_loginUrl);
+            var response = await _client.PostAsync(_loginUrl, new StringContent(bodyContent, Encoding.UTF8, "application/json"));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return401IfPasswordIsIncorrect()
+        {
+            //Arrange
+            string iv;
+            var user = new User
+                       {
+                           Password = _cryptoService.EncryptPassword("some other pass", out iv),
+                           PasswordIV = Convert.FromBase64String(iv)
+                       };
+
+            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+            
+            var authSignature = CreateRequestSignature(bodyContent);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
+
+            _appRepo.Setup(x => x.GetById(_testApp.Id))
+                    .Returns(_testApp);
+            _userService.Setup(x => x.GetUser(_username, true, true, false))
+                        .Returns(() => user);
+
+            //Act
+            var response = await _client.PostAsync(_loginUrl, new StringContent(bodyContent, Encoding.UTF8, "application/json"));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200WhenEverythingIsOk()
+        {
+            //Arrange
+            string iv;
+            var user = new User
+            {
+                Password = _cryptoService.EncryptPassword(_password, out iv),
+                PasswordIV = Convert.FromBase64String(iv)
+            };
+
+            var passwordHash =
+                _cryptoService.GenerateHMACSHA512Hash(Encoding.UTF8.GetBytes(_password),
+                                                      _testApp.PasswordSigningKey);
+
+            _loginRequest.Password = passwordHash;
+            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+            var authSignature = CreateRequestSignature(bodyContent);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
+
+            _appRepo.Setup(x => x.GetById(_testApp.Id))
+                    .Returns(_testApp);
+            _userService.Setup(x => x.GetUser(_username, true, true, false))
+                        .Returns(() => user);
+            
+            //Act
+            var response = await _client.PostAsync(_loginUrl, new StringContent(bodyContent, Encoding.UTF8, "application/json"));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+
 
         [TearDown]
         public void Cleanup()

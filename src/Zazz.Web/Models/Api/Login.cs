@@ -8,6 +8,8 @@ namespace Zazz.Web.Models.Api
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public int AppId { get; set; }
     }
 
     public class LoginApiResponse
