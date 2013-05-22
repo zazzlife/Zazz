@@ -17,13 +17,15 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUserService _userService;
         private readonly ICryptoService _cryptoService;
         private readonly IApiAppRepository _apiAppRepository;
+        private readonly IPhotoService _photoService;
 
         public LoginController(IUserService userService, ICryptoService cryptoService,
-            IApiAppRepository apiAppRepository)
+            IApiAppRepository apiAppRepository, IPhotoService photoService)
         {
             _userService = userService;
             _cryptoService = cryptoService;
             _apiAppRepository = apiAppRepository;
+            _photoService = photoService;
         }
 
         [HMACAuthorize(IgnoreUserIdAndPassword = true)]
@@ -42,7 +44,16 @@ namespace Zazz.Web.Controllers.Api
             if (request.Password != hashCheck)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
-            return null;
+            var response = new LoginApiResponse
+                           {
+                               Id = user.Id,
+                               AccountType = user.AccountType,
+                               DisplayName = _userService.GetUserDisplayName(user.Id),
+                               DisplayPicture = _photoService.GetUserImageUrl(user.Id),
+                               IsConfirmed = user.IsConfirmed
+                           };
+
+            return response;
         }
     }
 }

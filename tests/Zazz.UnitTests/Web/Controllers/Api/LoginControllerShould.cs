@@ -11,7 +11,9 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
 using Zazz.Web.DependencyResolution;
@@ -33,6 +35,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private ApiApp _testApp;
         private CryptoService _cryptoService;
         private LoginApiRequest _loginRequest;
+        private Mock<IPhotoService> _photoService;
         private const string BASE_ADDRESS = "http://localhost:8080";
         private const string AUTH_SCHEME = "ZazzApi";
 
@@ -49,6 +52,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _userService = _mockRepo.Create<IUserService>();
             _appRepo = _mockRepo.Create<IApiAppRepository>();
+            _photoService = _mockRepo.Create<IPhotoService>();
 
             var config = new HttpSelfHostConfiguration(BASE_ADDRESS);
             JsonConfig.Configure(config);
@@ -86,6 +90,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                      x.For<ICryptoService>().Use<CryptoService>();
                                      x.For<IUserService>().Use(_userService.Object);
                                      x.For<IApiAppRepository>().Use(_appRepo.Object);
+                                     x.For<IPhotoService>().Use(_photoService.Object);
                                  });
         }
 
@@ -173,8 +178,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             string iv;
             var user = new User
             {
+                Id = 25,
+                AccountType = AccountType.User,
+                Username = _username,
                 Password = _cryptoService.EncryptPassword(_password, out iv),
-                PasswordIV = Convert.FromBase64String(iv)
+                PasswordIV = Convert.FromBase64String(iv),
+                IsConfirmed = true
             };
 
             var passwordHash =
@@ -190,6 +199,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                     .Returns(_testApp);
             _userService.Setup(x => x.GetUser(_username, true, true, false))
                         .Returns(() => user);
+
+            _userService.Setup(x => x.GetUserDisplayName(user.Id))
+                        .Returns(_username);
+
+            _photoService.Setup(x => x.GetUserImageUrl(user.Id))
+                         .Returns(new PhotoLinks("testUrl"));
             
             //Act
             var response = await _client.PostAsync(_loginUrl, new StringContent(bodyContent, Encoding.UTF8, "application/json"));
