@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 
@@ -18,7 +19,7 @@ namespace Zazz.Web.Models.Api
 
         public DateTime Time { get; set; }
 
-        public PhotoApiModel Photos { get; set; }
+        public IEnumerable<PhotoApiModel> Photos { get; set; }
 
         public PostApiModel Post { get; set; }
 
