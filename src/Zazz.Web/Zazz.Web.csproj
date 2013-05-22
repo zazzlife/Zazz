@@ -248,6 +248,7 @@
     <Compile Include="Models\Api\Feed.cs" />
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\Api\PhotoApiModel.cs" />
+    <Compile Include="Models\Api\PostApiModel.cs" />
     <Compile Include="Models\BaseLayoutViewModel.cs" />
     <Compile Include="Models\BaseUserPageLayoutViewModel.cs" />
     <Compile Include="Models\ClubProfileViewModel.cs" />
