@@ -2,12 +2,6 @@
     background-color: #222222;
     color: white;
 }*/
-
-.navbar .brand {
-    padding: 0;
-    padding-top: 2px;
-}
-
 .container {
     width: 1000px !important;
     height: 100%;
@@ -222,7 +216,7 @@ input, textarea, select {
     Navbar
 ***************************************/
 
-/*.navbar .navbar-inner {
+.navbar .navbar-inner {
     border-bottom: 2px solid #222222;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
@@ -899,7 +893,7 @@ input, textarea, select {
     .navbar-inverse .btn-navbar:active,
     .navbar-inverse .btn-navbar.active {
         background-color: #040405 \9;
-    }*/
+    }
 
 
 /***************************************
@@ -916,3 +910,9 @@ input, textarea, select {
 .modal-footer {
     background-color: #181818;
 }*/
+
+
+.navbar .brand {
+    padding: 0;
+    padding-top: 9px;
+}
