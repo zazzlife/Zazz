@@ -12,7 +12,7 @@
                  src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
         </a>
 
-        @if (Model.PostViewModel.ToUserId != 0)
+        @if (Model.PostViewModel.ToUserId.HasValue)
         {
             <br/>
             <div class="text-center"><i class="icon-caret-down icon-large" style="color: black;"></i></div>

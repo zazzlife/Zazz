@@ -12,6 +12,6 @@ namespace Zazz.Web.Models.Api
 
         public string ToUserDisplayName { get; set; }
 
-        public PhotoLinks ToUserPhotoUrl { get; set; }
+        public PhotoLinks ToUserDisplayPhoto { get; set; }
     }
 }

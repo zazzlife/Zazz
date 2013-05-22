@@ -8,7 +8,7 @@ namespace Zazz.Web.Models
 
         public string PostText { get; set; }
 
-        public int ToUserId { get; set; }
+        public int? ToUserId { get; set; }
 
         public string ToUserDisplayName { get; set; }
 
