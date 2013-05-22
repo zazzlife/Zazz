@@ -24,5 +24,7 @@ namespace Zazz.Web.Models.Api
         public PostApiModel Post { get; set; }
 
         public EventApiModel Event { get; set; }
+
+        public IEnumerable<CommentApiModel> Comments { get; set; }
     }
 }
