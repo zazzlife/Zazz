@@ -414,6 +414,7 @@
     <Content Include="Images\select2x2.png" />
     <Content Include="Images\ubc.png" />
     <Content Include="Images\victoria-uni.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\comments.js" />
