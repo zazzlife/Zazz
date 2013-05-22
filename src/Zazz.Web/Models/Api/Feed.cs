@@ -25,11 +25,6 @@ namespace Zazz.Web.Models.Api
         public EventApiModel Event { get; set; }
     }
 
-    public class PhotoApiModel
-    {
-
-    }
-
     public class PostApiModel
     {
 

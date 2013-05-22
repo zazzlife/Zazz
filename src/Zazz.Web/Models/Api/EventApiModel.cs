@@ -30,7 +30,7 @@ namespace Zazz.Web.Models.Api
 
         public bool IsDateOnly { get; set; }
 
-        public bool IsCurrentUserOwner { get; set; }
+        public bool IsFromCurrentUser { get; set; }
 
         public float? Latitude { get; set; }
 
