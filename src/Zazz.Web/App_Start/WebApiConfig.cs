@@ -11,7 +11,7 @@ namespace Zazz.Web
         {
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
