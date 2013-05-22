@@ -244,6 +244,7 @@
     <Compile Include="Helpers\FeedHelper.cs" />
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="ImageValidator.cs" />
+    <Compile Include="Models\Api\EventApiModel.cs" />
     <Compile Include="Models\Api\Feed.cs" />
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\BaseLayoutViewModel.cs" />
