@@ -22,6 +22,6 @@ namespace Zazz.Web.Models.Api
 
         public string DisplayName { get; set; }
 
-        public PhotoLinks DisplayPicture { get; set; }
+        public PhotoLinks DisplayPhoto { get; set; }
     }
 }
