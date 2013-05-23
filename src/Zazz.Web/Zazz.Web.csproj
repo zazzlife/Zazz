@@ -257,6 +257,7 @@
     <Compile Include="Models\CommentsViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\CropViewMOdel.cs" />
+    <Compile Include="Models\EditClubProfileViewModel.cs" />
     <Compile Include="Models\EventDetailsPageViewModel.cs" />
     <Compile Include="Models\EventListSideViewModel.cs" />
     <Compile Include="Models\EventListViewModel.cs" />
@@ -542,6 +543,7 @@
     <Content Include="Views\Shared\_WeeklyEditForm.cshtml" />
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
+    <Content Include="Views\User\EditClub.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />

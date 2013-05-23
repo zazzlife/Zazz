@@ -205,8 +205,12 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Edit()
         {
-            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true, true);
+            return user.AccountType == AccountType.User ? EditUser(user) : EditClub(user);
+        }
 
+        private ActionResult EditUser(User user)
+        {
             var vm = new EditUserProfileViewModel
             {
                 CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
@@ -220,19 +224,18 @@ namespace Zazz.Web.Controllers
                 MajorId = user.UserDetail.MajorId,
                 Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
                 SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
-                SyncFbEvents = user.Preferences.SyncFbEvents,
-                //SyncFbPosts = user.UserDetail.SyncFbPosts,
-                //SyncFbImages = user.UserDetail.SyncFbImages,
-                //AccountType = user.AccountType
+                SyncFbEvents = user.Preferences.SyncFbEvents
             };
 
-            return View("EditUser", vm);
+            return View(vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public ActionResult Edit(EditUserProfileViewModel vm)
+        public ActionResult EditUser(EditUserProfileViewModel vm)
         {
-            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true);
+            if (user.AccountType != AccountType.User)
+                throw new SecurityException();
 
             vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
             vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
@@ -249,8 +252,6 @@ namespace Zazz.Web.Controllers
                 user.UserDetail.CityId = (short)vm.CityId;
                 user.UserDetail.MajorId = (byte)vm.MajorId;
                 user.Preferences.SyncFbEvents = vm.SyncFbEvents;
-                //user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
-                //user.UserDetail.SyncFbImages = vm.SyncFbImages;
                 user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
                 _uow.SaveChanges();
@@ -259,7 +260,52 @@ namespace Zazz.Web.Controllers
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
-            return View("EditUser", vm);
+            return View(vm);
+        }
+
+        private ActionResult EditClub(User user)
+        {
+            var currentUserId = _userService.GetUserId(User.Identity.Name);
+
+            var vm = new EditClubProfileViewModel
+                     {
+                         ClubAddress = user.ClubDetail.Address,
+                         ClubName = user.ClubDetail.ClubName,
+                         ClubType = user.ClubDetail.ClubTypeId,
+                         ClubTypes = _staticDataRepo.GetClubTypes(),
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(currentUserId),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
+                         SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
+                         SyncFbEvents = user.Preferences.SyncFbEvents,
+                         SyncFbImages = user.Preferences.SyncFbImages,
+                         SyncFbPosts = user.Preferences.SyncFbPosts
+                     };
+
+            return View(vm);
+        }
+
+        [HttpPost, Authorize, ValidateAntiForgeryToken]
+        public ActionResult EditClub(EditClubProfileViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true);
+                if (user.AccountType != AccountType.ClubAdmin)
+                    throw new SecurityException();
+
+                user.ClubDetail.Address = vm.ClubAddress;
+                user.ClubDetail.ClubName = vm.ClubName;
+                user.ClubDetail.ClubTypeId = vm.ClubType;
+                user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
+                user.Preferences.SyncFbEvents = vm.SyncFbEvents;
+                user.Preferences.SyncFbImages = vm.SyncFbImages;
+                user.Preferences.SyncFbPosts = vm.SyncFbPosts;
+
+                ShowAlert("Your preferences has been updated.", AlertType.Success);
+            }
+
+            vm.ClubTypes = _staticDataRepo.GetClubTypes();
+            return View(vm);
         }
 
         [Authorize]
