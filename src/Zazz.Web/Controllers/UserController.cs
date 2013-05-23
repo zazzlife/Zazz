@@ -227,7 +227,7 @@ namespace Zazz.Web.Controllers
                 SyncFbEvents = user.Preferences.SyncFbEvents
             };
 
-            return View(vm);
+            return View("EditUser", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
@@ -260,7 +260,7 @@ namespace Zazz.Web.Controllers
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
-            return View(vm);
+            return View("EditUser", vm);
         }
 
         private ActionResult EditClub(User user)
@@ -281,7 +281,7 @@ namespace Zazz.Web.Controllers
                          SyncFbPosts = user.Preferences.SyncFbPosts
                      };
 
-            return View(vm);
+            return View("EditClub", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
@@ -305,7 +305,7 @@ namespace Zazz.Web.Controllers
             }
 
             vm.ClubTypes = _staticDataRepo.GetClubTypes();
-            return View(vm);
+            return View("EditClub", vm);
         }
 
         [Authorize]
