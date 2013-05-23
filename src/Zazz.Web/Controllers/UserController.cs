@@ -85,9 +85,9 @@ namespace Zazz.Web.Controllers
                          IsSelf = currentUserId == user.Id,
                          Address = user.ClubDetail.Address,
                          ClubType = user.ClubDetail.ClubType.Name,
-                         CoverPhotoUrl = user.ClubDetail.CoverPhotoId == 0 
-                         ? DefaultImageHelper.GetDefaultCoverImage()
-                         : _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId).OriginalLink,
+                         CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
+                         ? _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
+                         : DefaultImageHelper.GetDefaultCoverImage(),
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),

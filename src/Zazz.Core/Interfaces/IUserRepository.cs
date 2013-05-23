@@ -29,7 +29,7 @@ namespace Zazz.Core.Interfaces
 
         string GetUserFullName(string username);
 
-        int GetUserPhotoId(int userId);
+        int? GetUserPhotoId(int userId);
         
         string GetUserName(int userId);
 

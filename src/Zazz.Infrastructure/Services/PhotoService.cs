@@ -261,12 +261,12 @@ namespace Zazz.Infrastructure.Services
 
 
             if (photo.Id == photo.User.ProfilePhotoId)
-                photo.User.ProfilePhotoId = 0;
+                photo.User.ProfilePhotoId = null;
 
             if (photo.User.AccountType == AccountType.ClubAdmin)
             {
                 if (photo.Id == photo.User.ClubDetail.CoverPhotoId)
-                    photo.User.ClubDetail.CoverPhotoId = 0;
+                    photo.User.ClubDetail.CoverPhotoId = null;
             }
 
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
@@ -341,14 +341,14 @@ namespace Zazz.Infrastructure.Services
 
             var img = new PhotoLinks();
 
-            if (photoId == 0)
+            if (!photoId.HasValue)
             {
                 var gender = _uow.UserRepository.GetUserGender(userId);
                 img = DefaultImageHelper.GetUserDefaultImage(gender);
             }
             else
             {
-                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
+                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId.Value);
                 if (photo == null)
                 {
                     var gender = _uow.UserRepository.GetUserGender(userId);

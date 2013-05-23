@@ -43,7 +43,7 @@ namespace Zazz.Core.Models.Data
 
         public virtual ClubDetail ClubDetail { get; set; }
 
-        public int ProfilePhotoId { get; set; }
+        public int? ProfilePhotoId { get; set; }
 
         public virtual ICollection<Weekly> Weeklies { get; set; }
     }

@@ -104,7 +104,7 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public int GetUserPhotoId(int userId)
+        public int? GetUserPhotoId(int userId)
         {
             return DbSet.Where(u => u.Id == userId)
                         .Select(u => u.ProfilePhotoId)
@@ -126,13 +126,13 @@ namespace Zazz.Data.Repositories
             foreach (var u in profilePhotos)
             {
                 photoIdWasProfilePic = true;
-                u.ProfilePhotoId = 0;
+                u.ProfilePhotoId = null;
             }
 
             var coverPhotos = DbContext.ClubDetails.Where(u => u.CoverPhotoId == photoId);
             foreach (var u in coverPhotos)
             {
-                u.CoverPhotoId = 0;
+                u.CoverPhotoId = null;
             }
 
             return photoIdWasProfilePic;
