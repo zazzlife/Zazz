@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers.Api
                        UserId = feed.UserId,
                        UserDisplayName = feed.UserDisplayName,
                        UserDisplayPhoto = feed.UserImageUrl,
-                       CanCurrentUserRemoveFeed = feed.CurrentUserCanRemoveFeed,
+                       CanCurrentUserRemoveFeed = feed.CurrentUserCanRemoveFeed || feed.IsFromCurrentUser,
                        Time = feed.Time,
 
                        Comments = feed.CommentsViewModel.Comments
@@ -137,7 +137,7 @@ namespace Zazz.Web.Controllers.Api
                             Price = feed.EventViewModel.Price,
                             Street = feed.EventViewModel.Street,
                             Time = feed.EventViewModel.Time.ToString("s"),
-                            UtcTime = DateTime.Parse(feed.EventViewModel.UtcTime).ToString("s")
+                            UtcTime = feed.EventViewModel.Time.ToUniversalTime().ToString("s")
                          } 
                        : null
                    };
