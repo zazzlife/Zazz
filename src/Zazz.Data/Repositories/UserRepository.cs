@@ -47,6 +47,26 @@ namespace Zazz.Data.Repositories
                                                                 StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public User GetById(int userId, bool includeDetails = false, bool includeClubDetails = false, bool includeWeeklies = false,
+                            bool includePreferences = false)
+        {
+            var query = DbSet.AsQueryable();
+
+            if (includeDetails)
+                query = query.Include(u => u.UserDetail);
+
+            if (includeClubDetails)
+                query = query.Include(u => u.ClubDetail);
+
+            if (includeWeeklies)
+                query = query.Include(u => u.Weeklies);
+
+            if (includePreferences)
+                query = query.Include(u => u.Preferences);
+
+            return query.SingleOrDefault(u => u.Id == userId);
+        }
+
         public int GetIdByEmail(string email)
         {
             return DbSet.Where(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase))
