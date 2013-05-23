@@ -79,10 +79,10 @@ namespace Zazz.Web.Controllers
                                          {
                                              PostId = post.Id,
                                              PostText = message,
-                                             ToUserId = toUser.HasValue ? toUser.Value : 0,
+                                             ToUserId = toUser,
                                              ToUserDisplayName = toUser.HasValue
                                                                      ? _userService.GetUserDisplayName(toUser.Value)
-                                                                     : "",
+                                                                     : null,
                                              ToUserPhotoUrl = toUser.HasValue
                                                                   ? _photoService.GetUserImageUrl(toUser.Value)
                                                                   : null
