@@ -9,7 +9,7 @@ namespace Zazz.Core.Interfaces
         User GetByEmail(string email);
 
         User GetByUsername(string username, bool includeDetails = false, bool includeClubDetails = false,
-                     bool includeWeeklies = false);
+                     bool includeWeeklies = false, bool includePreferences = false);
 
         int GetIdByEmail(string email);
 

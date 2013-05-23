@@ -27,7 +27,7 @@ namespace Zazz.Data.Repositories
         }
 
         public User GetByUsername(string username, bool includeDetails = false, bool includeClubDetails = false,
-                     bool includeWeeklies = false)
+                     bool includeWeeklies = false, bool includePreferences = false)
         {
             var query = DbSet.AsQueryable();
 
@@ -39,6 +39,9 @@ namespace Zazz.Data.Repositories
 
             if (includeWeeklies)
                 query = query.Include(u => u.Weeklies);
+
+            if (includePreferences)
+                query = query.Include(u => u.Preferences);
 
             return query.SingleOrDefault(u => u.Username.Equals(username,
                                                                 StringComparison.InvariantCultureIgnoreCase));

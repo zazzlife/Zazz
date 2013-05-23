@@ -79,7 +79,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var username = "soroush";
             var user = new User();
             _uow.Setup(x => x.UserRepository.GetByUsername(username,
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                 .Returns(user);
 
 
@@ -89,7 +89,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreSame(user, result);
             _uow.Verify(x => x.UserRepository.GetByUsername(username,
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
 
         }
 

@@ -52,7 +52,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var pass = "password";
             
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(_user);
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
@@ -70,7 +70,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(() => null);
 
             //Act
@@ -91,7 +91,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(_user);
 
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
@@ -117,7 +117,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var pass = "pass";
             _user.LastActivity = DateTime.MaxValue;
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(_user);
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
@@ -135,7 +135,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var pass = "pass";
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(_user);
 
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
