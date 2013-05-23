@@ -220,9 +220,9 @@ namespace Zazz.Web.Controllers
                 Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
                 SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
                 SyncFbEvents = user.UserDetail.SyncFbEvents,
-                SyncFbPosts = user.UserDetail.SyncFbPosts,
-                SyncFbImages = user.UserDetail.SyncFbImages,
-                AccountType = user.AccountType
+                //SyncFbPosts = user.UserDetail.SyncFbPosts,
+                //SyncFbImages = user.UserDetail.SyncFbImages,
+                //AccountType = user.AccountType
             };
 
             return View("EditUser", vm);
@@ -248,8 +248,8 @@ namespace Zazz.Web.Controllers
                 user.UserDetail.CityId = (short)vm.CityId;
                 user.UserDetail.MajorId = (byte)vm.MajorId;
                 user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
-                user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
-                user.UserDetail.SyncFbImages = vm.SyncFbImages;
+                //user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
+                //user.UserDetail.SyncFbImages = vm.SyncFbImages;
                 user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
                 _uow.SaveChanges();
