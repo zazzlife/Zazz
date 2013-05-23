@@ -116,22 +116,32 @@ namespace Zazz.Web.Controllers
                                    LastActivity = DateTime.UtcNow,
                                    Username = registerVm.UserName,
                                    AccountType = registerVm.AccountType,
-                                   UserDetail = new UserDetail
-                                                    {
-                                                        Gender = registerVm.Gender,
-                                                        PublicEmail = registerVm.PublicEmail,
-                                                        SchoolId = registerVm.SchoolId,
-                                                        FullName = registerVm.FullName,
-                                                        MajorId = registerVm.MajorId,
-                                                        JoinedDate = DateTime.UtcNow,
-                                                        CityId = registerVm.CityId,
-                                                        SendSyncErrorNotifications = true,
-                                                        SyncFbEvents = true
-                                                    }
+                                   JoinedDate = DateTime.UtcNow
                                };
 
                 if (registerVm.AccountType == AccountType.ClubAdmin)
-                    user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
+                {
+                    user.ClubDetail = new ClubDetail
+                                      {
+                                          ClubName = registerVm.ClubName,
+                                          Address = "TODO: add address",
+                                          ClubTypeId = registerVm.ClubType,
+                                      };
+                }
+                else
+                {
+                    user.UserDetail = new UserDetail
+                                      {
+                                          Gender = registerVm.Gender,
+                                          PublicEmail = registerVm.PublicEmail,
+                                          SchoolId = registerVm.SchoolId,
+                                          FullName = registerVm.FullName,
+                                          MajorId = registerVm.MajorId,
+                                          CityId = registerVm.CityId,
+                                          SendSyncErrorNotifications = true,
+                                          SyncFbEvents = true
+                                      };
+                }
 
                 try
                 {
@@ -360,24 +370,38 @@ namespace Zazz.Web.Controllers
 
                 var user = new User
                 {
-                    Email = oauthData.Email,
+                    Email = registerVm.Email,
                     IsConfirmed = true,
                     LastActivity = DateTime.UtcNow,
                     Username = registerVm.UserName,
                     AccountType = registerVm.AccountType,
-                    UserDetail = new UserDetail
+                    JoinedDate = DateTime.UtcNow
+                };
+
+                if (registerVm.AccountType == AccountType.ClubAdmin)
+                {
+                    user.ClubDetail = new ClubDetail
+                    {
+                        ClubName = registerVm.ClubName,
+                        Address = "TODO: add address",
+                        ClubTypeId = registerVm.ClubType,
+                    };
+                }
+                else
+                {
+                    user.UserDetail = new UserDetail
                     {
                         Gender = registerVm.Gender,
                         PublicEmail = registerVm.PublicEmail,
                         SchoolId = registerVm.SchoolId,
                         FullName = registerVm.FullName,
                         MajorId = registerVm.MajorId,
-                        JoinedDate = DateTime.UtcNow,
                         CityId = registerVm.CityId,
                         SendSyncErrorNotifications = true,
                         SyncFbEvents = true
-                    }
-                };
+                    };
+                }
+
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {
                                               new OAuthAccount
@@ -387,9 +411,6 @@ namespace Zazz.Web.Controllers
                                                       ProviderUserId = oauthData.ProviderUserId
                                                   }
                                           };
-
-                if (registerVm.AccountType == AccountType.ClubAdmin)
-                    user.ClubDetail = new ClubDetail { ClubName = registerVm.ClubName };
                 try
                 {
                     _authService.Register(user, registerVm.Password, false);

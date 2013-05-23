@@ -48,8 +48,5 @@ namespace Zazz.Core.Models.Data
         public DateTime? LastSyncError { get; set; }
 
         public DateTime? LasySyncErrorEmailSent { get; set; }
-
-        [Column(TypeName = "Date")]
-        public DateTime JoinedDate { get; set; }
     }
 }

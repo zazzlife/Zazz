@@ -28,6 +28,9 @@ namespace Zazz.Core.Models.Data
 
         public DateTime LastActivity { get; set; }
 
+        [Column(TypeName = "Date")]
+        public DateTime JoinedDate { get; set; }
+
         public bool IsConfirmed { get; set; }
 
         public virtual ValidationToken ValidationToken { get; set; }

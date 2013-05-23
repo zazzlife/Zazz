@@ -48,7 +48,7 @@ namespace Zazz.Web.Models
         public string ClubName { get; set; }
 
         [Display(Name = "Club Type")]
-        public int ClubType { get; set; }
+        public byte ClubType { get; set; }
 
         public IEnumerable<School> Schools { get; set; }
 
