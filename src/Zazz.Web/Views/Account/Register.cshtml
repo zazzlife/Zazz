@@ -111,6 +111,14 @@
                                 @Html.DropDownListFor(model => model.ClubType, new SelectList(Model.ClubTypes, "Id", "Name"), new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
                             </div>
+                            
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubAddress, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.ClubAddress, new { @class = "span4" })
+                                @Html.ValidationMessageFor(model => model.ClubAddress, null, new { @class = "help-inline" })
+                            </div>
                         </div>
 
                         <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>

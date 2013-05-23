@@ -124,7 +124,7 @@ namespace Zazz.Web.Controllers
                     user.ClubDetail = new ClubDetail
                                       {
                                           ClubName = registerVm.ClubName,
-                                          Address = "TODO: add address",
+                                          Address = registerVm.ClubAddress,
                                           ClubTypeId = registerVm.ClubType,
                                       };
                 }
@@ -189,7 +189,6 @@ namespace Zazz.Web.Controllers
                 {
                     var token = _authService.GenerateResetPasswordToken(email);
 
-                    //TODO: send email
                     var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, token.Token.ToString());
                     var message = String.Format(
                         "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", email,
@@ -383,7 +382,7 @@ namespace Zazz.Web.Controllers
                     user.ClubDetail = new ClubDetail
                     {
                         ClubName = registerVm.ClubName,
-                        Address = "TODO: add address",
+                        Address = registerVm.ClubAddress,
                         ClubTypeId = registerVm.ClubType,
                     };
                 }

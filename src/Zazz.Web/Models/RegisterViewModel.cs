@@ -50,6 +50,9 @@ namespace Zazz.Web.Models
         [Display(Name = "Club Type")]
         public byte ClubType { get; set; }
 
+        [Display(Name = "Club Address")]
+        public string ClubAddress { get; set; }
+
         public IEnumerable<School> Schools { get; set; }
 
         public IEnumerable<City> Cities { get; set; }
