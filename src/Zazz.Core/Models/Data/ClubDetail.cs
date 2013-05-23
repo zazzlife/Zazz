@@ -12,7 +12,7 @@ namespace Zazz.Core.Models.Data
         public string ClubName { get; set; }
 
         [ForeignKey("ClubType")]
-        public int ClubTypeId { get; set; }
+        public byte ClubTypeId { get; set; }
 
         public ClubType ClubType { get; set; }
 

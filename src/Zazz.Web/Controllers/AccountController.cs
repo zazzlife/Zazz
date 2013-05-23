@@ -94,7 +94,8 @@ namespace Zazz.Web.Controllers
                          {
                              Schools = _staticData.GetSchools(),
                              Cities = _staticData.GetCities(),
-                             Majors = _staticData.GetMajors()
+                             Majors = _staticData.GetMajors(),
+                             ClubTypes = _staticData.GetClubTypes()
                          };
 
             return View(vm);
@@ -152,6 +153,7 @@ namespace Zazz.Web.Controllers
             registerVm.Schools = _staticData.GetSchools();
             registerVm.Cities = _staticData.GetCities();
             registerVm.Majors = _staticData.GetMajors();
+            registerVm.ClubTypes = _staticData.GetClubTypes();
 
             return View(registerVm);
         }
@@ -338,7 +340,8 @@ namespace Zazz.Web.Controllers
                 ProvidedDataSignature = jsonSign,
                 Cities = _staticData.GetCities(),
                 Majors = _staticData.GetMajors(),
-                Schools = _staticData.GetSchools()
+                Schools = _staticData.GetSchools(),
+                ClubTypes = _staticData.GetClubTypes()
             };
 
             return View("OAuthRegister", registerPageVM);
@@ -408,6 +411,7 @@ namespace Zazz.Web.Controllers
             registerVm.Cities = _staticData.GetCities();
             registerVm.Schools = _staticData.GetSchools();
             registerVm.Majors = _staticData.GetMajors();
+            registerVm.ClubTypes = _staticData.GetClubTypes();
 
             return View(registerVm);
         }

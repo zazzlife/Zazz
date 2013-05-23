@@ -47,10 +47,15 @@ namespace Zazz.Web.Models
         [StringLength(30), Display(Name = "Club Name")]
         public string ClubName { get; set; }
 
+        [Display(Name = "Club Type")]
+        public int ClubType { get; set; }
+
         public IEnumerable<School> Schools { get; set; }
 
         public IEnumerable<City> Cities { get; set; }
 
         public IEnumerable<Major> Majors { get; set; }
+
+        public IEnumerable<ClubType> ClubTypes { get; set; }
     }
 }
