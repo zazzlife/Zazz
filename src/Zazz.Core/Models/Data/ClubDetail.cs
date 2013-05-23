@@ -10,5 +10,13 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(500)]
         public string ClubName { get; set; }
+
+        [ForeignKey("ClubType")]
+        public int ClubTypeId { get; set; }
+
+        public ClubType ClubType { get; set; }
+
+        [MaxLength(500)]
+        public string Address { get; set; }
     }
 }
