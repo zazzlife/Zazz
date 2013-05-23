@@ -35,7 +35,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            AccountType = AccountType.User
                        };
 
-            _uow.Setup(x => x.UserRepository.GetById(user.Id))
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, true, false))
                 .Returns(user);
 
             var weekly = new Weekly
@@ -58,7 +58,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 AccountType = AccountType.Club
             };
 
-            _uow.Setup(x => x.UserRepository.GetById(user.Id))
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, true, false))
                 .Returns(user);
             _uow.Setup(x => x.SaveChanges());
 

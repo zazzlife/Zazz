@@ -305,7 +305,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _cacheService.Setup(x => x.GetUserPassword(userId))
                          .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetById(userId))
+            _uow.Setup(x => x.UserRepository.GetById(userId, false, false, false, false))
                 .Returns(user);
             _cryptoService.Setup(x => x.DecryptPassword(user.Password, user.PasswordIV))
                           .Returns(Encoding.UTF8.GetString(password));
@@ -329,7 +329,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var userId = 12;
             _cacheService.Setup(x => x.GetUserPassword(userId))
                          .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetById(userId))
+            _uow.Setup(x => x.UserRepository.GetById(userId, false, false, false, false))
                 .Returns(() => null);
             //Act & Assert
             Assert.Throws<NotFoundException>(() => _sut.GetUserPassword(userId));

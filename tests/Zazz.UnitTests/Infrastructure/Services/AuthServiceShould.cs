@@ -26,7 +26,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void Init()
         {
             _pass = "pass";
-            _password = new byte[] {1, 2, 3, 4, 5, 6};
+            _password = new byte[] { 1, 2, 3, 4, 5, 6 };
             _iv = new byte[] { 1, 2, 3, 3, 4, 5 };
             _user = new User
                     {
@@ -50,7 +50,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var pass = "password";
-            
+
             _uowMock.Setup(x => x.UserRepository.GetByUsername(It.IsAny<string>(),
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                     .Returns(_user);
@@ -186,7 +186,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowIfUsernameExists_OnRegister()
         {
             //Arrange
-            
+
             _uowMock.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(true);
             _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
@@ -238,8 +238,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var ivBuffer = new byte[] { 1, 2 };
             var iv = Convert.ToBase64String(ivBuffer);
-            var encryptedPass = new byte[] {7, 8, 9};
-            
+            var encryptedPass = new byte[] { 7, 8, 9 };
+
 
             _cryptoMock.Setup(x => x.EncryptPassword(_pass, out iv))
                        .Returns(encryptedPass);
@@ -261,7 +261,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(false);
             _uowMock.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
-            
+
             var iv = String.Empty;
             _cryptoMock.Setup(x => x.EncryptPassword(_pass, out iv))
                        .Returns(_password);
@@ -346,7 +346,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uowMock.Setup(x => x.UserRepository.GetIdByEmail(email))
                     .Returns(userId);
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(userId))
-                    .Returns(() =>  null);
+                    .Returns(() => null);
 
             //Act
             var result = _sut.GenerateResetPasswordToken(email);
@@ -510,8 +510,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var newPass = "newpass";
-            var newPassBuffer = new byte[] {12, 34, 45};
-            var iv = new byte[] {67, 89};
+            var newPassBuffer = new byte[] { 12, 34, 45 };
+            var iv = new byte[] { 67, 89 };
             var ivText = Convert.ToBase64String(iv);
 
             var token = new ValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationDate = DateTime.UtcNow.AddDays(1) };
@@ -521,7 +521,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                 .Returns(token);
-            _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
                     .Returns(_user);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
@@ -548,7 +548,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                 .Returns(token);
-            _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
                     .Returns(_user);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
@@ -577,7 +577,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uowMock.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                 .Returns(token);
-            _uowMock.Setup(x => x.UserRepository.GetById(token.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
                     .Returns(_user);
             _uowMock.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
 
@@ -600,7 +600,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var pass = "pass";
             var newPass = "newPass";
             var invalidPass = "invalid";
-            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);
@@ -615,7 +615,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 //Assert
                 Assert.IsInstanceOf<InvalidPasswordException>(e);
-                _uowMock.Verify(x => x.UserRepository.GetById(_user.Id), Times.Once());
+                _uowMock.Verify(x => x.UserRepository.GetById(_user.Id, false, false, false, false), Times.Once());
                 _cryptoMock.Verify(x => x.DecryptPassword(_user.Password, _user.PasswordIV), Times.Once());
             }
         }
@@ -633,7 +633,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
             var newPassIvBuffer = Convert.FromBase64String(newPassIv);
 
-            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
             _cryptoMock.Setup(x => x.DecryptPassword(oldPassBuffer, oldPassIv))
                        .Returns(pass);
@@ -644,10 +644,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.ChangePassword(_user.Id, pass, newPass);
 
             //Assert
-            _uowMock.Verify(x => x.UserRepository.GetById(_user.Id), Times.Once());
+            _uowMock.Verify(x => x.UserRepository.GetById(_user.Id, false, false, false, false), Times.Once());
             _cryptoMock.Verify(x => x.DecryptPassword(oldPassBuffer, oldPassIv), Times.Once());
             _cryptoMock.Verify(x => x.EncryptPassword(newPass, out newPassIv), Times.Once());
-            
+
         }
 
         [Test]
@@ -660,7 +660,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
             var newPassIvBuffer = Convert.FromBase64String(newPassIv);
 
-            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id))
+            _uowMock.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
             _cryptoMock.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
                        .Returns(pass);

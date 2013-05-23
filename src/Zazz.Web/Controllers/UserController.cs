@@ -46,7 +46,7 @@ namespace Zazz.Web.Controllers
         [ActionName("Profile")]
         public ActionResult ShowProfile(int id)
         {
-            var user = _uow.UserRepository.GetById(id);
+            var user = _uow.UserRepository.GetById(id, true, true, true);
 
             var currentUserId = 0;
             var currentUserPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
@@ -205,7 +205,7 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Edit()
         {
-            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true, true);
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true, true, false, true);
             return user.AccountType == AccountType.User ? EditUser(user) : EditClub(user);
         }
 
@@ -233,7 +233,7 @@ namespace Zazz.Web.Controllers
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult EditUser(EditUserProfileViewModel vm)
         {
-            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true);
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, true, false, false, true);
             if (user.AccountType != AccountType.User)
                 throw new SecurityException();
 
@@ -285,7 +285,7 @@ namespace Zazz.Web.Controllers
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult EditClub(EditClubProfileViewModel vm)
         {
-            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true);
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true, false, true);
             if (user.AccountType != AccountType.Club)
                 throw new SecurityException();
 
