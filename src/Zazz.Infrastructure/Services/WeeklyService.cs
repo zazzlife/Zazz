@@ -19,7 +19,7 @@ namespace Zazz.Infrastructure.Services
         public void CreateWeekly(Weekly weekly)
         {
             var user = _uow.UserRepository.GetById(weekly.UserId);
-            if (user.AccountType != AccountType.ClubAdmin)
+            if (user.AccountType != AccountType.Club)
                 throw new InvalidOperationException("User should be a club admin.");
 
             user.Weeklies.Add(weekly);

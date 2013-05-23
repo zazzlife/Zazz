@@ -37,7 +37,7 @@
 {
     <ul class="nav nav-list">
         <li><a href="~/event/create"><i class="icon-calendar"></i>Create event</a></li>
-        @if (Model.AccountType == AccountType.ClubAdmin)
+        @if (Model.AccountType == AccountType.Club)
         {
             <li><a href="#manageFbPagesModal" data-toggle="modal" id="manageFbPages"><i class="icon-facebook"></i>Manage Facebook Pages</a></li>
         }

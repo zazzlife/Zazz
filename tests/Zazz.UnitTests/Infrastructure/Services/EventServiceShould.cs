@@ -97,7 +97,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
             _uow.Setup(x => x.UserRepository.GetUserAccountType(_zazzEvent.UserId))
-                .Returns(AccountType.ClubAdmin);
+                .Returns(AccountType.Club);
             _notificationService.Setup(x => x.CreateNewEventNotification(_zazzEvent.UserId, _zazzEvent.Id, false));
 
             //Act

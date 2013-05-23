@@ -121,12 +121,12 @@ namespace Zazz.Web.Controllers
                                                  {
                                                      SendSyncErrorNotifications = true,
                                                      SyncFbEvents = true,
-                                                     SyncFbImages = registerVm.AccountType == AccountType.ClubAdmin,
-                                                     SyncFbPosts = registerVm.AccountType == AccountType.ClubAdmin
+                                                     SyncFbImages = registerVm.AccountType == AccountType.Club,
+                                                     SyncFbPosts = registerVm.AccountType == AccountType.Club
                                                  }
                                };
 
-                if (registerVm.AccountType == AccountType.ClubAdmin)
+                if (registerVm.AccountType == AccountType.Club)
                 {
                     user.ClubDetail = new ClubDetail
                                       {
@@ -384,12 +384,12 @@ namespace Zazz.Web.Controllers
                                              {
                                                  SendSyncErrorNotifications = true,
                                                  SyncFbEvents = true,
-                                                 SyncFbImages = registerVm.AccountType == AccountType.ClubAdmin,
-                                                 SyncFbPosts = registerVm.AccountType == AccountType.ClubAdmin
+                                                 SyncFbImages = registerVm.AccountType == AccountType.Club,
+                                                 SyncFbPosts = registerVm.AccountType == AccountType.Club
                                              }
                            };
 
-                if (registerVm.AccountType == AccountType.ClubAdmin)
+                if (registerVm.AccountType == AccountType.Club)
                 {
                     user.ClubDetail = new ClubDetail
                                       {

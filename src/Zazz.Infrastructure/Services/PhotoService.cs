@@ -263,7 +263,7 @@ namespace Zazz.Infrastructure.Services
             if (photo.User.ProfilePhotoId.HasValue && photo.Id == photo.User.ProfilePhotoId)
                 photo.User.ProfilePhotoId = null;
 
-            if (photo.User.AccountType == AccountType.ClubAdmin)
+            if (photo.User.AccountType == AccountType.Club)
             {
                 if (photo.User.ClubDetail.CoverPhotoId.HasValue && photo.Id == photo.User.ClubDetail.CoverPhotoId)
                     photo.User.ClubDetail.CoverPhotoId = null;

@@ -286,7 +286,7 @@ namespace Zazz.Web.Controllers
         public ActionResult EditClub(EditClubProfileViewModel vm)
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true);
-            if (user.AccountType != AccountType.ClubAdmin)
+            if (user.AccountType != AccountType.Club)
                 throw new SecurityException();
 
             if (ModelState.IsValid)
@@ -325,7 +325,7 @@ namespace Zazz.Web.Controllers
         public void ChangeCoverPic(int id)
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
-            if (user.AccountType != AccountType.ClubAdmin)
+            if (user.AccountType != AccountType.Club)
                 throw new SecurityException();
 
             user.ClubDetail.CoverPhotoId = id;

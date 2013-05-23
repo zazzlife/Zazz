@@ -55,7 +55,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var user = new User
             {
                 Id = 2,
-                AccountType = AccountType.ClubAdmin
+                AccountType = AccountType.Club
             };
 
             _uow.Setup(x => x.UserRepository.GetById(user.Id))

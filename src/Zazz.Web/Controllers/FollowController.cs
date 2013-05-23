@@ -35,7 +35,7 @@ namespace Zazz.Web.Controllers
             {
                 _followService.SendFollowRequest(currentUserId, id);
             }
-            else if (accountType == AccountType.ClubAdmin)
+            else if (accountType == AccountType.Club)
             {
                 _followService.FollowClubAdmin(currentUserId, id);
             }

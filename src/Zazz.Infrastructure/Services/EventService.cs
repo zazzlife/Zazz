@@ -60,7 +60,7 @@ namespace Zazz.Infrastructure.Services
             feed.FeedUsers.Add(new FeedUser { UserId = zazzEvent.UserId });
 
             var userAccountType = _uow.UserRepository.GetUserAccountType(zazzEvent.UserId);
-            if (userAccountType == AccountType.ClubAdmin)
+            if (userAccountType == AccountType.Club)
             {
                 _notificationService.CreateNewEventNotification(zazzEvent.UserId, zazzEvent.Id, false);
             }

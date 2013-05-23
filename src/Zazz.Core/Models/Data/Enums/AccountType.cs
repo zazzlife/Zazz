@@ -6,7 +6,7 @@ namespace Zazz.Core.Models.Data.Enums
     {
         [Display(Name = "User")]
         User,
-        [Display(Name = "Club Admin")]
-        ClubAdmin
+        [Display(Name = "Club")]
+        Club
     }
 }
