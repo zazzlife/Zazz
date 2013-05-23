@@ -260,12 +260,12 @@ namespace Zazz.Infrastructure.Services
                 throw new SecurityException();
 
 
-            if (photo.Id == photo.User.ProfilePhotoId)
+            if (photo.User.ProfilePhotoId.HasValue && photo.Id == photo.User.ProfilePhotoId)
                 photo.User.ProfilePhotoId = null;
 
             if (photo.User.AccountType == AccountType.ClubAdmin)
             {
-                if (photo.Id == photo.User.ClubDetail.CoverPhotoId)
+                if (photo.User.ClubDetail.CoverPhotoId.HasValue && photo.Id == photo.User.ClubDetail.CoverPhotoId)
                     photo.User.ClubDetail.CoverPhotoId = null;
             }
 
