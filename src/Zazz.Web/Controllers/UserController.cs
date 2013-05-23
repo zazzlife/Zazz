@@ -206,7 +206,7 @@ namespace Zazz.Web.Controllers
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
 
-            var vm = new EditProfileViewModel
+            var vm = new EditUserProfileViewModel
             {
                 CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
                 CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
@@ -225,11 +225,11 @@ namespace Zazz.Web.Controllers
                 AccountType = user.AccountType
             };
 
-            return View(vm);
+            return View("EditUser", vm);
         }
 
         [HttpPost, Authorize, ValidateAntiForgeryToken]
-        public ActionResult Edit(EditProfileViewModel vm)
+        public ActionResult Edit(EditUserProfileViewModel vm)
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
 
@@ -258,7 +258,7 @@ namespace Zazz.Web.Controllers
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
-            return View(vm);
+            return View("EditUser", vm);
         }
 
         [Authorize]
