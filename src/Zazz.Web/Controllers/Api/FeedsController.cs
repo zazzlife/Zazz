@@ -8,6 +8,7 @@ using System.Web.Http.Filters;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 using Zazz.Web.Models.Api;
 
@@ -28,27 +29,43 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // GET api/v1/feeds
-        public IEnumerable<object> GetHomeFeeds()
+        public IEnumerable<FeedApiResponse> GetHomeFeeds()
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feeds = feedHelper.GetFeeds(userId);
+
+            return feeds.Select(FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?lastFeed=
         public IEnumerable<object> GetHomeFeeds(int lastFeed)
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feeds = feedHelper.GetFeeds(userId, lastFeed);
+
+            return feeds.Select(FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?id=
         public IEnumerable<object> GetUserFeeds(int id)
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feeds = feedHelper.GetUserActivityFeed(id, userId);
+
+            return feeds.Select(FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?id=&lastFeed=
         public IEnumerable<object> GetUserFeeds(int id, int lastFeed)
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feeds = feedHelper.GetUserActivityFeed(id, userId, lastFeed);
+
+            return feeds.Select(FeedViewModelToApiModel);
         }
 
         private FeedApiResponse FeedViewModelToApiModel(FeedViewModel feed)

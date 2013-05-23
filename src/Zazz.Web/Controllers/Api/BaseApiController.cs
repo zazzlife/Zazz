@@ -5,7 +5,7 @@ namespace Zazz.Web.Controllers.Api
 {
     public abstract class BaseApiController : ApiController
     {
-         int ExtractUserIdFromHeader()
+         public int ExtractUserIdFromHeader()
          {
              var auth = Request.Headers.Authorization;
              if (auth == null || String.IsNullOrEmpty(auth.Parameter))
