@@ -14,7 +14,7 @@
 
     <div>
 
-        @using (Html.BeginForm(null, null, FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("EditUser", "User"))
         {
             @Html.AntiForgeryToken()
             <div class="tabbable">
