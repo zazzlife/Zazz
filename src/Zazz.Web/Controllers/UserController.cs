@@ -212,20 +212,20 @@ namespace Zazz.Web.Controllers
         private ActionResult EditUser(User user)
         {
             var vm = new EditUserProfileViewModel
-            {
-                CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
-                CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
-                Gender = user.UserDetail.Gender,
-                FullName = user.UserDetail.FullName,
-                CityId = user.UserDetail.CityId,
-                Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
-                SchoolId = user.UserDetail.SchoolId,
-                Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
-                MajorId = user.UserDetail.MajorId,
-                Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
-                SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
-                SyncFbEvents = user.Preferences.SyncFbEvents
-            };
+                     {
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
+                         Gender = user.UserDetail.Gender,
+                         FullName = user.UserDetail.FullName,
+                         CityId = user.UserDetail.CityId,
+                         Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
+                         SchoolId = user.UserDetail.SchoolId,
+                         Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
+                         MajorId = user.UserDetail.MajorId,
+                         Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
+                         SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
+                         SyncFbEvents = user.Preferences.SyncFbEvents
+                     };
 
             return View("EditUser", vm);
         }
@@ -265,16 +265,14 @@ namespace Zazz.Web.Controllers
 
         private ActionResult EditClub(User user)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
-
             var vm = new EditClubProfileViewModel
                      {
                          ClubAddress = user.ClubDetail.Address,
                          ClubName = user.ClubDetail.ClubName,
                          ClubType = user.ClubDetail.ClubTypeId,
                          ClubTypes = _staticDataRepo.GetClubTypes(),
-                         CurrentUserDisplayName = _userService.GetUserDisplayName(currentUserId),
-                         CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
+                         CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                         CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
                          SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                          SyncFbEvents = user.Preferences.SyncFbEvents,
                          SyncFbImages = user.Preferences.SyncFbImages,
@@ -287,12 +285,12 @@ namespace Zazz.Web.Controllers
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult EditClub(EditClubProfileViewModel vm)
         {
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true);
+            if (user.AccountType != AccountType.ClubAdmin)
+                throw new SecurityException();
+
             if (ModelState.IsValid)
             {
-                var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true);
-                if (user.AccountType != AccountType.ClubAdmin)
-                    throw new SecurityException();
-
                 user.ClubDetail.Address = vm.ClubAddress;
                 user.ClubDetail.ClubName = vm.ClubName;
                 user.ClubDetail.ClubTypeId = vm.ClubType;
@@ -301,10 +299,15 @@ namespace Zazz.Web.Controllers
                 user.Preferences.SyncFbImages = vm.SyncFbImages;
                 user.Preferences.SyncFbPosts = vm.SyncFbPosts;
 
+                _uow.SaveChanges();
+
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
+            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id);
+            vm.CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id);
             vm.ClubTypes = _staticDataRepo.GetClubTypes();
+
             return View("EditClub", vm);
         }
 
