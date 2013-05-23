@@ -250,6 +250,7 @@
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\Api\PhotoApiModel.cs" />
     <Compile Include="Models\Api\PostApiModel.cs" />
+    <Compile Include="Models\Api\UserApiModel.cs" />
     <Compile Include="Models\BaseLayoutViewModel.cs" />
     <Compile Include="Models\BaseUserPageLayoutViewModel.cs" />
     <Compile Include="Models\ClubProfileViewModel.cs" />
@@ -265,7 +266,7 @@
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\JsonErrorModel.cs" />
     <Compile Include="Models\AlertType.cs" />
-    <Compile Include="Models\EditProfileViewModel.cs" />
+    <Compile Include="Models\EditUserProfileViewModel.cs" />
     <Compile Include="Models\EventViewModel.cs" />
     <Compile Include="Models\NotificationsPageViewModel.cs" />
     <Compile Include="Models\NotificationViewModel.cs" />
@@ -511,7 +512,7 @@
     <Content Include="Views\Event\EditForm.cshtml" />
     <Content Include="Views\Shared\_UserPageLayout.cshtml" />
     <Content Include="Views\Event\Show.cshtml" />
-    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\EditUser.cshtml" />
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
     <Content Include="Views\Event\_EventsListPartial.cshtml" />
     <Content Include="Views\Photo\_SelectPhoto.cshtml" />
