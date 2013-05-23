@@ -218,11 +218,11 @@ namespace Zazz.Web.Controllers
                          Gender = user.UserDetail.Gender,
                          FullName = user.UserDetail.FullName,
                          CityId = user.UserDetail.CityId,
-                         Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name"),
+                         Cities = _staticDataRepo.GetCities(),
                          SchoolId = user.UserDetail.SchoolId,
-                         Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
+                         Schools = _staticDataRepo.GetSchools(),
                          MajorId = user.UserDetail.MajorId,
-                         Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
+                         Majors = _staticDataRepo.GetMajors(),
                          SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                          SyncFbEvents = user.Preferences.SyncFbEvents
                      };
@@ -237,9 +237,9 @@ namespace Zazz.Web.Controllers
             if (user.AccountType != AccountType.User)
                 throw new SecurityException();
 
-            vm.Cities = new SelectList(_staticDataRepo.GetCities(), "id", "name");
-            vm.Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name");
-            vm.Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name");
+            vm.Cities = _staticDataRepo.GetCities();
+            vm.Schools =_staticDataRepo.GetSchools();
+            vm.Majors = _staticDataRepo.GetMajors();
 
             vm.CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id);
             vm.CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id);
@@ -248,9 +248,9 @@ namespace Zazz.Web.Controllers
             {
                 user.UserDetail.Gender = vm.Gender;
                 user.UserDetail.FullName = vm.FullName;
-                user.UserDetail.SchoolId = (short)vm.SchoolId;
-                user.UserDetail.CityId = (short)vm.CityId;
-                user.UserDetail.MajorId = (byte)vm.MajorId;
+                user.UserDetail.SchoolId = vm.SchoolId;
+                user.UserDetail.CityId = vm.CityId;
+                user.UserDetail.MajorId = vm.MajorId;
                 user.Preferences.SyncFbEvents = vm.SyncFbEvents;
                 user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 

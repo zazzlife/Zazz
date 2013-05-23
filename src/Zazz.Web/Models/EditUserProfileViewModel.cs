@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 using System.Web.Mvc;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models
@@ -12,15 +14,15 @@ namespace Zazz.Web.Models
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
-        public SelectList Schools { get; set; }
+        public IEnumerable<School> Schools { get; set; }
 
-        public int? SchoolId { get; set; }
+        public short? SchoolId { get; set; }
 
-        public SelectList Majors { get; set; }
+        public IEnumerable<Major> Majors { get; set; }
 
-        public int? MajorId { get; set; }
+        public byte? MajorId { get; set; }
 
-        public SelectList Cities { get; set; }
+        public IEnumerable<City> Cities { get; set; }
 
         public int? CityId { get; set; }
 
