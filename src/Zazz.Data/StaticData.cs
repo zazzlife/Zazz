@@ -50,5 +50,15 @@ namespace Zazz.Data
             yield return new Tag { Id = 11, Name = "Jampacked" };
             yield return new Tag { Id = 12, Name = "Justchilling" };
         }
+
+        public static IEnumerable<ClubType> GetClubTypes()
+        {
+            yield return new ClubType { Id = 1, Name = "Bar" };
+            yield return new ClubType { Id = 2, Name = "Lounge" };
+            yield return new ClubType { Id = 3, Name = "Nightclub" };
+            yield return new ClubType { Id = 4, Name = "Concert Venue" };
+            yield return new ClubType { Id = 5, Name = "Student Association" };
+            yield return new ClubType { Id = 6, Name = "Sorority" };
+        }
     }
 }
