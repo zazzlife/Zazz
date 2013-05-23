@@ -14,9 +14,11 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("ClubType")]
         public byte ClubTypeId { get; set; }
 
-        public ClubType ClubType { get; set; }
+        public virtual ClubType ClubType { get; set; }
 
         [MaxLength(500)]
         public string Address { get; set; }
+
+        public int CoverPhotoId { get; set; }
     }
 }

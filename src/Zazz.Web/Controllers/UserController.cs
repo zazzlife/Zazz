@@ -82,7 +82,9 @@ namespace Zazz.Web.Controllers
                          CurrentUserPhoto = currentUserPhoto,
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
-                         CoverPhotoUrl = user.UserDetail.CoverPhotoId == 0 
+                         Address = user.ClubDetail.Address,
+                         ClubType = user.ClubDetail.ClubType.Name,
+                         CoverPhotoUrl = user.ClubDetail.CoverPhotoId == 0 
                          ? DefaultImageHelper.GetDefaultCoverImage()
                          : _photoService.GeneratePhotoUrl(user.Id, user.UserDetail.CoverPhotoId).OriginalLink,
 

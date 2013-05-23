@@ -19,6 +19,10 @@ namespace Zazz.Web.Models
 
         public bool IsCurrentUserFollowingTheClub { get; set; }
 
+        public string ClubType { get; set; }
+
+        public string Address { get; set; }
+
         public List<FeedViewModel> Feeds { get; set; }
 
         public IEnumerable<WeeklyViewModel> Weeklies { get; set; }
