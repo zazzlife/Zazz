@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -86,7 +87,7 @@ namespace Zazz.Web.Controllers
                          ClubType = user.ClubDetail.ClubType.Name,
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId == 0 
                          ? DefaultImageHelper.GetDefaultCoverImage()
-                         : _photoService.GeneratePhotoUrl(user.Id, user.UserDetail.CoverPhotoId).OriginalLink,
+                         : _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId).OriginalLink,
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
@@ -265,7 +266,7 @@ namespace Zazz.Web.Controllers
         public void ChangeProfilePic(int id)
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
-            user.UserDetail.ProfilePhotoId = id;
+            user.ProfilePhotoId = id;
 
             _uow.SaveChanges();
             _cacheService.RemoveUserPhotoUrl(user.Id);
@@ -275,8 +276,10 @@ namespace Zazz.Web.Controllers
         public void ChangeCoverPic(int id)
         {
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
-            user.UserDetail.CoverPhotoId = id;
+            if (user.AccountType != AccountType.ClubAdmin)
+                throw new SecurityException();
 
+            user.ClubDetail.CoverPhotoId = id;
             _uow.SaveChanges();
         }
 

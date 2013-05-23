@@ -259,13 +259,15 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            var userDetail = photo.User.UserDetail;
 
-            if (photo.Id == userDetail.ProfilePhotoId)
-                photo.User.UserDetail.ProfilePhotoId = 0;
+            if (photo.Id == photo.User.ProfilePhotoId)
+                photo.User.ProfilePhotoId = 0;
 
-            if (photo.Id == userDetail.CoverPhotoId)
-                photo.User.UserDetail.CoverPhotoId = 0;
+            if (photo.User.AccountType == AccountType.ClubAdmin)
+            {
+                if (photo.Id == photo.User.ClubDetail.CoverPhotoId)
+                    photo.User.ClubDetail.CoverPhotoId = 0;
+            }
 
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
             var feedId = _uow.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId);

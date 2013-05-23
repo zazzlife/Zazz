@@ -106,23 +106,9 @@ namespace Zazz.Data.Repositories
 
         public int GetUserPhotoId(int userId)
         {
-            return DbContext.UserDetails.Where(u => u.Id == userId)
+            return DbSet.Where(u => u.Id == userId)
                         .Select(u => u.ProfilePhotoId)
                         .SingleOrDefault();
-        }
-
-        public int GetUserPhotoId(string username)
-        {
-            return DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
-                        .Select(u => u.UserDetail.ProfilePhotoId)
-                        .SingleOrDefault();
-        }
-
-        public int GetUserCoverPhotoId(int userId)
-        {
-            return DbContext.UserDetails.Where(u => u.Id == userId)
-                            .Select(u => u.CoverPhotoId)
-                            .SingleOrDefault();
         }
 
         public string GetUserName(int userId)
@@ -136,14 +122,14 @@ namespace Zazz.Data.Repositories
         {
             var photoIdWasProfilePic = false;
 
-            var profilePhotos = DbContext.UserDetails.Where(u => u.ProfilePhotoId == photoId);
+            var profilePhotos = DbSet.Where(u => u.ProfilePhotoId == photoId);
             foreach (var u in profilePhotos)
             {
                 photoIdWasProfilePic = true;
                 u.ProfilePhotoId = 0;
             }
 
-            var coverPhotos = DbContext.UserDetails.Where(u => u.CoverPhotoId == photoId);
+            var coverPhotos = DbContext.ClubDetails.Where(u => u.CoverPhotoId == photoId);
             foreach (var u in coverPhotos)
             {
                 u.CoverPhotoId = 0;

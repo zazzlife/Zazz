@@ -457,10 +457,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
-                    UserDetail = new UserDetail
+                    ProfilePhotoId = profilePhotoId,
+                    ClubDetail = new ClubDetail()
                     {
                         CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
                     }
                 }
             };
@@ -485,8 +485,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(0, photo.User.UserDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(0, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
@@ -516,10 +516,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
-                    UserDetail = new UserDetail
+                    ProfilePhotoId = profilePhotoId,
+                    ClubDetail = new ClubDetail()
                     {
                         CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
                     }
                 }
             };
@@ -544,8 +544,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
-            Assert.AreEqual(0, photo.User.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(0, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
@@ -575,10 +575,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
-                    UserDetail = new UserDetail
+                    ProfilePhotoId = profilePhotoId,
+                    ClubDetail = new ClubDetail()
                     {
                         CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
                     }
                 }
             };
@@ -602,8 +602,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
@@ -632,10 +632,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
-                    UserDetail = new UserDetail
+                    ProfilePhotoId = profilePhotoId,
+                    ClubDetail = new ClubDetail()
                     {
                         CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
                     }
                 }
             };
@@ -661,8 +661,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
@@ -690,10 +690,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
-                    UserDetail = new UserDetail
+                    ProfilePhotoId = profilePhotoId,
+                    ClubDetail = new ClubDetail()
                     {
                         CoverPhotoId = coverPhotoId,
-                        ProfilePhotoId = profilePhotoId
                     }
                 }
             };
@@ -719,8 +719,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.UserDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path

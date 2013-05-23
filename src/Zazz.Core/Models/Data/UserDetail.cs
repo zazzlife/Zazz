@@ -30,10 +30,6 @@ namespace Zazz.Core.Models.Data
 
         public int? CityId { get; set; }
 
-        public int CoverPhotoId { get; set; }
-
-        public int ProfilePhotoId { get; set; }
-
         [MaxLength(200), DataType(DataType.EmailAddress)]
         public string PublicEmail { get; set; }
     }

@@ -415,7 +415,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var photoId = 4432;
             var user = Mother.GetUser();
-            user.UserDetail.ProfilePhotoId = photoId;
+            user.ProfilePhotoId = photoId;
 
             using (var ctx = new ZazzDbContext())
             {
@@ -429,33 +429,7 @@ namespace Zazz.IntegrationTests.Repositories
             var result = _repo.GetUserPhotoId(user.Id);
 
             //Assert
-            Assert.AreEqual(user.UserDetail.ProfilePhotoId, result);
-        }
-
-        [TestCase("USERNAME")]
-        [TestCase("username")]
-        [TestCase("UserName")]
-        public void NotBeCaseSensitiveReturnCorrectPhotoId_OnGetUserPhotoIdByUsername(string username)
-        {
-            //Arrange
-            var photoId = 4432;
-            var user = Mother.GetUser();
-            user.Username = "username";
-            user.UserDetail.ProfilePhotoId = photoId;
-
-            using (var ctx = new ZazzDbContext())
-            {
-                var repo = new UserRepository(ctx);
-                repo.InsertGraph(user);
-
-                ctx.SaveChanges();
-            }
-
-            //Act
-            var result = _repo.GetUserPhotoId(username);
-
-            //Assert
-            Assert.AreEqual(user.UserDetail.ProfilePhotoId, result);
+            Assert.AreEqual(user.ProfilePhotoId, result);
         }
 
         [Test]
@@ -546,29 +520,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectCoverPhotoId_OnGetUserPhotoId()
-        {
-            //Arrange
-            var photoId = 4432;
-            var user = Mother.GetUser();
-            user.UserDetail.CoverPhotoId = photoId;
-
-            using (var ctx = new ZazzDbContext())
-            {
-                var repo = new UserRepository(ctx);
-                repo.InsertGraph(user);
-
-                ctx.SaveChanges();
-            }
-
-            //Act
-            var result = _repo.GetUserCoverPhotoId(user.Id);
-
-            //Assert
-            Assert.AreEqual(user.UserDetail.CoverPhotoId, result);
-        }
-
-        [Test]
         public void ReturnCorrectUsername_OnGetUsername()
         {
             //Arrange
@@ -596,12 +547,12 @@ namespace Zazz.IntegrationTests.Repositories
             var idNotToBeRemoved = 5678;
 
             var userA = Mother.GetUser();
-            userA.UserDetail.ProfilePhotoId = idToBeRemoved;
-            userA.UserDetail.CoverPhotoId = idNotToBeRemoved;
+            userA.ProfilePhotoId = idToBeRemoved;
+            userA.ClubDetail.CoverPhotoId = idNotToBeRemoved;
 
             var userB = Mother.GetUser();
-            userB.UserDetail.ProfilePhotoId = idNotToBeRemoved;
-            userB.UserDetail.CoverPhotoId = idToBeRemoved;
+            userB.ProfilePhotoId = idNotToBeRemoved;
+            userB.ClubDetail.CoverPhotoId = idToBeRemoved;
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);
@@ -614,11 +565,11 @@ namespace Zazz.IntegrationTests.Repositories
             var b = _repo.GetById(userB.Id);
 
             //Assert
-            Assert.AreEqual(0, a.UserDetail.ProfilePhotoId);
-            Assert.AreEqual(idNotToBeRemoved, a.UserDetail.CoverPhotoId);
+            Assert.AreEqual(0, a.ProfilePhotoId);
+            Assert.AreEqual(idNotToBeRemoved, a.ClubDetail.CoverPhotoId);
 
-            Assert.AreEqual(0, b.UserDetail.CoverPhotoId);
-            Assert.AreEqual(idNotToBeRemoved, b.UserDetail.ProfilePhotoId);
+            Assert.AreEqual(0, b.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(idNotToBeRemoved, b.ProfilePhotoId);
         }
 
         [Test]
@@ -627,7 +578,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var photoId = 12;
             var user = Mother.GetUser();
-            user.UserDetail.ProfilePhotoId = photoId;
+            user.ProfilePhotoId = photoId;
 
             _zazzDbContext.Users.Add(user);
             _zazzDbContext.SaveChanges();
@@ -646,7 +597,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var photoId = 12;
             var user = Mother.GetUser();
-            user.UserDetail.ProfilePhotoId = 13;
+            user.ProfilePhotoId = 13;
 
             _zazzDbContext.Users.Add(user);
             _zazzDbContext.SaveChanges();
