@@ -1,6 +1,162 @@
-﻿@{
-    ViewBag.Title = "EditClub";
+﻿@model EditClubProfileViewModel
+
+@{
+    ViewBag.Title = "Edit Profile";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
-<h2>EditClub</h2>
+<div>
+    <div class="page-header">
+        <h3>Edit Profile</h3>
+    </div>
+
+    <div>
+
+        @using (Html.BeginForm("EditClub", "User"))
+        {
+            @Html.AntiForgeryToken()
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#aboutTab" data-toggle="tab">About</a></li>
+                    <li><a href="#profilePicTab" data-toggle="tab">Profile Pictures</a></li>
+                    <li><a href="#fbSyncTab" data-toggle="tab">Facebook Sync</a></li>
+                    <li><a href="#notificationsTab" data-toggle="tab">Notifications</a></li>
+                </ul>
+                <div class="tab-content margin-ten">
+                    <div class="tab-pane active" id="aboutTab">
+                        <a href="~/account/changepassword">Change Password</a>
+                        <p style="margin-top: 30px;">
+
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.ClubName, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.TextBoxFor(model => model.ClubName, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.ClubAddress, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.TextBoxFor(model => model.ClubAddress, new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.ClubAddress, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.ClubType, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.ClubType, new SelectList(Model.ClubTypes, "Id", "Name", Model.ClubType),
+                                    new { @class = "span4" })
+
+                                    @Html.ValidationMessageFor(model => model.ClubType, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+
+
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="profilePicTab">
+                       
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    <label class="control-label">Profile Picture</label>
+                                </div>
+                                <div class="editor-field selectProfilePic">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
+                                            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group" style="margin-top: 40px; margin-bottom: 100px;">
+                                <div class="editor-label">
+                                    <label class="control-label">Profile Cover Picture</label>
+                                </div>
+                                <div class="editor-field">
+                                    <div class="btn-group selectCoverPic">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
+                                            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+
+
+                    <div class="tab-pane" id="fbSyncTab">
+                        <p>
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbEvents) Sync Facebook Events
+                                </label>
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
+                                </label>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
+                                </label>
+                            </div>
+                            
+                        </p>
+                    </div>
+                    <div class="tab-pane" id="notificationsTab">
+                        <p>
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    @Html.EditorFor(model => model.SendFbErrorNotification) Send Facebook Sync Error Notifications
+                                </label>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="~/" class="btn">Cancel</a>
+            </p>
+        }
+        
+        <div class="modal hide fade" id="cropPromptModal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Would you like to crop the photo?</h3>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary" id="cropLink" target="_blank">Yes</a>
+                <a href="#" data-dismiss="modal" class="btn">No</a>
+            </div>
+        </div>
+
+
+        @Html.Partial("_PhotoGalleryModal")
+        @Html.Partial("_UploadPicModal", true)
+
+    </div>
+</div>

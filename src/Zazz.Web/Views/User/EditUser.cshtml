@@ -1,6 +1,4 @@
-﻿@using Zazz.Core.Models.Data
-@using Zazz.Core.Models.Data.Enums
-@model EditUserProfileViewModel
+﻿@model EditUserProfileViewModel
 
 @{
     ViewBag.Title = "Edit Profile";
@@ -83,41 +81,23 @@
                     </div>
                     <div class="tab-pane" id="profilePicTab">
                        
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    <label class="control-label">Profile Picture</label>
-                                </div>
-                                <div class="editor-field selectProfilePic">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
-                                            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
-                                        </ul>
-                                    </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                <label class="control-label">Profile Picture</label>
+                            </div>
+                            <div class="editor-field selectProfilePic">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
+                                        <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
+                                    </ul>
                                 </div>
                             </div>
-
-                            <div class="control-group" style="margin-top: 40px; margin-bottom: 100px;">
-                                <div class="editor-label">
-                                    <label class="control-label">Profile Cover Picture</label>
-                                </div>
-                                <div class="editor-field">
-                                    <div class="btn-group selectCoverPic">
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
-                                            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
                     </div>
 
 
@@ -128,21 +108,6 @@
                                     @Html.EditorFor(model => model.SyncFbEvents) Sync Facebook Events
                                 </label>
                             </div>
-                            
-                           @* @if (Model.AccountType == AccountType.ClubAdmin)
-                            {
-                                <div class="control-group">
-                                    <label class="checkbox">
-                                        @Html.EditorFor(model => model.SyncFbPosts) Sync Facebook Posts
-                                    </label>
-                                    </div>
-
-                                <div class="control-group">
-                                    <label class="checkbox">
-                                        @Html.EditorFor(model => model.SyncFbImages) Sync Facebook Images
-                                    </label>
-                                </div>
-                            }*@
                             
                         </p>
                     </div>
