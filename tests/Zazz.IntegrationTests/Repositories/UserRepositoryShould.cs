@@ -37,21 +37,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void SetEntityStateAsModified_OnInsertOrUpdate_WhenUserIdIsProvided()
-        {
-            //Arrange
-            var user = Mother.GetUser();
-            user.Id = 12;
-            user.UserDetail.Id = 12;
-
-            //Act
-            _repo.InsertOrUpdate(user);
-
-            //Assert
-            Assert.AreEqual(EntityState.Modified, _zazzDbContext.Entry(user).State);
-        }
-
-        [Test]
         public void Throw_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
         {
             //Arrange
@@ -438,7 +423,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var gender = Gender.Male;
             var user = Mother.GetUser();
-            user.UserDetail.Gender = gender;
+            user.UserDetail = new UserDetail {Gender = gender};
 
             using (var ctx = new ZazzDbContext())
             {
@@ -461,7 +446,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var gender = Gender.Male;
             var user = Mother.GetUser();
-            user.UserDetail.Gender = gender;
+            user.UserDetail = new UserDetail {Gender = gender};
             user.Username = "username";
 
             using (var ctx = new ZazzDbContext())
@@ -482,7 +467,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            user.UserDetail.FullName = "Full Name";
+            user.UserDetail = new UserDetail {FullName = "Full Name"};
             using (var ctx = new ZazzDbContext())
             {
                 ctx.Users.Add(user);
@@ -504,7 +489,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = Mother.GetUser();
             user.Username = "username";
-            user.UserDetail.FullName = "Full Name";
+            user.UserDetail = new UserDetail { FullName = "Full Name" };
 
             using (var ctx = new ZazzDbContext())
             {
@@ -548,11 +533,11 @@ namespace Zazz.IntegrationTests.Repositories
 
             var userA = Mother.GetUser();
             userA.ProfilePhotoId = idToBeRemoved;
-            userA.ClubDetail.CoverPhotoId = idNotToBeRemoved;
+            userA.ClubDetail = new ClubDetail {CoverPhotoId = idNotToBeRemoved, ClubTypeId = 1};
 
             var userB = Mother.GetUser();
             userB.ProfilePhotoId = idNotToBeRemoved;
-            userB.ClubDetail.CoverPhotoId = idToBeRemoved;
+            userB.ClubDetail = new ClubDetail { CoverPhotoId = idToBeRemoved, ClubTypeId = 1 };
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);
@@ -565,10 +550,10 @@ namespace Zazz.IntegrationTests.Repositories
             var b = _repo.GetById(userB.Id);
 
             //Assert
-            Assert.AreEqual(0, a.ProfilePhotoId);
+            Assert.AreEqual(null, a.ProfilePhotoId);
             Assert.AreEqual(idNotToBeRemoved, a.ClubDetail.CoverPhotoId);
 
-            Assert.AreEqual(0, b.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(null, b.ClubDetail.CoverPhotoId);
             Assert.AreEqual(idNotToBeRemoved, b.ProfilePhotoId);
         }
 

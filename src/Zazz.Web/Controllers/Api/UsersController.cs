@@ -17,8 +17,9 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT /api/v1/users/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, ApiUser user)
         {
+            throw new NotImplementedException();
         }
     }
 }

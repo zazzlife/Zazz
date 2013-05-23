@@ -16,6 +16,7 @@ namespace Zazz.IntegrationTests
                             Password = new byte[] {1,2,3,4,5},
                             PasswordIV = new byte[] {6,7,8,9},
                             JoinedDate = DateTime.UtcNow,
+                            Preferences = new UserPreferences()
                         };
          }
 

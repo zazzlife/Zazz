@@ -265,7 +265,7 @@ namespace Zazz.Infrastructure.Services
 
             if (photo.User.AccountType == AccountType.Club)
             {
-                if (photo.User.ClubDetail.CoverPhotoId.HasValue && photo.Id == photo.User.ClubDetail.CoverPhotoId)
+                if (photo.User.ClubDetail.CoverPhotoId.HasValue && photo.Id == photo.User.ClubDetail.CoverPhotoId.Value)
                     photo.User.ClubDetail.CoverPhotoId = null;
             }
 

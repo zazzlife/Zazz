@@ -439,7 +439,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SetCoverPhotoIdTo0AndNotResetCacheIfThePhotoIsCoverPhotoAndNotProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
+        public void SetCoverPhotoIdToNullAndNotResetCacheIfThePhotoIsCoverPhotoAndNotProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
 
@@ -457,6 +457,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId,
                 User = new User
                 {
+                    AccountType = AccountType.Club,
                     ProfilePhotoId = profilePhotoId,
                     ClubDetail = new ClubDetail()
                     {
@@ -485,7 +486,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photoId, userId);
 
             //Assert
-            Assert.AreEqual(0, photo.User.ClubDetail.CoverPhotoId);
+            Assert.AreEqual(null, photo.User.ClubDetail.CoverPhotoId);
             Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
@@ -499,7 +500,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void SetProfilePhotoIdTo0AndResetCacheIfThePhotoIsProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
+        public void SetProfilePhotoIdToNullAndResetCacheIfThePhotoIsProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
         {
             //Arrange
             var feedId = 12;
@@ -545,7 +546,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(0, photo.User.ProfilePhotoId);
+            Assert.AreEqual(null, photo.User.ProfilePhotoId);
             _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
             _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
             _fs.Verify(x => x.RemoveFile(It.IsAny<string>()), Times.Exactly(4)); //TODO: try specifing the path
@@ -976,7 +977,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ReturnDefaultImage_WhenPhotoIdIs0AndAddToCacheIfItsNotThere_GetUserImageUrl()
+        public void ReturnDefaultImage_WhenPhotoIdIsNullAndAddToCacheIfItsNotThere_GetUserImageUrl()
         {
             //Arrange
             var userId = 12;
@@ -993,7 +994,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var expected = DefaultImageHelper.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
-                .Returns(0);
+                .Returns(() => null);
             _uow.Setup(x => x.UserRepository.GetUserGender(userId))
                 .Returns(gender);
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
