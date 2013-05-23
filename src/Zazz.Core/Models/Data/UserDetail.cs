@@ -36,17 +36,5 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(200), DataType(DataType.EmailAddress)]
         public string PublicEmail { get; set; }
-
-        public bool SyncFbEvents { get; set; }
-
-        public bool SyncFbPosts { get; set; }
-
-        public bool SyncFbImages { get; set; }
-
-        public bool SendSyncErrorNotifications { get; set; }
-
-        public DateTime? LastSyncError { get; set; }
-
-        public DateTime? LasySyncErrorEmailSent { get; set; }
     }
 }

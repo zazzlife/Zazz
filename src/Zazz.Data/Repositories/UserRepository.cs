@@ -154,7 +154,7 @@ namespace Zazz.Data.Repositories
 
         public bool WantsFbEventsSynced(int userId)
         {
-            return DbContext.UserDetails
+            return DbContext.UserPreferences
                             .Where(u => u.Id == userId)
                             .Select(u => u.SyncFbEvents)
                             .SingleOrDefault();
@@ -162,7 +162,7 @@ namespace Zazz.Data.Repositories
 
         public bool WantsFbPostsSynced(int userId)
         {
-            return DbContext.UserDetails
+            return DbContext.UserPreferences
                             .Where(u => u.Id == userId)
                             .Select(u => u.SyncFbPosts)
                             .SingleOrDefault();
@@ -170,7 +170,7 @@ namespace Zazz.Data.Repositories
 
         public bool WantsFbImagesSynced(int userId)
         {
-            return DbContext.UserDetails
+            return DbContext.UserPreferences
                             .Where(u => u.Id == userId)
                             .Select(u => u.SyncFbImages)
                             .SingleOrDefault();

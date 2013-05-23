@@ -218,8 +218,8 @@ namespace Zazz.Web.Controllers
                 Schools = new SelectList(_staticDataRepo.GetSchools(), "id", "name"),
                 MajorId = user.UserDetail.MajorId,
                 Majors = new SelectList(_staticDataRepo.GetMajors(), "id", "name"),
-                SendFbErrorNotification = user.UserDetail.SendSyncErrorNotifications,
-                SyncFbEvents = user.UserDetail.SyncFbEvents,
+                SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
+                SyncFbEvents = user.Preferences.SyncFbEvents,
                 //SyncFbPosts = user.UserDetail.SyncFbPosts,
                 //SyncFbImages = user.UserDetail.SyncFbImages,
                 //AccountType = user.AccountType
@@ -247,10 +247,10 @@ namespace Zazz.Web.Controllers
                 user.UserDetail.SchoolId = (short)vm.SchoolId;
                 user.UserDetail.CityId = (short)vm.CityId;
                 user.UserDetail.MajorId = (byte)vm.MajorId;
-                user.UserDetail.SyncFbEvents = vm.SyncFbEvents;
+                user.Preferences.SyncFbEvents = vm.SyncFbEvents;
                 //user.UserDetail.SyncFbPosts = vm.SyncFbPosts;
                 //user.UserDetail.SyncFbImages = vm.SyncFbImages;
-                user.UserDetail.SendSyncErrorNotifications = vm.SendFbErrorNotification;
+                user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
 
                 _uow.SaveChanges();
 

@@ -662,10 +662,16 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var userA = Mother.GetUser();
-            userA.UserDetail.SyncFbEvents = true;
+            userA.Preferences = new UserPreferences
+                                {
+                                    SyncFbEvents = true
+                                };
 
             var userB = Mother.GetUser();
-            userB.UserDetail.SyncFbEvents = false;
+            userB.Preferences = new UserPreferences
+                                {
+                                    SyncFbEvents = false
+                                };
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);
@@ -685,10 +691,16 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var userA = Mother.GetUser();
-            userA.UserDetail.SyncFbPosts = true;
+            userA.Preferences = new UserPreferences
+                                {
+                                    SyncFbPosts = true
+                                };
 
             var userB = Mother.GetUser();
-            userB.UserDetail.SyncFbPosts = false;
+            userB.Preferences = new UserPreferences
+                                {
+                                    SyncFbPosts = false
+                                };
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);
@@ -708,10 +720,16 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var userA = Mother.GetUser();
-            userA.UserDetail.SyncFbImages = true;
+            userA.Preferences = new UserPreferences
+                                {
+                                    SyncFbImages = true
+                                };
 
             var userB = Mother.GetUser();
-            userB.UserDetail.SyncFbImages = false;
+            userB.Preferences = new UserPreferences
+                                {
+                                    SyncFbImages = false
+                                };
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);

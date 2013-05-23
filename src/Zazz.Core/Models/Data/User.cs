@@ -37,6 +37,8 @@ namespace Zazz.Core.Models.Data
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 
+        public virtual UserPreferences Preferences { get; set; }
+
         public virtual UserDetail UserDetail { get; set; }
 
         public virtual ClubDetail ClubDetail { get; set; }

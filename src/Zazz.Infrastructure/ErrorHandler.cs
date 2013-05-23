@@ -23,32 +23,32 @@ namespace Zazz.Infrastructure
 
         public void HandleAccessTokenExpired(string fbUserId, OAuthProvider provider)
         {
-            var errorLog = "Expired access token: " + fbUserId;
-            _logger.LogError("ErrorHandler", errorLog);
+            //var errorLog = "Expired access token: " + fbUserId;
+            //_logger.LogError("ErrorHandler", errorLog);
 
-            var oauthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(long.Parse(fbUserId),
-                                                                                            provider);
+            //var oauthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(long.Parse(fbUserId),
+            //                                                                                provider);
 
-            if (oauthAccount.User.UserDetail.SendSyncErrorNotifications &&
-                oauthAccount.User.UserDetail.LasySyncErrorEmailSent < DateTime.UtcNow.AddDays(-7))
-            {
-                bool isHtml;
-                string subject;
-                var message = EmailMessages.AccessTokenExpiredMessage(out isHtml, out subject);
-                var emailMessage = new MailMessage(EmailMessages.NOREPLY_ADDRESS, oauthAccount.User.Email)
-                                       {
-                                           Body = message,
-                                           IsBodyHtml = isHtml,
-                                           Subject = subject,
-                                           BodyEncoding = Encoding.UTF8
-                                       };
+            //if (oauthAccount.User.UserDetail.SendSyncErrorNotifications &&
+            //    oauthAccount.User.UserDetail.LasySyncErrorEmailSent < DateTime.UtcNow.AddDays(-7))
+            //{
+            //    bool isHtml;
+            //    string subject;
+            //    var message = EmailMessages.AccessTokenExpiredMessage(out isHtml, out subject);
+            //    var emailMessage = new MailMessage(EmailMessages.NOREPLY_ADDRESS, oauthAccount.User.Email)
+            //                           {
+            //                               Body = message,
+            //                               IsBodyHtml = isHtml,
+            //                               Subject = subject,
+            //                               BodyEncoding = Encoding.UTF8
+            //                           };
 
-                _emailService.Send(emailMessage);
-                oauthAccount.User.UserDetail.LasySyncErrorEmailSent = DateTime.UtcNow;
-            }
+            //    _emailService.Send(emailMessage);
+            //    oauthAccount.User.UserDetail.LasySyncErrorEmailSent = DateTime.UtcNow;
+            //}
 
-            oauthAccount.User.UserDetail.LastSyncError = DateTime.UtcNow;
-            _uow.SaveChanges();
+            //oauthAccount.User.UserDetail.LastSyncError = DateTime.UtcNow;
+            //_uow.SaveChanges();
         }
 
         public void HandleFacebookApiLimitReached(string fbUserId, string path, string fields)

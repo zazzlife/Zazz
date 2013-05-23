@@ -12,6 +12,7 @@ namespace Zazz.Data
         public IDbSet<ClubType> ClubTypes { get; set; }
 
         public IDbSet<User> Users { get; set; }
+        public IDbSet<UserPreferences> UserPreferences { get; set; }
         public IDbSet<UserDetail> UserDetails { get; set; }
         public IDbSet<ClubDetail> ClubDetails { get; set; }
         public IDbSet<ValidationToken> ValidationTokens { get; set; }
@@ -55,6 +56,10 @@ namespace Zazz.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<UserPreferences>()
+                        .HasRequired(p => p.User)
+                        .WithRequiredPrincipal(u => u.Preferences);
+
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.ValidationToken)
                         .WithRequired(v => v.User);

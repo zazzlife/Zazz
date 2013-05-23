@@ -116,7 +116,14 @@ namespace Zazz.Web.Controllers
                                    LastActivity = DateTime.UtcNow,
                                    Username = registerVm.UserName,
                                    AccountType = registerVm.AccountType,
-                                   JoinedDate = DateTime.UtcNow
+                                   JoinedDate = DateTime.UtcNow,
+                                   Preferences = new UserPreferences
+                                                 {
+                                                     SendSyncErrorNotifications = true,
+                                                     SyncFbEvents = true,
+                                                     SyncFbImages = registerVm.AccountType == AccountType.ClubAdmin,
+                                                     SyncFbPosts = registerVm.AccountType == AccountType.ClubAdmin
+                                                 }
                                };
 
                 if (registerVm.AccountType == AccountType.ClubAdmin)
@@ -138,8 +145,6 @@ namespace Zazz.Web.Controllers
                                           FullName = registerVm.FullName,
                                           MajorId = registerVm.MajorId,
                                           CityId = registerVm.CityId,
-                                          SendSyncErrorNotifications = true,
-                                          SyncFbEvents = true
                                       };
                 }
 
@@ -368,37 +373,42 @@ namespace Zazz.Web.Controllers
                 var oauthData = JsonConvert.DeserializeObject<OAuthLoginResponse>(registerVm.OAuthProvidedData);
 
                 var user = new User
-                {
-                    Email = registerVm.Email,
-                    IsConfirmed = true,
-                    LastActivity = DateTime.UtcNow,
-                    Username = registerVm.UserName,
-                    AccountType = registerVm.AccountType,
-                    JoinedDate = DateTime.UtcNow
-                };
+                           {
+                               Email = registerVm.Email,
+                               IsConfirmed = true,
+                               LastActivity = DateTime.UtcNow,
+                               Username = registerVm.UserName,
+                               AccountType = registerVm.AccountType,
+                               JoinedDate = DateTime.UtcNow,
+                               Preferences = new UserPreferences
+                                             {
+                                                 SendSyncErrorNotifications = true,
+                                                 SyncFbEvents = true,
+                                                 SyncFbImages = registerVm.AccountType == AccountType.ClubAdmin,
+                                                 SyncFbPosts = registerVm.AccountType == AccountType.ClubAdmin
+                                             }
+                           };
 
                 if (registerVm.AccountType == AccountType.ClubAdmin)
                 {
                     user.ClubDetail = new ClubDetail
-                    {
-                        ClubName = registerVm.ClubName,
-                        Address = registerVm.ClubAddress,
-                        ClubTypeId = registerVm.ClubType,
-                    };
+                                      {
+                                          ClubName = registerVm.ClubName,
+                                          Address = registerVm.ClubAddress,
+                                          ClubTypeId = registerVm.ClubType,
+                                      };
                 }
                 else
                 {
                     user.UserDetail = new UserDetail
-                    {
-                        Gender = registerVm.Gender,
-                        PublicEmail = registerVm.PublicEmail,
-                        SchoolId = registerVm.SchoolId,
-                        FullName = registerVm.FullName,
-                        MajorId = registerVm.MajorId,
-                        CityId = registerVm.CityId,
-                        SendSyncErrorNotifications = true,
-                        SyncFbEvents = true
-                    };
+                                      {
+                                          Gender = registerVm.Gender,
+                                          PublicEmail = registerVm.PublicEmail,
+                                          SchoolId = registerVm.SchoolId,
+                                          FullName = registerVm.FullName,
+                                          MajorId = registerVm.MajorId,
+                                          CityId = registerVm.CityId
+                                      };
                 }
 
                 user.LinkedAccounts = new List<OAuthAccount>
