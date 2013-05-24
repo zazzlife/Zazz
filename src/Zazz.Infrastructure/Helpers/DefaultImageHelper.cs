@@ -1,10 +1,16 @@
+using System;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Helpers
 {
-    public class DefaultImageHelper
+    public static class DefaultImageHelper
     {
+        public static string ExtractBaseUrl(Uri uri)
+        {
+            return uri.Scheme + "://" + uri.Authority;
+        }
+
         public static PhotoLinks GetUserDefaultImage(Gender gender, string baseAddress = "")
         {
             return new PhotoLinks(baseAddress + "/Images/placeholder.gif");
