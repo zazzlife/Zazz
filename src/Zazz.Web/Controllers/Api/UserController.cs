@@ -92,9 +92,46 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT /api/v1/user
-        public void Put(ApiUser user)
+        public void Put(ApiUser u)
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var user = _uow.UserRepository.GetById(userId, true, true, false, true);
+
+            if (u.Preferences == null ||
+                (user.AccountType == AccountType.User && u.UserDetails == null) ||
+                (user.AccountType == AccountType.Club && u.ClubDetails == null))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+            user.ProfilePhotoId = u.ProfilePhotoId;
+
+            user.Preferences.SendSyncErrorNotifications = u.Preferences.SendSyncErrorNotifications;
+            user.Preferences.SyncFbEvents = u.Preferences.SyncFbEvents;
+            
+            if (user.AccountType == AccountType.User)
+            {
+                user.UserDetail.CityId = u.UserDetails.CityId;
+                user.UserDetail.Gender = u.UserDetails.Gender;
+                user.UserDetail.FullName = u.UserDetails.FullName;
+                user.UserDetail.MajorId = u.UserDetails.MajorId;
+                user.UserDetail.SchoolId = u.UserDetails.SchoolId;
+            }
+            else
+            {
+                user.ClubDetail.Address = u.ClubDetails.Address;
+                user.ClubDetail.ClubName = u.ClubDetails.ClubName;
+                user.ClubDetail.ClubTypeId = u.ClubDetails.ClubTypeId;
+                user.ClubDetail.CoverPhotoId = u.ClubDetails.CoverPhotoId;
+
+                if (u.Preferences.SyncFbImages.HasValue)
+                    user.Preferences.SyncFbImages = u.Preferences.SyncFbImages.Value;
+
+                if (u.Preferences.SyncFbPosts.HasValue)
+                    user.Preferences.SyncFbPosts = u.Preferences.SyncFbPosts.Value;
+            }
+
+            _uow.SaveChanges();
         }
     }
 }
