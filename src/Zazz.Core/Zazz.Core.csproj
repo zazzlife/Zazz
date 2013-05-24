@@ -69,6 +69,7 @@
     <Compile Include="Interfaces\ICacheSystem.cs" />
     <Compile Include="Interfaces\ICommentService.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
+    <Compile Include="Interfaces\IDefaultImageHelper.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IFacebookHelper.cs" />
     <Compile Include="Interfaces\IFacebookPageRepository.cs" />

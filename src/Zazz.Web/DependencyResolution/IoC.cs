@@ -35,6 +35,7 @@ namespace Zazz.Web.DependencyResolution
         {
             var rootDirectory = HostingEnvironment.MapPath("/");
             var baseBlobAddress = ConfigurationManager.AppSettings["BaseBlobUrl"];
+            var websiteAddress = ConfigurationManager.AppSettings["WebsiteAddress"];
 
             ObjectFactory.Initialize(x =>
                         {
@@ -74,7 +75,10 @@ namespace Zazz.Web.DependencyResolution
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
                             x.For<IFacebookHelper>().Use<FacebookHelper>();
-                            
+
+                            x.For<IDefaultImageHelper>().Use<DefaultImages>()
+                             .Ctor<string>("baseAddress").Is(websiteAddress);
+
                             x.For<ILogger>().Use<Logger>();
 
                             x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
