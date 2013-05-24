@@ -20,6 +20,7 @@ namespace Zazz.Infrastructure.Services
         private readonly IUoW _uow;
         private readonly IFileService _fileService;
         private readonly string _rootPath;
+        private readonly string _baseBlobUrl;
         private readonly ICacheService _cacheService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
@@ -29,11 +30,13 @@ namespace Zazz.Infrastructure.Services
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, string rootPath)
+            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, string rootPath,
+            string baseBlobUrl)
         {
             _uow = uow;
             _fileService = fileService;
             _rootPath = rootPath;
+            _baseBlobUrl = baseBlobUrl;
             _cacheService = cacheService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;

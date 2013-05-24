@@ -27,6 +27,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<ICacheService> _cacheService;
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
+        private string _baseBlobUrl;
 
         [SetUp]
         public void Init()
@@ -37,9 +38,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _tempRootPath = Path.GetTempPath();
             _stringHelper = new Mock<IStringHelper>();
             _staticDataRepo = new Mock<IStaticDataRepository>();
-
+            _baseBlobUrl = "http://localhost:17433";
             _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object, _stringHelper.Object,
-                                    _staticDataRepo.Object, _tempRootPath);
+                                    _staticDataRepo.Object, _tempRootPath, _baseBlobUrl);
             _uow.Setup(x => x.SaveChanges());
         }
 

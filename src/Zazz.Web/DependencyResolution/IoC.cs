@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Configuration;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using StructureMap;
@@ -33,6 +34,7 @@ namespace Zazz.Web.DependencyResolution
         public static IContainer Initialize()
         {
             var rootDirectory = HostingEnvironment.MapPath("/");
+            var baseBlobAddress = ConfigurationManager.AppSettings["BaseBlobUrl"];
 
             ObjectFactory.Initialize(x =>
                         {
@@ -66,7 +68,8 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IWeeklyService>().Use<WeeklyService>();
 
                             x.For<IPhotoService>().Use<PhotoService>()
-                             .Ctor<string>("rootPath").Is(rootDirectory);
+                             .Ctor<string>("rootPath").Is(rootDirectory)
+                             .Ctor<string>("baseBlobUrl").Is(baseBlobAddress);
 
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
