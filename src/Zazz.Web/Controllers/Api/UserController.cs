@@ -14,7 +14,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [HMACAuthorize]
     public class UserController : BaseApiController
     {
         private readonly IUoW _uow;
@@ -33,12 +33,14 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = ExtractUserIdFromHeader();
             var user = _userService.GetUser(userId, true, true, false, true);
+            var baseUrl = DefaultImages.ExtractBaseUrl(Request.RequestUri);
 
             var response = new ApiUser
                            {
                                AccountType = user.AccountType,
                                Id = user.Id,
                                Username = user.Username,
+                               ProfilePhotoId = user.ProfilePhotoId,
                                Preferences = new ApiUserPreferences
                                              {
                                                  SendSyncErrorNotifications = user.Preferences.SendSyncErrorNotifications,
@@ -64,12 +66,11 @@ namespace Zazz.Web.Controllers.Api
                                            Address = user.ClubDetail.Address,
                                            ClubName = user.ClubDetail.ClubName,
                                            ClubType = user.ClubDetail.ClubType,
+                                           CoverPhotoId = user.ClubDetail.CoverPhotoId,
                                            CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
                                                ? _photoService
-                                               .GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value)
-                                               : new PhotoLinks(
-                                                   DefaultImages.GetDefaultCoverImage(
-                                                   DefaultImages.ExtractBaseUrl(Request.RequestUri)))
+                                                 .GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value)
+                                               : new PhotoLinks(DefaultImages.GetDefaultCoverImage(baseUrl))
                                        };
 
                 response.Preferences.SyncFbImages = user.Preferences.SyncFbImages;

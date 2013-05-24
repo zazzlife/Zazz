@@ -18,6 +18,10 @@ namespace Zazz.Web.Models.Api
         public ApiClubDetails ClubDetails { get; set; }
 
         public ApiUserPreferences Preferences { get; set; }
+
+        public int? ProfilePhotoId { get; set; }
+
+        public PhotoLinks ProfilePhoto { get; set; }
     }
 
     public class ApiUserProfile
@@ -69,6 +73,8 @@ namespace Zazz.Web.Models.Api
         public string Address { get; set; }
 
         public string ClubName { get; set; }
+
+        public int? CoverPhotoId { get; set; }
 
         public PhotoLinks CoverPhoto { get; set; }
     }
