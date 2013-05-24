@@ -9,6 +9,21 @@ namespace Zazz.Web.Models.Api
     {
         public int Id { get; set; }
 
+        public string Username { get; set; }
+
+        public AccountType AccountType { get; set; }
+
+        public ApiUserDetails UserDetails { get; set; }
+
+        public ApiClubDetails ClubDetails { get; set; }
+
+        public ApiUserPreferences Preferences { get; set; }
+    }
+
+    public class ApiUserProfile
+    {
+        public int Id { get; set; }
+
         public string DisplayName { get; set; }
 
         public PhotoLinks DisplayPhoto { get; set; }
@@ -29,7 +44,9 @@ namespace Zazz.Web.Models.Api
 
         public IEnumerable<PhotoApiModel> Photos { get; set; }
 
-        public ApiUserPreferences Preferences { get; set; }
+        public ApiUserDetails UserDetails { get; set; }
+
+        public ApiClubDetails ClubDetails { get; set; }
     }
 
     public class ApiUserDetails
@@ -60,9 +77,9 @@ namespace Zazz.Web.Models.Api
     {
         public bool SyncFbEvents { get; set; }
 
-        public bool SyncFbPosts { get; set; }
+        public bool? SyncFbPosts { get; set; }
 
-        public bool SyncFbImages { get; set; }
+        public bool? SyncFbImages { get; set; }
 
         public bool SendSyncErrorNotifications { get; set; } 
     }

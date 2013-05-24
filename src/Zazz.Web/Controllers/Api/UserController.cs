@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
+using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure.Helpers;
+using Zazz.Web.Filters;
+using Zazz.Web.Models.Api;
+
+namespace Zazz.Web.Controllers.Api
+{
+    [HMACAuthorize]
+    public class UserController : BaseApiController
+    {
+        private readonly IUoW _uow;
+        private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
+
+        public UserController(IUoW uow, IUserService userService, IPhotoService photoService)
+        {
+            _uow = uow;
+            _userService = userService;
+            _photoService = photoService;
+        }
+
+        // GET /api/v1/user
+        public ApiUser Get()
+        {
+            var userId = ExtractUserIdFromHeader();
+            var user = _userService.GetUser(userId, true, true, false, true);
+
+            var response = new ApiUser
+                           {
+                               AccountType = user.AccountType,
+                               Id = user.Id,
+                               Username = user.Username,
+                               Preferences = new ApiUserPreferences
+                                             {
+                                                 SendSyncErrorNotifications = user.Preferences.SendSyncErrorNotifications,
+                                                 SyncFbEvents = user.Preferences.SyncFbEvents
+                                             }
+                           };
+
+            if (user.AccountType == AccountType.User)
+            {
+                response.UserDetails = new ApiUserDetails
+                                       {
+                                           City = user.UserDetail.City,
+                                           FullName = user.UserDetail.FullName,
+                                           Gender = user.UserDetail.Gender,
+                                           Major = user.UserDetail.Major,
+                                           School = user.UserDetail.School
+                                       };
+            }
+            else
+            {
+                response.ClubDetails = new ApiClubDetails
+                                       {
+                                           Address = user.ClubDetail.Address,
+                                           ClubName = user.ClubDetail.ClubName,
+                                           ClubType = user.ClubDetail.ClubType,
+                                           CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
+                                               ? _photoService
+                                               .GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value)
+                                               : new PhotoLinks(DefaultImageHelper.GetDefaultCoverImage())
+                                       };
+
+                response.Preferences.SyncFbImages = user.Preferences.SyncFbImages;
+                response.Preferences.SyncFbPosts = user.Preferences.SyncFbPosts;
+            }
+
+            return response;
+        }
+
+        // PUT /api/v1/user
+        public void Put(ApiUser user)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
