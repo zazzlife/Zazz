@@ -5,29 +5,29 @@ namespace Zazz.Infrastructure.Helpers
 {
     public class DefaultImageHelper
     {
-        public static PhotoLinks GetUserDefaultImage(Gender gender)
+        public static PhotoLinks GetUserDefaultImage(Gender gender, string baseAddress = "")
         {
-            return new PhotoLinks("/Images/placeholder.gif");
+            return new PhotoLinks(baseAddress + "/Images/placeholder.gif");
         }
 
-        public static string GetDefaultCoverImage()
+        public static string GetDefaultCoverImage(string baseAddress = "")
         {
-            return "/Images/cover-image.gif";
+            return baseAddress + "/Images/cover-image.gif";
         }
 
-        public static PhotoLinks GetDefaultAlbumImage()
+        public static PhotoLinks GetDefaultAlbumImage(string baseAddress = "")
         {
-            return new PhotoLinks("/Images/placeholder.gif");
+            return new PhotoLinks(baseAddress + "/Images/placeholder.gif");
         }
 
-        public static PhotoLinks GetDefaultEventImage()
+        public static PhotoLinks GetDefaultEventImage(string baseAddress = "")
         {
-            return new PhotoLinks("/Images/placeholder.gif");
+            return new PhotoLinks(baseAddress + "/Images/placeholder.gif");
         }
 
-        public static PhotoLinks GetDefaultWeeklyImage()
+        public static PhotoLinks GetDefaultWeeklyImage(string baseAddress = "")
         {
-            return new PhotoLinks("/Images/placeholder.gif");
+            return new PhotoLinks(baseAddress + "/Images/placeholder.gif");
         }
     }
 }
