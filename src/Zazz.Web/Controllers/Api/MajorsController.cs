@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers.Api
         public Major Get(int id)
         {
             return _staticDataRepository.GetMajors()
-                                        .SingleOrDefault(c => c.Id == id);
+                                        .SingleOrDefault(m => m.Id == id);
         }
     }
 }
