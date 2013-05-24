@@ -56,13 +56,13 @@ namespace Zazz.Infrastructure.Services
         {
             return new PhotoLinks
                    {
-                       VerySmallLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
-                                                     userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
-                       SmallLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
-                                                 userId, photoId, SMALL_IMAGE_SUFFIX),
-                       MediumLink = String.Format("/picture/user/{0}/{1}-{2}.jpg",
-                                                  userId, photoId, MEDIUM_IMAGE_SUFFIX),
-                       OriginalLink = String.Format("/picture/user/{0}/{1}.jpg", userId, photoId)
+                       VerySmallLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
+                                                     _baseBlobUrl, userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
+                       SmallLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
+                                                 _baseBlobUrl, userId, photoId, SMALL_IMAGE_SUFFIX),
+                       MediumLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
+                                                  _baseBlobUrl, userId, photoId, MEDIUM_IMAGE_SUFFIX),
+                       OriginalLink = String.Format("{0}/picture/user/{1}/{2}.jpg", _baseBlobUrl, userId, photoId)
                    };
         }
 

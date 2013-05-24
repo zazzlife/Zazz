@@ -50,10 +50,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void GenerateCorrectPath_OnGeneratePhotoUrl(int userId, int photoId)
         {
             //Arrange
-            var expectedVerySmall = String.Format("/picture/user/{0}/{1}-vs.jpg", userId, photoId);
-            var expectedSmall = String.Format("/picture/user/{0}/{1}-s.jpg", userId, photoId);
-            var expectedMedium = String.Format("/picture/user/{0}/{1}-m.jpg", userId, photoId);
-            var expectedOriginal = String.Format("/picture/user/{0}/{1}.jpg", userId, photoId);
+            var expectedVerySmall = String.Format("{0}/picture/user/{1}/{2}-vs.jpg", _baseBlobUrl, userId, photoId);
+            var expectedSmall = String.Format("{0}/picture/user/{1}/{2}-s.jpg", _baseBlobUrl, userId, photoId);
+            var expectedMedium = String.Format("{0}/picture/user/{1}/{2}-m.jpg", _baseBlobUrl, userId, photoId);
+            var expectedOriginal = String.Format("{0}/picture/user/{1}/{2}.jpg", _baseBlobUrl, userId, photoId);
 
             //Act
             var result = _sut.GeneratePhotoUrl(userId, photoId);
