@@ -6,11 +6,6 @@ namespace Zazz.Infrastructure
 {
     public static class DefaultImages
     {
-        public static string ExtractBaseUrl(Uri uri)
-        {
-            return uri.Scheme + "://" + uri.Authority;
-        }
-
         public static PhotoLinks GetUserDefaultImage(Gender gender, string baseAddress = "")
         {
             return new PhotoLinks(baseAddress + "/Images/placeholder.gif");

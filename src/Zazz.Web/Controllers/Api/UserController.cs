@@ -10,6 +10,7 @@ using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Filters;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -33,7 +34,7 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = ExtractUserIdFromHeader();
             var user = _userService.GetUser(userId, true, true, false, true);
-            var baseUrl = DefaultImages.ExtractBaseUrl(Request.RequestUri);
+            var baseUrl = Request.RequestUri.GetBaseAddress();
 
             var response = new ApiUser
                            {
