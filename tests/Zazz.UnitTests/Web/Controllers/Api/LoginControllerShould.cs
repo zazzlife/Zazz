@@ -131,7 +131,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _appRepo.Setup(x => x.GetById(_testApp.Id))
                     .Returns(_testApp);
-            _userService.Setup(x => x.GetUser(_username, true, true, false))
+            _userService.Setup(x => x.GetUser(_username, true, true, false, false))
                         .Returns(() => null);
 
             //Act
@@ -160,7 +160,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _appRepo.Setup(x => x.GetById(_testApp.Id))
                     .Returns(_testApp);
-            _userService.Setup(x => x.GetUser(_username, true, true, false))
+            _userService.Setup(x => x.GetUser(_username, true, true, false, false))
                         .Returns(() => user);
 
             //Act
@@ -197,7 +197,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _appRepo.Setup(x => x.GetById(_testApp.Id))
                     .Returns(_testApp);
-            _userService.Setup(x => x.GetUser(_username, true, true, false))
+            _userService.Setup(x => x.GetUser(_username, true, true, false, false))
                         .Returns(() => user);
 
             _userService.Setup(x => x.GetUserDisplayName(user.Id))

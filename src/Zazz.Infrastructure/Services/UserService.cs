@@ -39,9 +39,17 @@ namespace Zazz.Infrastructure.Services
         }
 
         public User GetUser(string username, bool includeDetails = false, bool includeClubDetails = false,
-                     bool includeWeeklies = false)
+                     bool includeWeeklies = false, bool includePreferences = false)
         {
-            return _uoW.UserRepository.GetByUsername(username, includeDetails, includeClubDetails, includeWeeklies);
+            return _uoW.UserRepository
+                .GetByUsername(username, includeDetails, includeClubDetails, includeWeeklies, includePreferences);
+        }
+
+        public User GetUser(int userId, bool includeDetails = false, bool includeClubDetails = false,
+            bool includeWeeklies = false, bool includePreferences = false)
+        {
+            return _uoW.UserRepository
+                .GetById(userId, includeDetails, includeClubDetails, includeWeeklies, includePreferences);
         }
 
         public byte[] GetUserPassword(int userId)

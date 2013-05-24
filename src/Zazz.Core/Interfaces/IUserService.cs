@@ -12,7 +12,10 @@ namespace Zazz.Core.Interfaces
         int GetUserId(string username);
 
         User GetUser(string username, bool includeDetails = false, bool includeClubDetails = false,
-                     bool includeWeeklies = false);
+                     bool includeWeeklies = false, bool includePreferences = false);
+
+        User GetUser(int userId, bool includeDetails = false, bool includeClubDetails = false,
+                     bool includeWeeklies = false, bool includePreferences = false);
 
         byte[] GetUserPassword(int userId);
 
