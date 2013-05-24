@@ -7,13 +7,14 @@ using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class UserController : BaseApiController
     {
         private readonly IUoW _uow;
@@ -66,7 +67,9 @@ namespace Zazz.Web.Controllers.Api
                                            CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
                                                ? _photoService
                                                .GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value)
-                                               : new PhotoLinks(DefaultImageHelper.GetDefaultCoverImage())
+                                               : new PhotoLinks(
+                                                   DefaultImages.GetDefaultCoverImage(
+                                                   DefaultImages.ExtractBaseUrl(Request.RequestUri)))
                                        };
 
                 response.Preferences.SyncFbImages = user.Preferences.SyncFbImages;

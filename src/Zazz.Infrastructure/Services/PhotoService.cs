@@ -344,7 +344,7 @@ namespace Zazz.Infrastructure.Services
             if (!photoId.HasValue)
             {
                 var gender = _uow.UserRepository.GetUserGender(userId);
-                img = DefaultImageHelper.GetUserDefaultImage(gender);
+                img = DefaultImages.GetUserDefaultImage(gender);
             }
             else
             {
@@ -352,7 +352,7 @@ namespace Zazz.Infrastructure.Services
                 if (photo == null)
                 {
                     var gender = _uow.UserRepository.GetUserGender(userId);
-                    img = DefaultImageHelper.GetUserDefaultImage(gender);
+                    img = DefaultImages.GetUserDefaultImage(gender);
                 }
                 else if (photo.IsFacebookPhoto)
                 {

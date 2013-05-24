@@ -96,7 +96,7 @@ namespace Zazz.Web.Controllers
                                                       ? String.Empty
                                                       : _userService.GetUserDisplayName(currentUserId),
                          CurrentUserPhoto = currentUserId == 0
-                                                ? DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
+                                                ? DefaultImages.GetUserDefaultImage(Gender.NotSpecified)
                                                 : _photoService.GetUserImageUrl(currentUserId)
                      };
 
@@ -124,7 +124,7 @@ namespace Zazz.Web.Controllers
 
                 var photo = a.Photos.FirstOrDefault(); //TODO: dont use this navigation property, it is getting all pictures.
                 if (photo == null)
-                    album.AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage();
+                    album.AlbumPicUrl = DefaultImages.GetDefaultAlbumImage();
                 else
                 {
                     album.AlbumPicUrl = photo.IsFacebookPhoto
@@ -151,7 +151,7 @@ namespace Zazz.Web.Controllers
                                                       ? String.Empty
                                                       : _userService.GetUserDisplayName(currentUserId),
                              CurrentUserPhoto = currentUserId == 0
-                                                    ? DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
+                                                    ? DefaultImages.GetUserDefaultImage(Gender.NotSpecified)
                                                     : _photoService.GetUserImageUrl(currentUserId)
                          };
 

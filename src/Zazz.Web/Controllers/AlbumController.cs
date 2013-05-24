@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers
                          {
                              AlbumId = album.Id,
                              AlbumName = value,
-                             AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
+                             AlbumPicUrl = DefaultImages.GetDefaultAlbumImage(),
                              IsFromCurrentUser = true,
                              UserId = userId
                          };

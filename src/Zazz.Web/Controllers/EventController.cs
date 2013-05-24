@@ -42,7 +42,7 @@ namespace Zazz.Web.Controllers
         public ActionResult List()
         {
             var userDisplayName = String.Empty;
-            var userPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+            var userPhoto = DefaultImages.GetUserDefaultImage(Gender.NotSpecified);
             if (Request.IsAuthenticated)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
@@ -166,14 +166,14 @@ namespace Zazz.Web.Controllers
 
                 if (!e.PhotoId.HasValue)
                 {
-                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
+                    e.ImageUrl = DefaultImages.GetDefaultEventImage();
                     continue;
                 }
 
                 var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
                 if (photo == null)
                 {
-                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
+                    e.ImageUrl = DefaultImages.GetDefaultEventImage();
                     continue;
                 }
 
@@ -202,7 +202,7 @@ namespace Zazz.Web.Controllers
                                           {
                                               Time = DateTime.UtcNow,
                                               UtcTime = DateTime.UtcNow.ToString("s"),
-                                              ImageUrl = DefaultImageHelper.GetDefaultAlbumImage()
+                                              ImageUrl = DefaultImages.GetDefaultAlbumImage()
                                           }
                      };
 
@@ -357,7 +357,7 @@ namespace Zazz.Web.Controllers
                          IsFacebookEvent = zazzEvent.IsFacebookEvent,
                          ImageUrl = zazzEvent.IsFacebookEvent
                                         ? new PhotoLinks(zazzEvent.FacebookPhotoLink)
-                                        : DefaultImageHelper.GetDefaultAlbumImage(),
+                                        : DefaultImages.GetDefaultAlbumImage(),
                          IsDateOnly = zazzEvent.IsDateOnly,
                          FacebookEventId = zazzEvent.FacebookEventId
                      };

@@ -991,7 +991,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             UserId = userId
                         };
 
-            var expected = DefaultImageHelper.GetUserDefaultImage(gender);
+            var expected = DefaultImages.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(() => null);
@@ -1034,7 +1034,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId
             };
 
-            var expected = DefaultImageHelper.GetUserDefaultImage(gender);
+            var expected = DefaultImages.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);

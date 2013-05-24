@@ -169,7 +169,7 @@ namespace Zazz.Web.Helpers
                 if (feedVm.EventViewModel.ImageUrl == null)
                 {
                     // this event doesn't have a picture
-                    feedVm.EventViewModel.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
+                    feedVm.EventViewModel.ImageUrl = DefaultImages.GetDefaultEventImage();
                 }
 
                 feedVm.CommentsViewModel.ItemId = feed.EventFeed.EventId;

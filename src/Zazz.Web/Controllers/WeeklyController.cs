@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Models;
 
@@ -43,7 +44,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? _photoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : DefaultImageHelper.GetDefaultWeeklyImage();
+                                : DefaultImages.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }
@@ -65,7 +66,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? _photoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : DefaultImageHelper.GetDefaultWeeklyImage();
+                                : DefaultImages.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }

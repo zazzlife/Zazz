@@ -57,10 +57,10 @@
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
     <Compile Include="CircularBufferCache.cs" />
+    <Compile Include="DefaultImages.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FakeEMailService.cs" />
     <Compile Include="Helpers\DateTimeHelpers.cs" />
-    <Compile Include="Helpers\DefaultImageHelper.cs" />
     <Compile Include="Helpers\FacebookHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Logger.cs" />

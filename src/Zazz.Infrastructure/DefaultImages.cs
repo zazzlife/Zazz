@@ -2,9 +2,9 @@ using System;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 
-namespace Zazz.Infrastructure.Helpers
+namespace Zazz.Infrastructure
 {
-    public static class DefaultImageHelper
+    public static class DefaultImages
     {
         public static string ExtractBaseUrl(Uri uri)
         {

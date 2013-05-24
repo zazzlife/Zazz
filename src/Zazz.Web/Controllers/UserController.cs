@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers
             var user = _uow.UserRepository.GetById(id, true, true, true);
 
             var currentUserId = 0;
-            var currentUserPhoto = DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+            var currentUserPhoto = DefaultImages.GetUserDefaultImage(Gender.NotSpecified);
             var currentUserDisplayName = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
@@ -87,7 +87,7 @@ namespace Zazz.Web.Controllers
                          ClubType = user.ClubDetail.ClubType.Name,
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                          ? _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
-                         : DefaultImageHelper.GetDefaultCoverImage(),
+                         : DefaultImages.GetDefaultCoverImage(),
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
@@ -104,7 +104,7 @@ namespace Zazz.Web.Controllers
                              CurrentUserId = currentUserId,
                              PhotoLinks = w.PhotoId.HasValue
                              ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
-                             : DefaultImageHelper.GetDefaultWeeklyImage()
+                             : DefaultImages.GetDefaultWeeklyImage()
                          }),
                          PartyAlbums = _uow.AlbumRepository.GetLatestAlbums(user.Id)
                            .Select(a => new PartyAlbumViewModel
@@ -335,7 +335,7 @@ namespace Zazz.Web.Controllers
         public string GetCurrentUserImageUrl()
         {
             if (!User.Identity.IsAuthenticated)
-                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
+                return DefaultImages.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
             var userId = _userService.GetUserId(User.Identity.Name);
             return _photoService.GetUserImageUrl(userId).SmallLink;
