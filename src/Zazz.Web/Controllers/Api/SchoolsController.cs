@@ -15,13 +15,13 @@ namespace Zazz.Web.Controllers.Api
             _staticDataRepository = staticDataRepository;
         }
 
-        // GET api/v1/cities
+        // GET api/v1/schools
         public IEnumerable<School> Get()
         {
             return _staticDataRepository.GetSchools();
         }
 
-        // GET api/v1/cities/5
+        // GET api/v1/schools/5
         public School Get(int id)
         {
             return _staticDataRepository.GetSchools()
