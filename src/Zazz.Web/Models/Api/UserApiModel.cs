@@ -28,6 +28,8 @@ namespace Zazz.Web.Models.Api
         public IEnumerable<FeedApiResponse> Feeds { get; set; }
 
         public IEnumerable<PhotoApiModel> Photos { get; set; }
+
+        public ApiUserPreferences Preferences { get; set; }
     }
 
     public class ApiUserDetails
@@ -52,5 +54,16 @@ namespace Zazz.Web.Models.Api
         public string ClubName { get; set; }
 
         public PhotoLinks CoverPhoto { get; set; }
+    }
+
+    public class ApiUserPreferences
+    {
+        public bool SyncFbEvents { get; set; }
+
+        public bool SyncFbPosts { get; set; }
+
+        public bool SyncFbImages { get; set; }
+
+        public bool SendSyncErrorNotifications { get; set; } 
     }
 }
