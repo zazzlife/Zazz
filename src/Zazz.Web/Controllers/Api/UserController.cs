@@ -53,17 +53,25 @@ namespace Zazz.Web.Controllers.Api
 
             if (user.AccountType == AccountType.User)
             {
+                response.ProfilePhoto = user.ProfilePhotoId.HasValue
+                                            ? _photoService.GeneratePhotoUrl(user.Id, user.ProfilePhotoId.Value)
+                                            : _defaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender);
+
                 response.UserDetails = new ApiUserDetails
                                        {
                                            City = user.UserDetail.City,
                                            FullName = user.UserDetail.FullName,
                                            Gender = user.UserDetail.Gender,
                                            Major = user.UserDetail.Major,
-                                           School = user.UserDetail.School
+                                           School = user.UserDetail.School,
                                        };
             }
             else
             {
+                response.ProfilePhoto = user.ProfilePhotoId.HasValue
+                                            ? _photoService.GeneratePhotoUrl(user.Id, user.ProfilePhotoId.Value)
+                                            : _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+
                 response.ClubDetails = new ApiClubDetails
                                        {
                                            Address = user.ClubDetail.Address,
