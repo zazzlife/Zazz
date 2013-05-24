@@ -18,12 +18,15 @@ namespace Zazz.Web.Controllers
         private readonly IWeeklyService _weeklyService;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
-        public WeeklyController(IWeeklyService weeklyService, IUserService userService, IPhotoService photoService)
+        public WeeklyController(IWeeklyService weeklyService, IUserService userService,
+            IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
         {
             _weeklyService = weeklyService;
             _userService = userService;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult New(WeeklyViewModel vm)
@@ -44,7 +47,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? _photoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : DefaultImages.GetDefaultWeeklyImage();
+                                : _defaultImageHelper.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }
@@ -66,7 +69,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? _photoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : DefaultImages.GetDefaultWeeklyImage();
+                                : _defaultImageHelper.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }

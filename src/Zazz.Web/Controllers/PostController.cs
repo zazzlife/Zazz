@@ -18,21 +18,23 @@ namespace Zazz.Web.Controllers
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IUoW _uow;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public PostController(IPostService postService, IUserService userService,
-            IPhotoService photoService, IUoW uow)
+            IPhotoService photoService, IUoW uow, IDefaultImageHelper defaultImageHelper)
         {
             _postService = postService;
             _userService = userService;
             _photoService = photoService;
             _uow = uow;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize]
         public ActionResult Show(int id)
         {
             var currentUserId = _userService.GetUserId(User.Identity.Name);
-            var feed = new FeedHelper(_uow, _userService, _photoService)
+            var feed = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
                 .GetSinglePostFeed(id, currentUserId);
 
             if (feed == null)

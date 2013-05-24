@@ -23,12 +23,15 @@ namespace Zazz.Web.Controllers
         private readonly IPhotoService _photoService;
         private readonly IAlbumService _albumService;
         private readonly IUserService _userService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
-        public PhotoController(IPhotoService photoService, IAlbumService albumService, IUserService userService)
+        public PhotoController(IPhotoService photoService, IAlbumService albumService,
+            IUserService userService, IDefaultImageHelper defaultImageHelper)
         {
             _photoService = photoService;
             _albumService = albumService;
             _userService = userService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize]
@@ -96,7 +99,7 @@ namespace Zazz.Web.Controllers
                                                       ? String.Empty
                                                       : _userService.GetUserDisplayName(currentUserId),
                          CurrentUserPhoto = currentUserId == 0
-                                                ? DefaultImages.GetUserDefaultImage(Gender.NotSpecified)
+                                                ? _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
                                                 : _photoService.GetUserImageUrl(currentUserId)
                      };
 
@@ -124,7 +127,7 @@ namespace Zazz.Web.Controllers
 
                 var photo = a.Photos.FirstOrDefault(); //TODO: dont use this navigation property, it is getting all pictures.
                 if (photo == null)
-                    album.AlbumPicUrl = DefaultImages.GetDefaultAlbumImage();
+                    album.AlbumPicUrl = _defaultImageHelper.GetDefaultAlbumImage();
                 else
                 {
                     album.AlbumPicUrl = photo.IsFacebookPhoto
@@ -151,7 +154,7 @@ namespace Zazz.Web.Controllers
                                                       ? String.Empty
                                                       : _userService.GetUserDisplayName(currentUserId),
                              CurrentUserPhoto = currentUserId == 0
-                                                    ? DefaultImages.GetUserDefaultImage(Gender.NotSpecified)
+                                                    ? _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
                                                     : _photoService.GetUserImageUrl(currentUserId)
                          };
 

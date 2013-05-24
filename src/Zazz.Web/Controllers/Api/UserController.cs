@@ -21,12 +21,15 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUoW _uow;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
-        public UserController(IUoW uow, IUserService userService, IPhotoService photoService)
+        public UserController(IUoW uow, IUserService userService, IPhotoService photoService,
+            IDefaultImageHelper defaultImageHelper)
         {
             _uow = uow;
             _userService = userService;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         // GET /api/v1/user
@@ -34,7 +37,6 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = ExtractUserIdFromHeader();
             var user = _userService.GetUser(userId, true, true, false, true);
-            var baseUrl = Request.RequestUri.GetBaseAddress();
 
             var response = new ApiUser
                            {
@@ -71,7 +73,7 @@ namespace Zazz.Web.Controllers.Api
                                            CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
                                                ? _photoService
                                                  .GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value)
-                                               : new PhotoLinks(DefaultImages.GetDefaultCoverImage(baseUrl))
+                                               : _defaultImageHelper.GetDefaultCoverImage()
                                        };
 
                 response.Preferences.SyncFbImages = user.Preferences.SyncFbImages;

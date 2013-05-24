@@ -28,6 +28,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
         private string _baseBlobUrl;
+        private DefaultImageHelper _defaultImageHelperHelper;
 
         [SetUp]
         public void Init()
@@ -39,8 +40,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _stringHelper = new Mock<IStringHelper>();
             _staticDataRepo = new Mock<IStaticDataRepository>();
             _baseBlobUrl = "http://localhost:17433";
+            _defaultImageHelperHelper = new DefaultImageHelper("");
             _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object, _stringHelper.Object,
-                                    _staticDataRepo.Object, _tempRootPath, _baseBlobUrl);
+                                    _staticDataRepo.Object, _defaultImageHelperHelper,  _tempRootPath, _baseBlobUrl);
             _uow.Setup(x => x.SaveChanges());
         }
 
@@ -992,7 +994,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             UserId = userId
                         };
 
-            var expected = DefaultImages.GetUserDefaultImage(gender);
+            var expected = _defaultImageHelperHelper.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(() => null);
@@ -1035,7 +1037,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId
             };
 
-            var expected = DefaultImages.GetUserDefaultImage(gender);
+            var expected = _defaultImageHelperHelper.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);

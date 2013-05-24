@@ -16,13 +16,16 @@ namespace Zazz.Web.Helpers
         private readonly IUoW _uow;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
         public int PageSize { get; set; }
 
-        public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService)
+        public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService,
+            IDefaultImageHelper defaultImageHelper)
         {
             _uow = uow;
             _userService = userService;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
             PageSize = 10;
         }
 
@@ -169,7 +172,7 @@ namespace Zazz.Web.Helpers
                 if (feedVm.EventViewModel.ImageUrl == null)
                 {
                     // this event doesn't have a picture
-                    feedVm.EventViewModel.ImageUrl = DefaultImages.GetDefaultEventImage();
+                    feedVm.EventViewModel.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
                 }
 
                 feedVm.CommentsViewModel.ItemId = feed.EventFeed.EventId;

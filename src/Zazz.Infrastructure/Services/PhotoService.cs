@@ -24,13 +24,14 @@ namespace Zazz.Infrastructure.Services
         private readonly ICacheService _cacheService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
         private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
         private const string SMALL_IMAGE_SUFFIX = "s";
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
         public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, string rootPath,
+            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, IDefaultImageHelper defaultImageHelper, string rootPath,
             string baseBlobUrl)
         {
             _uow = uow;
@@ -40,6 +41,7 @@ namespace Zazz.Infrastructure.Services
             _cacheService = cacheService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         public IQueryable<Photo> GetAll()
@@ -347,7 +349,7 @@ namespace Zazz.Infrastructure.Services
             if (!photoId.HasValue)
             {
                 var gender = _uow.UserRepository.GetUserGender(userId);
-                img = DefaultImages.GetUserDefaultImage(gender);
+                img = _defaultImageHelper.GetUserDefaultImage(gender);
             }
             else
             {
@@ -355,7 +357,7 @@ namespace Zazz.Infrastructure.Services
                 if (photo == null)
                 {
                     var gender = _uow.UserRepository.GetUserGender(userId);
-                    img = DefaultImages.GetUserDefaultImage(gender);
+                    img = _defaultImageHelper.GetUserDefaultImage(gender);
                 }
                 else if (photo.IsFacebookPhoto)
                 {

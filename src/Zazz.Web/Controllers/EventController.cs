@@ -23,15 +23,18 @@ namespace Zazz.Web.Controllers
         private readonly IEventService _eventService;
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
         private const int PAGE_SIZE = 10;
 
-        public EventController(IUserService userService, IEventService eventService, IUoW uow, IPhotoService photoService)
+        public EventController(IUserService userService, IEventService eventService,
+            IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
         {
             _userService = userService;
             _eventService = eventService;
             _uow = uow;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult Index()
@@ -42,7 +45,7 @@ namespace Zazz.Web.Controllers
         public ActionResult List()
         {
             var userDisplayName = String.Empty;
-            var userPhoto = DefaultImages.GetUserDefaultImage(Gender.NotSpecified);
+            var userPhoto = _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
             if (Request.IsAuthenticated)
             {
                 var userId = _userService.GetUserId(User.Identity.Name);
@@ -166,14 +169,14 @@ namespace Zazz.Web.Controllers
 
                 if (!e.PhotoId.HasValue)
                 {
-                    e.ImageUrl = DefaultImages.GetDefaultEventImage();
+                    e.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
                     continue;
                 }
 
                 var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
                 if (photo == null)
                 {
-                    e.ImageUrl = DefaultImages.GetDefaultEventImage();
+                    e.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
                     continue;
                 }
 
@@ -202,7 +205,7 @@ namespace Zazz.Web.Controllers
                                           {
                                               Time = DateTime.UtcNow,
                                               UtcTime = DateTime.UtcNow.ToString("s"),
-                                              ImageUrl = DefaultImages.GetDefaultAlbumImage()
+                                              ImageUrl = _defaultImageHelper.GetDefaultAlbumImage()
                                           }
                      };
 
@@ -357,7 +360,7 @@ namespace Zazz.Web.Controllers
                          IsFacebookEvent = zazzEvent.IsFacebookEvent,
                          ImageUrl = zazzEvent.IsFacebookEvent
                                         ? new PhotoLinks(zazzEvent.FacebookPhotoLink)
-                                        : DefaultImages.GetDefaultAlbumImage(),
+                                        : _defaultImageHelper.GetDefaultAlbumImage(),
                          IsDateOnly = zazzEvent.IsDateOnly,
                          FacebookEventId = zazzEvent.FacebookEventId
                      };

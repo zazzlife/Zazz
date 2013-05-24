@@ -51,6 +51,10 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ICryptoService>().Singleton().Use<CryptoService>();
                             x.For<IApiAppRepository>().Singleton().Use<InMemoryApiAppRepository>();
 
+                            x.For<IDefaultImageHelper>()
+                             .Singleton().Use<DefaultImageHelper>()
+                             .Ctor<string>("baseAddress").Is(websiteAddress);
+
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
 
                             // Services
@@ -75,9 +79,6 @@ namespace Zazz.Web.DependencyResolution
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
                             x.For<IFacebookHelper>().Use<FacebookHelper>();
-
-                            x.For<IDefaultImageHelper>().Use<DefaultImages>()
-                             .Ctor<string>("baseAddress").Is(websiteAddress);
 
                             x.For<ILogger>().Use<Logger>();
 

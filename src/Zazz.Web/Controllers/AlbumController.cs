@@ -18,12 +18,15 @@ namespace Zazz.Web.Controllers
         private readonly IAlbumService _albumService;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
-        public AlbumController(IAlbumService albumService, IUserService userService, IPhotoService photoService)
+        public AlbumController(IAlbumService albumService, IUserService userService,
+            IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
         {
             _albumService = albumService;
             _userService = userService;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize, HttpPost]
@@ -49,7 +52,7 @@ namespace Zazz.Web.Controllers
                          {
                              AlbumId = album.Id,
                              AlbumName = value,
-                             AlbumPicUrl = DefaultImages.GetDefaultAlbumImage(),
+                             AlbumPicUrl = _defaultImageHelper.GetDefaultAlbumImage(),
                              IsFromCurrentUser = true,
                              UserId = userId
                          };

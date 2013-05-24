@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="ApiKeys.cs" />
     <Compile Include="CircularBufferCache.cs" />
-    <Compile Include="DefaultImages.cs" />
+    <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FakeEMailService.cs" />
     <Compile Include="Helpers\DateTimeHelpers.cs" />

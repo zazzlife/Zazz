@@ -24,9 +24,11 @@ namespace Zazz.Web.Controllers
         private readonly IUserService _userService;
         private readonly ICacheService _cacheService;
         private readonly ITagService _tagService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
-            IUserService userService, ICacheService cacheService, ITagService tagService)
+            IUserService userService, ICacheService cacheService, ITagService tagService,
+            IDefaultImageHelper defaultImageHelper)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
@@ -34,6 +36,7 @@ namespace Zazz.Web.Controllers
             _userService = userService;
             _cacheService = cacheService;
             _tagService = tagService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize]
@@ -49,7 +52,7 @@ namespace Zazz.Web.Controllers
             var user = _uow.UserRepository.GetById(id, true, true, true);
 
             var currentUserId = 0;
-            var currentUserPhoto = DefaultImages.GetUserDefaultImage(Gender.NotSpecified);
+            var currentUserPhoto = _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
             var currentUserDisplayName = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
@@ -87,12 +90,13 @@ namespace Zazz.Web.Controllers
                          ClubType = user.ClubDetail.ClubType.Name,
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                          ? _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
-                         : DefaultImages.GetDefaultCoverImage(),
+                         : _defaultImageHelper.GetDefaultCoverImage().OriginalLink,
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
-                         Feeds = new FeedHelper(_uow, _userService, _photoService).GetUserActivityFeed(user.Id, currentUserId),
+                         Feeds = new FeedHelper(_uow, _userService, _photoService,
+                             _defaultImageHelper).GetUserActivityFeed(user.Id, currentUserId),
                          Weeklies = weeklies.Select(w => new WeeklyViewModel
                          {
                              DayOfTheWeek = w.DayOfTheWeek,
@@ -104,7 +108,7 @@ namespace Zazz.Web.Controllers
                              CurrentUserId = currentUserId,
                              PhotoLinks = w.PhotoId.HasValue
                              ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
-                             : DefaultImages.GetDefaultWeeklyImage()
+                             : _defaultImageHelper.GetDefaultWeeklyImage()
                          }),
                          PartyAlbums = _uow.AlbumRepository.GetLatestAlbums(user.Id)
                            .Select(a => new PartyAlbumViewModel
@@ -148,7 +152,8 @@ namespace Zazz.Web.Controllers
                          CurrentUserPhoto = currentUserPhoto,
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
-                         Feeds = new FeedHelper(_uow, _userService, _photoService).GetUserActivityFeed(user.Id, 
+                         Feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
+                         .GetUserActivityFeed(user.Id, 
                          currentUserId),
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          Photos = photos.Select(p => new PhotoViewModel
@@ -196,7 +201,7 @@ namespace Zazz.Web.Controllers
                 currentUserId = _userService.GetUserId(User.Identity.Name);
 
             var user = _userService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, _userService, _photoService)
+            var feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
                                   .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
             return View("_FeedsPartial", feeds);
@@ -335,7 +340,7 @@ namespace Zazz.Web.Controllers
         public string GetCurrentUserImageUrl()
         {
             if (!User.Identity.IsAuthenticated)
-                return DefaultImages.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
+                return _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
             var userId = _userService.GetUserId(User.Identity.Name);
             return _photoService.GetUserImageUrl(userId).SmallLink;

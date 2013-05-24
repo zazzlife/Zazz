@@ -20,19 +20,22 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUoW _uow;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
-        public FeedsController(IUoW uow, IUserService userService, IPhotoService photoService)
+        public FeedsController(IUoW uow, IUserService userService, IPhotoService photoService,
+            IDefaultImageHelper defaultImageHelper)
         {
             _uow = uow;
             _userService = userService;
             _photoService = photoService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         // GET api/v1/feeds
         public IEnumerable<FeedApiResponse> GetHomeFeeds()
         {
             var userId = ExtractUserIdFromHeader();
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetFeeds(userId);
 
             return feeds.Select(FeedViewModelToApiModel);
@@ -42,7 +45,7 @@ namespace Zazz.Web.Controllers.Api
         public IEnumerable<object> GetHomeFeeds(int lastFeed)
         {
             var userId = ExtractUserIdFromHeader();
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetFeeds(userId, lastFeed);
 
             return feeds.Select(FeedViewModelToApiModel);
@@ -52,7 +55,7 @@ namespace Zazz.Web.Controllers.Api
         public IEnumerable<object> GetUserFeeds(int id)
         {
             var userId = ExtractUserIdFromHeader();
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetUserActivityFeed(id, userId);
 
             return feeds.Select(FeedViewModelToApiModel);
@@ -62,7 +65,7 @@ namespace Zazz.Web.Controllers.Api
         public IEnumerable<object> GetUserFeeds(int id, int lastFeed)
         {
             var userId = ExtractUserIdFromHeader();
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetUserActivityFeed(id, userId, lastFeed);
 
             return feeds.Select(FeedViewModelToApiModel);

@@ -20,14 +20,16 @@ namespace Zazz.Web.Controllers
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
         private readonly ICommentService _commentService;
+        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public CommentController(IUoW uow, IPhotoService photoService, IUserService userService,
-            ICommentService commentService)
+            ICommentService commentService, IDefaultImageHelper defaultImageHelper)
         {
             _uow = uow;
             _photoService = photoService;
             _userService = userService;
             _commentService = commentService;
+            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult Get(int id, CommentType commentType, int lastComment)
@@ -42,7 +44,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
                 userId = _userService.GetUserId(User.Identity.Name);
 
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
             return View("FeedItems/_CommentList", comments);
@@ -55,7 +57,7 @@ namespace Zazz.Web.Controllers
                 throw new ArgumentException("Id cannot be 0", "id");
 
             var currentUserId = _userService.GetUserId(User.Identity.Name);
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService);
+            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
 
             var vm = new CommentsViewModel
                      {
