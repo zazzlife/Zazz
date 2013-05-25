@@ -218,6 +218,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\Api\AlbumController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
     <Compile Include="Controllers\Api\ClubTypesController.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ImageValidator.cs" />
+    <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\CommentApiModel.cs" />
     <Compile Include="Models\Api\EventApiModel.cs" />
     <Compile Include="Models\Api\Feed.cs" />
