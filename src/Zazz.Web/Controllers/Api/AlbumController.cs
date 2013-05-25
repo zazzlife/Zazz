@@ -117,9 +117,20 @@ namespace Zazz.Web.Controllers.Api
             }
         }
 
-        // DELETE api/album/5
+        // DELETE api/v1/album/5
         public void Delete(int id)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                _albumService.DeleteAlbum(id, ExtractUserIdFromHeader());
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }
