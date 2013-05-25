@@ -87,7 +87,10 @@ namespace Zazz.Web.Controllers.Api
                     };
 
             _albumService.CreateAlbum(a);
+            
             album.Id = a.Id;
+            album.CreatedDate = a.CreatedDate;
+            album.Thumbnail = _defaultImageHelper.GetDefaultAlbumImage();
 
             return album;
         }
