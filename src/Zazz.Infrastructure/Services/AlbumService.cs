@@ -70,19 +70,18 @@ namespace Zazz.Infrastructure.Services
 
         public void DeleteAlbum(int albumId, int currentUserId)
         {
-            if (albumId == 0)
-                throw new ArgumentException("Album Id cannot be 0", "albumId");
+            var album = _uow.AlbumRepository.GetById(albumId, true);
 
-            var ownerId = _uow.AlbumRepository.GetOwnerId(albumId);
-            if (ownerId != currentUserId)
+            if (album == null)
+                throw new NotFoundException();
+
+            if (album.UserId != currentUserId)
                 throw new SecurityException();
 
-            var photosIds = _uow.AlbumRepository.GetAlbumPhotoIds(albumId).ToList();
+            foreach (var p in album.Photos)
+                _photoService.RemovePhoto(p.Id, currentUserId);
 
-            foreach (var photoId in photosIds)
-                _photoService.RemovePhoto(photoId, currentUserId);
-
-            _uow.AlbumRepository.Remove(albumId);
+            _uow.AlbumRepository.Remove(album);
             _uow.SaveChanges();
         }
     }

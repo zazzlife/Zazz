@@ -20,12 +20,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userId;
         private Mock<IPhotoService> _photoService;
         private int _photoId;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _uow = new Mock<IUoW>();
-            _photoService = new Mock<IPhotoService>();
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+            _uow = _mockRepo.Create<IUoW>();
+            _photoService = _mockRepo.Create<IPhotoService>();
             _sut = new AlbumService(_uow.Object, _photoService.Object);
             _album = new Album
                      {
@@ -34,8 +36,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _userId = 12;
             _photoId = 1;
-
-            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
@@ -43,13 +43,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _uow.Setup(x => x.AlbumRepository.InsertGraph(_album));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateAlbum(_album);
 
             //Assert
-            _uow.Verify(x => x.AlbumRepository.InsertGraph(_album), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -64,8 +64,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.Throws<NotFoundException>(() => _sut.UpdateAlbum(albumId, "new name", _userId));
 
             //Assert
-            _uow.Verify(x => x.AlbumRepository.GetById(albumId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -79,8 +78,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<SecurityException>(() => _sut.UpdateAlbum(_album.Id, "new name", _userId));
-            _uow.Verify(x => x.AlbumRepository.GetById(_album.Id), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -91,6 +89,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _album.UserId = _userId;
             _uow.Setup(x => x.AlbumRepository.GetById(_album.Id))
                 .Returns(_album);
+            _uow.Setup(x => x.SaveChanges());
+
             var newName = "new name";
 
             //Act
@@ -98,68 +98,64 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newName, _album.Name);
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+
+            _mockRepo.VerifyAll();
+
         }
 
         [Test]
-        public void ThrowIfAlbumIdIs0_OnDeleteAlbum()
+        public void ThrowNotFoundIfAlbumNotFOund_OnDeleteAlbum()
         {
             //Arrange
+            var albumId = 22;
+            _uow.Setup(x => x.AlbumRepository.GetById(albumId, true))
+                .Returns(() => null);
+
             //Act
-            try
-            {
-                _sut.DeleteAlbum(0, _userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (ArgumentException)
-            {
-            }
+            Assert.Throws<NotFoundException>(() => _sut.DeleteAlbum(albumId, _userId));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void CheckForOwnerIdAndThrowIfDoesntMatch_OnDeleteAlbum()
+        public void ThrowIfTheCurrentUserIsNotOwner_OnDeleteAlbum()
         {
             //Arrange
             _album.Id = 123;
             _album.UserId = 400;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
-                .Returns(_album.UserId);
+            _uow.Setup(x => x.AlbumRepository.GetById(_album.Id, true))
+                .Returns(_album);
 
             //Act & Assert
-            try
-            {
-                _sut.DeleteAlbum(_album.Id, _userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
-            _uow.Verify(x => x.AlbumRepository.GetOwnerId(_album.Id), Times.Once());
+            Assert.Throws<SecurityException>(() => _sut.DeleteAlbum(_album.Id, _userId));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
         public void DeleteAndSave_OnDeleteAlbum()
         {
             //Arrange
-            var photoIds = new[] {1, 2, 3, 4};
-            
+            var photoIds = new[] { 1, 2, 3, 4 };
+
+            foreach (var id in photoIds)
+            {
+                _album.Photos.Add(new Photo { Id = id });
+            }
+
             _album.Id = 123;
             _album.UserId = _userId;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
-                .Returns(_userId);
-            _uow.Setup(x => x.AlbumRepository.Remove(_album.Id));
-            _uow.Setup(x => x.AlbumRepository.GetAlbumPhotoIds(_album.Id))
-                .Returns(photoIds);
+            _uow.Setup(x => x.AlbumRepository.GetById(_album.Id, true))
+                .Returns(_album);
+            _uow.Setup(x => x.AlbumRepository.Remove(_album));
             _photoService.Setup(x => x.RemovePhoto(It.IsInRange(1, 4, Range.Inclusive), _userId));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.DeleteAlbum(_album.Id, _userId);
 
             //Assert
-            _uow.Verify(x => x.AlbumRepository.Remove(_album.Id), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _photoService.Verify(x => x.RemovePhoto(It.IsInRange(1, 4, Range.Inclusive), _userId),
-                                 Times.Exactly(photoIds.Length));
+            _mockRepo.VerifyAll();
         }
     }
 }
