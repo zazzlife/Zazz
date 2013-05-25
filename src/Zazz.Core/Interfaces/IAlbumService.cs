@@ -7,7 +7,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumService
     {
-        Album GetAlbum(int albumId);
+        Album GetAlbum(int albumId, bool includePhotos = false);
 
         List<Album> GetUserAlbums(int userId, int skip, int take);
 

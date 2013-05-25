@@ -19,6 +19,16 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You should always provide the id for updating the album, if it's new then use insert graph.");
         }
 
+        public Album GetById(int id, bool includePhotos)
+        {
+            var query = DbSet.AsQueryable();
+
+            if (includePhotos)
+                query = query.Include(a => a.Photos);
+
+            return query.SingleOrDefault(a => a.Id == id);
+        }
+
         public IEnumerable<Album> GetLatestAlbums(int userId, int albumsCount = 3, int photosCount = 13)
         {
             var query = (from album in DbSet

@@ -19,7 +19,7 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
-        public Album GetAlbum(int albumId)
+        public Album GetAlbum(int albumId, bool includePhotos)
         {
             return _uow.AlbumRepository.GetById(albumId);
         }

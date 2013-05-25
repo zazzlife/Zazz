@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IAlbumRepository : IRepository<Album>
     {
+        Album GetById(int id, bool includePhotos);
+
         IEnumerable<Album> GetLatestAlbums(int userId, int albumsCount = 3, int photosCount = 13);
 
         int GetOwnerId(int albumId);
