@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Models;
+﻿using System;
+using Zazz.Core.Models;
 
 namespace Zazz.Web.Models.Api
 {
@@ -10,9 +11,9 @@ namespace Zazz.Web.Models.Api
 
         public string Description { get; set; }
 
-        public string Time { get; set; }
+        public DateTimeOffset Time { get; set; }
 
-        public string UtcTime { get; set; }
+        public DateTime UtcTime { get; set; }
 
         public string Location { get; set; }
 
@@ -22,7 +23,7 @@ namespace Zazz.Web.Models.Api
 
         public float? Price { get; set; }
 
-        public string CreatedDate { get; set; }
+        public DateTime CreatedTime { get; set; }
 
         public bool IsFacebookEvent { get; set; }
 

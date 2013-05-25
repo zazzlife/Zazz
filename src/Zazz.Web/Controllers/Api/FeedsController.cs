@@ -121,27 +121,27 @@ namespace Zazz.Web.Controllers.Api
                        ? new EventApiModel
                          {
                              City = feed.EventViewModel.City,
-                             CreatedDate = feed.EventViewModel.CreatedDate.HasValue 
-                                ? feed.EventViewModel.CreatedDate.Value.ToString("s")
-                                : null,
-                            Description = feed.EventViewModel.Description,
-                            EventId = feed.EventViewModel.Id,
-                            FacebookLink = feed.EventViewModel.FacebookEventId.HasValue
-                                ? "https://www.facebook.com/events/" + feed.EventViewModel.FacebookEventId.Value
-                                :  null,
-                            ImageUrl = feed.EventViewModel.ImageUrl,
-                            IsDateOnly = feed.EventViewModel.IsDateOnly,
-                            IsFacebookEvent = feed.EventViewModel.IsFacebookEvent,
-                            IsFromCurrentUser = feed.EventViewModel.IsOwner,
-                            Latitude = feed.EventViewModel.Latitude,
-                            Longitude = feed.EventViewModel.Longitude,
-                            Location = feed.EventViewModel.Location,
-                            Name = feed.EventViewModel.Name,
-                            Price = feed.EventViewModel.Price,
-                            Street = feed.EventViewModel.Street,
-                            Time = feed.EventViewModel.Time.ToString("s"),
-                            UtcTime = feed.EventViewModel.Time.ToUniversalTime().ToString("s")
-                         } 
+                             CreatedTime = feed.EventViewModel.CreatedDate.HasValue
+                             ? feed.EventViewModel.CreatedDate.Value
+                             : DateTime.MinValue,
+                             Description = feed.EventViewModel.Description,
+                             EventId = feed.EventViewModel.Id,
+                             FacebookLink = feed.EventViewModel.FacebookEventId.HasValue
+                                 ? "https://www.facebook.com/events/" + feed.EventViewModel.FacebookEventId.Value
+                                 : null,
+                             ImageUrl = feed.EventViewModel.ImageUrl,
+                             IsDateOnly = feed.EventViewModel.IsDateOnly,
+                             IsFacebookEvent = feed.EventViewModel.IsFacebookEvent,
+                             IsFromCurrentUser = feed.EventViewModel.IsOwner,
+                             Latitude = feed.EventViewModel.Latitude,
+                             Longitude = feed.EventViewModel.Longitude,
+                             Location = feed.EventViewModel.Location,
+                             Name = feed.EventViewModel.Name,
+                             Price = feed.EventViewModel.Price,
+                             Street = feed.EventViewModel.Street,
+                             Time = feed.EventViewModel.Time,
+                             UtcTime = feed.EventViewModel.Time.ToUniversalTime().DateTime
+                         }
                        : null
                    };
         }
