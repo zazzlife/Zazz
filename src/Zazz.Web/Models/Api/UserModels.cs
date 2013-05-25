@@ -44,9 +44,9 @@ namespace Zazz.Web.Models.Api
 
         public bool FollowRequestAlreadySent { get; set; }
 
-        public IEnumerable<FeedApiResponse> Feeds { get; set; }
+        public IEnumerable<ApiFeed> Feeds { get; set; }
 
-        public IEnumerable<PhotoApiModel> Photos { get; set; }
+        public IEnumerable<ApiPhoto> Photos { get; set; }
 
         public ApiUserDetails UserDetails { get; set; }
 

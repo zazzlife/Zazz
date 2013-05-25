@@ -3,7 +3,7 @@ using Zazz.Core.Models;
 
 namespace Zazz.Web.Models.Api
 {
-    public class EventApiModel
+    public class ApiEvent
     {
         public int EventId { get; set; }
 

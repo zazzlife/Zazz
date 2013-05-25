@@ -3,7 +3,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models.Api
 {
-    public class LoginApiRequest
+    public class ApiLoginRequest
     {
         public string Username { get; set; }
 
@@ -12,7 +12,7 @@ namespace Zazz.Web.Models.Api
         public int AppId { get; set; }
     }
 
-    public class LoginApiResponse
+    public class ApiLoginResponse
     {
         public int Id { get; set; }
 

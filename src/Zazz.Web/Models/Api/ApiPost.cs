@@ -2,7 +2,7 @@
 
 namespace Zazz.Web.Models.Api
 {
-    public class PostApiModel
+    public class ApiPost
     {
         public int PostId { get; set; }
 

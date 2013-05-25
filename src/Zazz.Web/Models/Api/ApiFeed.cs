@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models.Api
 {
-    public class FeedApiResponse
+    public class ApiFeed
     {
         public int UserId { get; set; }
 
@@ -19,12 +19,12 @@ namespace Zazz.Web.Models.Api
 
         public DateTime Time { get; set; }
 
-        public IEnumerable<PhotoApiModel> Photos { get; set; }
+        public IEnumerable<ApiPhoto> Photos { get; set; }
 
-        public PostApiModel Post { get; set; }
+        public ApiPost Post { get; set; }
 
-        public EventApiModel Event { get; set; }
+        public ApiEvent ApiEvent { get; set; }
 
-        public IEnumerable<CommentApiModel> Comments { get; set; }
+        public IEnumerable<ApiComment> Comments { get; set; }
     }
 }

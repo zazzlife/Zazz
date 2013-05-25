@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
 
         // POST api/v1/login
         [HMACAuthorize(IgnoreUserIdAndPassword = true)]
-        public LoginApiResponse Post(LoginApiRequest request)
+        public ApiLoginResponse Post(ApiLoginRequest request)
         {
             var user = _userService.GetUser(request.Username, true, true);
             if (user == null)
@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers.Api
             if (request.Password != hashCheck)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
-            var response = new LoginApiResponse
+            var response = new ApiLoginResponse
                            {
                                Id = user.Id,
                                AccountType = user.AccountType,

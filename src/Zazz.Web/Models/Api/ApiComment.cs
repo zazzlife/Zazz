@@ -3,7 +3,7 @@ using Zazz.Core.Models;
 
 namespace Zazz.Web.Models.Api
 {
-    public class CommentApiModel
+    public class ApiComment
     {
         public int CommentId { get; set; }
 

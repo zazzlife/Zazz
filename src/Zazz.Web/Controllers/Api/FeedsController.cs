@@ -32,7 +32,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // GET api/v1/feeds
-        public IEnumerable<FeedApiResponse> GetHomeFeeds()
+        public IEnumerable<ApiFeed> GetHomeFeeds()
         {
             var userId = ExtractUserIdFromHeader();
             var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
@@ -71,9 +71,9 @@ namespace Zazz.Web.Controllers.Api
             return feeds.Select(FeedViewModelToApiModel);
         }
 
-        private FeedApiResponse FeedViewModelToApiModel(FeedViewModel feed)
+        private ApiFeed FeedViewModelToApiModel(FeedViewModel feed)
         {
-            return new FeedApiResponse
+            return new ApiFeed
                    {
                        FeedType = feed.FeedType,
                        UserId = feed.UserId,
@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers.Api
                        Time = feed.Time,
 
                        Comments = feed.CommentsViewModel.Comments
-                       .Select(c => new CommentApiModel
+                       .Select(c => new ApiComment
                                     {
                                         CommentId = c.CommentId,
                                         CommentText = c.CommentText,
@@ -95,7 +95,7 @@ namespace Zazz.Web.Controllers.Api
                                     }),
 
                        Photos = feed.FeedType == FeedType.Picture
-                       ? feed.PhotoViewModel.Select(p => new PhotoApiModel
+                       ? feed.PhotoViewModel.Select(p => new ApiPhoto
                                                          {
                                                              PhotoId = p.PhotoId,
                                                              Description = p.PhotoDescription,
@@ -107,7 +107,7 @@ namespace Zazz.Web.Controllers.Api
                        : null,
 
                        Post = feed.FeedType == FeedType.Post
-                       ? new PostApiModel
+                       ? new ApiPost
                          {
                              Message = feed.PostViewModel.PostText,
                              PostId = feed.PostViewModel.PostId,
@@ -117,8 +117,8 @@ namespace Zazz.Web.Controllers.Api
                          }
                        : null,
 
-                       Event = feed.FeedType == FeedType.Event
-                       ? new EventApiModel
+                       ApiEvent = feed.FeedType == FeedType.Event
+                       ? new ApiEvent
                          {
                              City = feed.EventViewModel.City,
                              CreatedTime = feed.EventViewModel.CreatedDate.HasValue

@@ -2,7 +2,7 @@
 
 namespace Zazz.Web.Models.Api
 {
-    public class PhotoApiModel
+    public class ApiPhoto
     {
         public int PhotoId { get; set; }
 

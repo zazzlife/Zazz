@@ -34,7 +34,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private Mock<IApiAppRepository> _appRepo;
         private ApiApp _testApp;
         private CryptoService _cryptoService;
-        private LoginApiRequest _loginRequest;
+        private ApiLoginRequest _apiLoginRequest;
         private Mock<IPhotoService> _photoService;
         private const string BASE_ADDRESS = "http://localhost:8080";
         private const string AUTH_SCHEME = "ZazzApi";
@@ -74,7 +74,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _password = "123";
             _loginUrl = "/api/v1/login";
 
-            _loginRequest = new LoginApiRequest
+            _apiLoginRequest = new ApiLoginRequest
                             {
                                 AppId = _testApp.Id,
                                 Password = _password,
@@ -110,7 +110,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAuthorizationHeaderIsMissing()
         {
             //Arrange
-            var postContent = new StringContent(JsonConvert.SerializeObject(_loginRequest));
+            var postContent = new StringContent(JsonConvert.SerializeObject(_apiLoginRequest));
 
             //Act
             var response = await _client.PostAsync(_loginUrl, postContent);
@@ -124,7 +124,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return404IfRequestSignatureIsOkButUserDoesNotExists()
         {
             //Arrange
-            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+            var bodyContent = JsonConvert.SerializeObject(_apiLoginRequest);
 
             var authSignature = CreateRequestSignature(bodyContent);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
@@ -153,7 +153,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                            PasswordIV = Convert.FromBase64String(iv)
                        };
 
-            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+            var bodyContent = JsonConvert.SerializeObject(_apiLoginRequest);
             
             var authSignature = CreateRequestSignature(bodyContent);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
@@ -190,8 +190,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 _cryptoService.GenerateHMACSHA512Hash(Encoding.UTF8.GetBytes(_password),
                                                       _testApp.PasswordSigningKey);
 
-            _loginRequest.Password = passwordHash;
-            var bodyContent = JsonConvert.SerializeObject(_loginRequest);
+            _apiLoginRequest.Password = passwordHash;
+            var bodyContent = JsonConvert.SerializeObject(_apiLoginRequest);
             var authSignature = CreateRequestSignature(bodyContent);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authSignature);
 

@@ -16,6 +16,6 @@ namespace Zazz.Web.Models.Api
 
         public DateTime CreatedDate { get; set; }
 
-        public IEnumerable<PhotoApiModel> Photos { get; set; }
+        public IEnumerable<ApiPhoto> Photos { get; set; }
     }
 }
