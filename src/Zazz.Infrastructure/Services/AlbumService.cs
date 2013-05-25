@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -54,16 +55,16 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UpdateAlbum(Album album, int currentUserId)
+        public void UpdateAlbum(int albumId, string newName, int currentUserId)
         {
-            if (album.Id == 0)
-                throw new ArgumentException("Album id cannot be 0");
+            var album = _uow.AlbumRepository.GetById(albumId);
+            if (album == null)
+                throw new NotFoundException();
 
-            var ownerId = _uow.AlbumRepository.GetOwnerId(album.Id);
-            if (ownerId != currentUserId)
+            if (album.UserId != currentUserId)
                 throw new SecurityException();
 
-            _uow.AlbumRepository.InsertOrUpdate(album);
+            album.Name = newName;
             _uow.SaveChanges();
         }
 

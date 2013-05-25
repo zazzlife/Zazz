@@ -4,6 +4,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
@@ -26,7 +27,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow = new Mock<IUoW>();
             _photoService = new Mock<IPhotoService>();
             _sut = new AlbumService(_uow.Object, _photoService.Object);
-            _album = new Album();
+            _album = new Album
+                     {
+                         Name = "name"
+                     };
+
             _userId = 12;
             _photoId = 1;
 
@@ -48,18 +53,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ThrowIfAlbumIdIs0_OnUpdateAlbum()
+        public void ThrowNotFoundIfAlbumNotFOund_OnUpdateAlbum()
         {
             //Arrange
+            var albumId = 22;
+            _uow.Setup(x => x.AlbumRepository.GetById(albumId))
+                .Returns(() => null);
+
             //Act
-            try
-            {
-                _sut.UpdateAlbum(_album, _userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (ArgumentException)
-            {
-            }
+            Assert.Throws<NotFoundException>(() => _sut.UpdateAlbum(albumId, "new name", _userId));
+
+            //Assert
+            _uow.Verify(x => x.AlbumRepository.GetById(albumId), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -67,19 +73,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
-                .Returns(155);
+            _album.UserId = 1900;
+            _uow.Setup(x => x.AlbumRepository.GetById(_album.Id))
+                .Returns(_album);
 
             //Act & Assert
-            try
-            {
-                _sut.UpdateAlbum(_album, _userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
-            _uow.Verify(x => x.AlbumRepository.GetOwnerId(_album.Id), Times.Once());
+            Assert.Throws<SecurityException>(() => _sut.UpdateAlbum(_album.Id, "new name", _userId));
+            _uow.Verify(x => x.AlbumRepository.GetById(_album.Id), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Never());
         }
 
         [Test]
@@ -87,15 +88,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _album.Id = 144;
-            _uow.Setup(x => x.AlbumRepository.GetOwnerId(_album.Id))
-                .Returns(_userId);
-            _uow.Setup(x => x.AlbumRepository.InsertOrUpdate(_album));
+            _album.UserId = _userId;
+            _uow.Setup(x => x.AlbumRepository.GetById(_album.Id))
+                .Returns(_album);
+            var newName = "new name";
 
             //Act
-            _sut.UpdateAlbum(_album, _userId);
+            _sut.UpdateAlbum(_album.Id, newName, _userId);
 
             //Assert
-            _uow.Verify(x => x.AlbumRepository.InsertOrUpdate(_album), Times.Once());
+            Assert.AreEqual(newName, _album.Name);
             _uow.Verify(x => x.SaveChanges(), Times.Once());
         }
 

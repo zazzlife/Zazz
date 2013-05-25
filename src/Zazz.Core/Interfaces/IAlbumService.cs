@@ -17,13 +17,7 @@ namespace Zazz.Core.Interfaces
 
         void CreateAlbum(Album album);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="album">Album to update. Id should not be 0</param>
-        /// <param name="currentUserId">Id of the user that is updating the album. Required for security checks</param>
-        /// <returns></returns>
-        void UpdateAlbum(Album album, int currentUserId);
+        void UpdateAlbum(int albumId, string newName, int currentUserId);
 
         /// <summary>
         /// 
