@@ -17,6 +17,6 @@ namespace Zazz.Web.Models.Api
 
         public bool IsFromCurrentUser { get; set; }
 
-        public string Time { get; set; }
+        public DateTime Time { get; set; }
     }
 }

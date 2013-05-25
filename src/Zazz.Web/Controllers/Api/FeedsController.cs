@@ -91,7 +91,7 @@ namespace Zazz.Web.Controllers.Api
                                         UserId = c.UserId,
                                         UserDisplayName = c.UserDisplayName,
                                         UserDisplayPhoto = c.UserPhotoUrl,
-                                        Time = c.Time.ToString("s")
+                                        Time = c.Time
                                     }),
 
                        Photos = feed.FeedType == FeedType.Picture
