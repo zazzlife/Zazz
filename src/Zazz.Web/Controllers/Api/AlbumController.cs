@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -95,9 +97,24 @@ namespace Zazz.Web.Controllers.Api
             return album;
         }
 
-        // PUT api/album/5
-        public void Put(int id, [FromBody]string value)
+        // PUT api/v1/album/5
+        public void Put(int id, ApiAlbum album)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                _albumService.UpdateAlbum(id, album.Name, ExtractUserIdFromHeader());
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
 
         // DELETE api/album/5
