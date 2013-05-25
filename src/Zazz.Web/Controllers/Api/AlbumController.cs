@@ -6,10 +6,13 @@ using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
+using Zazz.Core.Models.Data;
+using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [HMACAuthorize]
     public class AlbumController : BaseApiController
     {
         private readonly IAlbumService _albumService;
@@ -72,9 +75,21 @@ namespace Zazz.Web.Controllers.Api
                    };
         }
 
-        // POST api/album
-        public void Post([FromBody]string value)
+        // POST api/v1/album
+        public ApiAlbum Post(ApiAlbum album)
         {
+            var a = new Album
+                    {
+                        CreatedDate = DateTime.UtcNow,
+                        IsFacebookAlbum = false,
+                        Name = album.Name,
+                        UserId = ExtractUserIdFromHeader(),
+                    };
+
+            _albumService.CreateAlbum(a);
+            album.Id = a.Id;
+
+            return album;
         }
 
         // PUT api/album/5
