@@ -7,13 +7,13 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class BaseController : Controller
+    public abstract class BaseController : Controller
     {
         protected readonly IUserService UserService;
         protected readonly IPhotoService PhotoService;
         protected readonly IDefaultImageHelper DefaultImageHelper;
 
-        public BaseController(IUserService userService, IPhotoService photoService,
+        protected BaseController(IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper)
         {
             UserService = userService;
