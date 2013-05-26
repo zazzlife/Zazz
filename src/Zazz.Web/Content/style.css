@@ -22,6 +22,10 @@
     font-size: 13px;
 }
 
+.ui-autocomplete {
+    z-index: 1040;
+}
+
 .ui-autocomplete .ui-menu-item {
     border-bottom-style: dashed;
     border-bottom-color: #b6b6b6;
