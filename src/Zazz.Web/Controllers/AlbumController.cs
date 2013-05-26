@@ -47,7 +47,7 @@ namespace Zazz.Web.Controllers
                          {
                              AlbumId = album.Id,
                              AlbumName = value,
-                             AlbumPicUrl = _defaultImageHelper.GetDefaultAlbumImage(),
+                             AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
                              IsFromCurrentUser = true,
                              UserId = userId
                          };

@@ -11,14 +11,14 @@ namespace Zazz.Web.Controllers
     {
         protected readonly IUserService UserService;
         protected readonly IPhotoService PhotoService;
-        protected readonly IDefaultImageHelper _defaultImageHelper;
+        protected readonly IDefaultImageHelper DefaultImageHelper;
 
         public BaseController(IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper)
         {
             UserService = userService;
             PhotoService = photoService;
-            _defaultImageHelper = defaultImageHelper;
+            DefaultImageHelper = defaultImageHelper;
         }
 
         public string GetCurrentUserDisplayName()
@@ -42,7 +42,7 @@ namespace Zazz.Web.Controllers
         public PhotoLinks GetDisplayPicture()
         {
             if (!User.Identity.IsAuthenticated)
-                return _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
+                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
 
             var userId = UserService.GetUserId(User.Identity.Name);
             return GetDisplayPicture(userId);

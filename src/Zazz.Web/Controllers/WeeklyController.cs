@@ -42,7 +42,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? PhotoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : _defaultImageHelper.GetDefaultWeeklyImage();
+                                : DefaultImageHelper.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }
@@ -64,7 +64,7 @@ namespace Zazz.Web.Controllers
 
             vm.PhotoLinks = vm.PhotoId.HasValue
                                 ? PhotoService.GeneratePhotoUrl(userId, vm.PhotoId.Value)
-                                : _defaultImageHelper.GetDefaultWeeklyImage();
+                                : DefaultImageHelper.GetDefaultWeeklyImage();
 
             return View("_WeeklyItem", vm);
         }

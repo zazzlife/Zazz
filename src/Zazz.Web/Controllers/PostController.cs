@@ -29,7 +29,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Show(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var feed = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper)
+            var feed = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper)
                 .GetSinglePostFeed(id, currentUserId);
 
             if (feed == null)

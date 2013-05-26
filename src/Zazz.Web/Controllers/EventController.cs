@@ -153,14 +153,14 @@ namespace Zazz.Web.Controllers
 
                 if (!e.PhotoId.HasValue)
                 {
-                    e.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
+                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     continue;
                 }
 
                 var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(e.PhotoId.Value);
                 if (photo == null)
                 {
-                    e.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
+                    e.ImageUrl = DefaultImageHelper.GetDefaultEventImage();
                     continue;
                 }
 
@@ -182,7 +182,7 @@ namespace Zazz.Web.Controllers
                                           {
                                               Time = DateTime.UtcNow,
                                               UtcTime = DateTime.UtcNow.ToString("s"),
-                                              ImageUrl = _defaultImageHelper.GetDefaultAlbumImage()
+                                              ImageUrl = DefaultImageHelper.GetDefaultAlbumImage()
                                           }
                      };
 
@@ -316,7 +316,7 @@ namespace Zazz.Web.Controllers
                          IsFacebookEvent = zazzEvent.IsFacebookEvent,
                          ImageUrl = zazzEvent.IsFacebookEvent
                                         ? new PhotoLinks(zazzEvent.FacebookPhotoLink)
-                                        : _defaultImageHelper.GetDefaultAlbumImage(),
+                                        : DefaultImageHelper.GetDefaultAlbumImage(),
                          IsDateOnly = zazzEvent.IsDateOnly,
                          FacebookEventId = zazzEvent.FacebookEventId
                      };

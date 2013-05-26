@@ -116,7 +116,7 @@ namespace Zazz.Web.Controllers
 
                 var photo = a.Photos.FirstOrDefault(); //TODO: dont use this navigation property, it is getting all pictures.
                 if (photo == null)
-                    album.AlbumPicUrl = _defaultImageHelper.GetDefaultAlbumImage();
+                    album.AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage();
                 else
                 {
                     album.AlbumPicUrl = photo.IsFacebookPhoto
