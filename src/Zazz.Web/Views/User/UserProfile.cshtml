@@ -67,7 +67,7 @@
         @if (Model.Photos.Any())
         {
             <div class="well pics-widget">
-                <h6>Party pics</h6>
+                <a class="black" href="~/photo/list/@Model.UserId"><h6>Party pics</h6></a>
                 <ul>
                     @foreach (var p in Model.Photos)
                     {
@@ -109,7 +109,7 @@
         </div>
     </section>
     <section class="right-panel">
-        <ul class="tag-stats">
+        <ul class="tag-stats" style="position: relative;">
             @foreach (var t in Model.TagsStats)
             {
                 <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
