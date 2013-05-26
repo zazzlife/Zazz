@@ -3,7 +3,7 @@ using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
-    public class ClubProfileViewModel : BaseLayoutViewModel
+    public class ClubProfileViewModel
     {
         public int UserId { get; set; }
 

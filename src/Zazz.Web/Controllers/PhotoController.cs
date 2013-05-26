@@ -90,13 +90,7 @@ namespace Zazz.Web.Controllers
                          Photos = photosVm,
                          UserId = id,
                          ViewType = PhotoViewType.Photos,
-                         UserDisplayName = UserService.GetUserDisplayName(id),
-                         CurrentUserDisplayName = currentUserId == 0
-                                                      ? String.Empty
-                                                      : UserService.GetUserDisplayName(currentUserId),
-                         CurrentUserPhoto = currentUserId == 0
-                                                ? _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
-                                                : _photoService.GetUserImageUrl(currentUserId)
+                         UserDisplayName = UserService.GetUserDisplayName(id)
                      };
 
             return View("MainView", vm);
@@ -145,13 +139,7 @@ namespace Zazz.Web.Controllers
                              Albums = albumsVm,
                              UserId = id,
                              ViewType = PhotoViewType.Albums,
-                             UserDisplayName = UserService.GetUserDisplayName(id),
-                             CurrentUserDisplayName = currentUserId == 0
-                                                      ? String.Empty
-                                                      : UserService.GetUserDisplayName(currentUserId),
-                             CurrentUserPhoto = currentUserId == 0
-                                                    ? _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified)
-                                                    : _photoService.GetUserImageUrl(currentUserId)
+                             UserDisplayName = UserService.GetUserDisplayName(id)
                          };
 
             return View("MainView", fullVm);
@@ -275,11 +263,7 @@ namespace Zazz.Web.Controllers
             if (photo.UserId != userId)
                 throw new HttpException(401, "You are not authorized to crop this image.");
 
-            var vm = new CropViewModel
-                     {
-                         CurrentUserDisplayName = UserService.GetUserDisplayName(userId),
-                         CurrentUserPhoto = _photoService.GetUserImageUrl(userId)
-                     };
+            var vm = new CropViewModel();
 
             if (photo.IsFacebookPhoto)
             {
@@ -309,9 +293,6 @@ namespace Zazz.Web.Controllers
             var userId = UserService.GetUserId(User.Identity.Name);
             if (photo.UserId != userId)
                 throw new HttpException(401, "You are not authorized to crop this image.");
-
-            vm.CurrentUserDisplayName = UserService.GetUserDisplayName(userId);
-            vm.CurrentUserPhoto = _photoService.GetUserImageUrl(userId);
 
             vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
             vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)

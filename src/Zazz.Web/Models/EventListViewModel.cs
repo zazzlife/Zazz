@@ -1,7 +1,7 @@
 ﻿
 namespace Zazz.Web.Models
 {
-    public class EventListViewModel : BaseLayoutViewModel
+    public class EventListViewModel
     {
         public EventListSideViewModel WeekEvents { get; set; }
 

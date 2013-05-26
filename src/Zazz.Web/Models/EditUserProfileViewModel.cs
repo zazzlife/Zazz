@@ -7,7 +7,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models
 {
-    public class EditUserProfileViewModel : BaseUserPageLayoutViewModel
+    public class EditUserProfileViewModel
     {
         public Gender Gender { get; set; }
 

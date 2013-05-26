@@ -39,8 +39,6 @@ namespace Zazz.Web.Controllers
 
             var vm = new ShowPostViewModel
                      {
-                         CurrentUserDisplayName = UserService.GetUserDisplayName(currentUserId),
-                         CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
                          FeedViewModel = feed
                      };
 

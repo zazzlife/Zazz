@@ -2,7 +2,7 @@
 
 namespace Zazz.Web.Models
 {
-    public class TagsPageViewModel : BaseUserPageLayoutViewModel
+    public class TagsPageViewModel
     {
         public IEnumerable<string> AvailableTags { get; set; }
 

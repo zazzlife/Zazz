@@ -1,6 +1,6 @@
 ﻿namespace Zazz.Web.Models
 {
-    public class CropViewModel : BaseLayoutViewModel
+    public class CropViewModel
     {
         public string PhotoUrl { get; set; }
 

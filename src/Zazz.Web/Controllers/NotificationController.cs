@@ -30,8 +30,6 @@ namespace Zazz.Web.Controllers
 
             var vm = new NotificationsPageViewModel
                      {
-                         CurrentUserDisplayName = User.Identity.Name,
-                         CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
                          Notifications = notificationsVm
                      };
 

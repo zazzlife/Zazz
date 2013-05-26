@@ -48,8 +48,6 @@ namespace Zazz.Web.Controllers
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id),
-                             CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
                              TagStats = new TagStatsWidgetViewModel
                                         {
                                             Tags = tagStats.Select(t => new TagStatViewModel
@@ -92,8 +90,6 @@ namespace Zazz.Web.Controllers
 
             var vm = new TagsPageViewModel
                      {
-                         CurrentUserDisplayName = UserService.GetUserDisplayName(userId),
-                         CurrentUserPhoto = _photoService.GetUserImageUrl(userId),
                          AvailableTags = availableTags.Select(t => t.Name),
                          SelectedTags = selectedTags,
                          Feeds = feeds

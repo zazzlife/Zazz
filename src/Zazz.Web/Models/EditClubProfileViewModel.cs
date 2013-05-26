@@ -4,7 +4,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Models
 {
-    public class EditClubProfileViewModel : BaseUserPageLayoutViewModel
+    public class EditClubProfileViewModel
     {
         [Display(Name = "Club Name")]
         public string ClubName { get; set; }

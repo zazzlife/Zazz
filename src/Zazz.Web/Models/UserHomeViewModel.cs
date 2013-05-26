@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models
 {
-    public class UserHomeViewModel : BaseUserPageLayoutViewModel
+    public class UserHomeViewModel
     {
         public AccountType AccountType { get; set; }
         

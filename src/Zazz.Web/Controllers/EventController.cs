@@ -41,19 +41,8 @@ namespace Zazz.Web.Controllers
 
         public ActionResult List()
         {
-            var userDisplayName = String.Empty;
-            var userPhoto = _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
-            if (Request.IsAuthenticated)
-            {
-                var userId = UserService.GetUserId(User.Identity.Name);
-                userDisplayName = UserService.GetUserDisplayName(userId);
-                userPhoto = _photoService.GetUserImageUrl(userId);
-            }
-
             var vm = new EventListViewModel
                      {
-                         CurrentUserDisplayName = userDisplayName,
-                         CurrentUserPhoto = userPhoto,
                          MonthEvents = new EventListSideViewModel
                                        {
                                            Events = GetMonthEvents(),
@@ -189,15 +178,8 @@ namespace Zazz.Web.Controllers
         public ActionResult Create()
         {
             ViewBag.FormAction = "Create";
-
-            var userId = UserService.GetUserId(User.Identity.Name);
-            var displayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = _photoService.GetUserImageUrl(userId);
-
             var vm = new EventDetailsPageViewModel
                      {
-                         CurrentUserDisplayName = displayName,
-                         CurrentUserPhoto = userPhoto,
                          EventViewModel = new EventViewModel
                                           {
                                               Time = DateTime.UtcNow,
@@ -225,9 +207,6 @@ namespace Zazz.Web.Controllers
                 return Redirect("~/event/show/" + zazzEvent.Id);
             }
 
-            vm.CurrentUserDisplayName = UserService.GetUserDisplayName(userId);
-            vm.CurrentUserPhoto = _photoService.GetUserImageUrl(userId);
-
             ViewBag.FormAction = "Create";
             return View("EditForm", vm);
         }
@@ -237,15 +216,9 @@ namespace Zazz.Web.Controllers
         {
             var eventVm = GetEvent(id, false);
 
-            var userId = UserService.GetUserId(User.Identity.Name);
-            var displayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = _photoService.GetUserImageUrl(userId);
-
             var vm = new EventDetailsPageViewModel
                      {
                          EventViewModel = eventVm,
-                         CurrentUserDisplayName = displayName,
-                         CurrentUserPhoto = userPhoto
                      };
 
             return View(vm);
@@ -254,15 +227,9 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Edit(int id)
         {
-            var userId = UserService.GetUserId(User.Identity.Name);
-            var displayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = _photoService.GetUserImageUrl(userId);
-
             var vm = new EventDetailsPageViewModel
                      {
                          EventViewModel = GetEvent(id, true),
-                         CurrentUserDisplayName = displayName,
-                         CurrentUserPhoto = userPhoto
                      };
 
             ViewBag.FormAction = "Edit";
@@ -285,12 +252,6 @@ namespace Zazz.Web.Controllers
 
                 return Redirect("~/event/show/" + id);
             }
-
-            var displayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = _photoService.GetUserImageUrl(userId);
-
-            vm.CurrentUserDisplayName = displayName;
-            vm.CurrentUserPhoto = userPhoto;
 
             return View("EditForm", vm);
         }

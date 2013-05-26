@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models
 {
-    public class UserProfileViewModel : BaseLayoutViewModel
+    public class UserProfileViewModel
     {
         public PhotoLinks UserPhoto { get; set; }
 

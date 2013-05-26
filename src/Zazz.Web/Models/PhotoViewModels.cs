@@ -3,7 +3,7 @@ using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
-    public class MainPhotoPageViewModel : BaseLayoutViewModel
+    public class MainPhotoPageViewModel
     {
         public PhotoViewType ViewType { get; set; }
 

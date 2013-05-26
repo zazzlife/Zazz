@@ -260,8 +260,6 @@
     <Compile Include="Models\Api\ApiPhoto.cs" />
     <Compile Include="Models\Api\ApiPost.cs" />
     <Compile Include="Models\Api\UserModels.cs" />
-    <Compile Include="Models\BaseLayoutViewModel.cs" />
-    <Compile Include="Models\BaseUserPageLayoutViewModel.cs" />
     <Compile Include="Models\ClubProfileViewModel.cs" />
     <Compile Include="Models\CommentsViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
