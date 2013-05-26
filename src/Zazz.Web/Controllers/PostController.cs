@@ -16,15 +16,13 @@ namespace Zazz.Web.Controllers
     {
         private readonly IPostService _postService;
         private readonly IUoW _uow;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public PostController(IPostService postService, IUserService userService,
             IPhotoService photoService, IUoW uow, IDefaultImageHelper defaultImageHelper)
-            : base (userService, photoService)
+            : base (userService, photoService, defaultImageHelper)
         {
             _postService = postService;
             _uow = uow;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize]

@@ -18,7 +18,8 @@ namespace Zazz.Web.Controllers
         public const byte NOTIFICATIONS_PAGE_SIZE = 30;
 
         public NotificationController(IUserService userService, IPhotoService photoService,
-            INotificationService notificationService) : base (userService, photoService)
+            INotificationService notificationService, IDefaultImageHelper defaultImageHelper) 
+            : base (userService, photoService, defaultImageHelper)
         {
             _notificationService = notificationService;
         }

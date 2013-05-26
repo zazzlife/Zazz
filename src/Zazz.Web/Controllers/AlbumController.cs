@@ -16,13 +16,12 @@ namespace Zazz.Web.Controllers
     public class AlbumController : BaseController
     {
         private readonly IAlbumService _albumService;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public AlbumController(IAlbumService albumService, IUserService userService,
-            IPhotoService photoService, IDefaultImageHelper defaultImageHelper) : base(userService, photoService)
+            IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
+            : base(userService, photoService, defaultImageHelper)
         {
             _albumService = albumService;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize, HttpPost]

@@ -18,15 +18,13 @@ namespace Zazz.Web.Controllers
     {
         private readonly IUoW _uow;
         private readonly ICommentService _commentService;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public CommentController(IUoW uow, IPhotoService photoService, IUserService userService,
             ICommentService commentService, IDefaultImageHelper defaultImageHelper)
-            : base(userService, photoService)
+            : base(userService, photoService, defaultImageHelper)
         {
             _uow = uow;
             _commentService = commentService;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult Get(int id, CommentType commentType, int lastComment)

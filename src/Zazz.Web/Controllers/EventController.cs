@@ -21,17 +21,15 @@ namespace Zazz.Web.Controllers
     {
         private readonly IEventService _eventService;
         private readonly IUoW _uow;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         private const int PAGE_SIZE = 10;
 
         public EventController(IUserService userService, IEventService eventService,
             IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
-            : base(userService, photoService)
+            : base(userService, photoService, defaultImageHelper)
         {
             _eventService = eventService;
             _uow = uow;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult Index()

@@ -16,14 +16,12 @@ namespace Zazz.Web.Controllers
     public class WeeklyController : BaseController
     {
         private readonly IWeeklyService _weeklyService;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public WeeklyController(IWeeklyService weeklyService, IUserService userService,
             IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
-            : base (userService, photoService)
+            : base (userService, photoService, defaultImageHelper)
         {
             _weeklyService = weeklyService;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult New(WeeklyViewModel vm)

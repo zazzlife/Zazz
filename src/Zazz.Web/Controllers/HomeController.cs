@@ -18,16 +18,14 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
         private readonly ITagService _tagService;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper) : base(userService, photoService)
+            IDefaultImageHelper defaultImageHelper) : base(userService, photoService, defaultImageHelper)
         {
             _uow = uow;
             _staticDataRepository = staticDataRepository;
             _tagService = tagService;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         public ActionResult UpdateTags()

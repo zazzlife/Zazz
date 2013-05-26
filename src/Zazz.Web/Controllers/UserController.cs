@@ -22,17 +22,15 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
         private readonly ITagService _tagService;
-        private readonly IDefaultImageHelper _defaultImageHelper;
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper) : base (userService, photoService)
+            IDefaultImageHelper defaultImageHelper) : base (userService, photoService, defaultImageHelper)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
             _cacheService = cacheService;
             _tagService = tagService;
-            _defaultImageHelper = defaultImageHelper;
         }
 
         [Authorize]

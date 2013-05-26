@@ -27,8 +27,9 @@ namespace Zazz.Web.Controllers
         private readonly ICryptoService _cryptoService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
-            ICryptoService cryptoService, IUserService userService, IPhotoService photoService) 
-            : base(userService, photoService)
+            ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
+            IDefaultImageHelper defaultImageHelper) 
+            : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
             _authService = authService;
