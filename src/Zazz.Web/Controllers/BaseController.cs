@@ -34,9 +34,14 @@ namespace Zazz.Web.Controllers
             return UserService.GetUserDisplayName(id);
         }
 
-        public string GetVerySmallDisplayPicture()
+        public string GetCurrentUserVerySmallDisplayPicture()
         {
             return GetDisplayPicture().VerySmallLink;
+        }
+
+        public string GetVerySmallDisplayPicture(int userId)
+        {
+            return GetDisplayPicture(userId).VerySmallLink;
         }
 
         public PhotoLinks GetDisplayPicture()

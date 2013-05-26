@@ -19,7 +19,7 @@ else
                 <td>
                     <a href="~/user/profile/@r.FromUserId" target="_blank">
                         <img style="max-width: 60px;max-height: 60px;" 
-                            src="@Html.Action("GetUserImageUrl", "User", new { userId = r.FromUserId })" alt="@r.FromUsername"/>
+                            src="@Html.Action("GetVerySmallDisplayPicture", new { userId = r.FromUserId })" alt="@r.FromUsername"/>
                     </a>
                 </td>
                 <td style="padding-top: 29px; width: 230px;"><a href="~/user/profile/@r.FromUserId" target="_blank"><strong>@r.FromUsername</strong></a></td>
