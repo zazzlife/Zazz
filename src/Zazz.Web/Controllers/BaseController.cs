@@ -18,12 +18,15 @@ namespace Zazz.Web.Controllers
 
         public string GetDisplayName()
         {
-            throw new NotImplementedException();
+            if (!User.Identity.IsAuthenticated)
+                return "Not Logged in!";
+
+            return _userService.GetUserDisplayName(User.Identity.Name);
         }
 
         public string GetDisplayName(int id)
         {
-            throw new NotImplementedException();
+            return _userService.GetUserDisplayName(id);
         }
 
         public void ShowAlert(string message, AlertType alertType)
