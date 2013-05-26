@@ -752,11 +752,13 @@ hr.gold-line {
     padding: 0;
     float: left;
     padding-top: 14px;
-    padding-left: 29px;
+    padding-left: 25px;
+    width: 630px;
+    text-align: center;
 }
 
 .weekly {
-    float: left;
+    display: inline-block;
     text-align: center;
     font-weight: 600;
     margin-right: 10px;

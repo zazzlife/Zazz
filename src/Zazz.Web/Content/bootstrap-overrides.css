@@ -19,6 +19,7 @@
 .popover {
     min-width: 100px;
     text-align: center;
+    z-index: 1050;
 }
 
 .well {
