@@ -352,25 +352,36 @@ hr.gold-line {
     .top-menu {
         list-style: none;
         margin: 0;
-        padding: 42px 0 20px 0;
+        padding: 15px 0;
         text-align: center;
     }
 
-    .top-menu li {
+    .top-menu li.header {
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: gray;
+    }
+
+    .top-menu .menu-items {
+        padding: 0;
+        margin: 0;
+    }
+
+    .top-menu .menu-items li {
         display: inline-block;
         margin-right: 20px;
     }
 
-    .top-menu li:last-child {
+    .top-menu .menu-items li:last-child {
         margin-right: 0;
     }
 
-    .top-menu li a, .top-menu li a:hover {
+    .top-menu .menu-items li a, .top-menu .menu-items li a:hover {
         color: black;
         text-decoration: none;
     }
 
-    .top-menu li a>i {
+    .top-menu .menu-items li a>i {
         margin-right: 3px;
     }
 
