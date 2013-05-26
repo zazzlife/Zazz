@@ -10,7 +10,5 @@ namespace Zazz.Web.Models
         public AccountType AccountType { get; set; }
         
         public IEnumerable<FeedViewModel> Feeds { get; set; }
-
-        public TagStatsWidgetViewModel TagStats { get; set; }
     }
 }

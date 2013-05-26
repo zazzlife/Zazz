@@ -109,7 +109,13 @@
         </div>
     </section>
     <section class="right-panel">
-        @Html.Partial("_TagStatsWidget", Model.TagsStats)
+        <ul class="tag-stats">
+            @foreach (var t in Model.TagsStats)
+            {
+                <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
+            }
+        </ul>
     </section>
     
     @Html.Raw(photoLightboxes)

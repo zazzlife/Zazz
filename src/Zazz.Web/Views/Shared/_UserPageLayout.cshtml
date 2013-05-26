@@ -4,7 +4,7 @@
 @{
     Layout = "_Layout.cshtml";
 
-    TagStatsWidgetViewModel tagStats = null;
+    IEnumerable<TagStatViewModel> tagStats = null;
     var controller = ViewContext.Controller as UserPageLayoutBaseController;
     if (controller != null)
     {
@@ -50,7 +50,7 @@
             </ul>
             
             <ul class="tag-stats">
-                @foreach (var t in tagStats.Tags.Take(6))
+                @foreach (var t in tagStats.Take(6))
                 {
                     <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
                     <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
@@ -103,7 +103,7 @@
                 @RenderSection("RightPanel", false)
             </div>
             <ul class="tag-stats">
-                @foreach (var t in tagStats.Tags.Skip(6))
+                @foreach (var t in tagStats.Skip(6))
                 {
                     <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
                     <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>

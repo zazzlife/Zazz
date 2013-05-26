@@ -21,21 +21,14 @@ namespace Zazz.Web.Controllers
             TagService = tagService;
         }
 
-        public TagStatsWidgetViewModel GetTagStats()
+        public IEnumerable<TagStatViewModel> GetTagStats()
         {
-            var tagStats = TagService.GetAllTagStats().ToList();
-
-            return new TagStatsWidgetViewModel
-                   {
-                       Tags = tagStats.Select(t => new TagStatViewModel
-                                                   {
-                                                       TagName = t.Tag.Name,
-                                                       UsersCount = t.UsersCount
-                                                   }),
-                       LastUpdate = tagStats.FirstOrDefault() == null
-                                        ? DateTime.MinValue
-                                        : tagStats.First().LastUpdate
-                   };
+            return TagService.GetAllTagStats()
+                             .Select(t => new TagStatViewModel
+                                          {
+                                              TagName = t.Tag.Name,
+                                              UsersCount = t.UsersCount
+                                          });
         }
     }
 }

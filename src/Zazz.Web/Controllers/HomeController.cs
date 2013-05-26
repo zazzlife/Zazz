@@ -42,8 +42,7 @@ namespace Zazz.Web.Controllers
                 var vm = new UserHomeViewModel
                          {
                              AccountType = user.AccountType,
-                             Feeds = feeds,
-                             TagStats = GetTagStats()
+                             Feeds = feeds
                          };
 
                 return View("UserHome", vm);
