@@ -17,7 +17,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class EventController : BaseController
+    public class EventController : UserPageLayoutBaseController
     {
         private readonly IEventService _eventService;
         private readonly IUoW _uow;
@@ -25,8 +25,8 @@ namespace Zazz.Web.Controllers
         private const int PAGE_SIZE = 10;
 
         public EventController(IUserService userService, IEventService eventService,
-            IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
-            : base(userService, photoService, defaultImageHelper)
+            IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper, ITagService tagService)
+            : base(userService, photoService, defaultImageHelper, tagService)
         {
             _eventService = eventService;
             _uow = uow;

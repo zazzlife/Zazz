@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
@@ -20,9 +21,21 @@ namespace Zazz.Web.Controllers
             TagService = tagService;
         }
 
-        public IEnumerable<TagStat> GetTagStats()
+        public TagStatsWidgetViewModel GetTagStats()
         {
-            return TagService.GetAllTagStats();
+            var tagStats = TagService.GetAllTagStats().ToList();
+
+            return new TagStatsWidgetViewModel
+                   {
+                       Tags = tagStats.Select(t => new TagStatViewModel
+                                                   {
+                                                       TagName = t.Tag.Name,
+                                                       UsersCount = t.UsersCount
+                                                   }),
+                       LastUpdate = tagStats.FirstOrDefault() == null
+                                        ? DateTime.MinValue
+                                        : tagStats.First().LastUpdate
+                   };
         }
     }
 }

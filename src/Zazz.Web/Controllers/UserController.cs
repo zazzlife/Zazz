@@ -16,21 +16,19 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : UserPageLayoutBaseController
     {
         private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
-        private readonly ITagService _tagService;
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper) : base (userService, photoService, defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper) : base (userService, photoService, defaultImageHelper, tagService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
             _cacheService = cacheService;
-            _tagService = tagService;
         }
 
         [Authorize]
@@ -128,7 +126,6 @@ namespace Zazz.Web.Controllers
 
             const int PHOTOS_COUNT = 15;
             var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
-            var tagStats = _tagService.GetAllTagStats().ToList();
 
             var vm = new UserProfileViewModel
                      {
@@ -152,17 +149,7 @@ namespace Zazz.Web.Controllers
                              ? new PhotoLinks(p.FacebookLink)
                              : PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                          }),
-                         TagsStats = new TagStatsWidgetViewModel
-                         {
-                             Tags = tagStats.Select(t => new TagStatViewModel
-                             {
-                                 TagName = t.Tag.Name,
-                                 UsersCount = t.UsersCount
-                             }),
-                             LastUpdate = tagStats.FirstOrDefault() == null
-                                              ? DateTime.MinValue
-                                              : tagStats.First().LastUpdate
-                         },
+                         TagsStats = GetTagStats(),
                          City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
                          Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
                          School = user.UserDetail.School == null ? null : user.UserDetail.School.Name

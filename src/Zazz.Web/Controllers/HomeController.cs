@@ -13,24 +13,22 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController : UserPageLayoutBaseController
     {
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
-        private readonly ITagService _tagService;
 
         public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper) : base(userService, photoService, defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper) : base(userService, photoService, defaultImageHelper, tagService)
         {
             _uow = uow;
             _staticDataRepository = staticDataRepository;
-            _tagService = tagService;
         }
 
         public ActionResult UpdateTags()
         {
-            _tagService.UpdateTagStatistics();
+            TagService.UpdateTagStatistics();
             return Redirect(Request.UrlReferrer.AbsolutePath);
         }
 
@@ -40,23 +38,12 @@ namespace Zazz.Web.Controllers
             {
                 var user = UserService.GetUser(User.Identity.Name);
                 var feeds = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper).GetFeeds(user.Id);
-
-                var tagStats = _tagService.GetAllTagStats().ToList();
+                
                 var vm = new UserHomeViewModel
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             TagStats = new TagStatsWidgetViewModel
-                                        {
-                                            Tags = tagStats.Select(t => new TagStatViewModel
-                                                                        {
-                                                                            TagName = t.Tag.Name,
-                                                                            UsersCount = t.UsersCount
-                                                                        }),
-                                            LastUpdate = tagStats.FirstOrDefault() == null
-                                                             ? DateTime.MinValue
-                                                             : tagStats.First().LastUpdate
-                                        }
+                             TagStats = GetTagStats()
                          };
 
                 return View("UserHome", vm);
