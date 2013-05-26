@@ -93,7 +93,7 @@ namespace Zazz.Web.Models.Api
 
         public bool? SyncFbPosts { get; set; }
 
-        public bool? SyncFbImages { get; set; }
+        public bool? SyncFbPhotos { get; set; }
 
         public bool SendSyncErrorNotifications { get; set; } 
     }

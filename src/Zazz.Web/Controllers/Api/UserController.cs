@@ -84,7 +84,7 @@ namespace Zazz.Web.Controllers.Api
                                                : _defaultImageHelper.GetDefaultCoverImage()
                                        };
 
-                response.Preferences.SyncFbImages = user.Preferences.SyncFbImages;
+                response.Preferences.SyncFbPhotos = user.Preferences.SyncFbImages;
                 response.Preferences.SyncFbPosts = user.Preferences.SyncFbPosts;
             }
 
@@ -124,8 +124,8 @@ namespace Zazz.Web.Controllers.Api
                 user.ClubDetail.ClubTypeId = u.ClubDetails.ClubTypeId;
                 user.ClubDetail.CoverPhotoId = u.ClubDetails.CoverPhotoId;
 
-                if (u.Preferences.SyncFbImages.HasValue)
-                    user.Preferences.SyncFbImages = u.Preferences.SyncFbImages.Value;
+                if (u.Preferences.SyncFbPhotos.HasValue)
+                    user.Preferences.SyncFbImages = u.Preferences.SyncFbPhotos.Value;
 
                 if (u.Preferences.SyncFbPosts.HasValue)
                     user.Preferences.SyncFbPosts = u.Preferences.SyncFbPosts.Value;
