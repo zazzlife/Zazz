@@ -10,14 +10,14 @@ namespace Zazz.Web.Controllers
     public class BaseController : Controller
     {
         protected readonly IUserService UserService;
-        protected readonly IPhotoService _photoService;
+        protected readonly IPhotoService PhotoService;
         protected readonly IDefaultImageHelper _defaultImageHelper;
 
         public BaseController(IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper)
         {
             UserService = userService;
-            _photoService = photoService;
+            PhotoService = photoService;
             _defaultImageHelper = defaultImageHelper;
         }
 
@@ -50,7 +50,7 @@ namespace Zazz.Web.Controllers
 
         private PhotoLinks GetDisplayPicture(int id)
         {
-            return _photoService.GetUserImageUrl(id);
+            return PhotoService.GetUserImageUrl(id);
         }
 
         public void ShowAlert(string message, AlertType alertType)

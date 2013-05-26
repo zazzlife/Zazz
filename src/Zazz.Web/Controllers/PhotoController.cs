@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers
             if (Request.IsAuthenticated)
                 currentUserId = UserService.GetUserId(User.Identity.Name);
 
-            var query = _photoService.GetAll().Where(p => p.UserId == id);
+            var query = PhotoService.GetAll().Where(p => p.UserId == id);
             if (albumId.HasValue)
                 query = query.Where(p => p.AlbumId == albumId.Value);
 
@@ -69,11 +69,11 @@ namespace Zazz.Web.Controllers
                                                   PhotoId = p.id,
                                                   PhotoUrl = p.isFromFb
                                                                  ? new PhotoLinks(p.fbUrl)
-                                                                 : _photoService.GeneratePhotoUrl(p.userId, p.id),
+                                                                 : PhotoService.GeneratePhotoUrl(p.userId, p.id),
                                                   FromUserId = id,
                                                   FromUserDisplayName = UserService.GetUserDisplayName(id),
                                                   PhotoDescription = p.description,
-                                                  FromUserPhotoUrl = _photoService.GetUserImageUrl(id)
+                                                  FromUserPhotoUrl = PhotoService.GetUserImageUrl(id)
                                               })
                                  .ToList();
 
@@ -121,7 +121,7 @@ namespace Zazz.Web.Controllers
                 {
                     album.AlbumPicUrl = photo.IsFacebookPhoto
                                             ? new PhotoLinks(photo.FacebookLink)
-                                            : _photoService.GeneratePhotoUrl(photo.UserId, photo.Id);
+                                            : PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id);
                 }
 
                 albumsVm.Add(album);
@@ -148,7 +148,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Remove(int id)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            _photoService.RemovePhoto(id, userId);
+            PhotoService.RemovePhoto(id, userId);
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
@@ -184,7 +184,7 @@ namespace Zazz.Web.Controllers
             var photo = SaveImage(image.InputStream, description, albumId, showInFeed);
             response.PhotoId = photo.Id;
             response.Success = true;
-            response.PhotoUrl = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
+            response.PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
 
             return new JsonNetResult(response);
         }
@@ -208,7 +208,7 @@ namespace Zazz.Web.Controllers
                             UserId = userId
                         };
 
-            _photoService.SavePhoto(photo, image, showInFeed);
+            PhotoService.SavePhoto(photo, image, showInFeed);
             return photo;
         }
 
@@ -217,8 +217,8 @@ namespace Zazz.Web.Controllers
         {
             var userId = UserService.GetUserId(User.Identity.Name);
             var userDisplayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = _photoService.GetUserImageUrl(userId);
-            var photo = _photoService.GetPhoto(id);
+            var userPhoto = PhotoService.GetUserImageUrl(userId);
+            var photo = PhotoService.GetPhoto(id);
 
             var vm = new FeedViewModel
                      {
@@ -233,7 +233,7 @@ namespace Zazz.Web.Controllers
                                                   new PhotoViewModel
                                                   {
                                                       PhotoId = photo.Id,
-                                                      PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id),
+                                                      PhotoUrl = PhotoService.GeneratePhotoUrl(userId, photo.Id),
                                                       PhotoDescription = photo.Description,
                                                       IsFromCurrentUser = true,
                                                       FromUserDisplayName = userDisplayName,
@@ -257,7 +257,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Crop(int id, string @for)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            var photo = _photoService.GetPhoto(id);
+            var photo = PhotoService.GetPhoto(id);
 
             if (photo.UserId != userId)
                 throw new HttpException(401, "You are not authorized to crop this image.");
@@ -270,7 +270,7 @@ namespace Zazz.Web.Controllers
                 return View(vm);
             }
 
-            vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
+            vm.PhotoUrl = PhotoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
             vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
                            ? 2.5 : 1;
 
@@ -281,7 +281,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Crop(int id, string @for, CropViewModel vm)
         {
             var cropArea = new Rectangle((int)vm.X, (int)vm.Y, (int)vm.W, (int)vm.H);
-            var photo = _photoService.GetPhoto(id);
+            var photo = PhotoService.GetPhoto(id);
 
             if (photo.IsFacebookPhoto)
             {
@@ -293,11 +293,11 @@ namespace Zazz.Web.Controllers
             if (photo.UserId != userId)
                 throw new HttpException(401, "You are not authorized to crop this image.");
 
-            vm.PhotoUrl = _photoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
+            vm.PhotoUrl = PhotoService.GeneratePhotoUrl(userId, photo.Id).OriginalLink;
             vm.Ratio = @for.Equals("cover", StringComparison.InvariantCultureIgnoreCase)
                            ? 2.5 : 1;
 
-            _photoService.CropPhoto(photo, userId, cropArea);
+            PhotoService.CropPhoto(photo, userId, cropArea);
             return View(vm);
         }
 
@@ -311,7 +311,7 @@ namespace Zazz.Web.Controllers
 
             var currentUserId = UserService.GetUserId(User.Identity.Name);
 
-            var query = _photoService.GetAll().Where(p => p.UserId == currentUserId);
+            var query = PhotoService.GetAll().Where(p => p.UserId == currentUserId);
             if (albumId.HasValue)
                 query = query.Where(p => p.AlbumId == albumId.Value);
 
@@ -334,7 +334,7 @@ namespace Zazz.Web.Controllers
                 PhotoId = p.id,
                 PhotoUrl = p.isFromFb
                                ? new PhotoLinks(p.fbUrl)
-                               : _photoService.GeneratePhotoUrl(p.userId, p.id)
+                               : PhotoService.GeneratePhotoUrl(p.userId, p.id)
             })
                                  .ToList();
 

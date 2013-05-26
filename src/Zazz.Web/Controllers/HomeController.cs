@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = UserService.GetUser(User.Identity.Name);
-                var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper).GetFeeds(user.Id);
+                var feeds = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper).GetFeeds(user.Id);
 
                 var tagStats = _tagService.GetAllTagStats().ToList();
                 var vm = new UserHomeViewModel
@@ -80,7 +80,7 @@ namespace Zazz.Web.Controllers
                 availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
                 .Select(t => t.Id);
 
-            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper).GetTaggedFeeds(userId,
+            var feeds = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper).GetTaggedFeeds(userId,
                                                                                          selectedTagsIds.ToList());
 
             if (Request.IsAjaxRequest())
@@ -100,7 +100,7 @@ namespace Zazz.Web.Controllers
         {
 
             var user = UserService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
+            var feeds = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper)
                                   .GetFeeds(user.Id, lastFeedId);
 
             return View("_FeedsPartial", feeds);
@@ -135,7 +135,7 @@ namespace Zazz.Web.Controllers
                 var autocompleteResponse = new AutocompleteResponse
                           {
                               Id = u.id,
-                              Img = _photoService.GetUserImageUrl(u.id).VerySmallLink
+                              Img = PhotoService.GetUserImageUrl(u.id).VerySmallLink
                           };
 
                 if (!String.IsNullOrEmpty(u.clubname) &&

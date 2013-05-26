@@ -86,7 +86,7 @@ namespace Zazz.Web.Controllers
 
                     NotificationType = n.NotificationType,
                     UserDisplayName = UserService.GetUserDisplayName(n.UserBId),
-                    UserPhoto = _photoService.GetUserImageUrl(n.UserBId),
+                    UserPhoto = PhotoService.GetUserImageUrl(n.UserBId),
                     PhotoViewModel = n.NotificationType != NotificationType.CommentOnPhoto ? null
                     : new PhotoViewModel
                     {
@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers
 
                         FromUserId = n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 
-                        FromUserPhotoUrl = _photoService.GetUserImageUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
+                        FromUserPhotoUrl = PhotoService.GetUserImageUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
 
                         IsFromCurrentUser = userId == n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 
@@ -105,7 +105,7 @@ namespace Zazz.Web.Controllers
                         PhotoUrl = n.CommentNotification.Comment.PhotoComment.Photo.IsFacebookPhoto
 
                         ? new PhotoLinks(n.CommentNotification.Comment.PhotoComment.Photo.FacebookLink)
-                        : _photoService.GeneratePhotoUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId, n.CommentNotification.Comment.PhotoComment.PhotoId)
+                        : PhotoService.GeneratePhotoUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId, n.CommentNotification.Comment.PhotoComment.PhotoId)
                     }
                 });
 

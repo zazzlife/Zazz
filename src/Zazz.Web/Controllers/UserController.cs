@@ -65,7 +65,7 @@ namespace Zazz.Web.Controllers
         {
             var weeklies = user.Weeklies.ToList();
             var displayName = UserService.GetUserDisplayName(user.Id);
-            var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
+            var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
 
             var vm = new ClubProfileViewModel
                      {
@@ -76,13 +76,13 @@ namespace Zazz.Web.Controllers
                          Address = user.ClubDetail.Address,
                          ClubType = user.ClubDetail.ClubType.Name,
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
-                         ? _photoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
+                         ? PhotoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
                          : _defaultImageHelper.GetDefaultCoverImage().OriginalLink,
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
-                         Feeds = new FeedHelper(_uow, UserService, _photoService,
+                         Feeds = new FeedHelper(_uow, UserService, PhotoService,
                              _defaultImageHelper).GetUserActivityFeed(user.Id, currentUserId),
                          Weeklies = weeklies.Select(w => new WeeklyViewModel
                          {
@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers
                              OwnerUserId = w.UserId,
                              CurrentUserId = currentUserId,
                              PhotoLinks = w.PhotoId.HasValue
-                             ? _photoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
+                             ? PhotoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
                              : _defaultImageHelper.GetDefaultWeeklyImage()
                          }),
                          PartyAlbums = _uow.AlbumRepository.GetLatestAlbums(user.Id)
@@ -113,7 +113,7 @@ namespace Zazz.Web.Controllers
                                    PhotoId = p.Id,
                                    PhotoUrl = p.IsFacebookPhoto
                                    ? new PhotoLinks(p.FacebookLink)
-                                   : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                   : PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                                })
                            })
                      };
@@ -124,7 +124,7 @@ namespace Zazz.Web.Controllers
         private ActionResult LoadUserProfile(User user, int currentUserId)
         {
             var displayName = UserService.GetUserDisplayName(user.Id);
-            var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
+            var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
 
             const int PHOTOS_COUNT = 15;
             var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
@@ -136,7 +136,7 @@ namespace Zazz.Web.Controllers
                          UserName = displayName,
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
-                         Feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
+                         Feeds = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper)
                          .GetUserActivityFeed(user.Id, 
                          currentUserId),
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
@@ -150,7 +150,7 @@ namespace Zazz.Web.Controllers
                              PhotoId = p.Id,
                              PhotoUrl = p.IsFacebookPhoto
                              ? new PhotoLinks(p.FacebookLink)
-                             : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                             : PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                          }),
                          TagsStats = new TagStatsWidgetViewModel
                          {
@@ -185,7 +185,7 @@ namespace Zazz.Web.Controllers
                 currentUserId = UserService.GetUserId(User.Identity.Name);
 
             var user = UserService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
+            var feeds = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper)
                                   .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
             return View("_FeedsPartial", feeds);
@@ -318,12 +318,12 @@ namespace Zazz.Web.Controllers
                 return _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
             var userId = UserService.GetUserId(User.Identity.Name);
-            return _photoService.GetUserImageUrl(userId).SmallLink;
+            return PhotoService.GetUserImageUrl(userId).SmallLink;
         }
 
         public string GetUserImageUrl(int userId)
         {
-            return _photoService.GetUserImageUrl(userId).VerySmallLink;
+            return PhotoService.GetUserImageUrl(userId).VerySmallLink;
         }
 
         public string GetCurrentUserDisplayName()

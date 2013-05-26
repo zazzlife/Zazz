@@ -29,7 +29,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Show(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var feed = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
+            var feed = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper)
                 .GetSinglePostFeed(id, currentUserId);
 
             if (feed == null)
@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
 
             _postService.NewPost(post);
 
-            var userPhotoUrl = _photoService.GetUserImageUrl(userId);
+            var userPhotoUrl = PhotoService.GetUserImageUrl(userId);
 
             var vm = new FeedViewModel
                      {
@@ -79,7 +79,7 @@ namespace Zazz.Web.Controllers
                                                                      ? UserService.GetUserDisplayName(toUser.Value)
                                                                      : null,
                                              ToUserPhotoUrl = toUser.HasValue
-                                                                  ? _photoService.GetUserImageUrl(toUser.Value)
+                                                                  ? PhotoService.GetUserImageUrl(toUser.Value)
                                                                   : null
                                          },
                          CommentsViewModel = new CommentsViewModel

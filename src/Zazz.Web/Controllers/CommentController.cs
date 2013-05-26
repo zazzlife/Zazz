@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
                 userId = UserService.GetUserId(User.Identity.Name);
 
-            var feedHelper = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper);
+            var feedHelper = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper);
             var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
             return View("FeedItems/_CommentList", comments);
@@ -52,13 +52,13 @@ namespace Zazz.Web.Controllers
                 throw new ArgumentException("Id cannot be 0", "id");
 
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var feedHelper = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper);
+            var feedHelper = new FeedHelper(_uow, UserService, PhotoService, _defaultImageHelper);
 
             var vm = new CommentsViewModel
                      {
                          CommentType = CommentType.Photo,
                          ItemId = id,
-                         CurrentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId),
+                         CurrentUserPhotoUrl = PhotoService.GetUserImageUrl(currentUserId),
                          Comments = feedHelper.GetComments(id, CommentType.Photo, currentUserId)
                      };
 
@@ -111,7 +111,7 @@ namespace Zazz.Web.Controllers
                                 Time = c.Time,
                                 UserId = c.UserId,
                                 UserDisplayName = UserService.GetUserDisplayName(userId),
-                                UserPhotoUrl = _photoService.GetUserImageUrl(userId)
+                                UserPhotoUrl = PhotoService.GetUserImageUrl(userId)
                             };
 
             return View("FeedItems/_SingleComment", commentVm);
