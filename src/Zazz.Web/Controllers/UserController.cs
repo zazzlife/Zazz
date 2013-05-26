@@ -311,32 +311,5 @@ namespace Zazz.Web.Controllers
             user.ClubDetail.CoverPhotoId = id;
             _uow.SaveChanges();
         }
-
-        public string GetCurrentUserImageUrl()
-        {
-            if (!User.Identity.IsAuthenticated)
-                return DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
-
-            var userId = UserService.GetUserId(User.Identity.Name);
-            return PhotoService.GetUserImageUrl(userId).SmallLink;
-        }
-
-        public string GetUserImageUrl(int userId)
-        {
-            return PhotoService.GetUserImageUrl(userId).VerySmallLink;
-        }
-
-        public string GetCurrentUserDisplayName()
-        {
-            if (!User.Identity.IsAuthenticated)
-                return "Not Logged in!";
-
-            return UserService.GetUserDisplayName(User.Identity.Name);
-        }
-
-        public string GetUserDisplayName(int userId)
-        {
-            return UserService.GetUserDisplayName(userId);
-        }
     }
 }
