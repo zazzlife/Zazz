@@ -105,7 +105,7 @@ namespace Zazz.Web.Controllers
             else
             {
                 return
-                    "<span id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
+                    "<span style=\"margin-left: 3px;\" id=\"follow-request-count\" class=\"badge badge-small badge-info\">"
                     + requestsCount + "</span>";
             }
         }
