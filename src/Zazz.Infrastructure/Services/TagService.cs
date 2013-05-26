@@ -19,6 +19,7 @@ namespace Zazz.Infrastructure.Services
 
         public IEnumerable<TagStat> GetAllTagStats()
         {
+            //TODO: cache this for 5 minutes.
             return _uow.TagStatRepository.GetAll();
         }
 

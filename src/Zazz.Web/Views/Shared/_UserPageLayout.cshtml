@@ -1,10 +1,14 @@
-﻿@{
+﻿@using Zazz.Web.Controllers
+@{
     Layout = "_Layout.cshtml";
+    
+    // only showing tags in the home page, if you want to show in all pages with UserPageLayout,
+    // add GetTags to the base controller and uncomment the line below to get its context.
+    //var controller = ViewContext.Controller as BaseController;  
 }
 
 <div id="user-home-page-content">
     <div class="container">
-
         @* LEFT PANEL *@
         <section class="left-panel">
             <div class="user">
