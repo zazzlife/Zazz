@@ -252,7 +252,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var lastFeed = new Feed
                            {
-                               FeedType = FeedType.Picture,
+                               FeedType = FeedType.Photo,
                                Time = DateTime.UtcNow.AddDays(-2)
                            };
 
@@ -322,7 +322,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var lastFeed = new Feed
             {
-                FeedType = FeedType.Picture,
+                FeedType = FeedType.Photo,
                 Time = DateTime.UtcNow.AddHours(-23)
             };
 

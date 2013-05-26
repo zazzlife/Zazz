@@ -5,6 +5,6 @@ namespace Zazz.Core.Models.Data.Enums
         Post,
         Event,
         Comment,
-        Picture
+        Photo
     }
 }

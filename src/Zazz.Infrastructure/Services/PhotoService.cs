@@ -114,7 +114,7 @@ namespace Zazz.Infrastructure.Services
                 // Checking if the last user feed is photo and it is less than 24 hours.
 
                 var lastFeed = _uow.FeedRepository.GetUserLastFeed(photo.UserId);
-                if (lastFeed != null && lastFeed.FeedType == FeedType.Picture &&
+                if (lastFeed != null && lastFeed.FeedType == FeedType.Photo &&
                     lastFeed.Time >= DateTime.UtcNow.AddDays(-1))
                 {
                     lastFeed.FeedPhotos.Add(new FeedPhoto
@@ -126,7 +126,7 @@ namespace Zazz.Infrastructure.Services
                 {
                     var feed = new Feed
                                {
-                                   FeedType = FeedType.Picture,
+                                   FeedType = FeedType.Photo,
                                    Time = photo.UploadDate,
                                };
 

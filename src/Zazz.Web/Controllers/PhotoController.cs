@@ -226,7 +226,7 @@ namespace Zazz.Web.Controllers
                          UserImageUrl = userPhoto,
                          UserDisplayName = userDisplayName,
                          Time = photo.UploadDate,
-                         FeedType = FeedType.Picture,
+                         FeedType = FeedType.Photo,
                          IsFromCurrentUser = true,
                          PhotoViewModel = new List<PhotoViewModel>
                                               {

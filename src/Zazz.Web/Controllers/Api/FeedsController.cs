@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers.Api
                                         Time = c.Time
                                     }),
 
-                       Photos = feed.FeedType == FeedType.Picture
+                       Photos = feed.FeedType == FeedType.Photo
                        ? feed.PhotoViewModel.Select(p => new ApiPhoto
                                                          {
                                                              PhotoId = p.PhotoId,

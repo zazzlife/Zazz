@@ -184,7 +184,7 @@ namespace Zazz.Web.Helpers
 
                 #region Photo
             }
-            else if (feed.FeedType == FeedType.Picture)
+            else if (feed.FeedType == FeedType.Photo)
             {
                 var photos = _uow.PhotoRepository.GetPhotos(feed.FeedPhotos.Select(f => f.PhotoId)).ToList();
 

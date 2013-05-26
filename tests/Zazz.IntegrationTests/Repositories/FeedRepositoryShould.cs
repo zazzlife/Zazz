@@ -318,7 +318,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             var firstFeed = new Feed
                             {
-                                FeedType = FeedType.Picture,
+                                FeedType = FeedType.Photo,
                                 FeedUsers = new List<FeedUser>
                                               {
                                                   new FeedUser {UserId = user.Id}
