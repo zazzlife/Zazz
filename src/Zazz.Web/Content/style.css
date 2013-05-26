@@ -44,6 +44,10 @@ body {
     font-family: 'Open Sans';
 }
 
+article .container {
+    padding-top: 45px;
+}
+
 /*img {
     max-height: 100%;
     max-width: 100%;
