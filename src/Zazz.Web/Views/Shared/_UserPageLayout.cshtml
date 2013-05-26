@@ -1,10 +1,15 @@
-﻿@using Zazz.Web.Controllers
+﻿@using Zazz.Infrastructure.Helpers
+@using Zazz.Web.Controllers
+@using System.Linq;
 @{
     Layout = "_Layout.cshtml";
-    
-    // only showing tags in the home page, if you want to show in all pages with UserPageLayout,
-    // add GetTags to the base controller and uncomment the line below to get its context.
-    //var controller = ViewContext.Controller as BaseController;  
+
+    TagStatsWidgetViewModel tagStats = null;
+    var controller = ViewContext.Controller as UserPageLayoutBaseController;
+    if (controller != null)
+    {
+        tagStats = controller.GetTagStats();
+    }
 }
 
 <div id="user-home-page-content">
@@ -43,6 +48,16 @@
                 <li><a href="#">Link A</a></li>
                 <li><a href="#">Link B</a></li>*@
             </ul>
+            
+            <ul class="tag-stats">
+                @foreach (var t in tagStats.Tags.Take(6))
+                {
+                    <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                    <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
+                }
+                <li class="tags-lastupdate">last update: <strong>@tagStats.LastUpdate.ToRelativeTime()</strong></li>
+            </ul>
+
         </section>
 
         @* MIDDLE PANEL *@
@@ -86,6 +101,15 @@
 
         <section class="right-panel">
             @RenderSection("RightPanel", false)
+            
+            <ul class="tag-stats">
+                @foreach (var t in tagStats.Tags.Skip(6))
+                {
+                    <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                    <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
+                }
+                <li class="tags-lastupdate">last update: <strong>@tagStats.LastUpdate.ToRelativeTime()</strong></li>
+            </ul>
         </section>
 
         <div class="clearfix"></div>

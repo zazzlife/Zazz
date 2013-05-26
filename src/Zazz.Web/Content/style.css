@@ -1072,6 +1072,10 @@ a.tag {
     padding-bottom: 15px;
 }
 
+.tag-stats a {
+    color: black;
+}
+
 .tag-header {
     font-weight: 600;
     font-size: 14px;
