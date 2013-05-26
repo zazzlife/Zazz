@@ -239,6 +239,7 @@
     <Compile Include="Controllers\PhotoController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserPageLayoutBaseController.cs" />
     <Compile Include="Controllers\WeeklyController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
