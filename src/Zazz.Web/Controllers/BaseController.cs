@@ -17,7 +17,7 @@ namespace Zazz.Web.Controllers
             _photoService = photoService;
         }
 
-        public string GetDisplayName()
+        public string GetCurrentUserDisplayName()
         {
             if (!User.Identity.IsAuthenticated)
                 return "Not Logged in!";
@@ -28,6 +28,11 @@ namespace Zazz.Web.Controllers
         public string GetDisplayName(int id)
         {
             return UserService.GetUserDisplayName(id);
+        }
+
+        public string GetVerySmallDisplayPicture()
+        {
+            return GetDisplayPicture().VerySmallLink;
         }
 
         public PhotoLinks GetDisplayPicture()

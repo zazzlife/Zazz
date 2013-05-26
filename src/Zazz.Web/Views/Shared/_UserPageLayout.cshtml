@@ -1,5 +1,4 @@
-﻿@model BaseUserPageLayoutViewModel
-@{
+﻿@{
     Layout = "_Layout.cshtml";
 }
 
@@ -9,8 +8,8 @@
         @* LEFT PANEL *@
         <section class="left-panel">
             <div class="user">
-                <img class="user-img img-rounded img-polaroid" src="@Model.CurrentUserPhoto.VerySmallLink" />
-                <a href="~/user" class="username">@Model.CurrentUserDisplayName</a>
+                <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetVerySmallDisplayPicture")" />
+                <a href="~/user" class="username">@Html.Action("GetCurrentUserDisplayName")</a>
             </div>
             <ul class="nav nav-list">
                 <li class="divider"></li>
