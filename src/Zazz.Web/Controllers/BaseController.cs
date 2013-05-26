@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -27,6 +28,20 @@ namespace Zazz.Web.Controllers
         public string GetDisplayName(int id)
         {
             return _userService.GetUserDisplayName(id);
+        }
+
+        public PhotoLinks GetDisplayPicture()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return new PhotoLinks(""); //TODO: use default image helper
+
+            var userId = _userService.GetUserId(User.Identity.Name);
+            return GetDisplayPicture(userId);
+        }
+
+        private PhotoLinks GetDisplayPicture(int id)
+        {
+            return _photoService.GetUserImageUrl(id);
         }
 
         public void ShowAlert(string message, AlertType alertType)
