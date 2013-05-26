@@ -40,15 +40,15 @@ namespace Zazz.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = _userService.GetUser(User.Identity.Name);
-                var feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper).GetFeeds(user.Id);
+                var user = UserService.GetUser(User.Identity.Name);
+                var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper).GetFeeds(user.Id);
 
                 var tagStats = _tagService.GetAllTagStats().ToList();
                 var vm = new UserHomeViewModel
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                             CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id),
                              CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
                              TagStats = new TagStatsWidgetViewModel
                                         {
@@ -74,7 +74,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Tags(string @select)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var availableTags = _staticDataRepository.GetTags().ToList();
             var selectedTags = String.IsNullOrEmpty(@select)
                                    ? Enumerable.Empty<string>()
@@ -84,7 +84,7 @@ namespace Zazz.Web.Controllers
                 availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
                 .Select(t => t.Id);
 
-            var feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper).GetTaggedFeeds(userId,
+            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper).GetTaggedFeeds(userId,
                                                                                          selectedTagsIds.ToList());
 
             if (Request.IsAjaxRequest())
@@ -92,7 +92,7 @@ namespace Zazz.Web.Controllers
 
             var vm = new TagsPageViewModel
                      {
-                         CurrentUserDisplayName = _userService.GetUserDisplayName(userId),
+                         CurrentUserDisplayName = UserService.GetUserDisplayName(userId),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(userId),
                          AvailableTags = availableTags.Select(t => t.Name),
                          SelectedTags = selectedTags,
@@ -105,8 +105,8 @@ namespace Zazz.Web.Controllers
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
 
-            var user = _userService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
+            var user = UserService.GetUser(User.Identity.Name);
+            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
                                   .GetFeeds(user.Id, lastFeedId);
 
             return View("_FeedsPartial", feeds);

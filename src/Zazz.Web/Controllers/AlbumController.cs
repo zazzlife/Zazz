@@ -35,7 +35,7 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
+                var userId = UserService.GetUserId(User.Identity.Name);
                 var album = new Album
                 {
                     Name = value,
@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public void Remove(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _albumService.DeleteAlbum(id, userId);
         }
 
@@ -70,7 +70,7 @@ namespace Zazz.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 throw new HttpException(403, "");
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var albums = _albumService.GetUserAlbums(userId);
 
             var response = albums.Select(a => new { id = a.Id, name = a.Name });

@@ -304,7 +304,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 // the user is already signed in but oauth email is different
-                var userId = _userService.GetUserId(User.Identity.Name);
+                var userId = UserService.GetUserId(User.Identity.Name);
                 oauthAccount.UserId = userId;
 
                 _authService.AddOAuthAccount(oauthAccount);

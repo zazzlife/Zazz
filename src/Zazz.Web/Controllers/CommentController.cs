@@ -39,9 +39,9 @@ namespace Zazz.Web.Controllers
 
             var userId = 0;
             if (User.Identity.IsAuthenticated)
-                userId = _userService.GetUserId(User.Identity.Name);
+                userId = UserService.GetUserId(User.Identity.Name);
 
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
+            var feedHelper = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper);
             var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
             return View("FeedItems/_CommentList", comments);
@@ -53,8 +53,8 @@ namespace Zazz.Web.Controllers
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
 
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
+            var feedHelper = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper);
 
             var vm = new CommentsViewModel
                      {
@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             if (userId == 0)
                 throw new SecurityException();
 
@@ -112,7 +112,7 @@ namespace Zazz.Web.Controllers
                                 IsFromCurrentUser = userId == c.UserId,
                                 Time = c.Time,
                                 UserId = c.UserId,
-                                UserDisplayName = _userService.GetUserDisplayName(userId),
+                                UserDisplayName = UserService.GetUserDisplayName(userId),
                                 UserPhotoUrl = _photoService.GetUserImageUrl(userId)
                             };
 
@@ -125,7 +125,7 @@ namespace Zazz.Web.Controllers
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _commentService.RemoveComment(id, userId);
         }
 
@@ -135,7 +135,7 @@ namespace Zazz.Web.Controllers
             if (id == 0)
                 throw new ArgumentException("Id cannot be 0", "id");
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _commentService.EditComment(id, userId, comment);
         }
     }

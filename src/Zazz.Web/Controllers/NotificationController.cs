@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Index()
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
             var notificationsVm = GetNotifications(currentUserId, NOTIFICATIONS_PAGE_SIZE);
 
             var vm = new NotificationsPageViewModel
@@ -40,7 +40,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Get(long? lastNotification, int take = 5)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var notifications = GetNotifications(userId, take, lastNotification);
 
             return View("_Notifications", notifications);
@@ -86,12 +86,12 @@ namespace Zazz.Web.Controllers
                                 : 0,
 
                     NotificationType = n.NotificationType,
-                    UserDisplayName = _userService.GetUserDisplayName(n.UserBId),
+                    UserDisplayName = UserService.GetUserDisplayName(n.UserBId),
                     UserPhoto = _photoService.GetUserImageUrl(n.UserBId),
                     PhotoViewModel = n.NotificationType != NotificationType.CommentOnPhoto ? null
                     : new PhotoViewModel
                     {
-                        FromUserDisplayName = _userService.GetUserDisplayName(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
+                        FromUserDisplayName = UserService.GetUserDisplayName(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
 
                         FromUserId = n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 
@@ -115,19 +115,19 @@ namespace Zazz.Web.Controllers
 
         public void MarkAll()
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _notificationService.MarkUserNotificationsAsRead(userId);
         }
 
         public void Remove(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _notificationService.Remove(id, userId);
         }
 
         public string GetNewNotificationsCount()
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var newNotificationsCount = _notificationService.GetUnreadNotificationsCount(userId);
 
             if (newNotificationsCount == 0)

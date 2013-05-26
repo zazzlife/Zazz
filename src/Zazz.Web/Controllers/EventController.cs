@@ -45,8 +45,8 @@ namespace Zazz.Web.Controllers
             var userPhoto = _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified);
             if (Request.IsAuthenticated)
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                userDisplayName = _userService.GetUserDisplayName(userId);
+                var userId = UserService.GetUserId(User.Identity.Name);
+                userDisplayName = UserService.GetUserDisplayName(userId);
                 userPhoto = _photoService.GetUserImageUrl(userId);
             }
 
@@ -190,8 +190,8 @@ namespace Zazz.Web.Controllers
         {
             ViewBag.FormAction = "Create";
 
-            var userId = _userService.GetUserId(User.Identity.Name);
-            var displayName = _userService.GetUserDisplayName(userId);
+            var userId = UserService.GetUserId(User.Identity.Name);
+            var displayName = UserService.GetUserDisplayName(userId);
             var userPhoto = _photoService.GetUserImageUrl(userId);
 
             var vm = new EventDetailsPageViewModel
@@ -212,7 +212,7 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken, Authorize]
         public ActionResult Create(EventDetailsPageViewModel vm)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             if (userId == 0)
                 throw new HttpException(401, "Unauthorized");
 
@@ -225,7 +225,7 @@ namespace Zazz.Web.Controllers
                 return Redirect("~/event/show/" + zazzEvent.Id);
             }
 
-            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(userId);
+            vm.CurrentUserDisplayName = UserService.GetUserDisplayName(userId);
             vm.CurrentUserPhoto = _photoService.GetUserImageUrl(userId);
 
             ViewBag.FormAction = "Create";
@@ -237,8 +237,8 @@ namespace Zazz.Web.Controllers
         {
             var eventVm = GetEvent(id, false);
 
-            var userId = _userService.GetUserId(User.Identity.Name);
-            var displayName = _userService.GetUserDisplayName(userId);
+            var userId = UserService.GetUserId(User.Identity.Name);
+            var displayName = UserService.GetUserDisplayName(userId);
             var userPhoto = _photoService.GetUserImageUrl(userId);
 
             var vm = new EventDetailsPageViewModel
@@ -254,8 +254,8 @@ namespace Zazz.Web.Controllers
         [HttpGet, Authorize]
         public ActionResult Edit(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
-            var displayName = _userService.GetUserDisplayName(userId);
+            var userId = UserService.GetUserId(User.Identity.Name);
+            var displayName = UserService.GetUserDisplayName(userId);
             var userPhoto = _photoService.GetUserImageUrl(userId);
 
             var vm = new EventDetailsPageViewModel
@@ -273,7 +273,7 @@ namespace Zazz.Web.Controllers
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EventDetailsPageViewModel vm)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
 
             if (ModelState.IsValid)
             {
@@ -286,7 +286,7 @@ namespace Zazz.Web.Controllers
                 return Redirect("~/event/show/" + id);
             }
 
-            var displayName = _userService.GetUserDisplayName(userId);
+            var displayName = UserService.GetUserDisplayName(userId);
             var userPhoto = _photoService.GetUserImageUrl(userId);
 
             vm.CurrentUserDisplayName = displayName;
@@ -298,7 +298,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Remove(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _eventService.DeleteEvent(id, userId);
 
             ShowAlert("The event has been deleted.", AlertType.Success);
@@ -329,7 +329,7 @@ namespace Zazz.Web.Controllers
 
         private EventViewModel GetEvent(int id, bool ownerOnly)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
 
             var zazzEvent = _eventService.GetEvent(id);
             if (zazzEvent == null)

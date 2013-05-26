@@ -25,8 +25,8 @@ namespace Zazz.Web.Controllers
 
         public void FollowUser(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
-            var accountType = _userService.GetUserAccountType(id);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
+            var accountType = UserService.GetUserAccountType(id);
 
             if (accountType == AccountType.User)
             {
@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers
         /// <returns></returns>
         public void Unfollow(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.RemoveFollow(currentUserId, id);
         }
 
@@ -56,25 +56,25 @@ namespace Zazz.Web.Controllers
         /// <returns></returns>
         public void StopFollow(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.RemoveFollow(id, currentUserId);
         }
 
         public void AcceptFollow(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.AcceptFollowRequest(id, currentUserId);
         }
 
         public void RejectFollow(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.RejectFollowRequest(id, currentUserId);
         }
 
         public ActionResult GetFollowRequests()
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var userFollows = _followService.GetFollowRequests(userId);
 
             var vm = new List<FollowRequestViewModel>();
@@ -96,7 +96,7 @@ namespace Zazz.Web.Controllers
 
         public string GetFollowRequestsCount()
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var requestsCount = _followService.GetFollowRequestsCount(userId);
 
             if (requestsCount == 0)

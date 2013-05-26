@@ -30,8 +30,8 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Show(int id)
         {
-            var currentUserId = _userService.GetUserId(User.Identity.Name);
-            var feed = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
+            var currentUserId = UserService.GetUserId(User.Identity.Name);
+            var feed = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
                 .GetSinglePostFeed(id, currentUserId);
 
             if (feed == null)
@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers
 
             var vm = new ShowPostViewModel
                      {
-                         CurrentUserDisplayName = _userService.GetUserDisplayName(currentUserId),
+                         CurrentUserDisplayName = UserService.GetUserDisplayName(currentUserId),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(currentUserId),
                          FeedViewModel = feed
                      };
@@ -53,7 +53,7 @@ namespace Zazz.Web.Controllers
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             var post = new Post
                        {
                            CreatedTime = DateTime.UtcNow,
@@ -72,7 +72,7 @@ namespace Zazz.Web.Controllers
                          FeedType = FeedType.Post,
                          UserId = userId,
                          Time = post.CreatedTime,
-                         UserDisplayName = _userService.GetUserDisplayName(userId),
+                         UserDisplayName = UserService.GetUserDisplayName(userId),
                          UserImageUrl = userPhotoUrl,
                          PostViewModel = new PostViewModel
                                          {
@@ -80,7 +80,7 @@ namespace Zazz.Web.Controllers
                                              PostText = message,
                                              ToUserId = toUser,
                                              ToUserDisplayName = toUser.HasValue
-                                                                     ? _userService.GetUserDisplayName(toUser.Value)
+                                                                     ? UserService.GetUserDisplayName(toUser.Value)
                                                                      : null,
                                              ToUserPhotoUrl = toUser.HasValue
                                                                   ? _photoService.GetUserImageUrl(toUser.Value)
@@ -101,14 +101,14 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public void Remove(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _postService.RemovePost(id, userId);
         }
 
         [Authorize, HttpPost]
         public void Edit(int id, string text)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _postService.EditPost(id, text, userId);
         }
     }

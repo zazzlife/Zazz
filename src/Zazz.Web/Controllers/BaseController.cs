@@ -8,12 +8,12 @@ namespace Zazz.Web.Controllers
 {
     public class BaseController : Controller
     {
-        protected readonly IUserService _userService;
+        protected readonly IUserService UserService;
         protected readonly IPhotoService _photoService;
 
         public BaseController(IUserService userService, IPhotoService photoService)
         {
-            _userService = userService;
+            UserService = userService;
             _photoService = photoService;
         }
 
@@ -22,12 +22,12 @@ namespace Zazz.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return "Not Logged in!";
 
-            return _userService.GetUserDisplayName(User.Identity.Name);
+            return UserService.GetUserDisplayName(User.Identity.Name);
         }
 
         public string GetDisplayName(int id)
         {
-            return _userService.GetUserDisplayName(id);
+            return UserService.GetUserDisplayName(id);
         }
 
         public PhotoLinks GetDisplayPicture()
@@ -35,7 +35,7 @@ namespace Zazz.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return new PhotoLinks(""); //TODO: use default image helper
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             return GetDisplayPicture(userId);
         }
 

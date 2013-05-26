@@ -38,7 +38,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             return ShowProfile(userId);
         }
 
@@ -52,9 +52,9 @@ namespace Zazz.Web.Controllers
             var currentUserDisplayName = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
-                currentUserId = _userService.GetUserId(User.Identity.Name);
+                currentUserId = UserService.GetUserId(User.Identity.Name);
                 currentUserPhoto = _photoService.GetUserImageUrl(currentUserId);
-                currentUserDisplayName = _userService.GetUserDisplayName(currentUserId);
+                currentUserDisplayName = UserService.GetUserDisplayName(currentUserId);
             }
 
             if (user.AccountType == AccountType.User)
@@ -71,7 +71,7 @@ namespace Zazz.Web.Controllers
             string currentUserDisplayName, PhotoLinks currentUserPhoto)
         {
             var weeklies = user.Weeklies.ToList();
-            var displayName = _userService.GetUserDisplayName(user.Id);
+            var displayName = UserService.GetUserDisplayName(user.Id);
             var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
 
             var vm = new ClubProfileViewModel
@@ -91,7 +91,7 @@ namespace Zazz.Web.Controllers
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
-                         Feeds = new FeedHelper(_uow, _userService, _photoService,
+                         Feeds = new FeedHelper(_uow, UserService, _photoService,
                              _defaultImageHelper).GetUserActivityFeed(user.Id, currentUserId),
                          Weeklies = weeklies.Select(w => new WeeklyViewModel
                          {
@@ -133,7 +133,7 @@ namespace Zazz.Web.Controllers
         private ActionResult LoadUserProfile(User user, int currentUserId,
             string currentUserDisplayName, PhotoLinks currentUserPhoto)
         {
-            var displayName = _userService.GetUserDisplayName(user.Id);
+            var displayName = UserService.GetUserDisplayName(user.Id);
             var profilePhotoUrl = _photoService.GetUserImageUrl(user.Id);
 
             const int PHOTOS_COUNT = 15;
@@ -148,7 +148,7 @@ namespace Zazz.Web.Controllers
                          CurrentUserPhoto = currentUserPhoto,
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
-                         Feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
+                         Feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
                          .GetUserActivityFeed(user.Id, 
                          currentUserId),
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
@@ -194,10 +194,10 @@ namespace Zazz.Web.Controllers
         {
             var currentUserId = 0;
             if (Request.IsAuthenticated)
-                currentUserId = _userService.GetUserId(User.Identity.Name);
+                currentUserId = UserService.GetUserId(User.Identity.Name);
 
-            var user = _userService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper)
+            var user = UserService.GetUser(User.Identity.Name);
+            var feeds = new FeedHelper(_uow, UserService, _photoService, _defaultImageHelper)
                                   .GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
             return View("_FeedsPartial", feeds);
@@ -214,7 +214,7 @@ namespace Zazz.Web.Controllers
         {
             var vm = new EditUserProfileViewModel
                      {
-                         CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                         CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
                          Gender = user.UserDetail.Gender,
                          FullName = user.UserDetail.FullName,
@@ -242,7 +242,7 @@ namespace Zazz.Web.Controllers
             vm.Schools =_staticDataRepo.GetSchools();
             vm.Majors = _staticDataRepo.GetMajors();
 
-            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id);
+            vm.CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id);
             vm.CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id);
 
             if (ModelState.IsValid)
@@ -272,7 +272,7 @@ namespace Zazz.Web.Controllers
                          ClubName = user.ClubDetail.ClubName,
                          ClubType = user.ClubDetail.ClubTypeId,
                          ClubTypes = _staticDataRepo.GetClubTypes(),
-                         CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id),
+                         CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id),
                          CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id),
                          SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                          SyncFbEvents = user.Preferences.SyncFbEvents,
@@ -305,7 +305,7 @@ namespace Zazz.Web.Controllers
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
-            vm.CurrentUserDisplayName = _userService.GetUserDisplayName(user.Id);
+            vm.CurrentUserDisplayName = UserService.GetUserDisplayName(user.Id);
             vm.CurrentUserPhoto = _photoService.GetUserImageUrl(user.Id);
             vm.ClubTypes = _staticDataRepo.GetClubTypes();
 
@@ -338,7 +338,7 @@ namespace Zazz.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return _defaultImageHelper.GetUserDefaultImage(Gender.NotSpecified).SmallLink;
 
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             return _photoService.GetUserImageUrl(userId).SmallLink;
         }
 
@@ -352,12 +352,12 @@ namespace Zazz.Web.Controllers
             if (!User.Identity.IsAuthenticated)
                 return "Not Logged in!";
 
-            return _userService.GetUserDisplayName(User.Identity.Name);
+            return UserService.GetUserDisplayName(User.Identity.Name);
         }
 
         public string GetUserDisplayName(int userId)
         {
-            return _userService.GetUserDisplayName(userId);
+            return UserService.GetUserDisplayName(userId);
         }
     }
 }

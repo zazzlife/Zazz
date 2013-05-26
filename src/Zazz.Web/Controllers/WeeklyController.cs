@@ -28,7 +28,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult New(WeeklyViewModel vm)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
 
             _weeklyService.CreateWeekly(new Weekly
                                         {
@@ -51,7 +51,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Edit(WeeklyViewModel vm)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _weeklyService.EditWeekly(new Weekly
                                       {
                                           Id = vm.Id,
@@ -73,7 +73,7 @@ namespace Zazz.Web.Controllers
 
         public void Remove(int id)
         {
-            var userId = _userService.GetUserId(User.Identity.Name);
+            var userId = UserService.GetUserId(User.Identity.Name);
             _weeklyService.RemoveWeekly(id, userId);
         }
     }
