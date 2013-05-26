@@ -376,12 +376,12 @@ hr.gold-line {
         margin-right: 0;
     }
 
-    .top-menu .menu-items li a, .top-menu .menu-items li a:hover {
+    .top-menu .menu-items li > a, .top-menu .menu-items li > a:hover {
         color: black;
         text-decoration: none;
     }
 
-    .top-menu .menu-items li a>i {
+    .top-menu .menu-items li a > i {
         margin-right: 3px;
     }
 
