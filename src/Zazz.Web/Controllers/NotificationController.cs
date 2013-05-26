@@ -11,19 +11,15 @@ using Zazz.Web.Models;
 namespace Zazz.Web.Controllers
 {
     [Authorize]
-    public class NotificationController : Controller
+    public class NotificationController : BaseController
     {
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly INotificationService _notificationService;
 
         public const byte NOTIFICATIONS_PAGE_SIZE = 30;
 
         public NotificationController(IUserService userService, IPhotoService photoService,
-            INotificationService notificationService)
+            INotificationService notificationService) : base (userService, photoService)
         {
-            _userService = userService;
-            _photoService = photoService;
             _notificationService = notificationService;
         }
 

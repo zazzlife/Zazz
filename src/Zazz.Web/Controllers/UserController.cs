@@ -20,20 +20,16 @@ namespace Zazz.Web.Controllers
     {
         private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
-        private readonly IPhotoService _photoService;
-        private readonly IUserService _userService;
         private readonly ICacheService _cacheService;
         private readonly ITagService _tagService;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper) : base (userService, photoService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
-            _photoService = photoService;
-            _userService = userService;
             _cacheService = cacheService;
             _tagService = tagService;
             _defaultImageHelper = defaultImageHelper;
@@ -353,6 +349,9 @@ namespace Zazz.Web.Controllers
 
         public string GetCurrentUserDisplayName()
         {
+            if (!User.Identity.IsAuthenticated)
+                return "Not Logged in!";
+
             return _userService.GetUserDisplayName(User.Identity.Name);
         }
 

@@ -1,11 +1,31 @@
 ﻿using System;
 using System.Web.Mvc;
+using Zazz.Core.Interfaces;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
     public class BaseController : Controller
     {
+        protected readonly IUserService _userService;
+        protected readonly IPhotoService _photoService;
+
+        public BaseController(IUserService userService, IPhotoService photoService)
+        {
+            _userService = userService;
+            _photoService = photoService;
+        }
+
+        public string GetDisplayName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDisplayName(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ShowAlert(string message, AlertType alertType)
         {
             TempData["alert"] = true;

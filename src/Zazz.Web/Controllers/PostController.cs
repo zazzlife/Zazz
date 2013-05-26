@@ -12,20 +12,17 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class PostController : Controller
+    public class PostController : BaseController
     {
         private readonly IPostService _postService;
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IUoW _uow;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         public PostController(IPostService postService, IUserService userService,
             IPhotoService photoService, IUoW uow, IDefaultImageHelper defaultImageHelper)
+            : base (userService, photoService)
         {
             _postService = postService;
-            _userService = userService;
-            _photoService = photoService;
             _uow = uow;
             _defaultImageHelper = defaultImageHelper;
         }

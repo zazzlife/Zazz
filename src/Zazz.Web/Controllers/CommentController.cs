@@ -14,20 +14,17 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class CommentController : Controller
+    public class CommentController : BaseController
     {
         private readonly IUoW _uow;
-        private readonly IPhotoService _photoService;
-        private readonly IUserService _userService;
         private readonly ICommentService _commentService;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         public CommentController(IUoW uow, IPhotoService photoService, IUserService userService,
             ICommentService commentService, IDefaultImageHelper defaultImageHelper)
+            : base(userService, photoService)
         {
             _uow = uow;
-            _photoService = photoService;
-            _userService = userService;
             _commentService = commentService;
             _defaultImageHelper = defaultImageHelper;
         }

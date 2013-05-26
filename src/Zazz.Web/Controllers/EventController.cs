@@ -19,21 +19,18 @@ namespace Zazz.Web.Controllers
 {
     public class EventController : BaseController
     {
-        private readonly IUserService _userService;
         private readonly IEventService _eventService;
         private readonly IUoW _uow;
-        private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         private const int PAGE_SIZE = 10;
 
         public EventController(IUserService userService, IEventService eventService,
             IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
+            : base(userService, photoService)
         {
-            _userService = userService;
             _eventService = eventService;
             _uow = uow;
-            _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
         }
 
@@ -267,7 +264,7 @@ namespace Zazz.Web.Controllers
                          CurrentUserDisplayName = displayName,
                          CurrentUserPhoto = userPhoto
                      };
-             
+
             ViewBag.FormAction = "Edit";
 
             return View("EditForm", vm);

@@ -13,19 +13,16 @@ using Zazz.Web.Models;
 namespace Zazz.Web.Controllers
 {
     [Authorize]
-    public class WeeklyController : Controller
+    public class WeeklyController : BaseController
     {
         private readonly IWeeklyService _weeklyService;
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         public WeeklyController(IWeeklyService weeklyService, IUserService userService,
             IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
+            : base (userService, photoService)
         {
             _weeklyService = weeklyService;
-            _userService = userService;
-            _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
         }
 

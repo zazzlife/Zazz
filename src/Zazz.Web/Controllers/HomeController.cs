@@ -16,19 +16,15 @@ namespace Zazz.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly IUoW _uow;
-        private readonly IPhotoService _photoService;
-        private readonly IUserService _userService;
         private readonly IStaticDataRepository _staticDataRepository;
         private readonly ITagService _tagService;
         private readonly IDefaultImageHelper _defaultImageHelper;
 
         public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper) : base(userService, photoService)
         {
             _uow = uow;
-            _photoService = photoService;
-            _userService = userService;
             _staticDataRepository = staticDataRepository;
             _tagService = tagService;
             _defaultImageHelper = defaultImageHelper;

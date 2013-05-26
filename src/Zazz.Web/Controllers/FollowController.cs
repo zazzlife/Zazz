@@ -16,14 +16,11 @@ namespace Zazz.Web.Controllers
     public class FollowController : BaseController
     {
         private readonly IFollowService _followService;
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
 
         public FollowController(IFollowService followService, IUserService userService, IPhotoService photoService)
+            : base(userService, photoService)
         {
             _followService = followService;
-            _userService = userService;
-            _photoService = photoService;
         }
 
         public void FollowUser(int id)

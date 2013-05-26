@@ -25,14 +25,14 @@ namespace Zazz.Web.Controllers
         private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
 
-        public AccountController(IStaticDataRepository staticData, IAuthService authService, ICryptoService cryptoService, IUserService userService)
+        public AccountController(IStaticDataRepository staticData, IAuthService authService,
+            ICryptoService cryptoService, IUserService userService, IPhotoService photoService) 
+            : base(userService, photoService)
         {
             _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
-            _userService = userService;
         }
 
         public ActionResult Index()
