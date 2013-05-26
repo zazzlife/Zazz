@@ -23,7 +23,8 @@ var clickedAwayFromPopout = false;
 
 $('#notifications-link').popover({
     html: true,
-    trigger: 'manual'
+    trigger: 'manual',
+    placement: 'bottom'
 }).click(function (e) {
 
     var self = $(this);
@@ -71,8 +72,8 @@ $('#notifications-link').popover({
             var linkWidth = self.parent('li').width();
             var linkHeight = self.parent('li').height();
 
-            var left = linkPosition.left + linkWidth;
-            var top = (linkPosition.top + (linkHeight / 2)) - (popover.height() / 2);
+            var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
+            var top = linkPosition.top + linkHeight;
 
             popover.css({
                 top: top,

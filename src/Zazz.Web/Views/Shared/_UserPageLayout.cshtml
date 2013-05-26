@@ -18,7 +18,7 @@
             <ul class="nav nav-list">
                 <li class="divider"></li>
 
-                <li class="nav-header">ACCOUNT</li>
+                @*<li class="nav-header">ACCOUNT</li>
                 <li>
                     <a href="#" id="notifications-link" 
                        data-toggle="popover" data-html="true" data-original-title="Notifications"
@@ -41,7 +41,7 @@
 
                 <li class="nav-header">OTHER LINKS</li>
                 <li><a href="#">Link A</a></li>
-                <li><a href="#">Link B</a></li>
+                <li><a href="#">Link B</a></li>*@
             </ul>
         </section>
 
@@ -61,10 +61,18 @@
                 <li class="header">Account</li>
                 <li>
                     <ul class="menu-items">
+                        <li>
+                            <a href="#" id="notifications-link" 
+                               data-toggle="popover" data-html="true" data-original-title="Notifications"
+                               data-title="Notifications"
+                               data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
+                        
+                                <i class="icon-globe"></i>Notifications @Html.Action("GetNewNotificationsCount", "Notification")
+                            </a>
+                        </li>
                         <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                         <li><a href="~/event/list"><i class="icon-calendar"></i>Events</a></li>
                         <li><a href="~/photo/"><i class="icon-camera"></i>Photos</a></li>
-                        <li><a href="~/user/edit"><i class="icon-pencil"></i>Edit Profile</a></li>
                         <li><a href="#"><i class="icon-glass"></i>Clubs</a></li>
                     </ul>
                 </li>
