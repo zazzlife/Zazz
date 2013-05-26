@@ -21,6 +21,21 @@ function markAllNotificationsAsRead() {
 var isPopoutVisible = false;
 var clickedAwayFromPopout = false;
 
+function calculatePopoverPosition(link, popover) {
+    
+    var linkPosition = link.offset();
+    var linkWidth = link.width();
+    var linkHeight = link.height();
+
+    var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
+    var top = linkPosition.top + linkHeight;
+
+    popover.css({
+        top: top,
+        left: left
+    });
+}
+
 $('#notifications-link').popover({
     html: true,
     trigger: 'manual',
@@ -28,6 +43,7 @@ $('#notifications-link').popover({
 }).click(function (e) {
 
     var self = $(this);
+    var li = self.parent('li');
     self.popover('show');
     clickedAwayFromPopout = false;
     isPopoutVisible = true;
@@ -45,6 +61,8 @@ $('#notifications-link').popover({
     popover.children('.notification-popover-footer').remove();
     var allNotificationsLink = $('<div class="notification-popover-footer"><a href="/notification">View all</a></div>');
     allNotificationsLink.appendTo(popover);
+
+    calculatePopoverPosition(li, popover);
 
     var url = "/notification/get";
     var take = 5;
@@ -68,17 +86,18 @@ $('#notifications-link').popover({
             });
 
             // calculating the new position of the popover
-            var linkPosition = self.parent('li').offset();
-            var linkWidth = self.parent('li').width();
-            var linkHeight = self.parent('li').height();
+            calculatePopoverPosition(li, popover);
+            //var linkPosition = self.parent('li').offset();
+            //var linkWidth = self.parent('li').width();
+            //var linkHeight = self.parent('li').height();
 
-            var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
-            var top = linkPosition.top + linkHeight;
+            //var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
+            //var top = linkPosition.top + linkHeight;
 
-            popover.css({
-                top: top,
-                left: left
-            });
+            //popover.css({
+            //    top: top,
+            //    left: left
+            //});
             applyPageStyles();
             markAllNotificationsAsRead();
         }
