@@ -140,7 +140,10 @@ namespace Zazz.Web.Controllers.Api
                              Price = feed.EventViewModel.Price,
                              Street = feed.EventViewModel.Street,
                              Time = feed.EventViewModel.Time,
-                             UtcTime = feed.EventViewModel.Time.ToUniversalTime().DateTime
+                             UtcTime = feed.EventViewModel.Time.ToUniversalTime().DateTime,
+                             UserDisplayName = feed.UserDisplayName,
+                             UserDisplayPhoto = feed.UserImageUrl,
+                             UserId = feed.UserId
                          }
                        : null
                    };

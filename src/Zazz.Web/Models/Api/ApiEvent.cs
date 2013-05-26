@@ -33,6 +33,12 @@ namespace Zazz.Web.Models.Api
 
         public bool IsFromCurrentUser { get; set; }
 
+        public int UserId { get; set; }
+
+        public string UserDisplayName { get; set; }
+
+        public PhotoLinks UserDisplayPhoto { get; set; }
+
         public float? Latitude { get; set; }
 
         public float? Longitude { get; set; }
