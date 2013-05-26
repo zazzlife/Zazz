@@ -44,7 +44,7 @@ body {
     font-family: 'Open Sans';
 }
 
-article .container {
+article#layout .container {
     padding-top: 45px;
 }
 
@@ -1000,6 +1000,7 @@ ul.thumbnail-rows {
 .notification-list {
     list-style: none;
     margin: 0;
+    text-align: left;
 }
 
 .notification-list .notification-row {
@@ -1007,6 +1008,7 @@ ul.thumbnail-rows {
     padding-bottom: 8px;
     border-bottom: 1px dashed gray;
     position: relative;
+    width: 100%;
 }
 
 .notification-list .notification-row:first-child {
