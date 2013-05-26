@@ -111,9 +111,13 @@ namespace Zazz.Web.Controllers.Api
                          {
                              Message = feed.PostViewModel.PostText,
                              PostId = feed.PostViewModel.PostId,
+                             FromUserId = feed.UserId,
+                             FromUserDisplayName = feed.UserDisplayName,
+                             FromUserDisplayPhoto = feed.UserImageUrl,
                              ToUserDisplayName = feed.PostViewModel.ToUserDisplayName,
                              ToUserId = feed.PostViewModel.ToUserId,
-                             ToUserDisplayPhoto = feed.PostViewModel.ToUserPhotoUrl
+                             ToUserDisplayPhoto = feed.PostViewModel.ToUserPhotoUrl,
+                             Time = feed.Time
                          }
                        : null,
 
