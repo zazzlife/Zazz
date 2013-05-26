@@ -1044,6 +1044,10 @@ li.new-notification {
     font-size: 14px;
 }
 
+.popover-content {
+    min-height: 15px;
+}
+
 /***************************************
     Tags
 ***************************************/
