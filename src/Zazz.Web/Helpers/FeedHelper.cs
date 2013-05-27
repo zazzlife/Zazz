@@ -323,8 +323,9 @@ namespace Zazz.Web.Helpers
                 CanCurrentUserRemoveFeed = feed.CurrentUserCanRemoveFeed || feed.IsFromCurrentUser,
                 Time = feed.Time,
 
-                Comments = feed.CommentsViewModel.Comments
-                .Select(c => new ApiComment
+                Comments = feed.CommentsViewModel.Comments == null
+                ? null //Enumerable.Empty<ApiComment>()
+                : feed.CommentsViewModel.Comments.Select(c => new ApiComment
                 {
                     CommentId = c.CommentId,
                     CommentText = c.CommentText,
