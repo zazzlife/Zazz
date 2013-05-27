@@ -23,6 +23,8 @@ namespace Zazz.Core.Interfaces
 
         int GetFollowRequestsCount(int userId);
 
+        int GetFollowersCount(int userId);
+
         List<FollowRequest> GetFollowRequests(int userId);
     }
 }
