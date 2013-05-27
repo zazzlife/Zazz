@@ -258,6 +258,7 @@
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
+    <Compile Include="Models\Api\ApiWeekly.cs" />
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\Api\ApiPhoto.cs" />
     <Compile Include="Models\Api\ApiPost.cs" />

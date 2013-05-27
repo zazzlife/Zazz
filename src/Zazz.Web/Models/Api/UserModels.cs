@@ -48,6 +48,8 @@ namespace Zazz.Web.Models.Api
 
         public IEnumerable<ApiPhoto> Photos { get; set; }
 
+        public IEnumerable<ApiWeekly> Weeklies { get; set; }
+
         public ApiUserDetails UserDetails { get; set; }
 
         public ApiClubDetails ClubDetails { get; set; }
