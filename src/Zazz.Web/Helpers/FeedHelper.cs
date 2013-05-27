@@ -315,6 +315,7 @@ namespace Zazz.Web.Helpers
         {
             return new ApiFeed
             {
+                FeedId = feed.FeedId,
                 FeedType = feed.FeedType,
                 UserId = feed.UserId,
                 UserDisplayName = feed.UserDisplayName,

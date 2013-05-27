@@ -7,6 +7,8 @@ namespace Zazz.Web.Models.Api
 {
     public class ApiFeed
     {
+        public int FeedId { get; set; }
+
         public int UserId { get; set; }
 
         public PhotoLinks UserDisplayPhoto { get; set; }
