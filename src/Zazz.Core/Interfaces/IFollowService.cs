@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFollowService
     {
+        bool IsFollowing(int fromUser, int toUser);
+
         bool IsFollowRequestExists(int fromUser, int toUser);
 
         void FollowClubAdmin(int fromUserId, int clubAdminUserId);

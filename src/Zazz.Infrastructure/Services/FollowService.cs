@@ -18,6 +18,11 @@ namespace Zazz.Infrastructure.Services
             _notificationService = notificationService;
         }
 
+        public bool IsFollowing(int fromUser, int toUser)
+        {
+            return _uow.FollowRepository.Exists(fromUser, toUser);
+        }
+
         public bool IsFollowRequestExists(int fromUser, int toUser)
         {
             return _uow.FollowRequestRepository.Exists(fromUser, toUser);
