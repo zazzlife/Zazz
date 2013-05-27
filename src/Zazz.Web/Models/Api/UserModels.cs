@@ -38,11 +38,11 @@ namespace Zazz.Web.Models.Api
 
         public bool IsSelf { get; set; }
 
-        public bool IsTargetUserFollowingCurrentUser { get; set; }
+        public bool? IsTargetUserFollowingCurrentUser { get; set; }
 
-        public bool IsCurrentUserFollowingTargetUser { get; set; }
+        public bool? IsCurrentUserFollowingTargetUser { get; set; }
 
-        public bool FollowRequestAlreadySent { get; set; }
+        public bool? FollowRequestAlreadySent { get; set; }
 
         public IEnumerable<ApiFeed> Feeds { get; set; }
 

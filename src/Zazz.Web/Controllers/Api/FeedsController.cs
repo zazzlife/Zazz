@@ -38,7 +38,7 @@ namespace Zazz.Web.Controllers.Api
             var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetFeeds(userId);
 
-            return feeds.Select(FeedViewModelToApiModel);
+            return feeds.Select(feedHelper.FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?lastFeed=
@@ -48,7 +48,7 @@ namespace Zazz.Web.Controllers.Api
             var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetFeeds(userId, lastFeed);
 
-            return feeds.Select(FeedViewModelToApiModel);
+            return feeds.Select(feedHelper.FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?id=
@@ -58,7 +58,7 @@ namespace Zazz.Web.Controllers.Api
             var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetUserActivityFeed(id, userId);
 
-            return feeds.Select(FeedViewModelToApiModel);
+            return feeds.Select(feedHelper.FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?id=&lastFeed=
@@ -68,89 +68,9 @@ namespace Zazz.Web.Controllers.Api
             var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
             var feeds = feedHelper.GetUserActivityFeed(id, userId, lastFeed);
 
-            return feeds.Select(FeedViewModelToApiModel);
+            return feeds.Select(feedHelper.FeedViewModelToApiModel);
         }
 
-        private ApiFeed FeedViewModelToApiModel(FeedViewModel feed)
-        {
-            return new ApiFeed
-                   {
-                       FeedType = feed.FeedType,
-                       UserId = feed.UserId,
-                       UserDisplayName = feed.UserDisplayName,
-                       UserDisplayPhoto = feed.UserImageUrl,
-                       CanCurrentUserRemoveFeed = feed.CurrentUserCanRemoveFeed || feed.IsFromCurrentUser,
-                       Time = feed.Time,
-
-                       Comments = feed.CommentsViewModel.Comments
-                       .Select(c => new ApiComment
-                                    {
-                                        CommentId = c.CommentId,
-                                        CommentText = c.CommentText,
-                                        IsFromCurrentUser = c.IsFromCurrentUser,
-                                        UserId = c.UserId,
-                                        UserDisplayName = c.UserDisplayName,
-                                        UserDisplayPhoto = c.UserPhotoUrl,
-                                        Time = c.Time
-                                    }),
-
-                       Photos = feed.FeedType == FeedType.Photo
-                       ? feed.PhotoViewModel.Select(p => new ApiPhoto
-                                                         {
-                                                             PhotoId = p.PhotoId,
-                                                             Description = p.PhotoDescription,
-                                                             UserId = p.FromUserId,
-                                                             UserDisplayName = p.FromUserDisplayName,
-                                                             UserDisplayPhoto = p.FromUserPhotoUrl,
-                                                             PhotoLinks = p.PhotoUrl
-                                                         })
-                       : null,
-
-                       Post = feed.FeedType == FeedType.Post
-                       ? new ApiPost
-                         {
-                             Message = feed.PostViewModel.PostText,
-                             PostId = feed.PostViewModel.PostId,
-                             FromUserId = feed.UserId,
-                             FromUserDisplayName = feed.UserDisplayName,
-                             FromUserDisplayPhoto = feed.UserImageUrl,
-                             ToUserDisplayName = feed.PostViewModel.ToUserDisplayName,
-                             ToUserId = feed.PostViewModel.ToUserId,
-                             ToUserDisplayPhoto = feed.PostViewModel.ToUserPhotoUrl,
-                             Time = feed.Time
-                         }
-                       : null,
-
-                       ApiEvent = feed.FeedType == FeedType.Event
-                       ? new ApiEvent
-                         {
-                             City = feed.EventViewModel.City,
-                             CreatedTime = feed.EventViewModel.CreatedDate.HasValue
-                             ? feed.EventViewModel.CreatedDate.Value
-                             : DateTime.MinValue,
-                             Description = feed.EventViewModel.Description,
-                             EventId = feed.EventViewModel.Id,
-                             FacebookLink = feed.EventViewModel.FacebookEventId.HasValue
-                                 ? "https://www.facebook.com/events/" + feed.EventViewModel.FacebookEventId.Value
-                                 : null,
-                             ImageUrl = feed.EventViewModel.ImageUrl,
-                             IsDateOnly = feed.EventViewModel.IsDateOnly,
-                             IsFacebookEvent = feed.EventViewModel.IsFacebookEvent,
-                             IsFromCurrentUser = feed.EventViewModel.IsOwner,
-                             Latitude = feed.EventViewModel.Latitude,
-                             Longitude = feed.EventViewModel.Longitude,
-                             Location = feed.EventViewModel.Location,
-                             Name = feed.EventViewModel.Name,
-                             Price = feed.EventViewModel.Price,
-                             Street = feed.EventViewModel.Street,
-                             Time = feed.EventViewModel.Time,
-                             UtcTime = feed.EventViewModel.Time.ToUniversalTime().DateTime,
-                             UserDisplayName = feed.UserDisplayName,
-                             UserDisplayPhoto = feed.UserImageUrl,
-                             UserId = feed.UserId
-                         }
-                       : null
-                   };
-        }
+        
     }
 }
