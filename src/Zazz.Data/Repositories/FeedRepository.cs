@@ -46,7 +46,6 @@ namespace Zazz.Data.Repositories
         {
             return (from feed in DbSet
                     from feedUserId in feed.FeedUsers
-                    orderby feed.Time descending 
                     where userIds.Contains(feedUserId.UserId)
                     select feed)
                 .Distinct()
@@ -59,7 +58,6 @@ namespace Zazz.Data.Repositories
         {
             return (from feed in DbSet
                     from feedUserId in feed.FeedUsers
-                    orderby feed.Time descending 
                     where feedUserId.UserId == userId
                     select feed)
                 .Distinct()
