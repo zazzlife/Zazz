@@ -16,6 +16,9 @@ namespace Zazz.Web.Controllers.Api
 
         public void Put(int id, [FromBody] ApiComment comment)
         {
+            if (comment == null || String.IsNullOrWhiteSpace(comment.CommentText))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             try
             {
                 CommentService.EditComment(id, ExtractUserIdFromHeader(), comment.CommentText);

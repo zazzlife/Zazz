@@ -39,6 +39,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                    });
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfCommentTextIsMissing(string message)
+        {
+            //Arrange
+            _comment.CommentText = message;
+
+            var json = JsonConvert.SerializeObject(_comment);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
         [Test]
         public async Task Return404IfCommentsDoesntExists()
         {
