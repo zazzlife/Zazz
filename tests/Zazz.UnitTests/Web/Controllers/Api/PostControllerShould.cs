@@ -7,6 +7,7 @@ using System.Web.Http.Filters;
 using System.Web.Http.SelfHost;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
@@ -41,6 +42,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                         Id = _postId,
                         FromUserId = User.Id,
                         CreatedTime = DateTime.UtcNow,
+                        Message = "Message"
                     };
 
             _postService = MockRepo.Create<IPostService>();
@@ -86,5 +88,29 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfPostMessageIsMissing_OnPost(string message)
+        {
+            //Arrange
+            _post.Message = message;
+            ControllerAddress = "/api/v1/post";
+
+            var json = JsonConvert.SerializeObject(_post);
+            var postContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, postContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+
     }
 }

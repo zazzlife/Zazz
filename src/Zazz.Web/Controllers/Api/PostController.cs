@@ -55,6 +55,8 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/post
         public void Post(ApiPost post)
         {
+            if (String.IsNullOrWhiteSpace(post.Message))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
 
         // PUT api/v1/post/5
