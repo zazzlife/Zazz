@@ -125,6 +125,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             _post.FromUserId = User.Id + 1;
+            ControllerAddress = "/api/v1/post";
 
             var json = JsonConvert.SerializeObject(_post);
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -141,6 +142,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return404IfPostDoesntExists_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_post);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.GetPost(_postId))
+                        .Returns(() => null);
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
 
 
     }
