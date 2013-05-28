@@ -49,15 +49,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                    });
         }
 
-        private void SetupMocksForHMACAuth()
-        {
-            AppRepo.Setup(x => x.GetById(App.Id))
-                   .Returns(App);
-            UserService.Setup(x => x.GetUserPassword(User.Id))
-                       .Returns(Encoding.UTF8.GetBytes(Password));
-
-        }
-
         [Test]
         public async Task Return404IfPostIsNotFound_OnGet()
         {

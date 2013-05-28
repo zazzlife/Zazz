@@ -113,6 +113,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
         }
 
+        protected void SetupMocksForHMACAuth()
+        {
+            AppRepo.Setup(x => x.GetById(App.Id))
+                   .Returns(App);
+            UserService.Setup(x => x.GetUserPassword(User.Id))
+                       .Returns(Encoding.UTF8.GetBytes(Password));
+
+        }
+
         /******************************************************************
          * The following tests are testing HMACAuthorize on the controller.
          ******************************************************************/
