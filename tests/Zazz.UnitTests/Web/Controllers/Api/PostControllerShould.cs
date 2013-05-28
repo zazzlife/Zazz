@@ -28,12 +28,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public override void Init()
         {
             base.Init();
-            AppRepo.Setup(x => x.GetById(App.Id))
-                   .Returns(App);
-            UserService.Setup(x => x.GetUserPassword(User.Id))
-                       .Returns(Encoding.UTF8.GetBytes(Password));
-
-
+            
             _postId = 99;
             ControllerAddress = "/api/v1/post/" + _postId;
 
@@ -52,11 +47,22 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                    });
         }
 
+        private void SetupMocksForHMACAuth()
+        {
+            AppRepo.Setup(x => x.GetById(App.Id))
+                   .Returns(App);
+            UserService.Setup(x => x.GetUserPassword(User.Id))
+                       .Returns(Encoding.UTF8.GetBytes(Password));
+
+        }
+
         [Test]
         public async Task Return404IfPostIsNotFound_OnGet()
         {
             //Arrange
             AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
             _postService.Setup(x => x.GetPost(_postId))
                         .Returns(() => null);
 
@@ -73,6 +79,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
             _postService.Setup(x => x.GetPost(_postId))
                         .Returns(_post);
 
@@ -102,6 +110,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
 
             //Act
             var response = await Client.PostAsync(ControllerAddress, postContent);
