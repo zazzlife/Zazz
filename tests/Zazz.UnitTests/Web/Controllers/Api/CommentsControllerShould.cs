@@ -105,5 +105,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return204WhenSuccessful_OnPut()
+        {
+            //Arrange
+            _commentService.Setup(x => x.EditComment(_commentId, User.Id, _comment.CommentText));
+
+            var json = JsonConvert.SerializeObject(_comment);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
