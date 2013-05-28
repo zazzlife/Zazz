@@ -5,13 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class PostController : ApiController
+    public class PostController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
@@ -53,10 +54,23 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/post
-        public void Post(ApiPost post)
+        public ApiPost Post(ApiPost post)
         {
             if (String.IsNullOrWhiteSpace(post.Message))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var p = new Post
+                    {
+                        CreatedTime = DateTime.UtcNow,
+                        FromUserId = ExtractUserIdFromHeader(),
+                        Message = post.Message,
+                        ToUserId = post.ToUserId
+                    };
+
+            _postService.NewPost(p);
+            post.PostId = p.Id;
+
+            return post;
         }
 
         // PUT api/v1/post/5

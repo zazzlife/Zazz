@@ -120,6 +120,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task AssignTheCurrentUserToPostAndSaveIt_OnPost()
+        {
+            //Arrange
+            _post.FromUserId = User.Id + 1;
+
+            var json = JsonConvert.SerializeObject(_post);
+            var postContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.NewPost(It.Is<Post>(p => p.FromUserId == User.Id)));
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, postContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
 
     }
 }
