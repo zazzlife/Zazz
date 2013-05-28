@@ -6,6 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
@@ -309,14 +310,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            try
-            {
-                _sut.EditPost(_post.Id, "new text", _post.FromUserId);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (Exception)
-            {
-            }
+            Assert.Throws<NotFoundException>(() =>  _sut.EditPost(_post.Id, "new text", _post.FromUserId));
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -331,14 +325,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_post);
 
             //Act
-            try
-            {
-                _sut.EditPost(_post.Id, "new text", 99);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (SecurityException)
-            {
-            }
+            Assert.Throws<SecurityException>(() => _sut.EditPost(_post.Id, "new text", 99));
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
