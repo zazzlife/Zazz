@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
@@ -82,9 +84,18 @@ namespace Zazz.Web.Controllers.Api
             if (String.IsNullOrWhiteSpace(post.Message))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var p = _postService.GetPost(id);
-            if (p == null)
+            try
+            {
+                _postService.EditPost(id, post.Message, ExtractUserIdFromHeader());
+            }
+            catch (NotFoundException)
+            {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
 
         // DELETE api/v1/post/5

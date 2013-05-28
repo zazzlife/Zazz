@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -74,7 +75,7 @@ namespace Zazz.Infrastructure.Services
         {
             var post = _uow.PostRepository.GetById(postId);
             if (post == null)
-                throw new Exception("Not Found");
+                throw new NotFoundException();
 
             if (post.FromUserId != currentUserId)
                 throw new SecurityException();

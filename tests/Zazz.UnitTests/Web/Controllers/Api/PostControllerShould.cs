@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
@@ -9,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -143,27 +145,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
-        [Test]
-        public async Task Return404IfPostDoesntExists_OnPut()
-        {
-            //Arrange
-            var json = JsonConvert.SerializeObject(_post);
-            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            AddValidHMACHeaders("PUT", ControllerAddress, json);
-            SetupMocksForHMACAuth();
-
-            _postService.Setup(x => x.GetPost(_postId))
-                        .Returns(() => null);
-
-            //Act
-            var response = await Client.PutAsync(ControllerAddress, httpContent);
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
-            MockRepo.VerifyAll();
-        }
-
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
@@ -185,5 +166,46 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return404ForNotFoundException_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_post);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id))
+                        .Throws<NotFoundException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return403ForSecurityException_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_post);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id))
+                        .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
