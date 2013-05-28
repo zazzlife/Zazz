@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -42,7 +43,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public async Task Return400IfCommentTextIsMissing(string message)
+        public async Task Return400IfCommentTextIsMissing_OnPut(string message)
         {
             //Arrange
             _comment.CommentText = message;
@@ -62,7 +63,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return404IfCommentsDoesntExists()
+        public async Task Return404IfCommentsDoesntExists_OnPut()
         {
             //Arrange
             _commentService.Setup(x => x.EditComment(_commentId, User.Id, _comment.CommentText))
@@ -82,6 +83,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return403OnSecurityException_OnPut()
+        {
+            //Arrange
+            _commentService.Setup(x => x.EditComment(_commentId, User.Id, _comment.CommentText))
+                           .Throws<SecurityException>();
 
+            var json = JsonConvert.SerializeObject(_comment);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
