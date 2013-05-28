@@ -395,5 +395,19 @@ namespace Zazz.Web.Helpers
                 : null
             };
         }
+
+        public ApiComment CommentViewModelToApiModel(CommentViewModel commentViewModel)
+        {
+            return new ApiComment
+                   {
+                       CommentId = commentViewModel.CommentId,
+                       CommentText = commentViewModel.CommentText,
+                       IsFromCurrentUser = commentViewModel.IsFromCurrentUser,
+                       Time = commentViewModel.Time,
+                       UserDisplayName = commentViewModel.UserDisplayName,
+                       UserDisplayPhoto = commentViewModel.UserPhotoUrl,
+                       UserId = commentViewModel.UserId
+                   };
+        }
     }
 }
