@@ -7,11 +7,13 @@ using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.Filters;
 using Zazz.Web.Helpers;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [HMACAuthorize]
     public class UserProfileController : BaseApiController
     {
         private readonly IUserService _userService;
@@ -33,14 +35,14 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/userprofile
         public ApiUserProfile Get(int lastFeed = 0)
         {
-            var userId = 1; //ExtractUserIdFromHeader();
+            var userId = ExtractUserIdFromHeader();
             return Get(userId, lastFeed);
         }
 
         // GET api/v1/userprofile/5
         public ApiUserProfile Get(int id, int lastFeed = 0)
         {
-            var currentUserId = 1;//ExtractUserIdFromHeader();
+            var currentUserId = ExtractUserIdFromHeader();
 
             var user = _userService.GetUser(id, true, true, true);
             if (user == null)
