@@ -10,21 +10,22 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
     public class CommentController : BaseController
     {
-        private readonly IUoW _uow;
         private readonly ICommentService _commentService;
+        private readonly IFeedHelper _feedHelper;
 
-        public CommentController(IUoW uow, IPhotoService photoService, IUserService userService,
-            ICommentService commentService, IDefaultImageHelper defaultImageHelper)
+        public CommentController(IPhotoService photoService, IUserService userService,
+            ICommentService commentService, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
             : base(userService, photoService, defaultImageHelper)
         {
-            _uow = uow;
             _commentService = commentService;
+            _feedHelper = feedHelper;
         }
 
         public ActionResult Get(int id, CommentType commentType, int lastComment)
@@ -39,8 +40,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
                 userId = UserService.GetUserId(User.Identity.Name);
 
-            var feedHelper = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper);
-            var comments = feedHelper.GetComments(id, commentType, userId, lastComment, 10);
+            var comments = _feedHelper.GetComments(id, commentType, userId, lastComment, 10);
 
             return View("FeedItems/_CommentList", comments);
         }
@@ -52,14 +52,12 @@ namespace Zazz.Web.Controllers
                 throw new ArgumentException("Id cannot be 0", "id");
 
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var feedHelper = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper);
-
             var vm = new CommentsViewModel
                      {
                          CommentType = CommentType.Photo,
                          ItemId = id,
                          CurrentUserPhotoUrl = PhotoService.GetUserImageUrl(currentUserId),
-                         Comments = feedHelper.GetComments(id, CommentType.Photo, currentUserId)
+                         Comments = _feedHelper.GetComments(id, CommentType.Photo, currentUserId)
                      };
 
             return View("FeedItems/_FeedComments", vm);

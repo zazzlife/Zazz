@@ -9,6 +9,7 @@ using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -21,15 +22,17 @@ namespace Zazz.Web.Controllers.Api
         private readonly IFollowService _followService;
         private readonly IUoW _uow;
         private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly IFeedHelper _feedHelper;
 
         public UserProfileController(IUserService userService, IPhotoService photoService,
-            IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper)
+            IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
         {
             _userService = userService;
             _photoService = photoService;
             _followService = followService;
             _uow = uow;
             _defaultImageHelper = defaultImageHelper;
+            _feedHelper = feedHelper;
         }
 
         // GET api/v1/userprofile
@@ -62,8 +65,6 @@ namespace Zazz.Web.Controllers.Api
                 isTargetUserFollowingCurrentUser = _followService.IsFollowing(id, currentUserId);
             }
 
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
-
             var userDisplayName = _userService.GetUserDisplayName(id);
             var userDisplayPhoto = _photoService.GetUserImageUrl(id);
 
@@ -78,8 +79,8 @@ namespace Zazz.Web.Controllers.Api
                        IsSelf = isSelf,
                        IsCurrentUserFollowingTargetUser = isCurrentUserFollowingTargetUser,
                        IsTargetUserFollowingCurrentUser = isTargetUserFollowingCurrentUser,
-                       Feeds = feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
-                       .Select(feedHelper.FeedViewModelToApiModel),
+                       Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
+                       .Select(_feedHelper.FeedViewModelToApiModel),
                        Photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 15)
                        .ToList().Select(p => new ApiPhoto
                                     {

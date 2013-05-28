@@ -7,12 +7,13 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Helpers
 {
-    public class FeedHelper
+    public class FeedHelper : IFeedHelper
     {
         private readonly IUoW _uow;
         private readonly IUserService _userService;
@@ -287,7 +288,7 @@ namespace Zazz.Web.Helpers
             }
             else
             {
-                throw new ArgumentException("Invalid feed type", "commentType");
+                throw new ArgumentException("Invalid comment type", "commentType");
             }
 
             if (lastComment != 0)

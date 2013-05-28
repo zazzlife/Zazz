@@ -9,6 +9,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
 using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -17,13 +18,15 @@ namespace Zazz.Web.Controllers
     {
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly IFeedHelper _feedHelper;
 
         public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper) : base(userService, photoService, defaultImageHelper, tagService)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) : base(userService, photoService, defaultImageHelper, tagService)
         {
             _uow = uow;
             _staticDataRepository = staticDataRepository;
+            _feedHelper = feedHelper;
         }
 
         public ActionResult UpdateTags()
@@ -37,7 +40,7 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var user = UserService.GetUser(User.Identity.Name);
-                var feeds = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper).GetFeeds(user.Id);
+                var feeds = _feedHelper.GetFeeds(user.Id);
                 
                 var vm = new UserHomeViewModel
                          {
@@ -66,8 +69,7 @@ namespace Zazz.Web.Controllers
                 availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
                 .Select(t => t.Id);
 
-            var feeds = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper).GetTaggedFeeds(userId,
-                                                                                         selectedTagsIds.ToList());
+            var feeds = _feedHelper.GetTaggedFeeds(userId, selectedTagsIds.ToList());
 
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
@@ -86,8 +88,7 @@ namespace Zazz.Web.Controllers
         {
 
             var user = UserService.GetUser(User.Identity.Name);
-            var feeds = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper)
-                                  .GetFeeds(user.Id, lastFeedId);
+            var feeds = _feedHelper.GetFeeds(user.Id, lastFeedId);
 
             return View("_FeedsPartial", feeds);
         }

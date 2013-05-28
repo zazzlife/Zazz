@@ -26,6 +26,8 @@ using Zazz.Data.Repositories;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
+using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 
 namespace Zazz.Web.DependencyResolution 
 {
@@ -79,6 +81,7 @@ namespace Zazz.Web.DependencyResolution
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
                             x.For<IFacebookHelper>().Use<FacebookHelper>();
+                            x.For<IFeedHelper>().Use<FeedHelper>();
 
                             x.For<ILogger>().Use<Logger>();
 

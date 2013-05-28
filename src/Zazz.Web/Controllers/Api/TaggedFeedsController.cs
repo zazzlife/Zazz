@@ -7,6 +7,7 @@ using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
 using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -14,19 +15,12 @@ namespace Zazz.Web.Controllers.Api
     [HMACAuthorize]
     public class TaggedFeedsController : BaseApiController
     {
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
-        private readonly IUoW _uow;
-        private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly IFeedHelper _feedHelper;
         private readonly IStaticDataRepository _staticDataRepository;
 
-        public TaggedFeedsController(IUserService userService, IPhotoService photoService, IUoW uow,
-            IDefaultImageHelper defaultImageHelper, IStaticDataRepository staticDataRepository)
+        public TaggedFeedsController(IFeedHelper feedHelper, IStaticDataRepository staticDataRepository)
         {
-            _userService = userService;
-            _photoService = photoService;
-            _uow = uow;
-            _defaultImageHelper = defaultImageHelper;
+            _feedHelper = feedHelper;
             _staticDataRepository = staticDataRepository;
         }
 
@@ -57,10 +51,8 @@ namespace Zazz.Web.Controllers.Api
             if (validRequestedTags.Count < 1)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            var feedHelper = new FeedHelper(_uow, _userService, _photoService, _defaultImageHelper);
-
-            return feedHelper.GetTaggedFeeds(currentUserId, validRequestedTags, lastFeed)
-                             .Select(feedHelper.FeedViewModelToApiModel);
+            return _feedHelper.GetTaggedFeeds(currentUserId, validRequestedTags, lastFeed)
+                             .Select(_feedHelper.FeedViewModelToApiModel);
 
         }
     }

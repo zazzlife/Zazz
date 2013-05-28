@@ -261,6 +261,7 @@
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ImageValidator.cs" />
+    <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />

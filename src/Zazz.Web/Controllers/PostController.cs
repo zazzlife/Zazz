@@ -8,6 +8,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -15,22 +16,21 @@ namespace Zazz.Web.Controllers
     public class PostController : BaseController
     {
         private readonly IPostService _postService;
-        private readonly IUoW _uow;
+        private readonly IFeedHelper _feedHelper;
 
         public PostController(IPostService postService, IUserService userService,
-            IPhotoService photoService, IUoW uow, IDefaultImageHelper defaultImageHelper)
+            IPhotoService photoService, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
             : base (userService, photoService, defaultImageHelper)
         {
             _postService = postService;
-            _uow = uow;
+            _feedHelper = feedHelper;
         }
 
         [Authorize]
         public ActionResult Show(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var feed = new FeedHelper(_uow, UserService, PhotoService, DefaultImageHelper)
-                .GetSinglePostFeed(id, currentUserId);
+            var feed = _feedHelper.GetSinglePostFeed(id, currentUserId);
 
             if (feed == null)
                 throw new HttpException(404, "Post not found.");
