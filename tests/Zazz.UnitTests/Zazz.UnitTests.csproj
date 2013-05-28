@@ -101,6 +101,7 @@
     <Compile Include="Infrastructure\Services\WeeklyServiceShould.cs" />
     <Compile Include="Mother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Web\Controllers\Api\BaseApiControllerTests.cs" />
     <Compile Include="Web\Controllers\Api\LoginControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PostControllerShould.cs" />
     <Compile Include="Web\Filters\HMACAuthorizeAttributeShould.cs" />
