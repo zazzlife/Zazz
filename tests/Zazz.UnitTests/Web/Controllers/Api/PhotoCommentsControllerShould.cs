@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
@@ -83,6 +86,71 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return400IfIdIs0_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/photocomments/" + 0;
+            var message = "new message";
 
+            var json = JsonConvert.SerializeObject(message);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+            
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfMessageIsMissing_OnPost(string message)
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(message);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task SaveNewComment_OnPost()
+        {
+            //Arrange
+            var message = "new message";
+            var json = JsonConvert.SerializeObject(message);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+            
+            _commentService.Setup(x => x.CreateComment(It.Is<Comment>(c => c.Message == message &&
+                                                        c.PhotoComment.PhotoId == _photoId &&
+                                                        c.PostComment == null &&
+                                                        c.EventComment == null)
+                , CommentType.Photo))
+                .Returns(_commentId);
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
