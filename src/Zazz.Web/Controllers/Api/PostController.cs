@@ -74,13 +74,16 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT api/v1/post/5
-        public void Put(int id, ApiPost value)
+        public void Put(int id, ApiPost post)
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            var post = _postService.GetPost(id);
-            if (post == null)
+            if (String.IsNullOrWhiteSpace(post.Message))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var p = _postService.GetPost(id);
+            if (p == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
         }
 

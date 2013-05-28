@@ -164,7 +164,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfPostMessageIsEmpty_OnPut(string message)
+        {
+            //Arrange
+            _post.Message = message;
+            var json = JsonConvert.SerializeObject(_post);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
     }
 }
