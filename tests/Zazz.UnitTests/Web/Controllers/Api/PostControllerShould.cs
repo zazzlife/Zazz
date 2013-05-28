@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
@@ -62,6 +63,27 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200WhenEverythingIsOK_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            _postService.Setup(x => x.GetPost(_postId))
+                        .Returns(_post);
+
+            UserService.Setup(x => x.GetUserDisplayName(_post.FromUserId))
+                       .Returns("display name");
+            PhotoService.Setup(x => x.GetUserImageUrl(_post.FromUserId))
+                        .Returns(new PhotoLinks("url"));
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }

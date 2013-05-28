@@ -34,9 +34,22 @@ namespace Zazz.Web.Controllers.Api
             if (post == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-
-
-            return null;
+            return new ApiPost
+                   {
+                       PostId = post.Id,
+                       FromUserId = post.FromUserId,
+                       FromUserDisplayName = _userService.GetUserDisplayName(post.FromUserId),
+                       FromUserDisplayPhoto = _photoService.GetUserImageUrl(post.FromUserId),
+                       Message = post.Message,
+                       Time = post.CreatedTime,
+                       ToUserId = post.ToUserId,
+                       ToUserDisplayName = post.ToUserId.HasValue
+                                               ? _userService.GetUserDisplayName(post.ToUserId.Value)
+                                               : null,
+                       ToUserDisplayPhoto = post.ToUserId.HasValue
+                                                ? _photoService.GetUserImageUrl(post.ToUserId.Value)
+                                                : null,
+                   };
         }
 
         // POST api/v1/post
