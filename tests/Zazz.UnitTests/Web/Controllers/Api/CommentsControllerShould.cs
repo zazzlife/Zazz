@@ -23,6 +23,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
         public override void Init()
         {
+            DefaultHttpMethod = HttpMethod.Delete;
+
             base.Init();
 
             _commentId = 99;

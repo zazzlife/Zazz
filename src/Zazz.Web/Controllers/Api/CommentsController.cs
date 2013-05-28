@@ -33,5 +33,10 @@ namespace Zazz.Web.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
         }
+
+        public void Delete(int id)
+        {
+            
+        }
     }
 }

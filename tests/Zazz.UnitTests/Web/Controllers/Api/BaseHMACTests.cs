@@ -33,12 +33,13 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         protected string ControllerAddress;
         private const string AUTH_SCHEME = "ZazzApi";
 
+        protected HttpMethod DefaultHttpMethod = HttpMethod.Get;
 
         [SetUp]
         public virtual void Init()
         {
             //Global api config
-
+            
             App = Mother.GetApiApp();
             MockRepo = new MockRepository(MockBehavior.Strict);
             UserService = MockRepo.Create<IUserService>();
@@ -133,7 +134,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Date = null;
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -147,7 +156,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-1);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -161,7 +178,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(2);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -176,7 +201,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = null;
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -193,7 +226,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authorizationScheme);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -210,7 +251,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authorizationParam);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -227,7 +276,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -244,7 +301,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -261,7 +326,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -272,13 +345,22 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAppNotExists()
         {
             //Arrange
-            AddValidHMACHeaders("GET");
 
             AppRepo.Setup(x => x.GetById(App.Id))
                     .Returns(() => null);
 
+            AddValidHMACHeaders(DefaultHttpMethod.Method);
+
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -302,7 +384,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                    .Returns(App);
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -313,15 +403,24 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfTheUserDoesNotExists()
         {
             //Arrange
-            AddValidHMACHeaders("GET");
 
             AppRepo.Setup(x => x.GetById(App.Id))
                    .Returns(App);
             UserService.Setup(x => x.GetUserPassword(User.Id))
                        .Returns(() => null);
 
+            AddValidHMACHeaders(DefaultHttpMethod.Method);
+
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
@@ -336,7 +435,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             var authHeader = String.Format("{0}:{1}:{2}:{3}",
                 App.Id,
-                GetRequestSignature("GET", Client.DefaultRequestHeaders.Date.Value.ToString("r"), ControllerAddress),
+                GetRequestSignature(DefaultHttpMethod.Method, Client.DefaultRequestHeaders.Date.Value.ToString("r"), ControllerAddress),
                 User.Id,
                 "InvalidPassSignature");
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
@@ -347,7 +446,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                        .Returns(() => Encoding.UTF8.GetBytes(Password));
 
             //Act
-            var result = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage result;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                result = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                result = await Client.DeleteAsync(ControllerAddress);
+            }
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
