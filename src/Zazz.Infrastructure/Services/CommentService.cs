@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -70,7 +71,7 @@ namespace Zazz.Infrastructure.Services
         {
             var comment = _uow.CommentRepository.GetById(commentId);
             if (comment == null)
-                return;
+                throw new NotFoundException();
 
             if (comment.UserId != currentUserId)
                 throw new SecurityException();

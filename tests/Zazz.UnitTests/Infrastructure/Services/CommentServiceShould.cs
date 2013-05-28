@@ -2,6 +2,7 @@
 using System.Security;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -290,7 +291,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotThrowIfCommentDoesntExists_OnEditComment()
+        public void ThrowNotFoundIfCommentDoesntExists_OnEditComment()
         {
             //Arrange
             var commentId = 12;
@@ -299,7 +300,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.EditComment(commentId, 123, "");
+            Assert.Throws<NotFoundException>(() => _sut.EditComment(commentId, 123, ""));
 
             //Assert
             _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
