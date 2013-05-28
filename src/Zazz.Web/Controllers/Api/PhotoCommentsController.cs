@@ -1,13 +1,34 @@
-﻿using Zazz.Core.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Web.Http;
+using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class PhotoCommentsController : BaseCommentsApiController
+    public class PhotoCommentsController : BaseApiController
     {
-        public PhotoCommentsController(ICommentService commentService)
-            : base(commentService)
-        { }
+        private readonly IFeedHelper _feedHelper;
+        private readonly ICommentService _commentService;
+
+        public PhotoCommentsController(IFeedHelper feedHelper, ICommentService commentService)
+        {
+            _feedHelper = feedHelper;
+            _commentService = commentService;
+        }
+
+        // GET /api/v1/photocomments/5
+
+        public IEnumerable<ApiComment> Get(int id, int lastComment = 0)
+        {
+            if (id == 0 || lastComment < 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            return null;
+        }
     }
 }

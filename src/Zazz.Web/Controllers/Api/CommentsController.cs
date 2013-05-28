@@ -10,10 +10,14 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class CommentsController : BaseCommentsApiController
+    public class CommentsController : BaseApiController
     {
-        public CommentsController(ICommentService commentService) : base(commentService)
-        {}
+        private readonly ICommentService _commentService;
+
+        public CommentsController(ICommentService commentService)
+        {
+            _commentService = commentService;
+        }
 
         public void Put(int id, [FromBody] ApiComment comment)
         {
@@ -22,7 +26,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                CommentService.EditComment(id, ExtractUserIdFromHeader(), comment.CommentText);
+                _commentService.EditComment(id, ExtractUserIdFromHeader(), comment.CommentText);
             }
             catch (NotFoundException)
             {
@@ -41,7 +45,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                CommentService.RemoveComment(id, ExtractUserIdFromHeader());
+                _commentService.RemoveComment(id, ExtractUserIdFromHeader());
             }
             catch (SecurityException)
             {

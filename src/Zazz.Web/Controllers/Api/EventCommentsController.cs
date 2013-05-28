@@ -4,10 +4,7 @@ using Zazz.Web.Filters;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class EventCommentsController : BaseCommentsApiController
+    public class EventCommentsController : BaseApiController
     {
-        public EventCommentsController(ICommentService commentService)
-            : base(commentService)
-        { }
     }
 }
