@@ -15,15 +15,17 @@ using Zazz.Web.DependencyResolution;
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
     [TestFixture]
-    public class PostControllerShould : BaseApiControllerTests
+    public class PostControllerShould : BaseHMACTests
     {
         private Mock<IPostService> _postService;
 
         public override void Init()
         {
+            ControllerAddress = "/api/v1/post/5";
+
             base.Init();
 
-            _postService = MockRepo.Create<IPostService>();
+            _postService = _mockRepo.Create<IPostService>();
             IocContainer.Configure(x =>
                                    {
                                        x.For<IPostService>().Use(_postService.Object);

@@ -5,10 +5,12 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [HMACAuthorize]
     public class PostController : ApiController
     {
         private readonly IUserService _userService;
