@@ -101,6 +101,17 @@ namespace Zazz.Web.Controllers.Api
         // DELETE api/v1/post/5
         public void Delete(int id)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            try
+            {
+                _postService.RemovePost(id, ExtractUserIdFromHeader());
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }
