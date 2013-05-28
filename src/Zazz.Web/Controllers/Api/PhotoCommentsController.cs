@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
@@ -28,7 +30,8 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0 || lastComment < 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return null;
+            return _feedHelper.GetComments(id, CommentType.Photo, ExtractUserIdFromHeader(), lastComment)
+                              .Select(_feedHelper.CommentViewModelToApiModel);
         }
     }
 }

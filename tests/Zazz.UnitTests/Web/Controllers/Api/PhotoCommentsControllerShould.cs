@@ -1,10 +1,14 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Interfaces;
+using Zazz.Web.Models;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
@@ -57,5 +61,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task GetCommentsUsingFeedHelper_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            _feedHelper.Setup(x => x.GetComments(_photoId, CommentType.Photo, User.Id, 0, 5))
+                       .Returns(new List<CommentViewModel> {new CommentViewModel()});
+
+            _feedHelper.Setup(x => x.CommentViewModelToApiModel(It.IsAny<CommentViewModel>()))
+                       .Returns(new ApiComment());
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+
     }
 }
