@@ -225,7 +225,7 @@
     <Compile Include="Controllers\Api\FeedsController.cs" />
     <Compile Include="Controllers\Api\LoginController.cs" />
     <Compile Include="Controllers\Api\MajorsController.cs" />
-    <Compile Include="Controllers\Api\PostController.cs" />
+    <Compile Include="Controllers\Api\PostsController.cs" />
     <Compile Include="Controllers\Api\SchoolsController.cs" />
     <Compile Include="Controllers\Api\TaggedFeedsController.cs" />
     <Compile Include="Controllers\Api\TagsController.cs" />
@@ -547,13 +547,13 @@
     <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Notification\_Notifications.cshtml" />
-    <Content Include="Views\Post\Show.cshtml" />
     <Content Include="Views\Home\Tags.cshtml" />
     <Content Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\Shared\_WeeklyEditForm.cshtml" />
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
+    <Content Include="Views\Post\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />

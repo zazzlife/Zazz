@@ -14,13 +14,13 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class PostController : BaseApiController
+    public class PostsController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IPostService _postService;
 
-        public PostController(IUserService userService, IPhotoService photoService, IPostService postService)
+        public PostsController(IUserService userService, IPhotoService photoService, IPostService postService)
         {
             _userService = userService;
             _photoService = photoService;

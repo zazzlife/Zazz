@@ -32,7 +32,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             base.Init();
             
             _postId = 99;
-            ControllerAddress = "/api/v1/post/" + _postId;
+            ControllerAddress = "/api/v1/posts/" + _postId;
 
             _post = new Post
                     {
@@ -106,7 +106,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             _post.Message = message;
-            ControllerAddress = "/api/v1/post";
+            ControllerAddress = "/api/v1/posts";
 
             var json = JsonConvert.SerializeObject(_post);
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -127,7 +127,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             _post.FromUserId = User.Id + 1;
-            ControllerAddress = "/api/v1/post";
+            ControllerAddress = "/api/v1/posts";
 
             var json = JsonConvert.SerializeObject(_post);
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
