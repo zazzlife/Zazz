@@ -56,7 +56,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/post
-        public ApiPost Post(ApiPost post)
+        public ApiPost Post([FromBody] ApiPost post)
         {
             if (String.IsNullOrWhiteSpace(post.Message))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT api/v1/post/5
-        public void Put(int id, ApiPost post)
+        public void Put(int id, [FromBody] ApiPost post)
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.NotFound);

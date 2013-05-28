@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
 
         // POST api/v1/login
         [HMACAuthorize(IgnoreUserIdAndPassword = true)]
-        public ApiLoginResponse Post(ApiLoginRequest request)
+        public ApiLoginResponse Post([FromBody] ApiLoginRequest request)
         {
             var user = _userService.GetUser(request.Username, true, true);
             if (user == null)

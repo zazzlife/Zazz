@@ -92,7 +92,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT /api/v1/user
-        public void Put(ApiUser u)
+        public void Put([FromBody] ApiUser u)
         {
             var userId = ExtractUserIdFromHeader();
             var user = _uow.UserRepository.GetById(userId, true, true, false, true);
