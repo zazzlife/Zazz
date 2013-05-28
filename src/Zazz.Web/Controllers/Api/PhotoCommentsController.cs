@@ -31,7 +31,7 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0 || lastComment < 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return _feedHelper.GetComments(id, CommentType.Photo, ExtractUserIdFromHeader(), lastComment)
+            return _feedHelper.GetComments(id, CommentType.Photo, ExtractUserIdFromHeader(), lastComment, 10)
                               .Select(_feedHelper.CommentViewModelToApiModel);
         }
 
