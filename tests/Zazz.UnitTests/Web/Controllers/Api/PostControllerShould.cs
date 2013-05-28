@@ -209,6 +209,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
+        public async Task Return204IfSuccessful_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_post);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id));
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
         public async Task Return403ForSecurityException_OnDelete()
         {
             //Arrange
@@ -223,6 +243,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return204IfSuccessful_OnDelete()
+        {
+            //Arrange
+            AddValidHMACHeaders("DELETE", ControllerAddress);
+            SetupMocksForHMACAuth();
+
+            _postService.Setup(x => x.RemovePost(_postId, User.Id));
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }
