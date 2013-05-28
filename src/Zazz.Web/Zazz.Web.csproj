@@ -220,11 +220,16 @@
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\Api\AlbumController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
+    <Compile Include="Controllers\Api\BaseCommentsApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
     <Compile Include="Controllers\Api\ClubTypesController.cs" />
+    <Compile Include="Controllers\Api\CommentsController.cs" />
+    <Compile Include="Controllers\Api\EventCommentsController.cs" />
     <Compile Include="Controllers\Api\FeedsController.cs" />
     <Compile Include="Controllers\Api\LoginController.cs" />
     <Compile Include="Controllers\Api\MajorsController.cs" />
+    <Compile Include="Controllers\Api\PhotoCommentsController.cs" />
+    <Compile Include="Controllers\Api\PostCommentsController.cs" />
     <Compile Include="Controllers\Api\PostsController.cs" />
     <Compile Include="Controllers\Api\SchoolsController.cs" />
     <Compile Include="Controllers\Api\TaggedFeedsController.cs" />
