@@ -105,6 +105,7 @@
     <Compile Include="Web\Controllers\Api\CommentsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\LoginControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PhotoCommentsControllerShould.cs" />
+    <Compile Include="Web\Controllers\Api\PostCommentsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PostControllerShould.cs" />
     <Compile Include="Web\Filters\HMACAuthorizeAttributeShould.cs" />
   </ItemGroup>
