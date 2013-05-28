@@ -17,7 +17,7 @@ namespace Zazz.Web.Controllers.Api
 
         public void Put(int id, [FromBody] ApiComment comment)
         {
-            if (comment == null || String.IsNullOrWhiteSpace(comment.CommentText))
+            if (id == 0 || comment == null || String.IsNullOrWhiteSpace(comment.CommentText))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             try
@@ -36,7 +36,17 @@ namespace Zazz.Web.Controllers.Api
 
         public void Delete(int id)
         {
-            
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                CommentService.RemoveComment(id, ExtractUserIdFromHeader());
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }
