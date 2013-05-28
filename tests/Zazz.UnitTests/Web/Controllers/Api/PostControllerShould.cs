@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
 using System.Web.Http.SelfHost;
@@ -18,18 +20,49 @@ namespace Zazz.UnitTests.Web.Controllers.Api
     public class PostControllerShould : BaseHMACTests
     {
         private Mock<IPostService> _postService;
+        private Post _post;
+        private int _postId;
 
         public override void Init()
         {
-            ControllerAddress = "/api/v1/post/5";
-
             base.Init();
+            AppRepo.Setup(x => x.GetById(App.Id))
+                   .Returns(App);
+            UserService.Setup(x => x.GetUserPassword(User.Id))
+                       .Returns(Encoding.UTF8.GetBytes(Password));
 
-            _postService = _mockRepo.Create<IPostService>();
+
+            _postId = 99;
+            ControllerAddress = "/api/v1/post/" + _postId;
+
+            _post = new Post
+                    {
+                        Id = _postId,
+                        FromUserId = User.Id,
+                        CreatedTime = DateTime.UtcNow,
+                    };
+
+            _postService = MockRepo.Create<IPostService>();
             IocContainer.Configure(x =>
                                    {
                                        x.For<IPostService>().Use(_postService.Object);
                                    });
+        }
+
+        [Test]
+        public async Task Return404IfPostIsNotFound_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            _postService.Setup(x => x.GetPost(_postId))
+                        .Returns(() => null);
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
         }
     }
 }

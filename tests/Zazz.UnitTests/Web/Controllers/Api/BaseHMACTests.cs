@@ -19,9 +19,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 {
     public abstract class BaseHMACTests
     {
-        protected HttpSelfHostServer _server;
-        protected HttpClient _client;
-        protected MockRepository _mockRepo;
+        protected HttpSelfHostServer Server;
+        protected HttpClient Client;
+        protected MockRepository MockRepo;
         protected Mock<IUserService> UserService;
         protected Mock<IApiAppRepository> AppRepo;
         protected Mock<IPhotoService> PhotoService;
@@ -40,10 +40,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Global api config
 
             App = Mother.GetApiApp();
-            _mockRepo = new MockRepository(MockBehavior.Strict);
-            UserService = _mockRepo.Create<IUserService>();
-            AppRepo = _mockRepo.Create<IApiAppRepository>();
-            PhotoService = _mockRepo.Create<IPhotoService>();
+            MockRepo = new MockRepository(MockBehavior.Strict);
+            UserService = MockRepo.Create<IUserService>();
+            AppRepo = MockRepo.Create<IApiAppRepository>();
+            PhotoService = MockRepo.Create<IPhotoService>();
             CryptoService = new CryptoService();
 
             Password = "password";
@@ -64,9 +64,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             IocContainer = BuildIoC();
             config.DependencyResolver = new StructureMapDependencyResolver(IocContainer);
 
-            _server = new HttpSelfHostServer(config);
-            _client = new HttpClient(_server);
-            _client.BaseAddress = new Uri(BASE_ADDRESS);
+            Server = new HttpSelfHostServer(config);
+            Client = new HttpClient(Server);
+            Client.BaseAddress = new Uri(BASE_ADDRESS);
         }
 
         private IContainer BuildIoC()
@@ -109,8 +109,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var authHeader = String.Format("{0}:{1}:{2}:{3}",
                                            App.Id, requestSignature, User.Id, passSignature);
 
-            _client.DefaultRequestHeaders.Date = date;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+            Client.DefaultRequestHeaders.Date = date;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
         }
 
         /******************************************************************
@@ -121,57 +121,57 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfDateHeaderIsNotProvided()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = null;
+            Client.DefaultRequestHeaders.Date = null;
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
         public async Task Return403IfDateIsLessThanOneMinutesAgo()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-1);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-1);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
         public async Task Return403IfDateIsGreaterThanUTCNow()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(2);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(2);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
         public async Task Return403IfAuthorizationHeaderIsMissing()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = null;
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = null;
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TestCase("basic")]
@@ -180,15 +180,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAuthorizationHeaderIsNotZazzApi(string authorizationScheme)
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authorizationScheme);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authorizationScheme);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TestCase(null)]
@@ -197,15 +197,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAuthorizationHeaderValueIsMissing(string authorizationParam)
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authorizationParam);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authorizationParam);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TestCase("a")]
@@ -214,15 +214,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAuthorizationHeaderValueIsMissingAnyOfTheRequiredParameters(string auth)
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TestCase("text:sign:1:sign")]
@@ -231,15 +231,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfAppIdIsNotValidInteger(string auth)
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TestCase("1:sign:0:sign")]
@@ -248,15 +248,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfUserIdIsNotValidInteger(string auth)
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, auth);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
@@ -269,35 +269,35 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                     .Returns(() => null);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
         public async Task Return403IfRequestSignatureIsInvalid()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
 
             var authHeader = String.Format("{0}:{1}:{2}:{3}",
                 App.Id,
                 "Invalid Signature",
                 User.Id,
                 GetPasswordSignature());
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
 
             AppRepo.Setup(x => x.GetById(App.Id))
                    .Returns(App);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
@@ -312,25 +312,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                        .Returns(() => null);
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [Test]
         public async Task Return403IfThePasswordSignatureIsInvalid()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow;
 
             var authHeader = String.Format("{0}:{1}:{2}:{3}",
                 App.Id,
-                GetRequestSignature("GET", _client.DefaultRequestHeaders.Date.Value.ToString("r"), ControllerAddress),
+                GetRequestSignature("GET", Client.DefaultRequestHeaders.Date.Value.ToString("r"), ControllerAddress),
                 User.Id,
                 "InvalidPassSignature");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME, authHeader);
 
             AppRepo.Setup(x => x.GetById(App.Id))
                    .Returns(App);
@@ -338,18 +338,18 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                        .Returns(() => Encoding.UTF8.GetBytes(Password));
 
             //Act
-            var result = await _client.GetAsync(ControllerAddress);
+            var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
-            _mockRepo.VerifyAll();
+            MockRepo.VerifyAll();
         }
 
         [TearDown]
         public void Cleanup()
         {
-            _server.Dispose();
-            _client.Dispose();
+            Server.Dispose();
+            Client.Dispose();
         }
 
     }

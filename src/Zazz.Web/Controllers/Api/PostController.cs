@@ -27,7 +27,16 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/post/5
         public ApiPost Get(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            var post = _postService.GetPost(id);
+            if (post == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+
+
+            return null;
         }
 
         // POST api/v1/post
