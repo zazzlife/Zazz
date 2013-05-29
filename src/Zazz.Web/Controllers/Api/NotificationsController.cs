@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data.Enums;
@@ -72,10 +73,20 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // DELETE api/v1/notifications/5
-        public void Delete(int id)
+        public void Delete(long id)
         {
             if (id < 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                var userId = ExtractUserIdFromHeader();
+                _notificationService.Remove(id, userId);
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }

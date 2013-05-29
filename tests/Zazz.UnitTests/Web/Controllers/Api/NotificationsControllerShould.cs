@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -79,7 +80,30 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return403ForSecurityException_OnDelete()
+        {
+            //Arrange
+            var notificationId = 66;
+            ControllerAddress += "/" + notificationId;
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _notificationService.Setup(x => x.Remove(notificationId, User.Id))
+                                .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
 
     }
 }
