@@ -31,8 +31,6 @@ namespace Zazz.Web.Models.Api
 
         public bool IsDateOnly { get; set; }
 
-        public bool IsFromCurrentUser { get; set; }
-
         public int UserId { get; set; }
 
         public string UserDisplayName { get; set; }

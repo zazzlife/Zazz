@@ -11,9 +11,11 @@ using NUnit.Framework;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Infrastructure;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
 using Zazz.Web.DependencyResolution;
+using Zazz.Web.Interfaces;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -79,6 +81,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IUserService>().Use(UserService.Object);
                 x.For<IApiAppRepository>().Use(AppRepo.Object);
                 x.For<IPhotoService>().Use(PhotoService.Object);
+                x.For<IObjectMapper>().Use<ObjectMapper>();
+                x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
+                    .Ctor<string>("baseAddress").Is("test.zazzlife.com");
             });
         }
 

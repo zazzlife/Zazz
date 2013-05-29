@@ -86,11 +86,8 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ILogger>().Use<Logger>();
 
                             x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
-                            x.SetAllProperties(p =>
-                                               {
-                                                   p.OfType<IApiAppRepository>();
-                                                   p.OfType<ICryptoService>();
-                                               });
+                            
+                            x.For<IObjectMapper>().Use<ObjectMapper>();
 
 #if DEBUG
                             x.For<IEmailService>().Use<FakeEmailService>();

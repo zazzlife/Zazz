@@ -379,7 +379,6 @@ namespace Zazz.Web.Helpers
                     ImageUrl = feed.EventViewModel.ImageUrl,
                     IsDateOnly = feed.EventViewModel.IsDateOnly,
                     IsFacebookEvent = feed.EventViewModel.IsFacebookEvent,
-                    IsFromCurrentUser = feed.EventViewModel.IsOwner,
                     Latitude = feed.EventViewModel.Latitude,
                     Longitude = feed.EventViewModel.Longitude,
                     Location = feed.EventViewModel.Location,

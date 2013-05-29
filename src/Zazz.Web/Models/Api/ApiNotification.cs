@@ -8,11 +8,11 @@ namespace Zazz.Web.Models.Api
     {
         public long Id { get; set; }
 
-        public int UserId { get; set; }
+        public int FriendId { get; set; }
 
-        public string UserDisplayName { get; set; }
+        public string FriendDisplayName { get; set; }
 
-        public PhotoLinks UserPhoto { get; set; }
+        public PhotoLinks FriendDisplayPhoto { get; set; }
 
         public NotificationType NotificationType { get; set; }
 
