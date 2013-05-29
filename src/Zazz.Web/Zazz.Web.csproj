@@ -227,6 +227,7 @@
     <Compile Include="Controllers\Api\FeedsController.cs" />
     <Compile Include="Controllers\Api\LoginController.cs" />
     <Compile Include="Controllers\Api\MajorsController.cs" />
+    <Compile Include="Controllers\Api\NotificationsController.cs" />
     <Compile Include="Controllers\Api\PhotoCommentsController.cs" />
     <Compile Include="Controllers\Api\PostCommentsController.cs" />
     <Compile Include="Controllers\Api\PostsController.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
+    <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\Api\ApiPhoto.cs" />
