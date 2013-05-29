@@ -75,9 +75,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _feedHelper.Setup(x => x.GetComments(_photoId, CommentType.Photo, User.Id, 0, 10))
                        .Returns(new List<CommentViewModel> {new CommentViewModel()});
 
-            _feedHelper.Setup(x => x.CommentViewModelToApiModel(It.IsAny<CommentViewModel>()))
-                       .Returns(new ApiComment());
-
             //Act
             var response = await Client.GetAsync(ControllerAddress);
 

@@ -74,7 +74,8 @@ namespace Zazz.Web.Controllers.Api
         // DELETE api/v1/notifications/5
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (id < 1)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
     }
 }

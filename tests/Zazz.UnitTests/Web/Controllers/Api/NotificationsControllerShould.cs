@@ -63,5 +63,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public async Task Return400ForBadId_OnDelete(int id)
+        {
+            //Arrange
+            ControllerAddress += "/" + id;
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
     }
 }
