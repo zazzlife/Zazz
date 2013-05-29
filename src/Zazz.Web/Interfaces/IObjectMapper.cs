@@ -1,4 +1,5 @@
 ﻿using Zazz.Core.Models.Data;
+using Zazz.Web.Models;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Interfaces
@@ -11,7 +12,10 @@ namespace Zazz.Web.Interfaces
 
         ApiEvent EventToApiEvent(ZazzEvent e);
 
-
         ApiWeekly WeeklyToApiWeekly(Weekly weekly);
+
+        ApiFeed FeedViewModelToApiModel(FeedViewModel feed);
+
+        ApiComment CommentViewModelToApiModel(CommentViewModel commentViewModel);
     }
 }

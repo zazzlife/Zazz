@@ -40,9 +40,5 @@ namespace Zazz.Web.Interfaces
 
         List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId,
                                                            int lastComment = 0, int pageSize = 5);
-
-        ApiFeed FeedViewModelToApiModel(FeedViewModel feed);
-
-        ApiComment CommentViewModelToApiModel(CommentViewModel commentViewModel);
     }
 }

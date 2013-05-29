@@ -17,11 +17,14 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IFeedHelper _feedHelper;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly IObjectMapper _objectMapper;
 
-        public TaggedFeedsController(IFeedHelper feedHelper, IStaticDataRepository staticDataRepository)
+        public TaggedFeedsController(IFeedHelper feedHelper, IStaticDataRepository staticDataRepository,
+            IObjectMapper objectMapper)
         {
             _feedHelper = feedHelper;
             _staticDataRepository = staticDataRepository;
+            _objectMapper = objectMapper;
         }
 
         // GET api/tagfeeds/1,2,3,4,5
@@ -52,7 +55,7 @@ namespace Zazz.Web.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             return _feedHelper.GetTaggedFeeds(currentUserId, validRequestedTags, lastFeed)
-                             .Select(_feedHelper.FeedViewModelToApiModel);
+                             .Select(_objectMapper.FeedViewModelToApiModel);
 
         }
     }

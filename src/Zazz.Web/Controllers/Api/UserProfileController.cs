@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers.Api
                        IsCurrentUserFollowingTargetUser = isCurrentUserFollowingTargetUser,
                        IsTargetUserFollowingCurrentUser = isTargetUserFollowingCurrentUser,
                        Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
-                       .Select(_feedHelper.FeedViewModelToApiModel),
+                       .Select(_objectMapper.FeedViewModelToApiModel),
                        Photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 15)
                        .ToList().Select(_objectMapper.PhotoToApiPhoto),
                        UserDetails = user.AccountType == AccountType.User

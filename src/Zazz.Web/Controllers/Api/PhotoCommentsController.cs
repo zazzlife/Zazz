@@ -17,11 +17,14 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IFeedHelper _feedHelper;
         private readonly ICommentService _commentService;
+        private readonly IObjectMapper _objectMapper;
 
-        public PhotoCommentsController(IFeedHelper feedHelper, ICommentService commentService)
+        public PhotoCommentsController(IFeedHelper feedHelper, ICommentService commentService,
+            IObjectMapper objectMapper)
         {
             _feedHelper = feedHelper;
             _commentService = commentService;
+            _objectMapper = objectMapper;
         }
 
         // GET /api/v1/photocomments/5
@@ -32,7 +35,7 @@ namespace Zazz.Web.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             return _feedHelper.GetComments(id, CommentType.Photo, ExtractUserIdFromHeader(), lastComment, 10)
-                              .Select(_feedHelper.CommentViewModelToApiModel);
+                              .Select(_objectMapper.CommentViewModelToApiModel);
         }
 
         // POST /api/v1/photocomments/5
