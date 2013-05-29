@@ -104,6 +104,24 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return204OnSuccess_OnDelete()
+        {
+            //Arrange
+            var notificationId = 66;
+            ControllerAddress += "/" + notificationId;
 
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _notificationService.Setup(x => x.Remove(notificationId, User.Id));
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
