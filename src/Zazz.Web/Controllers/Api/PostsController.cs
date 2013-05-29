@@ -9,6 +9,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -19,12 +20,15 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IPostService _postService;
+        private readonly IObjectMapper _objectMapper;
 
-        public PostsController(IUserService userService, IPhotoService photoService, IPostService postService)
+        public PostsController(IUserService userService, IPhotoService photoService, IPostService postService,
+            IObjectMapper objectMapper)
         {
             _userService = userService;
             _photoService = photoService;
             _postService = postService;
+            _objectMapper = objectMapper;
         }
 
         // GET api/v1/post/5
@@ -37,22 +41,7 @@ namespace Zazz.Web.Controllers.Api
             if (post == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return new ApiPost
-                   {
-                       PostId = post.Id,
-                       FromUserId = post.FromUserId,
-                       FromUserDisplayName = _userService.GetUserDisplayName(post.FromUserId),
-                       FromUserDisplayPhoto = _photoService.GetUserImageUrl(post.FromUserId),
-                       Message = post.Message,
-                       Time = post.CreatedTime,
-                       ToUserId = post.ToUserId,
-                       ToUserDisplayName = post.ToUserId.HasValue
-                                               ? _userService.GetUserDisplayName(post.ToUserId.Value)
-                                               : null,
-                       ToUserDisplayPhoto = post.ToUserId.HasValue
-                                                ? _photoService.GetUserImageUrl(post.ToUserId.Value)
-                                                : null,
-                   };
+            return _objectMapper.PostToApiPost(post);
         }
 
         // POST api/v1/post
