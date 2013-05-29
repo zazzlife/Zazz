@@ -86,5 +86,20 @@ namespace Zazz.Web
                        UserDisplayPhoto = _photoService.GetUserImageUrl(e.UserId)
                    };
         }
+
+        public ApiWeekly WeeklyToApiWeekly(Weekly weekly)
+        {
+            return new ApiWeekly
+                   {
+                       DayOfTheWeek = weekly.DayOfTheWeek,
+                       Description = weekly.Description,
+                       Id = weekly.Id,
+                       Name = weekly.Name,
+                       UserId = weekly.UserId,
+                       PhotoLinks = weekly.PhotoId.HasValue
+                                        ? _photoService.GeneratePhotoUrl(weekly.UserId, weekly.PhotoId.Value)
+                                        : _defaultImageHelper.GetDefaultWeeklyImage()
+                   };
+        }
     }
 }

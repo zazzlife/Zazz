@@ -23,9 +23,11 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUoW _uow;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IFeedHelper _feedHelper;
+        private readonly IObjectMapper _objectMapper;
 
         public UserProfileController(IUserService userService, IPhotoService photoService,
-            IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
+            IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper,
+            IObjectMapper objectMapper)
         {
             _userService = userService;
             _photoService = photoService;
@@ -33,6 +35,7 @@ namespace Zazz.Web.Controllers.Api
             _uow = uow;
             _defaultImageHelper = defaultImageHelper;
             _feedHelper = feedHelper;
+            _objectMapper = objectMapper;
         }
 
         // GET api/v1/userprofile
@@ -82,17 +85,7 @@ namespace Zazz.Web.Controllers.Api
                        Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
                        .Select(_feedHelper.FeedViewModelToApiModel),
                        Photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 15)
-                       .ToList().Select(p => new ApiPhoto
-                                    {
-                                        UserId = p.UserId,
-                                        Description = p.Description,
-                                        PhotoId = p.Id,
-                                        UserDisplayName = userDisplayName,
-                                        UserDisplayPhoto = userDisplayPhoto,
-                                        PhotoLinks = p.IsFacebookPhoto
-                                        ? new PhotoLinks(p.FacebookLink)
-                                        : _photoService.GeneratePhotoUrl(id, p.Id)
-                                    }),
+                       .ToList().Select(_objectMapper.PhotoToApiPhoto),
                        UserDetails = user.AccountType == AccountType.User
                        ? new ApiUserDetails
                          {
@@ -115,17 +108,7 @@ namespace Zazz.Web.Controllers.Api
                          }
                       : null,
                        Weeklies = user.AccountType == AccountType.Club
-                       ? user.Weeklies.Select(w => new ApiWeekly
-                                                   {
-                                                       DayOfTheWeek = w.DayOfTheWeek,
-                                                       Description = w.Description,
-                                                       Id = w.Id,
-                                                       Name = w.Name,
-                                                       UserId = w.UserId,
-                                                       PhotoLinks = w.PhotoId.HasValue
-                                                       ? _photoService.GeneratePhotoUrl(id, w.PhotoId.Value)
-                                                       : _defaultImageHelper.GetDefaultWeeklyImage()
-                                                   })
+                       ? user.Weeklies.Select(_objectMapper.WeeklyToApiWeekly)
                      : null
                    };
         }

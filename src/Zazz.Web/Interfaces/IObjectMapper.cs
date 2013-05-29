@@ -10,5 +10,8 @@ namespace Zazz.Web.Interfaces
         ApiPhoto PhotoToApiPhoto(Photo photo);
 
         ApiEvent EventToApiEvent(ZazzEvent e);
+
+
+        ApiWeekly WeeklyToApiWeekly(Weekly weekly);
     }
 }
