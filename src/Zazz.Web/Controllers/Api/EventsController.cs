@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -46,13 +47,19 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/events
-        public ApiEvent Post([FromBody]string value)
+        public ApiEvent Post([FromBody]ApiEvent e)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(e.Name))
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
+
+
+            return null;
         }
 
         // PUT api/v1/events/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]ApiEvent value)
         {
             throw new NotImplementedException();
         }
