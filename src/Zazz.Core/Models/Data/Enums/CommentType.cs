@@ -2,8 +2,8 @@
 {
     public enum CommentType : byte
     {
-        Photo,
-        Event,
-        Post
+        Photo = 1,
+        Event = 2,
+        Post = 3
     }
 }

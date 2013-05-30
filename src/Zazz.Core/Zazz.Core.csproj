@@ -120,7 +120,6 @@
     <Compile Include="Models\Data\Enums\Gender.cs" />
     <Compile Include="Models\Data\Enums\NotificationType.cs" />
     <Compile Include="Models\Data\Enums\OAuthProvider.cs" />
-    <Compile Include="Models\Data\Enums\UserType.cs" />
     <Compile Include="Models\Data\EventComment.cs" />
     <Compile Include="Models\Data\EventFeed.cs" />
     <Compile Include="Models\Data\EventNotification.cs" />
