@@ -10,7 +10,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web
 {
-    public partial class ObjectMapper : IObjectMapper
+    public class ObjectMapper : IObjectMapper
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;

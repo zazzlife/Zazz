@@ -6,6 +6,8 @@ using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Interfaces;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -14,6 +16,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
     {
         private int _eventId;
         private Mock<IEventService> _eventService;
+        private Mock<IObjectMapper> _objectMapper;
 
         public override void Init()
         {
@@ -23,10 +26,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             ControllerAddress = "/api/v1/events/" + _eventId;
 
             _eventService = MockRepo.Create<IEventService>();
+            _objectMapper = MockRepo.Create<IObjectMapper>();
 
             IocContainer.Configure(x =>
                                    {
                                        x.For<IEventService>().Use(_eventService.Object);
+                                       x.For<IObjectMapper>().Use(_objectMapper.Object);
                                    });
         }
 
@@ -62,6 +67,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return200OnSuccess_OnGet()
+        {
+            //Arrange
+            _eventService.Setup(x => x.GetEvent(_eventId))
+                .Returns(new ZazzEvent());
+            _objectMapper.Setup(x => x.EventToApiEvent(It.IsAny<ZazzEvent>()))
+                         .Returns(new ApiEvent());
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
     }
