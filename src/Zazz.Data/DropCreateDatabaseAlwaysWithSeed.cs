@@ -20,9 +20,6 @@ namespace Zazz.Data
             foreach (var tag in StaticData.GetTags())
                 context.Tags.Add(tag);
 
-            foreach (var clubType in StaticData.GetClubTypes())
-                context.ClubTypes.Add(clubType);
-
             var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
             foreach (var sqlFile in sqlFiles)
                 context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));

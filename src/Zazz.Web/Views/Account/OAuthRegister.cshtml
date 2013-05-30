@@ -85,20 +85,36 @@
                                     User
                                 </label>
                                 <label class="radio" for="_AccountType_ClubAdmin">
-                                    <input id="_AccountType_ClubAdmin" name="AccountType" type="radio" value="ClubAdmin" />
+                                    <input id="_AccountType_ClubAdmin" name="AccountType" type="radio" value="Club" />
                                     Club Admin
                                 </label>
                             </div>
                         </div>
 
                         <div id="clubDetails" class="control-group hide">
-                            <hr />
+                            <hr/>
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.ClubName, new { @class = "control-label required" })
                             </div>
                             <div class="editor-field">
                                 @Html.TextBoxFor(model => model.ClubName, new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
+                            </div>
+                            
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubType, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.DropDownListFor(model => model.ClubType, Model.ClubType.EnumToSelectList(), new { @class = "span4" })
+                                @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
+                            </div>
+                            
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubAddress, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.ClubAddress, new { @class = "span4" })
+                                @Html.ValidationMessageFor(model => model.ClubAddress, null, new { @class = "help-inline" })
                             </div>
                         </div>
 

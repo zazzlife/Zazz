@@ -9,7 +9,6 @@ namespace Zazz.Data
         public IDbSet<Major> Majors { get; set; }
         public IDbSet<School> Schools { get; set; }
         public IDbSet<Tag> Tags { get; set; }
-        public IDbSet<ClubType> ClubTypes { get; set; }
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<UserPreferences> UserPreferences { get; set; }

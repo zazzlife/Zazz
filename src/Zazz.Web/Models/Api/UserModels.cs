@@ -76,8 +76,6 @@ namespace Zazz.Web.Models.Api
 
     public class ApiClubDetails
     {
-        public byte ClubTypeId { get; set; }
-
         public ClubType ClubType { get; set; }
 
         public string Address { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Zazz.Core.Models;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models
 {
@@ -19,7 +20,7 @@ namespace Zazz.Web.Models
 
         public bool IsCurrentUserFollowingTheClub { get; set; }
 
-        public string ClubType { get; set; }
+        public ClubType ClubType { get; set; }
 
         public string Address { get; set; }
 

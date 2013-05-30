@@ -9,7 +9,6 @@ namespace Zazz.Core.Interfaces
         IEnumerable<City> GetCities();
         IEnumerable<Major> GetMajors();
         IEnumerable<Tag> GetTags();
-        IEnumerable<ClubType> GetClubTypes();
 
         Tag GetTagIfExists(string tagName);
     }

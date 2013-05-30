@@ -52,8 +52,7 @@
                                     @Html.LabelFor(model => model.ClubType, new { @class = "control-label" })
                                 </div>
                                 <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.ClubType, new SelectList(Model.ClubTypes, "Id", "Name", Model.ClubType),
-                                    new { @class = "span4" })
+                                    @Html.DropDownListFor(model => model.ClubType, Model.ClubType.EnumToSelectList(), new { @class = "span4" })
 
                                     @Html.ValidationMessageFor(model => model.ClubType, null, new { @class = "help-inline" })
                                 </div>

@@ -48,7 +48,7 @@ namespace Zazz.Web.Models
         public string ClubName { get; set; }
 
         [Display(Name = "Club Type")]
-        public byte ClubType { get; set; }
+        public ClubType ClubType { get; set; }
 
         [Display(Name = "Club Address")]
         public string ClubAddress { get; set; }
@@ -58,7 +58,5 @@ namespace Zazz.Web.Models
         public IEnumerable<City> Cities { get; set; }
 
         public IEnumerable<Major> Majors { get; set; }
-
-        public IEnumerable<ClubType> ClubTypes { get; set; }
     }
 }

@@ -23,11 +23,6 @@ namespace Zazz.Data
             return StaticData.GetMajors();
         }
 
-        public IEnumerable<ClubType> GetClubTypes()
-        {
-            return StaticData.GetClubTypes();
-        }
-
         public IEnumerable<Tag> GetTags()
         {
             return StaticData.GetTags();

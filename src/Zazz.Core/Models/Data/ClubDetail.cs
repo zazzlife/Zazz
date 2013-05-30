@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Models.Data
 {
@@ -11,10 +12,7 @@ namespace Zazz.Core.Models.Data
         [MaxLength(500)]
         public string ClubName { get; set; }
 
-        [ForeignKey("ClubType")]
-        public byte ClubTypeId { get; set; }
-
-        public virtual ClubType ClubType { get; set; }
+        public ClubType ClubType { get; set; }
 
         [MaxLength(500)]
         public string Address { get; set; }

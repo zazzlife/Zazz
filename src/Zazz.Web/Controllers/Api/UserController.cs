@@ -121,7 +121,7 @@ namespace Zazz.Web.Controllers.Api
             {
                 user.ClubDetail.Address = u.ClubDetails.Address;
                 user.ClubDetail.ClubName = u.ClubDetails.ClubName;
-                user.ClubDetail.ClubTypeId = u.ClubDetails.ClubTypeId;
+                user.ClubDetail.ClubType = u.ClubDetails.ClubType;
                 user.ClubDetail.CoverPhotoId = u.ClubDetails.CoverPhotoId;
 
                 if (u.Preferences.SyncFbPhotos.HasValue)

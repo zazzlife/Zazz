@@ -533,11 +533,11 @@ namespace Zazz.IntegrationTests.Repositories
 
             var userA = Mother.GetUser();
             userA.ProfilePhotoId = idToBeRemoved;
-            userA.ClubDetail = new ClubDetail {CoverPhotoId = idNotToBeRemoved, ClubTypeId = 1};
+            userA.ClubDetail = new ClubDetail {CoverPhotoId = idNotToBeRemoved, ClubType = ClubType.Bar };
 
             var userB = Mother.GetUser();
             userB.ProfilePhotoId = idNotToBeRemoved;
-            userB.ClubDetail = new ClubDetail { CoverPhotoId = idToBeRemoved, ClubTypeId = 1 };
+            userB.ClubDetail = new ClubDetail { CoverPhotoId = idToBeRemoved, ClubType = ClubType.Bar };
 
             _zazzDbContext.Users.Add(userA);
             _zazzDbContext.Users.Add(userB);

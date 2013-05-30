@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
                          Address = user.ClubDetail.Address,
-                         ClubType = user.ClubDetail.ClubType.Name,
+                         ClubType = user.ClubDetail.ClubType,
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                          ? PhotoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
                          : DefaultImageHelper.GetDefaultCoverImage().OriginalLink,
@@ -242,8 +242,7 @@ namespace Zazz.Web.Controllers
                      {
                          ClubAddress = user.ClubDetail.Address,
                          ClubName = user.ClubDetail.ClubName,
-                         ClubType = user.ClubDetail.ClubTypeId,
-                         ClubTypes = _staticDataRepo.GetClubTypes(),
+                         ClubType = user.ClubDetail.ClubType,
                          SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                          SyncFbEvents = user.Preferences.SyncFbEvents,
                          SyncFbImages = user.Preferences.SyncFbImages,
@@ -264,7 +263,7 @@ namespace Zazz.Web.Controllers
             {
                 user.ClubDetail.Address = vm.ClubAddress;
                 user.ClubDetail.ClubName = vm.ClubName;
-                user.ClubDetail.ClubTypeId = vm.ClubType;
+                user.ClubDetail.ClubType = vm.ClubType;
                 user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
                 user.Preferences.SyncFbEvents = vm.SyncFbEvents;
                 user.Preferences.SyncFbImages = vm.SyncFbImages;
@@ -274,8 +273,6 @@ namespace Zazz.Web.Controllers
 
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
-
-            vm.ClubTypes = _staticDataRepo.GetClubTypes();
 
             return View("EditClub", vm);
         }

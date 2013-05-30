@@ -221,7 +221,6 @@
     <Compile Include="Controllers\Api\AlbumController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
-    <Compile Include="Controllers\Api\ClubTypesController.cs" />
     <Compile Include="Controllers\Api\CommentsController.cs" />
     <Compile Include="Controllers\Api\EventCommentsController.cs" />
     <Compile Include="Controllers\Api\FeedsController.cs" />
