@@ -96,7 +96,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public async Task Return400IfIdNameIsMissing_OnPost(string name)
+        public async Task Return400IfNameIsMissing_OnPost(string name)
         {
             //Arrange
             ControllerAddress = "/api/v1/events/";
@@ -105,8 +105,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                     {
                         Description = "d",
                         Name = name,
-                        UtcTime = DateTime.UtcNow,
-                        Time = DateTimeOffset.Now,
+                        UtcTime = DateTime.UtcNow.AddMinutes(1),
+                        Time = DateTimeOffset.Now.AddMinutes(1),
                     };
 
             var json = JsonConvert.SerializeObject(e);
@@ -126,7 +126,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public async Task Return400IfIdDescriptionIsMissing_OnPost(string desc)
+        public async Task Return400IfDescriptionIsMissing_OnPost(string desc)
         {
             //Arrange
             ControllerAddress = "/api/v1/events/";
@@ -135,8 +135,36 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             {
                 Description = desc,
                 Name = "name",
-                UtcTime = DateTime.UtcNow,
-                Time = DateTimeOffset.Now,
+                UtcTime = DateTime.UtcNow.AddMinutes(1),
+                Time = DateTimeOffset.Now.AddMinutes(1),
+            };
+
+            var json = JsonConvert.SerializeObject(e);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PostAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfUTCTimeIsLessThanUTCNow_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/events/";
+
+            var e = new ApiEvent
+            {
+                Description = "D",
+                Name = "name",
+                UtcTime = DateTime.UtcNow.AddMinutes(-1),
+                Time = DateTimeOffset.Now.AddMinutes(1),
             };
 
             var json = JsonConvert.SerializeObject(e);

@@ -49,7 +49,9 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/events
         public ApiEvent Post([FromBody]ApiEvent e)
         {
-            if (String.IsNullOrWhiteSpace(e.Name) || String.IsNullOrWhiteSpace(e.Description))
+            if (String.IsNullOrWhiteSpace(e.Name) ||
+                String.IsNullOrWhiteSpace(e.Description) ||
+                e.UtcTime < DateTime.UtcNow)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
