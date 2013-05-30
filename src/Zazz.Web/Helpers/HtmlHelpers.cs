@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -83,10 +84,20 @@ namespace Zazz.Web.Helpers
             return MvcHtmlString.Create(sb.ToString());
         }
  
+        public static string GetEnumDisplay<TEnum>(this TEnum en)
+        {
+            var fieldInfo = en.GetType().GetField(en.ToString());
+            var displayAttribute = fieldInfo.GetCustomAttributes(typeof (DisplayAttribute), false)
+                                            .OfType<DisplayAttribute>()
+                                            .FirstOrDefault();
+
+            return displayAttribute == null ? en.ToString() : displayAttribute.GetName();
+        }
+
         public static SelectList EnumToSelectList<TEnum>(this TEnum enumobj)
         {
             var values = from TEnum e in Enum.GetValues(typeof (TEnum))
-                         select new { Id = e, Name = e.ToString() };
+                         select new { Id = e, Name = GetEnumDisplay(e) };
 
             return new SelectList(values, "Id", "Name", enumobj);
         }
