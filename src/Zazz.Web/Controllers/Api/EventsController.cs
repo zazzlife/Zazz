@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/events
         public ApiEvent Post([FromBody]ApiEvent e)
         {
-            if (String.IsNullOrWhiteSpace(e.Name))
+            if (String.IsNullOrWhiteSpace(e.Name) || String.IsNullOrWhiteSpace(e.Description))
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }

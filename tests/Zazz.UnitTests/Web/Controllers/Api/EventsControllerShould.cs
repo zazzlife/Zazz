@@ -122,5 +122,35 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfIdDescriptionIsMissing_OnPost(string desc)
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/events/";
+
+            var e = new ApiEvent
+            {
+                Description = desc,
+                Name = "name",
+                UtcTime = DateTime.UtcNow,
+                Time = DateTimeOffset.Now,
+            };
+
+            var json = JsonConvert.SerializeObject(e);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PostAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
