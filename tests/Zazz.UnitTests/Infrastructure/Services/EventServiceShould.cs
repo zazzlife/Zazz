@@ -5,6 +5,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -234,6 +235,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreSame(zazzEvent, result);
+            _uow.Verify(x => x.EventRepository.GetById(id), Times.Once());
+        }
+
+        [Test]
+        public void ThrowNotFoundIfEventDoesntExists_OnGetEvent()
+        {
+            //Arrange
+            var id = 123;
+            _uow.Setup(x => x.EventRepository.GetById(id))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() =>  _sut.GetEvent(id));
+
+            //Assert
             _uow.Verify(x => x.EventRepository.GetById(id), Times.Once());
         }
 

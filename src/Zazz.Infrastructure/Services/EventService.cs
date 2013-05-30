@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -116,7 +117,11 @@ namespace Zazz.Infrastructure.Services
 
         public ZazzEvent GetEvent(int id)
         {
-            return _uow.EventRepository.GetById(id);
+            var e = _uow.EventRepository.GetById(id);
+            if (e == null)
+                throw new NotFoundException();
+
+            return e;
         }
 
         public void DeleteEvent(int eventId, int currentUserId)
