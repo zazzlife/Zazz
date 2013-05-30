@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
+using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
@@ -12,10 +14,29 @@ namespace Zazz.Web.Controllers.Api
     [HMACAuthorize]
     public class EventsController : BaseApiController
     {
+        private readonly IEventService _eventService;
+
+        public EventsController(IEventService eventService)
+        {
+            _eventService = eventService;
+        }
+
         // GET api/v1/events/5
         public ApiEvent Get(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                var e = _eventService.GetEvent(id);
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return null;
         }
 
         // POST api/v1/events
