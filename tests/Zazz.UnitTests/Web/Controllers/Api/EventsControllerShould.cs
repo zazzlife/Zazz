@@ -154,18 +154,20 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return400IfUTCTimeIsLessThanUTCNow_OnPost()
+        public async Task Return200OnSuccess_OnPost()
         {
             //Arrange
             ControllerAddress = "/api/v1/events/";
 
             var e = new ApiEvent
             {
-                Description = "D",
+                Description = "d",
                 Name = "name",
-                UtcTime = DateTime.UtcNow.AddMinutes(-1),
+                UtcTime = DateTime.UtcNow.AddMinutes(1),
                 Time = DateTimeOffset.Now.AddMinutes(1),
             };
+
+            _eventService.Setup(x => x.CreateEvent(It.IsAny<ZazzEvent>()));
 
             var json = JsonConvert.SerializeObject(e);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -177,7 +179,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var result = await Client.PostAsync(ControllerAddress, httpContent);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
     }

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
@@ -50,14 +51,35 @@ namespace Zazz.Web.Controllers.Api
         public ApiEvent Post([FromBody]ApiEvent e)
         {
             if (String.IsNullOrWhiteSpace(e.Name) ||
-                String.IsNullOrWhiteSpace(e.Description) ||
-                e.UtcTime < DateTime.UtcNow)
+                String.IsNullOrWhiteSpace(e.Description))
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
+            var ze = new ZazzEvent
+                     {
+                         City = e.City,
+                         CreatedDate = DateTime.UtcNow,
+                         Description = e.Description,
+                         IsDateOnly = e.IsDateOnly,
+                         Latitude = e.Latitude,
+                         Longitude = e.Longitude,
+                         Location = e.Location,
+                         Name = e.Name,
+                         PhotoId = e.PhotoId,
+                         Price = e.Price,
+                         Street = e.Street,
+                         Time = e.Time,
+                         TimeUtc = e.UtcTime,
+                         UserId = ExtractUserIdFromHeader()
+                     };
 
-            return null;
+            _eventService.CreateEvent(ze);
+
+            e.EventId = ze.Id;
+            e.UserId = ze.UserId;
+
+            return e;
         }
 
         // PUT api/v1/events/5
