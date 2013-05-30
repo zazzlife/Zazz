@@ -77,7 +77,7 @@ namespace Zazz.Infrastructure.Services
 
             var e = _uow.EventRepository.GetById(updatedEvent.Id);
             if (e == null)
-                return;
+                throw new NotFoundException();
 
             if (e.UserId != currentUserId)
                 throw new SecurityException();

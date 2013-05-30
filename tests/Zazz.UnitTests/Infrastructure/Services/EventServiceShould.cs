@@ -119,8 +119,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var unavailableTag = "#dsadas";
 
-            var tag1Object = new Tag {Id = 1};
-            var tag2Object = new Tag {Id = 2};
+            var tag1Object = new Tag { Id = 1 };
+            var tag2Object = new Tag { Id = 2 };
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag });
@@ -247,7 +247,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            Assert.Throws<NotFoundException>(() =>  _sut.GetEvent(id));
+            Assert.Throws<NotFoundException>(() => _sut.GetEvent(id));
 
             //Assert
             _uow.Verify(x => x.EventRepository.GetById(id), Times.Once());
@@ -257,16 +257,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrownIfEventIdIs0_OnUpdateEvent()
         {
             //Arrange
-            //Act
-            try
-            {
-                _sut.UpdateEvent(_zazzEvent, _userId);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (ArgumentException)
-            {
-            }
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => _sut.UpdateEvent(_zazzEvent, _userId));
 
+        }
+
+        [Test]
+        public void ThrowIfEventDoesntExists_OnUpdateEvent()
+        {
+            //Arrange
+            _zazzEvent.Id = 444;
+            _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
+                .Returns(() => null);
+
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.UpdateEvent(_zazzEvent, _userId));
+            _uow.Verify(x => x.EventRepository.GetById(_zazzEvent.Id), Times.Once());
         }
 
         [Test]
@@ -278,17 +284,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
 
-            //Act
-            try
-            {
-                _sut.UpdateEvent(_zazzEvent, _userId);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (SecurityException)
-            {
-            }
-
-            //Assert
+            //Act & Assert
+            Assert.Throws<SecurityException>(() => _sut.UpdateEvent(_zazzEvent, _userId));
             _uow.Verify(x => x.EventRepository.GetById(_zazzEvent.Id), Times.Once());
         }
 
@@ -314,7 +311,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _zazzEvent.Id = 5;
             _zazzEvent.Description = "sample description";
-            _zazzEvent.Tags = new List<EventTag> {new EventTag(), new EventTag(), new EventTag()};
+            _zazzEvent.Tags = new List<EventTag> { new EventTag(), new EventTag(), new EventTag() };
             var updatedEvent = new ZazzEvent
             {
                 Id = _zazzEvent.Id,
