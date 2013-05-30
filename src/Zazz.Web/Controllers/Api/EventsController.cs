@@ -85,7 +85,8 @@ namespace Zazz.Web.Controllers.Api
         // PUT api/v1/events/5
         public void Put(int id, [FromBody]ApiEvent value)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
 
         // DELETE api/v1/events/5
