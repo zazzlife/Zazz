@@ -210,5 +210,34 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return404IfEventDoesntExists_OnPut()
+        {
+            //Arrange
+            var e = new ApiEvent
+            {
+                Description = "d",
+                Name = "name",
+                UtcTime = DateTime.UtcNow.AddMinutes(1),
+                Time = DateTimeOffset.Now.AddMinutes(1),
+            };
+
+            _eventService.Setup(x => x.UpdateEvent(It.IsAny<ZazzEvent>(), User.Id))
+                         .Throws<NotFoundException>();
+
+            var json = JsonConvert.SerializeObject(e);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PutAsync(ControllerAddress, httpContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }

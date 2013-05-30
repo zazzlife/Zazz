@@ -83,10 +83,36 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // PUT api/v1/events/5
-        public void Put(int id, [FromBody]ApiEvent value)
+        public void Put(int id, [FromBody]ApiEvent e)
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var ze = new ZazzEvent
+                     {
+                         City = e.City,
+                         Description = e.Description,
+                         IsDateOnly = e.IsDateOnly,
+                         Latitude = e.Latitude,
+                         Longitude = e.Longitude,
+                         Location = e.Location,
+                         Name = e.Name,
+                         PhotoId = e.PhotoId,
+                         Price = e.Price,
+                         Street = e.Street,
+                         Time = e.Time,
+                         TimeUtc = e.UtcTime,
+                     };
+
+            try
+            {
+                _eventService.UpdateEvent(ze, ExtractUserIdFromHeader());
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            
         }
 
         // DELETE api/v1/events/5
