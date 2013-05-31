@@ -101,14 +101,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.1.10\lib\net45\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\..\packages\Microsoft.Net.Http.2.1.10\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -454,10 +448,12 @@
     <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\app\tags.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
+    <None Include="Scripts\jquery-2.0.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.0.1.js" />
+    <Content Include="Scripts\jquery-2.0.1.min.js" />
     <Content Include="Scripts\jquery.atwho.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.extends.js" />
-    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\auth-icons.png" />
     <Content Include="Images\cover-image.gif" />
     <Content Include="Images\fb-login-btn.jpg" />
@@ -488,16 +484,16 @@
     <Content Include="Scripts\fine-upload\uploader.js" />
     <Content Include="Scripts\fine-upload\util.js" />
     <Content Include="Scripts\fine-upload\window.receive.message.js" />
-    <Content Include="Scripts\jquery-1.9.1.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\jquery-1.9.1.min.map" />
     <Content Include="Scripts\css-transit.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.color.js" />
     <Content Include="Scripts\jquery.Jcrop.js" />
+    <Content Include="Scripts\jquery-2.0.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Content\modernizr-2.6.2.js" />
