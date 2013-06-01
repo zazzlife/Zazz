@@ -229,6 +229,7 @@
     <Compile Include="Controllers\Api\MajorsController.cs" />
     <Compile Include="Controllers\Api\NotificationsController.cs" />
     <Compile Include="Controllers\Api\PhotoCommentsController.cs" />
+    <Compile Include="Controllers\Api\PhotosController.cs" />
     <Compile Include="Controllers\Api\PostCommentsController.cs" />
     <Compile Include="Controllers\Api\PostsController.cs" />
     <Compile Include="Controllers\Api\SchoolsController.cs" />
