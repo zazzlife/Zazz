@@ -6,6 +6,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data
 {
+    // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
     public class StaticDataRepository : IStaticDataRepository
     {
         public IEnumerable<School> GetSchools()

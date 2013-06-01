@@ -9,6 +9,7 @@ namespace Zazz.Infrastructure
     {
         private readonly string _baseAddress;
 
+        // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public DefaultImageHelper(string baseAddress)
         {
             _baseAddress = baseAddress;

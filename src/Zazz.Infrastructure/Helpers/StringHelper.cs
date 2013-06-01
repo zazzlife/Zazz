@@ -6,6 +6,7 @@ using Zazz.Core.Interfaces;
 
 namespace Zazz.Infrastructure.Helpers
 {
+    // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
     public class StringHelper : IStringHelper
     {
         public IEnumerable<string> ExtractTags(string text)

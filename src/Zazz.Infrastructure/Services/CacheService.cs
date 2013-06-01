@@ -3,6 +3,7 @@ using Zazz.Core.Models;
 
 namespace Zazz.Infrastructure.Services
 {
+    // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
     public class CacheService : ICacheService
     {
         //These properties should be internal so they are accessable by unit test project.

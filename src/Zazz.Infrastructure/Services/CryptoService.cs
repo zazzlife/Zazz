@@ -23,6 +23,7 @@ namespace Zazz.Infrastructure.Services
             }; //128 bit
         //Base64: bRFj2Dk3wfSY1n4lsak60w==
 
+        // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public CryptoService()
         {
             _passwordCipherKeyBuffer = Convert.FromBase64String(PASSWORD_CIPHER_KEY);

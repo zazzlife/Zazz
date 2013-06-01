@@ -10,8 +10,9 @@ namespace Zazz.Infrastructure.Services
         private readonly string _storageConnString;
 
         private const string PIC_CONTAINER_NAME = "pictures";
-
-        public AzureService(string storageConnString)
+        
+        // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
+        public AzureService(string storageConnString) 
         {
             _storageConnString = storageConnString;
         }

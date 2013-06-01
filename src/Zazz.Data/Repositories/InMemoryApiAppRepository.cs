@@ -10,6 +10,7 @@ namespace Zazz.Data.Repositories
     {
         private static readonly HashSet<ApiApp> ApiApps = new HashSet<ApiApp>();
 
+        // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public InMemoryApiAppRepository()
         {
             const string IOS_KEY = "7jFgrLKqfIO9YEkTqEZZQ+yVnHLZK2jm2kQEtQrpcjGIaRmQ0xCrdB9PCNJ/nbwUThaNC5ZSQi2cVcs2e232eDrz67xcmWL2qpVwuTN3zpBOIaka0FNkCinjN6SF5sZQUB/gga9KFJYzFNCe8k4nHteblxVZCujmB5ohKQYwB5k=";
