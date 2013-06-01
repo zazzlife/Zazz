@@ -38,6 +38,7 @@ namespace Zazz.Web.DependencyResolution
             var rootDirectory = HostingEnvironment.MapPath("/");
             var baseBlobAddress = ConfigurationManager.AppSettings["BaseBlobUrl"];
             var websiteAddress = ConfigurationManager.AppSettings["WebsiteAddress"];
+            var blobConnString = ConfigurationManager.AppSettings["BlobConnectionString"];
 
             ObjectFactory.Initialize(x =>
                         {
@@ -53,9 +54,14 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ICryptoService>().Singleton().Use<CryptoService>();
                             x.For<IApiAppRepository>().Singleton().Use<InMemoryApiAppRepository>();
 
-                            x.For<IDefaultImageHelper>()
-                             .Singleton().Use<DefaultImageHelper>()
+                            x.For<IDefaultImageHelper>().Singleton()
+                             .Use<DefaultImageHelper>()
                              .Ctor<string>("baseAddress").Is(websiteAddress);
+
+                            x.For<IStorageService>().Singleton()
+                             .Use<AzureService>()
+                             .Ctor<string>("storageConnString").Is(blobConnString);
+
 
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
 
