@@ -49,6 +49,7 @@ namespace Zazz.Web
             return new ApiPhoto
                    {
                        Description = photo.Description,
+                       AlbumId = photo.AlbumId,
                        PhotoId = photo.Id,
                        PhotoLinks = photo.IsFacebookPhoto
                                         ? new PhotoLinks(photo.FacebookLink)
@@ -135,6 +136,7 @@ namespace Zazz.Web
                 ? feed.PhotoViewModel.Select(p => new ApiPhoto
                 {
                     PhotoId = p.PhotoId,
+                    AlbumId = p.AlbumId,
                     Description = p.PhotoDescription,
                     UserId = p.FromUserId,
                     UserDisplayName = p.FromUserDisplayName,

@@ -47,6 +47,8 @@ namespace Zazz.Web.Models
     {
         public int PhotoId { get; set; }
 
+        public int? AlbumId { get; set; }
+
         public string PhotoDescription { get; set; }
 
         public PhotoLinks PhotoUrl { get; set; }

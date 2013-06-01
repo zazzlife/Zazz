@@ -10,6 +10,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -21,14 +22,16 @@ namespace Zazz.Web.Controllers.Api
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IPhotoService _photoService;
         private readonly IUserService _userService;
+        private readonly IObjectMapper _objectMapper;
 
         public AlbumController(IAlbumService albumService, IDefaultImageHelper defaultImageHelper,
-            IPhotoService photoService, IUserService userService)
+            IPhotoService photoService, IUserService userService, IObjectMapper objectMapper)
         {
             _albumService = albumService;
             _defaultImageHelper = defaultImageHelper;
             _photoService = photoService;
             _userService = userService;
+            _objectMapper = objectMapper;
         }
 
         // GET api/v1/album/5
@@ -63,17 +66,7 @@ namespace Zazz.Web.Controllers.Api
                        Name = album.Name,
                        UserId = album.UserId,
                        Thumbnail = albumThumbnail,
-                       Photos = album.Photos.Select(p => new ApiPhoto
-                                                         {
-                                                             Description = p.Description,
-                                                             PhotoId = p.Id,
-                                                             UserId = p.UserId,
-                                                             UserDisplayName = _userService.GetUserDisplayName(p.UserId),
-                                                             UserDisplayPhoto = _photoService.GetUserImageUrl(p.UserId),
-                                                             PhotoLinks = p.IsFacebookPhoto
-                                                             ? new PhotoLinks(p.FacebookLink)
-                                                             : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
-                                                         })
+                       Photos = album.Photos.Select(_objectMapper.PhotoToApiPhoto)
                    };
         }
 

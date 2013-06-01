@@ -199,6 +199,7 @@ namespace Zazz.Web.Helpers
                     .Select(p => new PhotoViewModel
                     {
                         PhotoId = p.Id,
+                        AlbumId = p.AlbumId,
                         PhotoDescription = p.Description,
                         FromUserDisplayName = feedVm.UserDisplayName,
                         FromUserPhotoUrl = feedVm.UserImageUrl,
