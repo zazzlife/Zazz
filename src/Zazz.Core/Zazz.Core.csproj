@@ -90,6 +90,7 @@
     <Compile Include="Interfaces\IPostService.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
+    <Compile Include="Interfaces\IStorageService.cs" />
     <Compile Include="Interfaces\IStringHelper.cs" />
     <Compile Include="Interfaces\ITagService.cs" />
     <Compile Include="Interfaces\ITagStatRepository.cs" />
