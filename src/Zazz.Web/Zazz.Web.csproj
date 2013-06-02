@@ -218,7 +218,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
-    <Compile Include="Controllers\Api\AlbumController.cs" />
+    <Compile Include="Controllers\Api\AlbumsController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
     <Compile Include="Controllers\Api\CommentsController.cs" />

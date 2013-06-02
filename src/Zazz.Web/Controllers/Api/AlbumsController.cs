@@ -16,20 +16,26 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class AlbumController : BaseApiController
+    public class AlbumsController : BaseApiController
     {
         private readonly IAlbumService _albumService;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IPhotoService _photoService;
         private readonly IObjectMapper _objectMapper;
 
-        public AlbumController(IAlbumService albumService, IDefaultImageHelper defaultImageHelper,
+        public AlbumsController(IAlbumService albumService, IDefaultImageHelper defaultImageHelper,
             IPhotoService photoService, IObjectMapper objectMapper)
         {
             _albumService = albumService;
             _defaultImageHelper = defaultImageHelper;
             _photoService = photoService;
             _objectMapper = objectMapper;
+        }
+
+        // GET api/v1/album?userId=&lastAlbum=
+        public IEnumerable<ApiAlbum> GetUserAlbums(int userId, int? lastAlbum = null)
+        {
+            throw new NotImplementedException();
         }
 
         // GET api/v1/album/5
