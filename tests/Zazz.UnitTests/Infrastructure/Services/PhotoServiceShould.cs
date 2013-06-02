@@ -6,6 +6,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -42,7 +43,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _baseBlobUrl = "http://localhost:17433";
             _defaultImageHelperHelper = new DefaultImageHelper("");
             _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object, _stringHelper.Object,
-                                    _staticDataRepo.Object, _defaultImageHelperHelper,  _tempRootPath, _baseBlobUrl);
+                                    _staticDataRepo.Object, _defaultImageHelperHelper, _tempRootPath, _baseBlobUrl);
             _uow.Setup(x => x.SaveChanges());
         }
 
@@ -750,17 +751,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(photo.UserId);
 
             //Act
-            try
-            {
-                _sut.UpdatePhoto(photo, 1234);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (ArgumentException)
-            {
-            }
+            Assert.Throws<ArgumentException>(() => _sut.UpdatePhoto(photo, 1234));
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Never());
+        }
+
+        [Test]
+        public void ThrowIfPhotoDoesntExists_OnUpdatePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = 890
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.UpdatePhoto(photo, userId));
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
         }
 
         [Test]
@@ -782,14 +801,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(photo);
 
             //Act
-            try
-            {
-                _sut.UpdatePhoto(photo, userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
+            Assert.Throws<SecurityException>(() => _sut.UpdatePhoto(photo, userId));
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());

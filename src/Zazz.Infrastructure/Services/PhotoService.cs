@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -320,6 +321,9 @@ namespace Zazz.Infrastructure.Services
                 throw new ArgumentException();
 
             var photo = _uow.PhotoRepository.GetById(updatedPhoto.Id);
+            if (photo == null)
+                throw new NotFoundException();
+
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
