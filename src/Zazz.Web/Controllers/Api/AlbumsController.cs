@@ -38,7 +38,23 @@ namespace Zazz.Web.Controllers.Api
             if (userId < 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            throw new NotImplementedException();
+            var albums = _albumService.GetUserAlbums(userId, true)
+                .ToList()
+                .Select(a => new ApiAlbum
+                             {
+                                 CreatedDate = a.CreatedDate,
+                                 Id = a.Id,
+                                 Name = a.Name,
+                                 UserId = a.UserId,
+                                 Thumbnail = a.Photos.FirstOrDefault() == null
+                                 ? _defaultImageHelper.GetDefaultAlbumImage()
+                                 : a.Photos.First().IsFacebookPhoto
+                                     ? new PhotoLinks(a.Photos.First().FacebookLink)
+                                     : _photoService.GeneratePhotoUrl(a.UserId, a.Photos.First().Id),
+                                 Photos = a.Photos.Select(_objectMapper.PhotoToApiPhoto)
+                             });
+
+            return albums;
         }
 
         // GET api/v1/album/5
