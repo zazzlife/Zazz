@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
@@ -16,6 +17,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private int _photoId;
         private Mock<IPhotoService> _photoService;
         private ApiPhoto _apiPhoto;
+        private Mock<IObjectMapper> _objectMapper;
 
         public override void Init()
         {
@@ -30,10 +32,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                         };
 
             _photoService = MockRepo.Create<IPhotoService>();
+            _objectMapper = MockRepo.Create<IObjectMapper>();
 
             IocContainer.Configure(x =>
             {
                 x.For<IPhotoService>().Use(_photoService.Object);
+                x.For<IObjectMapper>().Use(_objectMapper.Object);
             });
         }
 
@@ -132,6 +136,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnPhoto_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            _photoService.Setup(x => x.GetPhoto(_photoId))
+                         .Returns(new Photo());
+            _objectMapper.Setup(x => x.PhotoToApiPhoto(It.IsAny<Photo>()))
+                         .Returns(new ApiPhoto());
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
     }

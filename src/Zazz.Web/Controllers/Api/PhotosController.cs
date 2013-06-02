@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers.Api
             if (photo == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return null;
+            return _objectMapper.PhotoToApiPhoto(photo);
         }
 
         // POST api/v1/photos
