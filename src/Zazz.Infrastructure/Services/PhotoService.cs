@@ -49,6 +49,17 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetAll();
         }
 
+        public IQueryable<Photo> GetUserPhotos(int userId, int take, int? lastPhotoId = null)
+        {
+            var query = _uow.PhotoRepository.GetAll()
+                            .Where(p => p.UserId == userId);
+
+            if (lastPhotoId.HasValue)
+                query = query.Where(p => p.Id < lastPhotoId.Value);
+
+            return query.Take(take);
+        }
+
         public Photo GetPhoto(int id)
         {
             return _uow.PhotoRepository.GetById(id);

@@ -12,6 +12,8 @@ namespace Zazz.Core.Interfaces
     {
         IQueryable<Photo> GetAll();
 
+        IQueryable<Photo> GetUserPhotos(int userId, int take, int? lastPhotoId = null);
+
         Photo GetPhoto(int id);
 
         PhotoLinks GeneratePhotoUrl(int userId, int photoId);
