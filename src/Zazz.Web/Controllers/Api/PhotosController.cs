@@ -183,7 +183,11 @@ namespace Zazz.Web.Controllers.Api
         // DELETE api/v1/photos/5
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+
+
         }
     }
 }
