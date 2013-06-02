@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -14,10 +15,12 @@ namespace Zazz.Web.Controllers.Api
     public class PhotosController : BaseApiController
     {
         private readonly IPhotoService _photoService;
+        private readonly IObjectMapper _objectMapper;
 
-        public PhotosController(IPhotoService photoService)
+        public PhotosController(IPhotoService photoService, IObjectMapper objectMapper)
         {
             _photoService = photoService;
+            _objectMapper = objectMapper;
         }
 
         // GET api/v1/photos?userId=&lastPhoto=
@@ -26,7 +29,10 @@ namespace Zazz.Web.Controllers.Api
             if (userId < 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return null;
+            const int PAGE_SIZE = 25;
+
+            var photos = _photoService.GetUserPhotos(userId, PAGE_SIZE, lastPhoto);
+            return photos.Select(_objectMapper.PhotoToApiPhoto);
         }
 
         // GET api/v1/photos/5
