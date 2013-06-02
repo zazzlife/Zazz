@@ -23,6 +23,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private Mock<IPhotoService> _photoService;
         private ApiPhoto _apiPhoto;
         private Mock<IObjectMapper> _objectMapper;
+        private Mock<IImageValidator> _imageValidator;
 
         private const string PHOTO = "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";
 
@@ -40,11 +41,13 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _photoService = MockRepo.Create<IPhotoService>();
             _objectMapper = MockRepo.Create<IObjectMapper>();
+            _imageValidator = MockRepo.Create<IImageValidator>();
 
             IocContainer.Configure(x =>
             {
                 x.For<IPhotoService>().Use(_photoService.Object);
                 x.For<IObjectMapper>().Use(_objectMapper.Object);
+                x.For<IImageValidator>().Use(_imageValidator.Object);
             });
         }
 
@@ -184,6 +187,36 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Assert
             Assert.AreEqual(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
         }
+
+        [Test]
+        public async Task Return400IfPhotoIsNotProvided_OnPost()
+        {
+            //Arrange
+            var values = new[]
+                         {
+                             new KeyValuePair<string, string>("description", "this is the description"),
+                             new KeyValuePair<string, string>("albumId", "5"),
+                             new KeyValuePair<string, string>("showInFeed", "true"),
+                         };
+
+            var content = new MultipartFormDataContent();
+            foreach (var v in values)
+                content.Add(new StringContent(v.Value), v.Key);
+
+            var stringContent = await content.ReadAsStringAsync();
+
+            AddValidHMACHeaders("POST", ControllerAddress, stringContent);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+
 
         [Test]
         public async Task TEST_OnPost()
