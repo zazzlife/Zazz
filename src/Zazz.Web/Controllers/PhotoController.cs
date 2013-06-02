@@ -100,7 +100,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Albums(int id)
         {
-            var albums = _albumService.GetUserAlbums(id);
+            var albums = _albumService.GetUserAlbums(id, true);
 
             var currentUserId = 0;
             if (User.Identity.IsAuthenticated)

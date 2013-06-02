@@ -13,7 +13,7 @@ namespace Zazz.Core.Interfaces
 
         Album GetAlbum(int albumId, bool includePhotos = false);
 
-        IQueryable<Album> GetUserAlbums(int userId);
+        IQueryable<Album> GetUserAlbums(int userId, bool includePhotos = false);
 
         void CreateAlbum(Album album);
 

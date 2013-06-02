@@ -31,10 +31,9 @@ namespace Zazz.Infrastructure.Services
             return _uow.AlbumRepository.GetById(albumId);
         }
 
-        public IQueryable<Album> GetUserAlbums(int userId)
+        public IQueryable<Album> GetUserAlbums(int userId, bool includePhotos = false)
         {
-            return _uow.AlbumRepository.GetAll()
-                       .Where(a => a.UserId == userId);
+            return _uow.AlbumRepository.GetUserAlbums(userId, includePhotos);
         }
 
         public void CreateAlbum(Album album)

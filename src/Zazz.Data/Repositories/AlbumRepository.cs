@@ -59,20 +59,6 @@ namespace Zazz.Data.Repositories
             return albums;
         }
 
-        public int GetOwnerId(int albumId)
-        {
-            return DbSet.Where(a => a.Id == albumId)
-                        .Select(a => a.UserId)
-                        .SingleOrDefault();
-        }
-
-        public IEnumerable<int> GetAlbumPhotoIds(int albumId)
-        {
-            return DbSet.Where(a => a.Id == albumId)
-                        .SelectMany(a => a.Photos)
-                        .Select(p => p.Id);
-        }
-
         public Album GetByFacebookId(string fbId)
         {
             return DbSet.SingleOrDefault(a => a.FacebookId.Equals(fbId, StringComparison.InvariantCultureIgnoreCase));
@@ -104,6 +90,17 @@ namespace Zazz.Data.Repositories
                                                      .FirstOrDefault()
                              })
                 .SingleOrDefault();
+        }
+
+        public IQueryable<Album> GetUserAlbums(int userId, bool includePhotos = false)
+        {
+            var query = DbSet
+                .Where(a => a.UserId == userId);
+
+            if (includePhotos)
+                query = query.Include(a => a.Photos);
+
+            return query;
         }
     }
 }

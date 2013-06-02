@@ -12,14 +12,12 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<Album> GetLatestAlbums(int userId, int albumsCount = 3, int photosCount = 13);
 
-        int GetOwnerId(int albumId);
-
-        IEnumerable<int> GetAlbumPhotoIds(int albumId);
-
         Album GetByFacebookId(string fbId);
 
         IEnumerable<int> GetPageAlbumIds(int pageId);
         
         AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId);
+        
+        IQueryable<Album> GetUserAlbums(int userId, bool includePhotos = false);
     }
 }

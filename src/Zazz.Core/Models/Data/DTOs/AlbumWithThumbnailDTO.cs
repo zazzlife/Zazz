@@ -18,6 +18,6 @@ namespace Zazz.Core.Models.Data.DTOs
 
         public DateTime CreatedDate { get; set; }
 
-        public int ThumbnailPhotoId { get; set; }
+        public int? ThumbnailPhotoId { get; set; }
     }
 }
