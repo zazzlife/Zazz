@@ -174,8 +174,10 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-
-            throw new NotImplementedException();
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
 
         // DELETE api/v1/photos/5

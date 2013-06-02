@@ -406,5 +406,46 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return403WhenUserIsNotAuthorizedToEditPhoto_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_apiPhoto);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id))
+                         .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, stringContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return204OnSuccess_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_apiPhoto);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id));
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, stringContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
