@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Interfaces;
@@ -186,6 +187,33 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Returning404IfAlbumDoesntExists_OnPut()
+        {
+            //Arrange
+
+            var album = new ApiAlbum
+            {
+                Name = "name",
+            };
+
+            var json = JsonConvert.SerializeObject(album);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.UpdateAlbum(_albumId, album.Name, User.Id))
+                         .Throws<NotFoundException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }
