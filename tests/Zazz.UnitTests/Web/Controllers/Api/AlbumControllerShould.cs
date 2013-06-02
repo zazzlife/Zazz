@@ -306,5 +306,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return204OnSuccess_OnDelete()
+        {
+            //Arrange
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.DeleteAlbum(_albumId, User.Id));
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
