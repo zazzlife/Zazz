@@ -163,5 +163,30 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Returning400IfIdIs0_OnPut()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/albums/0";
+
+            var album = new ApiAlbum
+                        {
+                            Name = "name",
+                        };
+
+            var json = JsonConvert.SerializeObject(album);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
