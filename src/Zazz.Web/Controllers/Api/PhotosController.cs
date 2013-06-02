@@ -51,6 +51,9 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/photos
         public void Post([FromBody]ApiPhoto p)
         {
+            if (!Request.Content.IsMimeMultipartContent("form-data"))
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
             throw new NotImplementedException();
         }
 
