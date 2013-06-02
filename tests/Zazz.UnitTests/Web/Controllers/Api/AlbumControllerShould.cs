@@ -88,5 +88,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return404IfAlbumDoesntExists_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.GetAlbum(_albumId, true))
+                         .Returns(() => null);
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
