@@ -38,7 +38,10 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/photos/5
         public ApiPhoto Get(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            return null;
         }
 
         // POST api/v1/photos
