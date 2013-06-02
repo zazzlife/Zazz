@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Interfaces;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -125,6 +129,35 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task CreateNewAlbum_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/albums";
+
+            var album = new ApiAlbum
+                        {
+                            Name = "name",
+                        };
+
+            var json = JsonConvert.SerializeObject(album);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.CreateAlbum(It.Is<Album>(a => a.Name == album.Name &&
+                                                                     a.UserId == User.Id &&
+                                                                     a.IsFacebookAlbum == false)));
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
