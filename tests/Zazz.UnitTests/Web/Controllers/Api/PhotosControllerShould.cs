@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Interfaces;
@@ -385,6 +386,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return404IfPhotoDoesntExists_OnPut()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_apiPhoto);
+            var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id))
+                         .Throws<NotFoundException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, stringContent);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }

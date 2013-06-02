@@ -7,6 +7,7 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
@@ -157,6 +158,22 @@ namespace Zazz.Web.Controllers.Api
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            try
+            {
+                var photo = new Photo
+                            {
+                                Id = id,
+                                AlbumId = p.AlbumId,
+                                Description = p.Description,
+                            };
+
+                _photoService.UpdatePhoto(photo, ExtractUserIdFromHeader());
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
             throw new NotImplementedException();
         }
