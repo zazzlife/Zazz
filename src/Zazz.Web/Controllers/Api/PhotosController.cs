@@ -72,6 +72,22 @@ namespace Zazz.Web.Controllers.Api
 
             string description = null;
             int? albumId = null;
+            var showInFeed = true;
+
+            // parsing show in feed
+            var providedShowInFeed = bodyParts.Contents
+                .FirstOrDefault(c => c.Headers
+                .ContentDisposition.Name.Equals("showInFeed", StringComparison.InvariantCultureIgnoreCase));
+
+            if (providedShowInFeed != null)
+            {
+                var val = await providedShowInFeed.ReadAsStringAsync();
+                bool b;
+                if (Boolean.TryParse(val, out  b))
+                {
+                    showInFeed = b;
+                }
+            }
 
             // parsing description
             var providedDescription = bodyParts.Contents
@@ -91,15 +107,11 @@ namespace Zazz.Web.Controllers.Api
             {
                 var val = await providedAlbum.ReadAsStringAsync();
                 int album;
-                if (int.TryParse(val, out album))
+                if (Int32.TryParse(val, out album))
                 {
                     albumId = album;
                 }
             }
-
-
-
-
 
             throw new NotImplementedException();
         }

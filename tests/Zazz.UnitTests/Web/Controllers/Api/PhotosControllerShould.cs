@@ -193,6 +193,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                          {
                              new KeyValuePair<string, string>("description", "this is the description"),
                              new KeyValuePair<string, string>("albumId", "5"),
+                             new KeyValuePair<string, string>("showInFeed", "true"),
                          };
 
             var photoContent = new ByteArrayContent(Convert.FromBase64String(PHOTO));
