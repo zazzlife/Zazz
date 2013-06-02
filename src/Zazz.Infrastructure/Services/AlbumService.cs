@@ -25,24 +25,10 @@ namespace Zazz.Infrastructure.Services
             return _uow.AlbumRepository.GetById(albumId);
         }
 
-        public List<Album> GetUserAlbums(int userId, int skip, int take)
-        {
-            return _uow.AlbumRepository.GetAll()
-                       .Where(a => a.UserId == userId)
-                       .OrderBy(a => a.Id)
-                       .Skip(skip)
-                       .Take(take).ToList();
-        }
-
         public List<Album> GetUserAlbums(int userId)
         {
             return _uow.AlbumRepository.GetAll()
                        .Where(a => a.UserId == userId).ToList();
-        }
-
-        public int GetUserAlbumsCount(int userId)
-        {
-            return _uow.AlbumRepository.GetAll().Count(a => a.UserId == userId);
         }
 
         public void CreateAlbum(Album album)

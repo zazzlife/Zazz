@@ -9,11 +9,7 @@ namespace Zazz.Core.Interfaces
     {
         Album GetAlbum(int albumId, bool includePhotos = false);
 
-        List<Album> GetUserAlbums(int userId, int skip, int take);
-
         List<Album> GetUserAlbums(int userId);
-
-        int GetUserAlbumsCount(int userId);
 
         void CreateAlbum(Album album);
 
