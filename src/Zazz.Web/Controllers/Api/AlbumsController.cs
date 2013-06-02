@@ -60,6 +60,9 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/album/5
         public ApiAlbum Get(int id)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             var album = _albumService.GetAlbum(id, true);
             if (album == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
