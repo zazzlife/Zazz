@@ -125,13 +125,13 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             SetupMocksForHMACAuth();
 
             _photoService.Setup(x => x.GetPhoto(_photoId))
-                         .Returns(new Photo());
+                         .Returns(() => null);
 
             //Act
             var result = await Client.GetAsync(ControllerAddress);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
             MockRepo.VerifyAll();
         }
     }
