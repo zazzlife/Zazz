@@ -76,5 +76,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task GetUserPhotosAndPassLastPhotoId_OnGet()
+        {
+            //Arrange
+            var userId = 12;
+            var defaultPageSize = 25;
+            var lastPhoto = 44;
+            ControllerAddress = String.Format("/api/v1/photos?userId={0}&lastPhoto={1}", userId, lastPhoto);
+
+            _photoService.Setup(x => x.GetUserPhotos(userId, defaultPageSize, lastPhoto))
+                         .Returns(new EnumerableQuery<Photo>(Enumerable.Empty<Photo>()));
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
