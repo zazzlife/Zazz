@@ -43,7 +43,7 @@ namespace Zazz.Web.Controllers.Api
                 .Select(a => new ApiAlbum
                              {
                                  CreatedDate = a.CreatedDate,
-                                 Id = a.Id,
+                                 AlbumId = a.Id,
                                  Name = a.Name,
                                  UserId = a.UserId,
                                  Thumbnail = a.Photos.FirstOrDefault() == null
@@ -88,7 +88,7 @@ namespace Zazz.Web.Controllers.Api
             return new ApiAlbum
                    {
                        CreatedDate = album.CreatedDate,
-                       Id = album.Id,
+                       AlbumId = album.Id,
                        Name = album.Name,
                        UserId = album.UserId,
                        Thumbnail = albumThumbnail,
@@ -109,7 +109,7 @@ namespace Zazz.Web.Controllers.Api
 
             _albumService.CreateAlbum(a);
             
-            album.Id = a.Id;
+            album.AlbumId = a.Id;
             album.CreatedDate = a.CreatedDate;
             album.Thumbnail = _defaultImageHelper.GetDefaultAlbumImage();
 

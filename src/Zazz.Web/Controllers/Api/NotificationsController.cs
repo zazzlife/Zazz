@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers.Api
 
             return notifications.Select(n => new ApiNotification
                                              {
-                                                 Id = n.Id,
+                                                 NotificationId = n.Id,
                                                  IsRead = n.IsRead,
                                                  NotificationType = n.NotificationType,
                                                  Time = n.Time,

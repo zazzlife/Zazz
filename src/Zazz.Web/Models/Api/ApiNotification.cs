@@ -6,7 +6,7 @@ namespace Zazz.Web.Models.Api
 {
     public class ApiNotification
     {
-        public long Id { get; set; }
+        public long NotificationId { get; set; }
 
         public int FriendId { get; set; }
 

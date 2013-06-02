@@ -98,7 +98,7 @@ namespace Zazz.Web
                    {
                        DayOfTheWeek = weekly.DayOfTheWeek,
                        Description = weekly.Description,
-                       Id = weekly.Id,
+                       WeeklyId = weekly.Id,
                        Name = weekly.Name,
                        UserId = weekly.UserId,
                        PhotoLinks = weekly.PhotoId.HasValue

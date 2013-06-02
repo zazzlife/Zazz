@@ -6,7 +6,7 @@ namespace Zazz.Web.Models.Api
 {
     public class ApiAlbum
     {
-        public int Id { get; set; }
+        public int AlbumId { get; set; }
 
         public int UserId { get; set; }
 

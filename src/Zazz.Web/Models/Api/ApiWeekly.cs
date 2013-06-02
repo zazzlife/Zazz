@@ -5,7 +5,7 @@ namespace Zazz.Web.Models.Api
 {
     public class ApiWeekly
     {
-        public int Id { get; set; }
+        public int WeeklyId { get; set; }
 
         public string Name { get; set; }
 
