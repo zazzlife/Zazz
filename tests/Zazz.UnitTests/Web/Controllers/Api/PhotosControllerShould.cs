@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -317,22 +318,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task TEST_OnPost()
+        public async Task Return403OnSecurityException_OnPost()
         {
             //Arrange
+            var description = "this is the description";
+            var albumId = 5;
+            var showInFeed = true;
+
             var values = new[]
                          {
-                             new KeyValuePair<string, string>("description", "this is the description"),
-                             new KeyValuePair<string, string>("albumId", "5"),
-                             new KeyValuePair<string, string>("showInFeed", "true"),
+                             new KeyValuePair<string, string>("description", description),
+                             new KeyValuePair<string, string>("albumId", albumId.ToString()),
+                             new KeyValuePair<string, string>("showInFeed", showInFeed.ToString()),
                          };
 
             var photoContent = new ByteArrayContent(Convert.FromBase64String(PHOTO));
             photoContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                                                      {
-                                                          FileName = "file.jpg",
-                                                          Name = "photo"
-                                                      };
+            {
+                FileName = "file.jpg",
+                Name = "photo"
+            };
 
 
             var content = new MultipartFormDataContent();
@@ -346,11 +351,18 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             AddValidHMACHeaders("POST", ControllerAddress, stringContent);
             SetupMocksForHMACAuth();
 
+            _imageValidator.Setup(x => x.IsValid(It.IsAny<Stream>()))
+                           .Returns(true);
+
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), It.IsAny<Stream>(), showInFeed))
+                         .Throws<SecurityException>();
+
             //Act
             var response = await Client.PostAsync(ControllerAddress, content);
 
             //Assert
-
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
         }
     }
 }

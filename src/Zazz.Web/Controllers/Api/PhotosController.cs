@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -129,24 +131,25 @@ namespace Zazz.Web.Controllers.Api
             try
             {
                 _photoService.SavePhoto(photo, photoStream, showInFeed);
+                return _objectMapper.PhotoToApiPhoto(photo);
             }
-            catch (Exception e)
+            catch (SecurityException)
             {
-                
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
+            finally
+            {
+                providedPhoto.Dispose();
+                photoStream.Dispose();
+                if (providedShowInFeed != null)
+                    providedShowInFeed.Dispose();
 
-            providedPhoto.Dispose();
-            photoStream.Dispose();
-            if (providedShowInFeed != null)
-                providedShowInFeed.Dispose();
+                if (providedDescription != null)
+                    providedDescription.Dispose();
 
-            if (providedDescription != null)
-                providedDescription.Dispose();
-
-            if (providedAlbum != null)
-                providedAlbum.Dispose();
-
-            return _objectMapper.PhotoToApiPhoto(photo);
+                if (providedAlbum != null)
+                    providedAlbum.Dispose();
+            }
         }
 
         // PUT api/v1photos/5
