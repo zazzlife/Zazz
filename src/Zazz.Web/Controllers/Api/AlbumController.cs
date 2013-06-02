@@ -21,16 +21,14 @@ namespace Zazz.Web.Controllers.Api
         private readonly IAlbumService _albumService;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IPhotoService _photoService;
-        private readonly IUserService _userService;
         private readonly IObjectMapper _objectMapper;
 
         public AlbumController(IAlbumService albumService, IDefaultImageHelper defaultImageHelper,
-            IPhotoService photoService, IUserService userService, IObjectMapper objectMapper)
+            IPhotoService photoService, IObjectMapper objectMapper)
         {
             _albumService = albumService;
             _defaultImageHelper = defaultImageHelper;
             _photoService = photoService;
-            _userService = userService;
             _objectMapper = objectMapper;
         }
 
