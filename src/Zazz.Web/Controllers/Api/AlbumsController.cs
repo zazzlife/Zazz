@@ -35,6 +35,9 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/album?userId=&lastAlbum=
         public IEnumerable<ApiAlbum> GetUserAlbums(int userId, int? lastAlbum = null)
         {
+            if (userId < 1)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             throw new NotImplementedException();
         }
 

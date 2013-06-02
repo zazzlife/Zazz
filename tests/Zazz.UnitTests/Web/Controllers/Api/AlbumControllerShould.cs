@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -26,5 +28,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IAlbumService>().Use(_albumService.Object);
             });
         }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public async Task Return400IfUserIdIsInvalid_OnGetUserAlbums(int userId)
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/albums?userId={0}", userId);
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+
     }
 }
