@@ -21,9 +21,12 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // GET api/v1/photos?userId=&lastPhoto=
-        public IEnumerable<ApiPhoto> Get(int userId, int? lastPhoto)
+        public IEnumerable<ApiPhoto> GetUserPhotos(int userId, int? lastPhoto = null)
         {
-            throw new NotImplementedException();
+            if (userId < 1)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            return null;
         }
 
         // GET api/v1/photos/5

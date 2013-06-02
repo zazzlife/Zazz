@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -32,6 +34,24 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             {
                 x.For<IPhotoService>().Use(_photoService.Object);
             });
+        }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        public async Task Return400IfUserIdIsLessThan1_OnGet(int userId)
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/photos?userId={0}", userId);
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
         }
     }
 }
