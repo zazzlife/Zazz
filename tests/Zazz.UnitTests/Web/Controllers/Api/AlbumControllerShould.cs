@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -104,6 +105,29 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnAlbum_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            var album = new Album
+                        {
+                            Photos = new List<Photo>()
+                        };
+
+            _albumService.Setup(x => x.GetAlbum(_albumId, true))
+                         .Returns(album);
+
+            //Act
+            var response = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }
