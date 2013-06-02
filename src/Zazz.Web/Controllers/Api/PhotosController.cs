@@ -186,8 +186,14 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-
-
+            try
+            {
+                _photoService.RemovePhoto(id, ExtractUserIdFromHeader());
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }

@@ -463,5 +463,22 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
+        
+        [Test]
+        public async Task Return403WhenUserIsNotAuthorized_OnDelete()
+        {
+            //Arrange
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _photoService.Setup(x => x.RemovePhoto(_photoId, User.Id))
+                         .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+        }
     }
 }
