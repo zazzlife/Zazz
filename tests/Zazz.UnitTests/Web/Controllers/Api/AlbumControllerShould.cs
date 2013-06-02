@@ -288,6 +288,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return403IfUserIsNotAuthorized_OnDelete()
+        {
+            //Arrange
 
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.DeleteAlbum(_albumId, User.Id))
+                         .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
