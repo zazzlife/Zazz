@@ -41,6 +41,10 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            var photo = _photoService.GetPhoto(id);
+            if (photo == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
             return null;
         }
 
