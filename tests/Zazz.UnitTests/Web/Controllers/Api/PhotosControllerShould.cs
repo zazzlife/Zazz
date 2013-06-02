@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -216,7 +217,46 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return400IfPhotoIsNotValid_OnPost()
+        {
+            //Arrange
+            var values = new[]
+                         {
+                             new KeyValuePair<string, string>("description", "this is the description"),
+                             new KeyValuePair<string, string>("albumId", "5"),
+                             new KeyValuePair<string, string>("showInFeed", "true"),
+                         };
 
+            var photoContent = new ByteArrayContent(Convert.FromBase64String(PHOTO));
+            photoContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                                                      {
+                                                          FileName = "file.jpg",
+                                                          Name = "photo"
+                                                      };
+
+
+            var content = new MultipartFormDataContent();
+            foreach (var v in values)
+                content.Add(new StringContent(v.Value), v.Key);
+
+            content.Add(photoContent);
+
+            var stringContent = await content.ReadAsStringAsync();
+
+            AddValidHMACHeaders("POST", ControllerAddress, stringContent);
+            SetupMocksForHMACAuth();
+
+            _imageValidator.Setup(x => x.IsValid(It.IsAny<Stream>()))
+                           .Returns(false);
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
         [Test]
         public async Task TEST_OnPost()
