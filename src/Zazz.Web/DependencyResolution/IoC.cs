@@ -53,6 +53,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             x.For<ICryptoService>().Singleton().Use<CryptoService>();
                             x.For<IApiAppRepository>().Singleton().Use<InMemoryApiAppRepository>();
+                            x.For<IImageValidator>().Singleton().Use<ImageValidator>();
 
                             x.For<IDefaultImageHelper>().Singleton()
                              .Use<DefaultImageHelper>()

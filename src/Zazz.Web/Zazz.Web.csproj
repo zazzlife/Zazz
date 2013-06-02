@@ -263,6 +263,7 @@
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Interfaces\IFeedHelper.cs" />
+    <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />

@@ -14,6 +14,7 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -21,12 +22,14 @@ namespace Zazz.Web.Controllers
     public class PhotoController : BaseController
     {
         private readonly IAlbumService _albumService;
+        private readonly IImageValidator _imageValidator;
 
         public PhotoController(IPhotoService photoService, IAlbumService albumService,
-            IUserService userService, IDefaultImageHelper defaultImageHelper) 
+            IUserService userService, IDefaultImageHelper defaultImageHelper, IImageValidator imageValidator) 
             : base (userService, photoService, defaultImageHelper)
         {
             _albumService = albumService;
+            _imageValidator = imageValidator;
         }
 
         [Authorize]
@@ -157,7 +160,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Upload(HttpPostedFileBase image, string description, int? albumId, bool showInFeed)
         {
             var errorMessage = "Image was not valid";
-            if (image == null || !ImageValidator.IsValid(image, out errorMessage))
+            if (image == null || !_imageValidator.IsValid(image, out errorMessage))
             {
                 ShowAlert(errorMessage, AlertType.Error);
                 return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
@@ -170,11 +173,9 @@ namespace Zazz.Web.Controllers
 
         public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
-            var response = new FineUploadResponse
-                           {
-                           };
+            var response = new FineUploadResponse();
             var errorMessage = "Image was not valid";
-            if (image == null || !ImageValidator.IsValid(image, out errorMessage))
+            if (image == null || !_imageValidator.IsValid(image, out errorMessage))
             {
                 response.Success = false;
                 response.Error = errorMessage;

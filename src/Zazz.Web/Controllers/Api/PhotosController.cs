@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
@@ -17,11 +18,14 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IPhotoService _photoService;
         private readonly IObjectMapper _objectMapper;
+        private readonly IImageValidator _imageValidator;
 
-        public PhotosController(IPhotoService photoService, IObjectMapper objectMapper)
+        public PhotosController(IPhotoService photoService, IObjectMapper objectMapper,
+            IImageValidator imageValidator)
         {
             _photoService = photoService;
             _objectMapper = objectMapper;
+            _imageValidator = imageValidator;
         }
 
         // GET api/v1/photos?userId=&lastPhoto=
@@ -50,24 +54,24 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/photos
-        public async Task Post()
+        public async Task<ApiPhoto> Post()
         {
             if (!Request.Content.IsMimeMultipartContent("form-data"))
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
+            
             var streamProvider = new MultipartMemoryStreamProvider();
             var bodyParts = await Request.Content.ReadAsMultipartAsync(streamProvider);
-
+            
             // parsing photo 
             var providedPhoto = bodyParts.Contents
                 .FirstOrDefault(c => c.Headers
                 .ContentDisposition.Name.Equals("photo", StringComparison.InvariantCultureIgnoreCase));
-
+            
             if (providedPhoto == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var photo = await providedPhoto.ReadAsByteArrayAsync();
-            if (!ImageValidator.IsValid(photo))
+            var photoStream = await providedPhoto.ReadAsStreamAsync();
+            if (!_imageValidator.IsValid(photoStream))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             string description = null;
@@ -113,7 +117,29 @@ namespace Zazz.Web.Controllers.Api
                 }
             }
 
-            throw new NotImplementedException();
+            var photo = new Photo
+                    {
+                        AlbumId = albumId,
+                        Description = description,
+                        IsFacebookPhoto = false,
+                        UploadDate = DateTime.UtcNow,
+                        UserId = ExtractUserIdFromHeader()
+                    };
+
+            _photoService.SavePhoto(photo, photoStream, showInFeed);
+
+            providedPhoto.Dispose();
+            photoStream.Dispose();
+            if (providedShowInFeed != null)
+                providedShowInFeed.Dispose();
+
+            if (providedDescription != null)
+                providedDescription.Dispose();
+
+            if (providedAlbum != null)
+                providedAlbum.Dispose();
+
+            return _objectMapper.PhotoToApiPhoto(photo);
         }
 
         // PUT api/v1photos/5

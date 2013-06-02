@@ -3,21 +3,22 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Web;
+using Zazz.Web.Interfaces;
 
 namespace Zazz.Web
 {
-    public static class ImageValidator
+    public class ImageValidator : IImageValidator
     {
         private const int MAXIMUM_SIZE = 3 * 1024 * 1024;
 
-        public static bool IsValid(byte[] img)
+        public bool IsValid(Stream imgStream)
         {
-            if (img.Length > MAXIMUM_SIZE)
+            if (imgStream.Length > MAXIMUM_SIZE)
                 return false;
 
             try
             {
-                using (var i = Image.FromStream(new MemoryStream(img)))
+                using (var i = Image.FromStream(imgStream))
                     return i.RawFormat.Equals(ImageFormat.Jpeg);
             }
             catch 
@@ -26,7 +27,7 @@ namespace Zazz.Web
             return false;
         }
 
-        public static bool IsValid(HttpPostedFileBase uploadedImage, out string errorMessage)
+        public bool IsValid(HttpPostedFileBase uploadedImage, out string errorMessage)
         {
             if (uploadedImage.ContentLength > MAXIMUM_SIZE)
             {
