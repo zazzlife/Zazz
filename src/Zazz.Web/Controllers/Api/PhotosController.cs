@@ -155,6 +155,9 @@ namespace Zazz.Web.Controllers.Api
         // PUT api/v1photos/5
         public void Put(int id, [FromBody]ApiPhoto p)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             throw new NotImplementedException();
         }
 
