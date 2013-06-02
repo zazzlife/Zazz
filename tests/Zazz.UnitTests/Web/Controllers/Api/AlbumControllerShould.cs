@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -214,6 +215,33 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Returning403IfUserIsNotAuthorized_OnPut()
+        {
+            //Arrange
+
+            var album = new ApiAlbum
+            {
+                Name = "name",
+            };
+
+            var json = JsonConvert.SerializeObject(album);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            _albumService.Setup(x => x.UpdateAlbum(_albumId, album.Name, User.Id))
+                         .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.PutAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }
