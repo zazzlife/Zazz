@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 
 namespace Zazz.Core.Interfaces
 {
     public interface IAlbumService
     {
+        AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId);
+
         Album GetAlbum(int albumId, bool includePhotos = false);
 
-        List<Album> GetUserAlbums(int userId);
+        IQueryable<Album> GetUserAlbums(int userId);
 
         void CreateAlbum(Album album);
 

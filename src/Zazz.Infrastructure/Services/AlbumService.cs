@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -20,15 +21,20 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
+        public AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId)
+        {
+            return _uow.AlbumRepository.GetAlbumWithThumbnail(albumId);
+        }
+
         public Album GetAlbum(int albumId, bool includePhotos)
         {
             return _uow.AlbumRepository.GetById(albumId);
         }
 
-        public List<Album> GetUserAlbums(int userId)
+        public IQueryable<Album> GetUserAlbums(int userId)
         {
             return _uow.AlbumRepository.GetAll()
-                       .Where(a => a.UserId == userId).ToList();
+                       .Where(a => a.UserId == userId);
         }
 
         public void CreateAlbum(Album album)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 
 namespace Zazz.Data.Repositories
 {
@@ -83,6 +84,26 @@ namespace Zazz.Data.Repositories
                 .Where(a => a.PageId == pageId)
                 .Select(a => a.Id);
 
+        }
+
+        public AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId)
+        {
+            return DbSet
+                .Where(a => a.Id == albumId)
+                .Select(a => new AlbumWithThumbnailDTO
+                             {
+                                 CreatedDate = a.CreatedDate,
+                                 FacebookId = a.FacebookId,
+                                 Id = albumId,
+                                 IsFacebookAlbum = a.IsFacebookAlbum,
+                                 Name = a.Name,
+                                 PageId = a.PageId,
+                                 UserId = a.UserId,
+                                 ThumbnailPhotoId = a.Photos
+                                                     .Select(p => p.Id)
+                                                     .FirstOrDefault()
+                             })
+                .SingleOrDefault();
         }
     }
 }

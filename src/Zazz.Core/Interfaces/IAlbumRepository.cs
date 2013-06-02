@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 
 namespace Zazz.Core.Interfaces
 {
@@ -18,5 +19,7 @@ namespace Zazz.Core.Interfaces
         Album GetByFacebookId(string fbId);
 
         IEnumerable<int> GetPageAlbumIds(int pageId);
+        
+        AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId);
     }
 }
