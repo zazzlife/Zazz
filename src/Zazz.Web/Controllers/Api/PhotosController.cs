@@ -126,7 +126,14 @@ namespace Zazz.Web.Controllers.Api
                         UserId = ExtractUserIdFromHeader()
                     };
 
-            _photoService.SavePhoto(photo, photoStream, showInFeed);
+            try
+            {
+                _photoService.SavePhoto(photo, photoStream, showInFeed);
+            }
+            catch (Exception e)
+            {
+                
+            }
 
             providedPhoto.Dispose();
             photoStream.Dispose();

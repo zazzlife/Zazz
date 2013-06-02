@@ -259,6 +259,64 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
+        public async Task Return200WhenEverythingIsOk_OnPost()
+        {
+            //Arrange
+            var description = "this is the description";
+            var albumId = 5;
+            var showInFeed = true;
+
+            var values = new[]
+                         {
+                             new KeyValuePair<string, string>("description", description),
+                             new KeyValuePair<string, string>("albumId", albumId.ToString()),
+                             new KeyValuePair<string, string>("showInFeed", showInFeed.ToString()),
+                         };
+
+            var photoContent = new ByteArrayContent(Convert.FromBase64String(PHOTO));
+            photoContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                FileName = "file.jpg",
+                Name = "photo"
+            };
+
+
+            var content = new MultipartFormDataContent();
+            foreach (var v in values)
+                content.Add(new StringContent(v.Value), v.Key);
+
+            content.Add(photoContent);
+
+            var stringContent = await content.ReadAsStringAsync();
+
+            AddValidHMACHeaders("POST", ControllerAddress, stringContent);
+            SetupMocksForHMACAuth();
+
+            _imageValidator.Setup(x => x.IsValid(It.IsAny<Stream>()))
+                           .Returns(true);
+
+            //_photoService.Setup(x => x.SavePhoto(It.Is<Photo>(p => p.Description == description &&
+            //                                                       p.UserId == User.Id &&
+            //                                                       p.AlbumId == albumId &&
+            //                                                       p.IsFacebookPhoto == false &&
+            //                                                       p.UploadDate >= DateTime.UtcNow),
+            //                                     It.IsAny<Stream>(), showInFeed))
+            //             .Returns(1);
+
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), It.IsAny<Stream>(), showInFeed))
+                .Returns(1);
+            _objectMapper.Setup(x => x.PhotoToApiPhoto(It.IsAny<Photo>()))
+                         .Returns(new ApiPhoto());
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
         public async Task TEST_OnPost()
         {
             //Arrange
