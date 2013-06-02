@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -183,6 +185,40 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.UnsupportedMediaType, response.StatusCode);
         }
 
+        [Test]
+        public async Task TEST_OnPost()
+        {
+            //Arrange
+            var values = new[]
+                         {
+                             new KeyValuePair<string, string>("description", "this is the description"),
+                             new KeyValuePair<string, string>("albumId", "5"),
+                         };
 
+            var photoContent = new ByteArrayContent(Convert.FromBase64String(PHOTO));
+            photoContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                                                      {
+                                                          FileName = "file.jpg",
+                                                          Name = "photo"
+                                                      };
+
+
+            var content = new MultipartFormDataContent();
+            foreach (var v in values)
+                content.Add(new StringContent(v.Value), v.Key);
+
+            content.Add(photoContent);
+
+            var stringContent = await content.ReadAsStringAsync();
+
+            AddValidHMACHeaders("POST", ControllerAddress, stringContent);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+
+        }
     }
 }

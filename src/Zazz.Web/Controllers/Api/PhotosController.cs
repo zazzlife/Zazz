@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
@@ -49,10 +50,56 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/photos
-        public void Post([FromBody]ApiPhoto p)
+        public async Task Post()
         {
             if (!Request.Content.IsMimeMultipartContent("form-data"))
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+            var streamProvider = new MultipartMemoryStreamProvider();
+            var bodyParts = await Request.Content.ReadAsMultipartAsync(streamProvider);
+
+            // parsing photo 
+            var providedPhoto = bodyParts.Contents
+                .FirstOrDefault(c => c.Headers
+                .ContentDisposition.Name.Equals("photo", StringComparison.InvariantCultureIgnoreCase));
+
+            if (providedPhoto == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var photo = await providedPhoto.ReadAsByteArrayAsync();
+            if (!ImageValidator.IsValid(photo))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            string description = null;
+            int? albumId = null;
+
+            // parsing description
+            var providedDescription = bodyParts.Contents
+               .FirstOrDefault(c => c.Headers
+               .ContentDisposition.Name.Equals("description", StringComparison.InvariantCultureIgnoreCase));
+
+            if (providedDescription != null)
+                description = await providedDescription.ReadAsStringAsync();
+
+
+            // parsing album id
+            var providedAlbum = bodyParts.Contents
+                .FirstOrDefault(c => c.Headers
+                .ContentDisposition.Name.Equals("albumId", StringComparison.InvariantCultureIgnoreCase));
+
+            if (providedAlbum != null)
+            {
+                var val = await providedAlbum.ReadAsStringAsync();
+                int album;
+                if (int.TryParse(val, out album))
+                {
+                    albumId = album;
+                }
+            }
+
+
+
+
 
             throw new NotImplementedException();
         }
