@@ -27,17 +27,8 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/v1/feeds
-        public IEnumerable<ApiFeed> GetHomeFeeds()
-        {
-            var userId = ExtractUserIdFromHeader();
-            var feeds = _feedHelper.GetFeeds(userId);
-
-            return feeds.Select(_objectMapper.FeedViewModelToApiModel);
-        }
-
         // GET api/v1/feeds?lastFeed=
-        public IEnumerable<object> GetHomeFeeds(int lastFeed)
+        public IEnumerable<ApiFeed> GetHomeFeeds(int lastFeed = 0)
         {
             var userId = ExtractUserIdFromHeader();
             var feeds = _feedHelper.GetFeeds(userId, lastFeed);
@@ -45,17 +36,8 @@ namespace Zazz.Web.Controllers.Api
             return feeds.Select(_objectMapper.FeedViewModelToApiModel);
         }
 
-        // GET api/v1/feeds?id=
-        public IEnumerable<object> GetUserFeeds(int id)
-        {
-            var userId = ExtractUserIdFromHeader();
-            var feeds = _feedHelper.GetUserActivityFeed(id, userId);
-
-            return feeds.Select(_objectMapper.FeedViewModelToApiModel);
-        }
-
         // GET api/v1/feeds?id=&lastFeed=
-        public IEnumerable<object> GetUserFeeds(int id, int lastFeed)
+        public IEnumerable<ApiFeed> GetUserFeeds(int id, int lastFeed = 0)
         {
             var userId = ExtractUserIdFromHeader();
             var feeds = _feedHelper.GetUserActivityFeed(id, userId, lastFeed);
