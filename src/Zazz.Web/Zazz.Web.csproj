@@ -567,6 +567,9 @@
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
+    <None Include="Web.Dev.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />
