@@ -1,18 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class Follow : BaseEntity
+    public class Follow
     {
         /// <summary>
-        /// This is the user that follows another user
+        /// This is the user that is being followed
         /// </summary>
-        [ForeignKey("FromUserId")]
-        public User FromUser { get; set; }
+        [Key, Column(Order = 0)]
+        public int ToUserId { get; set; }
 
         /// <summary>
         /// This is the user that follows another user
         /// </summary>
+        [Key, Column(Order = 1)]
         public int FromUserId { get; set; }
 
         /// <summary>
@@ -22,8 +24,9 @@ namespace Zazz.Core.Models.Data
         public User ToUser { get; set; }
 
         /// <summary>
-        /// This is the user that is being followed
+        /// This is the user that follows another user
         /// </summary>
-        public int ToUserId { get; set; }
+        [ForeignKey("FromUserId")]
+        public User FromUser { get; set; }
     }
 }

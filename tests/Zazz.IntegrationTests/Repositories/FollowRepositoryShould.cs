@@ -37,28 +37,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ThrowException_OnInsertOrUpdate_WhenFromUserIdIsNotProvided()
-        {
-            //Arrange
-            _follow.Id = 0;
-            _follow.FromUserId = 0;
-
-            //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_follow));
-        }
-
-        [Test]
-        public void ThrowException_OnInsertOrUpdate_WhenToUserIdIsNotProvided()
-        {
-            //Arrange
-            _follow.Id = 0;
-            _follow.ToUserId = 0;
-
-            //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(_follow));
-        }
-
-        [Test]
         public void ReturnFollowersCorrectly()
         {
             //Arrange

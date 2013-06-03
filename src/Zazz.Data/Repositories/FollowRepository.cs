@@ -9,61 +9,60 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class FollowRepository : BaseRepository<Follow>, IFollowRepository
+    public class FollowRepository : IFollowRepository
     {
-        public FollowRepository(DbContext dbContext) : base(dbContext)
+        private readonly DbContext _dbContext;
+        private readonly DbSet<Follow> _dbSet;
+
+        public FollowRepository(DbContext dbContext)
         {
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<Follow>();
         }
 
-        protected override int GetItemId(Follow item)
+        public void InsertGraph(Follow follow)
         {
-            if (item.FromUserId == default (int) || item.ToUserId == default (int))
-                throw new ArgumentException("FromUserId or ToUserId cannot be 0");
-
-            return DbSet.Where(f => f.FromUserId == item.FromUserId)
-                        .Where(f => f.ToUserId == item.ToUserId)
-                        .Select(f => f.Id)
-                        .SingleOrDefault();
+            _dbSet.Add(follow);
         }
 
         public IQueryable<Follow> GetUserFollowers(int toUserId)
         {
-            return DbSet.Where(f => f.ToUserId == toUserId);
+            return _dbSet.Where(f => f.ToUserId == toUserId);
         }
 
         public IEnumerable<Follow> GetUserFollows(int fromUserId)
         {
-            return DbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable();
+            return _dbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable();
         }
 
         public IEnumerable<int> GetFollowsUserIds(int fromUserId)
         {
-            return DbSet.Where(f => f.FromUserId == fromUserId)
+            return _dbSet.Where(f => f.FromUserId == fromUserId)
                         .Select(f => f.ToUserId);
         }
 
         public int GetFollowersCount(int userId)
         {
-            return DbSet.Count(f => f.ToUserId == userId);
+            return _dbSet.Count(f => f.ToUserId == userId);
         }
 
         public bool Exists(int fromUserId, int toUserId)
         {
-            return DbSet.Where(f => f.FromUserId == fromUserId)
+            return _dbSet.Where(f => f.FromUserId == fromUserId)
                         .Where(f => f.ToUserId == toUserId)
                         .Any();
         }
 
         public void Remove(int fromUserId, int toUserId)
         {
-            var item = DbSet.Where(f => f.FromUserId == fromUserId)
+            var item = _dbSet.Where(f => f.FromUserId == fromUserId)
                             .Where(f => f.ToUserId == toUserId)
                             .SingleOrDefault();
 
             if (item == null)
                 return;
 
-            DbContext.Entry(item).State = EntityState.Deleted;
+            _dbContext.Entry(item).State = EntityState.Deleted;
         }
     }
 }

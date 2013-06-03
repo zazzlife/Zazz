@@ -5,8 +5,10 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IFollowRepository : IRepository<Follow>
+    public interface IFollowRepository
     {
+        void InsertGraph(Follow follow);
+
         /// <summary>
         /// Returns a list of users that follow the user
         /// </summary>
