@@ -271,6 +271,7 @@
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
+    <Compile Include="Models\Api\ApiFollower.cs" />
     <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
     <Compile Include="Models\Api\Login.cs" />
