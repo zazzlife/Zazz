@@ -7,25 +7,19 @@ using System.Windows.Media;
 
 namespace Zazz.Infrastructure.Services
 {
+    // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
     public class QRCodeService : IQRCodeService
     {
         public MemoryStream GenerateBlackAndWhite(string text, int width = 200, int dpi = 96)
         {
-            var encoder = new QrEncoder(ErrorCorrectionLevel.M);
+            var encoder = new QrEncoder(ErrorCorrectionLevel.H);
             var qrCode = encoder.Encode(text);
 
-            var sizeCalculator = new FixedCodeSize(width, QuietZoneModules.Two);
+            var sizeCalculator = new FixedCodeSize(width, QuietZoneModules.Zero);
             var renderer = new WriteableBitmapRenderer(sizeCalculator, Colors.Black, Colors.White);
 
-            // the only supported PixelFormats are "Gray8" and "Pbgra32" if you're going to draw in color, you should use "Pbgra32"
-            var writeableBitmap = new WriteableBitmap(width, width, dpi, dpi, PixelFormats.Gray8, null);
-
-            renderer.Draw(writeableBitmap, qrCode.Matrix);
-
             var ms = new MemoryStream();
-            var jpgEncoder = new JpegBitmapEncoder();
-            jpgEncoder.Frames.Add(BitmapFrame.Create(writeableBitmap));
-            jpgEncoder.Save(ms);
+            renderer.WriteToStream(qrCode.Matrix, ImageFormatEnum.JPEG, ms);
 
             return ms;
         }
