@@ -9,7 +9,7 @@ using Zazz.Web.Filters;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class FollowsController : BaseApiController
+    public class FollowersController : BaseApiController
     {
         // POST api/v1/follows
         public void Post([FromBody]int userId)

@@ -5,7 +5,7 @@ using Zazz.Core.Interfaces;
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
     [TestFixture]
-    public class FollowsControllerShould : BaseHMACTests
+    public class FollowersControllerShould : BaseHMACTests
     {
         private int _userId;
 
@@ -16,7 +16,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             base.Init();
 
             _userId = 5;
-            ControllerAddress = "/api/v1/follows/" + _userId;
+            ControllerAddress = "/api/v1/followers/" + _userId;
 
             IocContainer.Configure(x =>
             {

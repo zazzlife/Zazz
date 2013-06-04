@@ -225,7 +225,7 @@
     <Compile Include="Controllers\Api\EventCommentsController.cs" />
     <Compile Include="Controllers\Api\EventsController.cs" />
     <Compile Include="Controllers\Api\FeedsController.cs" />
-    <Compile Include="Controllers\Api\FollowsController.cs" />
+    <Compile Include="Controllers\Api\FollowersController.cs" />
     <Compile Include="Controllers\Api\LoginController.cs" />
     <Compile Include="Controllers\Api\MajorsController.cs" />
     <Compile Include="Controllers\Api\NotificationsController.cs" />
