@@ -121,6 +121,7 @@
     <Compile Include="Web\Controllers\Api\PhotosControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PostCommentsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PostControllerShould.cs" />
+    <Compile Include="Web\Controllers\Api\QRCodeControllerShould.cs" />
     <Compile Include="Web\Filters\HMACAuthorizeAttributeShould.cs" />
   </ItemGroup>
   <ItemGroup>
