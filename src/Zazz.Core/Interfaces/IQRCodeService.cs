@@ -4,6 +4,6 @@ namespace Zazz.Core.Interfaces
 {
     public interface IQRCodeService
     {
-        MemoryStream Generate(string text);
+        MemoryStream GenerateBlackAndWhite(string text, int width = 200, int dpi = 96);
     }
 }
