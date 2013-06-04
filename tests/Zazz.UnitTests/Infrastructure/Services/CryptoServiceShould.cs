@@ -97,6 +97,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             CollectionAssert.DoesNotContain(result, 0);
         }
 
+        [TestCase("Soroush", "J5qMP2WGddHzyRaS11oDDUCWYX0=")]
+        [TestCase("Password", "gP09Rdv2hhq+FbekuqzOhKPnjBw=")]
+        [TestCase("P@$$wo0rd", "DVupBGS5sxnRXQOA3H/1/hTArqU=")]
+        public void GenerateExpectedTokens_OnGenerateQRCodeToken(string password, string expected)
+        {
+            //Arrange
+            var passWordBuffer = Encoding.UTF8.GetBytes(password);
+
+            //Act
+            var result = _sut.GenerateQRCodeToken(passWordBuffer);
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
         [TestCase("Soroush")]
         [TestCase("Password")]
         [TestCase("P@$$wo0rd")]

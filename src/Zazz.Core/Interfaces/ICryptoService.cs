@@ -12,6 +12,8 @@
 
         string GenerateTextSignature(string clearText);
 
+        string GenerateQRCodeToken(byte[] userPassword);
+
         string GenerateSignedSHA1Hash(string clearText, string key);
 
         string GenerateHMACSHA512Hash(byte[] text, byte[] key);

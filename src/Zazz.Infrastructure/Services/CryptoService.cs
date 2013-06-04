@@ -8,11 +8,18 @@ namespace Zazz.Infrastructure.Services
     public class CryptoService : ICryptoService
     {
         /// <summary>
-        /// This key should be used to sign passwords in DB, using SHA1 (HMACSHA1)
+        /// This key should be used to encrypt passwords in DB, RijndaelManaged (AES)
         /// </summary>
         private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
         private readonly byte[] _passwordCipherKeyBuffer;
-        
+
+        /// <summary>
+        /// This key should be used to sign user password for creating QR Code token.
+        /// </summary>
+        private const string QRCODE_KEY =
+            "UmxsLIJybHRxDfykBbWGNoRbvHXPZDvzJa58A50kvI5W+94Ym0kPfcIZ4ZkOZLx5uIls9qdZgNZwOLR/6Evfdg==";
+        private readonly byte[] _qrCodeKeyBuffer;
+
         /// <summary>
         /// This key should be used to sign a string to make sure it's not tampered with later.
         /// </summary>
@@ -27,6 +34,7 @@ namespace Zazz.Infrastructure.Services
         public CryptoService()
         {
             _passwordCipherKeyBuffer = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
+            _qrCodeKeyBuffer = Convert.FromBase64String(QRCODE_KEY);
         }
 
         private RijndaelManaged CreateCipher(byte[] key)
@@ -100,6 +108,15 @@ namespace Zazz.Infrastructure.Services
                 throw new ArgumentNullException("clearText");
 
             return ComputeSHA1SignedHash(RandomSignHashSecret, clearText);
+        }
+
+        public string GenerateQRCodeToken(byte[] userPassword)
+        {
+            using (var sha1 = new HMACSHA1(_qrCodeKeyBuffer))
+            {
+                var hash = sha1.ComputeHash(userPassword);
+                return Convert.ToBase64String(hash);
+            }
         }
 
         public string GenerateSignedSHA1Hash(string clearText, string key)
