@@ -11,6 +11,8 @@ namespace Zazz.Core.Interfaces
 
         bool IsFollowRequestExists(int fromUser, int toUser);
 
+        void Follow(int fromUserId, int toUserId);
+
         void FollowClubAdmin(int fromUserId, int clubAdminUserId);
 
         void SendFollowRequest(int fromUserId, int toUserId);

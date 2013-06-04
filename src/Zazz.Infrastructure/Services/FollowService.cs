@@ -28,6 +28,11 @@ namespace Zazz.Infrastructure.Services
             return _uow.FollowRequestRepository.Exists(fromUser, toUser);
         }
 
+        public void Follow(int fromUserId, int toUserId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void FollowClubAdmin(int fromUserId, int clubAdminUserId)
         {
             var exists = _uow.FollowRepository.Exists(fromUserId, clubAdminUserId);
@@ -85,7 +90,7 @@ namespace Zazz.Infrastructure.Services
             if (request.ToUserId != currentUserId)
                 throw new SecurityException();
 
-            _uow.FollowRequestRepository.Remove((FollowRequest) request);
+            _uow.FollowRequestRepository.Remove(request);
             _uow.SaveChanges();
         }
 

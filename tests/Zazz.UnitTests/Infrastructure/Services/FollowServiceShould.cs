@@ -20,21 +20,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userBId;
         private FollowRequest _followRequest;
         private Mock<INotificationService> _notificationService;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _uow = new Mock<IUoW>();
-            _notificationService = new Mock<INotificationService>();
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+
+            _uow = _mockRepo.Create<IUoW>();
+            _notificationService = _mockRepo.Create<INotificationService>();
             _sut = new FollowService(_uow.Object, _notificationService.Object);
 
             _userAId = 12;
             _userBId = 15;
             _clubId = 13;
             _followRequest = new FollowRequest {FromUserId = _userAId, ToUserId = _userBId};
-
-
-            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
@@ -43,15 +43,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
                 .Returns(true);
-            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
 
             //Act
             _sut.FollowClubAdmin(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -61,14 +58,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
                 .Returns(false);
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.FollowClubAdmin(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.Exists(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -77,14 +73,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
                 .Returns(true);
-            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
             _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -93,14 +87,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
                 .Returns(true);
-            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
 
             //Act
             _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -109,15 +101,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
                 .Returns(false);
-            _uow.Setup(x => x.FollowRequestRepository.InsertGraph(_followRequest));
+            _uow.Setup(x => x.FollowRequestRepository
+                             .InsertGraph(It.Is<FollowRequest>(f => f.FromUserId == _followRequest.FromUserId &&
+                                                                    f.ToUserId == _followRequest.ToUserId)));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.SendFollowRequest(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRequestRepository.Exists(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.FollowRequestRepository.InsertGraph(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -127,8 +120,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var followRequestId = 555;
             _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
                 .Returns(_followRequest);
-            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
-            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
             //Act
             try
@@ -141,11 +132,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _notificationService.Verify(x => x.CreateFollowAcceptedNotification(
-                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<bool>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -159,16 +146,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
             _notificationService.Setup(x => x.CreateFollowAcceptedNotification(
                 _followRequest.FromUserId, _followRequest.ToUserId, false));
-                
+
+            _uow.Setup(x => x.SaveChanges());
             //Act
             _sut.AcceptFollowRequest(followRequestId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Once());
-            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _notificationService.Verify(x => x.CreateFollowAcceptedNotification(
-                _followRequest.FromUserId, _followRequest.ToUserId, false), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -178,8 +162,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var followRequestId = 555;
             _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
                 .Returns(_followRequest);
-            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
-            _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
 
             //Act
 
@@ -193,9 +175,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             }
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -205,16 +185,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var followRequestId = 555;
             _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
                 .Returns(_followRequest);
-            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.RejectFollowRequest(followRequestId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()), Times.Never());
-            _uow.Verify(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -222,13 +200,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Remove(_userAId, _userBId));
+            _notificationService.Setup(x => x.RemoveFollowAcceptedNotification(_userAId, _userBId, false));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.RemoveFollow(_userAId, _userBId);
 
             //Assert
-            _uow.Verify(x => x.FollowRepository.Remove(_userAId, _userBId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -237,13 +216,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.FollowRepository.Remove(_userAId, _userBId));
             _notificationService.Setup(x => x.RemoveFollowAcceptedNotification(_userAId, _userBId, false));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.RemoveFollow(_userAId, _userBId);
 
             //Assert
-            _notificationService.Verify(x => x.RemoveFollowAcceptedNotification(_userAId, _userBId, false), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
 
@@ -260,7 +239,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetFollowRequestsCount(_userAId);
 
             //Assert
-            _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequestsCount(_userAId), Times.Once());
+            _mockRepo.VerifyAll();
             Assert.AreEqual(count, result);
         }
 
@@ -276,7 +255,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetFollowRequests(_userAId);
 
             //Assert
-            _uow.Verify(x => x.FollowRequestRepository.GetReceivedRequests(_userAId), Times.Once());
+            _mockRepo.VerifyAll();
             Assert.AreSame(receivedRequests, result);
         }
     }
