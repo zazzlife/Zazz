@@ -182,6 +182,8 @@
     <Compile Include="Models\Facebook\PictureSize.cs" />
     <Compile Include="Models\PhotoLinks.cs" />
     <Compile Include="Models\Data\TagStat.cs" />
+    <Compile Include="Models\QRCodeModel.cs" />
+    <Compile Include="Models\QRCodeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
