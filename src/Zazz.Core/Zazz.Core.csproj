@@ -97,6 +97,7 @@
     <Compile Include="Interfaces\IPhotoService.cs" />
     <Compile Include="Interfaces\IPostRepository.cs" />
     <Compile Include="Interfaces\IPostService.cs" />
+    <Compile Include="Interfaces\IQRCodeService.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IStaticDataRepository.cs" />
     <Compile Include="Interfaces\IStorageService.cs" />
