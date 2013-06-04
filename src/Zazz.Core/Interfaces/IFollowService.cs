@@ -13,10 +13,6 @@ namespace Zazz.Core.Interfaces
 
         void Follow(int fromUserId, int toUserId);
 
-        void FollowClubAdmin(int fromUserId, int clubAdminUserId);
-
-        void SendFollowRequest(int fromUserId, int toUserId);
-
         void AcceptFollowRequest(int requestId, int currentUserId);
 
         void RejectFollowRequest(int requestId, int currentUserId);

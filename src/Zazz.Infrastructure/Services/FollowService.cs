@@ -4,6 +4,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -30,36 +31,38 @@ namespace Zazz.Infrastructure.Services
 
         public void Follow(int fromUserId, int toUserId)
         {
-            throw new NotImplementedException();
-        }
-
-        public void FollowClubAdmin(int fromUserId, int clubAdminUserId)
-        {
-            var exists = _uow.FollowRepository.Exists(fromUserId, clubAdminUserId);
-            if (exists)
+            var followExists = _uow.FollowRepository.Exists(fromUserId, toUserId);
+            if (followExists)
                 return;
 
-            var follow = new Follow { FromUserId = fromUserId, ToUserId = clubAdminUserId };
-            _uow.FollowRepository.InsertGraph(follow);
+            var accountType = _uow.UserRepository.GetUserAccountType(toUserId);
+            if (accountType == AccountType.Club)
+            {
+                var follow = new Follow
+                             {
+                                 FromUserId = fromUserId,
+                                 ToUserId = toUserId
+                             };
 
-            _uow.SaveChanges();
-        }
+                _uow.FollowRepository.InsertGraph(follow);
+                _uow.SaveChanges();
+            }
+            else
+            {
+                var exists = _uow.FollowRequestRepository.Exists(fromUserId, toUserId);
+                if (exists)
+                    return;
 
-        public void SendFollowRequest(int fromUserId, int toUserId)
-        {
-            var exists = _uow.FollowRequestRepository.Exists(fromUserId, toUserId);
-            if (exists)
-                return;
-
-            var request = new FollowRequest
+                var request = new FollowRequest
                               {
                                   FromUserId = fromUserId,
                                   ToUserId = toUserId,
                                   RequestDate = DateTime.UtcNow
                               };
 
-            _uow.FollowRequestRepository.InsertGraph(request);
-            _uow.SaveChanges();
+                _uow.FollowRequestRepository.InsertGraph(request);
+                _uow.SaveChanges();
+            }
         }
 
         public void AcceptFollowRequest(int requestId, int currentUserId)

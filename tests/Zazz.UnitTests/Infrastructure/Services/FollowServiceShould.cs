@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -38,76 +39,81 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotCreateFollowIfExists_OnFollowClubAdmin()
+        public void NotCreateFollowIfItAlreadyExists_OnFollow()
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
                 .Returns(true);
 
             //Act
-            _sut.FollowClubAdmin(_userAId, _userBId);
+            _sut.Follow(_userAId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void CreateFollowIfNotExists_OnFollowClubAdmin()
+        public void AddNewFollowRecordIfAccountTypeIsClub_OnFollow()
         {
             //Arrange
             _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
                 .Returns(false);
-            _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
+
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_userBId))
+                .Returns(AccountType.Club);
+
+            _uow.Setup(x => x.FollowRepository
+                             .InsertGraph(It.Is<Follow>(f => f.FromUserId == _userAId &&
+                                                             f.ToUserId == _userBId)));
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.FollowClubAdmin(_userAId, _userBId);
+            _sut.Follow(_userAId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void CheckIfRecordExists_OnSendFollowRequest()
+        public void NotCreateANewFollowRequestIfAccountIsUserAndRequestExists_OnFollow()
         {
             //Arrange
+            _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
+                .Returns(false);
+
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_userBId))
+                .Returns(AccountType.User);
+
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
                 .Returns(true);
 
             //Act
-            _sut.SendFollowRequest(_userAId, _userBId);
+            _sut.Follow(_userAId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotInsertIfRecordExists_OnSendFollowRequest()
+        public void CreateAFollowRequestIfAccountIsUserAndFollowRequestNotExists_OnFollow()
         {
             //Arrange
-            _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
-                .Returns(true);
+            _uow.Setup(x => x.FollowRepository.Exists(_userAId, _userBId))
+                .Returns(false);
 
-            //Act
-            _sut.SendFollowRequest(_userAId, _userBId);
+            _uow.Setup(x => x.UserRepository.GetUserAccountType(_userBId))
+                .Returns(AccountType.User);
 
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void InsertAndSaveCorrectlyWhenNotExists_OnSendFollowRequest()
-        {
-            //Arrange
             _uow.Setup(x => x.FollowRequestRepository.Exists(_userAId, _userBId))
                 .Returns(false);
+
             _uow.Setup(x => x.FollowRequestRepository
-                             .InsertGraph(It.Is<FollowRequest>(f => f.FromUserId == _followRequest.FromUserId &&
-                                                                    f.ToUserId == _followRequest.ToUserId)));
-            _uow.Setup(x => x.SaveChanges());
+                             .InsertGraph(It.Is<FollowRequest>(f => f.FromUserId == _userAId &&
+                                                                    f.ToUserId == _userBId)));
 
+            _uow.Setup(x => x.SaveChanges());
             //Act
-            _sut.SendFollowRequest(_userAId, _userBId);
+            _sut.Follow(_userAId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();

@@ -27,16 +27,7 @@ namespace Zazz.Web.Controllers
         public void FollowUser(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
-            var accountType = UserService.GetUserAccountType(id);
-
-            if (accountType == AccountType.User)
-            {
-                _followService.SendFollowRequest(currentUserId, id);
-            }
-            else if (accountType == AccountType.Club)
-            {
-                _followService.FollowClubAdmin(currentUserId, id);
-            }
+            _followService.Follow(currentUserId, id);
         }
 
         /// <summary>
