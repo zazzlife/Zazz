@@ -17,10 +17,8 @@ namespace Zazz.Infrastructure.Services
             var sizeCalculator = new FixedCodeSize(width, QuietZoneModules.Two);
             var renderer = new WriteableBitmapRenderer(sizeCalculator, Colors.Black, Colors.White);
 
-            var imgSize = width + 20;
-
             // the only supported PixelFormats are "Gray8" and "Pbgra32" if you're going to draw in color, you should use "Pbgra32"
-            var writeableBitmap = new WriteableBitmap(imgSize, imgSize, dpi, dpi, PixelFormats.Gray8, null);
+            var writeableBitmap = new WriteableBitmap(width, width, dpi, dpi, PixelFormats.Gray8, null);
 
             renderer.Draw(writeableBitmap, qrCode.Matrix);
 
