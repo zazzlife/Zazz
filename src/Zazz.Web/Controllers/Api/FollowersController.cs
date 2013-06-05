@@ -54,6 +54,9 @@ namespace Zazz.Web.Controllers.Api
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var currentUserId = ExtractUserIdFromHeader();
+            _followService.RemoveFollow(currentUserId, id);
         }
     }
 }

@@ -104,5 +104,24 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task RemoveFollow_OnDelete()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followers/" + _userId;
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _followService.Setup(x => x.RemoveFollow(User.Id, _userId));
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
