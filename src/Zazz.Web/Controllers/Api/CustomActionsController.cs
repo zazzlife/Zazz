@@ -15,7 +15,7 @@ namespace Zazz.Web.Controllers.Api
         [HMACAuthorize, HttpPost, ActionName("QRCodeFollow")]
         public void AddQRCodeFollow(QRCodeModel user)
         {
-            if (user.Id == 0)
+            if (user.Id == 0 || String.IsNullOrWhiteSpace(user.Token))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
     }

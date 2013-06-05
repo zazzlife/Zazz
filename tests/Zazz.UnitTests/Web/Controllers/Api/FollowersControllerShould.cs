@@ -115,6 +115,34 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task Return400IfTokenIsInvalid_OnQRCodePost(string token)
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followers/qrcode";
+
+            var qrModel = new QRCodeModel
+            {
+                Id = 14,
+                Token = token
+            };
+
+            var json = JsonConvert.SerializeObject(qrModel);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
         [Test]
         public async Task Throw400IfIdIs0_OnDelete()
         {
