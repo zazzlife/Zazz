@@ -11,13 +11,13 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class FollowersController : BaseApiController
+    public class PartyWebController : BaseApiController
     {
         private readonly IFollowService _followService;
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
 
-        public FollowersController(IFollowService followService, IUserService userService,
+        public PartyWebController(IFollowService followService, IUserService userService,
             IPhotoService photoService)
         {
             _followService = followService;
@@ -25,13 +25,14 @@ namespace Zazz.Web.Controllers.Api
             _photoService = photoService;
         }
 
-        public IEnumerable<ApiFollower> Get()
+        // GET api/v1/partyweb
+        public IEnumerable<ApiPartyWebFollower> Get()
         {
             var userId = ExtractUserIdFromHeader();
             var followers = _followService.GetFollowers(userId)
                 .Select(f => f.FromUserId);
 
-            return followers.Select(x => new ApiFollower
+            return followers.Select(x => new ApiPartyWebFollower
                                          {
                                              UserId = x,
                                              DisplayName = _userService.GetUserDisplayName(x),
@@ -39,7 +40,7 @@ namespace Zazz.Web.Controllers.Api
                                          });
         }
 
-        // POST api/v1/followers
+        // POST api/v1/partyweb
         public void Post([FromBody]int userId)
         {
             if (userId == 0)
@@ -49,7 +50,7 @@ namespace Zazz.Web.Controllers.Api
             _followService.Follow(currentUserId, userId);
         }
 
-        // DELETE api/v1/followers/5
+        // DELETE api/v1/partyweb/5
         public void Delete(int id)
         {
             if (id == 0)

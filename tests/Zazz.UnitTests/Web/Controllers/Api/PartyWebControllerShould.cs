@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
     [TestFixture]
-    public class FollowersControllerShould : BaseHMACTests
+    public class PartyWebControllerShould : BaseHMACTests
     {
         private Mock<IFollowService> _followService;
         private int _userId;
@@ -25,7 +25,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             base.Init();
 
             _userId = 83;
-            ControllerAddress = "/api/v1/followers";
+            ControllerAddress = "/api/v1/partyweb";
             _followService = MockRepo.Create<IFollowService>();
 
             IocContainer.Configure(x =>
@@ -94,7 +94,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfUserIdIs0_OnQRCodePost()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/qrcode";
+            ControllerAddress = "/api/v1/partyweb/qrcode";
 
             var qrModel = new QRCodeModel
                           {
@@ -122,7 +122,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfTokenIsInvalid_OnQRCodePost(string token)
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/qrcode";
+            ControllerAddress = "/api/v1/partyweb/qrcode";
 
             var qrModel = new QRCodeModel
             {
@@ -148,7 +148,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return404IfUserDoesntExists_OnQRCodePost()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/qrcode";
+            ControllerAddress = "/api/v1/partyweb/qrcode";
 
             var qrModel = new QRCodeModel
             {
@@ -177,7 +177,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfTokenIsInvalid_OnQRCodePost()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/qrcode";
+            ControllerAddress = "/api/v1/partyweb/qrcode";
 
             var password = Encoding.UTF8.GetBytes("password");
 
@@ -208,7 +208,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return204AndCreateFollowOnSuccess_OnQRCodePost()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/qrcode";
+            ControllerAddress = "/api/v1/partyweb/qrcode";
 
             var password = Encoding.UTF8.GetBytes("password");
 
@@ -241,7 +241,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Throw400IfIdIs0_OnDelete()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/0";
+            ControllerAddress = "/api/v1/partyweb/0";
 
             AddValidHMACHeaders("DELETE");
             SetupMocksForHMACAuth();
@@ -258,7 +258,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task RemoveFollow_OnDelete()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers/" + _userId;
+            ControllerAddress = "/api/v1/partyweb/" + _userId;
 
             AddValidHMACHeaders("DELETE");
             SetupMocksForHMACAuth();

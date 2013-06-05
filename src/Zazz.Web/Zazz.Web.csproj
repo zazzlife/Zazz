@@ -226,7 +226,7 @@
     <Compile Include="Controllers\Api\EventCommentsController.cs" />
     <Compile Include="Controllers\Api\EventsController.cs" />
     <Compile Include="Controllers\Api\FeedsController.cs" />
-    <Compile Include="Controllers\Api\FollowersController.cs" />
+    <Compile Include="Controllers\Api\PartyWebController.cs" />
     <Compile Include="Controllers\Api\FollowRequestsController.cs" />
     <Compile Include="Controllers\Api\LoginController.cs" />
     <Compile Include="Controllers\Api\MajorsController.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
-    <Compile Include="Models\Api\ApiFollower.cs" />
+    <Compile Include="Models\Api\ApiPartyWebFollower.cs" />
     <Compile Include="Models\Api\ApiFollowRequest.cs" />
     <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
