@@ -5,6 +5,7 @@ using System.Security;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -48,6 +49,7 @@ namespace Zazz.Infrastructure.Services
 
             var feed = new Feed
                        {
+                           FeedType = FeedType.Post,
                            PostFeed = new PostFeed { PostId = post.Id },
                            Time = post.CreatedTime,
                        };
