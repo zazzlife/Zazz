@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/v1/post/5
+        // GET api/v1/posts/5
         public ApiPost Get(int id)
         {
             if (id == 0)
@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers.Api
             return _objectMapper.PostToApiPost(post);
         }
 
-        // POST api/v1/post
+        // POST api/v1/posts
         public ApiPost Post([FromBody] ApiPost post)
         {
             if (String.IsNullOrWhiteSpace(post.Message))
@@ -59,7 +59,7 @@ namespace Zazz.Web.Controllers.Api
             return post;
         }
 
-        // PUT api/v1/post/5
+        // PUT api/v1/posts/5
         public void Put(int id, [FromBody] ApiPost post)
         {
             if (id == 0)
@@ -82,7 +82,7 @@ namespace Zazz.Web.Controllers.Api
             }
         }
 
-        // DELETE api/v1/post/5
+        // DELETE api/v1/posts/5
         public void Delete(int id)
         {
             if (id == 0)

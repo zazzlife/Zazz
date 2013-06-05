@@ -30,7 +30,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _commentId = 99;
             _postId = 444;
-            ControllerAddress = "/api/v1/postcomments/" + _postId;
+            ControllerAddress = "/api/v1/comments/posts/" + _postId;
 
             _comment = new ApiComment
                        {
@@ -51,7 +51,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfIdIs0_OnGet()
         {
             //Arrange
-            ControllerAddress = "/api/v1/postcomments/" + 0;
+            ControllerAddress = "/api/v1/comments/posts/" + 0;
 
             AddValidHMACHeaders("GET");
             SetupMocksForHMACAuth();
@@ -86,7 +86,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfIdIs0_OnPost()
         {
             //Arrange
-            ControllerAddress = "/api/v1/postcomments/" + 0;
+            ControllerAddress = "/api/v1/comments/posts/" + 0;
             var message = "new message";
 
             var json = JsonConvert.SerializeObject(message);

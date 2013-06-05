@@ -10,6 +10,24 @@ namespace Zazz.Web
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "PhotoComments",
+                routeTemplate: "api/v1/comments/photos/{id}",
+                defaults: new { controller = "PhotoComments", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "PostComments",
+                routeTemplate: "api/v1/comments/posts/{id}",
+                defaults: new { controller = "PostComments", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "EventComments",
+                routeTemplate: "api/v1/comments/events/{id}",
+                defaults: new { controller = "EventComments", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "QRCodeFollow",
                 routeTemplate: "api/v1/partyweb/qrcode",
                 defaults: new { controller = "CustomActions", action = "QRCodeFollow" }
