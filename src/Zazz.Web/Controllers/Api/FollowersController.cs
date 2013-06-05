@@ -39,12 +39,14 @@ namespace Zazz.Web.Controllers.Api
                                          });
         }
 
-        // POST api/v1/follows
+        // POST api/v1/followers
         public void Post([FromBody]int userId)
         {
+            if (userId == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
 
-        // DELETE api/v1/follows/5
+        // DELETE api/v1/followers/5
         public void Delete(int id)
         {
         }

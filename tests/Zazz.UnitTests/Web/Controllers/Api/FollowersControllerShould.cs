@@ -1,28 +1,29 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
     [TestFixture]
     public class FollowersControllerShould : BaseHMACTests
     {
-        private int _userId;
         private Mock<IFollowService> _followService;
+        private int _userId;
 
         public override void Init()
         {
-            DefaultHttpMethod = HttpMethod.Delete;
-
             base.Init();
 
-            _userId = 5;
-            ControllerAddress = "/api/v1/followers/" + _userId;
+            _userId = 83;
+            ControllerAddress = "/api/v1/followers";
             _followService = MockRepo.Create<IFollowService>();
 
             IocContainer.Configure(x =>
@@ -35,8 +36,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task GetFollowers_OnGet()
         {
             //Arrange
-            ControllerAddress = "/api/v1/followers";
-
             _followService.Setup(x => x.GetFollowers(User.Id))
                           .Returns(new EnumerableQuery<Follow>(Enumerable.Empty<Follow>()));
 
@@ -50,5 +49,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return400IfUserIdIs0_OnPost()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(0);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+
     }
 }
