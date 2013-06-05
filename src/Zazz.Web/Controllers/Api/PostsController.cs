@@ -17,16 +17,11 @@ namespace Zazz.Web.Controllers.Api
     [HMACAuthorize]
     public class PostsController : BaseApiController
     {
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IPostService _postService;
         private readonly IObjectMapper _objectMapper;
 
-        public PostsController(IUserService userService, IPhotoService photoService, IPostService postService,
-            IObjectMapper objectMapper)
+        public PostsController(IPostService postService, IObjectMapper objectMapper)
         {
-            _userService = userService;
-            _photoService = photoService;
             _postService = postService;
             _objectMapper = objectMapper;
         }
