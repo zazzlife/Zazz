@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models.Api;
 
@@ -85,6 +86,32 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfUserIdIs0_OnQRCodePost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followers/qrcode";
+
+            var qrModel = new QRCodeModel
+                          {
+                              Id = 0,
+                              Token = "token"
+                          };
+
+            var json = JsonConvert.SerializeObject(qrModel);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             MockRepo.VerifyAll();
         }
 
