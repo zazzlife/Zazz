@@ -101,5 +101,24 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task RejectFollowRequestWhenActionIsReject_OnGet()
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=reject", _userId);
+
+            _followService.Setup(x => x.RejectFollowRequest(_userId, User.Id));
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }

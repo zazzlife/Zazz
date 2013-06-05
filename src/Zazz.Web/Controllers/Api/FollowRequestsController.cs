@@ -48,14 +48,15 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0 || String.IsNullOrWhiteSpace(action))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            var currentUserId = ExtractUserIdFromHeader();
+
             if (action.Equals("accept", StringComparison.InvariantCultureIgnoreCase))
             {
-                var userId = ExtractUserIdFromHeader();
-                _followService.AcceptFollowRequest(id, userId);
+                _followService.AcceptFollowRequest(id, currentUserId);
             }
             else if (action.Equals("reject", StringComparison.InvariantCultureIgnoreCase))
             {
-                
+                _followService.RejectFollowRequest(id, currentUserId);
             }
             else
             {
