@@ -19,7 +19,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             base.Init();
 
             _userId = 83;
-            ControllerAddress = "/api/v1/followrequests";
+            ControllerAddress = "/api/v1/followrequests/" + _userId;
             _followService = MockRepo.Create<IFollowService>();
 
             IocContainer.Configure(x =>
@@ -32,6 +32,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task ReturnFollowRequests_OnGet()
         {
             //Arrange
+            ControllerAddress = "/api/v1/followrequests";
+
             _followService.Setup(x => x.GetFollowRequests(User.Id))
                           .Returns(new EnumerableQuery<FollowRequest>(Enumerable.Empty<FollowRequest>()));
 
@@ -45,5 +47,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return400IfIdIs0_OnGet()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followrequests/0?action=accept";
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+
     }
 }

@@ -45,7 +45,8 @@ namespace Zazz.Web.Controllers.Api
         // DELETE api/v1/followrequests/5?action=accept/reject
         public void Delete(int id, string action)
         {
-            throw new NotImplementedException();
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
     }
 }
