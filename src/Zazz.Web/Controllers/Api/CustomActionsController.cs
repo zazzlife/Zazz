@@ -14,10 +14,12 @@ namespace Zazz.Web.Controllers.Api
     public class CustomActionsController : BaseApiController
     {
         private readonly IUserService _userService;
+        private readonly ICryptoService _cryptoService;
 
-        public CustomActionsController(IUserService userService)
+        public CustomActionsController(IUserService userService, ICryptoService cryptoService)
         {
             _userService = userService;
+            _cryptoService = cryptoService;
         }
 
         //POST /api/v1/followers/qrcode
@@ -30,6 +32,10 @@ namespace Zazz.Web.Controllers.Api
             try
             {
                 var userPass = _userService.GetUserPassword(user.Id);
+                var check = _cryptoService.GenerateQRCodeToken(userPass);
+
+                if (user.Token != check)
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
             catch (NotFoundException)
             {
