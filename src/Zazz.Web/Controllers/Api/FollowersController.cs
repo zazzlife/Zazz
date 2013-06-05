@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
@@ -12,9 +13,30 @@ namespace Zazz.Web.Controllers.Api
     [HMACAuthorize]
     public class FollowersController : BaseApiController
     {
+        private readonly IFollowService _followService;
+        private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
+
+        public FollowersController(IFollowService followService, IUserService userService,
+            IPhotoService photoService)
+        {
+            _followService = followService;
+            _userService = userService;
+            _photoService = photoService;
+        }
+
         public IEnumerable<ApiFollower> Get()
         {
-            throw new NotImplementedException();
+            var userId = ExtractUserIdFromHeader();
+            var followers = _followService.GetFollowers(userId)
+                .Select(f => f.FromUserId);
+
+            return followers.Select(x => new ApiFollower
+                                         {
+                                             UserId = x,
+                                             DisplayName = _userService.GetUserDisplayName(x),
+                                             DisplayPhoto = _photoService.GetUserImageUrl(x)
+                                         });
         }
 
         // POST api/v1/follows
