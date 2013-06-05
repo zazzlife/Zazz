@@ -68,6 +68,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task CreateFollow_OnPost()
+        {
+            //Arrange
+            var json = JsonConvert.SerializeObject(_userId);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _followService.Setup(x => x.Follow(User.Id, _userId));
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
     }
 }
