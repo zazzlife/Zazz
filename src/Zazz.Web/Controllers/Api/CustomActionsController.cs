@@ -15,11 +15,14 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IUserService _userService;
         private readonly ICryptoService _cryptoService;
+        private readonly IFollowService _followService;
 
-        public CustomActionsController(IUserService userService, ICryptoService cryptoService)
+        public CustomActionsController(IUserService userService, ICryptoService cryptoService,
+            IFollowService followService)
         {
             _userService = userService;
             _cryptoService = cryptoService;
+            _followService = followService;
         }
 
         //POST /api/v1/followers/qrcode
@@ -36,6 +39,8 @@ namespace Zazz.Web.Controllers.Api
 
                 if (user.Token != check)
                     throw new HttpResponseException(HttpStatusCode.Forbidden);
+
+                _followService.Follow(user.Id, ExtractUserIdFromHeader());
             }
             catch (NotFoundException)
             {

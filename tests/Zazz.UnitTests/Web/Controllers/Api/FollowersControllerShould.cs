@@ -205,6 +205,39 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
+        public async Task Return204AndCreateFollowOnSuccess_OnQRCodePost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followers/qrcode";
+
+            var password = Encoding.UTF8.GetBytes("password");
+
+            var qrModel = new QRCodeModel
+            {
+                Id = 500,
+                Token = CryptoService.GenerateQRCodeToken(password)
+            };
+
+            var json = JsonConvert.SerializeObject(qrModel);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            UserService.Setup(x => x.GetUserPassword(qrModel.Id))
+                       .Returns(password);
+
+            _followService.Setup(x => x.Follow(qrModel.Id, User.Id));
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
         public async Task Throw400IfIdIs0_OnDelete()
         {
             //Arrange
