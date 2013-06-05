@@ -30,7 +30,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             _context.SaveChanges();
 
-            _follow = new Follow {FromUserId = _userA.Id, ToUserId = _userB.Id};
+            _follow = new Follow { FromUserId = _userA.Id, ToUserId = _userB.Id };
             _context.Follows.Add(_follow);
 
             _context.SaveChanges();
@@ -104,7 +104,7 @@ namespace Zazz.IntegrationTests.Repositories
                 ctx.Users.Add(userC);
                 ctx.SaveChanges();
 
-                var followB = new Follow {FromUserId = _userB.Id, ToUserId = _userA.Id};
+                var followB = new Follow { FromUserId = _userB.Id, ToUserId = _userA.Id };
                 var followC = new Follow { FromUserId = userC.Id, ToUserId = _userA.Id };
 
                 ctx.Follows.Add(followB);

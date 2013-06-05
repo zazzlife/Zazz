@@ -9,41 +9,53 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class FollowRequestRepository : BaseRepository<FollowRequest>, IFollowRequestRepository
+    public class FollowRequestRepository : IFollowRequestRepository
     {
-        public FollowRequestRepository(DbContext dbContext) : base(dbContext)
+        private readonly DbContext _dbContext;
+        private readonly DbSet<FollowRequest> _dbSet;
+
+        public FollowRequestRepository(DbContext dbContext)
         {
+            _dbContext = dbContext;
+            _dbSet = _dbContext.Set<FollowRequest>();
         }
 
-        protected override int GetItemId(FollowRequest item)
+        public FollowRequest GetFollowRequest(int fromUserId, int toUserId)
         {
-            if (item.FromUserId == default (int) || item.ToUserId == default (int))
-                throw new ArgumentException("From user id and to user id must be supplied");
+            return _dbSet
+                .Where(f => f.FromUserId == fromUserId)
+                .Where(f => f.ToUserId == toUserId)
+                .SingleOrDefault();
+        }
 
-            return DbSet.Where(r => r.FromUserId == item.FromUserId)
-                        .Where(r => r.ToUserId == item.ToUserId)
-                        .Select(r => r.Id)
-                        .SingleOrDefault();
+        public void InsertGraph(FollowRequest followRequest)
+        {
+            _dbSet.Add(followRequest);
         }
 
         public int GetReceivedRequestsCount(int userId)
         {
-            return DbSet.Count(r => r.ToUserId == userId);
+            return _dbSet.Count(r => r.ToUserId == userId);
         }
 
-        public List<FollowRequest> GetReceivedRequests(int userId)
+        public IQueryable<FollowRequest> GetReceivedRequests(int userId)
         {
-            return DbSet.Where(r => r.ToUserId == userId).ToList();
+            return _dbSet.Where(r => r.ToUserId == userId);
         }
 
-        public List<FollowRequest> GetSentRequests(int userId)
+        public IQueryable<FollowRequest> GetSentRequests(int userId)
         {
-            return DbSet.Where(r => r.FromUserId == userId).ToList();
+            return _dbSet.Where(r => r.FromUserId == userId);
+        }
+
+        public void Remove(FollowRequest followRequest)
+        {
+            _dbContext.Entry(followRequest).State = EntityState.Deleted;
         }
 
         public void Remove(int fromUserId, int toUserId)
         {
-            var item = DbSet
+            var item = _dbSet
                 .Where(r => r.FromUserId == fromUserId)
                 .Where(r => r.ToUserId == toUserId)
                 .SingleOrDefault();
@@ -51,12 +63,12 @@ namespace Zazz.Data.Repositories
             if (item == null)
                 return;
 
-            DbContext.Entry(item).State = EntityState.Deleted;
+            _dbContext.Entry(item).State = EntityState.Deleted;
         }
 
         public bool Exists(int fromUserId, int toUserId)
         {
-            return DbSet.Where(r => r.FromUserId == fromUserId)
+            return _dbSet.Where(r => r.FromUserId == fromUserId)
                         .Where(r => r.ToUserId == toUserId)
                         .Any();
         }

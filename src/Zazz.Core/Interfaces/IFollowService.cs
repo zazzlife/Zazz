@@ -14,9 +14,9 @@ namespace Zazz.Core.Interfaces
 
         void Follow(int fromUserId, int toUserId);
 
-        void AcceptFollowRequest(int requestId, int currentUserId);
+        void AcceptFollowRequest(int fromUserId, int currentUserId);
 
-        void RejectFollowRequest(int requestId, int currentUserId);
+        void RejectFollowRequest(int fromUserId, int currentUserId);
 
         void RemoveFollow(int fromUserId, int toUserId);
 
@@ -24,7 +24,7 @@ namespace Zazz.Core.Interfaces
 
         int GetFollowersCount(int userId);
 
-        List<FollowRequest> GetFollowRequests(int userId);
+        IQueryable<FollowRequest> GetFollowRequests(int userId);
 
         IQueryable<Follow> GetFollowers(int userId);
     }

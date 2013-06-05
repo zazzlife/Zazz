@@ -69,19 +69,11 @@ namespace Zazz.Web.Controllers
             var userId = UserService.GetUserId(User.Identity.Name);
             var userFollows = _followService.GetFollowRequests(userId);
 
-            var vm = new List<FollowRequestViewModel>();
-
-            foreach (var followRequest in userFollows)
-            {
-                var r = new FollowRequestViewModel
-                        {
-                            FromUserId = followRequest.FromUserId,
-                            FromUsername = followRequest.FromUser.Username,
-                            RequestId = followRequest.Id
-                        };
-
-                vm.Add(r);
-            }
+            var vm = userFollows.Select(f => new FollowRequestViewModel
+                                             {
+                                                 FromUserId = f.FromUserId,
+                                                 FromUsername = f.FromUser.Username,
+                                             });
 
             return View("_FollowRequestsPartial", vm);
         }

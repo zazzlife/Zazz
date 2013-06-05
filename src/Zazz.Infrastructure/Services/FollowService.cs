@@ -66,9 +66,9 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public void AcceptFollowRequest(int requestId, int currentUserId)
+        public void AcceptFollowRequest(int fromUserId, int currentUserId)
         {
-            var followRequest = _uow.FollowRequestRepository.GetById(requestId);
+            var followRequest = _uow.FollowRequestRepository.GetFollowRequest(fromUserId, currentUserId);
             if (followRequest == null)
                 return;
 
@@ -85,9 +85,9 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void RejectFollowRequest(int requestId, int currentUserId)
+        public void RejectFollowRequest(int fromUserId, int currentUserId)
         {
-            var request = _uow.FollowRequestRepository.GetById(requestId);
+            var request = _uow.FollowRequestRepository.GetFollowRequest(fromUserId, currentUserId);
             if (request == null)
                 return;
 
@@ -115,7 +115,7 @@ namespace Zazz.Infrastructure.Services
             return _uow.FollowRepository.GetFollowersCount(userId);
         }
 
-        public List<FollowRequest> GetFollowRequests(int userId)
+        public IQueryable<FollowRequest> GetFollowRequests(int userId)
         {
             return _uow.FollowRequestRepository.GetReceivedRequests(userId);
         }

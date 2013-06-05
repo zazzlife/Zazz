@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -21,23 +22,43 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ThrowException_OnInsertOrUpdate_WhenFromUserIdIs0()
+        public void ReturnCorrectFollowRequest_OnGetFollowRequest()
         {
             //Arrange
-            var followRequest = new FollowRequest { ToUserId = 21, RequestDate = DateTime.Now };
+            var userA = Mother.GetUser();
+            var userB = Mother.GetUser();
+            var userC = Mother.GetUser();
+            _context.Users.Add(userA);
+            _context.Users.Add(userB);
+            _context.Users.Add(userC);
+            _context.SaveChanges();
 
-            //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(followRequest));
-        }
+            var aToB = new FollowRequest { FromUserId = userA.Id, ToUserId = userB.Id, RequestDate = DateTime.UtcNow };
 
-        [Test]
-        public void ThrowException_OnInsertOrUpdate_WhenToUserIdIs0()
-        {
-            //Arrange
-            var followRequest = new FollowRequest { FromUserId = 21, RequestDate = DateTime.Now };
+            var aToC = new FollowRequest { FromUserId = userA.Id, ToUserId = userC.Id, RequestDate = DateTime.UtcNow };
 
-            //Act & Assert
-            Assert.Throws<ArgumentException>(() => _repo.InsertOrUpdate(followRequest));
+            var bToA = new FollowRequest { FromUserId = userB.Id, ToUserId = userA.Id, RequestDate = DateTime.UtcNow };
+
+            var bToC = new FollowRequest { FromUserId = userB.Id, ToUserId = userC.Id, RequestDate = DateTime.UtcNow };
+
+            var cToA = new FollowRequest { FromUserId = userC.Id, ToUserId = userA.Id, RequestDate = DateTime.UtcNow };
+
+            var cToB = new FollowRequest { FromUserId = userC.Id, ToUserId = userB.Id, RequestDate = DateTime.UtcNow };
+
+            _context.FollowRequests.Add(aToB);
+            _context.FollowRequests.Add(aToC);
+            _context.FollowRequests.Add(bToA);
+            _context.FollowRequests.Add(bToC);
+            _context.FollowRequests.Add(cToA);
+            _context.FollowRequests.Add(cToB);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetFollowRequest(userA.Id, userB.Id);
+
+            //Assert
+            Assert.AreEqual(userA.Id, result.FromUserId);
+            Assert.AreEqual(userB.Id, result.ToUserId);
         }
 
         [Test]
@@ -120,7 +141,7 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetReceivedRequests(userA.Id);
+            var result = _repo.GetReceivedRequests(userA.Id).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);
@@ -163,8 +184,8 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.GetSentRequests(userA.Id);
-            
+            var result = _repo.GetSentRequests(userA.Id).ToList();
+
             //Assert
             Assert.AreEqual(2, result.Count);
         }

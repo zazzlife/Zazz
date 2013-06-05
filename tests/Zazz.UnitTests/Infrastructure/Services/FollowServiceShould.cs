@@ -124,19 +124,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowIfCurrentUserIsNotTheTargetUserAndNotCreateNotification_OnAcceptFollowRequest()
         {
             //Arrange
-            var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
-                .Returns(_followRequest);
+            var maliciousUserId = 999;
+            _uow.Setup(x => x.FollowRequestRepository
+               .GetFollowRequest(_followRequest.FromUserId, maliciousUserId))
+               .Returns(_followRequest);
 
             //Act
-            try
-            {
-                _sut.AcceptFollowRequest(followRequestId, 999);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
+            Assert.Throws<SecurityException>(() => _sut.AcceptFollowRequest(_followRequest.FromUserId, maliciousUserId));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -146,9 +140,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void AddNewUserFollowAndDeleteRequestAndCreateANotification_OnAcceptFollowRequest()
         {
             //Arrange
-            var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
-                .Returns(_followRequest);
+            _uow.Setup(x => x.FollowRequestRepository
+               .GetFollowRequest(_followRequest.FromUserId, _followRequest.ToUserId))
+               .Returns(_followRequest);
+
             _uow.Setup(x => x.FollowRepository.InsertGraph(It.IsAny<Follow>()));
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
             _notificationService.Setup(x => x.CreateFollowAcceptedNotification(
@@ -156,7 +151,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.SaveChanges());
             //Act
-            _sut.AcceptFollowRequest(followRequestId, _userBId);
+            _sut.AcceptFollowRequest(_followRequest.FromUserId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();
@@ -166,20 +161,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowIfCurrentUserIdIsNotTheTargetUser_OnRejectRequest()
         {
             //Arrange
-            var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
-                .Returns(_followRequest);
+            var maliciousUserId = 999;
+            _uow.Setup(x => x.FollowRequestRepository
+               .GetFollowRequest(_followRequest.FromUserId, maliciousUserId))
+               .Returns(_followRequest);
 
             //Act
-
-            try
-            {
-                _sut.RejectFollowRequest(followRequestId, 999);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
+            Assert.Throws<SecurityException>(() => _sut.RejectFollowRequest(_followRequest.FromUserId, maliciousUserId));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -189,14 +177,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void RemoveTheRequest_OnRejectRequest()
         {
             //Arrange
-            var followRequestId = 555;
-            _uow.Setup(x => x.FollowRequestRepository.GetById(followRequestId))
-                .Returns(_followRequest);
+            _uow.Setup(x => x.FollowRequestRepository
+               .GetFollowRequest(_followRequest.FromUserId, _followRequest.ToUserId))
+               .Returns(_followRequest);
+
             _uow.Setup(x => x.FollowRequestRepository.Remove(It.IsAny<FollowRequest>()));
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.RejectFollowRequest(followRequestId, _userBId);
+            _sut.RejectFollowRequest(_followRequest.FromUserId, _userBId);
 
             //Assert
             _mockRepo.VerifyAll();
@@ -256,14 +245,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var receivedRequests = new List<FollowRequest>();
             _uow.Setup(x => x.FollowRequestRepository.GetReceivedRequests(_userAId))
-                .Returns(receivedRequests);
+                .Returns(receivedRequests.AsQueryable());
 
             //Act
             var result = _sut.GetFollowRequests(_userAId);
 
             //Assert
             _mockRepo.VerifyAll();
-            Assert.AreSame(receivedRequests, result);
         }
 
         [Test]
