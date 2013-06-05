@@ -26,13 +26,13 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // GET api/v1/partyweb
-        public IEnumerable<ApiPartyWebFollower> Get()
+        public IEnumerable<ApiPartyWebFollow> Get()
         {
             var userId = ExtractUserIdFromHeader();
             var followers = _followService.GetFollowers(userId)
                 .Select(f => f.FromUserId);
 
-            return followers.Select(x => new ApiPartyWebFollower
+            return followers.Select(x => new ApiPartyWebFollow
                                          {
                                              UserId = x,
                                              DisplayName = _userService.GetUserDisplayName(x),

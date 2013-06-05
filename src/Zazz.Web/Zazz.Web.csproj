@@ -273,7 +273,7 @@
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
-    <Compile Include="Models\Api\ApiPartyWebFollower.cs" />
+    <Compile Include="Models\Api\ApiPartyWebFollow.cs" />
     <Compile Include="Models\Api\ApiFollowRequest.cs" />
     <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
