@@ -88,5 +88,21 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Throw400IfIdIs0_OnDelete()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followers/0";
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+            
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }

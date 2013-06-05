@@ -52,6 +52,8 @@ namespace Zazz.Web.Controllers.Api
         // DELETE api/v1/followers/5
         public void Delete(int id)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
         }
     }
 }
