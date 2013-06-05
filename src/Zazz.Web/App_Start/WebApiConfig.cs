@@ -10,6 +10,12 @@ namespace Zazz.Web
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "QRCodeFollow",
+                routeTemplate: "api/v1/followers/qrcode",
+                defaults: new { controller = "CustomActions", action = "QRCodeFollow" }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
