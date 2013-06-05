@@ -64,6 +64,20 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Test]
+        public async Task Return400IfActionIsNotValid_OnGet()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followrequests/444?action=randomaction";
 
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 }
