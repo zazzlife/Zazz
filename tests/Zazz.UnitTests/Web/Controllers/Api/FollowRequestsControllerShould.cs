@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Moq;
@@ -62,6 +63,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
         }
 
         [Test]
@@ -78,6 +80,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task AcceptFollowRequestWhenActionIsAccept_OnGet()
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=accept", _userId);
+
+            _followService.Setup(x => x.AcceptFollowRequest(_userId, User.Id));
+
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
         }
     }
 }

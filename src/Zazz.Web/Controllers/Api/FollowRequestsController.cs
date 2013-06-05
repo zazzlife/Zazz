@@ -50,7 +50,8 @@ namespace Zazz.Web.Controllers.Api
 
             if (action.Equals("accept", StringComparison.InvariantCultureIgnoreCase))
             {
-                
+                var userId = ExtractUserIdFromHeader();
+                _followService.AcceptFollowRequest(id, userId);
             }
             else if (action.Equals("reject", StringComparison.InvariantCultureIgnoreCase))
             {
