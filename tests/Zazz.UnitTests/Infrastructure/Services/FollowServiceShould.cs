@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Moq;
@@ -263,6 +264,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
             Assert.AreSame(receivedRequests, result);
+        }
+
+        [Test]
+        public void GetFollowers_OnGetFollowers()
+        {
+            //Arrange
+            var userId = 5343;
+            _uow.Setup(x => x.FollowRepository.GetUserFollowers(userId))
+                .Returns(new EnumerableQuery<Follow>(Enumerable.Empty<Follow>()));
+
+            //Act
+            _sut.GetFollowers(userId);
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
     }
 }

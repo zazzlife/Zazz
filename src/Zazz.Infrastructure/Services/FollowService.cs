@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
@@ -117,6 +118,11 @@ namespace Zazz.Infrastructure.Services
         public List<FollowRequest> GetFollowRequests(int userId)
         {
             return _uow.FollowRequestRepository.GetReceivedRequests(userId);
+        }
+
+        public IQueryable<Follow> GetFollowers(int userId)
+        {
+            return _uow.FollowRepository.GetUserFollowers(userId);
         }
     }
 }
