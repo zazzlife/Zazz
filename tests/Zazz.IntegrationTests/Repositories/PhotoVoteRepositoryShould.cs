@@ -17,6 +17,7 @@ namespace Zazz.IntegrationTests.Repositories
         private Photo _photo2;
         private Photo _photo3;
         private Photo _photo4;
+        private User _user3;
 
         [SetUp]
         public void Init()
@@ -26,9 +27,11 @@ namespace Zazz.IntegrationTests.Repositories
 
             _user1 = Mother.GetUser();
             _user2 = Mother.GetUser();
+            _user3 = Mother.GetUser();
 
             _context.Users.Add(_user1);
             _context.Users.Add(_user2);
+            _context.Users.Add(_user3);
             _context.SaveChanges();
 
             _photo1 = Mother.GetPhoto(_user1.Id);
@@ -99,6 +102,49 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsTrue(result);
         }
+
+        [Test]
+        public void ReturnCorrectNumber_OnGetVotesCount()
+        {
+            //Arrange
+            // photo1: 1 vote
+            // photo2: 2 votes
+            // photo3: 3 votes
+            // photo3: 0 votes
+
+            var p1v1 = new PhotoVote { PhotoId = _photo1.Id, UserId = _user1.Id };
+
+            var p2v1 = new PhotoVote { PhotoId = _photo2.Id, UserId = _user1.Id };
+            var p2v2 = new PhotoVote { PhotoId = _photo2.Id, UserId = _user2.Id };
+
+            var p3v1 = new PhotoVote { PhotoId = _photo3.Id, UserId = _user1.Id };
+            var p3v2 = new PhotoVote { PhotoId = _photo3.Id, UserId = _user2.Id };
+            var p3v3 = new PhotoVote { PhotoId = _photo3.Id, UserId = _user3.Id };
+
+            _context.PhotoVotes.Add(p1v1);
+
+            _context.PhotoVotes.Add(p2v1);
+            _context.PhotoVotes.Add(p2v2);
+
+            _context.PhotoVotes.Add(p3v1);
+            _context.PhotoVotes.Add(p3v2);
+            _context.PhotoVotes.Add(p3v3);
+
+            _context.SaveChanges();
+
+            //Act
+            var p1Result = _repo.GetVotesCount(_photo1.Id);
+            var p2Result = _repo.GetVotesCount(_photo2.Id);
+            var p3Result = _repo.GetVotesCount(_photo3.Id);
+            var p4Result = _repo.GetVotesCount(_photo4.Id);
+
+            //Assert
+            Assert.AreEqual(1, p1Result);
+            Assert.AreEqual(2, p2Result);
+            Assert.AreEqual(3, p3Result);
+            Assert.AreEqual(0, p4Result);
+        }
+
 
     }
 }

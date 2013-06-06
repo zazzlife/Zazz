@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces
 
         bool Exists(int photoId, int userId);
 
-        bool GetVoteCounts(int photoId);
+        int GetVotesCount(int photoId);
 
         void Remove(PhotoVote vote);
 

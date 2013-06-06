@@ -29,9 +29,9 @@ namespace Zazz.Data.Repositories
                 .Any();
         }
 
-        public bool GetVoteCounts(int photoId)
+        public int GetVotesCount(int photoId)
         {
-            throw new System.NotImplementedException();
+            return _dbSet.Count(v => v.PhotoId == photoId);
         }
 
         public void Remove(PhotoVote vote)
