@@ -2,7 +2,7 @@
 
 namespace Zazz.Web.Models.Api
 {
-    public class ApiPartyWebFollow
+    public class ApiFollow
     {
         public int UserId { get; set; }
 
