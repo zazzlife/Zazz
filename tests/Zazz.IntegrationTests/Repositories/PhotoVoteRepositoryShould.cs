@@ -65,6 +65,40 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(_context.PhotoVotes.Any(v => v.PhotoId == _photo1.Id && v.UserId == _user1.Id));
         }
 
+        [Test]
+        public void ReturnFalseIfVoteDoesNotExists_OnExists()
+        {
+            //Arrange
+            Assert.IsFalse(_context.PhotoVotes.Any(v => v.PhotoId == _photo1.Id && v.UserId == _user1.Id));
+
+            //Act
+            var result = _repo.Exists(_photo1.Id, _user1.Id);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ReturnTrueIfVoteExists_OnExists()
+        {
+            //Arrange
+            var vote = new PhotoVote
+                       {
+                           PhotoId = _photo1.Id,
+                           UserId = _user1.Id
+                       };
+
+            _context.PhotoVotes.Add(vote);
+            _context.SaveChanges();
+
+            Assert.IsTrue(_context.PhotoVotes.Any(v => v.PhotoId == _photo1.Id && v.UserId == _user1.Id));
+
+            //Act
+            var result = _repo.Exists(_photo1.Id, _user1.Id);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
 
     }
 }

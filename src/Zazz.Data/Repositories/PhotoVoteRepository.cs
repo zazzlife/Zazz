@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -22,7 +23,10 @@ namespace Zazz.Data.Repositories
 
         public bool Exists(int photoId, int userId)
         {
-            throw new System.NotImplementedException();
+            return _dbSet
+                .Where(v => v.PhotoId == photoId)
+                .Where(v => v.UserId == userId)
+                .Any();
         }
 
         public bool GetVoteCounts(int photoId)
