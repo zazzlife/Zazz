@@ -144,6 +144,7 @@
     <Compile Include="Models\Data\Notification.cs" />
     <Compile Include="Models\Data\PhotoComment.cs" />
     <Compile Include="Models\Data\PhotoTag.cs" />
+    <Compile Include="Models\Data\PhotoVote.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\PostComment.cs" />
     <Compile Include="Models\Data\PostFeed.cs" />

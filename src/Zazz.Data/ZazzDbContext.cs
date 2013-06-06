@@ -34,6 +34,7 @@ namespace Zazz.Data
         public IDbSet<Notification> Notifications { get; set; }
         public IDbSet<TagStat> TagStats { get; set; }
         public IDbSet<Weekly> Weeklies { get; set; }
+        public IDbSet<PhotoVote> PhotoVotes { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
