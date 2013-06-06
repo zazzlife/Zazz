@@ -145,6 +145,27 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(0, p4Result);
         }
 
+        [Test]
+        public void Remove_OnRemoveByObject()
+        {
+            //Arrange
+            var vote = new PhotoVote
+                       {
+                           PhotoId = _photo1.Id,
+                           UserId = _user1.Id
+                       };
 
+            _context.PhotoVotes.Add(vote);
+            _context.SaveChanges();
+
+            Assert.IsTrue(_context.PhotoVotes.Any(v => v.PhotoId == _photo1.Id && v.UserId == _user1.Id));
+
+            //Act
+            _repo.Remove(vote);
+            _context.SaveChanges();
+
+            //Assert
+            Assert.IsFalse(_context.PhotoVotes.Any(v => v.PhotoId == _photo1.Id && v.UserId == _user1.Id));
+        }
     }
 }

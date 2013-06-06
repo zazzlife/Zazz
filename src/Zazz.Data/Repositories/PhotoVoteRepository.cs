@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -36,7 +37,7 @@ namespace Zazz.Data.Repositories
 
         public void Remove(PhotoVote vote)
         {
-            throw new System.NotImplementedException();
+            _context.Entry(vote).State = EntityState.Deleted;
         }
 
         public void Remove(int photoId, int userId)
