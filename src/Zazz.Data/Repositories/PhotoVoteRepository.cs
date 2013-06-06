@@ -17,7 +17,7 @@ namespace Zazz.Data.Repositories
 
         public void InsertGraph(PhotoVote vote)
         {
-            throw new System.NotImplementedException();
+            _dbSet.Add(vote);
         }
 
         public bool Exists(int photoId, int userId)
