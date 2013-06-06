@@ -35,6 +35,7 @@ namespace Zazz.Data
         public IDbSet<TagStat> TagStats { get; set; }
         public IDbSet<Weekly> Weeklies { get; set; }
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
+        public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -71,6 +72,10 @@ namespace Zazz.Data
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.ClubDetail)
                         .WithRequired(c => c.User);
+
+            //modelBuilder.Entity<UserReceivedVotes>()
+            //            .HasRequired(v => v.User)
+            //            .WithOptional(u => u.ReceivedVotesCount);
 
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.User)
