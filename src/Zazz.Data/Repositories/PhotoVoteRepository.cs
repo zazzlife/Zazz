@@ -42,7 +42,14 @@ namespace Zazz.Data.Repositories
 
         public void Remove(int photoId, int userId)
         {
-            throw new System.NotImplementedException();
+            var vote = _dbSet.Where(v => v.PhotoId == photoId)
+                             .Where(v => v.UserId == userId)
+                             .SingleOrDefault();
+
+            if (vote == null)
+                return;
+
+            Remove(vote);
         }
     }
 }
