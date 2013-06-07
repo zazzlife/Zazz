@@ -15,6 +15,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
+using Zazz.Web.Filters;
 using Zazz.Web.Models;
 using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;
 
@@ -36,10 +37,35 @@ namespace Zazz.Web.Controllers
             _cryptoService = cryptoService;
         }
 
-        public ActionResult Index()
+        #region AppRegister
+
+        [HttpGet]
+        public ActionResult AppRegister()
         {
-            return RedirectToAction("Index", "Home");
+            throw new NotImplementedException();
+
+            var authHeader = Request.Headers["Authorization"];
+            var appId = authHeader.Substring(8, authHeader.IndexOf(':') - 8);
+
+            var vm = new AppRegisterViewModel
+                     {
+                         App = appId,
+                         AppSignature = _cryptoService.GenerateTextSignature(appId),
+                         Schools = _staticData.GetSchools(),
+                         Cities = _staticData.GetCities(),
+                         Majors = _staticData.GetMajors()
+                     };
+
+            return View(vm);
         }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult AppRegister(AppRegisterViewModel vm)
+        {
+            return View();
+        }
+
+        #endregion
 
         [HttpGet]
         public ActionResult Login(string returnUrl)
