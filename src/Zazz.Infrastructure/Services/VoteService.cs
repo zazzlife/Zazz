@@ -53,7 +53,10 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.PhotoVoteRepository.Exists(photoId, currentUserId))
                 return;
 
+            _uow.PhotoVoteRepository.Remove(photoId, currentUserId);
+            _uow.UserReceivedVotesRepository.Decrement(photo.UserId);
 
+            _uow.SaveChanges();
         }
     }
 }
