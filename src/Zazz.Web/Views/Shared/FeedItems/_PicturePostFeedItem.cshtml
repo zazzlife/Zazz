@@ -20,12 +20,16 @@
             Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.PhotoViewModel[0]);
 
             
-            <div style="margin: 5px 5px 0 0;">
+            <div style="margin: 5px 0 0 0;">
                 <div class="pull-left">
-                    <button data-vote-btn="1" data-isloaded="0" class="btn-link" data-id="@Model.PhotoViewModel[0].PhotoId">
+                    <button data-vote-btn="1" data-isloaded="0"
+                            class="btn-link disabled" data-id="@Model.PhotoViewModel[0].PhotoId" disabled="disabled">
+                        
                         <i class="icon-thumbs-up"></i> 
-                        Vote <span id="photoVoteCount-@Model.PhotoViewModel[0].PhotoId">(5)</span>
+                        Vote
                     </button>
+                    
+                    <span id="photoVotesCount-@Model.PhotoViewModel[0].PhotoId"><i class="icon-spin icon-spinner"></i></span>
                 </div>
                 
 

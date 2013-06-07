@@ -459,6 +459,7 @@
     <Content Include="Scripts\app\scroll-pagination.js" />
     <None Include="Scripts\bootstrap-editable-datepicker-backup.b" />
     <Content Include="Scripts\app\tags.js" />
+    <Content Include="Scripts\app\vote.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <None Include="Scripts\jquery-2.0.1.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.1.js" />

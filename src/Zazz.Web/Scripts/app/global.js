@@ -37,6 +37,7 @@ function applyPageStyles() {
 
     initInputTags();
     initWeeklies();
+    loadVoteButtons();
 }
 
 function showAjaxErrorMessage(res) {
