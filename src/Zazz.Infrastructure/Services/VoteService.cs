@@ -22,7 +22,7 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoVoteRepository.GetVotesCount(photoId);
         }
 
-        public bool HasUserVotedOnPhoto(int photoId, int userId)
+        public bool PhotoVoteExists(int photoId, int userId)
         {
             if (photoId == 0)
                 throw new ArgumentOutOfRangeException("photoId");

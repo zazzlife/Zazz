@@ -67,39 +67,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #endregion
 
-        #region HAS_USER_VOTED_ON_PHOTO
+        #region PHOTO_VOTE_EXISTS
 
         [Test]
-        public void ThrowIfPhotoIdIs0_OnHasUserVotedOnPhoto()
+        public void ThrowIfPhotoIdIs0_OnPhotoVoteExists()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.HasUserVotedOnPhoto(0, _currentUserId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoVoteExists(0, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserIdIs0_OnHasUserVotedOnPhoto()
+        public void ThrowIfUserIdIs0_OnPhotoVoteExists()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.HasUserVotedOnPhoto(_photoId, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoVoteExists(_photoId, 0));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ReturnValueFromRepository_OnHasUserVotedOnPhoto()
+        public void ReturnValueFromRepository_OnPhotoVoteExists()
         {
             //Arrange
             _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
                 .Returns(true);
 
             //Act
-            var result = _sut.HasUserVotedOnPhoto(_photoId, _currentUserId);
+            var result = _sut.PhotoVoteExists(_photoId, _currentUserId);
 
             //Assert
             Assert.IsTrue(result);

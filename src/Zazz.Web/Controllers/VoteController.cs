@@ -34,7 +34,7 @@ namespace Zazz.Web.Controllers
         public bool Exists(int id)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
-            return _voteService.HasUserVotedOnPhoto(id, userId);
+            return _voteService.PhotoVoteExists(id, userId);
         }
 
         public int Count(int id)

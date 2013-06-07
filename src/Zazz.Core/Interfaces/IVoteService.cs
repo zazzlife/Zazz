@@ -4,7 +4,7 @@
     {
         int GetPhotoVotesCount(int photoId);
 
-        bool HasUserVotedOnPhoto(int photoId, int userId);
+        bool PhotoVoteExists(int photoId, int userId);
 
         void AddPhotoVote(int photoId, int currentUserId);
 
