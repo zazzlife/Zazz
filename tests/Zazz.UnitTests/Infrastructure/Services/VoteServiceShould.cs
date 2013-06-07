@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -27,7 +28,29 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ThrowNotFoundIfPhotoNotExists_OnAddVote()
+        public void ThrowIfPhotoIdIs0_OnAddPhotoVote()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoVote(0, _currentUserId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIdIs0_OnAddPhotoVote()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoVote(_photoId, 0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundIfPhotoNotExists_OnAddPhotoVote()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.Exists(_photoId))

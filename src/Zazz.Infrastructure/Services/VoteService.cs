@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Exceptions;
+﻿using System;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 
 namespace Zazz.Infrastructure.Services
@@ -14,6 +15,12 @@ namespace Zazz.Infrastructure.Services
 
         public void AddPhotoVote(int photoId, int currentUserId)
         {
+            if (photoId == 0)
+                throw new ArgumentOutOfRangeException("photoId");
+
+            if (currentUserId == 0)
+                throw new ArgumentOutOfRangeException("currentUserId");
+
             if (!_uow.PhotoRepository.Exists(photoId))
                 throw new NotFoundException();
         }
