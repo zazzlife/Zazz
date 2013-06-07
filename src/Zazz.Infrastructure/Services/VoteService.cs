@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Interfaces;
+﻿using Zazz.Core.Exceptions;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -13,7 +14,8 @@ namespace Zazz.Infrastructure.Services
 
         public void AddPhotoVote(int photoId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (!_uow.PhotoRepository.Exists(photoId))
+                throw new NotFoundException();
         }
 
         public void RemovePhotoVote(int photoId, int currentUserId)
