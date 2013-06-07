@@ -109,6 +109,7 @@
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\FollowService.cs" />
     <Compile Include="Services\QRCodeService.cs" />
+    <Compile Include="Services\VoteService.cs" />
     <Compile Include="Services\WeeklyService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\PhotoService.cs" />

@@ -117,6 +117,7 @@
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
+    <Compile Include="Interfaces\IVoteService.cs" />
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
     <Compile Include="Models\Data\ApiApp.cs" />
