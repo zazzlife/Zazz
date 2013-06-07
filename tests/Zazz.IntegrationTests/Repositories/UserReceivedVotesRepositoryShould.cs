@@ -97,5 +97,44 @@ namespace Zazz.IntegrationTests.Repositories
             var check = _context.UserReceivedVotes.SingleOrDefault(u => u.UserId == _user1.Id);
             Assert.AreEqual((currentCount + 1), check.Count);
         }
+
+        [Test]
+        public void InsertRecordIfNotExists_OnDecrement()
+        {
+            //Arrange
+
+            //Act
+            _repo.Decrement(_user1.Id);
+            _context.SaveChanges();
+
+            //Assert
+            var check = _context.UserReceivedVotes.Find(_user1.Id);
+            Assert.AreEqual(0, check.Count);
+        }
+
+        [Test]
+        public void DecrementCountIfRecordExists_OnDecrement()
+        {
+            //Arrange
+            var currentCount = 222;
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.UserReceivedVotes.Add(new UserReceivedVotes
+                {
+                    Count = currentCount,
+                    LastUpdate = DateTime.UtcNow,
+                    UserId = _user1.Id
+                });
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            _repo.Decrement(_user1.Id);
+
+            //Assert
+            var check = _context.UserReceivedVotes.SingleOrDefault(u => u.UserId == _user1.Id);
+            Assert.AreEqual((currentCount - 1), check.Count);
+        }
     }
 }

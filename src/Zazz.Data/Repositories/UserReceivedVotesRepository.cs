@@ -32,7 +32,7 @@ namespace Zazz.Data.Repositories
                 "set nocount on" + newLine +
                 "IF EXISTS(SELECT 1 FROM dbo.UserReceivedVotes WHERE UserId = @userId)" + newLine +
                     "BEGIN" + newLine +
-                        "UPDATE dbo.UserReceivedVotes SET Count = Count + 1 WHERE UserId = @userId" + newLine +
+                        "UPDATE dbo.UserReceivedVotes SET Count = Count + 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
                     "END" + newLine +
                 "ELSE" + newLine +
                     "BEGIN" + newLine +
@@ -45,7 +45,20 @@ namespace Zazz.Data.Repositories
 
         public void Decrement(int userId)
         {
-            throw new System.NotImplementedException();
+            var newLine = Environment.NewLine;
+            var query =
+                "set nocount on" + newLine +
+                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedVotes WHERE UserId = @userId)" + newLine +
+                    "BEGIN" + newLine +
+                        "UPDATE dbo.UserReceivedVotes SET Count = Count - 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
+                    "END" + newLine +
+                "ELSE" + newLine +
+                    "BEGIN" + newLine +
+                        "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 0, GETUTCDATE())" + newLine +
+                    "END";
+
+            var userIdParam = new SqlParameter("userId", userId);
+            _context.Database.ExecuteSqlCommand(query, userIdParam);
         }
     }
 }
