@@ -1,5 +1,33 @@
-﻿function showVoteOrUnvoteBtn(id, btn) {
+﻿function showVoteOrUnvoteBtn(id, $btn) {
     
+    var url = "/vote/exists/" + id;
+
+    var removeVoteHtml = '<i class="icon-thumbs-down"></i> Remove vote';
+    var removeVoteUrl = "/vote/remove/" + id;
+    var voteUrl = "/vote/add/" + id;
+
+    var actionUrl;
+
+    $.ajax({
+        url: url,
+        cache: false,
+        success: function(res) {
+            
+            if (res.toLowerCase() == 'true') {
+                $btn.html(removeVoteHtml);
+                actionUrl = removeVoteUrl;
+            } else {
+                actionUrl = voteUrl;
+            }
+
+            $btn.attr('data-url', actionUrl);
+            $btn.removeClass('disabled');
+            $btn.removeAttr('disabled');
+            $btn.attr('data-isloaded', '1');
+            $btn.css('opacity', '1');
+        }
+    });
+
 }
 
 function getVotesCount(id) {
@@ -33,7 +61,7 @@ function loadVoteButtons() {
             return;
         }
         
-        $self.css('opacity', '0.6');
+        $self.css('opacity', '0.4');
         var id = $self.data('id');
 
         getVotesCount(id);
