@@ -5,13 +5,13 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class ValidationTokenRepository : BaseRepository<ValidationToken>, IValidationTokenRepository
+    public class ValidationTokenRepository : BaseRepository<UserValidationToken>, IValidationTokenRepository
     {
         public ValidationTokenRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(ValidationToken item)
+        protected override int GetItemId(UserValidationToken item)
         {
             throw new InvalidOperationException("You should always provide the id for updating the token, if it's new then use insert graph.");
         }

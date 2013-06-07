@@ -49,7 +49,7 @@ namespace Zazz.Infrastructure.Services
 
             if (createToken)
             {
-                user.ValidationToken = new ValidationToken
+                user.UserValidationToken = new UserValidationToken
                                            {
                                                ExpirationDate = DateTime.UtcNow.AddYears(1),
                                                Token = Guid.NewGuid()
@@ -62,13 +62,13 @@ namespace Zazz.Infrastructure.Services
             return user;
         }
 
-        public ValidationToken GenerateResetPasswordToken(string email)
+        public UserValidationToken GenerateResetPasswordToken(string email)
         {
             var userId = _uow.UserRepository.GetIdByEmail(email);
             if (userId == 0)
                 throw new EmailNotExistsException();
 
-            var token = new ValidationToken
+            var token = new UserValidationToken
                             {
                                 ExpirationDate = DateTime.UtcNow.AddDays(1),
                                 Id = userId,

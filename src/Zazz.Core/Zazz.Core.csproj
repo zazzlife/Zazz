@@ -169,7 +169,7 @@
     <Compile Include="Models\Data\FollowRequest.cs" />
     <Compile Include="Models\Data\Photo.cs" />
     <Compile Include="Models\Data\UserDetail.cs" />
-    <Compile Include="Models\Data\ValidationToken.cs" />
+    <Compile Include="Models\Data\UserValidationToken.cs" />
     <Compile Include="Models\Facebook\FbComment.cs" />
     <Compile Include="Models\Facebook\FbEvent.cs" />
     <Compile Include="Models\Facebook\FbPage.cs" />

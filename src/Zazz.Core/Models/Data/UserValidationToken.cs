@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class ValidationToken : BaseEntity
+    public class UserValidationToken : BaseEntity
     {
         [ForeignKey("Id")]
         public User User { get; set; }

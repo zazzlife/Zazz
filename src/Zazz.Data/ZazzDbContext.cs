@@ -14,7 +14,7 @@ namespace Zazz.Data
         public IDbSet<UserPreferences> UserPreferences { get; set; }
         public IDbSet<UserDetail> UserDetails { get; set; }
         public IDbSet<ClubDetail> ClubDetails { get; set; }
-        public IDbSet<ValidationToken> ValidationTokens { get; set; }
+        public IDbSet<UserValidationToken> ValidationTokens { get; set; }
         public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
@@ -62,7 +62,7 @@ namespace Zazz.Data
                         .WithRequiredPrincipal(u => u.Preferences);
 
             modelBuilder.Entity<User>()
-                        .HasOptional(u => u.ValidationToken)
+                        .HasOptional(u => u.UserValidationToken)
                         .WithRequired(v => v.User);
 
             modelBuilder.Entity<User>()

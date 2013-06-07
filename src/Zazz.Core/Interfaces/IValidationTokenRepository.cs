@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IValidationTokenRepository : IRepository<ValidationToken>
+    public interface IValidationTokenRepository : IRepository<UserValidationToken>
     {
          
     }

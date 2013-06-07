@@ -24,7 +24,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void AddOnInsertGraph()
         {
             //Arrange
-            var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
+            var token = new UserValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
 
             //Act
             _repo.InsertGraph(token);
@@ -37,7 +37,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void UpdateOnInsertOrUpdate_WhenIdIsProvided()
         {
             //Arrange
-            var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
+            var token = new UserValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
 
             //Act
             _repo.InsertOrUpdate(token);
@@ -50,7 +50,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void ThrowExceptionOnInsertOrUpdate_WhenIdIsNotProvided()
         {
             //Arrange
-            var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Token = Guid.NewGuid() };
+            var token = new UserValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Token = Guid.NewGuid() };
 
             //Act & Assert
             Assert.Throws<InvalidOperationException>(() => _repo.InsertOrUpdate(token));
@@ -60,7 +60,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void DeleteOnDelete()
         {
             //Arrange
-            var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
+            var token = new UserValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Id = 1, Token = Guid.NewGuid() };
 
             //Act
             _repo.Remove(token);
@@ -73,9 +73,9 @@ namespace Zazz.IntegrationTests.Repositories
         public void DeleteOnDeleteWithId()
         {
             //Arrange
-            var token = new ValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Token = Guid.NewGuid() };
+            var token = new UserValidationToken { ExpirationDate = DateTime.Now.AddDays(1), Token = Guid.NewGuid() };
             var user = Mother.GetUser();
-            user.ValidationToken = token;
+            user.UserValidationToken = token;
 
             new UserRepository(_context).InsertGraph(user);
             _context.SaveChanges();

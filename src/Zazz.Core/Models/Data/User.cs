@@ -33,7 +33,7 @@ namespace Zazz.Core.Models.Data
 
         public bool IsConfirmed { get; set; }
 
-        public virtual ValidationToken ValidationToken { get; set; }
+        public virtual UserValidationToken UserValidationToken { get; set; }
 
         public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
 

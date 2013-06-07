@@ -10,7 +10,7 @@ namespace Zazz.Core.Interfaces
 
         User Register(User user,string password, bool createToken);
 
-        ValidationToken GenerateResetPasswordToken(string email);
+        UserValidationToken GenerateResetPasswordToken(string email);
 
         bool IsTokenValid(int userId, Guid token);
 
