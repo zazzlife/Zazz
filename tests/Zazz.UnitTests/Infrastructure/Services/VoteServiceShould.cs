@@ -67,6 +67,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #endregion
 
+        #region HAS_USER_VOTED_ON_PHOTO
+
+        [Test]
+        public void ThrowIfPhotoIdIs0_OnHasUserVotedOnPhoto()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.HasUserVotedOnPhoto(0, _currentUserId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIdIs0_OnHasUserVotedOnPhoto()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.HasUserVotedOnPhoto(_photoId, 0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnValueFromRepository_OnHasUserVotedOnPhoto()
+        {
+            //Arrange
+            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+                .Returns(true);
+
+            //Act
+            var result = _sut.HasUserVotedOnPhoto(_photoId, _currentUserId);
+
+            //Assert
+            Assert.IsTrue(result);
+            _mockRepo.VerifyAll();
+        }
+
+        #endregion
+
         #region ADD_PHOTO_VOTE
 
         [Test]
