@@ -36,6 +36,37 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _currentUserId = 13;
         }
 
+        #region GET_PHOTO_VOTES_COUNT
+
+        [Test]
+        public void ThrowIfPhotoIdIs0_OnGetPhotoVotesCount()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.GetPhotoVotesCount(0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void GetValueFromRepository_OnGetPhotoVotesCount()
+        {
+            //Arrange
+            var votesCount = 444;
+            _uow.Setup(x => x.PhotoVoteRepository.GetVotesCount(_photoId))
+                .Returns(votesCount);
+
+            //Act
+            var result = _sut.GetPhotoVotesCount(_photoId);
+
+            //Assert
+            Assert.AreEqual(votesCount, result);
+            _mockRepo.VerifyAll();
+        }
+
+        #endregion
+
         #region ADD_PHOTO_VOTE
 
         [Test]

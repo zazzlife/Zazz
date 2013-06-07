@@ -14,9 +14,12 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
-        public int GetPhotoVoteCounts(int photoId)
+        public int GetPhotoVotesCount(int photoId)
         {
-            throw new NotImplementedException();
+            if (photoId == 0)
+                throw new ArgumentOutOfRangeException("photoId");
+
+            return _uow.PhotoVoteRepository.GetVotesCount(photoId);
         }
 
         public bool IsUserVotedOnPhoto(int photoId, int userId)

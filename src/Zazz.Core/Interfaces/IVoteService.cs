@@ -2,7 +2,7 @@
 {
     public interface IVoteService
     {
-        int GetPhotoVoteCounts(int photoId);
+        int GetPhotoVotesCount(int photoId);
 
         bool IsUserVotedOnPhoto(int photoId, int userId);
 
