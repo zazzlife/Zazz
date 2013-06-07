@@ -22,6 +22,8 @@ namespace Zazz.Core.Interfaces
         INotificationRepository NotificationRepository { get; }
         ITagStatRepository TagStatRepository { get; }
         IWeeklyRepository WeeklyRepository { get; }
+        IPhotoVoteRepository PhotoVoteRepository { get; }
+        IUserReceivedVotesRepository UserReceivedVotesRepository { get; }
 
         void SaveChanges();
     }

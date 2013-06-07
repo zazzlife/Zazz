@@ -127,6 +127,21 @@ namespace Zazz.Data
             get { return _weeklyRepository ?? (_weeklyRepository = new WeeklyRepository(GetContext())); }
         }
 
+        private IPhotoVoteRepository _photoVoteRepository;
+        public IPhotoVoteRepository PhotoVoteRepository
+        {
+            get { return _photoVoteRepository ?? (_photoVoteRepository = new PhotoVoteRepository(GetContext())); }
+        }
+
+        private IUserReceivedVotesRepository _userReceivedVotesRepository;
+        public IUserReceivedVotesRepository UserReceivedVotesRepository
+        {
+            get
+            {
+                return _userReceivedVotesRepository ??
+                       (_userReceivedVotesRepository = new UserReceivedVotesRepository(GetContext()));
+            }
+        }
 
         private ZazzDbContext GetContext()
         {
