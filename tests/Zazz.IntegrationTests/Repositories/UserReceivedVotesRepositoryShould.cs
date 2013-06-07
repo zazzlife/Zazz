@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -48,7 +49,7 @@ namespace Zazz.IntegrationTests.Repositories
                                                LastUpdate = DateTime.UtcNow,
                                                UserId = _user2.Id
                                            });
-            
+
             _context.SaveChanges();
 
             //Act
@@ -56,6 +57,45 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(user1Count, result);
+        }
+
+        [Test]
+        public void InsertRecordIfNotExists_OnIncrement()
+        {
+            //Arrange
+
+            //Act
+            _repo.Increment(_user1.Id);
+            _context.SaveChanges();
+
+            //Assert
+            var check = _context.UserReceivedVotes.Find(_user1.Id);
+            Assert.AreEqual(1, check.Count);
+        }
+
+        [Test]
+        public void IncrementCountIfRecordExists_OnIncrement()
+        {
+            //Arrange
+            var currentCount = 222;
+            using (var ctx = new ZazzDbContext())
+            {
+                ctx.UserReceivedVotes.Add(new UserReceivedVotes
+                                          {
+                                              Count = currentCount,
+                                              LastUpdate = DateTime.UtcNow,
+                                              UserId = _user1.Id
+                                          });
+
+                ctx.SaveChanges();
+            }
+
+            //Act
+            _repo.Increment(_user1.Id);
+
+            //Assert
+            var check = _context.UserReceivedVotes.SingleOrDefault(u => u.UserId == _user1.Id);
+            Assert.AreEqual((currentCount + 1), check.Count);
         }
     }
 }

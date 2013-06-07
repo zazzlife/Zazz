@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -23,12 +25,25 @@ namespace Zazz.Data.Repositories
                          .SingleOrDefault();
         }
 
-        public int Increment(int userId)
+        public void Increment(int userId)
         {
-            throw new System.NotImplementedException();
+            var newLine = Environment.NewLine;
+            var query =
+                "set nocount on" + newLine +
+                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedVotes WHERE UserId = @userId)" + newLine +
+                    "BEGIN" + newLine +
+                        "UPDATE dbo.UserReceivedVotes SET Count = Count + 1 WHERE UserId = @userId" + newLine +
+                    "END" + newLine +
+                "ELSE" + newLine +
+                    "BEGIN" + newLine +
+                        "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 1, GETUTCDATE())" + newLine +
+                    "END";
+
+            var userIdParam = new SqlParameter("userId", userId);
+            _context.Database.ExecuteSqlCommand(query, userIdParam);
         }
 
-        public int Decrement(int userId)
+        public void Decrement(int userId)
         {
             throw new System.NotImplementedException();
         }

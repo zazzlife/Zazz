@@ -4,8 +4,8 @@
     {
         int GetCount(int userId);
 
-        int Increment(int userId);
+        void Increment(int userId);
 
-        int Decrement(int userId);
+        void Decrement(int userId);
     }
 }
