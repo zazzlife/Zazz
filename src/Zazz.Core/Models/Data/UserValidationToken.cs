@@ -10,6 +10,6 @@ namespace Zazz.Core.Models.Data
 
         public Guid Token { get; set; }
 
-        public DateTime ExpirationDate { get; set; }
+        public DateTime ExpirationTime { get; set; }
     }
 }

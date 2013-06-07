@@ -51,7 +51,7 @@ namespace Zazz.Infrastructure.Services
             {
                 user.UserValidationToken = new UserValidationToken
                                            {
-                                               ExpirationDate = DateTime.UtcNow.AddYears(1),
+                                               ExpirationTime = DateTime.UtcNow.AddYears(1),
                                                Token = Guid.NewGuid()
                                            };
             }
@@ -70,7 +70,7 @@ namespace Zazz.Infrastructure.Services
 
             var token = new UserValidationToken
                             {
-                                ExpirationDate = DateTime.UtcNow.AddDays(1),
+                                ExpirationTime = DateTime.UtcNow.AddDays(1),
                                 Id = userId,
                                 Token = Guid.NewGuid(),
                             };
@@ -91,7 +91,7 @@ namespace Zazz.Infrastructure.Services
             if (userToken == null)
                 return false;
 
-            if (userToken.ExpirationDate < DateTime.UtcNow)
+            if (userToken.ExpirationTime < DateTime.UtcNow)
                 throw new TokenExpiredException();
 
             return token.Equals(userToken.Token);

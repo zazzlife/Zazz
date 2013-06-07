@@ -36,6 +36,7 @@ namespace Zazz.Data
         public IDbSet<Weekly> Weeklies { get; set; }
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
         public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }
+        public IDbSet<AppRequestToken> AppRequestTokens { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
