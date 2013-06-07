@@ -27,7 +27,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET /api/v1/postcomments/5
+        // GET /api/v1/comments/posts/5
 
         public IEnumerable<ApiComment> Get(int id, int lastComment = 0)
         {
@@ -38,7 +38,7 @@ namespace Zazz.Web.Controllers.Api
                               .Select(_objectMapper.CommentViewModelToApiModel);
         }
 
-        // POST /api/v1/postcomments/5
+        // POST /api/v1/comments/posts/5
 
         public ApiComment Post(int id, [FromBody] string comment)
         {

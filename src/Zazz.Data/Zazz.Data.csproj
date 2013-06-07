@@ -76,6 +76,7 @@
     <Compile Include="Repositories\PhotoVoteRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\TagStatRepository.cs" />
+    <Compile Include="Repositories\UserReceivedVotesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
     <Compile Include="Repositories\WeeklyRepository.cs" />

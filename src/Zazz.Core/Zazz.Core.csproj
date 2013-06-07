@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\IFollowRepository.cs" />
     <Compile Include="Interfaces\IFollowRequestRepository.cs" />
     <Compile Include="Interfaces\IPhotoRepository.cs" />
+    <Compile Include="Interfaces\IUserReceivedVotesRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
