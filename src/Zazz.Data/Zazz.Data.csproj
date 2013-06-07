@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repositories\AppRequestTokenRepository.cs" />
     <Compile Include="Repositories\InMemoryApiAppRepository.cs" />
     <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />
