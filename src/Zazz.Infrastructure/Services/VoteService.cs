@@ -14,6 +14,16 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
+        public int GetPhotoVoteCounts(int photoId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsUserVotedOnPhoto(int photoId, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddPhotoVote(int photoId, int currentUserId)
         {
             if (photoId == 0)
