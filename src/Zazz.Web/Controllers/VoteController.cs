@@ -19,6 +19,18 @@ namespace Zazz.Web.Controllers
             _userService = userService;
         }
 
+        public void Add(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _voteService.AddPhotoVote(id, userId);
+        }
+
+        public void Remove(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _voteService.RemovePhotoVote(id, userId);
+        }
+
         public bool Exists(int id)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
