@@ -63,6 +63,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfUserHasAlreadyVoted_OnAddPhotoVote()
+        {
+            //Arrange
+            _uow.Setup(x => x.PhotoRepository.Exists(_photoId))
+                .Returns(true);
+
+            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+                .Returns(true);
+
+            //Act
+            Assert.Throws<AlreadyVotedException>(() => _sut.AddPhotoVote(_photoId, _currentUserId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
 
     }
 }

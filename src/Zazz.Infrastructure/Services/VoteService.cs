@@ -23,6 +23,9 @@ namespace Zazz.Infrastructure.Services
 
             if (!_uow.PhotoRepository.Exists(photoId))
                 throw new NotFoundException();
+
+            if (_uow.PhotoVoteRepository.Exists(photoId, currentUserId))
+                throw new AlreadyVotedException();
         }
 
         public void RemovePhotoVote(int photoId, int currentUserId)
