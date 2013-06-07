@@ -40,7 +40,11 @@ namespace Zazz.Infrastructure.Services
 
         public void RemovePhotoVote(int photoId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            if (photoId == 0)
+                throw new ArgumentOutOfRangeException("photoId");
+
+            if (currentUserId == 0)
+                throw new ArgumentOutOfRangeException("currentUserId");
         }
     }
 }

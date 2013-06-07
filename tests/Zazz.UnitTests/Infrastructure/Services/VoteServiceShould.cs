@@ -36,6 +36,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _currentUserId = 13;
         }
 
+        #region ADD_PHOTO_VOTE
         [Test]
         public void ThrowIfPhotoIdIs0_OnAddPhotoVote()
         {
@@ -112,5 +113,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        #endregion
+
+        #region REMOVE_PHOTO_VOTE
+
+        [Test]
+        public void ThrowIfPhotoIdIs0_OnRemovePhotoVote()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoVote(0, _currentUserId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIdIs0_OnRemovePhotoVote()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoVote(_photoId, 0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        #endregion
     }
 }
