@@ -1,5 +1,4 @@
-﻿@using Zazz.Infrastructure
-@using Zazz.Infrastructure.Helpers
+﻿@using Zazz.Infrastructure.Helpers
 @model FeedViewModel
 @{
     Layout = null;
@@ -20,8 +19,19 @@
 
             Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.PhotoViewModel[0]);
 
-            <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right"
-                 class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Model.Time.ToRelativeTime()
+            
+            <div style="margin: 5px 5px 0 0;">
+                <div class="pull-left">
+                    <button data-vote-btn="1" data-isloaded="0" class="btn-link" data-id="@Model.PhotoViewModel[0].PhotoId">
+                        <i class="icon-thumbs-up"></i> 
+                        Vote <span id="photoVoteCount-@Model.PhotoViewModel[0].PhotoId">(5)</span>
+                    </button>
+                </div>
+                
+
+                <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right"
+                     class="pull-right font-verysmall">@Model.Time.ToRelativeTime()
+                </div>
             </div>
             <div class="clearfix"></div>
 
