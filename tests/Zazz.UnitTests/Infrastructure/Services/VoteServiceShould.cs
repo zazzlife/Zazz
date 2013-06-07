@@ -37,6 +37,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         #region ADD_PHOTO_VOTE
+
         [Test]
         public void ThrowIfPhotoIdIs0_OnAddPhotoVote()
         {
@@ -135,6 +136,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             //Act
             Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoVote(_photoId, 0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void NotDoAnythingIfPhotoNotExists_OnAddPhotoVote()
+        {
+            //Arrange
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemovePhotoVote(_photoId, _currentUserId);
 
             //Assert
             _mockRepo.VerifyAll();

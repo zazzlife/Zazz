@@ -45,6 +45,10 @@ namespace Zazz.Infrastructure.Services
 
             if (currentUserId == 0)
                 throw new ArgumentOutOfRangeException("currentUserId");
+
+            var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
+            if (photo == null)
+                return;
         }
     }
 }
