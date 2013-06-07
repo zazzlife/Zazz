@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -17,7 +18,9 @@ namespace Zazz.Data.Repositories
 
         public int GetCount(int userId)
         {
-            throw new System.NotImplementedException();
+            return _dbSet.Where(u => u.UserId == userId)
+                         .Select(u => u.Count)
+                         .SingleOrDefault();
         }
 
         public int Increment(int userId)

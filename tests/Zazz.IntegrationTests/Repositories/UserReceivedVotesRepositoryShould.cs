@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
 using Zazz.Data.Repositories;
@@ -25,6 +26,36 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(_user1);
             _context.Users.Add(_user2);
             _context.SaveChanges();
+        }
+
+        [Test]
+        public void GetCount_OnGetCount()
+        {
+            //Arrange
+            var user1Count = 50;
+            var user2Count = 49;
+
+            _context.UserReceivedVotes.Add(new UserReceivedVotes
+                                           {
+                                               Count = user1Count,
+                                               LastUpdate = DateTime.UtcNow,
+                                               UserId = _user1.Id
+                                           });
+
+            _context.UserReceivedVotes.Add(new UserReceivedVotes
+                                           {
+                                               Count = user2Count,
+                                               LastUpdate = DateTime.UtcNow,
+                                               UserId = _user2.Id
+                                           });
+            
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetCount(_user1.Id);
+
+            //Assert
+            Assert.AreEqual(user1Count, result);
         }
     }
 }
