@@ -36,5 +36,10 @@ namespace Zazz.Web.Controllers
             var userId = _userService.GetUserId(User.Identity.Name);
             return _voteService.HasUserVotedOnPhoto(id, userId);
         }
+
+        public int Count(int id)
+        {
+            return _voteService.GetPhotoVotesCount(id);
+        }
     }
 }
