@@ -35,7 +35,6 @@ namespace Zazz.Infrastructure.Services
             _uow.UserReceivedVotesRepository.Increment(photo.UserId);
 
             _uow.SaveChanges();
-
         }
 
         public void RemovePhotoVote(int photoId, int currentUserId)
@@ -49,6 +48,12 @@ namespace Zazz.Infrastructure.Services
             var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId);
             if (photo == null)
                 return;
+
+            // This check is required because if we continue we'll decrement a vote count, and if the current user hasn't voted we want to stop right here.
+            if (!_uow.PhotoVoteRepository.Exists(photoId, currentUserId))
+                return;
+
+
         }
     }
 }

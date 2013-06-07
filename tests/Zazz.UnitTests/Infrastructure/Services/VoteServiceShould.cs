@@ -155,6 +155,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void NotDoAnythingIfUserHasntVoted_OnAddPhotoVote()
+        {
+            //Arrange
+            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
+                .Returns(_photo);
+
+            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+                .Returns(false);
+
+            //Act
+            _sut.RemovePhotoVote(_photoId, _currentUserId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
         #endregion
     }
 }
