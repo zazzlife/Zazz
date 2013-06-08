@@ -67,7 +67,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult AppRegister(AppRegisterViewModel vm)
+        public ActionResult AppRegister(AppRegisterViewModel vm, long requestId, string token)
         {
             if (vm.RequestId == 0 || String.IsNullOrWhiteSpace(vm.Token))
                 throw new HttpException(400, "bad request");
@@ -86,11 +86,13 @@ namespace Zazz.Web.Controllers
                     var user = _objectMapper.RegisterVmToUser(vm);
                     user.IsConfirmed = false;
 
-
                     _authService.Register(user, vm.Password, true);
 
                     var queryString = String.Format("?requestId={0}&userId={1}", vm.RequestId, user.Id);
-                    var sign = _cryptoService.GenerateTextSignature(queryString);
+                    var sign = BitConverter.ToString(
+                        Convert.FromBase64String(
+                            _cryptoService.GenerateTextSignature(queryString)))
+                                           .Replace("-", "");
 
                     var redirectUrl = "/account/appauthsuccess" + queryString + "&sign=" + sign;
                     return Redirect(redirectUrl);
@@ -120,7 +122,11 @@ namespace Zazz.Web.Controllers
         public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
         {
             var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
-            var signCheck = _cryptoService.GenerateTextSignature(queryString);
+            var signCheck = BitConverter.ToString(
+                        Convert.FromBase64String(
+                            _cryptoService.GenerateTextSignature(queryString)))
+                                           .Replace("-", "");
+
             if (signCheck != sign)
                 throw new HttpException(403, "Forbidden");
 
