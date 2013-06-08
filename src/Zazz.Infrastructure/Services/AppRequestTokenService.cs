@@ -18,6 +18,9 @@ namespace Zazz.Infrastructure.Services
 
         public AppRequestToken Create(int appId)
         {
+            if (appId == 0)
+                throw new ArgumentOutOfRangeException("appId");
+
             const int KEY_SIZE = 128; //bits
             var token = new AppRequestToken
                         {

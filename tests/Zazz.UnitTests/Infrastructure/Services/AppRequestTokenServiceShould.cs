@@ -30,6 +30,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfAppIdIsInvalid_OnCreate()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.Create(0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void CreateANewTokenAndItShouldExpireIn1Hour_OnCreate()
         {
             //Arrange
