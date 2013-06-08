@@ -26,10 +26,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.Throws<ArgumentNullException>(() => _sut.GenerateTextSignature(text));
         }
 
-        [TestCase("Soroush", "x4v5bzGTqggKFVTAlBozEtUJti4=")]
-        [TestCase("Test", "zd2pYSnfXScOSWlsdysp5sX5Syw=")]
-        [TestCase(" ", "nfzzCf8ZkNUO0sXYCSzYvPfQxLU=")]
-        [TestCase("TEST", "gytI6IQGRv1YkY7epefn3Ju6BRs=")]
+        [TestCase("Soroush", "7OE6RcIOCmW40uBFm2kxApukqIecGoCpvTJbuvXIurPJfhmpFqf2lfOied9s1qGmlEV1seRshlClOQ5bsaqHyA==")]
+        [TestCase("Test", "yK4PaQEVZW3Q7R0euTF58SLyqRzvIwBGiGXQrLGldKr+jiwH+OQEMHEvRFiTvRQVdDeBYaTvDNGOFsqnI+fbyw==")]
+        [TestCase(" ", "r/3KyUDRoVbdB+1wFawJbRybF5MFxx0+H0cG4tbISXlJiTf7Ec1zKHx0/Ub+8mqxA9RxV9eFgZkKfu+aZuRE0A==")]
+        [TestCase("TEST", "kaQJskDvERcIaiC+9RKr1vkdv/7H/ctRYR/YeCdyVBnX2OR0swPwLOqNuwro0iao3UfsTfH64/BnSl1hZ2SWWQ==")]
         public void GenerateExpectedValues_OnGenerateTextSignature(string text, string expected)
         {
             //Act
