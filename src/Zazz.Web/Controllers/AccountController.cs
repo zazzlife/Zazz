@@ -125,7 +125,8 @@ namespace Zazz.Web.Controllers
             var request = _appRequestTokenService.Get(requestId);
             var app = _appRepository.GetById(request.AppId);
 
-            var userPass = UserService.GetUserPassword(userId);
+            var user = UserService.GetUser(userId);
+            var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
             var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
 
             var displayName = UserService.GetUserDisplayName(userId);
@@ -138,6 +139,7 @@ namespace Zazz.Web.Controllers
                 new
                 {
                     userId,
+                    accountType = user.AccountType,
                     passwordSignature,
                     displayName,
                     displayPhoto
