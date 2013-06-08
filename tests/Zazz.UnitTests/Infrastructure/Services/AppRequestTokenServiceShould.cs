@@ -47,7 +47,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var token = "token";
             var tokenBuffer = Encoding.UTF8.GetBytes(token);
 
-            _cryptoService.Setup(x => x.GenerateKey(128, false))
+            _cryptoService.Setup(x => x.GenerateKey(64 * 8, false))
                           .Returns(tokenBuffer);
 
             _uow.Setup(x => x.AppRequestTokenRepository
