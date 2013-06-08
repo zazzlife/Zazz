@@ -24,6 +24,7 @@ namespace Zazz.Core.Interfaces
         IWeeklyRepository WeeklyRepository { get; }
         IPhotoVoteRepository PhotoVoteRepository { get; }
         IUserReceivedVotesRepository UserReceivedVotesRepository { get; }
+        IAppRequestTokenRepository AppRequestTokenRepository { get; }
 
         void SaveChanges();
     }

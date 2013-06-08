@@ -143,6 +143,12 @@ namespace Zazz.Data
             }
         }
 
+        private IAppRequestTokenRepository _appRequestTokenRepository;
+        public IAppRequestTokenRepository AppRequestTokenRepository
+        {
+            get { return _appRequestTokenRepository ?? (new AppRequestTokenRepository(GetContext())); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)
