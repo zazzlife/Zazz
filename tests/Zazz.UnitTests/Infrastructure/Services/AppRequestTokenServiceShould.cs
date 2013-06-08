@@ -119,5 +119,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfRequestIdIsInvalid_OnRemove()
+        {
+            //Arrange
+            var requestId = 0L;
+
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.Remove(requestId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CallRemoveOnRepoAndSave_OnRemove()
+        {
+            //Arrange
+            var requestId = 143223L;
+            _uow.Setup(x => x.AppRequestTokenRepository.Remove(requestId));
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.Remove(requestId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }

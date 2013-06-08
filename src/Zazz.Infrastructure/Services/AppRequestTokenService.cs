@@ -49,7 +49,11 @@ namespace Zazz.Infrastructure.Services
 
         public void Remove(long requestId)
         {
-            throw new System.NotImplementedException();
+            if (requestId == 0)
+                throw new ArgumentOutOfRangeException("requestId");
+
+            _uow.AppRequestTokenRepository.Remove(requestId);
+            _uow.SaveChanges();
         }
     }
 }
