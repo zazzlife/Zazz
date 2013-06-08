@@ -2,6 +2,7 @@
 using System.Text;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
@@ -50,6 +51,61 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.Create(_appId);
 
             //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfRequestIdIsInvalid_OnGet()
+        {
+            //Arrange
+            var requestId = 0L;
+
+            //Act
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.Get(requestId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundIfRequestWasNotFound_OnGet()
+        {
+            //Arrange
+            var requestId = 44444L;
+            _uow.Setup(x => x.AppRequestTokenRepository.GetById(requestId))
+                .Returns(() => null);
+
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.Get(requestId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnToken_OnGet()
+        {
+            //Arrange
+            var requestId = 44444L;
+            var token = new AppRequestToken
+                        {
+                            AppId = _appId,
+                            ExpirationTime = DateTime.UtcNow.AddDays(1),
+                            Id = requestId,
+                            Token = new byte[1]
+                        };
+
+            _uow.Setup(x => x.AppRequestTokenRepository.GetById(requestId))
+                .Returns(token);
+
+
+            //Act
+            var result = _sut.Get(requestId);
+
+            //Assert
+            Assert.AreSame(token, result);
+
             _mockRepo.VerifyAll();
         }
     }

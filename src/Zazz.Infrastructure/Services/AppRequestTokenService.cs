@@ -1,4 +1,5 @@
 ﻿using System;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -31,12 +32,19 @@ namespace Zazz.Infrastructure.Services
             return token;
         }
 
-        public AppRequestToken Get(int requestId)
+        public AppRequestToken Get(long requestId)
         {
-            throw new System.NotImplementedException();
+            if (requestId == 0)
+                throw new ArgumentOutOfRangeException("requestId");
+
+            var token = _uow.AppRequestTokenRepository.GetById(requestId);
+            if (token == null)
+                throw new NotFoundException();
+
+            return token;
         }
 
-        public void Remove(int requestId)
+        public void Remove(long requestId)
         {
             throw new System.NotImplementedException();
         }

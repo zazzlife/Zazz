@@ -6,8 +6,8 @@ namespace Zazz.Core.Interfaces
     {
         AppRequestToken Create(int appId);
 
-        AppRequestToken Get(int requestId);
+        AppRequestToken Get(long requestId);
 
-        void Remove(int requestId);
+        void Remove(long requestId);
     }
 }
