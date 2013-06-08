@@ -95,6 +95,7 @@
     <Compile Include="Infrastructure\ErrorHandlerShould.cs" />
     <Compile Include="Infrastructure\Helpers\StringHelperShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\AppRequestTokenServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CacheServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CommentServiceShould.cs" />

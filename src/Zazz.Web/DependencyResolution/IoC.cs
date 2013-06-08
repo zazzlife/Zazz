@@ -82,6 +82,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ITagService>().Use<TagService>();
                             x.For<IWeeklyService>().Use<WeeklyService>();
                             x.For<IVoteService>().Use<VoteService>();
+                            x.For<IAppRequestTokenService>().Use<AppRequestTokenService>();
 
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory)

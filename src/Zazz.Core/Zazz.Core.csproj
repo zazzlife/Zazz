@@ -75,6 +75,7 @@
     <Compile Include="Interfaces\IAlbumRepository.cs" />
     <Compile Include="Interfaces\IApiAppRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenRepository.cs" />
+    <Compile Include="Interfaces\IAppRequestTokenService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
     <Compile Include="Interfaces\ICacheService.cs" />
     <Compile Include="Interfaces\ICacheSystem.cs" />
