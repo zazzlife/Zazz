@@ -133,6 +133,7 @@
     <Compile Include="Models\Data\DTOs\AlbumWithThumbnailDTO.cs" />
     <Compile Include="Models\Data\DTOs\PhotoMinimalDTO.cs" />
     <Compile Include="Models\Data\Enums\AccountType.cs" />
+    <Compile Include="Models\Data\Enums\AppTokenType.cs" />
     <Compile Include="Models\Data\Enums\ClubType.cs" />
     <Compile Include="Models\Data\Enums\CommentType.cs" />
     <Compile Include="Models\Data\Enums\FeedType.cs" />

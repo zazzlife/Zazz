@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -34,7 +35,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.Create(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.Create(0, AppTokenType.Register));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -52,6 +53,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.AppRequestTokenRepository
                              .InsertGraph(It.Is<AppRequestToken>(a => a.AppId == _appId &&
+                                                                      a.TokenType == AppTokenType.Register &&
                                                                       a.ExpirationTime > DateTime.UtcNow &&
                                                                       a.ExpirationTime < DateTime.UtcNow.AddHours(2) &&
                                                                       a.Token.Equals(tokenBuffer))));
@@ -59,7 +61,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            var result = _sut.Create(_appId);
+            var result = _sut.Create(_appId, AppTokenType.Register);
 
             //Assert
             _mockRepo.VerifyAll();

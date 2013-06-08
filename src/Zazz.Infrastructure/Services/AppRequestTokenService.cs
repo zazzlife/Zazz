@@ -2,6 +2,7 @@
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -16,7 +17,7 @@ namespace Zazz.Infrastructure.Services
             _cryptoService = cryptoService;
         }
 
-        public AppRequestToken Create(int appId)
+        public AppRequestToken Create(int appId, AppTokenType tokenType)
         {
             if (appId == 0)
                 throw new ArgumentOutOfRangeException("appId");
@@ -25,6 +26,7 @@ namespace Zazz.Infrastructure.Services
             var token = new AppRequestToken
                         {
                             AppId = appId,
+                            TokenType = tokenType,
                             ExpirationTime = DateTime.UtcNow.AddHours(1),
                             Token = _cryptoService.GenerateKey(KEY_SIZE)
                         };

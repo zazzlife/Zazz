@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
@@ -29,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
             if (!Int32.TryParse(authSegments[0], out appId))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var token = _appRequestTokenService.Create(appId);
+            var token = _appRequestTokenService.Create(appId, AppTokenType.Register);
             return new ApiAppToken
                    {
                        ExpirationTime = token.ExpirationTime,

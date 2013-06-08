@@ -152,7 +152,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME,
                                                                                         CreateRequestSignature());
 
-            _appRequestTokenService.Setup(x => x.Create(_app.Id))
+            _appRequestTokenService.Setup(x => x.Create(_app.Id, AppTokenType.Register))
                                    .Returns(token);
 
             //Act
