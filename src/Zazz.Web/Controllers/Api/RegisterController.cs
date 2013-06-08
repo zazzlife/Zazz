@@ -13,12 +13,10 @@ namespace Zazz.Web.Controllers.Api
     public class RegisterController : ApiController
     {
         private readonly IAppRequestTokenService _appRequestTokenService;
-        private readonly IApiAppRepository _appRepository;
 
-        public RegisterController(IAppRequestTokenService appRequestTokenService, IApiAppRepository appRepository)
+        public RegisterController(IAppRequestTokenService appRequestTokenService)
         {
             _appRequestTokenService = appRequestTokenService;
-            _appRepository = appRepository;
         }
 
         [HMACAuthorize(true)]
