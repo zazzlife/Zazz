@@ -13,16 +13,31 @@ namespace Zazz.Web.Controllers.Api
     public class RegisterController : ApiController
     {
         private readonly IAppRequestTokenService _appRequestTokenService;
+        private readonly IApiAppRepository _appRepository;
 
-        public RegisterController(IAppRequestTokenService appRequestTokenService)
+        public RegisterController(IAppRequestTokenService appRequestTokenService, IApiAppRepository appRepository)
         {
             _appRequestTokenService = appRequestTokenService;
+            _appRepository = appRepository;
         }
 
         [HMACAuthorize(true)]
         public ApiAppToken Get()
         {
-            throw new NotImplementedException();
+            var authHeader = Request.Headers.Authorization.Parameter;
+            var authSegments = authHeader.Split(':');
+            int appId;
+
+            if (!Int32.TryParse(authSegments[0], out appId))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var token = _appRequestTokenService.Create(appId);
+            return new ApiAppToken
+                   {
+                       ExpirationTime = token.ExpirationTime,
+                       RequestId = token.Id,
+                       Token = BitConverter.ToString(token.Token).Replace("-", "")
+                   };
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private MockRepository _mockRepo;
         private Mock<IUserService> _userService;
         private Mock<IApiAppRepository> _appRepo;
-        private ApiApp _testApp;
+        private ApiApp _app;
         private CryptoService _cryptoService;
         private Mock<IPhotoService> _photoService;
         private Mock<IAppRequestTokenService> _appRequestTokenService;
@@ -40,7 +40,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [SetUp]
         public void Init()
         {
-            _testApp = Mother.GetApiApp();
+            _app = Mother.GetApiApp();
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _userService = _mockRepo.Create<IUserService>();
@@ -87,8 +87,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                _registerUrl + "\n";
 
             var utf8Buffer = Encoding.UTF8.GetBytes(stringToSign);
-            var signature = _cryptoService.GenerateHMACSHA512Hash(utf8Buffer, _testApp.RequestSigningKey);
-            return String.Format("{0}:{1}", _testApp.Id, signature);
+            var signature = _cryptoService.GenerateHMACSHA512Hash(utf8Buffer, _app.RequestSigningKey);
+            return String.Format("{0}:{1}", _app.Id, signature);
         }
 
         [Test]
@@ -133,5 +133,36 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task CreateATokenAndReturnIt()
+        {
+            //Arrange
+            _appRepo.Setup(x => x.GetById(_app.Id))
+                    .Returns(_app);
+
+            var token = new AppRequestToken
+                        {
+                            AppId = _app.Id,
+                            ExpirationTime = DateTime.UtcNow.AddHours(1),
+                            Id = 44,
+                            Token = Encoding.UTF8.GetBytes("token")
+                        };
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME,
+                                                                                        CreateRequestSignature());
+
+            _appRequestTokenService.Setup(x => x.Create(_app.Id))
+                                   .Returns(token);
+
+            //Act
+            var response = await _client.GetAsync(_registerUrl);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }
