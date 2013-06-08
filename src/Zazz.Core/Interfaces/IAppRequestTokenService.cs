@@ -9,5 +9,6 @@ namespace Zazz.Core.Interfaces
         AppRequestToken Get(long requestId);
 
         void Remove(long requestId);
+        void Remove(AppRequestToken request);
     }
 }

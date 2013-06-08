@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using System.Web;
@@ -16,6 +17,7 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;
 
@@ -27,16 +29,21 @@ namespace Zazz.Web.Controllers
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
         private readonly IAppRequestTokenService _appRequestTokenService;
+        private readonly IObjectMapper _objectMapper;
+        private readonly IApiAppRepository _appRepository;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService) 
+            IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
+            IObjectMapper objectMapper, IApiAppRepository appRepository) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
             _appRequestTokenService = appRequestTokenService;
+            _objectMapper = objectMapper;
+            _appRepository = appRepository;
         }
 
         #region AppRegister
@@ -62,7 +69,81 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult AppRegister(AppRegisterViewModel vm)
         {
-            return View();
+            if (vm.RequestId == 0 || String.IsNullOrWhiteSpace(vm.Token))
+                throw new HttpException(400, "bad request");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var requestToken = _appRequestTokenService.Get(vm.RequestId);
+                    var t = BitConverter.ToString(requestToken.Token).Replace("-", "");
+
+                    if (requestToken.ExpirationTime < DateTime.UtcNow ||
+                        !t.Equals(vm.Token, StringComparison.InvariantCultureIgnoreCase))
+                        throw new HttpException(403, "Forbidden");
+
+                    var user = _objectMapper.RegisterVmToUser(vm);
+                    user.IsConfirmed = false;
+
+
+                    _authService.Register(user, vm.Password, true);
+
+                    var queryString = String.Format("?requestId={0}&userId={1}", vm.RequestId, user.Id);
+                    var sign = _cryptoService.GenerateTextSignature(queryString);
+
+                    var redirectUrl = "/account/appauthsuccess" + queryString + "&sign=" + sign;
+                    return Redirect(redirectUrl);
+
+                }
+                catch (UsernameExistsException)
+                {
+                    ShowAlert("Username is already exists.", AlertType.Warning);
+                }
+                catch (EmailExistsException)
+                {
+                    ShowAlert("This email address has registered before. Please login.", AlertType.Warning);
+                }
+                catch (NotFoundException)
+                {
+                    throw new HttpException(403, "Forbidden");
+                }
+            }
+
+            vm.Schools = _staticData.GetSchools();
+            vm.Cities = _staticData.GetCities();
+            vm.Majors = _staticData.GetMajors();
+            
+            return View(vm);
+        }
+
+        public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
+        {
+            var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
+            var signCheck = _cryptoService.GenerateTextSignature(queryString);
+            if (signCheck != sign)
+                throw new HttpException(403, "Forbidden");
+
+            var request = _appRequestTokenService.Get(requestId);
+            var app = _appRepository.GetById(request.AppId);
+
+            var userPass = UserService.GetUserPassword(userId);
+            var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
+
+            var displayName = UserService.GetUserDisplayName(userId);
+            var displayPhoto = PhotoService.GetUserImageUrl(userId);
+            
+
+            _appRequestTokenService.Remove(request);
+
+            return new JsonNetResult(
+                new
+                {
+                    userId,
+                    passwordSignature,
+                    displayName,
+                    displayPhoto
+                });
         }
 
         #endregion
@@ -135,44 +216,8 @@ namespace Zazz.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new User
-                               {
-                                   Email = registerVm.Email,
-                                   IsConfirmed = false,
-                                   LastActivity = DateTime.UtcNow,
-                                   Username = registerVm.UserName,
-                                   AccountType = registerVm.AccountType,
-                                   JoinedDate = DateTime.UtcNow,
-                                   Preferences = new UserPreferences
-                                                 {
-                                                     SendSyncErrorNotifications = true,
-                                                     SyncFbEvents = true,
-                                                     SyncFbImages = registerVm.AccountType == AccountType.Club,
-                                                     SyncFbPosts = registerVm.AccountType == AccountType.Club
-                                                 }
-                               };
-
-                if (registerVm.AccountType == AccountType.Club)
-                {
-                    user.ClubDetail = new ClubDetail
-                                      {
-                                          ClubName = registerVm.ClubName,
-                                          Address = registerVm.ClubAddress,
-                                          ClubType = registerVm.ClubType,
-                                      };
-                }
-                else
-                {
-                    user.UserDetail = new UserDetail
-                                      {
-                                          Gender = registerVm.Gender,
-                                          PublicEmail = registerVm.PublicEmail,
-                                          SchoolId = registerVm.SchoolId,
-                                          FullName = registerVm.FullName,
-                                          MajorId = registerVm.MajorId,
-                                          CityId = registerVm.CityId,
-                                      };
-                }
+                var user = _objectMapper.RegisterVmToUser(registerVm);
+                user.IsConfirmed = false;
 
                 try
                 {
@@ -396,44 +441,8 @@ namespace Zazz.Web.Controllers
 
                 var oauthData = JsonConvert.DeserializeObject<OAuthLoginResponse>(registerVm.OAuthProvidedData);
 
-                var user = new User
-                           {
-                               Email = registerVm.Email,
-                               IsConfirmed = true,
-                               LastActivity = DateTime.UtcNow,
-                               Username = registerVm.UserName,
-                               AccountType = registerVm.AccountType,
-                               JoinedDate = DateTime.UtcNow,
-                               Preferences = new UserPreferences
-                                             {
-                                                 SendSyncErrorNotifications = true,
-                                                 SyncFbEvents = true,
-                                                 SyncFbImages = registerVm.AccountType == AccountType.Club,
-                                                 SyncFbPosts = registerVm.AccountType == AccountType.Club
-                                             }
-                           };
-
-                if (registerVm.AccountType == AccountType.Club)
-                {
-                    user.ClubDetail = new ClubDetail
-                                      {
-                                          ClubName = registerVm.ClubName,
-                                          Address = registerVm.ClubAddress,
-                                          ClubType = registerVm.ClubType,
-                                      };
-                }
-                else
-                {
-                    user.UserDetail = new UserDetail
-                                      {
-                                          Gender = registerVm.Gender,
-                                          PublicEmail = registerVm.PublicEmail,
-                                          SchoolId = registerVm.SchoolId,
-                                          FullName = registerVm.FullName,
-                                          MajorId = registerVm.MajorId,
-                                          CityId = registerVm.CityId
-                                      };
-                }
+                var user = _objectMapper.RegisterVmToUser(registerVm);
+                user.IsConfirmed = true;
 
                 user.LinkedAccounts = new List<OAuthAccount>
                                           {

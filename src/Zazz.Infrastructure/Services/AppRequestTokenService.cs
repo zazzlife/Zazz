@@ -55,5 +55,11 @@ namespace Zazz.Infrastructure.Services
             _uow.AppRequestTokenRepository.Remove(requestId);
             _uow.SaveChanges();
         }
+
+        public void Remove(AppRequestToken request)
+        {
+            _uow.AppRequestTokenRepository.Remove(request);
+            _uow.SaveChanges();
+        }
     }
 }
