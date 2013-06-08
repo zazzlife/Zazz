@@ -108,6 +108,19 @@ namespace Zazz.Infrastructure.Services
             return GenerateHMACSHA512Hash(textBuffer, _randomSignHashSecretBuffer);
         }
 
+        public string GenerateHexTextSignature(string clearText)
+        {
+            if (String.IsNullOrEmpty(clearText))
+                throw new ArgumentNullException("clearText");
+
+            var textBuffer = Encoding.UTF8.GetBytes(clearText);
+            using (var hmacsha512 = new HMACSHA512(_randomSignHashSecretBuffer))
+            {
+                var hash = hmacsha512.ComputeHash(textBuffer);
+                return BitConverter.ToString(hash).Replace("-", "");
+            }
+        }
+
         public string GenerateQRCodeToken(byte[] userPassword)
         {
             using (var sha1 = new HMACSHA1(_qrCodeKeyBuffer))

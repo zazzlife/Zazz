@@ -89,10 +89,7 @@ namespace Zazz.Web.Controllers
                     _authService.Register(user, vm.Password, true);
 
                     var queryString = String.Format("?requestId={0}&userId={1}", vm.RequestId, user.Id);
-                    var sign = BitConverter.ToString(
-                        Convert.FromBase64String(
-                            _cryptoService.GenerateTextSignature(queryString)))
-                                           .Replace("-", "");
+                    var sign = _cryptoService.GenerateHexTextSignature(queryString);
 
                     var redirectUrl = "/account/appauthsuccess" + queryString + "&sign=" + sign;
                     return Redirect(redirectUrl);
@@ -122,10 +119,7 @@ namespace Zazz.Web.Controllers
         public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
         {
             var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
-            var signCheck = BitConverter.ToString(
-                        Convert.FromBase64String(
-                            _cryptoService.GenerateTextSignature(queryString)))
-                                           .Replace("-", "");
+            var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
 
             if (signCheck != sign)
                 throw new HttpException(403, "Forbidden");
