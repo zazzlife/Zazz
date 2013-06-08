@@ -219,7 +219,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
-    <Compile Include="Controllers\Api\ApiAppToken.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
     <Compile Include="Controllers\Api\CommentsController.cs" />
@@ -272,6 +271,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
+    <Compile Include="Models\Api\ApiAppToken.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />
     <Compile Include="Models\Api\ApiEvent.cs" />
     <Compile Include="Models\Api\ApiFeed.cs" />
