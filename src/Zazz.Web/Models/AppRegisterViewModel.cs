@@ -6,9 +6,9 @@ namespace Zazz.Web.Models
     public class AppRegisterViewModel : RegisterViewModel
     {
         [HiddenInput]
-        public string App { get; set; }
+        public long RequestId { get; set; }
 
         [HiddenInput]
-        public string AppSignature { get; set; }
+        public string Token { get; set; }
     }
 }

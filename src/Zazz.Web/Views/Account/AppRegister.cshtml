@@ -16,8 +16,8 @@
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-            @Html.HiddenFor(m => m.App)
-            @Html.HiddenFor(m => m.AppSignature)
+            @Html.HiddenFor(m => m.RequestId)
+            @Html.HiddenFor(m => m.Token)
             <fieldset>
                 <legend>Register</legend>
                 @if (TempData["alert"] != null && ((bool)TempData["alert"]))

@@ -26,34 +26,34 @@ namespace Zazz.Web.Controllers
         private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
+        private readonly IAppRequestTokenService _appRequestTokenService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper) 
+            IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
+            _appRequestTokenService = appRequestTokenService;
         }
 
         #region AppRegister
 
         [HttpGet]
-        public ActionResult AppRegister()
+        public ActionResult AppRegister(long requestId, string token)
         {
-            throw new NotImplementedException();
-
-            var authHeader = Request.Headers["Authorization"];
-            var appId = authHeader.Substring(8, authHeader.IndexOf(':') - 8);
+            if (requestId == 0 || String.IsNullOrWhiteSpace(token))
+                throw new HttpException(400, "bad request");
 
             var vm = new AppRegisterViewModel
                      {
-                         App = appId,
-                         AppSignature = _cryptoService.GenerateTextSignature(appId),
+                         RequestId = requestId,
+                         Token = token,
                          Schools = _staticData.GetSchools(),
                          Cities = _staticData.GetCities(),
-                         Majors = _staticData.GetMajors()
+                         Majors = _staticData.GetMajors(),
                      };
 
             return View(vm);
