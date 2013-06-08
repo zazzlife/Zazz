@@ -280,7 +280,6 @@
     <Compile Include="Models\Api\ApiFollowRequest.cs" />
     <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
-    <Compile Include="Models\AppRegisterViewModel.cs" />
     <Compile Include="Models\Api\Login.cs" />
     <Compile Include="Models\Api\ApiPhoto.cs" />
     <Compile Include="Models\Api\ApiPost.cs" />
@@ -579,7 +578,6 @@
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
-    <Content Include="Views\Account\AppRegister.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

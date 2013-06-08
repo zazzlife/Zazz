@@ -54,33 +54,31 @@ namespace Zazz.Web.Controllers
             if (requestId == 0 || String.IsNullOrWhiteSpace(token))
                 throw new HttpException(400, "bad request");
 
-            var vm = new AppRegisterViewModel
+            var vm = new RegisterViewModel
                      {
-                         RequestId = requestId,
-                         Token = token,
                          Schools = _staticData.GetSchools(),
                          Cities = _staticData.GetCities(),
                          Majors = _staticData.GetMajors(),
                      };
 
-            return View(vm);
+            return View("Register", vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult AppRegister(AppRegisterViewModel vm, long requestId, string token)
+        public ActionResult AppRegister(RegisterViewModel vm, long requestId, string token)
         {
-            if (vm.RequestId == 0 || String.IsNullOrWhiteSpace(vm.Token))
+            if (requestId == 0 || String.IsNullOrWhiteSpace(token))
                 throw new HttpException(400, "bad request");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var requestToken = _appRequestTokenService.Get(vm.RequestId);
+                    var requestToken = _appRequestTokenService.Get(requestId);
                     var t = BitConverter.ToString(requestToken.Token).Replace("-", "");
 
                     if (requestToken.ExpirationTime < DateTime.UtcNow ||
-                        !t.Equals(vm.Token, StringComparison.InvariantCultureIgnoreCase))
+                        !t.Equals(token, StringComparison.InvariantCultureIgnoreCase))
                         throw new HttpException(403, "Forbidden");
 
                     var user = _objectMapper.RegisterVmToUser(vm);
@@ -88,7 +86,7 @@ namespace Zazz.Web.Controllers
 
                     _authService.Register(user, vm.Password, true);
 
-                    var queryString = String.Format("?requestId={0}&userId={1}", vm.RequestId, user.Id);
+                    var queryString = String.Format("?requestId={0}&userId={1}", requestId, user.Id);
                     var sign = _cryptoService.GenerateHexTextSignature(queryString);
 
                     var redirectUrl = "/account/appauthsuccess" + queryString + "&sign=" + sign;
@@ -112,8 +110,8 @@ namespace Zazz.Web.Controllers
             vm.Schools = _staticData.GetSchools();
             vm.Cities = _staticData.GetCities();
             vm.Majors = _staticData.GetMajors();
-            
-            return View(vm);
+
+            return View("Register", vm);
         }
 
         public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
