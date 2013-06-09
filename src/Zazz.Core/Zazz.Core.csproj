@@ -176,6 +176,7 @@
     <Compile Include="Models\Data\UserValidationToken.cs" />
     <Compile Include="Models\Facebook\FbComment.cs" />
     <Compile Include="Models\Facebook\FbEvent.cs" />
+    <Compile Include="Models\Facebook\FbFriend.cs" />
     <Compile Include="Models\Facebook\FbPage.cs" />
     <Compile Include="Models\Facebook\FbPageChangedFields.cs" />
     <Compile Include="Models\Facebook\FbPageChangedFieldValue.cs" />
