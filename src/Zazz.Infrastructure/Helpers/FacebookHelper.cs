@@ -235,6 +235,8 @@ namespace Zazz.Infrastructure.Helpers
 
         public IEnumerable<FbFriend> GetFriends(string accessToken)
         {
+            _client.AccessToken = accessToken;
+
             const string TABLE = "user";
             const string FIELDS = "uid, name, pic";
             const string WHERE = "can_message = 1 AND uid in (SELECT uid2 FROM friend WHERE uid1 = me())";
