@@ -233,6 +233,32 @@ namespace Zazz.Infrastructure.Helpers
             return photos;
         }
 
+        public IEnumerable<FbFriend> GetFriends(string accessToken)
+        {
+            const string TABLE = "user";
+            const string FIELDS = "uid, name, pic";
+            const string WHERE = "can_message = 1 AND uid in (SELECT uid2 FROM friend WHERE uid1 = me())";
+            var query = GenerateFql(FIELDS, TABLE, WHERE);
+
+            dynamic result = _client.Get("fql", new { q = query });
+
+            var friends = new List<FbFriend>();
+
+            foreach (var f in result.data)
+            {
+                var friend = new FbFriend
+                             {
+                                 Id = f.uid,
+                                 Name = f.name,
+                                 Photo = f.pic
+                             };
+
+                friends.Add(friend);
+            }
+
+            return friends;
+        }
+
         public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
         {
             var e = new ZazzEvent

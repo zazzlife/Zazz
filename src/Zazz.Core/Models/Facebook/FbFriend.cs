@@ -13,8 +13,5 @@ namespace Zazz.Core.Models.Facebook
 
         [DataMember(Name = "pic")]
         public string Photo { get; set; }
-
-        [DataMember(Name = "can_message")]
-        public bool CanMessage { get; set; }
     }
 }
