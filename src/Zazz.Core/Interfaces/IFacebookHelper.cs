@@ -33,7 +33,9 @@ namespace Zazz.Core.Interfaces
         IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit);
 
         IEnumerable<FbFriend> GetFriends(string accessToken);
-            
+
+        Task SendAppInviteRequests(IEnumerable<long> users, string appId, string appSecret, string message);
+
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
     }
 }

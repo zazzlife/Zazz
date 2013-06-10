@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Facebook;
 using Microsoft.CSharp.RuntimeBinder;
 using Zazz.Core.Interfaces;
@@ -223,8 +225,8 @@ namespace Zazz.Infrastructure.Helpers
                                 Description = p.caption,
                                 Id = p.pid,
                                 Source = p.images[0].source,
-                                Width = (int) p.images[0].width,
-                                Height = (int) p.images[0].height
+                                Width = (int)p.images[0].width,
+                                Height = (int)p.images[0].height
                             };
 
                 photos.Add(photo);
@@ -239,7 +241,7 @@ namespace Zazz.Infrastructure.Helpers
 
             const string TABLE = "user";
             const string FIELDS = "uid, name, pic";
-            const string WHERE = "can_message = 1 AND uid in (SELECT uid2 FROM friend WHERE uid1 = me())";
+            const string WHERE = "uid in (SELECT uid2 FROM friend WHERE uid1 = me())";
             var query = GenerateFql(FIELDS, TABLE, WHERE);
 
             dynamic result = _client.Get("fql", new { q = query });
@@ -259,6 +261,29 @@ namespace Zazz.Infrastructure.Helpers
             }
 
             return friends;
+        }
+
+        public async Task SendAppInviteRequests(IEnumerable<long> users, string appId, string appSecret, string message)
+        {
+            //https://developers.facebook.com/docs/appsonfacebook/tutorial/
+
+            var appTokenUrl = String.Format("https://graph.facebook.com/oauth/access_token?client_id={0}&client_secret={1}&grant_type=client_credentials", appId, appSecret);
+
+            string appTokenResponse;
+            using (var client = new HttpClient())
+                appTokenResponse = await client.GetStringAsync(appTokenUrl);
+
+            var responseSegments = appTokenResponse.Split('=');
+            var token = responseSegments[1];
+
+            _client.AccessToken = token;
+
+            //The data parameter is a string that the app can use to store any relevant data in order to process the request.
+            const string DATA = "";
+            
+            var ids = String.Join(",", users);
+            
+            _client.Post("apprequests", new { ids, message, data = DATA });
         }
 
         public ZazzEvent FbEventToZazzEvent(FbEvent fbEvent)
