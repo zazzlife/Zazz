@@ -101,47 +101,13 @@ namespace Zazz.Web.Controllers
 
         public JsonNetResult Search(string q)
         {
-            var users = _uow.UserRepository.GetAll()
-                            .Where(u =>
-                                u.UserDetail.FullName.Contains(q) ||
-                                u.Username.Contains(q) ||
-                                u.ClubDetail.ClubName.Contains(q))
-                            .Select(u => new
-                                         {
-                                             id = u.Id,
-                                             username = u.Username,
-                                             fullname = u.UserDetail.FullName,
-                                             clubname = u.ClubDetail.ClubName
-                                         })
-                            .Take(5);
-
-            var response = new List<AutocompleteResponse>();
-
-            foreach (var u in users)
-            {
-                var autocompleteResponse = new AutocompleteResponse
-                          {
-                              Id = u.id,
-                              Img = PhotoService.GetUserImageUrl(u.id).VerySmallLink
-                          };
-
-                if (!String.IsNullOrEmpty(u.clubname) &&
-                    u.clubname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    autocompleteResponse.Value = u.clubname;
-                }
-                else if (!String.IsNullOrEmpty(u.fullname) &&
-                         u.fullname.IndexOf(q, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    autocompleteResponse.Value = u.fullname;
-                }
-                else
-                {
-                    autocompleteResponse.Value = u.username;
-                }
-
-                response.Add(autocompleteResponse);
-            }
+            var users = UserService.Search(q);
+            var response = users.Select(u => new AutocompleteResponse
+                                             {
+                                                 Id = u.UserId,
+                                                 Value = u.DisplayName,
+                                                 Img = u.DisplayPhoto.VerySmallLink
+                                             });
 
             return new JsonNetResult(response);
         }
