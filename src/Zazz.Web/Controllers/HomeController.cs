@@ -16,15 +16,14 @@ namespace Zazz.Web.Controllers
 {
     public class HomeController : UserPageLayoutBaseController
     {
-        private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
         private readonly IFeedHelper _feedHelper;
 
-        public HomeController(IUoW uow, IPhotoService photoService, IUserService userService,
+        public HomeController(IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) : base(userService, photoService, defaultImageHelper, tagService)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) :
+            base(userService, photoService, defaultImageHelper, tagService)
         {
-            _uow = uow;
             _staticDataRepository = staticDataRepository;
             _feedHelper = feedHelper;
         }
