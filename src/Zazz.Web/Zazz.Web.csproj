@@ -238,6 +238,7 @@
     <Compile Include="Controllers\Api\QRCodeController.cs" />
     <Compile Include="Controllers\Api\RegisterController.cs" />
     <Compile Include="Controllers\Api\SchoolsController.cs" />
+    <Compile Include="Controllers\Api\SearchController.cs" />
     <Compile Include="Controllers\Api\TaggedFeedsController.cs" />
     <Compile Include="Controllers\Api\TagsController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
