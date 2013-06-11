@@ -14,12 +14,14 @@ namespace Zazz.Infrastructure.Helpers
 {
     public class FacebookHelper : IFacebookHelper
     {
+        private readonly IKeyChain _keyChain;
         private const string EVENT_FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
         private const string EVENT_TABLE = "event";
         private readonly FacebookClient _client;
 
-        public FacebookHelper()
+        public FacebookHelper(IKeyChain keyChain)
         {
+            _keyChain = keyChain;
             _client = new FacebookClient();
         }
 
@@ -157,10 +159,10 @@ namespace Zazz.Infrastructure.Helpers
         public void LinkPage(string pageId, string accessToken)
         {
             _client.AccessToken = accessToken;
-            const string APP_ID = ApiKeys.FACEBOOK_APP_ID;
+            var appId = _keyChain.FACEBOOK_APP_ID;
             var path = String.Format("{0}/tabs", pageId);
 
-            var result = (bool)_client.Post(path, new { app_id = APP_ID });
+            var result = (bool)_client.Post(path, new { app_id = appId });
             if (!result)
                 throw new Exception("Link was not successful");
         }

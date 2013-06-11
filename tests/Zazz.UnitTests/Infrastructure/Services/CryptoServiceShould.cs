@@ -59,7 +59,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void GenerateExpectedValues_OnComputeSHA1SignedHash(string text, string expected)
         {
             //Act
-            var hash = _sut.GenerateSignedSHA1Hash(text, ApiKeys.FACEBOOK_API_SECRET);
+            var hash = _sut.GenerateSignedSHA1Hash(text, "56e97d3e73d03ac9be75d79d0d5e820d");
 
             //Assert
             Assert.AreEqual(expected, hash);

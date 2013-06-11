@@ -40,6 +40,10 @@ namespace Zazz.Web.DependencyResolution
             var websiteAddress = ConfigurationManager.AppSettings["WebsiteAddress"];
             var blobConnString = ConfigurationManager.AppSettings["BlobConnectionString"];
 
+            var facebookRealtimeToken = ConfigurationManager.AppSettings["FacebookRealtimeVerifyToken"];
+            var facebookAppId = ConfigurationManager.AppSettings["FacebookAppId"];
+            var facebookAppSecret = ConfigurationManager.AppSettings["FacebookAppSecret"];
+
             ObjectFactory.Initialize(x =>
                         {
                             x.Scan(scan =>
@@ -64,6 +68,11 @@ namespace Zazz.Web.DependencyResolution
                              .Use<AzureService>()
                              .Ctor<string>("storageConnString").Is(blobConnString);
 
+                            x.For<IKeyChain>().Singleton()
+                             .Use<KeyChain>()
+                             .Ctor<string>("facebookRealtimeToken").Is(facebookRealtimeToken)
+                             .Ctor<string>("facebookAppId").Is(facebookAppId)
+                             .Ctor<string>("facebookAppSecret").Is(facebookAppSecret);
 
                             x.For<IUoW>().HttpContextScoped().Use<UoW>();
 

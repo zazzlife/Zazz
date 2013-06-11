@@ -90,7 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiKeys.cs" />
+    <Compile Include="KeyChain.cs" />
     <Compile Include="CircularBufferCache.cs" />
     <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />

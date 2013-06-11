@@ -25,13 +25,16 @@ namespace Zazz.Web.Controllers
         private readonly IFacebookService _facebookService;
         private readonly IUoW _uow;
         private readonly IUserService _userService;
+        private readonly IKeyChain _keyChain;
 
-        public FacebookController(ICryptoService cryptoService, IFacebookService facebookService, IUoW uow, IUserService userService)
+        public FacebookController(ICryptoService cryptoService, IFacebookService facebookService,
+            IUoW uow, IUserService userService, IKeyChain keyChain)
         {
             _cryptoService = cryptoService;
             _facebookService = facebookService;
             _uow = uow;
             _userService = userService;
+            _keyChain = keyChain;
         }
 
         public async Task<string> Update()
@@ -48,7 +51,7 @@ namespace Zazz.Web.Controllers
             var providedSignature = Request.Headers["X-Hub-Signature"].Replace("sha1=", "");
             var signature = _cryptoService.GenerateSignedSHA1Hash(
                 clearText: body,
-                key: ApiKeys.FACEBOOK_API_SECRET);
+                key: _keyChain.FACEBOOK_API_SECRET);
 
             if (!providedSignature.Equals(signature, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityException();
@@ -74,7 +77,7 @@ namespace Zazz.Web.Controllers
             var challenge = Request.QueryString["hub.challenge"];
             var verifyToken = Request.QueryString["hub.verify_token"];
 
-            if (verifyToken != ApiKeys.FACEBOOK_REALTIME_VERIFY_TOKEN)
+            if (verifyToken != _keyChain.FACEBOOK_REALTIME_VERIFY_TOKEN)
                 throw new SecurityException();
 
             return challenge;
