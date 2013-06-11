@@ -18,6 +18,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private UserService _sut;
         private Mock<ICacheService> _cacheService;
         private Mock<ICryptoService> _cryptoService;
+        private Mock<IPhotoService> _photoService;
 
         [SetUp]
         public void Init()
@@ -25,7 +26,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cacheService = new Mock<ICacheService>();
             _cryptoService = new Mock<ICryptoService>(MockBehavior.Strict);
             _uow = new Mock<IUoW>(MockBehavior.Strict);
-            _sut = new UserService(_uow.Object, _cacheService.Object, _cryptoService.Object);
+            _photoService = new Mock<IPhotoService>(MockBehavior.Strict);
+            _sut = new UserService(_uow.Object, _cacheService.Object, _cryptoService.Object, _photoService.Object);
         }
 
         [Test]

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
@@ -16,6 +18,8 @@ namespace Zazz.Core.Interfaces
 
         User GetUser(int userId, bool includeDetails = false, bool includeClubDetails = false,
                      bool includeWeeklies = false, bool includePreferences = false);
+
+        IEnumerable<UserSearchResult> Search(string name);
 
         byte[] GetUserPassword(int userId);
 
