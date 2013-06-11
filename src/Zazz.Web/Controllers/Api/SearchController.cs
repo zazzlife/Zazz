@@ -24,7 +24,10 @@ namespace Zazz.Web.Controllers.Api
 
         public UserSearchResult Get(string query)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(query))
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            return null;
         }
     }
 }
