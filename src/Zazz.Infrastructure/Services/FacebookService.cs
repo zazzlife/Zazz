@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Security;
 using System.Threading.Tasks;
 using Facebook;
@@ -183,11 +184,10 @@ namespace Zazz.Infrastructure.Services
 
             var photos = _facebookHelper.GetPhotos(page.AccessToken, limit);
             foreach (var fbPhoto in photos)
-            {
+            {   
                 var dbPhoto = _uow.PhotoRepository.GetByFacebookId(fbPhoto.Id);
                 if (dbPhoto != null)
                 {
-                    dbPhoto.FacebookLink = fbPhoto.Source;
                     dbPhoto.Description = fbPhoto.Description;
                 }
                 else
@@ -214,14 +214,14 @@ namespace Zazz.Infrastructure.Services
                                     AlbumId = album.Id,
                                     Description = fbPhoto.Description,
                                     FacebookId = fbPhoto.Id,
-                                    FacebookLink = fbPhoto.Source,
                                     IsFacebookPhoto = true,
                                     UploadDate = fbPhoto.CreatedTime.UnixTimestampToDateTime(),
                                     UserId = page.UserId,
                                     PageId = page.Id
                                 };
-
-                    _photoService.SavePhoto(photo, Stream.Null, true);
+                    
+                    var photoStream = new HttpClient().GetStreamAsync(fbPhoto.Source).Result; //TODO: use async/await
+                    _photoService.SavePhoto(photo, photoStream, true);
                 }
             }
 
