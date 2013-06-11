@@ -195,6 +195,7 @@
     <Compile Include="Models\Data\TagStat.cs" />
     <Compile Include="Models\QRCodeModel.cs" />
     <Compile Include="Models\QRCodeType.cs" />
+    <Compile Include="Models\UserSearchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
