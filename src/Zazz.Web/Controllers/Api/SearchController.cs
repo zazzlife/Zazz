@@ -22,12 +22,12 @@ namespace Zazz.Web.Controllers.Api
 
         // GET /api/v1/search?query=
 
-        public UserSearchResult Get(string query)
+        public IEnumerable<UserSearchResult> Get(string query)
         {
             if (String.IsNullOrWhiteSpace(query))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return null;
+            return _userService.Search(query);
         }
     }
 }
