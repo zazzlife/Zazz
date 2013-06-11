@@ -97,9 +97,7 @@ namespace Zazz.Web
                        Description = photo.Description,
                        AlbumId = photo.AlbumId,
                        PhotoId = photo.Id,
-                       PhotoLinks = photo.IsFacebookPhoto
-                                        ? new PhotoLinks(photo.FacebookLink)
-                                        : _photoService.GeneratePhotoUrl(photo.UserId, photo.Id),
+                       PhotoLinks = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id),
                        UserId = photo.UserId,
                        UserDisplayName = _userService.GetUserDisplayName(photo.UserId),
                        UserDisplayPhoto = _photoService.GetUserImageUrl(photo.UserId)

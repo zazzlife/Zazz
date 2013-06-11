@@ -204,9 +204,7 @@ namespace Zazz.Web.Helpers
                         FromUserDisplayName = feedVm.UserDisplayName,
                         FromUserPhotoUrl = feedVm.UserImageUrl,
                         FromUserId = p.UserId,
-                        PhotoUrl = p.IsFacebookPhoto
-                                       ? new PhotoLinks(p.FacebookLink)
-                                       : _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                        PhotoUrl = _photoService.GeneratePhotoUrl(p.UserId, p.Id)
                     }).ToList();
 
                 feedVm.CommentsViewModel.CommentType = CommentType.Photo;

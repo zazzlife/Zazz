@@ -30,9 +30,6 @@ namespace Zazz.Core.Models.Data
         [MaxLength(4000)]
         public string FacebookId { get; set; }
 
-        [MaxLength(4000)]
-        public string FacebookLink { get; set; }
-
         public DateTime UploadDate { get; set; }
 
         [ForeignKey("PageId")]

@@ -60,8 +60,6 @@ namespace Zazz.Web.Controllers
                              {
                                  id = p.Id,
                                  userId = p.UserId,
-                                 isFromFb = p.IsFacebookPhoto,
-                                 fbUrl = p.FacebookLink,
                                  description = p.Description
                              })
                 .ToList();
@@ -70,9 +68,7 @@ namespace Zazz.Web.Controllers
                                               {
                                                   IsFromCurrentUser = p.userId == currentUserId,
                                                   PhotoId = p.id,
-                                                  PhotoUrl = p.isFromFb
-                                                                 ? new PhotoLinks(p.fbUrl)
-                                                                 : PhotoService.GeneratePhotoUrl(p.userId, p.id),
+                                                  PhotoUrl = PhotoService.GeneratePhotoUrl(p.userId, p.id),
                                                   FromUserId = id,
                                                   FromUserDisplayName = UserService.GetUserDisplayName(id),
                                                   PhotoDescription = p.description,
@@ -122,9 +118,7 @@ namespace Zazz.Web.Controllers
                     album.AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage();
                 else
                 {
-                    album.AlbumPicUrl = photo.IsFacebookPhoto
-                                            ? new PhotoLinks(photo.FacebookLink)
-                                            : PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id);
+                    album.AlbumPicUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id);
                 }
 
                 albumsVm.Add(album);
@@ -321,22 +315,18 @@ namespace Zazz.Web.Controllers
                 .Skip(skip)
                 .Take(PAGE_SIZE)
                 .Select(p => new
-                {
-                    id = p.Id,
-                    userId = p.UserId,
-                    isFromFb = p.IsFacebookPhoto,
-                    fbUrl = p.FacebookLink
-                })
+                             {
+                                 id = p.Id,
+                                 userId = p.UserId,
+                             })
                 .ToList();
 
             var photosVm = photos.Select(p => new PhotoViewModel
-            {
-                IsFromCurrentUser = p.userId == currentUserId,
-                PhotoId = p.id,
-                PhotoUrl = p.isFromFb
-                               ? new PhotoLinks(p.fbUrl)
-                               : PhotoService.GeneratePhotoUrl(p.userId, p.id)
-            })
+                                              {
+                                                  IsFromCurrentUser = p.userId == currentUserId,
+                                                  PhotoId = p.id,
+                                                  PhotoUrl = PhotoService.GeneratePhotoUrl(p.userId, p.id)
+                                              })
                                  .ToList();
 
 

@@ -374,16 +374,6 @@ namespace Zazz.Infrastructure.Services
                     var gender = _uow.UserRepository.GetUserGender(userId);
                     img = _defaultImageHelper.GetUserDefaultImage(gender);
                 }
-                else if (photo.IsFacebookPhoto)
-                {
-                    img = new PhotoLinks
-                          {
-                              OriginalLink = photo.FacebookPicUrl,
-                              MediumLink = photo.FacebookPicUrl,
-                              SmallLink = photo.FacebookPicUrl,
-                              VerySmallLink = photo.FacebookPicUrl
-                          };
-                }
                 else
                 {
                     img = GeneratePhotoUrl(photo.UserId, photo.Id);

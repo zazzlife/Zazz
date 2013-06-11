@@ -112,9 +112,7 @@ namespace Zazz.Web.Controllers
                                    IsFromCurrentUser = currentUserId == user.Id,
                                    PhotoDescription = p.Description,
                                    PhotoId = p.Id,
-                                   PhotoUrl = p.IsFacebookPhoto
-                                   ? new PhotoLinks(p.FacebookLink)
-                                   : PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                                   PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                                })
                            })
                      };
@@ -148,9 +146,7 @@ namespace Zazz.Web.Controllers
                              IsFromCurrentUser = currentUserId == user.Id,
                              PhotoDescription = p.Description,
                              PhotoId = p.Id,
-                             PhotoUrl = p.IsFacebookPhoto
-                             ? new PhotoLinks(p.FacebookLink)
-                             : PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                             PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                          }),
                          TagsStats = GetTagStats(),
                          City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,

@@ -48,9 +48,7 @@ namespace Zazz.Web.Controllers.Api
                                  UserId = a.UserId,
                                  Thumbnail = a.Photos.FirstOrDefault() == null
                                  ? _defaultImageHelper.GetDefaultAlbumImage()
-                                 : a.Photos.First().IsFacebookPhoto
-                                     ? new PhotoLinks(a.Photos.First().FacebookLink)
-                                     : _photoService.GeneratePhotoUrl(a.UserId, a.Photos.First().Id),
+                                 : _photoService.GeneratePhotoUrl(a.UserId, a.Photos.First().Id),
                                  Photos = a.Photos.Select(_objectMapper.PhotoToApiPhoto)
                              });
 
@@ -75,14 +73,7 @@ namespace Zazz.Web.Controllers.Api
             else
             {
                 var firstPhoto = album.Photos.First();
-                if (firstPhoto.IsFacebookPhoto)
-                {
-                    albumThumbnail = new PhotoLinks(firstPhoto.FacebookLink);
-                }
-                else
-                {
-                    albumThumbnail = _photoService.GeneratePhotoUrl(firstPhoto.UserId, firstPhoto.Id);
-                }
+                albumThumbnail = _photoService.GeneratePhotoUrl(firstPhoto.UserId, firstPhoto.Id);
             }
 
             return new ApiAlbum

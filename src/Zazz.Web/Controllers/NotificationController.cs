@@ -102,10 +102,7 @@ namespace Zazz.Web.Controllers
 
                         PhotoId = n.CommentNotification.Comment.PhotoComment.PhotoId,
 
-                        PhotoUrl = n.CommentNotification.Comment.PhotoComment.Photo.IsFacebookPhoto
-
-                        ? new PhotoLinks(n.CommentNotification.Comment.PhotoComment.Photo.FacebookLink)
-                        : PhotoService.GeneratePhotoUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId, n.CommentNotification.Comment.PhotoComment.PhotoId)
+                        PhotoUrl = PhotoService.GeneratePhotoUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId, n.CommentNotification.Comment.PhotoComment.PhotoId)
                     }
                 });
 

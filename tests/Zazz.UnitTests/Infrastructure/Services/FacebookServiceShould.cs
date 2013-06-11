@@ -940,7 +940,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var oldPhoto = new Photo
                            {
-                               FacebookLink = "old link",
                                Description = "old desc"
                            };
 
@@ -962,7 +961,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
-            Assert.AreEqual(fbPhoto.Source, oldPhoto.FacebookLink);
 
             _uow.Verify(x => x.UserRepository.WantsFbImagesSynced(page.UserId), Times.Once());
             _fbHelper.Verify(x => x.GetPhotos(page.AccessToken, limit), Times.Once());

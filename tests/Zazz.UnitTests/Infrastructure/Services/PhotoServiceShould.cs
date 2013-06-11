@@ -1121,56 +1121,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ReturnFacebookImageUrlIfThePhotoIsFromFacebookAndAddToCacheIfItsNotThere_OnGetUserImageUrl()
-        {
-            //Arrange
-            var userId = 12;
-            var gender = Gender.Male;
-            var photoId = 123;
-
-            var photo = new PhotoMinimalDTO
-            {
-                AlbumId = 3,
-                Id = photoId,
-                UserId = userId,
-                IsFacebookPhoto = true,
-                FacebookPicUrl = "pic url"
-            };
-
-            var expected = new PhotoLinks
-                           {
-                               MediumLink = photo.FacebookPicUrl,
-                               OriginalLink = photo.FacebookPicUrl,
-                               SmallLink = photo.FacebookPicUrl,
-                               VerySmallLink = photo.FacebookPicUrl
-                           };
-
-            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
-                .Returns(photoId);
-            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
-                .Returns(gender);
-            _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId))
-                .Returns(() => photo);
-            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
-                         .Returns(() => null);
-            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
-
-            //Act
-            var result = _sut.GetUserImageUrl(userId);
-
-            //Assert
-            Assert.AreEqual(expected.OriginalLink, result.OriginalLink);
-            Assert.AreEqual(expected.MediumLink, result.MediumLink);
-            Assert.AreEqual(expected.SmallLink, result.SmallLink);
-            Assert.AreEqual(expected.VerySmallLink, result.VerySmallLink);
-            _uow.Verify(x => x.UserRepository.GetUserPhotoId(userId), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserGender(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Once());
-            _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()), Times.Once());
-        }
-
-        [Test]
         public void ReturnUserImageFromCacheIfExists_GetUserImageUrl()
         {
             //Arrange
