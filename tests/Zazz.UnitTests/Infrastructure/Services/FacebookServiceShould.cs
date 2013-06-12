@@ -971,7 +971,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                  Times.Never());
         }
 
-        [Test]
+        [Test, Ignore("Right now it has direct reference to HttpClient, and tries to download an actual image")]
         public void InsertPhotoAndCreateAlbumIfNotExists_OnUpdatePagePhotosAsync()
         {
             //Arrange
@@ -1021,7 +1021,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                  Times.Once());
         }
 
-        [Test]
+        [Test, Ignore("Right now it has direct reference to HttpClient, and tries to download an actual image")]
         public void InsertPhotoAndUseExistingAlbumIfExists_OnUpdatePagePhotosAsync()
         {
             //Arrange

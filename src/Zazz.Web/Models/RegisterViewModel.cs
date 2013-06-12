@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
@@ -16,11 +17,11 @@ namespace Zazz.Web.Models
         [StringLength(40), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [StringLength(30, MinimumLength = 3), Required, DataType(DataType.Password)]
+        [StringLength(30, MinimumLength = 3), Required, DataType(DataType.Password), AllowHtml]
         public string Password { get; set; }
 
         [Display(Name = "Confirm Password")]
-        [Required, DataType(DataType.Password), Compare("Password")]
+        [Required, DataType(DataType.Password), System.ComponentModel.DataAnnotations.Compare("Password"), AllowHtml]
         public string ConfirmPassword { get; set; }
 
         [Required]
