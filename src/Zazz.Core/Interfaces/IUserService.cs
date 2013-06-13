@@ -9,7 +9,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserService
     {
-        AccountType GetUserAccountType(int userId);
+        AccountType GetAccountType(int userId);
 
         int GetUserId(string username);
 
@@ -26,5 +26,7 @@ namespace Zazz.Core.Interfaces
         string GetUserDisplayName(int userId);
 
         string GetUserDisplayName(string username);
+
+        bool OAuthAccountExists(int userId, OAuthProvider provider);
     }
 }

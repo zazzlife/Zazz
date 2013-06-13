@@ -27,7 +27,7 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
-        public AccountType GetUserAccountType(int userId)
+        public AccountType GetAccountType(int userId)
         {
             return _uoW.UserRepository.GetUserAccountType(userId);
         }
@@ -134,6 +134,11 @@ namespace Zazz.Infrastructure.Services
         {
             var userId = GetUserId(username);
             return GetUserDisplayName(userId);
+        }
+
+        public bool OAuthAccountExists(int userId, OAuthProvider provider)
+        {
+            return _uoW.OAuthAccountRepository.Exists(userId, provider);
         }
     }
 }

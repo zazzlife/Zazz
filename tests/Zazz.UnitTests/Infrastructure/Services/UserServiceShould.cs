@@ -105,7 +105,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(accountType);
 
             //Act
-            var result = _sut.GetUserAccountType(id);
+            var result = _sut.GetAccountType(id);
 
             //Assert
             Assert.AreEqual(accountType, result);
@@ -338,6 +338,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.VerifyAll();
             _cryptoService.VerifyAll();
             _cacheService.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnCorrectValue_OnOAuthAccountExists()
+        {
+            //Arrange
+            var userId = 12;
+            var provider = OAuthProvider.Facebook;
+
+            _uow.Setup(x => x.OAuthAccountRepository.Exists(userId, provider))
+                .Returns(true);
+
+            //Act
+            var result = _sut.OAuthAccountExists(userId, provider);
+
+            //Assert
+            Assert.IsTrue(result);
+            _uow.VerifyAll();
         }
 
 
