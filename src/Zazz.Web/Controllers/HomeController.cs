@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
@@ -46,6 +47,9 @@ namespace Zazz.Web.Controllers
                              AccountType = user.AccountType,
                              Feeds = feeds
                          };
+
+                if (user.AccountType == AccountType.Club)
+                    vm.HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook);
 
                 return View("UserHome", vm);
             }

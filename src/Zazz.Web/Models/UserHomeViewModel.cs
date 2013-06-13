@@ -7,6 +7,8 @@ namespace Zazz.Web.Models
 {
     public class UserHomeViewModel
     {
+        public bool HasFacebookAccount { get; set; }
+
         public AccountType AccountType { get; set; }
         
         public IEnumerable<FeedViewModel> Feeds { get; set; }
