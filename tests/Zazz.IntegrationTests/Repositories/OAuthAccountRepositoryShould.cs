@@ -184,20 +184,20 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnFalseWhenOAuthAccountNotExists_OnOAuthAccountExists()
+        public void ReturnFalseWhenOAuthAccountNotExists_OnExistsByProviderId()
         {
             //Arrange
             var user = AddUser();
 
             //Act
-            var result = _repo.OAuthAccountExists(1234L, OAuthProvider.Facebook);
+            var result = _repo.Exists(1234L, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void ReturnTrueWhenOAuthAccountExists_OnOAuthAccountExists()
+        public void ReturnTrueWhenOAuthAccountExists_OnExistsByProviderId()
         {
             //Arrange
             var providerUserId = 123L;
@@ -217,7 +217,47 @@ namespace Zazz.IntegrationTests.Repositories
             }
 
             //Act
-            var result = _repo.OAuthAccountExists(providerUserId, OAuthProvider.Facebook);
+            var result = _repo.Exists(providerUserId, OAuthProvider.Facebook);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ReturnFalseWhenOAuthAccountNotExists_OnExistsByUserId()
+        {
+            //Arrange
+            var user = AddUser();
+
+            //Act
+            var result = _repo.Exists(user.Id, OAuthProvider.Facebook);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ReturnTrueWhenOAuthAccountExists_OnExistsByUserId()
+        {
+            //Arrange
+            var providerUserId = 123L;
+            var user = AddUser();
+            var oauthAccount = new OAuthAccount
+            {
+                AccessToken = "token",
+                Provider = OAuthProvider.Facebook,
+                ProviderUserId = providerUserId,
+                UserId = user.Id
+            };
+
+            using (var context = new ZazzDbContext())
+            {
+                context.OAuthAccounts.Add(oauthAccount);
+                context.SaveChanges();
+            }
+
+            //Act
+            var result = _repo.Exists(user.Id, OAuthProvider.Facebook);
 
             //Assert
             Assert.IsTrue(result);

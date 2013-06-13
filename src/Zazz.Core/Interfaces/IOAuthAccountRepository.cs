@@ -36,7 +36,9 @@ namespace Zazz.Core.Interfaces
         /// <param name="providerUserId">OAuth Provider's User ID</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        bool OAuthAccountExists(long providerUserId, OAuthProvider provider);
+        bool Exists(long providerUserId, OAuthProvider provider);
+
+        bool Exists(int userId, OAuthProvider provider);
 
         string GetAccessToken(int userId, OAuthProvider provider);
 

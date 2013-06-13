@@ -47,9 +47,16 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public bool OAuthAccountExists(long providerUserId, OAuthProvider provider)
+        public bool Exists(long providerUserId, OAuthProvider provider)
         {
             return DbSet.Where(o => o.ProviderUserId == providerUserId)
+                        .Where(o => o.Provider == provider)
+                        .Any();
+        }
+
+        public bool Exists(int userId, OAuthProvider provider)
+        {
+            return DbSet.Where(o => o.UserId == userId)
                         .Where(o => o.Provider == provider)
                         .Any();
         }
