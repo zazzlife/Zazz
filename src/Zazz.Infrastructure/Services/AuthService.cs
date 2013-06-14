@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -158,6 +159,11 @@ namespace Zazz.Infrastructure.Services
                 _uow.OAuthAccountRepository.InsertGraph(oauthAccount);
                 _uow.SaveChanges();
             }
+        }
+
+        public void UpdateAccessToken(long providerId, OAuthProvider provider, string accessToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

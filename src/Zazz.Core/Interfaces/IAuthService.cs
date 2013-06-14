@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Interfaces
 {
@@ -21,5 +22,7 @@ namespace Zazz.Core.Interfaces
         User GetOAuthUser(OAuthAccount oAuthAccount, string email);
         
         void AddOAuthAccount(OAuthAccount oauthAccount);
+
+        void UpdateAccessToken(long providerId, OAuthProvider provider, string accessToken);
     }
 }
