@@ -378,7 +378,7 @@ namespace Zazz.Web.Controllers
                 oauthAccount.UserId = userId;
 
                 _authService.AddOAuthAccount(oauthAccount);
-                ShowAlert("You have successfully linked your facebook account.", AlertType.Success);
+                ShowAlert("You have successfully updated your facebook account.", AlertType.Success);
             }
             else
             {
@@ -402,6 +402,8 @@ namespace Zazz.Web.Controllers
                     return RedirectToAction("OAuthRegister");
                 }
             }
+
+            _authService.UpdateAccessToken(user.Id, provider, accessToken);
 
             return RedirectToAction("Index", "Home");
         }
