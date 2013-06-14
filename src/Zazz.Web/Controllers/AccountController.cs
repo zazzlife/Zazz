@@ -378,6 +378,7 @@ namespace Zazz.Web.Controllers
                 oauthAccount.UserId = userId;
 
                 _authService.AddOAuthAccount(oauthAccount);
+                ShowAlert("You have successfully linked your facebook account.", AlertType.Success);
             }
             else
             {
