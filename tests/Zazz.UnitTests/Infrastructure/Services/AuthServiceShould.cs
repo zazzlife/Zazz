@@ -824,5 +824,69 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         #endregion
+
+        #region Update Access Token
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void ThrowIfAccessTokenIsInvalid_OnUpdateAccessToken(string token)
+        {
+            //Arrange
+            var provider = OAuthProvider.Facebook;
+
+            //Act
+            Assert.Throws<ArgumentNullException>(() => _sut.UpdateAccessToken(_user.Id, provider, token));
+
+            //Assert
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetUserAccount(_user.Id, provider), Times.Never());
+        }
+
+        [Test]
+        public void ThrowIfOAuthAccountWasNotFound_OnUpdateAccessToken()
+        {
+            //Arrange
+            var provider = OAuthProvider.Facebook;
+            var token = "123";
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetUserAccount(_user.Id, provider))
+                    .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.UpdateAccessToken(_user.Id, provider, token));
+
+            //Assert
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetUserAccount(_user.Id, provider), Times.Once());
+        }
+
+        [Test]
+        public void SetNewAccessTokenAndSave_OnUpdateAccessToken()
+        {
+            //Arrange
+            var provider = OAuthProvider.Facebook;
+            var token = "new token";
+            var providerUserId = 444L;
+
+            var oauthAccount = new OAuthAccount
+                               {
+                                   AccessToken = "old token",
+                                   Provider = provider,
+                                   ProviderUserId = providerUserId,
+                                   UserId = _user.Id
+                               };
+
+            _uowMock.Setup(x => x.OAuthAccountRepository.GetUserAccount(_user.Id, provider))
+                    .Returns(oauthAccount);
+
+            //Act
+            _sut.UpdateAccessToken(_user.Id, provider, token);
+
+            //Assert
+            Assert.AreEqual(token, oauthAccount.AccessToken);
+
+            _uowMock.Verify(x => x.OAuthAccountRepository.GetUserAccount(_user.Id, provider), Times.Once());
+            _uowMock.Verify(x => x.SaveChanges(), Times.Once());
+        }
+
+        #endregion
     }
 }

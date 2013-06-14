@@ -23,6 +23,6 @@ namespace Zazz.Core.Interfaces
         
         void AddOAuthAccount(OAuthAccount oauthAccount);
 
-        void UpdateAccessToken(long providerId, OAuthProvider provider, string accessToken);
+        void UpdateAccessToken(int userId, OAuthProvider provider, string accessToken);
     }
 }

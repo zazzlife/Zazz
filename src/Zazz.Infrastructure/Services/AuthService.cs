@@ -161,9 +161,17 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public void UpdateAccessToken(long providerId, OAuthProvider provider, string accessToken)
+        public void UpdateAccessToken(int userId, OAuthProvider provider, string accessToken)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(accessToken))
+                throw new ArgumentNullException("accessToken");
+
+            var account = _uow.OAuthAccountRepository.GetUserAccount(userId, provider);
+            if (account == null)
+                throw new NotFoundException();
+
+            account.AccessToken = accessToken;
+            _uow.SaveChanges();
         }
     }
 }
