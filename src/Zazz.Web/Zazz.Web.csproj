@@ -243,6 +243,7 @@
     <Compile Include="Controllers\Api\TagsController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\ProfileController.cs" />
+    <Compile Include="Controllers\Api\WeekliesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\EventController.cs" />
