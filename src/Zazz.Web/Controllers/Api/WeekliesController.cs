@@ -61,9 +61,12 @@ namespace Zazz.Web.Controllers.Api
             }
             catch (InvalidOperationException)
             {
-                throw new HttpResponseException(HttpStatusCode.Forbidden);
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-            
+            catch (WeekliesLimitReachedException)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            }
 
             throw new NotImplementedException();
         }

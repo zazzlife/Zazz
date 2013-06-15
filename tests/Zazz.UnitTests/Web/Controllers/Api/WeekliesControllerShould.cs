@@ -93,7 +93,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return403IfUserIsNotClubAdmin_OnPost()
+        public async Task Return400IfUserIsNotClubAdmin_OnPost()
         {
             //Arrange
             ControllerAddress = "/api/v1/weeklies";
@@ -117,7 +117,35 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var result = await Client.PostAsync(ControllerAddress, content);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+        }
+
+        [Test]
+        public async Task Return400IfClubHasCreated7Weeklies_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/weeklies";
+
+            var weekly = new Weekly
+            {
+                Description = "desc",
+                Name = "name",
+            };
+
+            var json = JsonConvert.SerializeObject(weekly);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _weeklyService.Setup(x => x.CreateWeekly(It.IsAny<Weekly>()))
+                          .Throws<WeekliesLimitReachedException>();
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
         }
     }
 }
