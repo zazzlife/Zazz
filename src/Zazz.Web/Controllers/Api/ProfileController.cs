@@ -20,19 +20,17 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IFollowService _followService;
-        private readonly IUoW _uow;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IFeedHelper _feedHelper;
         private readonly IObjectMapper _objectMapper;
 
         public ProfileController(IUserService userService, IPhotoService photoService,
-            IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper,
+            IFollowService followService, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper,
             IObjectMapper objectMapper)
         {
             _userService = userService;
             _photoService = photoService;
             _followService = followService;
-            _uow = uow;
             _defaultImageHelper = defaultImageHelper;
             _feedHelper = feedHelper;
             _objectMapper = objectMapper;
@@ -77,7 +75,7 @@ namespace Zazz.Web.Controllers.Api
                        IsTargetUserFollowingCurrentUser = isTargetUserFollowingCurrentUser,
                        Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
                        .Select(_objectMapper.FeedViewModelToApiModel),
-                       Photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 15)
+                       Photos = _photoService.GetLatestUserPhotos(id, 15)
                        .ToList().Select(_objectMapper.PhotoToApiPhoto),
                        UserDetails = user.AccountType == AccountType.User
                        ? new ApiUserDetails
