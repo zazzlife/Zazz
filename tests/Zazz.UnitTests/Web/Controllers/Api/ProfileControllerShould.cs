@@ -23,7 +23,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public override void Init()
         {
             base.Init();
-            ControllerAddress = "/api/v1/user/" + User.Id + "/profile";
+            ControllerAddress = "/api/v1/users/" + User.Id + "/profile";
 
             _followService = MockRepo.Create<IFollowService>(MockBehavior.Strict);
             _feedHelper = MockRepo.Create<IFeedHelper>(MockBehavior.Strict);
@@ -39,7 +39,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfIdIsInvalid_OnGet()
         {
             //Arrange
-            ControllerAddress = "/api/v1/user/0/profile";
+            ControllerAddress = "/api/v1/users/0/profile";
 
             AddValidHMACHeaders("GET");
             SetupMocksForHMACAuth();
