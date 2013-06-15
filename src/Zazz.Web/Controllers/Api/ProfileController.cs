@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [HMACAuthorize]
-    public class UserProfileController : BaseApiController
+    public class ProfileController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
@@ -25,7 +25,7 @@ namespace Zazz.Web.Controllers.Api
         private readonly IFeedHelper _feedHelper;
         private readonly IObjectMapper _objectMapper;
 
-        public UserProfileController(IUserService userService, IPhotoService photoService,
+        public ProfileController(IUserService userService, IPhotoService photoService,
             IFollowService followService, IUoW uow, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper,
             IObjectMapper objectMapper)
         {
@@ -38,14 +38,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/v1/userprofile
-        public ApiUserProfile Get(int lastFeed = 0)
-        {
-            var userId = ExtractUserIdFromHeader();
-            return Get(userId, lastFeed);
-        }
-
-        // GET api/v1/userprofile/5
+        // GET api/v1/user/5/profile
         public ApiUserProfile Get(int id, int lastFeed = 0)
         {
             var currentUserId = ExtractUserIdFromHeader();
