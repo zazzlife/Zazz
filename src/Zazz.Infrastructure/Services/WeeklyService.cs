@@ -16,6 +16,18 @@ namespace Zazz.Infrastructure.Services
             _uow = uow;
         }
 
+        public Weekly GetWeekly(int id)
+        {
+            if (id == 0)
+                throw new ArgumentException("id cannot be 0", "id");
+
+            var weekly = _uow.WeeklyRepository.GetById(id);
+            if (weekly == null)
+                throw new NotFoundException();
+
+            return weekly;
+        }
+
         public void CreateWeekly(Weekly weekly)
         {
             var user = _uow.UserRepository.GetById(weekly.UserId, false, false, true);

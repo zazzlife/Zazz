@@ -26,6 +26,48 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfIdIsInvalid_OnGetWeekly()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentException>(() => _sut.GetWeekly(0));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfWeeklyNotExists_OnGetWeekly()
+        {
+            //Arrange
+            var weekly = new Weekly { Id = 45 };
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.GetWeekly(weekly.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnWeekly_OnGetWeekly()
+        {
+            //Arrange
+            var weekly = new Weekly { Id = 45 };
+            _uow.Setup(x => x.WeeklyRepository.GetById(weekly.Id))
+                .Returns(weekly);
+
+            //Act
+            var result = _sut.GetWeekly(weekly.Id);
+
+            //Assert
+            Assert.AreSame(weekly, result);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ThrowIfUserIsNotClubAdmin_OnCreateWeekly()
         {
             //Arrange
