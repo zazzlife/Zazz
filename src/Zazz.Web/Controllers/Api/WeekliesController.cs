@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
@@ -44,6 +45,26 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/weeklies
         public ApiWeekly Post(ApiWeekly weekly)
         {
+            var userId = ExtractUserIdFromHeader();
+            var w = new Weekly
+                    {
+                        DayOfTheWeek = weekly.DayOfTheWeek,
+                        Description = weekly.Description,
+                        Name = weekly.Name,
+                        UserId = userId,
+                        PhotoId = weekly.PhotoId
+                    };
+
+            try
+            {
+                _weeklyService.CreateWeekly(w);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
+            
+
             throw new NotImplementedException();
         }
 

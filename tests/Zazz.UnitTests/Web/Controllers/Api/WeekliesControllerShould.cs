@@ -1,7 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -86,6 +90,34 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return403IfUserIsNotClubAdmin_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/weeklies";
+
+            var weekly = new Weekly
+            {
+                Description = "desc",
+                Name = "name",
+            };
+
+            var json = JsonConvert.SerializeObject(weekly);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _weeklyService.Setup(x => x.CreateWeekly(It.IsAny<Weekly>()))
+                          .Throws<InvalidOperationException>();
+
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
         }
     }
 }
