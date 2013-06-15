@@ -91,6 +91,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserHasAlreadyCreated7Weeklies_OnCreateWeekly()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 2,
+                AccountType = AccountType.Club
+            };
+
+            for (int i = 0; i < 7; i++)
+                user.Weeklies.Add(new Weekly());
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, true, false))
+                .Returns(user);
+
+            var weekly = new Weekly
+            {
+                UserId = user.Id
+            };
+
+            //Act & Assert
+            Assert.Throws<WeekliesLimitReachedException>(() => _sut.CreateWeekly(weekly));
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void InsertANewRecord_OnCreateWeekly()
         {
             //Arrange

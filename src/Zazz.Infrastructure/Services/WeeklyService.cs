@@ -34,6 +34,9 @@ namespace Zazz.Infrastructure.Services
             if (user.AccountType != AccountType.Club)
                 throw new InvalidOperationException("User should be a club admin.");
 
+            if (user.Weeklies.Count >= 7)
+                throw new WeekliesLimitReachedException();
+
             user.Weeklies.Add(weekly);
             _uow.SaveChanges();
         }
