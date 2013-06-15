@@ -137,6 +137,7 @@
     <Compile Include="Models\Data\Enums\AppTokenType.cs" />
     <Compile Include="Models\Data\Enums\ClubType.cs" />
     <Compile Include="Models\Data\Enums\CommentType.cs" />
+    <Compile Include="Models\Data\Enums\DayOfTheWeek.cs" />
     <Compile Include="Models\Data\Enums\FeedType.cs" />
     <Compile Include="Models\Data\Enums\Gender.cs" />
     <Compile Include="Models\Data\Enums\NotificationType.cs" />

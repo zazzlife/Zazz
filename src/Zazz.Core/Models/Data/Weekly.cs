@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Models.Data
 {
@@ -22,16 +23,5 @@ namespace Zazz.Core.Models.Data
         public User User { get; set; }
 
         public Photo Photo { get; set; }
-    }
-
-    public enum DayOfTheWeek : byte
-    {
-        Sunday,
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday,
-        Saturday
     }
 }
