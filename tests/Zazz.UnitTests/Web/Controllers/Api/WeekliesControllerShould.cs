@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -40,6 +42,49 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return404IfWeeklyNotExists_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            _weeklyService.Setup(x => x.GetWeekly(_weeklyId))
+                          .Throws<NotFoundException>();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnWeekly_OnGet()
+        {
+            //Arrange
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            var weekly = new Weekly
+                         {
+                             Id = _weeklyId,
+                             Description = "desc",
+                             Name = "name",
+                         };
+
+            _weeklyService.Setup(x => x.GetWeekly(_weeklyId))
+                          .Returns(weekly);
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
     }

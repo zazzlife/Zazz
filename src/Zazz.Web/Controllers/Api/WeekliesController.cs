@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
+using Zazz.Web.Interfaces;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
@@ -14,10 +16,12 @@ namespace Zazz.Web.Controllers.Api
     public class WeekliesController : BaseApiController
     {
         private readonly IWeeklyService _weeklyService;
+        private readonly IObjectMapper _objectMapper;
 
-        public WeekliesController(IWeeklyService weeklyService)
+        public WeekliesController(IWeeklyService weeklyService, IObjectMapper objectMapper)
         {
             _weeklyService = weeklyService;
+            _objectMapper = objectMapper;
         }
 
         // GET api/v1/weeklies/5
@@ -26,7 +30,15 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            throw new NotImplementedException();
+            try
+            {
+                var weekly = _weeklyService.GetWeekly(id);
+                return _objectMapper.WeeklyToApiWeekly(weekly);
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
         }
 
         // POST api/v1/weeklies
