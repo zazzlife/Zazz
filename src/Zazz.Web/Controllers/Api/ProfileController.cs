@@ -39,6 +39,9 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/user/5/profile
         public ApiUserProfile Get(int id, int lastFeed = 0)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             var currentUserId = ExtractUserIdFromHeader();
 
             var user = _userService.GetUser(id, true, true, true);
