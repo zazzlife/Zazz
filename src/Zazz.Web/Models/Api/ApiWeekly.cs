@@ -13,7 +13,7 @@ namespace Zazz.Web.Models.Api
 
         public int? PhotoId { get; set; }
 
-        public PhotoLinks PhotoLinks { get; set; }
+        public PhotoLinks Photo { get; set; }
 
         public DayOfTheWeek DayOfTheWeek { get; set; }
 

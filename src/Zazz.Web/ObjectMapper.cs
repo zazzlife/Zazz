@@ -145,7 +145,7 @@ namespace Zazz.Web
                        WeeklyId = weekly.Id,
                        Name = weekly.Name,
                        UserId = weekly.UserId,
-                       PhotoLinks = weekly.PhotoId.HasValue
+                       Photo = weekly.PhotoId.HasValue
                                         ? _photoService.GeneratePhotoUrl(weekly.UserId, weekly.PhotoId.Value)
                                         : _defaultImageHelper.GetDefaultWeeklyImage()
                    };
