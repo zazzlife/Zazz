@@ -23,6 +23,9 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/weeklies/5
         public ApiWeekly Get(int id)
         {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             throw new NotImplementedException();
         }
 
