@@ -45,6 +45,11 @@ namespace Zazz.Infrastructure.Services
             _defaultImageHelper = defaultImageHelper;
         }
 
+        public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
+        {
+            return _uow.PhotoRepository.GetLatestUserPhotos(userId, count);
+        }
+
         public IQueryable<Photo> GetAll()
         {
             return _uow.PhotoRepository.GetAll();

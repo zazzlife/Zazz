@@ -10,6 +10,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IPhotoService
     {
+        IQueryable<Photo> GetLatestUserPhotos(int userId, int count);
+
         IQueryable<Photo> GetAll();
 
         IQueryable<Photo> GetUserPhotos(int userId, int take, int? lastPhotoId = null);
