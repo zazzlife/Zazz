@@ -58,6 +58,7 @@ namespace Zazz.Web.Controllers.Api
             try
             {
                 _weeklyService.CreateWeekly(w);
+                return _objectMapper.WeeklyToApiWeekly(w);
             }
             catch (InvalidOperationException)
             {

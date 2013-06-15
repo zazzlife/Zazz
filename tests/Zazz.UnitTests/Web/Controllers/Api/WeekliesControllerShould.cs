@@ -8,7 +8,9 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -118,6 +120,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
         }
 
         [Test]
@@ -146,6 +149,45 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task CreateWeekly_OnPost()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/weeklies";
+
+            var weekly = new Weekly
+            {
+                Description = "desc",
+                Name = "name",
+                DayOfTheWeek = DayOfTheWeek.Thursday,
+                PhotoId = 44,
+            };
+
+            var json = JsonConvert.SerializeObject(weekly);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _weeklyService.Setup(x => x.CreateWeekly(It.Is<Weekly>(w => w.DayOfTheWeek == weekly.DayOfTheWeek &&
+                                                                        w.Description == weekly.Description &&
+                                                                        w.Name == weekly.Name &&
+                                                                        w.PhotoId == weekly.PhotoId &&
+                                                                        w.UserId == User.Id)));
+
+
+            PhotoService.Setup(x => x.GeneratePhotoUrl(User.Id, weekly.PhotoId.Value))
+                        .Returns(new PhotoLinks("links"));
+            
+            AddValidHMACHeaders("POST", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PostAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            MockRepo.VerifyAll();
         }
     }
 }
