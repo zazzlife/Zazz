@@ -100,8 +100,6 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
-
-            throw new NotImplementedException();
         }
 
         // Delete api/v1/weeklies/5

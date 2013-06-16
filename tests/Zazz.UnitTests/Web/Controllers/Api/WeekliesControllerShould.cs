@@ -286,5 +286,38 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return204OnSuccess_OnPut()
+        {
+            //Arrange
+
+            var weekly = new Weekly
+            {
+                Description = "desc",
+                Name = "name",
+                DayOfTheWeek = DayOfTheWeek.Thursday,
+                PhotoId = 44,
+            };
+
+            var json = JsonConvert.SerializeObject(weekly);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _weeklyService.Setup(x => x.EditWeekly(It.Is<Weekly>(w => w.DayOfTheWeek == weekly.DayOfTheWeek &&
+                                                                      w.Description == weekly.Description &&
+                                                                      w.Name == weekly.Name &&
+                                                                      w.PhotoId == weekly.PhotoId &&
+                                                                      w.Id == _weeklyId), User.Id));
+
+            AddValidHMACHeaders("PUT", ControllerAddress, json);
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.PutAsync(ControllerAddress, content);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
