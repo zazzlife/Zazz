@@ -76,6 +76,26 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0 || weekly == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            try
+            {
+                var userId = ExtractUserIdFromHeader();
+
+                var w = new Weekly
+                {
+                    Id = id,
+                    DayOfTheWeek = weekly.DayOfTheWeek,
+                    Description = weekly.Description,
+                    Name = weekly.Name,
+                    PhotoId = weekly.PhotoId
+                };
+
+                _weeklyService.EditWeekly(w, userId);
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
             throw new NotImplementedException();
         }
 
