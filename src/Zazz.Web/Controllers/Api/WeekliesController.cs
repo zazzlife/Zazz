@@ -108,7 +108,15 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            throw new NotImplementedException();
+            try
+            {
+                var userId = ExtractUserIdFromHeader();
+                _weeklyService.RemoveWeekly(id, userId);
+            }
+            catch (SecurityException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
         }
     }
 }
