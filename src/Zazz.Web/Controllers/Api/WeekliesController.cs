@@ -68,13 +68,14 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-
-            throw new NotImplementedException();
         }
 
         // Put api/v1/weeklies/5
         public void Put(int id, ApiWeekly weekly)
         {
+            if (id == 0 || weekly == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             throw new NotImplementedException();
         }
 
