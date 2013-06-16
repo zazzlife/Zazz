@@ -354,5 +354,22 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.Forbidden, result.StatusCode);
             MockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task Return204OnSuccess_OnDelete()
+        {
+            //Arrange
+            AddValidHMACHeaders("DELETE");
+            SetupMocksForHMACAuth();
+
+            _weeklyService.Setup(x => x.RemoveWeekly(_weeklyId, User.Id));
+
+            //Act
+            var result = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
     }
 }
