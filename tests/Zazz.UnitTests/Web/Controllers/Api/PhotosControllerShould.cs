@@ -59,7 +59,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfUserIdIsLessThan1_OnGet(int userId)
         {
             //Arrange
-            ControllerAddress = String.Format("/api/v1/photos?userId={0}", userId);
+            ControllerAddress = String.Format("/api/v1/users/{0}/photos", userId);
 
             AddValidHMACHeaders("GET");
             SetupMocksForHMACAuth();
@@ -78,7 +78,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Arrange
             var userId = 12;
             var defaultPageSize = 25;
-            ControllerAddress = String.Format("/api/v1/photos?userId={0}", userId);
+            ControllerAddress = String.Format("/api/v1/users/{0}/photos", userId);
 
             _photoService.Setup(x => x.GetUserPhotos(userId, defaultPageSize, null))
                          .Returns(new EnumerableQuery<Photo>(Enumerable.Empty<Photo>()));
@@ -101,7 +101,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var userId = 12;
             var defaultPageSize = 25;
             var lastPhoto = 44;
-            ControllerAddress = String.Format("/api/v1/photos?userId={0}&lastPhoto={1}", userId, lastPhoto);
+            ControllerAddress = String.Format("/api/v1/users/{0}/photos?lastPhoto={1}", userId, lastPhoto);
 
             _photoService.Setup(x => x.GetUserPhotos(userId, defaultPageSize, lastPhoto))
                          .Returns(new EnumerableQuery<Photo>(Enumerable.Empty<Photo>()));

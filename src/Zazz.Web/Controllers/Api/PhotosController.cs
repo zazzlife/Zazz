@@ -31,7 +31,7 @@ namespace Zazz.Web.Controllers.Api
             _imageValidator = imageValidator;
         }
 
-        // GET api/v1/photos?userId=&lastPhoto=
+        // GET api/v1/users/{userId}/photos?lastPhoto=
         public IEnumerable<ApiPhoto> GetUserPhotos(int userId, int? lastPhoto = null)
         {
             if (userId < 1)
