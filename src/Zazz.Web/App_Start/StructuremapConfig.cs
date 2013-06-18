@@ -20,11 +20,13 @@ using System.Web.Mvc;
 using StructureMap;
 using Zazz.Web.DependencyResolution;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Zazz.Web.App_Start.StructuremapMvc), "Start")]
+//[assembly: WebActivator.PreApplicationStartMethod(typeof(Zazz.Web.App_Start.StructuremapMvc), "Start")]
 
-namespace Zazz.Web.App_Start {
-    public static class StructuremapMvc {
-        public static void Start() {
+namespace Zazz.Web {
+    public static class StructuremapConfig 
+    {
+        public static void Configure() 
+        {
 			IContainer container = IoC.Initialize();
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new StructureMapDependencyResolver(container);

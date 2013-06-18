@@ -219,8 +219,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\JsonConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="App_Start\StructuremapConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="BackgroundWorkers\TagsUpdaterTask.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />

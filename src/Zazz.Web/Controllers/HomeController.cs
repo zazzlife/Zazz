@@ -29,12 +29,6 @@ namespace Zazz.Web.Controllers
             _feedHelper = feedHelper;
         }
 
-        public ActionResult UpdateTags()
-        {
-            TagService.UpdateTagStatistics();
-            return Redirect(Request.UrlReferrer.AbsolutePath);
-        }
-
         public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated)

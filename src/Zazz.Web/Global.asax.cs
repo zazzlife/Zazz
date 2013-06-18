@@ -20,6 +20,8 @@ namespace Zazz.Web
         {
             AreaRegistration.RegisterAllAreas();
 
+            StructuremapConfig.Configure();
+
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

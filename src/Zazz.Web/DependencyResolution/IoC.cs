@@ -74,7 +74,7 @@ namespace Zazz.Web.DependencyResolution
                              .Ctor<string>("facebookAppId").Is(facebookAppId)
                              .Ctor<string>("facebookAppSecret").Is(facebookAppSecret);
 
-                            x.For<IUoW>().HttpContextScoped().Use<UoW>();
+                            x.For<IUoW>().HybridHttpOrThreadLocalScoped().Use<UoW>();
 
                             // Services
                             x.For<IAlbumService>().Use<AlbumService>();

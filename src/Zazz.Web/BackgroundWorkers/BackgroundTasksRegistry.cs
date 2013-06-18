@@ -1,5 +1,10 @@
-﻿using FluentScheduler;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Http;
+using System.Web.Mvc;
+using FluentScheduler;
 using StructureMap;
+using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.BackgroundWorkers
 {
@@ -7,12 +12,16 @@ namespace Zazz.Web.BackgroundWorkers
     {
         public BackgroundTasksRegistry()
         {
-            //TODO: Register tasks here
+            //Register tasks here
+            Schedule<TagsUpdaterTask>()
+                .ToRunNow()
+                .AndEvery(10)
+                .Seconds();
         }
 
         public override ITask GetTaskInstance<T>()
         {
-            return ObjectFactory.Container.GetInstance<T>();
+            return ObjectFactory.GetInstance<T>();
         }
     }
 }
