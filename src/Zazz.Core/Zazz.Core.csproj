@@ -110,6 +110,7 @@
     <Compile Include="Interfaces\IStringHelper.cs" />
     <Compile Include="Interfaces\ITagService.cs" />
     <Compile Include="Interfaces\ITagStatRepository.cs" />
+    <Compile Include="Interfaces\ITagStatsCache.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
     <Compile Include="Interfaces\ICommentRepository.cs" />
     <Compile Include="Interfaces\IEventRepository.cs" />
