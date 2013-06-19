@@ -28,6 +28,9 @@ namespace Zazz.Web.Filters
 
         private HttpStatusCode _errorStatusCode = HttpStatusCode.Forbidden;
 
+        private string _reason;
+        private string _expected;
+
         /// <summary>
         /// Set this to true for some requests such as register page when there is no user id and password.
         /// </summary>
@@ -178,6 +181,12 @@ namespace Zazz.Web.Filters
         {
             base.HandleUnauthorizedRequest(actionContext);
             actionContext.Response.StatusCode = _errorStatusCode;
+
+            if (!String.IsNullOrEmpty(_reason))
+                actionContext.Response.Headers.Add("X-Reason", _reason);
+
+            if (!String.IsNullOrEmpty(_expected))
+                actionContext.Response.Headers.Add("X-Expected", _expected);
         }
     }
 }
