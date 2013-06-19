@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
@@ -38,10 +39,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var list = new List<TagStat>();
 
-            _cache.Setup(x => x.LastUpdate)
+            _cache.SetupGet(x => x.LastUpdate)
                   .Returns(DateTime.UtcNow.AddMinutes(minutesAgo));
 
-            _cache.Setup(x => x.TagStats)
+            _cache.SetupGet(x => x.TagStats)
                   .Returns(list);
 
             //Act
@@ -49,6 +50,29 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreSame(list, result);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void GetNewDataFromRepoAndSaveItToCacheIfCacheIsExpired_OnGetTagStats()
+        {
+            //Arrange
+            var list = new List<TagStat>();
+
+            _cache.SetupGet(x => x.LastUpdate)
+                  .Returns(DateTime.UtcNow.AddMinutes(-5));
+
+            _uow.Setup(x => x.TagStatRepository.GetAll())
+                .Returns(() => new EnumerableQuery<TagStat>(list));
+
+            _cache.SetupSet(x => x.TagStats = list);
+            _cache.SetupSet(x => x.LastUpdate = It.Is<DateTime>(d => d > DateTime.UtcNow.AddMinutes(-1) &&
+                                                                     d < DateTime.UtcNow.AddMinutes(1)));
+
+            //Act
+            var result = _sut.GetAllTagStats();
+
+            //Assert
             _mockRepo.VerifyAll();
         }
 

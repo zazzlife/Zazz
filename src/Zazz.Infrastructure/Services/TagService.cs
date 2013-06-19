@@ -24,7 +24,12 @@ namespace Zazz.Infrastructure.Services
             if (_tagStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
                 return _tagStatsCache.TagStats;
 
-            return _uow.TagStatRepository.GetAll();
+            var freshData = _uow.TagStatRepository.GetAll();
+
+            _tagStatsCache.TagStats = freshData.ToList();
+            _tagStatsCache.LastUpdate = DateTime.UtcNow;
+
+            return freshData;
         }
 
         public void UpdateTagStatistics()
