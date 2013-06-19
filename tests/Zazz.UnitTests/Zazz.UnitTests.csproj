@@ -107,6 +107,7 @@
     <Compile Include="Infrastructure\Services\PhotoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\EventServiceShould.cs" />
     <Compile Include="Infrastructure\Services\PostServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\TagServiceShould.cs" />
     <Compile Include="Infrastructure\Services\UserServiceShould.cs" />
     <Compile Include="Infrastructure\Services\VoteServiceShould.cs" />
     <Compile Include="Infrastructure\Services\WeeklyServiceShould.cs" />

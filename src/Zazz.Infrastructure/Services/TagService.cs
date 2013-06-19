@@ -10,16 +10,20 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly ITagStatsCache _tagStatsCache;
 
-        public TagService(IUoW uow, IStaticDataRepository staticDataRepository)
+        public TagService(IUoW uow, IStaticDataRepository staticDataRepository, ITagStatsCache tagStatsCache)
         {
             _uow = uow;
             _staticDataRepository = staticDataRepository;
+            _tagStatsCache = tagStatsCache;
         }
 
         public IEnumerable<TagStat> GetAllTagStats()
         {
-            //TODO: cache this for 5 minutes.
+            if (_tagStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
+                return _tagStatsCache.TagStats;
+
             return _uow.TagStatRepository.GetAll();
         }
 
