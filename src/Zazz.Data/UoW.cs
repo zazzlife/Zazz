@@ -9,11 +9,6 @@ namespace Zazz.Data
         private bool _isDisposed;
         private ZazzDbContext _dbContext;
 
-        public UoW()
-        {
-            
-        }
-
         private IOAuthAccountRepository _oAuthAccountRepository;
         public IOAuthAccountRepository OAuthAccountRepository
         {

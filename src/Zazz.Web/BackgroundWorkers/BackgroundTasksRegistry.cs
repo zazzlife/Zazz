@@ -15,8 +15,8 @@ namespace Zazz.Web.BackgroundWorkers
             //Register tasks here
             Schedule<TagsUpdaterTask>()
                 .ToRunNow()
-                .AndEvery(10)
-                .Seconds();
+                .AndEvery(5)
+                .Minutes();
         }
 
         public override ITask GetTaskInstance<T>()

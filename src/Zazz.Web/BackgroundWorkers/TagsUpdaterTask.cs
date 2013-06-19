@@ -1,5 +1,5 @@
 ﻿using FluentScheduler;
-using StructureMap;
+using StructureMap.Pipeline;
 using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.BackgroundWorkers
@@ -16,6 +16,8 @@ namespace Zazz.Web.BackgroundWorkers
         public void Execute()
         {
             _tagService.UpdateTagStatistics();
+            
+            new HybridLifecycle().FindCache().DisposeAndClear();
         }
     }
 }
