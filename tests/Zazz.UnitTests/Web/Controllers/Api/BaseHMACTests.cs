@@ -155,10 +155,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return403IfDateIsLessThanOneMinutesAgo()
+        public async Task Return403IfDateIsLessThan30MinutesAgo()
         {
             //Arrange
-            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-1);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-31);
 
             //Act
             HttpResponseMessage result;
@@ -177,10 +177,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return403IfDateIsGreaterThanUTCNow()
+        public async Task Return403IfDateIs30MinutesGreaterThanUTCNow()
         {
             //Arrange
-            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(2);
+            Client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddSeconds(31);
 
             //Act
             HttpResponseMessage result;

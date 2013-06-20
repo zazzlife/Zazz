@@ -87,12 +87,10 @@ namespace Zazz.Web.Filters
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
             // Checking Date Header
-
-            var headers = actionContext.Request.Headers.ToString();
-
             var date = actionContext.Request.Headers.Date;
             if (!date.HasValue ||
-                date.Value < DateTimeOffset.UtcNow.AddMinutes(-5))
+                date.Value < DateTimeOffset.UtcNow.AddMinutes(-30) ||
+                date.Value > DateTimeOffset.UtcNow.AddMinutes(30))
             {
                 _reason = "date is not valid";
                 _expected = DateTime.UtcNow.ToString("r");
