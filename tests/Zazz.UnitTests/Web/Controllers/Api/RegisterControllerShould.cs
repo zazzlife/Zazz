@@ -107,7 +107,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403IfDateHeaderIsInvalid()
         {
             //Arrange
-            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-6);
+            _client.DefaultRequestHeaders.Date = DateTimeOffset.UtcNow.AddMinutes(-31);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AUTH_SCHEME,
                                                                                         CreateRequestSignature());
 
