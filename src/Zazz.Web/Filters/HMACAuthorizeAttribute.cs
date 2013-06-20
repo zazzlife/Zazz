@@ -88,11 +88,15 @@ namespace Zazz.Web.Filters
         {
             // Checking Date Header
 
+            var headers = actionContext.Request.Headers.ToString();
+
             var date = actionContext.Request.Headers.Date;
             if (!date.HasValue ||
-                date.Value < DateTimeOffset.UtcNow.AddMinutes(-1) ||
-                date.Value > DateTimeOffset.UtcNow)
+                date.Value < DateTimeOffset.UtcNow.AddMinutes(-5))
             {
+                _reason = "date is not valid";
+                _expected = DateTime.UtcNow.ToString("r");
+
                 return false;
             }
 
@@ -102,18 +106,29 @@ namespace Zazz.Web.Filters
                 !authorization.Scheme.Equals("ZazzApi", StringComparison.InvariantCultureIgnoreCase) ||
                 String.IsNullOrWhiteSpace(authorization.Parameter))
             {
+                _reason = "Authorization header is missing or the scheme was not ZazzApi";
                 return false;
             }
 
             var authSegments = authorization.Parameter.Split(':');
             if ((!IgnoreUserIdAndPassword && authSegments.Length != 4) ||
                 (IgnoreUserIdAndPassword && authSegments.Length < 2))
+            {
+                _reason = "Authorization header was not complete";
+
                 return false;
+            }
+                
 
             // App Id
             int appId;
             if (!int.TryParse(authSegments[0], out appId) || appId < 1)
+            {
+                _reason = "invalid app id";
+
                 return false;
+            }
+                
 
             var requestSignature = authSegments[1];
 
@@ -122,7 +137,12 @@ namespace Zazz.Web.Filters
             if (!IgnoreUserIdAndPassword)
             {
                 if (!int.TryParse(authSegments[2], out userId) || userId < 1)
+                {
+                    _reason = "invalid user id";
+
                     return false;
+                }
+                    
             }
 
             // Password Hash
@@ -133,7 +153,12 @@ namespace Zazz.Web.Filters
 
             var app = ApiAppRepository.GetById(appId);
             if (app == null)
+            {
+                _reason = "app was not found";
+
                 return false;
+            }
+                
 
             var isSignatureValid = ValidateRequestSignature(app, requestSignature, actionContext.Request);
             if (!isSignatureValid)
@@ -151,12 +176,22 @@ namespace Zazz.Web.Filters
             var password = UserService.GetUserPassword(userId);
             if (password == default(byte[]))
             {
+                _reason = "user was not found";
+
                 _errorStatusCode = UserNotFoundStatusCode;
                 return false;
             }
 
             var serverPasswordHash = CryptoService.GenerateHMACSHA512Hash(password, app.PasswordSigningKey);
-            return serverPasswordHash == clientPasswordHash;
+            var isPasswordSignatureValid = serverPasswordHash == clientPasswordHash;
+
+            if (!isPasswordSignatureValid)
+            {
+                _reason = "password signature was invalid";
+                _expected = serverPasswordHash;
+            }
+
+            return isPasswordSignatureValid;
         }
 
         private bool ValidateRequestSignature(ApiApp app, string requestSignature, HttpRequestMessage request)
@@ -174,7 +209,14 @@ namespace Zazz.Web.Filters
             var signatureBuffer = Encoding.UTF8.GetBytes(stringToSign);
             var signature = CryptoService.GenerateHMACSHA512Hash(signatureBuffer, app.RequestSigningKey);
 
-            return requestSignature == signature;
+            var isSignatureValid = requestSignature == signature;
+            if (IgnoreUserIdAndPassword)
+            {
+                _reason = "request signature was invalid";
+                _expected = signature;
+            }
+            
+            return isSignatureValid;
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
