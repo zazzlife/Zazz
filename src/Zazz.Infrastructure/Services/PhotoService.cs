@@ -132,7 +132,8 @@ namespace Zazz.Infrastructure.Services
 
                 var lastFeed = _uow.FeedRepository.GetUserLastFeed(photo.UserId);
                 if (lastFeed != null && lastFeed.FeedType == FeedType.Photo &&
-                    lastFeed.Time >= DateTime.UtcNow.AddDays(-1))
+                    lastFeed.Time >= DateTime.UtcNow.AddDays(-1) &&
+                    lastFeed.FeedPhotos.Count < 9)
                 {
                     lastFeed.FeedPhotos.Add(new FeedPhoto
                                               {

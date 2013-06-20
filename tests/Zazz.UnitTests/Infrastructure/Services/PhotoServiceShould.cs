@@ -318,6 +318,46 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedHas9Photos_OnSavePhoto()
+        {
+            //Arrange
+            var photos = new List<FeedPhoto>();
+            photos.AddRange(Enumerable.Repeat(new FeedPhoto(), 9));
+
+            var lastFeed = new Feed
+                           {
+                               FeedType = FeedType.Photo,
+                               Time = DateTime.UtcNow.AddHours(-2),
+                               FeedPhotos = photos
+                           };
+
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            //Act
+
+            var id = _sut.SavePhoto(photo, Stream.Null, true);
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
+            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Once());
+            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
+            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
+            Assert.AreEqual(photo.Id, id);
+        }
+
+        [Test]
         public void SavePhotoDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
         {
             //Arrange
@@ -374,38 +414,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
             _uow.Verify(x => x.SaveChanges(), Times.Once());
             _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Never());
-            Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
-            Assert.AreEqual(photo.Id, id);
-        }
-
-        [Test]
-        public void SavePhotoRecordToDbButNotCallSaveToDiskWhenStreamIsEmpty_OnSavePhoto()
-        {
-            //Arrange
-            var photo = new Photo
-            {
-                Id = 1234,
-                AlbumId = 12,
-                Description = "desc",
-                UserId = 17
-            };
-            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
-            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
-
-            var path = _sut.GeneratePhotoFilePath(photo.UserId, photo.Id);
-
-            _fs.Setup(x => x.SaveFileAsync(It.IsAny<string>(), Stream.Null))
-                   .Returns(() => Task.Run(() => { }));
-
-            //Act
-
-            var id = _sut.SavePhoto(photo, Stream.Null, false);
-
-            //Assert
-            _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
-            _uow.Verify(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _fs.Verify(x => x.SaveFileAsync(It.IsAny<string>(), It.IsAny<Stream>()), Times.Never());
             Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
             Assert.AreEqual(photo.Id, id);
         }
