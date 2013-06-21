@@ -208,7 +208,7 @@ namespace Zazz.Web.Filters
             var signature = CryptoService.GenerateHMACSHA512Hash(signatureBuffer, app.RequestSigningKey);
 
             var isSignatureValid = requestSignature == signature;
-            if (IgnoreUserIdAndPassword)
+            if (!isSignatureValid)
             {
                 _reason = "request signature was invalid";
                 _expected = signature;
