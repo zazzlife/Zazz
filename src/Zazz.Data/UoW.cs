@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Zazz.Core.Interfaces;
+﻿using Zazz.Core.Interfaces;
 using Zazz.Data.Repositories;
 
 namespace Zazz.Data
@@ -9,144 +8,104 @@ namespace Zazz.Data
         private bool _isDisposed;
         private ZazzDbContext _dbContext;
 
-        private IOAuthAccountRepository _oAuthAccountRepository;
         public IOAuthAccountRepository OAuthAccountRepository
         {
-            get { return _oAuthAccountRepository ?? (_oAuthAccountRepository = new OAuthAccountRepository(GetContext())); }
+            get { return new OAuthAccountRepository(GetContext()); }
         }
 
-        private ICommentRepository _commentRepository;
         public ICommentRepository CommentRepository
         {
-            get { return _commentRepository ?? (_commentRepository = new CommentRepository(GetContext())); }
+            get { return new CommentRepository(GetContext()); }
         }
 
-        private IEventRepository _eventRepository;
         public IEventRepository EventRepository
         {
-            get { return _eventRepository ?? (_eventRepository = new EventRepository(GetContext())); }
+            get { return new EventRepository(GetContext()); }
         }
 
-        private IFollowRepository _followRepository;
         public IFollowRepository FollowRepository
         {
-            get { return _followRepository ?? (_followRepository = new FollowRepository(GetContext())); }
+            get { return new FollowRepository(GetContext()); }
         }
 
-        private IFollowRequestRepository _followRequestRepository;
         public IFollowRequestRepository FollowRequestRepository
         {
-            get { return _followRequestRepository ?? (_followRequestRepository = new FollowRequestRepository(GetContext())); }
+            get { return new FollowRequestRepository(GetContext()); }
         }
 
-        private IAlbumRepository _albumRepository;
         public IAlbumRepository AlbumRepository
         {
-            get { return _albumRepository ?? (_albumRepository = new AlbumRepository(GetContext())); }
+            get { return new AlbumRepository(GetContext()); }
         }
 
-        private IPhotoRepository _photoRepository;
         public IPhotoRepository PhotoRepository
         {
-            get { return _photoRepository ?? (_photoRepository = new PhotoRepository(GetContext())); }
+            get { return new PhotoRepository(GetContext()); }
         }
 
-        private IUserRepository _userRepository;
         public IUserRepository UserRepository
         {
-            get { return _userRepository ?? (_userRepository = new UserRepository(GetContext())); }
+            get { return new UserRepository(GetContext()); }
         }
 
-        private IValidationTokenRepository _validationTokenRepository;
         public IValidationTokenRepository ValidationTokenRepository
         {
-            get { return _validationTokenRepository ?? (_validationTokenRepository = new ValidationTokenRepository(GetContext())); }
+            get { return new ValidationTokenRepository(GetContext()); }
         }
 
-        private IFacebookSyncRetryRepository _facebookSyncRetryRepository;
         public IFacebookSyncRetryRepository FacebookSyncRetryRepository
         {
-            get
-            {
-                return _facebookSyncRetryRepository ?? (_facebookSyncRetryRepository = new FacebookSyncRetryRepository(GetContext()));
-            }
+            get { return new FacebookSyncRetryRepository(GetContext()); }
         }
 
-        private IFeedRepository _feedRepository;
         public IFeedRepository FeedRepository
         {
-            get { return _feedRepository ?? (_feedRepository = new FeedRepository(GetContext())); }
+            get { return new FeedRepository(GetContext()); }
         }
-
-        private IPostRepository _postRepository;
 
         public IPostRepository PostRepository
         {
-            get { return _postRepository ?? (_postRepository = new PostRepository(GetContext())); }
+            get { return new PostRepository(GetContext()); }
         }
 
-        private IFacebookPageRepository _facebookPageRepository;
         public IFacebookPageRepository FacebookPageRepository 
         {
-            get
-            {
-                return _facebookPageRepository 
-                    ?? (_facebookPageRepository = new FacebookPageRepository(GetContext()));
-            } 
+            get { return new FacebookPageRepository(GetContext()); } 
         }
 
-        private IFeedPhotoRepository _feedPhotoRepository;
         public IFeedPhotoRepository FeedPhotoRepository
         {
-            get
-            {
-                return _feedPhotoRepository 
-                    ?? (_feedPhotoRepository = new FeedPhotoRepository(GetContext()));
-            }
+            get { return new FeedPhotoRepository(GetContext()); }
         }
 
-        private INotificationRepository _notificationRepository;
         public INotificationRepository NotificationRepository
         {
-            get
-            {
-                return _notificationRepository
-                       ?? (_notificationRepository = new NotificationRepository(GetContext()));
-            }
+            get { return new NotificationRepository(GetContext()); }
         }
 
-        private ITagStatRepository _tagStatRepository;
         public ITagStatRepository TagStatRepository
         {
-            get { return _tagStatRepository ?? (_tagStatRepository = new TagStatRepository(GetContext())); }
+            get { return new TagStatRepository(GetContext()); }
         }
 
-        private IWeeklyRepository _weeklyRepository;
         public IWeeklyRepository WeeklyRepository
         {
-            get { return _weeklyRepository ?? (_weeklyRepository = new WeeklyRepository(GetContext())); }
+            get { return new WeeklyRepository(GetContext()); }
         }
 
-        private IPhotoVoteRepository _photoVoteRepository;
         public IPhotoVoteRepository PhotoVoteRepository
         {
-            get { return _photoVoteRepository ?? (_photoVoteRepository = new PhotoVoteRepository(GetContext())); }
+            get { return new PhotoVoteRepository(GetContext()); }
         }
 
-        private IUserReceivedVotesRepository _userReceivedVotesRepository;
         public IUserReceivedVotesRepository UserReceivedVotesRepository
         {
-            get
-            {
-                return _userReceivedVotesRepository ??
-                       (_userReceivedVotesRepository = new UserReceivedVotesRepository(GetContext()));
-            }
+            get { return new UserReceivedVotesRepository(GetContext()); }
         }
 
-        private IAppRequestTokenRepository _appRequestTokenRepository;
         public IAppRequestTokenRepository AppRequestTokenRepository
         {
-            get { return _appRequestTokenRepository ?? (new AppRequestTokenRepository(GetContext())); }
+            get { return new AppRequestTokenRepository(GetContext()); }
         }
 
         private ZazzDbContext GetContext()

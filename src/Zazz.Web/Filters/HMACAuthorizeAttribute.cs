@@ -155,8 +155,7 @@ namespace Zazz.Web.Filters
                 _reason = "app was not found";
 
                 return false;
-            }
-                
+            }  
 
             var isSignatureValid = ValidateRequestSignature(app, requestSignature, actionContext.Request);
             if (!isSignatureValid)
