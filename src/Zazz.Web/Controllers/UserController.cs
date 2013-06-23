@@ -26,8 +26,8 @@ namespace Zazz.Web.Controllers
 
         public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ITagService tagService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) 
-            : base (userService, photoService, defaultImageHelper, tagService)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
+            : base(userService, photoService, defaultImageHelper, tagService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
@@ -35,17 +35,19 @@ namespace Zazz.Web.Controllers
             _feedHelper = feedHelper;
         }
 
-        [Authorize]
-        public ActionResult Index()
-        {
-            var userId = UserService.GetUserId(User.Identity.Name);
-            return ShowProfile(userId);
-        }
-
         [ActionName("Profile")]
-        public ActionResult ShowProfile(int id)
+        public ActionResult ShowProfile(int id, string friendlySeoName)
         {
+            var displayName = UserService.GetUserDisplayName(id);
+
+            //SEO
+            var realFriendlySeoName = displayName.ToUrlFriendlyString();
+            if (!realFriendlySeoName.Equals(friendlySeoName))
+                return RedirectToActionPermanent("Profile", "User", new { id, friendlySeoName = realFriendlySeoName });
+
+
             var user = _uow.UserRepository.GetById(id, true, true, true);
+            var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
 
             var currentUserId = 0;
             if (User.Identity.IsAuthenticated)
@@ -55,19 +57,17 @@ namespace Zazz.Web.Controllers
 
             if (user.AccountType == AccountType.User)
             {
-                return LoadUserProfile(user, currentUserId);
+                return LoadUserProfile(user, currentUserId, displayName, profilePhotoUrl);
             }
             else
             {
-                return LoadClubProfile(user, currentUserId);
+                return LoadClubProfile(user, currentUserId, displayName, profilePhotoUrl);
             }
         }
 
-        private ActionResult LoadClubProfile(User user, int currentUserId)
+        private ActionResult LoadClubProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
             var weeklies = user.Weeklies.ToList();
-            var displayName = UserService.GetUserDisplayName(user.Id);
-            var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
 
             var vm = new ClubProfileViewModel
                      {
@@ -120,11 +120,8 @@ namespace Zazz.Web.Controllers
             return View("ClubProfile", vm);
         }
 
-        private ActionResult LoadUserProfile(User user, int currentUserId)
+        private ActionResult LoadUserProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
-            var displayName = UserService.GetUserDisplayName(user.Id);
-            var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
-
             const int PHOTOS_COUNT = 15;
             var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
 
@@ -135,7 +132,7 @@ namespace Zazz.Web.Controllers
                          UserPhoto = profilePhotoUrl,
                          IsSelf = currentUserId == user.Id,
                          Feeds = _feedHelper
-                         .GetUserActivityFeed(user.Id, 
+                         .GetUserActivityFeed(user.Id,
                          currentUserId),
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          Photos = photos.Select(p => new PhotoViewModel
@@ -210,7 +207,7 @@ namespace Zazz.Web.Controllers
                 throw new SecurityException();
 
             vm.Cities = _staticDataRepo.GetCities();
-            vm.Schools =_staticDataRepo.GetSchools();
+            vm.Schools = _staticDataRepo.GetSchools();
             vm.Majors = _staticDataRepo.GetMajors();
 
             if (ModelState.IsValid)
