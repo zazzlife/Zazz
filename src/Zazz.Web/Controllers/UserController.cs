@@ -39,6 +39,8 @@ namespace Zazz.Web.Controllers
         public ActionResult ShowProfile(int id, string friendlySeoName)
         {
             var displayName = UserService.GetUserDisplayName(id);
+            if (String.IsNullOrEmpty(displayName))
+                throw new HttpException(404, "user not found");
 
             //SEO
             var realFriendlySeoName = displayName.ToUrlFriendlyString();
@@ -47,6 +49,7 @@ namespace Zazz.Web.Controllers
 
 
             var user = _uow.UserRepository.GetById(id, true, true, true);
+
             var profilePhotoUrl = PhotoService.GetUserImageUrl(user.Id);
 
             var currentUserId = 0;

@@ -268,6 +268,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapFilterProvider.cs" />
+    <Compile Include="Filters\CustomHandleErrorAttribute.cs" />
     <Compile Include="Filters\HMACAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -587,8 +588,8 @@
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
-    <Content Include="Views\Error\404.cshtml" />
-    <Content Include="Views\Error\500.cshtml" />
+    <Content Include="Views\Shared\Errors\404.cshtml" />
+    <Content Include="Views\Shared\Errors\500.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
