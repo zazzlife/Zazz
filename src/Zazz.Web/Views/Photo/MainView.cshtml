@@ -13,11 +13,11 @@
         <div class="album-pic-switch">
             <div class="btn-group" data-toggle="buttons-radio">
                 
-                <a href="~/photo/list/@Model.UserId/1" 
+                <a href="~/photo/list/@Model.UserId?page=1" 
                     @*data-ajax="1" data-container="#photosContainer"*@
                    class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Photos ? "active" : "")">Photos</a>
                 
-                <a href="~/photo/albums/@Model.UserId/1"
+                <a href="~/photo/albums/@Model.UserId?page=1"
                     @*data-ajax="1" data-container="#photosContainer"*@
                    class="btn btn-large btn-info @(Model.ViewType == PhotoViewType.Albums ? "active" : "")">Albums</a>
             </div>
@@ -25,7 +25,7 @@
 
         @if (Model.ViewType == PhotoViewType.Photos)
         {
-            <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/1" data-page="1" data-clearfix="1">
+            <div id="photosContainer" class="pic-list well" data-scroll-pagination="1" data-url="/photo/list/@Model.UserId" data-page="1" data-clearfix="1">
                 @Html.Partial("_PhotoList", Model.Photos)
             </div>
         }

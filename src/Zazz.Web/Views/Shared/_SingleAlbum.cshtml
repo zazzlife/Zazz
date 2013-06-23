@@ -9,7 +9,7 @@
         {
             <button data-id="@Model.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
         }
-        <a href="/photo/list/@Model.UserId/1?albumId=@Model.AlbumId">
+        <a href="/photo/list/@Model.UserId?albumId=@Model.AlbumId">
             <img src="@Model.AlbumPicUrl.MediumLink" />
         </a>
     </div>
