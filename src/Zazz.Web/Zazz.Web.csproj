@@ -587,6 +587,8 @@
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
     <Content Include="Views\Post\Show.cshtml" />
+    <Content Include="Views\Error\404.cshtml" />
+    <Content Include="Views\Error\500.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
