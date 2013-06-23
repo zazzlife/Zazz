@@ -29,6 +29,16 @@ namespace Zazz.Web.Controllers
             return UserService.GetUserDisplayName(User.Identity.Name);
         }
 
+        public int GetCurrentUserId()
+        {
+            var id = 0;
+
+            if (User.Identity.IsAuthenticated)
+                id = UserService.GetUserId(User.Identity.Name);
+
+            return id;
+        }
+
         public string GetDisplayName(int id)
         {
             return UserService.GetUserDisplayName(id);
