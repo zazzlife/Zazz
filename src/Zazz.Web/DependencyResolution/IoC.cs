@@ -53,7 +53,7 @@ namespace Zazz.Web.DependencyResolution
                                     });
 
                             x.For<ICacheService>().Singleton().Use<CacheService>();
-                            x.For<IStringHelper>().Singleton().Use<StringHelper>();
+                            x.For<IStringHelper>().Singleton().Use<Infrastructure.Helpers.StringHelper>();
                             x.For<IStaticDataRepository>().Singleton().Use<StaticDataRepository>();
                             x.For<ICryptoService>().Singleton().Use<CryptoService>();
                             x.For<IApiAppRepository>().Singleton().Use<InMemoryApiAppRepository>();

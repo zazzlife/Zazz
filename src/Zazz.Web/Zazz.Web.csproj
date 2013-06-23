@@ -274,6 +274,7 @@
     </Compile>
     <Compile Include="Helpers\FeedHelper.cs" />
     <Compile Include="Helpers\HtmlHelpers.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\UriHelper.cs" />
     <Compile Include="ImageValidator.cs" />
     <Compile Include="Interfaces\IFeedHelper.cs" />
