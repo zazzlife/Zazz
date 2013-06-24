@@ -39,6 +39,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowNotFoundIfAlbumDoesntExists_OnGetAlbumWithThumbnail()
+        {
+            //Arrange
+            var albumId = 444;
+            _uow.Setup(x => x.AlbumRepository.GetAlbumWithThumbnail(albumId))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.GetAlbumWithThumbnail(albumId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void InsertAndSave_OnCreateAlbum()
         {
             //Arrange

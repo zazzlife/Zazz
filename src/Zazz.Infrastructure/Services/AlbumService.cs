@@ -23,7 +23,11 @@ namespace Zazz.Infrastructure.Services
 
         public AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId)
         {
-            return _uow.AlbumRepository.GetAlbumWithThumbnail(albumId);
+            var album = _uow.AlbumRepository.GetAlbumWithThumbnail(albumId);
+            if (album == null)
+                throw new NotFoundException();
+
+            return album;
         }
 
         public Album GetAlbum(int albumId, bool includePhotos)
