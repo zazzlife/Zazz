@@ -25,14 +25,23 @@ namespace Zazz.Infrastructure.Services
 
             if (commentType == CommentType.Photo)
             {
+                if (comment.PhotoComment == null || comment.PhotoComment.PhotoId == 0)
+                    throw new Exception("comment type was photo, but photo was either null or 0");
+
                 obj = _uow.PhotoRepository.GetById(comment.PhotoComment.PhotoId);
             }
             else if (commentType == CommentType.Post)
             {
+                if (comment.PostComment == null || comment.PostComment.PostId == 0)
+                    throw new Exception("comment type was post, but post was either null or 0");
+
                 obj = _uow.PostRepository.GetById(comment.PostComment.PostId);
             }
             else if (commentType == CommentType.Event)
             {
+                if (comment.EventComment == null || comment.EventComment.EventId == 0)
+                    throw new Exception("comment type was event, but event was either null or 0");
+
                 obj = _uow.EventRepository.GetById(comment.EventComment.EventId);
             }
             else
@@ -46,7 +55,7 @@ namespace Zazz.Infrastructure.Services
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
 
-            if (commentType == CommentType.Photo && comment.PhotoComment != null)
+            if (commentType == CommentType.Photo)
             {
                 var photoId = comment.PhotoComment.PhotoId;
                 var photo = (Photo) obj;
@@ -55,7 +64,7 @@ namespace Zazz.Infrastructure.Services
                     _notificationService.CreatePhotoCommentNotification(comment.Id, comment.UserId,
                                                                         photoId, photo.UserId, save: false);
             }
-            else if (commentType == CommentType.Post && comment.PostComment != null)
+            else if (commentType == CommentType.Post)
             {
                 var postId = comment.PostComment.PostId;
                 var post = (Post)obj;
@@ -74,7 +83,7 @@ namespace Zazz.Infrastructure.Services
                                                                        userId, save: false);
                 }
             }
-            else if (commentType == CommentType.Event && comment.EventComment != null)
+            else if (commentType == CommentType.Event)
             {
                 var eventId = comment.EventComment.EventId;
                 var zazzEvent = (ZazzEvent) obj;
