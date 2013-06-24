@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.DTOs;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -50,6 +51,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.Throws<NotFoundException>(() => _sut.GetAlbumWithThumbnail(albumId));
 
             //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnResultFromRepo_OnGetAlbumWithThumbnail()
+        {
+            //Arrange
+            var albumWithThumbnailDTO = new AlbumWithThumbnailDTO();
+            var albumId = 444;
+            _uow.Setup(x => x.AlbumRepository.GetAlbumWithThumbnail(albumId))
+                .Returns(albumWithThumbnailDTO);
+
+            //Act
+            var result = _sut.GetAlbumWithThumbnail(albumId);
+
+            //Assert
+            Assert.AreSame(albumWithThumbnailDTO, result);
             _mockRepo.VerifyAll();
         }
 
