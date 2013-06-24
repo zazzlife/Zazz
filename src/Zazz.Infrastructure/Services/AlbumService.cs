@@ -32,7 +32,11 @@ namespace Zazz.Infrastructure.Services
 
         public Album GetAlbum(int albumId, bool includePhotos)
         {
-            return _uow.AlbumRepository.GetById(albumId);
+            var album = _uow.AlbumRepository.GetById(albumId, includePhotos);
+            if (album == null)
+                throw new NotFoundException();
+
+            return album;
         }
 
         public IQueryable<Album> GetUserAlbums(int userId, bool includePhotos = false)

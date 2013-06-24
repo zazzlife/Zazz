@@ -72,6 +72,37 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowNotFoundIfAlbumDoesntExists_OnGetAlbum()
+        {
+            //Arrange
+            var albumId = 444;
+            _uow.Setup(x => x.AlbumRepository.GetById(albumId, true))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.GetAlbum(albumId, true));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ReturnResultFromRepo_OnGetAlbum()
+        {
+            //Arrange
+            var albumId = 444;
+            _uow.Setup(x => x.AlbumRepository.GetById(albumId, true))
+                .Returns(_album);
+
+            //Act
+            var result = _sut.GetAlbum(albumId, true);
+
+            //Assert
+            Assert.AreSame(_album, result);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void InsertAndSave_OnCreateAlbum()
         {
             //Arrange
