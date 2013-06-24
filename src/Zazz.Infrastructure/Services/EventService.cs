@@ -46,7 +46,9 @@ namespace Zazz.Infrastructure.Services
                 }
             }
 
-            zazzEvent.CreatedDate = DateTime.UtcNow;
+            if (zazzEvent.CreatedDate != default(DateTime))
+                zazzEvent.CreatedDate = DateTime.UtcNow;
+
             _uow.EventRepository.InsertGraph(zazzEvent);
 
             _uow.SaveChanges();
