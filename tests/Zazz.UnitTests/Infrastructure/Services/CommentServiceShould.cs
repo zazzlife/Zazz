@@ -42,6 +42,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowNotFoundWhenPhotoDoesNotExists_OnCreateComment()
+        {
+            //Arrange
+            _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.CreateComment(_comment, CommentType.Photo));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
+        [Test]
         public void CreateNotificationAndSaveCommentWhenCommentIsOnPhoto_OnCreateComment()
         {
             //Arrange
@@ -84,6 +99,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
 
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundWhenPostDoesNotExists_OnCreateComment()
+        {
+            //Arrange
+            _uow.Setup(x => x.PostRepository.GetById(_comment.PostComment.PostId))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.CreateComment(_comment, CommentType.Post));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -235,6 +264,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowNotFoundWhenEventDoesNotExists_OnCreateComment()
+        {
+            //Arrange
+            _uow.Setup(x => x.EventRepository.GetById(_comment.EventComment.EventId))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.CreateComment(_comment, CommentType.Event));
 
             //Assert
             _mockRepo.VerifyAll();

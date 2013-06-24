@@ -35,6 +35,16 @@ namespace Zazz.Web.Controllers
             _feedHelper = feedHelper;
         }
 
+        [Authorize]
+        public ActionResult Index()
+        {
+            var userId = GetCurrentUserId();
+            var displayName = GetCurrentUserDisplayName();
+
+            return RedirectToAction("Profile", "User",
+                                    new {id = userId, friendlySeoName = displayName.ToUrlFriendlyString()});
+        }
+
         [ActionName("Profile")]
         public ActionResult ShowProfile(int id, string friendlySeoName)
         {

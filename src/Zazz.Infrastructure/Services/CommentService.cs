@@ -21,13 +21,35 @@ namespace Zazz.Infrastructure.Services
 
         public int CreateComment(Comment comment, CommentType commentType)
         {
+            object obj;
+
+            if (commentType == CommentType.Photo)
+            {
+                obj = _uow.PhotoRepository.GetById(comment.PhotoComment.PhotoId);
+            }
+            else if (commentType == CommentType.Post)
+            {
+                obj = _uow.PostRepository.GetById(comment.PostComment.PostId);
+            }
+            else if (commentType == CommentType.Event)
+            {
+                obj = _uow.EventRepository.GetById(comment.EventComment.EventId);
+            }
+            else
+            {
+                throw new ArgumentException("unknown comment type", "commentType");
+            }
+
+            if (obj == null)
+                throw new NotFoundException();
+
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
 
             if (commentType == CommentType.Photo && comment.PhotoComment != null)
             {
                 var photoId = comment.PhotoComment.PhotoId;
-                var photo = _uow.PhotoRepository.GetById(photoId);
+                var photo = (Photo) obj;
 
                 if (photo.UserId != comment.UserId)
                     _notificationService.CreatePhotoCommentNotification(comment.Id, comment.UserId,
@@ -36,7 +58,7 @@ namespace Zazz.Infrastructure.Services
             else if (commentType == CommentType.Post && comment.PostComment != null)
             {
                 var postId = comment.PostComment.PostId;
-                var post = _uow.PostRepository.GetById(postId);
+                var post = (Post)obj;
 
                 // Creating a list of users to notify, at this moment maximum is 2 people but this way I leave a room to grow easily
                 var usersToBeNotified = new List<int> { post.FromUserId };
@@ -55,7 +77,7 @@ namespace Zazz.Infrastructure.Services
             else if (commentType == CommentType.Event && comment.EventComment != null)
             {
                 var eventId = comment.EventComment.EventId;
-                var zazzEvent = _uow.EventRepository.GetById(eventId);
+                var zazzEvent = (ZazzEvent) obj;
 
                 if (comment.UserId != zazzEvent.UserId)
                 {
