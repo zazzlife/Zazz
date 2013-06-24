@@ -55,6 +55,7 @@ namespace Zazz.Infrastructure.Services
             _uow.CommentRepository.InsertGraph(comment);
             _uow.SaveChanges();
 
+            // creating notifications
             if (commentType == CommentType.Photo)
             {
                 var photoId = comment.PhotoComment.PhotoId;
@@ -74,9 +75,8 @@ namespace Zazz.Infrastructure.Services
                 if (post.ToUserId.HasValue)
                     usersToBeNotified.Add(post.ToUserId.Value);
 
-                // Removing the person that commented from notification list
+                // Removing the person that the comment is from notification list
                 usersToBeNotified.Remove(comment.UserId);
-
                 foreach (var userId in usersToBeNotified)
                 {
                     _notificationService.CreatePostCommentNotification(comment.Id, comment.UserId, postId,
