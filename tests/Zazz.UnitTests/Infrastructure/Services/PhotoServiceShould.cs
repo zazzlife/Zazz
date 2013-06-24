@@ -409,24 +409,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void SavePhotoDBAndAddPhotoIdToLastFeedItemWhenLastFeedIsPhotoAndLessThan24Hours_OnSavePhoto()
         {
             //Arrange
-            var lastFeed = new Feed
-            {
-                FeedType = FeedType.Photo,
-                Time = DateTime.UtcNow.AddHours(-23)
-            };
-
             var photo = new Photo
-            {
-                Id = 1234,
-                AlbumId = 12,
-                Description = "desc",
-                UserId = 17
-            };
+                        {
+                            Id = 1234,
+                            AlbumId = 12,
+                            Description = "desc",
+                            UserId = 17
+                        };
+
+            var lastFeed = new Feed
+                           {
+                               FeedType = FeedType.Photo,
+                               Time = DateTime.UtcNow.AddHours(-23),
+                               FeedPhotos = new List<FeedPhoto>
+                                            {
+                                                new FeedPhoto {Photo = photo}
+                                            }
+                           };
+
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
             _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
                 .Returns(lastFeed);
 
+            //Act
             var id = _sut.SavePhoto(photo, Stream.Null, true);
 
             //Assert
