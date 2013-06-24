@@ -18,15 +18,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private CommentService _sut;
         private int _ownerId;
         private Comment _comment;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _uow = new Mock<IUoW>();
-            _notificationService = new Mock<INotificationService>();
-            _sut = new CommentService(_uow.Object, _notificationService.Object);
+            _mockRepo = new MockRepository(MockBehavior.Strict);
 
-            _uow.Setup(x => x.SaveChanges());
+            _uow = _mockRepo.Create<IUoW>();
+            _notificationService = _mockRepo.Create<INotificationService>();
+
+            _sut = new CommentService(_uow.Object, _notificationService.Object);
 
             _ownerId = 444;
             _comment = new Comment
@@ -55,16 +57,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _notificationService.Setup(x => x.CreatePhotoCommentNotification(
                 _comment.Id, _comment.UserId, _comment.PhotoComment.PhotoId, _ownerId, false));
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
-            _uow.Verify(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId), Times.Once());
-            _notificationService.Verify(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.UserId, _comment.PhotoComment.PhotoId, _ownerId, false), Times.Once());
-
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -80,16 +79,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetById(_comment.PhotoComment.PhotoId))
                 .Returns(photo);
 
-            _notificationService.Setup(x => x.CreatePhotoCommentNotification(
-                _comment.Id, _comment.UserId, _comment.PhotoComment.PhotoId, _ownerId, false));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Photo);
 
 
             //Assert
-            _notificationService.Verify(x => x.CreatePhotoCommentNotification(It.IsAny<int>(), It.IsAny<int>(),
-                                             It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -106,13 +103,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId, _comment.PostComment.PostId, _ownerId, false));
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
-            _uow.Verify(x => x.PostRepository.GetById(_comment.PostComment.PostId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -127,13 +124,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostComment.PostId))
                 .Returns(post);
-            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId, _comment.PostComment.PostId, _ownerId, false));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>(), false), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -151,12 +149,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId, _comment.PostComment.PostId, _ownerId, false));
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.FromUserId, false), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -173,17 +172,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostComment.PostId))
                 .Returns(post);
+
             _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                _comment.PostComment.PostId, It.IsAny<int>(), false));
+                _comment.PostComment.PostId, post.FromUserId, false));
+
+            _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
+                _comment.PostComment.PostId, post.ToUserId.Value, false));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.FromUserId, false), Times.Once());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.ToUserId.Value, false), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -201,16 +203,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostComment.PostId))
                 .Returns(post);
             _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                _comment.PostComment.PostId, It.IsAny<int>(), false));
+                _comment.PostComment.PostId, post.ToUserId.Value, false));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.FromUserId, false), Times.Never());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.ToUserId.Value, false), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -228,16 +229,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.GetById(_comment.PostComment.PostId))
                 .Returns(post);
             _notificationService.Setup(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                _comment.PostComment.PostId, It.IsAny<int>(), false));
+                _comment.PostComment.PostId, post.FromUserId, false));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Post);
 
             //Assert
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.FromUserId, false), Times.Once());
-            _notificationService.Verify(x => x.CreatePostCommentNotification(_comment.Id, _comment.UserId,
-                post.Id, post.ToUserId.Value, false), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -254,14 +254,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(zazzEvent);
             _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.UserId, _comment.EventComment.EventId, _ownerId, false));
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.CreateComment(_comment, CommentType.Event);
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
-            _uow.Verify(x => x.EventRepository.GetById(_comment.EventComment.EventId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _notificationService.Verify(x => x.CreateEventCommentNotification(_comment.Id, _comment.UserId, _comment.EventComment.EventId, _ownerId, false), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -276,18 +275,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.InsertGraph(_comment));
             _uow.Setup(x => x.EventRepository.GetById(_comment.EventComment.EventId))
                 .Returns(zazzEvent);
-            _notificationService.Setup(x => x.CreateEventCommentNotification(_comment.Id, _comment.UserId, _comment.EventComment.EventId, _ownerId, false));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.CreateComment(_comment, CommentType.Event);
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.InsertGraph(_comment), Times.Once());
-            _uow.Verify(x => x.EventRepository.GetById(_comment.EventComment.EventId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _notificationService.Verify(
-                x => x.CreateEventCommentNotification(_comment.Id, _comment.UserId, _comment.EventComment.EventId, zazzEvent.UserId, false),
-                Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -298,13 +293,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.GetById(commentId))
                 .Returns(() => null);
 
-
             //Act
             Assert.Throws<NotFoundException>(() => _sut.EditComment(commentId, 123, ""));
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -329,8 +322,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.Throws<SecurityException>(() => _sut.EditComment(commentId, 1, ""));
 
             //Assert
-            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -351,13 +343,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.GetById(commentId))
                 .Returns(() => comment);
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.EditComment(commentId, userId, newMessage);
 
             //Assert
             Assert.AreEqual(newMessage, comment.Message);
-            _uow.Verify(x => x.CommentRepository.GetById(commentId), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -374,7 +367,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemoveComment(commentId, userId);
 
             //Assert
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -397,7 +390,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.Throws<SecurityException>(() => _sut.RemoveComment(commentId, 9));
 
             //Assert
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -416,11 +409,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.CommentRepository.GetById(commentId))
                 .Returns(() => comment);
 
+            _uow.Setup(x => x.CommentRepository.Remove(comment));
+
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.RemoveComment(commentId, userId);
 
             //Assert
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
     }
 }

@@ -30,7 +30,8 @@ namespace Zazz.Infrastructure.Services
                 var photo = _uow.PhotoRepository.GetById(photoId);
 
                 if (photo.UserId != comment.UserId)
-                    _notificationService.CreatePhotoCommentNotification(comment.Id, comment.UserId, photoId, photo.UserId, save: false);
+                    _notificationService.CreatePhotoCommentNotification(comment.Id, comment.UserId,
+                                                                        photoId, photo.UserId, save: false);
             }
             else if (commentType == CommentType.Post && comment.PostComment != null)
             {
