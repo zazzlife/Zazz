@@ -37,6 +37,11 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault(e => e.Id == id);
         }
 
+        public IQueryable<ZazzEvent> GetUserEvents(int userId, int? lastEventId)
+        {
+            throw new NotImplementedException();
+        }
+
         public int GetUpcomingEventsCount(int userId)
         {
             var today = DateTime.UtcNow.Date;

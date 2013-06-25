@@ -8,6 +8,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IEventRepository : IRepository<ZazzEvent>
     {
+        IQueryable<ZazzEvent> GetUserEvents(int userId, int? lastEventId);
+
         int GetUpcomingEventsCount(int userId);
 
         int GetOwnerId(int eventId);
