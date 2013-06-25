@@ -35,6 +35,100 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void ReturnCorrectEvents_OnGetUserEvents()
+        {
+            //Arrange
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user2);
+
+            var user1Event = Mother.GetEvent(_user.Id);
+
+            var event1 = Mother.GetEvent(user2.Id);
+            var event2 = Mother.GetEvent(user2.Id);
+            var event3 = Mother.GetEvent(user2.Id);
+
+            _context.Events.Add(user1Event);
+            _context.Events.Add(event1);
+            _context.Events.Add(event2);
+            _context.Events.Add(event3);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUserEvents(user2.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Any(e => e.Id == event1.Id));
+            Assert.IsTrue(result.Any(e => e.Id == event2.Id));
+            Assert.IsTrue(result.Any(e => e.Id == event3.Id));
+        }
+
+        [Test]
+        public void ReturnLatestEventsFirst_OnGetUserEvents()
+        {
+            //Arrange
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user2);
+
+            var user1Event = Mother.GetEvent(_user.Id);
+
+            var event1 = Mother.GetEvent(user2.Id);
+            event1.CreatedDate = DateTime.UtcNow.AddDays(-1);
+
+            var event2 = Mother.GetEvent(user2.Id);
+            event2.CreatedDate = DateTime.UtcNow.AddHours(-1);
+
+            var event3 = Mother.GetEvent(user2.Id);
+
+            _context.Events.Add(user1Event);
+            _context.Events.Add(event1);
+            _context.Events.Add(event2);
+            _context.Events.Add(event3);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUserEvents(user2.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(event3.Id, result[0].Id);
+            Assert.AreEqual(event2.Id, result[1].Id);
+            Assert.AreEqual(event1.Id, result[2].Id);
+        }
+
+        [Test]
+        public void SkipEventsIfProvided_OnGetUserEvents()
+        {
+            //Arrange
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user2);
+
+            var user1Event = Mother.GetEvent(_user.Id);
+
+            var event1 = Mother.GetEvent(user2.Id);
+            var event2 = Mother.GetEvent(user2.Id);
+            var event3 = Mother.GetEvent(user2.Id);
+            var event4 = Mother.GetEvent(user2.Id);
+            var event5 = Mother.GetEvent(user2.Id);
+
+            _context.Events.Add(user1Event);
+            _context.Events.Add(event1);
+            _context.Events.Add(event2);
+            _context.Events.Add(event3);
+            _context.Events.Add(event4);
+            _context.Events.Add(event5);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUserEvents(user2.Id, event4.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Any(e => e.Id == event1.Id));
+            Assert.IsTrue(result.Any(e => e.Id == event2.Id));
+            Assert.IsTrue(result.Any(e => e.Id == event3.Id));
+        }
+
+        [Test]
         public void ReturnCorrectUserId_OnGetOwner()
         {
             //Arrange
