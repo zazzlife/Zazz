@@ -37,14 +37,16 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault(e => e.Id == id);
         }
 
-        public IQueryable<ZazzEvent> GetUserEvents(int userId, int? lastEventId = null)
+        public IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null)
         {
             var query = DbSet.Where(e => e.UserId == userId);
             
             if (lastEventId.HasValue)
                 query = query.Where(e => e.Id < lastEventId.Value);
 
-            return query.OrderByDescending(e => e.CreatedDate);
+            return query
+                .OrderByDescending(e => e.CreatedDate)
+                .Take(take);
         }
 
         public int GetUpcomingEventsCount(int userId)

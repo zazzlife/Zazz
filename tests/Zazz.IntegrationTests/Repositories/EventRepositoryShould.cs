@@ -54,7 +54,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetUserEvents(user2.Id).ToList();
+            var result = _repo.GetUserEvents(user2.Id, Int32.MaxValue).ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);
@@ -87,7 +87,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetUserEvents(user2.Id).ToList();
+            var result = _repo.GetUserEvents(user2.Id, Int32.MaxValue).ToList();
 
             //Assert
             Assert.AreEqual(event3.Id, result[0].Id);
@@ -119,7 +119,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetUserEvents(user2.Id, event4.Id).ToList();
+            var result = _repo.GetUserEvents(user2.Id, Int32.MaxValue, lastEventId: event4.Id).ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);
