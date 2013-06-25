@@ -40,6 +40,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserIdIs0_OnGetUserEvents()
+        {
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => _sut.GetUserEvents(0, 5, null));
+        }
+
+        [Test]
+        public void ThrowIfTakeIs0_OnGetUserEvents()
+        {
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => _sut.GetUserEvents(5, 0, null));
+        }
+
+        [Test]
         public void ThrowExceptionWhenUserIdIs0_OnCreateEvent()
         {
             //Arrange

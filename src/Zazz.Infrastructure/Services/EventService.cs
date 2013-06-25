@@ -27,7 +27,13 @@ namespace Zazz.Infrastructure.Services
 
         public IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null)
         {
-            throw new NotImplementedException();
+            if (userId == 0)
+                throw new ArgumentException("user id cannot be 0", "userId");
+
+            if (take == 0)
+                throw new ArgumentException("take cannot be 0", "take");
+
+            return _uow.EventRepository.GetUserEvents(userId, take, lastEventId);
         }
 
         public void CreateEvent(ZazzEvent zazzEvent)
