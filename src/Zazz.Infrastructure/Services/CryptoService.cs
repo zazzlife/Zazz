@@ -130,7 +130,7 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public string GenerateSignedSHA1Hash(string clearText, string key)
+        public string GenerateHMACSHA1Hash(string clearText, string key)
         {
             using (var hmacsha1 = new HMACSHA1(Encoding.UTF8.GetBytes(key)))
             {

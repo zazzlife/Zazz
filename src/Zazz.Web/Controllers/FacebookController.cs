@@ -49,7 +49,7 @@ namespace Zazz.Web.Controllers
             var body = await new StreamReader(Request.InputStream, Encoding.UTF8).ReadToEndAsync();
 
             var providedSignature = Request.Headers["X-Hub-Signature"].Replace("sha1=", "");
-            var signature = _cryptoService.GenerateSignedSHA1Hash(
+            var signature = _cryptoService.GenerateHMACSHA1Hash(
                 clearText: body,
                 key: _keyChain.FACEBOOK_API_SECRET);
 

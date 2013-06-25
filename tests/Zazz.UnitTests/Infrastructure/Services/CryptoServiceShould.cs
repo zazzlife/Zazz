@@ -56,10 +56,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [TestCase("Test", "1963801F189AABE6D09B4C185956C0BA39B8DF81")]
         [TestCase(" ", "79966BEDFB6BA4320DBBFFB259B8909495317C80")]
         [TestCase("TEST", "77EDB25DB5E27153EE0FA5217D1E69E294E3CF7E")]
-        public void GenerateExpectedValues_OnComputeSHA1SignedHash(string text, string expected)
+        public void GenerateExpectedValues_OnGenerateHMACSHA1Hash(string text, string expected)
         {
             //Act
-            var hash = _sut.GenerateSignedSHA1Hash(text, "56e97d3e73d03ac9be75d79d0d5e820d");
+            var hash = _sut.GenerateHMACSHA1Hash(text, "56e97d3e73d03ac9be75d79d0d5e820d");
 
             //Assert
             Assert.AreEqual(expected, hash);
