@@ -102,6 +102,7 @@ namespace Zazz.Web.Controllers.Api
 
             var ze = new ZazzEvent
                      {
+                         Id = id,
                          City = e.City,
                          Description = e.Description,
                          IsDateOnly = e.IsDateOnly,
