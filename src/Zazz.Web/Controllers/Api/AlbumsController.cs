@@ -32,7 +32,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/v1/album?userId=&lastAlbum=
+        // GET api/v1/users/{id}/albums?lastAlbum=
         public IEnumerable<ApiAlbum> GetUserAlbums(int userId, int? lastAlbum = null)
         {
             if (userId < 1)

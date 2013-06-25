@@ -10,6 +10,12 @@ namespace Zazz.Web
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "UserAlbums",
+                routeTemplate: "api/v1/users/{userId}/albums",
+                defaults: new { controller = "Albums", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "UserPhotos",
                 routeTemplate: "api/v1/users/{userId}/photos",
                 defaults: new { controller = "Photos", id = RouteParameter.Optional }

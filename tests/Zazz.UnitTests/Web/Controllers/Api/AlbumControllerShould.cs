@@ -46,7 +46,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfUserIdIsInvalid_OnGetUserAlbums(int userId)
         {
             //Arrange
-            ControllerAddress = String.Format("/api/v1/albums?userId={0}", userId);
+            ControllerAddress = String.Format("/api/v1/users/{0}/albums", userId);
 
             AddValidHMACHeaders("GET");
             SetupMocksForHMACAuth();
@@ -63,7 +63,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task ReturnAlbums_OnGetUserAlbums()
         {
             //Arrange
-            ControllerAddress = String.Format("/api/v1/albums?userId={0}", User.Id);
+            ControllerAddress = String.Format("/api/v1/users/{0}/albums", User.Id);
 
             AddValidHMACHeaders("GET");
             SetupMocksForHMACAuth();
