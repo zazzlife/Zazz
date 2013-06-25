@@ -40,6 +40,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
+        public async Task Return400IfUserIdIs0_OnGetUserEvents()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/users/0/events";
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
         public async Task Return400IfIdIs0_OnGet()
         {
             //Arrange

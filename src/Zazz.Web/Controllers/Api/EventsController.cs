@@ -27,6 +27,14 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
+        public IEnumerable<ApiEvent> GetUserEvents(int userId, int? lastEvent = null)
+        {
+            if (userId == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            throw new NotImplementedException();
+        }
+
         // GET api/v1/events/5
         public ApiEvent Get(int id)
         {
