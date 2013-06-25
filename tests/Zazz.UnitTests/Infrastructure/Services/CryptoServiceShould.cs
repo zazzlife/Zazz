@@ -65,6 +65,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(expected, hash);
         }
 
+        [TestCase("Soroush", "jmbNy+UYBp/tFhAKPadxt0+FK2w=")]
+        [TestCase("Test", "mP2O6I6QaGNZyM5mSygWCBNl/5U=")]
+        [TestCase(" ", "griU/PsvK4oWDSQjGsdhCIBsXE8=")]
+        [TestCase("TEST", "Knv/w/VGrrgIT3vZijJwHxhTZ5A=")]
+        public void GenerateExpectedValues_OnGenerateHMACSHA1HashWith(string text, string expected)
+        {
+            //Act
+            var key = Convert.FromBase64String("9IyYemRnr5oRDk+l5sPM1yL+tHZ9+sdx15PXSJlOjuD9KMb8Wsev2vB9dCWylHvvBJD++2YY7clgeuISPCA9Ow==");
+
+            var buffer = Encoding.UTF8.GetBytes(text);
+            var hash = _sut.GenerateHMACSHA1Hash(buffer, key);
+
+            //Assert
+            Assert.AreEqual(expected, hash);
+        }
+
         [Test]
         public void TestingEncryption()
         {

@@ -139,6 +139,15 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
+        public string GenerateHMACSHA1Hash(byte[] text, byte[] key)
+        {
+            using (var hmacsha1 = new HMACSHA1(key))
+            {
+                var hash = hmacsha1.ComputeHash(text);
+                return Convert.ToBase64String(hash);
+            }
+        }
+
         public string GenerateHMACSHA512Hash(byte[] text, byte[] key)
         {
             using (var hmacsha512 = new HMACSHA512(key))
