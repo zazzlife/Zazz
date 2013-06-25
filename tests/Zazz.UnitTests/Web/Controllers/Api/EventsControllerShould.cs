@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security;
@@ -53,6 +55,49 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnUserEvents_OnGetUserEvents()
+        {
+            //Arrange
+            var userId = 34;
+            ControllerAddress = String.Format("/api/v1/users/{0}/events", userId);
+
+            _eventService.Setup(x => x.GetUserEvents(userId, 30, null))
+                         .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent>()));
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnUserEventsAndPassLastEventId_OnGetUserEvents()
+        {
+            //Arrange
+            var userId = 34;
+            var lastEventId = 444;
+            ControllerAddress = String.Format("/api/v1/users/{0}/events?lastEvent={1}", userId, lastEventId);
+
+            _eventService.Setup(x => x.GetUserEvents(userId, 30, lastEventId))
+                         .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent>()));
+
+            AddValidHMACHeaders("GET");
+            SetupMocksForHMACAuth();
+
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
             MockRepo.VerifyAll();
         }
 

@@ -32,7 +32,10 @@ namespace Zazz.Web.Controllers.Api
             if (userId == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            throw new NotImplementedException();
+            const int TAKE = 30;
+
+            var events = _eventService.GetUserEvents(userId, TAKE, lastEvent);
+            return events.Select(_objectMapper.EventToApiEvent);
         }
 
         // GET api/v1/events/5
