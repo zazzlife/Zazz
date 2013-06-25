@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 
@@ -6,6 +7,15 @@ namespace Zazz.Core.Interfaces
 {
     public interface IEventService
     {
+        /// <summary>
+        /// Returns events that has been created by the user (in desc order)
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="take">Number of rows to take</param>
+        /// <param name="lastEventId"></param>
+        /// <returns></returns>
+        IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null);
+
         /// <summary>
         /// Creates an event
         /// </summary>

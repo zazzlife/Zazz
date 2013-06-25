@@ -25,6 +25,11 @@ namespace Zazz.Infrastructure.Services
             _staticDataRepository = staticDataRepository;
         }
 
+        public IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreateEvent(ZazzEvent zazzEvent)
         {
             if (zazzEvent.UserId == 0)
