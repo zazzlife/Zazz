@@ -13,14 +13,15 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class PostController : BaseController
+    public class PostController : UserPageLayoutBaseController
     {
         private readonly IPostService _postService;
         private readonly IFeedHelper _feedHelper;
 
         public PostController(IPostService postService, IUserService userService,
-            IPhotoService photoService, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
-            : base (userService, photoService, defaultImageHelper)
+            IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
+            IFeedHelper feedHelper, ITagService tagService)
+            : base (userService, photoService, defaultImageHelper, tagService)
         {
             _postService = postService;
             _feedHelper = feedHelper;
