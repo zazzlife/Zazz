@@ -67,7 +67,7 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-
+            
             var ze = new ZazzEvent
                      {
                          City = e.City,
@@ -82,7 +82,7 @@ namespace Zazz.Web.Controllers.Api
                          Price = e.Price,
                          Street = e.Street,
                          Time = e.Time,
-                         TimeUtc = e.UtcTime,
+                         TimeUtc = e.Time.ToUniversalTime().DateTime,
                          UserId = ExtractUserIdFromHeader()
                      };
 
