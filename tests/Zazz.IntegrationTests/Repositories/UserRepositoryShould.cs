@@ -763,5 +763,93 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(user.Username, result);
         }
+
+        [TestCase("username!")]
+        [TestCase("Username!")]
+        [TestCase("USERNAME!")]
+        public void ReturnFullNameIfAvailableAndAccountTypeIsUser_OnGetDisplayNameByUserName(string username)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.User;
+            user.Username = "username!";
+            user.UserDetail = new UserDetail { FullName = "user full name" };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(username);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
+        }
+
+        [TestCase("username!")]
+        [TestCase("Username!")]
+        [TestCase("USERNAME!")]
+        public void ReturnClubNameIfAvailableAndAccountTypeIsClub_OnGetDisplayNameByUsername(string username)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.Club;
+            user.Username = "username!";
+            user.ClubDetail = new ClubDetail { ClubName = "club name!" };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(username);
+
+            //Assert
+            Assert.AreEqual(user.ClubDetail.ClubName, result);
+        }
+
+        [TestCase("username!", null)]
+        [TestCase("Username!", "")]
+        [TestCase("USERNAME!", " ")]
+        public void ReturnUsernameIfFullNameIsNotAvailableAndAccountTypeIsUser_OnGetDisplayNameByUsername(string username, string fullname)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.User;
+            user.Username = "username!";
+            user.UserDetail = new UserDetail { FullName = fullname };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(username);
+
+            //Assert
+            Assert.AreEqual(user.Username, result);
+        }
+
+        [TestCase("username!", null)]
+        [TestCase("Username!", "")]
+        [TestCase("USERNAME!", " ")]
+        public void ReturnUserNameIfClubNameIsNotAvailableAndAccountTypeIsClub_OnGetDisplayNameByusername(string username, string clubName)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.Club;
+            user.Username = "username!";
+            user.ClubDetail = new ClubDetail { ClubName = clubName };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(username);
+
+            //Assert
+            Assert.AreEqual(user.Username, result);
+        }
     }
 }

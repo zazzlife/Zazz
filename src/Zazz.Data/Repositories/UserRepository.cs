@@ -158,7 +158,31 @@ namespace Zazz.Data.Repositories
 
         public string GetDisplayName(string username)
         {
-            throw new NotImplementedException();
+            var user = DbSet.Where(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase))
+                             .Select(u => new
+                             {
+                                 u.AccountType,
+                                 u.Username,
+                                 u.UserDetail.FullName,
+                                 u.ClubDetail.ClubName
+                             })
+                             .SingleOrDefault();
+
+            if (user == null)
+                return null;
+
+            if (user.AccountType == AccountType.User && !String.IsNullOrWhiteSpace(user.FullName))
+            {
+                return user.FullName;
+            }
+            else if (user.AccountType == AccountType.Club && !String.IsNullOrWhiteSpace(user.ClubName))
+            {
+                return user.ClubName;
+            }
+            else
+            {
+                return user.Username;
+            }
         }
 
         public int? GetUserPhotoId(int userId)
