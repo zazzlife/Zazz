@@ -108,6 +108,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserWasNotFound_OnGetUserById()
+        {
+            //Arrange
+            var userId = 22;
+            _uow.Setup(x => x.UserRepository.GetById(userId, false, false, false, false))
+                .Returns(() => null);
+
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.GetUser(userId));
+        }
+
+        [Test]
         public void ReturnGetUserAccountTypeFromRepo_OnGetUserAccountType()
         {
             //Arrange
