@@ -212,6 +212,54 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void GetDisplayNameAndAddToCache_OnGetUserDisplayNameWithUsername()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+            var displayName = "displayName";
+
+            _uow.Setup(x => x.UserRepository.GetDisplayName(user.Id))
+                .Returns(displayName);
+
+            _cacheService.Setup(x => x.GetUserId(user.Username))
+                         .Returns(user.Id);
+
+            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
+                         .Returns(() => null);
+            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, displayName));
+
+            //Act
+            var result = _sut.GetUserDisplayName(user.Username);
+
+            //Assert
+            Assert.AreEqual(displayName, result);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserDoesntExists_OnGetUserDisplayNameWithUsername()
+        {
+            //Arrange
+            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+            var displayName = "displayName";
+
+            _uow.Setup(x => x.UserRepository.GetDisplayName(user.Id))
+                .Returns(() => null);
+
+            _cacheService.Setup(x => x.GetUserId(user.Username))
+                         .Returns(user.Id);
+
+            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
+                         .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.GetUserDisplayName(user.Username));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ReturnCacheValueIfItExistsInCacheAndNotMakeDbCall_OnGetPassword()
         {
             //Arrange
