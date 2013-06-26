@@ -142,11 +142,11 @@ namespace Zazz.Data.Repositories
             if (user == null)
                 return null;
 
-            if (user.AccountType == AccountType.User && !String.IsNullOrEmpty(user.FullName))
+            if (user.AccountType == AccountType.User && !String.IsNullOrWhiteSpace(user.FullName))
             {
                 return user.FullName;
             }
-            else if (user.AccountType == AccountType.Club && !String.IsNullOrEmpty(user.ClubName))
+            else if (user.AccountType == AccountType.Club && !String.IsNullOrWhiteSpace(user.ClubName))
             {
                 return user.ClubName;
             }

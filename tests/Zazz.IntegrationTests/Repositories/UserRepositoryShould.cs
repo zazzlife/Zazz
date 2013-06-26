@@ -720,5 +720,48 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.ClubDetail.ClubName, result);
         }
 
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void ReturnUsernameIfFullNameIsNotAvailableAndAccountTypeIsUser_OnGetDisplayNameById(string fullname)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.User;
+            user.Username = "username!";
+            user.UserDetail = new UserDetail { FullName = fullname };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.Username, result);
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void ReturnUserNameIfClubNameIsNotAvailableAndAccountTypeIsClub_OnGetDisplayNameById(string clubName)
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.Club;
+            user.Username = "username!";
+            user.ClubDetail = new ClubDetail { ClubName = clubName };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.Username, result);
+        }
     }
 }
