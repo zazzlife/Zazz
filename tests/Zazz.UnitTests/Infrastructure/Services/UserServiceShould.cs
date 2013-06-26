@@ -75,6 +75,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserWasNotFound_OnGetUser()
+        {
+            //Arrange
+            var username = "soroush";
+            _uow.Setup(x => x.UserRepository.GetByUsername(username, false, false, false, false))
+                .Returns(() => null);
+
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.GetUser(username));
+        }
+
+        [Test]
         public void CallGetByUsername_OnGetUser()
         {
             //Arrange

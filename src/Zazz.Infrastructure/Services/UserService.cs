@@ -47,8 +47,13 @@ namespace Zazz.Infrastructure.Services
         public User GetUser(string username, bool includeDetails = false, bool includeClubDetails = false,
                      bool includeWeeklies = false, bool includePreferences = false)
         {
-            return _uoW.UserRepository
+            var user = _uoW.UserRepository
                 .GetByUsername(username, includeDetails, includeClubDetails, includeWeeklies, includePreferences);
+
+            if (user == null)
+                throw new NotFoundException();
+
+            return user;
         }
 
         public User GetUser(int userId, bool includeDetails = false, bool includeClubDetails = false,
