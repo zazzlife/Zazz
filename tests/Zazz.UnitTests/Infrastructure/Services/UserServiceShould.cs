@@ -19,14 +19,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<ICacheService> _cacheService;
         private Mock<ICryptoService> _cryptoService;
         private Mock<IPhotoService> _photoService;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _cacheService = new Mock<ICacheService>();
-            _cryptoService = new Mock<ICryptoService>(MockBehavior.Strict);
-            _uow = new Mock<IUoW>(MockBehavior.Strict);
-            _photoService = new Mock<IPhotoService>(MockBehavior.Strict);
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+
+            _cacheService = _mockRepo.Create<ICacheService>();
+            _cryptoService = _mockRepo.Create<ICryptoService>();
+            _uow = _mockRepo.Create<IUoW>();
+            _photoService = _mockRepo.Create<IPhotoService>();
             _sut = new UserService(_uow.Object, _cacheService.Object, _cryptoService.Object, _photoService.Object);
         }
 
@@ -47,9 +50,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(id, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(username), Times.Once());
-            _cacheService.Verify(x => x.GetUserId(username), Times.Once());
-            _cacheService.Verify(x => x.AddUserId(username, id), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -58,20 +59,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var username = "soroush";
             var id = 12;
-            _uow.Setup(x => x.UserRepository.GetIdByUsername(username))
-                .Returns(id);
             _cacheService.Setup(x => x.GetUserId(username))
                          .Returns(id);
-            _cacheService.Setup(x => x.AddUserId(username, id));
 
             //Act
             var result = _sut.GetUserId(username);
 
             //Assert
             Assert.AreEqual(id, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(It.IsAny<string>()), Times.Never());
-            _cacheService.Verify(x => x.GetUserId(username), Times.Once());
-            _cacheService.Verify(x => x.AddUserId(username, id), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -84,6 +80,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<NotFoundException>(() => _sut.GetUser(username));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -96,14 +93,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()))
                 .Returns(user);
 
-
             //Act
             var result = _sut.GetUser(username);
 
             //Assert
             Assert.AreSame(user, result);
-            _uow.Verify(x => x.UserRepository.GetByUsername(username,
-                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
+            _mockRepo.VerifyAll();
 
         }
 
@@ -117,6 +112,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<NotFoundException>(() => _sut.GetUser(userId));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -133,7 +129,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(accountType, result);
-            _uow.Verify(x => x.UserRepository.GetUserAccountType(id), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -142,23 +138,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
-                .Returns(user.UserDetail.FullName);
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(user.UserDetail.FullName);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
 
             //Act
             var result = _sut.GetUserDisplayName(user.Id);
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetUserFullName(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -167,26 +155,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
-                .Returns(user.UserDetail.FullName);
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
+            _cacheService.Setup(x => x.GetUserId(user.Username))
+                         .Returns(user.Id);
+
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(user.UserDetail.FullName);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
-            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
-                .Returns(user.Id);
 
             //Act
             var result = _sut.GetUserDisplayName(user.Username);
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserFullName(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(It.IsAny<int>(), It.IsAny<string>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -197,8 +177,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
                 .Returns(user.UserDetail.FullName);
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(() => null);
             _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
@@ -208,10 +186,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -233,10 +208,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(user.Username, result);
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(user.Id, user.Username), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -245,10 +217,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
 
-            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
-                .Returns(user.Id);
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
+            _cacheService.Setup(x => x.GetUserId(user.Username))
+                         .Returns(user.Id);
+
             _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
                 .Returns(user.UserDetail.FullName);
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
@@ -260,11 +231,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(user.UserDetail.FullName, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserName(It.IsAny<int>()), Times.Never());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -275,10 +242,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
                 .Returns(() => null);
+
             _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
                 .Returns(user.Username);
-            _uow.Setup(x => x.UserRepository.GetIdByUsername(user.Username))
-                .Returns(user.Id);
+
+            _cacheService.Setup(x => x.GetUserId(user.Username))
+                         .Returns(user.Id);
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(() => null);
             _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.Username));
@@ -288,11 +257,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(user.Username, result);
-            _uow.Verify(x => x.UserRepository.GetIdByUsername(user.Username), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserFullName(user.Id), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetUserName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.GetUserDisplayName(user.Id), Times.Once());
-            _cacheService.Verify(x => x.AddUserDiplayName(user.Id, user.Username), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -310,9 +275,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             CollectionAssert.AreEqual(password, result);
-            _cacheService.Verify(x => x.GetUserPassword(userId), Times.Once());
-            _cacheService.Verify(x => x.AddUserPassword(It.IsAny<int>(), It.IsAny<byte[]>()), Times.Never());
-            _uow.VerifyAll();
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -343,9 +306,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             CollectionAssert.AreEqual(password, result);
-            _uow.VerifyAll();
-            _cryptoService.VerifyAll();
-            _cacheService.VerifyAll();
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -359,9 +320,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             //Act & Assert
             Assert.Throws<NotFoundException>(() => _sut.GetUserPassword(userId));
-            _uow.VerifyAll();
-            _cryptoService.VerifyAll();
-            _cacheService.VerifyAll();
+            _mockRepo.VerifyAll();
         }
 
         [Test]
