@@ -69,6 +69,7 @@
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Exceptions\OAuthAccountAlreadyExistsException.cs" />
     <Compile Include="Exceptions\OAuthAccountNotFoundException.cs" />
+    <Compile Include="Exceptions\PasswordTooLongException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />
