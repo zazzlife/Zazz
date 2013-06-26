@@ -127,6 +127,16 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+        public string GetDisplayName(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDisplayName(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public int? GetUserPhotoId(int userId)
         {
             return DbSet.Where(u => u.Id == userId)
