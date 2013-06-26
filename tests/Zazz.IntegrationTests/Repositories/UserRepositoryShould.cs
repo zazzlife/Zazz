@@ -12,14 +12,14 @@ namespace Zazz.IntegrationTests.Repositories
     [TestFixture]
     public class UserRepositoryShould
     {
-        private ZazzDbContext _zazzDbContext;
+        private ZazzDbContext _context;
         private UserRepository _repo;
 
         [SetUp]
         public void Init()
         {
-            _zazzDbContext = new ZazzDbContext(true);
-            _repo = new UserRepository(_zazzDbContext);
+            _context = new ZazzDbContext(true);
+            _repo = new UserRepository(_context);
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Zazz.IntegrationTests.Repositories
             _repo.InsertGraph(user);
 
             //Assert
-            Assert.AreEqual(EntityState.Added, _zazzDbContext.Entry(user).State);
+            Assert.AreEqual(EntityState.Added, _context.Entry(user).State);
         }
 
         [Test]
@@ -362,7 +362,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Act
             _repo.Remove(user.Id);
-            _zazzDbContext.SaveChanges();
+            _context.SaveChanges();
 
             var result = _repo.GetById(user.Id);
 
@@ -386,7 +386,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Act
             _repo.Remove(user);
-            _zazzDbContext.SaveChanges();
+            _context.SaveChanges();
 
             var result = _repo.GetById(user.Id);
 
@@ -423,7 +423,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var gender = Gender.Male;
             var user = Mother.GetUser();
-            user.UserDetail = new UserDetail {Gender = gender};
+            user.UserDetail = new UserDetail { Gender = gender };
 
             using (var ctx = new ZazzDbContext())
             {
@@ -446,7 +446,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var gender = Gender.Male;
             var user = Mother.GetUser();
-            user.UserDetail = new UserDetail {Gender = gender};
+            user.UserDetail = new UserDetail { Gender = gender };
             user.Username = "username";
 
             using (var ctx = new ZazzDbContext())
@@ -467,7 +467,7 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             var user = Mother.GetUser();
-            user.UserDetail = new UserDetail {FullName = "Full Name"};
+            user.UserDetail = new UserDetail { FullName = "Full Name" };
             using (var ctx = new ZazzDbContext())
             {
                 ctx.Users.Add(user);
@@ -533,15 +533,15 @@ namespace Zazz.IntegrationTests.Repositories
 
             var userA = Mother.GetUser();
             userA.ProfilePhotoId = idToBeRemoved;
-            userA.ClubDetail = new ClubDetail {CoverPhotoId = idNotToBeRemoved, ClubType = ClubType.Bar };
+            userA.ClubDetail = new ClubDetail { CoverPhotoId = idNotToBeRemoved, ClubType = ClubType.Bar };
 
             var userB = Mother.GetUser();
             userB.ProfilePhotoId = idNotToBeRemoved;
             userB.ClubDetail = new ClubDetail { CoverPhotoId = idToBeRemoved, ClubType = ClubType.Bar };
 
-            _zazzDbContext.Users.Add(userA);
-            _zazzDbContext.Users.Add(userB);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(userA);
+            _context.Users.Add(userB);
+            _context.SaveChanges();
 
             //Act
             _repo.ResetPhotoId(idToBeRemoved);
@@ -565,8 +565,8 @@ namespace Zazz.IntegrationTests.Repositories
             var user = Mother.GetUser();
             user.ProfilePhotoId = photoId;
 
-            _zazzDbContext.Users.Add(user);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             //Act
             var result = _repo.ResetPhotoId(photoId);
@@ -584,8 +584,8 @@ namespace Zazz.IntegrationTests.Repositories
             var user = Mother.GetUser();
             user.ProfilePhotoId = 13;
 
-            _zazzDbContext.Users.Add(user);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             //Act
             var result = _repo.ResetPhotoId(photoId);
@@ -609,9 +609,9 @@ namespace Zazz.IntegrationTests.Repositories
                                     SyncFbEvents = false
                                 };
 
-            _zazzDbContext.Users.Add(userA);
-            _zazzDbContext.Users.Add(userB);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(userA);
+            _context.Users.Add(userB);
+            _context.SaveChanges();
 
             //Act
             var resultA = _repo.WantsFbEventsSynced(userA.Id);
@@ -638,9 +638,9 @@ namespace Zazz.IntegrationTests.Repositories
                                     SyncFbPosts = false
                                 };
 
-            _zazzDbContext.Users.Add(userA);
-            _zazzDbContext.Users.Add(userB);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(userA);
+            _context.Users.Add(userB);
+            _context.SaveChanges();
 
             //Act
             var resultA = _repo.WantsFbPostsSynced(userA.Id);
@@ -667,9 +667,9 @@ namespace Zazz.IntegrationTests.Repositories
                                     SyncFbImages = false
                                 };
 
-            _zazzDbContext.Users.Add(userA);
-            _zazzDbContext.Users.Add(userB);
-            _zazzDbContext.SaveChanges();
+            _context.Users.Add(userA);
+            _context.Users.Add(userB);
+            _context.SaveChanges();
 
             //Act
             var resultA = _repo.WantsFbImagesSynced(userA.Id);
@@ -678,6 +678,26 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsTrue(resultA);
             Assert.IsFalse(resultB);
+        }
+
+        [Test]
+        public void ReturnFullNameIfAvailable_OnGetDisplayNameById()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.User;
+            user.Username = "username!";
+            user.UserDetail = new UserDetail { FullName = "user full name" };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.UserDetail.FullName, result);
         }
 
 

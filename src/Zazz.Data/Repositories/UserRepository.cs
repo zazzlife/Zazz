@@ -129,7 +129,16 @@ namespace Zazz.Data.Repositories
 
         public string GetDisplayName(int userId)
         {
-            throw new NotImplementedException();
+            var names = DbSet.Where(u => u.Id == userId)
+                             .Select(u => new
+                                          {
+                                              username = u.Username,
+                                              fullName = u.UserDetail.FullName,
+                                              clubName = u.ClubDetail.ClubName
+                                          })
+                             .SingleOrDefault();
+
+            return names.fullName;
         }
 
         public string GetDisplayName(string username)
