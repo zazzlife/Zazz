@@ -617,6 +617,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Change Password
 
         [Test]
+        public void ThrowIfPasswordIsTooLong_OnChangePassword()
+        {
+            //Arrange
+            _pass = "123456789012345678901";
+            Assert.IsTrue(_pass.Length > 20);
+
+            //Act & Assert
+            Assert.Throws<PasswordTooLongException>(() => _sut.ChangePassword(_user.Id, "pass", _pass));
+        }
+
+        [Test]
         public void ThrowInvalidPasswordIfCurrentPasswordIsNotCorrect_OnChangePassword()
         {
             //Arrange

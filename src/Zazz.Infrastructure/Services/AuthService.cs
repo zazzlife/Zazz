@@ -123,6 +123,9 @@ namespace Zazz.Infrastructure.Services
 
         public void ChangePassword(int userId, string currentPassword, string newPassword)
         {
+            if (newPassword.Length > PASS_MAX_LENGTH)
+                throw new PasswordTooLongException();
+
             var user = _uow.UserRepository.GetById(userId);
 
             var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
