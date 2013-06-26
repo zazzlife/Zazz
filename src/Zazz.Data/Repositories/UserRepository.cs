@@ -129,16 +129,31 @@ namespace Zazz.Data.Repositories
 
         public string GetDisplayName(int userId)
         {
-            var names = DbSet.Where(u => u.Id == userId)
+            var user = DbSet.Where(u => u.Id == userId)
                              .Select(u => new
                                           {
-                                              username = u.Username,
-                                              fullName = u.UserDetail.FullName,
-                                              clubName = u.ClubDetail.ClubName
+                                              u.AccountType,
+                                              u.Username,
+                                              u.UserDetail.FullName,
+                                              u.ClubDetail.ClubName
                                           })
                              .SingleOrDefault();
 
-            return names.fullName;
+            if (user == null)
+                return null;
+
+            if (user.AccountType == AccountType.User && !String.IsNullOrEmpty(user.FullName))
+            {
+                return user.FullName;
+            }
+            else if (user.AccountType == AccountType.Club && !String.IsNullOrEmpty(user.ClubName))
+            {
+                return user.ClubName;
+            }
+            else
+            {
+                return user.Username;
+            }
         }
 
         public string GetDisplayName(string username)

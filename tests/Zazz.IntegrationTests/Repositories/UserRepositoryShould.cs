@@ -681,7 +681,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnFullNameIfAvailable_OnGetDisplayNameById()
+        public void ReturnFullNameIfAvailableAndAccountTypeIsUser_OnGetDisplayNameById()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -700,6 +700,25 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(user.UserDetail.FullName, result);
         }
 
+        [Test]
+        public void ReturnClubNameIfAvailableAndAccountTypeIsClub_OnGetDisplayNameById()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+
+            user.AccountType = AccountType.Club;
+            user.Username = "username!";
+            user.ClubDetail = new ClubDetail {ClubName = "club name!"};
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetDisplayName(user.Id);
+
+            //Assert
+            Assert.AreEqual(user.ClubDetail.ClubName, result);
+        }
 
     }
 }
