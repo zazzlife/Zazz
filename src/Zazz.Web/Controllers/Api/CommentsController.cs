@@ -9,7 +9,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class CommentsController : BaseApiController
     {
         private readonly ICommentService _commentService;

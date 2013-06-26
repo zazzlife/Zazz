@@ -12,7 +12,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class PostCommentsController : BaseApiController
     {
         private readonly IFeedHelper _feedHelper;

@@ -10,7 +10,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class FollowRequestsController : BaseApiController
     {
         private readonly IFollowService _followService;

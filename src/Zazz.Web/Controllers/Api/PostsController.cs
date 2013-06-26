@@ -14,7 +14,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class PostsController : BaseApiController
     {
         private readonly IPostService _postService;

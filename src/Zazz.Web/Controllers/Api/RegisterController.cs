@@ -20,7 +20,7 @@ namespace Zazz.Web.Controllers.Api
             _appRequestTokenService = appRequestTokenService;
         }
 
-        [HMACAuthorize(true)]
+        //[HMACAuthorize(true)]
         public ApiAppToken Get()
         {
             var authHeader = Request.Headers.Authorization.Parameter;

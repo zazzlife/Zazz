@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class UserController : BaseApiController
     {
         private readonly IUoW _uow;

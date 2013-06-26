@@ -7,18 +7,21 @@ namespace Zazz.Web.Controllers.Api
     {
          protected int ExtractUserIdFromHeader()
          {
-             var auth = Request.Headers.Authorization;
-             if (auth == null || String.IsNullOrEmpty(auth.Parameter))
-                 return 0;
+             return Int32.Parse(Request.Headers.Authorization.Parameter);
 
-             var authSegments = auth.Parameter.Split(':');
-             if (authSegments.Length < 4)
-                 return 0;
+             //var auth = Request.Headers.Authorization;
+             //if (auth == null || String.IsNullOrEmpty(auth.Parameter))
+             //    return 0;
 
-             int userId;
-             Int32.TryParse(authSegments[2], out userId);
+             //var authSegments = auth.Parameter.Split(':');
+             //if (authSegments.Length < 4)
+             //    return 0;
 
-             return userId;
+             //int userId;
+             //Int32.TryParse(authSegments[2], out userId);
+
+
+             //return userId;
          }
     }
 }

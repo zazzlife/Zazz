@@ -16,7 +16,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    [HMACAuthorize]
+    //[HMACAuthorize]
     public class PhotosController : BaseApiController
     {
         private readonly IPhotoService _photoService;
