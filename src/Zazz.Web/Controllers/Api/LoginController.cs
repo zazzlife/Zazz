@@ -37,13 +37,17 @@ namespace Zazz.Web.Controllers.Api
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             var clearPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
-            var app = _apiAppRepository.GetById(request.AppId);
 
-            var hashCheck = _cryptoService.GenerateHMACSHA512Hash(Encoding.UTF8.GetBytes(clearPassword),
-                                                                  app.PasswordSigningKey);
-
-            if (request.Password != hashCheck)
+            if (request.Password != clearPassword)
                 throw new HttpResponseException(HttpStatusCode.Unauthorized);
+
+            //var app = _apiAppRepository.GetById(request.AppId);
+
+            //var hashCheck = _cryptoService.GenerateHMACSHA512Hash(Encoding.UTF8.GetBytes(clearPassword),
+            //                                                    app.PasswordSigningKey);
+
+            //if (request.Password != hashCheck)
+            //    throw new HttpResponseException(HttpStatusCode.Unauthorized);
 
             var response = new ApiLoginResponse
                            {
