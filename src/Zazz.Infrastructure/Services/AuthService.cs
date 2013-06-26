@@ -25,7 +25,7 @@ namespace Zazz.Infrastructure.Services
         {
             var user = _uow.UserRepository.GetByUsername(username);
             if (user == null)
-                throw new UserNotExistsException();
+                throw new NotFoundException();
 
             var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
             if (decryptedPassword != password)
