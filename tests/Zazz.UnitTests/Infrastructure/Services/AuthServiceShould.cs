@@ -497,6 +497,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #region Reset Password
 
         [Test]
+        public void ThrowIfPasswordIsTooLong_OnResetPassword()
+        {
+            //Arrange
+            _pass = "123456789012345678901";
+            Assert.IsTrue(_pass.Length > 20);
+
+            //Act & Assert
+            Assert.Throws<PasswordTooLongException>(() => _sut.ResetPassword(_user.Id, Guid.NewGuid(), _pass));
+        }
+
+        [Test]
         public void ThrowInvalidTokenExceptionWhenTokenIsNotValid_OnResetPassword()
         {
             //Arrange

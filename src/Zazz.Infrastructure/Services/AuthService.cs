@@ -38,7 +38,7 @@ namespace Zazz.Infrastructure.Services
 
         public User Register(User user, string password, bool createToken)
         {
-            if (password.Length > 20)
+            if (password.Length > PASS_MAX_LENGTH)
                 throw new PasswordTooLongException();
 
             var usernameExists = _uow.UserRepository.ExistsByUsername(user.Username);
@@ -105,6 +105,9 @@ namespace Zazz.Infrastructure.Services
 
         public void ResetPassword(int userId, Guid token, string newPassword)
         {
+            if (newPassword.Length > PASS_MAX_LENGTH)
+                throw new PasswordTooLongException();
+
             var isTokenValid = IsTokenValid(userId, token);
             if (!isTokenValid)
                 throw new InvalidTokenException();
