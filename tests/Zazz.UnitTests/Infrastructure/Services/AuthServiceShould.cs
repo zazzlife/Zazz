@@ -115,61 +115,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<PasswordTooLongException>(() => _sut.Register(_user, _pass, false));
-        }
-
-        [Test]
-        public void CheckForExistingUsername_OnRegister()
-        {
-            //Arrange
-            _uow.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
-                    .Returns(false);
-            _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
-                    .Returns(false);
-
-            //Act
-            _sut.Register(_user, _pass, false);
-
-            //Assert
-            _uow.Verify(x => x.UserRepository.ExistsByUsername(_user.Username), Times.Once());
-        }
-
-        [Test]
-        public void CheckForExistingEmail_OnRegister()
-        {
-            //Arrange
-            _uow.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
-                    .Returns(false);
-            _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
-                    .Returns(false);
-
-            //Act
-            _sut.Register(_user, _pass, false);
-
-            //Assert
-            _uow.Verify(x => x.UserRepository.ExistsByEmail(_user.Email), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
         public void ThrowIfUsernameExists_OnRegister()
         {
             //Arrange
-
             _uow.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
                     .Returns(true);
-            _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
-                    .Returns(false);
 
             //Act
-            try
-            {
-                _sut.Register(_user, _pass, false);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (UsernameExistsException e)
-            {
-                //Assert
-                Assert.IsInstanceOf<UsernameExistsException>(e);
-            }
+            Assert.Throws<UsernameExistsException>(() => _sut.Register(_user, _pass, false));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -182,16 +142,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(true);
 
             //Act
-            try
-            {
-                _sut.Register(_user, _pass, false);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (EmailExistsException e)
-            {
-                //Assert
-                Assert.IsInstanceOf<EmailExistsException>(e);
-            }
+            Assert.Throws<EmailExistsException>(() => _sut.Register(_user, _pass, false));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -207,15 +161,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var iv = Convert.ToBase64String(ivBuffer);
             var encryptedPass = new byte[] { 7, 8, 9 };
 
-
             _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
                        .Returns(encryptedPass);
+
+            _uow.Setup(x => x.UserRepository.InsertGraph(It.IsAny<User>()));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.Register(_user, _pass, false);
 
             //Assert
-            _cryptoService.Verify(x => x.EncryptPassword(_pass, out iv), Times.Once());
+            _mockRepo.VerifyAll();
             CollectionAssert.AreEqual(encryptedPass, _user.Password);
             CollectionAssert.AreEqual(Convert.FromBase64String(iv), _user.PasswordIV);
         }
@@ -229,59 +185,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
 
-            var iv = String.Empty;
-            _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
-                       .Returns(_passBuffer);
+            var ivBuffer = new byte[] { 1, 2 };
+            var iv = Convert.ToBase64String(ivBuffer);
+            var encryptedPass = new byte[] { 7, 8, 9 };
 
+            _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
+                       .Returns(encryptedPass);
+
+            _uow.Setup(x => x.UserRepository.InsertGraph(It.IsAny<User>()));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.Register(_user, _pass, true);
 
             //Assert
+            _mockRepo.VerifyAll();
+
             Assert.IsNotNull(_user.UserValidationToken);
             Assert.AreEqual(DateTime.UtcNow.AddYears(1).Date, _user.UserValidationToken.ExpirationTime.Date);
             Assert.IsNotNull(_user.UserValidationToken.Token);
         }
 
-        [Test]
-        public void SaveUserWhenEverythingIsOk_OnRegister()
-        {
-            //Arrange
-            _uow.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
-                    .Returns(false);
-            _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
-                    .Returns(false);
-            var iv = String.Empty;
-            _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
-                       .Returns(_passBuffer);
-
-            //Act
-            _sut.Register(_user, _pass, false);
-
-            //Assert
-            _uow.Verify(x => x.UserRepository.InsertGraph(_user), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-        }
         #endregion
 
         #region Generate Reset Password Token
-
-        [Test]
-        public void GetUserIdByEmail_OnGenerateResetToken()
-        {
-            //Arrange
-            var email = "email";
-            _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
-                    .Returns(12);
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(It.IsAny<int>()))
-                    .Returns(() => null);
-
-            //Act
-            _sut.GenerateResetPasswordToken(email);
-
-            //Assert
-            _uow.Verify(x => x.UserRepository.GetIdByEmail(email), Times.Once());
-        }
 
         [Test]
         public void ThrowEmailNotExists_WhenEmailNotExists_OnGenerateResetToken()
@@ -291,21 +218,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
                     .Returns(0);
 
-            try
-            {
-                //Act
-                _sut.GenerateResetPasswordToken(email);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (EmailNotExistsException e)
-            {
-                //Assert
-                Assert.IsInstanceOf<EmailNotExistsException>(e);
-            }
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.GenerateResetPasswordToken(email));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void GenerateValidToken_OnGenerateResetToken()
+        public void InsertNewTokenIfNotExists_OnGenerateResetToken()
         {
             //Arrange
             var userId = 12;
@@ -315,6 +236,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(() => null);
 
+            _uow.Setup(x => x.ValidationTokenRepository.InsertGraph(It.Is<UserValidationToken>(t => t.Id == userId)));
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             var result = _sut.GenerateResetPasswordToken(email);
 
@@ -322,70 +246,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(DateTime.UtcNow.AddDays(1).Date, result.ExpirationTime.Date);
             Assert.IsNotNull(result.Token);
             Assert.AreEqual(userId, result.Id);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void DeleteOldTokenRecordIfExists_OnGenerateResetToken()
+        public void UpdateTokenIfExists_OnGenerateResetToken()
         {
             //Arrange
+            var userId = 12;
             var email = "email";
-            var userId = 1;
-            var token = new UserValidationToken();
+            var oldTokenExpirationTime = DateTime.UtcNow.AddDays(-1);
+            var oldTokenGuid = Guid.NewGuid();
+
+            var token = new UserValidationToken
+                        {
+                            Id = userId,
+                            ExpirationTime = oldTokenExpirationTime,
+                            Token = oldTokenGuid,
+                        };
+
             _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
                     .Returns(userId);
             _uow.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(token);
-            _uow.Setup(x => x.ValidationTokenRepository.Remove(token));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             var result = _sut.GenerateResetPasswordToken(email);
 
             //Assert
-            _uow.Verify(x => x.ValidationTokenRepository.GetById(userId), Times.Once());
-            _uow.Verify(x => x.ValidationTokenRepository.Remove(token), Times.Once());
-
-        }
-
-        [Test]
-        public void NotCallRemoveWhenOldTokenNotExists_OnGenerateResetToken()
-        {
-            //Arrange
-            var email = "email";
-            var userId = 1;
-            var token = new UserValidationToken();
-            _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
-                    .Returns(userId);
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(userId))
-                    .Returns(() => null);
-            _uow.Setup(x => x.ValidationTokenRepository.Remove(token));
-
-            //Act
-            var result = _sut.GenerateResetPasswordToken(email);
-
-            //Assert
-            _uow.Verify(x => x.ValidationTokenRepository.GetById(userId), Times.Once());
-            _uow.Verify(x => x.ValidationTokenRepository.Remove(token), Times.Never());
-        }
-
-        [Test]
-        public void SaveWhenEverythingIsOk_OnGenerateResetToken()
-        {
-            //Arrange
-            var email = "email";
-            var userId = 1;
-            var token = new UserValidationToken();
-            _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
-                    .Returns(userId);
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(userId))
-                    .Returns(() => null);
-            _uow.Setup(x => x.ValidationTokenRepository.Remove(token));
-
-            //Act
-            var result = _sut.GenerateResetPasswordToken(email);
-
-            //Assert
-            _uow.Verify(x => x.ValidationTokenRepository.InsertGraph(result));
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            Assert.AreEqual(DateTime.UtcNow.AddDays(1).Date, result.ExpirationTime.Date);
+            Assert.AreNotEqual(oldTokenGuid, result.Token);
+            Assert.AreEqual(userId, result.Id);
+            _mockRepo.VerifyAll();
         }
 
         #endregion

@@ -48,7 +48,7 @@ namespace Zazz.Infrastructure.Services
             var emailExists = _uow.UserRepository.ExistsByEmail(user.Email);
             if (emailExists)
                 throw new EmailExistsException();
-            
+
             var iv = String.Empty;
             user.Password = _cryptoService.EncryptPassword(password, out iv);
             user.PasswordIV = Convert.FromBase64String(iv);
@@ -72,20 +72,24 @@ namespace Zazz.Infrastructure.Services
         {
             var userId = _uow.UserRepository.GetIdByEmail(email);
             if (userId == 0)
-                throw new EmailNotExistsException();
+                throw new NotFoundException();
 
-            var token = new UserValidationToken
-                            {
-                                ExpirationTime = DateTime.UtcNow.AddDays(1),
-                                Id = userId,
-                                Token = Guid.NewGuid(),
-                            };
+            var tokenExists = true;
 
-            var oldToken = _uow.ValidationTokenRepository.GetById(userId);
-            if (oldToken != null)
-                _uow.ValidationTokenRepository.Remove(oldToken);
+            var token = _uow.ValidationTokenRepository.GetById(userId);
+            if (token == null)
+            {
+                tokenExists = false;
+                token = new UserValidationToken { Id = userId };
+            }
+                
 
-            _uow.ValidationTokenRepository.InsertGraph(token);
+            token.ExpirationTime = DateTime.UtcNow.AddDays(1);
+            token.Token = Guid.NewGuid();
+
+            if (!tokenExists)
+                _uow.ValidationTokenRepository.InsertGraph(token);
+
             _uow.SaveChanges();
 
             return token;
