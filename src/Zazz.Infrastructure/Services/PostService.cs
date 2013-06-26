@@ -27,7 +27,11 @@ namespace Zazz.Infrastructure.Services
 
         public Post GetPost(int postId)
         {
-            return _uow.PostRepository.GetById(postId);
+            var post = _uow.PostRepository.GetById(postId);
+            if (post == null)
+                throw new NotFoundException();
+            
+            return post;
         }
 
         public void NewPost(Post post)

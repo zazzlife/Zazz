@@ -50,6 +50,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfPostWasNotFount_OnGetPost()
+        {
+            //Arrange
+            var id = 444;
+            _uow.Setup(x => x.PostRepository.GetById(id))
+                .Returns(() => null);
+
+            //Act & Assert
+            Assert.Throws<NotFoundException>(() => _sut.GetPost(id));
+        }
+
+        [Test]
         public void CallGetByIdOnRepository_OnGetPost()
         {
             //Arrange
