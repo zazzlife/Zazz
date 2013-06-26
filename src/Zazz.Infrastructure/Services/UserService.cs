@@ -126,18 +126,12 @@ namespace Zazz.Infrastructure.Services
             if (!String.IsNullOrEmpty(cache))
                 return cache;
 
-            var fullName = _uoW.UserRepository.GetUserFullName(userId);
-            if (!String.IsNullOrEmpty(fullName))
-            {
-                _cacheService.AddUserDiplayName(userId, fullName);
-                return fullName;
-            }
-            else
-            {
-                var username = _uoW.UserRepository.GetUserName(userId);
-                _cacheService.AddUserDiplayName(userId, username);
-                return username;
-            }
+            var displayName = _uoW.UserRepository.GetDisplayName(userId);
+            if (displayName == null)
+                throw new NotFoundException();
+
+            _cacheService.AddUserDiplayName(userId, displayName);
+            return displayName;
         }
 
         public string GetUserDisplayName(string username)

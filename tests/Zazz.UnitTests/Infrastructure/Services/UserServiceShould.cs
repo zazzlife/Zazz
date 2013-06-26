@@ -170,93 +170,44 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ReturnFullNameWhenIsNotEmptyAndAddToCacheWhenNotExists_OnGetUserDisplayNameWithId()
+        public void GetDisplayNameAndAddToCache_OnGetUserDisplayNameWithUserId()
         {
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+            var displayName = "displayName";
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
-                .Returns(user.UserDetail.FullName);
+            _uow.Setup(x => x.UserRepository.GetDisplayName(user.Id))
+                .Returns(displayName);
+
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(() => null);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
+            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, displayName));
 
             //Act
             var result = _sut.GetUserDisplayName(user.Id);
 
             //Assert
-            Assert.AreEqual(user.UserDetail.FullName, result);
+            Assert.AreEqual(displayName, result);
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ReturnUserNameWhenFullNameIsEmptyAddToCacheWhenNotExists_OnGetUserDisplayNameWithId()
+        public void ThrowIfUserDoesntExists_OnGetUserDisplayNameWithUserId()
         {
             //Arrange
             var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
+            var displayName = "displayName";
 
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
-                .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
-            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
-                         .Returns(() => null);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.Username));
-
-            //Act
-            var result = _sut.GetUserDisplayName(user.Id);
-
-            //Assert
-            Assert.AreEqual(user.Username, result);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void ReturnFullNameWhenIsNotEmptyAddToCacheWhenNotExists_OnGetUserDisplayNameWithUsername()
-        {
-            //Arrange
-            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
-
-            _cacheService.Setup(x => x.GetUserId(user.Username))
-                         .Returns(user.Id);
-
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
-                .Returns(user.UserDetail.FullName);
-            _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
-                         .Returns(() => null);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.UserDetail.FullName));
-
-            //Act
-            var result = _sut.GetUserDisplayName(user.Username);
-
-            //Assert
-            Assert.AreEqual(user.UserDetail.FullName, result);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void ReturnUserNameWhenFullNameIsEmptyAddToCacheWhenNotExists_OnGetUserDisplayNameWithUsername()
-        {
-            //Arrange
-            var user = new User { Id = 12, Username = "username", UserDetail = new UserDetail { FullName = "Full name" } };
-
-            _uow.Setup(x => x.UserRepository.GetUserFullName(user.Id))
+            _uow.Setup(x => x.UserRepository.GetDisplayName(user.Id))
                 .Returns(() => null);
 
-            _uow.Setup(x => x.UserRepository.GetUserName(user.Id))
-                .Returns(user.Username);
-
-            _cacheService.Setup(x => x.GetUserId(user.Username))
-                         .Returns(user.Id);
             _cacheService.Setup(x => x.GetUserDisplayName(user.Id))
                          .Returns(() => null);
-            _cacheService.Setup(x => x.AddUserDiplayName(user.Id, user.Username));
 
             //Act
-            var result = _sut.GetUserDisplayName(user.Username);
+            Assert.Throws<NotFoundException>(() => _sut.GetUserDisplayName(user.Id));
 
             //Assert
-            Assert.AreEqual(user.Username, result);
             _mockRepo.VerifyAll();
         }
 
