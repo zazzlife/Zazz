@@ -150,6 +150,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         #endregion
 
         #region Register
+
+        [Test]
+        public void ThrowIfPasswordIsMoreThan20Char_OnRegister()
+        {
+            //Arrange
+            _pass = "123456789012345678901";
+            Assert.IsTrue(_pass.Length > 20);
+
+            //Act & Assert
+            Assert.Throws<PasswordTooLongException>(() => _sut.Register(_user, _pass, false));
+        }
+
         [Test]
         public void CheckForExistingUsername_OnRegister()
         {

@@ -13,6 +13,8 @@ namespace Zazz.Infrastructure.Services
         private readonly IUoW _uow;
         private readonly ICryptoService _cryptoService;
 
+        private const int PASS_MAX_LENGTH = 20;
+
         public AuthService(IUoW uow, ICryptoService cryptoService)
         {
             _uow = uow;
@@ -36,6 +38,9 @@ namespace Zazz.Infrastructure.Services
 
         public User Register(User user, string password, bool createToken)
         {
+            if (password.Length > 20)
+                throw new PasswordTooLongException();
+
             var usernameExists = _uow.UserRepository.ExistsByUsername(user.Username);
             if (usernameExists)
                 throw new UsernameExistsException();
