@@ -156,29 +156,26 @@ namespace Zazz.Infrastructure.Services
                 return existingOAuthAccount.User; // user and OAuth account exist
 
             var user = _uow.UserRepository.GetByEmail(email);
-            if (user != null)
-            {
-                oAuthAccount.UserId = user.Id;
-                _uow.OAuthAccountRepository.InsertGraph(oAuthAccount);
-
-                _uow.SaveChanges();
-
-                return user;
-            }
 
             return null;
         }
 
-        public void AddOAuthAccount(OAuthAccount oauthAccount)
+        public void AddOrUpdateOAuthAccount(OAuthAccount oauthAccount)
         {
-            var check = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oauthAccount.ProviderUserId,
+            var account = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oauthAccount.ProviderUserId,
                                                                                 oauthAccount.Provider);
 
-            if (check == null)
+            if (account == null)
             {
                 _uow.OAuthAccountRepository.InsertGraph(oauthAccount);
-                _uow.SaveChanges();
+                
             }
+            else
+            {
+                account.AccessToken = oauthAccount.AccessToken;
+            }
+
+            _uow.SaveChanges();
         }
 
         public void UpdateAccessToken(int userId, OAuthProvider provider, string accessToken)

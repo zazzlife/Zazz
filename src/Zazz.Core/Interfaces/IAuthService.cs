@@ -21,7 +21,7 @@ namespace Zazz.Core.Interfaces
         
         User GetOAuthUser(OAuthAccount oAuthAccount, string email);
         
-        void AddOAuthAccount(OAuthAccount oauthAccount);
+        void AddOrUpdateOAuthAccount(OAuthAccount oauthAccount);
 
         void UpdateAccessToken(int userId, OAuthProvider provider, string accessToken);
     }

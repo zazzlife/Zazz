@@ -377,7 +377,7 @@ namespace Zazz.Web.Controllers
                 var userId = UserService.GetUserId(User.Identity.Name);
                 oauthAccount.UserId = userId;
 
-                _authService.AddOAuthAccount(oauthAccount);
+                _authService.AddOrUpdateOAuthAccount(oauthAccount);
                 ShowAlert("You have successfully updated your facebook account.", AlertType.Success);
             }
             else

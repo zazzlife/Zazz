@@ -527,15 +527,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oauthAccount);
-            _uow.Setup(x => x.UserRepository.GetByEmail(email))
-                    .Returns(user);
 
             //Act
             var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetByEmail(It.IsAny<string>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -557,35 +554,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
-        }
-
-        [Test]
-        public void AddOAuthAccountIfUserExistsAndOAuthAccountIsNot_OnGetOAuthUserAsync()
-        {
-            //Arrange
-            var providerId = 1234L;
-            var provider = OAuthProvider.Facebook;
-            var email = "email";
-            var user = new User { Email = email, Id = 23 };
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
-
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
-                    .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetByEmail(email))
-                    .Returns(user);
-            _uow.Setup(x => x.OAuthAccountRepository.InsertGraph(oauthAccount));
-
-            //Act
-            var result = _sut.GetOAuthUser(oauthAccount, email);
-
-            //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
-            Assert.AreEqual(user.Id, oauthAccount.UserId);
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -607,55 +576,95 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider), Times.Once());
-            _uow.Verify(x => x.UserRepository.GetByEmail(email), Times.Once());
+            _mockRepo.VerifyAll();
             Assert.IsNull(result);
         }
 
         [Test]
-        public void NotAddNewOAuthAccountIfItExists_OnAddOAuthAccount()
+        public void NotAddNewOAuthAccountIfItExists_OnAddOrUpdateOAuthAccount()
         {
             //Arrange
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
 
             var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
-
             _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(new OAuthAccount());
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.AddOAuthAccount(oauthAccount);
+            _sut.AddOrUpdateOAuthAccount(oauthAccount);
 
             //Assert
 
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider),
-                            Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository.InsertGraph(It.IsAny<OAuthAccount>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
+           _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void AddNewOAuthAccountIfItNotExists_OnAddOAuthAccount()
+        public void AddNewOAuthAccountIfItNotExists_OnAddOrUpdateOAuthAccount()
         {
             //Arrange
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
 
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider, UserId = 23};
 
             _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
 
+            _uow.Setup(x => x.OAuthAccountRepository
+                             .InsertGraph(It.Is<OAuthAccount>(a => a.AccessToken == oauthAccount.AccessToken &&
+                                                                   a.Provider == provider &&
+                                                                   a.ProviderUserId == providerId &&
+                                                                   a.UserId == oauthAccount.UserId)));
+
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.AddOAuthAccount(oauthAccount);
+            _sut.AddOrUpdateOAuthAccount(oauthAccount);
 
             //Assert
+            _mockRepo.VerifyAll();
+        }
 
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider),
-                            Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository.InsertGraph(oauthAccount), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+        [Test]
+        public void UpdateAccessTokenIfOAuthAccountExists_OnAddOrUpdateOAuthAccount()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+
+            var oldOAuthAccount = new OAuthAccount
+                                  {
+                                      ProviderUserId = providerId,
+                                      Provider = provider,
+                                      UserId = 23,
+                                      AccessToken = "old token"
+                                  };
+
+            var newOauthAccount = new OAuthAccount
+                                  {
+                                      ProviderUserId = providerId,
+                                      Provider = provider,
+                                      UserId = 23,
+                                      AccessToken = "new token"
+                                  };
+
+
+            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(oldOAuthAccount);
+
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.AddOrUpdateOAuthAccount(newOauthAccount);
+
+            //Assert
+            Assert.AreEqual(newOauthAccount.AccessToken, oldOAuthAccount.AccessToken);
+
+            _mockRepo.VerifyAll();
         }
 
         #endregion
