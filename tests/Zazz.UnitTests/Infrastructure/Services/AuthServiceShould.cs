@@ -431,6 +431,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<PasswordTooLongException>(() => _sut.ChangePassword(_user.Id, "pass", _pass));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -446,18 +447,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(pass);
 
             //Act
-            try
-            {
-                _sut.ChangePassword(_user.Id, invalidPass, newPass);
-                Assert.Fail("Expected Exception Wasn't thrown");
-            }
-            catch (InvalidPasswordException e)
-            {
-                //Assert
-                Assert.IsInstanceOf<InvalidPasswordException>(e);
-                _uow.Verify(x => x.UserRepository.GetById(_user.Id, false, false, false, false), Times.Once());
-                _cryptoService.Verify(x => x.DecryptPassword(_user.Password, _user.PasswordIV), Times.Once());
-            }
+            Assert.Throws<InvalidPasswordException>(() => _sut.ChangePassword(_user.Id, invalidPass, newPass));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -480,13 +473,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
                        .Returns(newPassBuffer);
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
 
             //Assert
-            _uow.Verify(x => x.UserRepository.GetById(_user.Id, false, false, false, false), Times.Once());
-            _cryptoService.Verify(x => x.DecryptPassword(oldPassBuffer, oldPassIv), Times.Once());
-            _cryptoService.Verify(x => x.EncryptPassword(newPass, out newPassIv), Times.Once());
+            _mockRepo.VerifyAll();
 
         }
 
@@ -506,6 +499,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(pass);
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
                        .Returns(newPassBuffer);
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
