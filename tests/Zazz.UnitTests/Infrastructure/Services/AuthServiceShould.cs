@@ -583,7 +583,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var provider = OAuthProvider.Facebook;
             var email = "email";
             var user = new User { Email = email };
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+            var oauthAccount = new OAuthAccount {ProviderUserId = providerId, Provider = provider, User = new User()};
 
             _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oauthAccount);
@@ -592,6 +592,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
+            Assert.IsNotNull(result);
             _mockRepo.VerifyAll();
         }
 
@@ -614,6 +615,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var result = _sut.GetOAuthUser(oauthAccount, email);
 
             //Assert
+            Assert.IsNotNull(result);
             _mockRepo.VerifyAll();
         }
 

@@ -163,7 +163,7 @@ namespace Zazz.Infrastructure.Services
 
             var user = _uow.UserRepository.GetByEmail(email);
 
-            return null;
+            return user;
         }
 
         public void AddOrUpdateOAuthAccount(OAuthAccount oauthAccount)
