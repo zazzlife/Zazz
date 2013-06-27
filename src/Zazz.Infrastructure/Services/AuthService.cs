@@ -12,13 +12,15 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly ICryptoService _cryptoService;
+        private readonly ICacheService _cacheService;
 
         private const int PASS_MAX_LENGTH = 20;
 
-        public AuthService(IUoW uow, ICryptoService cryptoService)
+        public AuthService(IUoW uow, ICryptoService cryptoService, ICacheService cacheService)
         {
             _uow = uow;
             _cryptoService = cryptoService;
+            _cacheService = cacheService;
         }
 
         public void Login(string username, string password)
@@ -128,6 +130,8 @@ namespace Zazz.Infrastructure.Services
 
             _uow.ValidationTokenRepository.Remove(user.Id);
             _uow.SaveChanges();
+
+            _cacheService.RemovePassword(userId);
         }
 
         public void ChangePassword(int userId, string currentPassword, string newPassword)

@@ -22,6 +22,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private User _user;
         private string _pass;
         private MockRepository _mockRepo;
+        private Mock<ICacheService> _cacheService;
 
         [SetUp]
         public void Init()
@@ -40,11 +41,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
+            _cacheService = _mockRepo.Create<ICacheService>();
 
             _uow = _mockRepo.Create<IUoW>();
             _cryptoService = _mockRepo.Create<ICryptoService>();
 
-            _sut = new AuthService(_uow.Object, _cryptoService.Object);
+            _sut = new AuthService(_uow.Object, _cryptoService.Object, _cacheService.Object);
         }
 
         #region Login
@@ -382,6 +384,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
             _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ResetPassword(_user.Id, token.Token, newPass);
@@ -410,6 +413,34 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
             _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
+
+            //Act
+            _sut.ResetPassword(_user.Id, token.Token, newPass);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemoveOldPasswordFromCache_OnResetPassword()
+        {
+            //Arrange
+            var newPass = "newpass";
+            var newPassBuffer = new byte[] { 12, 34, 45 };
+            var iv = new byte[] { 67, 89 };
+            var ivText = Convert.ToBase64String(iv);
+
+            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            _user.UserValidationToken = token;
+            _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
+                       .Returns(() => newPassBuffer);
+
+            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
+                    .Returns(_user);
+            _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
+            _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ResetPassword(_user.Id, token.Token, newPass);
