@@ -26,5 +26,7 @@ namespace Zazz.Core.Interfaces
         void RemoveUserDisplayName(int userId);
 
         void RemoveUserPhotoUrl(int userId);
+
+        void RemovePassword(int userId);
     }
 }

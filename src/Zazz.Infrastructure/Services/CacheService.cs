@@ -61,5 +61,10 @@ namespace Zazz.Infrastructure.Services
         {
             PhotoUrlCache.Remove(userId);
         }
+
+        public void RemovePassword(int userId)
+        {
+            PasswordCache.Remove(userId);
+        }
     }
 }

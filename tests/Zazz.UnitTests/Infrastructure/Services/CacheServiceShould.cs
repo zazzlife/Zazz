@@ -19,14 +19,17 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private PhotoLinks _photoUrl;
         private Mock<ICacheSystem<int, byte[]>> _passwordCache;
         private byte[] _password;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _userIdCache = new Mock<ICacheSystem<string, int>>(MockBehavior.Strict);
-            _displayNameCache = new Mock<ICacheSystem<int, string>>(MockBehavior.Strict);
-            _photoUrlCache = new Mock<ICacheSystem<int, PhotoLinks>>(MockBehavior.Strict);
-            _passwordCache = new Mock<ICacheSystem<int, byte[]>>(MockBehavior.Strict);
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+
+            _userIdCache = _mockRepo.Create<ICacheSystem<string, int>>();
+            _displayNameCache = _mockRepo.Create<ICacheSystem<int, string>>();
+            _photoUrlCache = _mockRepo.Create<ICacheSystem<int, PhotoLinks>>();
+            _passwordCache = _mockRepo.Create<ICacheSystem<int, byte[]>>();
 
             _sut = new CacheService();
             CacheService.UserIdCache = _userIdCache.Object;
@@ -57,7 +60,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.AddUserId(_username, _userId);
 
             //Assert
-            _userIdCache.Verify(x => x.Add(_username, _userId), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -72,7 +75,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(_userId, result);
-            _userIdCache.Verify(x => x.TryGet(_username), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -85,7 +88,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.AddUserDiplayName(_userId, _displayName);
 
             //Assert
-            _displayNameCache.Verify(x => x.Add(_userId, _displayName), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -100,7 +103,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(_displayName, result);
-            _displayNameCache.Verify(x => x.TryGet(_userId), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -113,7 +116,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.AddUserPhotoUrl(_userId, _photoUrl);
 
             //Assert
-            _photoUrlCache.Verify(x => x.Add(_userId, _photoUrl), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -131,7 +134,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(_photoUrl.OriginalLink, result.OriginalLink);
             Assert.AreEqual(_photoUrl.SmallLink, result.SmallLink);
             Assert.AreEqual(_photoUrl.VerySmallLink, result.VerySmallLink);
-            _photoUrlCache.Verify(x => x.TryGet(_userId), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -144,7 +147,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.AddUserPassword(_userId, _password);
 
             //Assert
-            _passwordCache.Verify(x => x.Add(_userId, _password), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -159,23 +162,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             CollectionAssert.AreEqual(_password, userPassword);
-            _passwordCache.Verify(x => x.TryGet(_userId), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
         public void ShouldRemoveUserDisplayName_OnRemoveUserDisplayName()
         {
             //Arrange
-            _photoUrlCache.Setup(x => x.Remove(_userId));
             _displayNameCache.Setup(x => x.Remove(_userId));
 
             //Act
             _sut.RemoveUserDisplayName(_userId);
 
             //Assert
-            _userIdCache.Verify(x => x.Remove(_username), Times.Never());
-            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Never());
-            _displayNameCache.Verify(x => x.Remove(_userId), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -183,15 +183,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             _photoUrlCache.Setup(x => x.Remove(_userId));
-            _displayNameCache.Setup(x => x.Remove(_userId));
 
             //Act
             _sut.RemoveUserPhotoUrl(_userId);
 
             //Assert
-            _userIdCache.Verify(x => x.Remove(_username), Times.Never());
-            _photoUrlCache.Verify(x => x.Remove(_userId), Times.Once());
-            _displayNameCache.Verify(x => x.Remove(_userId), Times.Never());
+            _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ShouldRemovePassword_OnRemovePassword()
+        {
+            //Arrange
+            _passwordCache.Setup(x => x.Remove(_userId));
+
+            //Act
+            _sut.RemovePassword(_userId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }
