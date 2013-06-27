@@ -347,27 +347,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act & Assert
             Assert.Throws<PasswordTooLongException>(() => _sut.ResetPassword(_user.Id, Guid.NewGuid(), _pass));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
         public void ThrowInvalidTokenExceptionWhenTokenIsNotValid_OnResetPassword()
         {
             //Arrange
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id));
+            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            _user.UserValidationToken = token;
+            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
+                .Returns(_user);
 
-            //Act
-            try
-            {
-                _sut.ResetPassword(token.Id, Guid.NewGuid(), "");
-                Assert.Fail("Expected Exception wasn't thrown");
-            }
-            catch (InvalidTokenException e)
-            {
-                //Assert
-                _uow.Verify(x => x.ValidationTokenRepository.GetById(token.Id), Times.Once());
-                Assert.IsInstanceOf<InvalidTokenException>(e);
-            }
+            //Act & Assert
+            Assert.Throws<InvalidTokenException>(() =>  _sut.ResetPassword(_user.Id, Guid.NewGuid(), ""));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -379,51 +373,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var iv = new byte[] { 67, 89 };
             var ivText = Convert.ToBase64String(iv);
 
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
-
+            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            _user.UserValidationToken = token;
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
                        .Returns(() => newPassBuffer);
 
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
-                .Returns(token);
-            _uow.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
+            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.ResetPassword(token.Id, token.Token, newPass);
-
-            //Assert
-            _cryptoService.Verify(x => x.EncryptPassword(newPass, out ivText), Times.Once());
-        }
-
-        [Test]
-        public void UpdateTheUserCorrectly_OnResetPassword()
-        {
-            //Arrange
-            var newPass = "newpass";
-            var newPassBuffer = new byte[] { 12, 34, 45 };
-            var iv = new byte[] { 67, 89 };
-            var ivText = Convert.ToBase64String(iv);
-
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
-
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
-                       .Returns(() => newPassBuffer);
-
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
-                .Returns(token);
-            _uow.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
-                    .Returns(_user);
-            _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
-
-            //Act
-            _sut.ResetPassword(token.Id, token.Token, newPass);
+            _sut.ResetPassword(_user.Id, token.Token, newPass);
 
             //Assert
             CollectionAssert.AreEqual(newPassBuffer, _user.Password);
             CollectionAssert.AreEqual(iv, _user.PasswordIV);
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -435,23 +401,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var iv = new byte[] { 67, 89 };
             var ivText = Convert.ToBase64String(iv);
 
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
-
+            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            _user.UserValidationToken = token;
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
                        .Returns(() => newPassBuffer);
 
-            _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
-                .Returns(token);
-            _uow.Setup(x => x.UserRepository.GetById(token.Id, false, false, false, false))
+            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.ResetPassword(token.Id, token.Token, newPass);
+            _sut.ResetPassword(_user.Id, token.Token, newPass);
 
             //Assert
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-            _uow.Verify(x => x.ValidationTokenRepository.Remove(_user.Id));
+            _mockRepo.VerifyAll();
         }
 
         #endregion

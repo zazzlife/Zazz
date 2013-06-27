@@ -98,13 +98,18 @@ namespace Zazz.Infrastructure.Services
         public bool IsTokenValid(int userId, Guid token)
         {
             var userToken = _uow.ValidationTokenRepository.GetById(userId);
+            return IsTokenValid(userToken, token);
+        }
+
+        private bool IsTokenValid(UserValidationToken userToken, Guid providedToken)
+        {
             if (userToken == null)
                 return false;
 
             if (userToken.ExpirationTime < DateTime.UtcNow)
                 throw new TokenExpiredException();
 
-            return token.Equals(userToken.Token);
+            return providedToken.Equals(userToken.Token);
         }
 
         public void ResetPassword(int userId, Guid token, string newPassword)
@@ -112,11 +117,11 @@ namespace Zazz.Infrastructure.Services
             if (newPassword.Length > PASS_MAX_LENGTH)
                 throw new PasswordTooLongException();
 
-            var isTokenValid = IsTokenValid(userId, token);
+            var user = _uow.UserRepository.GetById(userId);
+            var isTokenValid = IsTokenValid(user.UserValidationToken, token);
             if (!isTokenValid)
                 throw new InvalidTokenException();
 
-            var user = _uow.UserRepository.GetById(userId);
             string iv;
             user.Password = _cryptoService.EncryptPassword(newPassword, out iv);
             user.PasswordIV = Convert.FromBase64String(iv);
