@@ -385,6 +385,7 @@ namespace Zazz.Web.Controllers
                 if (user != null)
                 {
                     //user exists
+                    _authService.AddOrUpdateOAuthAccount(oauthAccount);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
                 }
                 else
@@ -402,8 +403,6 @@ namespace Zazz.Web.Controllers
                     return RedirectToAction("OAuthRegister");
                 }
             }
-
-            _authService.UpdateAccessToken(user.Id, provider, accessToken);
 
             return RedirectToAction("Index", "Home");
         }
