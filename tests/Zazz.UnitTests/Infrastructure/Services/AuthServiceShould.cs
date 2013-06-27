@@ -299,7 +299,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.IsTrue(result);
-            _uow.Verify(x => x.ValidationTokenRepository.GetById(token.Id), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -315,7 +315,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.IsFalse(result);
-            _uow.Verify(x => x.ValidationTokenRepository.GetById(token.Id), Times.Once());
+            _mockRepo.VerifyAll();
 
         }
 
@@ -328,17 +328,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(() => token);
 
             //Act
-            try
-            {
-                var result = _sut.IsTokenValid(token.Id, token.Token);
-                Assert.Fail("Expected Exception wasn't thrown");
-            }
-            catch (TokenExpiredException e)
-            {
-                //Assert
-                _uow.Verify(x => x.ValidationTokenRepository.GetById(token.Id), Times.Once());
-                Assert.IsInstanceOf<TokenExpiredException>(e);
-            }
+            Assert.Throws<TokenExpiredException>(() => _sut.IsTokenValid(token.Id, token.Token));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         #endregion
