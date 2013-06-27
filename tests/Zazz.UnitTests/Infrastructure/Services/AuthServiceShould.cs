@@ -505,6 +505,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(newPassBuffer);
 
             _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
@@ -532,6 +533,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(newPassBuffer);
 
             _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
@@ -539,7 +541,34 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             CollectionAssert.AreEqual(newPassBuffer, _user.Password);
             CollectionAssert.AreEqual(newPassIvBuffer, _user.PasswordIV);
-            _uow.Verify(x => x.SaveChanges());
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemovePasswordFromCache_OnChangePassword()
+        {
+            //Arrange
+            var pass = "pass";
+            var newPass = "newPass";
+            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
+            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
+            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
+
+            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
+                    .Returns(_user);
+            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
+                       .Returns(pass);
+            _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
+                       .Returns(newPassBuffer);
+
+            _uow.Setup(x => x.SaveChanges());
+            _cacheService.Setup(x => x.RemovePassword(_user.Id));
+
+            //Act
+            _sut.ChangePassword(_user.Id, pass, newPass);
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
         #endregion

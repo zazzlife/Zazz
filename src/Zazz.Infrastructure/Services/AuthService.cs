@@ -150,6 +150,8 @@ namespace Zazz.Infrastructure.Services
             user.PasswordIV = Convert.FromBase64String(iv);
 
             _uow.SaveChanges();
+
+            _cacheService.RemovePassword(userId);
         }
 
         public User GetOAuthUser(OAuthAccount oAuthAccount, string email)
