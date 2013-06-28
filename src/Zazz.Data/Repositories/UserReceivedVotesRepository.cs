@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -39,7 +40,11 @@ namespace Zazz.Data.Repositories
                         "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 1, GETUTCDATE())" + newLine +
                     "END";
 
-            var userIdParam = new SqlParameter("userId", userId);
+            var userIdParam = new SqlParameter("userId", SqlDbType.Int)
+                              {
+                                  Value = userId
+                              };
+
             _context.Database.ExecuteSqlCommand(query, userIdParam);
         }
 
@@ -57,7 +62,11 @@ namespace Zazz.Data.Repositories
                         "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 0, GETUTCDATE())" + newLine +
                     "END";
 
-            var userIdParam = new SqlParameter("userId", userId);
+            var userIdParam = new SqlParameter("userId", SqlDbType.Int)
+                              {
+                                  Value = userId
+                              };
+
             _context.Database.ExecuteSqlCommand(query, userIdParam);
         }
     }
