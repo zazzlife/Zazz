@@ -30,9 +30,9 @@ namespace Zazz.Data.Repositories
             return _dbSet.Where(f => f.ToUserId == toUserId);
         }
 
-        public IEnumerable<Follow> GetUserFollows(int fromUserId)
+        public IQueryable<Follow> GetUserFollows(int fromUserId)
         {
-            return _dbSet.Where(f => f.FromUserId == fromUserId).AsEnumerable();
+            return _dbSet.Where(f => f.FromUserId == fromUserId);
         }
 
         public IEnumerable<int> GetFollowsUserIds(int fromUserId)

@@ -32,11 +32,13 @@ namespace Zazz.Web.Controllers
         private readonly IObjectMapper _objectMapper;
         private readonly IApiAppRepository _appRepository;
         private readonly IFacebookService _facebookService;
+        private readonly IFollowService _followService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
-            IObjectMapper objectMapper, IApiAppRepository appRepository, IFacebookService facebookService) 
+            IObjectMapper objectMapper, IApiAppRepository appRepository, IFacebookService facebookService,
+            IFollowService followService) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
@@ -46,6 +48,7 @@ namespace Zazz.Web.Controllers
             _objectMapper = objectMapper;
             _appRepository = appRepository;
             _facebookService = facebookService;
+            _followService = followService;
         }
 
         #region AppRegister
@@ -487,14 +490,25 @@ namespace Zazz.Web.Controllers
         {
             var userId = GetCurrentUserId();
             
+            //Getting user access token
             var fbAccessToken = UserService.GetAccessToken(userId, OAuthProvider.Facebook);
             if (String.IsNullOrEmpty(fbAccessToken))
                 return RedirectToAction("Index", "Home");
 
+            //Getting facebook friends that also have account on zazz
             var fbFriendIds = _facebookService.FindZazzFbFriends(fbAccessToken)
                                             .Select(f => f.Id)
                                             .ToList();
 
+            if (fbFriendIds.Count == 0)
+                return RedirectToAction("Index", "Home");
+
+            //Getting list of users that current user follows
+            var currentFollows = _followService.GetFollows(userId)
+                                               .Select(f => f.ToUserId);
+
+            //Removing the users that current user follows from facebook friends
+            fbFriendIds.RemoveAll(currentFollows.Contains);
             if (fbFriendIds.Count == 0)
                 return RedirectToAction("Index", "Home");
 

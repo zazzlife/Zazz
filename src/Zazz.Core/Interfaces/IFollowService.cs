@@ -27,5 +27,7 @@ namespace Zazz.Core.Interfaces
         IQueryable<FollowRequest> GetFollowRequests(int userId);
 
         IQueryable<Follow> GetFollowers(int userId);
+
+        IQueryable<Follow> GetFollows(int userId);
     }
 }

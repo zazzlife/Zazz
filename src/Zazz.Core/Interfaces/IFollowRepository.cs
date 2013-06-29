@@ -20,7 +20,7 @@ namespace Zazz.Core.Interfaces
         /// </summary>
         /// <param name="fromUserId"></param>
         /// <returns></returns>
-        IEnumerable<Follow> GetUserFollows(int fromUserId);
+        IQueryable<Follow> GetUserFollows(int fromUserId);
 
         IEnumerable<int> GetFollowsUserIds(int fromUserId);
 

@@ -128,5 +128,10 @@ namespace Zazz.Infrastructure.Services
         {
             return _uow.FollowRepository.GetUserFollowers(userId);
         }
+
+        public IQueryable<Follow> GetFollows(int userId)
+        {
+            return _uow.FollowRepository.GetUserFollows(userId);
+        }
     }
 }
