@@ -43,7 +43,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _photoService = _mockRepo.Create<IPhotoService>();
             _albumService = _mockRepo.Create<IAlbumService>();
 
-            _uow = new Mock<IUoW>();
+            _uow = _mockRepo.Create<IUoW>();
             _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object,
                                        _postService.Object, _photoService.Object, _albumService.Object);
         }
@@ -74,6 +74,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.OAuthAccountRepository
                 .GetOAuthAccountByProviderId(It.IsAny<long>(), OAuthProvider.Facebook))
                 .Returns(() => null);
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.HandleRealtimeUserUpdatesAsync(changes);
@@ -104,6 +105,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                             }
                                         }
             };
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.HandleRealtimeUserUpdatesAsync(changes);
@@ -156,7 +159,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => userBAccount);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()))
                 .Returns(() => false);
-
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.HandleRealtimeUserUpdatesAsync(changes);
@@ -330,7 +333,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        };
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
-            _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
 
 
             //Act
@@ -407,6 +409,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.EventRepository.GetPageEventIds(page.Id))
                 .Returns(eventIds);
 
+            _uow.Setup(x => x.FacebookPageRepository.Remove(page));
+
+            _uow.Setup(x => x.SaveChanges());
 
             _albumService.Setup(x => x.DeleteAlbum(
                 It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId));
@@ -563,14 +568,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             };
 
             var fbEvent = new FbEvent
-            {
-                Id = 12345
-            };
+                          {
+                              Id = 12345
+                          };
 
             var zazzEvent = new ZazzEvent
-            {
-                FacebookEventId = fbEvent.Id
-            };
+                            {
+                                FacebookEventId = fbEvent.Id
+                            };
 
             var limit = 15;
 
@@ -585,6 +590,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
                      .Returns(zazzEvent);
             _eventService.Setup(x => x.CreateEvent(zazzEvent));
+
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.UpdatePageEvents(page.FacebookId, limit);
@@ -713,7 +720,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
                 .Returns(oldPost);
-            _uow.Setup(x => x.PostRepository.InsertGraph(It.IsAny<Post>()));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.UpdatePageStatuses(page.FacebookId, limit);
@@ -804,7 +811,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(oldPhoto);
 
-
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.UpdatePagePhotos(page.FacebookId, limit);
