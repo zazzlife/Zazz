@@ -79,7 +79,9 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<User> GetUsersByProviderId(IEnumerable<long> providerIds, OAuthProvider provider)
         {
-            throw new NotImplementedException();
+            return DbSet.Where(u => providerIds.Contains(u.ProviderUserId))
+                        .Where(u => u.Provider == provider)
+                        .Select(u => u.User);
         }
     }
 }

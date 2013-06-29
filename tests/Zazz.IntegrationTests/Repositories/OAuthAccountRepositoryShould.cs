@@ -346,7 +346,50 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(oauthAccountA.AccessToken, result);
         }
 
+        [Test]
+        public void ReturnCorrectUsers_OnGetUsersByProviderId()
+        {
+            //Arrange
+            var providerIds = new long[] {11, 22, 33};
+            var provider = OAuthProvider.Facebook;
 
+
+            var user1 = Mother.GetUser();
+            user1.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[0] });
+
+            var user2 = Mother.GetUser();
+            user2.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[1] });
+
+            var user3 = Mother.GetUser();
+            user3.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[2] });
+
+            var user4 = Mother.GetUser();
+            user4.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = 44 });
+
+            var user5 = Mother.GetUser();
+            user5.LinkedAccounts.Add(new OAuthAccount
+                                     {
+                                         Provider = OAuthProvider.Microsoft,
+                                         ProviderUserId = providerIds[2]
+                                     });
+
+
+            _context.Users.Add(user1);
+            _context.Users.Add(user2);
+            _context.Users.Add(user3);
+            _context.Users.Add(user4);
+            _context.Users.Add(user5);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUsersByProviderId(providerIds, provider).ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count);
+            Assert.IsTrue(result.Any(a => a.Id == user1.Id));
+            Assert.IsTrue(result.Any(a => a.Id == user2.Id));
+            Assert.IsTrue(result.Any(a => a.Id == user3.Id));
+        }
 
         private User AddUser()
         {
