@@ -1,6 +1,27 @@
-﻿@{
+﻿@model FindFriendsViewModel
+@{
     ViewBag.Title = "FindFriends";
-    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
 }
 
-<h2>FindFriends</h2>
+<div class="container">
+    
+    <div class="page-header">
+        <h2>People you might know:</h2>
+    </div>
+    
+
+    <ul class="thumbnails">
+        @foreach (var f in Model.Friends)
+        {
+            <li class="span2">
+                <div class="thumbnail" style="text-align: center;">
+                    <img src="@f.Photo.SmallLink"/>
+                    <h6>@f.Name</h6>
+                    <button  data-id="@f.UserId" data-url="/follow/followuser/@f.UserId" data-action="follow" 
+                         title="follow user" data-placement="right" class="btn btn-info btn-block">Add as friend</button>
+                </div>
+            </li>
+        }
+    </ul>
+
+</div>
