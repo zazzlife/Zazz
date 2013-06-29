@@ -31,11 +31,12 @@ namespace Zazz.Web.Controllers
         private readonly IAppRequestTokenService _appRequestTokenService;
         private readonly IObjectMapper _objectMapper;
         private readonly IApiAppRepository _appRepository;
+        private readonly IFacebookService _facebookService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
-            IObjectMapper objectMapper, IApiAppRepository appRepository) 
+            IObjectMapper objectMapper, IApiAppRepository appRepository, IFacebookService facebookService) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
@@ -44,6 +45,7 @@ namespace Zazz.Web.Controllers
             _appRequestTokenService = appRequestTokenService;
             _objectMapper = objectMapper;
             _appRepository = appRepository;
+            _facebookService = facebookService;
         }
 
         #region AppRegister
@@ -483,8 +485,30 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult FindFriends()
         {
+            var userId = GetCurrentUserId();
+            
+            var fbAccessToken = UserService.GetAccessToken(userId, OAuthProvider.Facebook);
+            if (String.IsNullOrEmpty(fbAccessToken))
+                return RedirectToAction("Index", "Home");
 
-            return View();
+            var fbFriendIds = _facebookService.FindZazzFbFriends(fbAccessToken)
+                                            .Select(f => f.Id)
+                                            .ToList();
+
+            if (fbFriendIds.Count == 0)
+                return RedirectToAction("Index", "Home");
+
+            var vm = new FindFriendsViewModel
+                     {
+                         Friends = fbFriendIds.Select(id => new FriendViewModel
+                                                            {
+                                                                UserId = id,
+                                                                Name = UserService.GetUserDisplayName(id),
+                                                                Photo = PhotoService.GetUserImageUrl(id)
+                                                            })
+                     };
+
+            return View(vm);
         }
 
         public ActionResult SignOut()
