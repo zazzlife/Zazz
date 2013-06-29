@@ -910,5 +910,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotCallRepoAndReturnEmptyIfFbResultIsEmpty_OnFindZazzFbFriends()
+        {
+            //Arrange
+            var accessToken = "token";
+            _fbHelper.Setup(x => x.GetFriends(accessToken))
+                     .Returns(Enumerable.Empty<FbFriend>());
+
+            //Act
+            var result = _sut.FindZazzFbFriends(accessToken);
+
+            //Assert
+            CollectionAssert.IsEmpty(result);
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }

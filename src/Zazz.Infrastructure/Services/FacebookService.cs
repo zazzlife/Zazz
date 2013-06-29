@@ -277,6 +277,10 @@ namespace Zazz.Infrastructure.Services
 
         public IEnumerable<User> FindZazzFbFriends(string accessToken)
         {
+            var fbFriends = _facebookHelper.GetFriends(accessToken).ToList();
+            if (fbFriends.Count == 0)
+                return Enumerable.Empty<User>();
+
             throw new NotImplementedException();
         }
     }
