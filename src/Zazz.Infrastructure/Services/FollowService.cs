@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -32,6 +33,9 @@ namespace Zazz.Infrastructure.Services
 
         public void Follow(int fromUserId, int toUserId)
         {
+            if (fromUserId == toUserId)
+                throw new InvalidFollowException();
+
             var followExists = _uow.FollowRepository.Exists(fromUserId, toUserId);
             if (followExists)
                 return;

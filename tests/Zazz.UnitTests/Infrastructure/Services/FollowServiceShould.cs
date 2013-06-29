@@ -5,6 +5,7 @@ using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -38,6 +39,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _clubId = 13;
             _followRequest = new FollowRequest {FromUserId = _userAId, ToUserId = _userBId};
         }
+
+        [Test]
+        public void ThrowIfUserIsTryingToFollowHimself_OnFollow()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<InvalidFollowException>(() => _sut.Follow(_userAId, _userAId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
 
         [Test]
         public void NotCreateFollowIfItAlreadyExists_OnFollow()
