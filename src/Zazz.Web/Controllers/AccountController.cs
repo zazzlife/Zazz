@@ -462,7 +462,7 @@ namespace Zazz.Web.Controllers
                     _authService.Register(user, registerVm.Password, false);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("FindFriends");
                 }
                 catch (UsernameExistsException)
                 {
