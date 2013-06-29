@@ -58,7 +58,7 @@ $('#followsYouSign').click(function(e) {
 
 // Try to not move the follow ajax calls into ajax.js, it becomes worse.
 
-$(document).on('click', '.btn-follow', function () {
+$(document).on('click', '*[data-btn-follow]', function () {
     var self = $(this);
     var action = self.data('action');
     var originalBtnText = showBtnBusy(self, true);
