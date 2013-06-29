@@ -27,6 +27,8 @@ namespace Zazz.Core.Interfaces
 
         string GetUserDisplayName(string username);
 
+        string GetAccessToken(int userId, OAuthProvider provider);
+
         bool OAuthAccountExists(int userId, OAuthProvider provider);
     }
 }

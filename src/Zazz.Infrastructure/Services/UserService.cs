@@ -140,6 +140,11 @@ namespace Zazz.Infrastructure.Services
             return GetUserDisplayName(userId);
         }
 
+        public string GetAccessToken(int userId, OAuthProvider provider)
+        {
+            return _uoW.OAuthAccountRepository.GetAccessToken(userId, provider);
+        }
+
         public bool OAuthAccountExists(int userId, OAuthProvider provider)
         {
             return _uoW.OAuthAccountRepository.Exists(userId, provider);
