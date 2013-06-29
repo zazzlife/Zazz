@@ -274,5 +274,10 @@ namespace Zazz.Infrastructure.Services
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();
         }
+
+        public IEnumerable<User> FindZazzFbFriends(string accessToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

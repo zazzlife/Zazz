@@ -25,5 +25,7 @@ namespace Zazz.Core.Interfaces
         void LinkPage(FacebookPage fbPage);
 
         void UnlinkPage(string fbPageId, int currentUserId);
+
+        IEnumerable<User> FindZazzFbFriends(string accessToken);
     }
 }
