@@ -76,5 +76,10 @@ namespace Zazz.Data.Repositories
             if (item != null)
                 DbContext.Entry(item).State = EntityState.Deleted;
         }
+
+        public IQueryable<User> GetUsersByProviderId(IEnumerable<long> providerIds, OAuthProvider provider)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

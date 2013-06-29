@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -43,5 +44,7 @@ namespace Zazz.Core.Interfaces
         string GetAccessToken(int userId, OAuthProvider provider);
 
         void Remove(int userId, OAuthProvider provider);
+
+        IQueryable<User> GetUsersByProviderId(IEnumerable<long> providerIds, OAuthProvider provider);
     }
 }
