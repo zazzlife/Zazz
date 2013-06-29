@@ -480,6 +480,13 @@ namespace Zazz.Web.Controllers
             return View(registerVm);
         }
 
+        [Authorize]
+        public ActionResult FindFriends()
+        {
+
+            return View();
+        }
+
         public ActionResult SignOut()
         {
             if (User.Identity.IsAuthenticated)

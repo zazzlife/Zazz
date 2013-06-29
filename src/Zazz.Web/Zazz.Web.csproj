@@ -304,6 +304,7 @@
     <Compile Include="Models\EventListViewModel.cs" />
     <Compile Include="Models\FbPageViewModel.cs" />
     <Compile Include="Models\FeedViewModel.cs" />
+    <Compile Include="Models\FindFriendsViewModel.cs" />
     <Compile Include="Models\FineUploadResponse.cs" />
     <Compile Include="Models\FollowRequestViewModel.cs" />
     <Compile Include="Models\JsonErrorModel.cs" />
@@ -590,6 +591,7 @@
     <Content Include="Views\Post\Show.cshtml" />
     <Content Include="Views\Shared\Errors\404.cshtml" />
     <Content Include="Views\Shared\Errors\500.cshtml" />
+    <Content Include="Views\Account\FindFriends.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
