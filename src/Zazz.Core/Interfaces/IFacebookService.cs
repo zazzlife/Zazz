@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Facebook;
@@ -26,6 +27,6 @@ namespace Zazz.Core.Interfaces
 
         void UnlinkPage(string fbPageId, int currentUserId);
 
-        IEnumerable<User> FindZazzFbFriends(string accessToken);
+        IQueryable<User> FindZazzFbFriends(string accessToken);
     }
 }

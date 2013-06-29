@@ -275,11 +275,11 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public IEnumerable<User> FindZazzFbFriends(string accessToken)
+        public IQueryable<User> FindZazzFbFriends(string accessToken)
         {
             var fbFriends = _facebookHelper.GetFriends(accessToken).ToList();
             if (fbFriends.Count == 0)
-                return Enumerable.Empty<User>();
+                return Enumerable.Empty<User>().AsQueryable();
 
             var u = _uow.OAuthAccountRepository.GetUsersByProviderId(fbFriends.Select(f => f.Id), OAuthProvider.Facebook);
             return u;
