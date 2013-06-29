@@ -76,16 +76,18 @@ $(document).on('click', '*[data-btn-follow]', function () {
 
     $.ajax(options).done(function () {
 
-        if (action == "follow") {
-            self.attr('title', 'Follow request has been sent.');
-            setBtnDisabled(self);
-            self.html("<i class='icon-ok'></i>");
-        } else if (action == "unfollow") {
-            hideBtnBusy(self, "<i class='icon-plus'></i>");
-            self.attr('url', 'data-url="/follow/followuser/');
-            self.attr("action", "follow");
-        }
+        //if (action == "follow") {
+        //    self.attr('title', 'Follow request has been sent.');
+        //    setBtnDisabled(self);
+        //    self.html("<i class='icon-ok'></i>");
+        //} else if (action == "unfollow") {
+        //    hideBtnBusy(self, "<i class='icon-plus'></i>");
+        //    self.attr('data-url', '/follow/followuser/');
+        //    self.attr("data-action", "follow");
+        //}
 
+        setBtnDisabled(self);
+        self.html("<i class='icon-ok'></i>");
         applyPageStyles();
     });
 });
