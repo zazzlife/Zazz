@@ -281,7 +281,8 @@ namespace Zazz.Infrastructure.Services
             if (fbFriends.Count == 0)
                 return Enumerable.Empty<User>();
 
-            throw new NotImplementedException();
+            var u = _uow.OAuthAccountRepository.GetUsersByProviderId(fbFriends.Select(f => f.Id), OAuthProvider.Facebook);
+            return u;
         }
     }
 }

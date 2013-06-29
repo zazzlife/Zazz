@@ -927,6 +927,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void RetrunResultFromRepo_OnFindZazzFbFriends()
+        {
+            //Arrange
+            var accessToken = "token";
+            var fbFriends = new[]
+                            {
+                                new FbFriend {Id = 11},
+                                new FbFriend {Id = 22},
+                            };
 
+            _fbHelper.Setup(x => x.GetFriends(accessToken))
+                     .Returns(fbFriends);
+
+            var users = new[]
+                        {
+                            new User {Id = 1},
+                            new User {Id = 2},
+                        };
+
+            _uow.Setup(x => x.OAuthAccountRepository
+                             .GetUsersByProviderId(It.IsAny<IEnumerable<long>>(), OAuthProvider.Facebook))
+                .Returns(users.AsQueryable());
+
+            //Act
+            var result = _sut.FindZazzFbFriends(accessToken).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Any(u => u.Id == users[0].Id));
+            Assert.IsTrue(result.Any(u => u.Id == users[1].Id));
+
+            _mockRepo.VerifyAll();
+        }
     }
 }
