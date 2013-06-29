@@ -1,6 +1,6 @@
 ﻿@model FindFriendsViewModel
 @{
-    ViewBag.Title = "FindFriends";
+    ViewBag.Title = "Find Friends";
 }
 
 <div class="container">
@@ -16,7 +16,10 @@
         {
             <li class="span2">
                 <div class="thumbnail" style="text-align: center;">
-                    <img src="@f.Photo.SmallLink"/>
+                    <a href="~/user/profile/@f.UserId/@f.Name.ToUrlFriendlyString()" target="_blank">
+                        <img src="@f.Photo.SmallLink"/>
+                    </a>
+
                     <h6>@f.Name</h6>
                     <button data-btn-follow="1" data-id="@f.UserId" data-url="/follow/followuser/@f.UserId" data-action="follow" 
                         class="btn btn-info btn-block">Add as friend</button>
