@@ -29,23 +29,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IPhotoService> _photoService;
         private Mock<IPostService> _postService;
         private Mock<IAlbumService> _albumService;
+        private MockRepository _mockRepo;
 
         [SetUp]
         public void Init()
         {
-            _fbHelper = new Mock<IFacebookHelper>();
-            _errorHander = new Mock<IErrorHandler>();
-            _eventService = new Mock<IEventService>();
-            _postService = new Mock<IPostService>();
-            _photoService = new Mock<IPhotoService>();
-            _albumService = new Mock<IAlbumService>();
+            _mockRepo = new MockRepository(MockBehavior.Strict);
+
+            _fbHelper = _mockRepo.Create<IFacebookHelper>();
+            _errorHander = _mockRepo.Create<IErrorHandler>();
+            _eventService = _mockRepo.Create<IEventService>();
+            _postService = _mockRepo.Create<IPostService>();
+            _photoService = _mockRepo.Create<IPhotoService>();
+            _albumService = _mockRepo.Create<IAlbumService>();
 
             _uow = new Mock<IUoW>();
             _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object,
                                        _postService.Object, _photoService.Object, _albumService.Object);
-
-            _errorHander.Setup(x => x.LogException(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Exception>()));
-            _uow.Setup(x => x.SaveChanges());
         }
 
         [Test]
@@ -79,16 +79,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
-            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
-            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -118,16 +109,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
-                        Times.Never());
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
-                        Times.Never());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Never());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Never());
-            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
-            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -180,16 +162,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.HandleRealtimeUserUpdatesAsync(changes);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook), Times.Once());
-            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
-            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -288,6 +261,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _eventService.Setup(x => x.CreateEvent(It.IsAny<ZazzEvent>()));
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
             _sut.HandleRealtimeUserUpdatesAsync(changes);
 
@@ -299,17 +274,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(newEvent1.FacebookPhotoLink, event1.FacebookPhotoLink);
             Assert.AreEqual(event2.UserId, userAId);
 
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook), Times.Once());
-
-            _eventService.Verify(x => x.CreateEvent(event2), Times.Once());
-            _eventService.Verify(x => x.CreateEvent(event1), Times.Never());
-            _eventService.Verify(x => x.CreateEvent(newEvent1), Times.Never());
-
-            _fbHelper.Verify(x => x.GetEvents(userAId, userAAccount.AccessToken, It.IsAny<int>()), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -326,19 +291,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            try
-            {
-                var result = _sut.GetUserPages(userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (OAuthAccountNotFoundException)
-            {
-            }
+            Assert.Throws<OAuthAccountNotFoundException>(() => _sut.GetUserPages(userId));
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetUserAccount(userId, OAuthProvider.Facebook), Times.Once());
-            _fbHelper.Verify(x => x.GetPages(It.IsAny<string>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -354,13 +310,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
                 .Returns(oauthAccount);
 
+            _fbHelper.Setup(x => x.GetPages(oauthAccount.AccessToken))
+                     .Returns(Enumerable.Empty<FbPage>);
+
             //Act
             var result = _sut.GetUserPages(userId);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetUserAccount(userId, OAuthProvider.Facebook), Times.Once());
-            _fbHelper.Verify(x => x.GetPages(oauthAccount.AccessToken), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -377,20 +334,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            try
-            {
-                _sut.LinkPage(page);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (FacebookPageExistsException)
-            {
-            }
+            Assert.Throws<FacebookPageExistsException>(() => _sut.LinkPage(page));
 
             //Assert
-            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
-            _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
-            _fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -407,16 +354,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _uow.Setup(x => x.FacebookPageRepository.InsertGraph(It.IsAny<FacebookPage>()));
             _fbHelper.Setup(x => x.LinkPage(page.FacebookId, page.AccessToken));
-
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.LinkPage(page);
 
             //Assert
-            _fbHelper.Verify(x => x.LinkPage(page.FacebookId, page.AccessToken), Times.Once());
-            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
-            _uow.Verify(x => x.FacebookPageRepository.InsertGraph(page), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -433,27 +377,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(page);
 
             //Act
-            try
-            {
-                _sut.UnlinkPage(page.FacebookId, 1);
-                Assert.Fail("Expected exception was not thrown");
-            }
-            catch (SecurityException)
-            {
-            }
+            Assert.Throws<SecurityException>(() => _sut.UnlinkPage(page.FacebookId, 1));
 
             //Assert
-            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
-            _uow.Verify(x => x.FacebookPageRepository.Remove(It.IsAny<FacebookPage>()), Times.Never());
-            _uow.Verify(x => x.SaveChanges(), Times.Never());
-
-            _uow.Verify(x => x.AlbumRepository.GetPageAlbumIds(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.PostRepository.GetPagePostIds(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.EventRepository.GetPageEventIds(It.IsAny<int>()), Times.Never());
-
-            _albumService.Verify(x => x.DeleteAlbum(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
-            _postService.Verify(x => x.RemovePost(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
-            _eventService.Verify(x => x.DeleteEvent(It.IsAny<int>(), It.IsAny<int>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -493,23 +420,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UnlinkPage(page.FacebookId, page.UserId);
 
             //Assert
-            _uow.Verify(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId), Times.Once());
-            _uow.Verify(x => x.FacebookPageRepository.Remove(page), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
-
-            _uow.Verify(x => x.AlbumRepository.GetPageAlbumIds(page.Id), Times.Once());
-            _uow.Verify(x => x.PostRepository.GetPagePostIds(page.Id), Times.Once());
-            _uow.Verify(x => x.EventRepository.GetPageEventIds(page.Id), Times.Once());
-
-            _albumService.Verify(x => x.DeleteAlbum(
-                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId),
-                                 Times.Exactly(albumIds.Count));
-            _postService.Verify(x => x.RemovePost(
-                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId),
-                                Times.Exactly(postIds.Count));
-            _eventService.Verify(x => x.DeleteEvent(
-                It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId),
-                                 Times.Exactly(eventIds.Count));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -524,11 +435,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdateUserEvents(fbUserId, 5);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook),
-                        Times.Once());
-            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()), Times.Never());
-            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
-            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -552,13 +459,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdateUserEvents(oauthAccount.ProviderUserId, 5);
 
             //Assert
-            _uow.Verify(x => x.OAuthAccountRepository
-                .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook),
-                Times.Once());
-
-            _uow.Verify(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId), Times.Once());
-            _fbHelper.Verify(x => x.GetEvents(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never());
-            _eventService.Verify(x => x.CreateEvent(It.IsAny<ZazzEvent>()), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
