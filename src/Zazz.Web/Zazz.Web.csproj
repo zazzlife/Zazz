@@ -475,6 +475,7 @@
     <Content Include="Scripts\app\vote.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <None Include="Scripts\jquery-2.0.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
     <Content Include="Scripts\jquery.atwho.js" />
@@ -496,7 +497,6 @@
     <Content Include="Scripts\app\register.js" />
     <Content Include="Scripts\app\user-home-page.js" />
     <Content Include="Scripts\bootstrap-lightbox.js" />
-    <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\fine-upload\ajax.requester.js" />
     <Content Include="Scripts\fine-upload\button.js" />
     <Content Include="Scripts\fine-upload\deletefile.ajax.requester.js" />
