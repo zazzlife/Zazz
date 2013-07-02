@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using StructureMap;
 using Zazz.Web;
+using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
 using System.Net;
 
@@ -55,6 +56,95 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await _client.PostAsync(path, null);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfRequestTypeIsNotPassword_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "undefined"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full"),
+                         };
+            
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfPasswordIsMissing_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full"),
+                         };
+
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfUsernameIsMissing_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("scope", "full"),
+                         };
+
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfScopeIsMissing_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user")
+                         };
+
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
