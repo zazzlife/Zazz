@@ -10,14 +10,10 @@ namespace Zazz.Web.JWT
     {
         private readonly byte[] _key;
 
-        public JsonWebTokenHandler(byte[] key)
+        public JsonWebTokenHandler()
         {
-            _key = key;
-        }
-
-        public JsonWebTokenHandler(string key)
-        {
-            _key = Convert.FromBase64String(key);
+            const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
+            _key = Convert.FromBase64String(KEY);
         }
 
         public string Encode(HashSet<KeyValuePair<string, object>> claims, DateTime? expirationData = null)
