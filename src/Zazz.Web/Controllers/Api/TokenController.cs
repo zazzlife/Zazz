@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Net;
+using System.Web.Http;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -6,7 +8,10 @@ namespace Zazz.Web.Controllers.Api
     {
         public OAuthAccessTokenResponse Post(OAuthAccessTokenRequest request)
         {
-            
+            if (request == null)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            throw new NotImplementedException();
         }
     }
 
