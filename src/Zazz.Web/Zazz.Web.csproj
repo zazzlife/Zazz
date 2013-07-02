@@ -270,6 +270,7 @@
     <Compile Include="DependencyResolution\StructureMapFilterProvider.cs" />
     <Compile Include="Filters\CustomHandleErrorAttribute.cs" />
     <Compile Include="Filters\HMACAuthorizeAttribute.cs" />
+    <Compile Include="Filters\OAuth2AuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
