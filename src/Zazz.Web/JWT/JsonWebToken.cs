@@ -9,7 +9,7 @@ namespace Zazz.Web.JWT
     {
         public JWTHeader Header { get; set; }
 
-        public ICollection<KeyValuePair<string, object>> Claims { get; set; }
+        public HashSet<KeyValuePair<string, object>> Claims { get; set; }
 
         public string Signature { get; set; }
     }
