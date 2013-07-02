@@ -284,6 +284,7 @@
     <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
+    <Compile Include="JWT\JsonWebToken.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiAppToken.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />
@@ -601,7 +602,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Logs\" />
-    <Folder Include="JWT\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
