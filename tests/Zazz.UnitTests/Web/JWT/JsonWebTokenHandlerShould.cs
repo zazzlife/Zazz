@@ -18,7 +18,7 @@ namespace Zazz.UnitTests.Web.JWT
         }
 
         [Test]
-        public void ReplacePlusWithDash_OnBase64UrlEncode()
+        public void ReplacePlusWithMinus_OnBase64UrlEncode()
         {
             //Arrange
             Assert.IsTrue(_base64.IndexOf('+') > -1);
@@ -31,6 +31,18 @@ namespace Zazz.UnitTests.Web.JWT
             Assert.IsTrue(result.IndexOf('-') > -1);
         }
 
- 
+        [Test]
+        public void ReplaceForwardSlashWithUnderline_OnBase64UrlEncode()
+        {
+            //Arrange
+            Assert.IsTrue(_base64.IndexOf('/') > -1);
+
+            //Act
+            var result = _sut.Base64UrlEncode(Convert.FromBase64String(_base64));
+
+            //Assert
+            Assert.IsFalse(result.IndexOf('/') > -1);
+            Assert.IsTrue(result.IndexOf('_') > -1);
+        }
     }
 }
