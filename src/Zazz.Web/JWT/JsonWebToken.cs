@@ -11,31 +11,15 @@ namespace Zazz.Web.JWT
 
         public HashSet<KeyValuePair<string, object>> Claims { get; set; }
 
+        public DateTime? IssuedTime { get; set; }
+
+        public DateTime? ExpirationTime { get; set; }
+
         public string Signature { get; set; }
     }
 
     public class JWTHeader
     {
-        /// <summary>
-        /// Issuer
-        /// </summary>
-        public string iss { get; set; }
-
-        /// <summary>
-        /// Audience
-        /// </summary>
-        public string aud { get; set; }
-
-        /// <summary>
-        /// Not Before
-        /// </summary>
-        public long nbf { get; set; }
-
-        /// <summary>
-        /// Expiration Time
-        /// </summary>
-        public long exp { get; set; }
-
         /// <summary>
         /// Type
         /// </summary>
