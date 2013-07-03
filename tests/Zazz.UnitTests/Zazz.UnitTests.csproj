@@ -50,6 +50,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\Zazz.Web\bin\Microsoft.Practices.ServiceLocation.dll</HintPath>

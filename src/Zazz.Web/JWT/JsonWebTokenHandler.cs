@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using Newtonsoft.Json;
+using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.JWT
 {
     public class JsonWebTokenHandler
     {
         private readonly byte[] _key;
+
+        // http://tools.ietf.org/html/draft-jones-json-web-token-10
 
         public JsonWebTokenHandler()
         {
@@ -17,9 +22,37 @@ namespace Zazz.Web.JWT
             _key = Convert.FromBase64String(KEY);
         }
 
-        public string Encode(HashSet<KeyValuePair<string, object>> claims, DateTime? expirationData = null)
+        public string Encode(HashSet<KeyValuePair<string, object>> claims, DateTime? expirationDate = null)
         {
-            throw new NotImplementedException();
+            var header = new JWTHeader { alg = "HS256" };
+
+            var payLoad = new Dictionary<string, object>
+                          {
+                              {"iss", "https://www.zazzlife.com"},
+                              {"aud", "Zazz clients"},
+                              {"nbf", DateTime.UtcNow.ToUnixTimestamp()}
+                          };
+
+            if (expirationDate.HasValue)
+                payLoad.Add("exp", expirationDate.Value.ToUnixTimestamp());
+
+            foreach (var claim in claims)
+                payLoad.Add(claim.Key, claim.Value);
+
+            var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
+            var payloadJson = JsonConvert.SerializeObject(payLoad, Formatting.None);
+
+            var headerBytes = Encoding.UTF8.GetBytes(headerJson);
+            var payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
+
+            var headerBase64 = Base64UrlEncode(headerBytes);
+            var payloadBase64 = Base64UrlEncode(payloadBytes);
+
+            var jwtString = headerBase64 + "." + payloadBase64;
+            var signature = SignString(jwtString);
+
+            jwtString += "." + signature;
+            return jwtString;
         }
 
         public JsonWebToken Decode(string token)
@@ -53,6 +86,17 @@ namespace Zazz.Web.JWT
             }
 
             return Convert.FromBase64String(base64);
+        }
+
+        private string SignString(string stringToSign)
+        {
+            using (var sha256 = new HMACSHA256(_key))
+            {
+                var buffer = Encoding.UTF8.GetBytes(stringToSign);
+                var cipher = sha256.ComputeHash(buffer);
+
+                return Base64UrlEncode(cipher);
+            }
         }
     }
 }

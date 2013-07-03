@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using NUnit.Framework;
+using Newtonsoft.Json.Linq;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Web.JWT;
 
 namespace Zazz.UnitTests.Web.JWT
@@ -69,7 +74,50 @@ namespace Zazz.UnitTests.Web.JWT
 
             //Assert
             Assert.AreEqual(_base64, Convert.ToBase64String(result));
+        }
 
+        [Test]
+        public void CreateCorrectHeader_OnEncode()
+        {
+            //Arrange
+            var claims = new HashSet<KeyValuePair<string, object>>
+                         {
+                             new KeyValuePair<string, object>("stringKey", "stringVal"),
+                             new KeyValuePair<string, object>("intKey", 1234)
+                         };
+
+            //Act
+            var result = _sut.Encode(claims, DateTime.UtcNow.AddHours(1));
+
+            var segments = result.Split('.');
+            dynamic header = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[0])));
+
+            //Assert
+            Assert.AreEqual("HS256", (string)header.alg);
+            Assert.AreEqual("JWT", (string)header.typ);
+        }
+
+        [Test]
+        public void CreateCorrectClaims_OnEncode()
+        {
+            //Arrange
+            var claims = new HashSet<KeyValuePair<string, object>>
+                         {
+                             new KeyValuePair<string, object>("stringKey", "stringVal"),
+                             new KeyValuePair<string, object>("intKey", 1234)
+                         };
+            var expDate = DateTime.UtcNow.AddHours(1);
+
+            //Act
+            var result = _sut.Encode(claims, expDate);
+
+            var segments = result.Split('.');
+            dynamic claimsJson = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[1])));
+
+            //Assert
+            Assert.AreEqual("stringVal", (string)claimsJson.stringKey);
+            Assert.AreEqual(1234, (int)claimsJson.intKey);
+            Assert.AreEqual(expDate.ToUnixTimestamp(), (long)claimsJson.exp);
         }
     }
 }

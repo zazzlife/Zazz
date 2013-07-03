@@ -9,9 +9,9 @@ namespace Zazz.Web.JWT
     {
         public JWTHeader Header { get; set; }
 
-        public HashSet<KeyValuePair<string, object>> Claims { get; set; }
+        public HashSet<Dictionary<string, object>> Claims { get; set; }
 
-        public DateTime? IssuedTime { get; set; }
+        public DateTime IssuedTime { get; set; }
 
         public DateTime? ExpirationTime { get; set; }
 
@@ -23,7 +23,7 @@ namespace Zazz.Web.JWT
         /// <summary>
         /// Type
         /// </summary>
-        private string typ { get { return "JWT"; } }
+        public string typ { get { return "JWT"; } }
 
         /// <summary>
         /// Algorithm
