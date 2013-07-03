@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Web;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace Zazz.Web
 {
+    public class OAuthErrorModel
+    {
+        [JsonProperty("error")]
+        public string Error { get; set; }
+
+        [JsonProperty("error_description")]
+        public string ErrorDescription { get; set; }
+    }
+
     public class OAuthErrorException : HttpResponseException
     {
         public OAuthErrorException(OAuthError error, string errorDescription = null,
@@ -20,6 +31,7 @@ namespace Zazz.Web
         { }
     }
 
+    [DataContract]
     public enum OAuthError
     {
         /// <summary>
@@ -29,7 +41,8 @@ namespace Zazz.Web
         /// utilizes more than one mechanism for authenticating the
         /// client, or is otherwise malformed.
         /// </summary>
-        invalid_request,
+        [EnumMember(Value = "invalid_request")]
+        InvalidRequest,
         /// <summary>
         /// Client authentication failed (e.g., unknown client, no
         /// client authentication included, or unsupported
@@ -42,7 +55,8 @@ namespace Zazz.Web
         /// include the "WWW-Authenticate" response header field
         /// matching the authentication scheme used by the client.
         /// </summary>
-        invalid_client,
+        [EnumMember(Value = "invalid_client")]
+        InvalidClient,
         /// <summary>
         /// The provided authorization grant (e.g., authorization
         /// code, resource owner credentials) or refresh token is
@@ -50,22 +64,25 @@ namespace Zazz.Web
         /// URI used in the authorization request, or was issued to
         /// another client.
         /// </summary>
-        invalid_grant,
+        [EnumMember(Value = "invalid_grant")]
+        InvalidGrant,
         /// <summary>
         /// The authenticated client is not authorized to use this
         /// authorization grant type.
         /// </summary>
-        unauthorized_client,
+        [EnumMember(Value = "unauthorized_client")]
+        UnauthorizedClient,
         /// <summary>
         /// The authorization grant type is not supported by the
         /// authorization server.
         /// </summary>
-        unsupported_grant_type,
+        [EnumMember(Value = "unsupported_grant_type")]
+        UnsupportedGrantType,
         /// <summary>
         /// The requested scope is invalid, unknown, malformed, or
         /// exceeds the scope granted by the resource owner.
         /// </summary>
-        invalid_scope
-
+        [EnumMember(Value = "invalid_scope")]
+        InvalidScope
     }
 }
