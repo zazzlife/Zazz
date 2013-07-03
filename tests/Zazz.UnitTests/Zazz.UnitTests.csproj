@@ -133,6 +133,7 @@
     <Compile Include="Web\Controllers\Api\TokenControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\WeekliesControllerShould.cs" />
     <Compile Include="Web\Filters\HMACAuthorizeAttributeShould.cs" />
+    <Compile Include="Web\JWT\JsonWebTokenHandlerShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
