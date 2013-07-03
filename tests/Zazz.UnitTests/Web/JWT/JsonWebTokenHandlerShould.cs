@@ -81,10 +81,10 @@ namespace Zazz.UnitTests.Web.JWT
         public void CreateCorrectHeader_OnEncode()
         {
             //Arrange
-            var claims = new HashSet<KeyValuePair<string, object>>
+            var claims = new Dictionary<string, object>()
                          {
-                             new KeyValuePair<string, object>("stringKey", "stringVal"),
-                             new KeyValuePair<string, object>("intKey", 1234)
+                             {"stringKey", "stringVal"},
+                             {"intKey", 1234}
                          };
 
             //Act
@@ -94,19 +94,20 @@ namespace Zazz.UnitTests.Web.JWT
             dynamic header = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[0])));
 
             //Assert
-            Assert.AreEqual("HS256", (string) header.alg);
-            Assert.AreEqual("JWT", (string) header.typ);
+            Assert.AreEqual("HS256", (string)header.alg);
+            Assert.AreEqual("JWT", (string)header.typ);
         }
 
         [Test]
         public void CreateCorrectClaims_OnEncode()
         {
             //Arrange
-            var claims = new HashSet<KeyValuePair<string, object>>
+            var claims = new Dictionary<string, object>()
                          {
-                             new KeyValuePair<string, object>("stringKey", "stringVal"),
-                             new KeyValuePair<string, object>("intKey", 1234)
+                             {"stringKey", "stringVal"},
+                             {"intKey", 1234}
                          };
+
             var expDate = DateTime.UtcNow.AddHours(1);
 
             //Act
@@ -116,9 +117,9 @@ namespace Zazz.UnitTests.Web.JWT
             dynamic claimsJson = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[1])));
 
             //Assert
-            Assert.AreEqual("stringVal", (string) claimsJson.stringKey);
-            Assert.AreEqual(1234, (int) claimsJson.intKey);
-            Assert.AreEqual(expDate.ToUnixTimestamp(), (long) claimsJson.exp);
+            Assert.AreEqual("stringVal", (string)claimsJson.stringKey);
+            Assert.AreEqual(1234, (int)claimsJson.intKey);
+            Assert.AreEqual(expDate.ToUnixTimestamp(), (long)claimsJson.exp);
         }
 
         [TestCase(null)]
@@ -138,7 +139,7 @@ namespace Zazz.UnitTests.Web.JWT
         public void ThrowInvalidTokenExceptionIfSignatureIsInvalid_OnDecode()
         {
             //Arrange
-            var validToken = _sut.Encode(new HashSet<KeyValuePair<string, object>>(), DateTime.UtcNow.AddDays(1));
+            var validToken = _sut.Encode(new Dictionary<string, object>(), DateTime.UtcNow.AddDays(1));
             var segments = validToken.Split('.');
             segments[2] = "invalid token";
 
@@ -153,10 +154,10 @@ namespace Zazz.UnitTests.Web.JWT
         {
             //Arrange
             var expDate = DateTime.UtcNow.AddDays(1);
-            var claims = new HashSet<KeyValuePair<string, object>>
+            var claims = new Dictionary<string, object>()
                          {
-                             new KeyValuePair<string, object>("key", "val"),
-                             new KeyValuePair<string, object>("key2", 1)
+                             {"key", "val"},
+                             {"key2", 1}
                          };
 
             var validToken = _sut.Encode(claims, expDate);

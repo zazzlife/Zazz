@@ -23,37 +23,31 @@ namespace Zazz.Web.JWT
             _key = Convert.FromBase64String(KEY);
         }
 
-        public string Encode(HashSet<KeyValuePair<string, object>> claims, DateTime? expirationDate = null)
+        public string Encode(Dictionary<string, object> claims, DateTime? expirationDate = null)
         {
             var header = new JWTHeader { alg = "HS256" };
 
-            var payLoad = new Dictionary<string, object>
-                          {
-                              {"iss", "https://www.zazzlife.com"},
-                              {"aud", "Zazz clients"},
-                              {"nbf", DateTime.UtcNow.ToUnixTimestamp()}
-                          };
+            claims.Add("iss", "https://www.zazzlife.com");
+            claims.Add("aud", "Zazz clients");
+            claims.Add("nbf", DateTime.UtcNow.ToUnixTimestamp());
 
             if (expirationDate.HasValue)
-                payLoad.Add("exp", expirationDate.Value.ToUnixTimestamp());
-
-            foreach (var claim in claims)
-                payLoad.Add(claim.Key, claim.Value);
+                claims.Add("exp", expirationDate.Value.ToUnixTimestamp());
 
             // converting to json
             var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
-            var payloadJson = JsonConvert.SerializeObject(payLoad, Formatting.None);
+            var claimsJson = JsonConvert.SerializeObject(claims, Formatting.None);
 
             // getting utf8 bytes
             var headerBytes = Encoding.UTF8.GetBytes(headerJson);
-            var payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
+            var claimsBytes = Encoding.UTF8.GetBytes(claimsJson);
 
             // converting to base64 url safe
             var headerBase64 = Base64UrlEncode(headerBytes);
-            var payloadBase64 = Base64UrlEncode(payloadBytes);
+            var claimsBase64 = Base64UrlEncode(claimsBytes);
 
             // signing
-            var jwtString = headerBase64 + "." + payloadBase64;
+            var jwtString = headerBase64 + "." + claimsBase64;
             var signature = SignString(jwtString);
 
             jwtString += "." + signature;
