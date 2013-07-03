@@ -27,11 +27,16 @@ namespace Zazz.Web.JWT
             throw new NotImplementedException();
         }
 
+        // http://tools.ietf.org/html/rfc4648
         public string Base64UrlEncode(byte[] data)
         {
-            throw new NotImplementedException();
+            var base64 = Convert.ToBase64String(data);
+            base64 = base64.Replace('+', '-');
+
+            return base64;
         }
 
+        // http://tools.ietf.org/html/rfc4648
         public byte[] Base64UrlDecode(string base64)
         {
             throw new NotImplementedException();
