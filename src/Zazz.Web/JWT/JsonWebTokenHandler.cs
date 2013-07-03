@@ -12,6 +12,7 @@ namespace Zazz.Web.JWT
 
         public JsonWebTokenHandler()
         {
+            // 64 bytes
             const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
             _key = Convert.FromBase64String(KEY);
         }
@@ -22,6 +23,16 @@ namespace Zazz.Web.JWT
         }
 
         public JsonWebToken Decode(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Base64UrlEncode(byte[] data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] Base64UrlDecode(string base64)
         {
             throw new NotImplementedException();
         }
