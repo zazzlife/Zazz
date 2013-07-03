@@ -93,8 +93,8 @@ namespace Zazz.UnitTests.Web.JWT
             dynamic header = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[0])));
 
             //Assert
-            Assert.AreEqual("HS256", (string)header.alg);
-            Assert.AreEqual("JWT", (string)header.typ);
+            Assert.AreEqual("HS256", (string) header.alg);
+            Assert.AreEqual("JWT", (string) header.typ);
         }
 
         [Test]
@@ -115,9 +115,24 @@ namespace Zazz.UnitTests.Web.JWT
             dynamic claimsJson = JObject.Parse(Encoding.UTF8.GetString(_sut.Base64UrlDecode(segments[1])));
 
             //Assert
-            Assert.AreEqual("stringVal", (string)claimsJson.stringKey);
-            Assert.AreEqual(1234, (int)claimsJson.intKey);
-            Assert.AreEqual(expDate.ToUnixTimestamp(), (long)claimsJson.exp);
+            Assert.AreEqual("stringVal", (string) claimsJson.stringKey);
+            Assert.AreEqual(1234, (int) claimsJson.intKey);
+            Assert.AreEqual(expDate.ToUnixTimestamp(), (long) claimsJson.exp);
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("asdf")]
+        [TestCase("asdfg.asdfg")]
+        public void ThrowInvalidTokenIfItDoesntHave3Segments_OnDecode(string token)
+        {
+            //Arrange
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => _sut.Decode(token));
+
+        }
+
+
     }
 }

@@ -57,6 +57,13 @@ namespace Zazz.Web.JWT
 
         public JsonWebToken Decode(string token)
         {
+            if (String.IsNullOrWhiteSpace(token))
+                throw new ArgumentException("Token cannot be empty", "token");
+
+            var segments = token.Split('.');
+            if (segments.Length < 3)
+                throw new ArgumentException("Token was invalid", "token");
+
             throw new NotImplementedException();
         }
 
