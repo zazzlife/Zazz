@@ -44,5 +44,18 @@ namespace Zazz.UnitTests.Web.JWT
             Assert.IsFalse(result.IndexOf('/') > -1);
             Assert.IsTrue(result.IndexOf('_') > -1);
         }
+
+        [Test]
+        public void RemoveTrailingEqualSymbols_OnBase64UrlEncode()
+        {
+            //Arrange
+            Assert.IsTrue(_base64.EndsWith("="));
+
+            //Act
+            var result = _sut.Base64UrlEncode(Convert.FromBase64String(_base64));
+
+            //Assert
+            Assert.IsFalse(result.EndsWith("="));
+        }
     }
 }

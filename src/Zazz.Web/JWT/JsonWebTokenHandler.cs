@@ -33,6 +33,7 @@ namespace Zazz.Web.JWT
             var base64 = Convert.ToBase64String(data);
             base64 = base64.Replace('+', '-');
             base64 = base64.Replace('/', '_');
+            base64 = base64.TrimEnd('=');
 
             return base64;
         }
