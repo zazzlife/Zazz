@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using Newtonsoft.Json;
+using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.JWT
@@ -63,6 +64,18 @@ namespace Zazz.Web.JWT
             var segments = token.Split('.');
             if (segments.Length < 3)
                 throw new ArgumentException("Token was invalid", "token");
+
+            var header = segments[0];
+            var payload = segments[1];
+            var signature = segments[2];
+
+            var stringToSing = header + "." + payload;
+            var signatureCheck = SignString(stringToSing);
+
+            if (signatureCheck != signature)
+               throw new InvalidTokenException();
+
+
 
             throw new NotImplementedException();
         }

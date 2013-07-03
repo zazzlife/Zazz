@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
+using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Web.JWT;
 
@@ -131,6 +132,20 @@ namespace Zazz.UnitTests.Web.JWT
             //Act & Assert
             Assert.Throws<ArgumentException>(() => _sut.Decode(token));
 
+        }
+
+        [Test]
+        public void ThrowInvalidTokenExceptionIfSignatureIsInvalid_OnDecode()
+        {
+            //Arrange
+            var validToken = _sut.Encode(new HashSet<KeyValuePair<string, object>>(), DateTime.UtcNow.AddDays(1));
+            var segments = validToken.Split('.');
+            segments[2] = "invalid token";
+
+            var tokenWithInvalidSign = String.Join(".", segments);
+
+            //Act & Assert
+            Assert.Throws<InvalidTokenException>(() => _sut.Decode(tokenWithInvalidSign));
         }
 
 
