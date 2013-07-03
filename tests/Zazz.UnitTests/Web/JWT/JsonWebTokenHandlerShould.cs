@@ -57,5 +57,19 @@ namespace Zazz.UnitTests.Web.JWT
             //Assert
             Assert.IsFalse(result.EndsWith("="));
         }
+
+        [Test]
+        public void DecodeUrlSafeBase64Correctly_OnBase64Decode()
+        {
+            //Arrange
+            var urlSafeBas64 = "7UeoUtefyJLpwrOgxFjR1Qyf-oo0_cDGAftSoBQssLxLmBLCE2dxpkv62Z7-RZ7-URmb2UMO6enwJofXLa-CKw";
+
+            //Act
+            var result = _sut.Base64UrlDecode(urlSafeBas64);
+
+            //Assert
+            Assert.AreEqual(_base64, Convert.ToBase64String(result));
+
+        }
     }
 }

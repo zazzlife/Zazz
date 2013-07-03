@@ -41,7 +41,18 @@ namespace Zazz.Web.JWT
         // http://tools.ietf.org/html/rfc4648#page-7
         public byte[] Base64UrlDecode(string base64)
         {
-            throw new NotImplementedException();
+            base64 = base64.Replace('-', '+');
+            base64 = base64.Replace('_', '/');
+
+            switch (base64.Length % 4) // Pad with trailing '='s
+            {
+                case 0: break; // No pad chars in this case
+                case 2: base64 += "=="; break; // Two pad chars
+                case 3: base64 += "="; break; // One pad char
+                default: throw new ArgumentException("Invalid base64.", "base64");
+            }
+
+            return Convert.FromBase64String(base64);
         }
     }
 }
