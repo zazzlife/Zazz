@@ -148,6 +148,30 @@ namespace Zazz.UnitTests.Web.JWT
             Assert.Throws<InvalidTokenException>(() => _sut.Decode(tokenWithInvalidSign));
         }
 
+        [Test]
+        public void DecodeCorrectly_OnDecode()
+        {
+            //Arrange
+            var expDate = DateTime.UtcNow.AddDays(1);
+            var claims = new HashSet<KeyValuePair<string, object>>
+                         {
+                             new KeyValuePair<string, object>("key", "val"),
+                             new KeyValuePair<string, object>("key2", 1)
+                         };
 
+            var validToken = _sut.Encode(claims, expDate);
+
+            //Act
+            var result = _sut.Decode(validToken);
+
+            //Assert
+            Assert.AreEqual("HS256", result.Header.alg);
+            Assert.AreEqual("JWT", result.Header.typ);
+
+            Assert.AreEqual(expDate.Date, result.ExpirationTime.Value.Date);
+
+            Assert.AreEqual("val", result.Claims["key"]);
+            Assert.AreEqual(1, result.Claims["key2"]);
+        }
     }
 }

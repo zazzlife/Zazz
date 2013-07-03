@@ -9,7 +9,7 @@ namespace Zazz.Web.JWT
     {
         public JWTHeader Header { get; set; }
 
-        public HashSet<Dictionary<string, object>> Claims { get; set; }
+        public Dictionary<string, object> Claims { get; set; }
 
         public DateTime IssuedTime { get; set; }
 

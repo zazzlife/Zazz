@@ -40,15 +40,19 @@ namespace Zazz.Web.JWT
             foreach (var claim in claims)
                 payLoad.Add(claim.Key, claim.Value);
 
+            // converting to json
             var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
             var payloadJson = JsonConvert.SerializeObject(payLoad, Formatting.None);
 
+            // getting utf8 bytes
             var headerBytes = Encoding.UTF8.GetBytes(headerJson);
             var payloadBytes = Encoding.UTF8.GetBytes(payloadJson);
 
+            // converting to base64 url safe
             var headerBase64 = Base64UrlEncode(headerBytes);
             var payloadBase64 = Base64UrlEncode(payloadBytes);
 
+            // signing
             var jwtString = headerBase64 + "." + payloadBase64;
             var signature = SignString(jwtString);
 
@@ -69,15 +73,45 @@ namespace Zazz.Web.JWT
             var payload = segments[1];
             var signature = segments[2];
 
+            //checking signature
             var stringToSing = header + "." + payload;
             var signatureCheck = SignString(stringToSing);
 
             if (signatureCheck != signature)
                throw new InvalidTokenException();
 
+            // getting back to json format
+            var headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
+            var payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(payload));
 
+            // converting json to object models
+            var h = JsonConvert.DeserializeObject<JWTHeader>(headerJson);
+            var claims = JsonConvert.DeserializeObject<Dictionary<string, object>>(payloadJson);
 
-            throw new NotImplementedException();
+            // extracting issued date
+            var issuedDate = DateTime.MinValue;
+            if (claims.ContainsKey("nbf") && (claims["nbf"] is long))
+            {
+                var nbf = (long)claims["nbf"];
+                issuedDate = nbf.UnixTimestampToDateTime();
+            }
+
+            // extracting expiration date
+            var expDate = DateTime.MinValue;
+            if (claims.ContainsKey("exp") && (claims["exp"] is long))
+            {
+                var exp = (long) claims["exp"];
+                expDate = exp.UnixTimestampToDateTime();
+            }
+
+            return new JsonWebToken
+                   {
+                       Claims = claims,
+                       Header = h,
+                       Signature = signature,
+                       IssuedTime = issuedDate,
+                       ExpirationTime = expDate
+                   };
         }
 
         // http://tools.ietf.org/html/rfc4648#page-7
