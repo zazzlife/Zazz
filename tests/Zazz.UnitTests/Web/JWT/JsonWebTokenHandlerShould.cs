@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
-using Zazz.Web.JsonWebToken;
+using Zazz.Web.OAuthAuthorizationServer.JsonWebToken;
 
 namespace Zazz.UnitTests.Web
 {

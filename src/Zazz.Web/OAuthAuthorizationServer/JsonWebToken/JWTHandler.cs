@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 
-namespace Zazz.Web.JsonWebToken
+namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
 {
     public class JWTHandler
     {

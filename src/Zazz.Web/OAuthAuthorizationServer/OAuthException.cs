@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Runtime.Serialization;
-using System.Web;
 using System.Web.Http;
 using Newtonsoft.Json;
 
-namespace Zazz.Web
+namespace Zazz.Web.OAuthAuthorizationServer
 {
     public class OAuthErrorModel
     {
@@ -19,14 +15,14 @@ namespace Zazz.Web
         public string ErrorDescription { get; set; }
     }
 
-    public class OAuthErrorException : HttpResponseException
+    public class OAuthException : HttpResponseException
     {
-        public OAuthErrorException(OAuthError error, string errorDescription = null,
-                                   HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+        public OAuthException(OAuthError error, string errorDescription = null,
+                              HttpStatusCode statusCode = HttpStatusCode.BadRequest)
             : base(statusCode)
         {}
 
-        public OAuthErrorException(HttpResponseMessage response)
+        public OAuthException(HttpResponseMessage response)
             : base(response)
         { }
     }

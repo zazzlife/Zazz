@@ -285,8 +285,8 @@
     <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
-    <Compile Include="JsonWebToken\JWT.cs" />
-    <Compile Include="JsonWebToken\JWTHandler.cs" />
+    <Compile Include="OAuthAuthorizationServer\JsonWebToken\JWT.cs" />
+    <Compile Include="OAuthAuthorizationServer\JsonWebToken\JWTHandler.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiAppToken.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />
@@ -335,7 +335,7 @@
     <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="Models\WeeklyViewModel.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
-    <Compile Include="OAuthErrorException.cs" />
+    <Compile Include="OAuthAuthorizationServer\OAuthException.cs" />
     <Compile Include="ObjectMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidateImageAttribute.cs" />

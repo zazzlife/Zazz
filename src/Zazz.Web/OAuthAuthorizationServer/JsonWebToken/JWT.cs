@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Zazz.Web.JsonWebToken
+namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
 {
     public class JWT
     {
