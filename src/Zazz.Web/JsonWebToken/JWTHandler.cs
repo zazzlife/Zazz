@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 
-namespace Zazz.Web.JWT
+namespace Zazz.Web.JsonWebToken
 {
-    public class JsonWebTokenHandler
+    public class JWTHandler
     {
         private readonly byte[] _key;
 
         // http://tools.ietf.org/html/draft-jones-json-web-token-10
 
-        public JsonWebTokenHandler()
+        public JWTHandler()
         {
             // 64 bytes
             const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
@@ -25,7 +23,7 @@ namespace Zazz.Web.JWT
 
         public string Encode(Dictionary<string, object> claims, DateTime? expirationDate = null)
         {
-            var header = new JWTHeader { alg = "HS256" };
+            var header = new JWTHeader { Algorithm = "HS256" };
 
             claims.Add("iss", "https://www.zazzlife.com");
             claims.Add("aud", "Zazz clients");
@@ -54,7 +52,7 @@ namespace Zazz.Web.JWT
             return jwtString;
         }
 
-        public JsonWebToken Decode(string token)
+        public JWT Decode(string token)
         {
             if (String.IsNullOrWhiteSpace(token))
                 throw new ArgumentException("Token cannot be empty", "token");
@@ -98,7 +96,7 @@ namespace Zazz.Web.JWT
                 expDate = exp.UnixTimestampToDateTime();
             }
 
-            return new JsonWebToken
+            return new JWT
                    {
                        Claims = claims,
                        Header = h,

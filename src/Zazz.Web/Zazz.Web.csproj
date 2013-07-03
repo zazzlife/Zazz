@@ -284,8 +284,8 @@
     <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
-    <Compile Include="JWT\JsonWebToken.cs" />
-    <Compile Include="JWT\JsonWebTokenHandler.cs" />
+    <Compile Include="JsonWebToken\JWT.cs" />
+    <Compile Include="JsonWebToken\JWTHandler.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiAppToken.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />

@@ -6,20 +6,20 @@ using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
-using Zazz.Web.JWT;
+using Zazz.Web.JsonWebToken;
 
-namespace Zazz.UnitTests.Web.JWT
+namespace Zazz.UnitTests.Web
 {
     [TestFixture]
     public class JsonWebTokenHandlerShould
     {
-        private JsonWebTokenHandler _sut;
+        private JWTHandler _sut;
         private string _base64;
 
         [SetUp]
         public void Init()
         {
-            _sut = new JsonWebTokenHandler();
+            _sut = new JWTHandler();
             _base64 = "7UeoUtefyJLpwrOgxFjR1Qyf+oo0/cDGAftSoBQssLxLmBLCE2dxpkv62Z7+RZ7+URmb2UMO6enwJofXLa+CKw==";
         }
 
@@ -166,8 +166,8 @@ namespace Zazz.UnitTests.Web.JWT
             var result = _sut.Decode(validToken);
 
             //Assert
-            Assert.AreEqual("HS256", result.Header.alg);
-            Assert.AreEqual("JWT", result.Header.typ);
+            Assert.AreEqual("HS256", result.Header.Algorithm);
+            Assert.AreEqual("JWT", result.Header.Type);
 
             Assert.AreEqual(expDate.Date, result.ExpirationTime.Value.Date);
 

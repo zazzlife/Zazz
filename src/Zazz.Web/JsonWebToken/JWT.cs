@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Newtonsoft.Json;
 
-namespace Zazz.Web.JWT
+namespace Zazz.Web.JsonWebToken
 {
-    public class JsonWebToken
+    public class JWT
     {
         public JWTHeader Header { get; set; }
 
@@ -23,11 +22,13 @@ namespace Zazz.Web.JWT
         /// <summary>
         /// Type
         /// </summary>
-        public string typ { get { return "JWT"; } }
+        [JsonProperty("typ")]
+        public string Type { get { return "JWT"; } }
 
         /// <summary>
         /// Algorithm
         /// </summary>
-        public string alg { get; set; }
+        [JsonProperty("alg")]
+        public string Algorithm { get; set; }
     }
 }
