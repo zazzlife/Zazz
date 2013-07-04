@@ -37,9 +37,6 @@ namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
         public JWT(string jwtString) : this()
         {
             if (String.IsNullOrWhiteSpace(jwtString))
-                throw new ArgumentNullException("jwtString");
-
-            if (String.IsNullOrWhiteSpace(jwtString))
                 throw new ArgumentException("Token cannot be empty", "jwtString");
 
             var segments = jwtString.Split('.');
@@ -64,13 +61,13 @@ namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
             // converting json to object models
             Header = JsonConvert.DeserializeObject<JWTHeader>(headerJson);
 
-            var claims = JsonConvert.DeserializeObject<Dictionary<string, object>>(payloadJson);
+            Claims = JsonConvert.DeserializeObject<Dictionary<string, object>>(payloadJson);
 
             // extracting issued date
             var issuedDate = DateTime.MinValue;
-            if (claims.ContainsKey("nbf") && (claims["nbf"] is long))
+            if (Claims.ContainsKey("nbf") && (Claims["nbf"] is long))
             {
-                var nbf = (long)claims["nbf"];
+                var nbf = (long)Claims["nbf"];
                 issuedDate = nbf.UnixTimestampToDateTime();
             }
 
@@ -78,9 +75,9 @@ namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
 
             // extracting expiration date
             var expDate = DateTime.MinValue;
-            if (claims.ContainsKey("exp") && (claims["exp"] is long))
+            if (Claims.ContainsKey("exp") && (Claims["exp"] is long))
             {
-                var exp = (long)claims["exp"];
+                var exp = (long)Claims["exp"];
                 expDate = exp.UnixTimestampToDateTime();
             }
 
