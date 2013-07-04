@@ -20,6 +20,9 @@ namespace Zazz.Data
             foreach (var tag in StaticData.GetTags())
                 context.Tags.Add(tag);
 
+            foreach (var scope in StaticData.GetScopes())
+                context.OAuthScopes.Add(scope);
+
             var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
             foreach (var sqlFile in sqlFiles)
                 context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));

@@ -29,6 +29,11 @@ namespace Zazz.Data
             return StaticData.GetTags();
         }
 
+        public IEnumerable<OAuthScope> GetOAuthScopes()
+        {
+            return StaticData.GetScopes();
+        }
+
         public Tag GetTagIfExists(string tagName)
         {
             return StaticData.GetTags()

@@ -50,5 +50,10 @@ namespace Zazz.Data
             yield return new Tag { Id = 11, Name = "Jampacked" };
             yield return new Tag { Id = 12, Name = "Justchilling" };
         }
+
+        public static IEnumerable<OAuthScope> GetScopes()
+        {
+            yield return new OAuthScope { Id = 1, Name = "full" };
+        }
     }
 }
