@@ -115,7 +115,7 @@ namespace Zazz.UnitTests.Web
             Assert.AreEqual("HS256", result.Header.Algorithm);
             Assert.AreEqual("JWT", result.Header.Type);
 
-            Assert.AreEqual(expDate.Date, result.ExpirationTime.Value.Date);
+            Assert.AreEqual(expDate.Date, result.ExpirationDate.Value.Date);
 
             Assert.AreEqual("val", result.Claims["key"]);
             Assert.AreEqual(1, result.Claims["key2"]);

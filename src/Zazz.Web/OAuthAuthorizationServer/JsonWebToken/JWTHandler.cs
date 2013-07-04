@@ -101,8 +101,8 @@ namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
                        Claims = claims,
                        Header = h,
                        Signature = signature,
-                       IssuedTime = issuedDate,
-                       ExpirationTime = expDate
+                       IssuedDate = issuedDate,
+                       ExpirationDate = expDate
                    };
         }
 
