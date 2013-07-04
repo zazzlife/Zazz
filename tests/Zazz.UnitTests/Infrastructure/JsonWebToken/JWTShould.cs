@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
-using Zazz.Web.OAuthAuthorizationServer.JsonWebToken;
 
-namespace Zazz.UnitTests.Web
+namespace Zazz.UnitTests.Infrastructure.JsonWebToken
 {
     [TestFixture]
     public class JsonWebTokenHandlerShould
@@ -17,7 +15,7 @@ namespace Zazz.UnitTests.Web
         public void CreateCorrectHeader_OnEncode()
         {
             //Arrange
-            var jwt = new JWT
+            var jwt = new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT
                       {
                           Claims = new Dictionary<string, object>()
                                    {
@@ -41,7 +39,7 @@ namespace Zazz.UnitTests.Web
         public void CreateCorrectClaims_OnEncode()
         {
             //Arrange
-            var jwt = new JWT
+            var jwt = new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT
                       {
                           Claims = new Dictionary<string, object>()
                                    {
@@ -72,7 +70,7 @@ namespace Zazz.UnitTests.Web
         {
             //Arrange
             //Act & Assert
-            Assert.Throws<ArgumentException>(() => new JWT(token));
+            Assert.Throws<ArgumentException>(() => new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT(token));
 
         }
 
@@ -80,7 +78,7 @@ namespace Zazz.UnitTests.Web
         public void ThrowInvalidTokenExceptionIfSignatureIsInvalid_OnDecode()
         {
             //Arrange
-            var jwt = new JWT
+            var jwt = new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT
                       {
                           Claims = new Dictionary<string, object>(),
                           ExpirationDate = DateTime.UtcNow.AddDays(1)
@@ -93,14 +91,14 @@ namespace Zazz.UnitTests.Web
             var tokenWithInvalidSign = String.Join(".", segments);
 
             //Act & Assert
-            Assert.Throws<InvalidTokenException>(() => new JWT(tokenWithInvalidSign));
+            Assert.Throws<InvalidTokenException>(() => new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT(tokenWithInvalidSign));
         }
 
         [Test]
         public void DecodeCorrectly_OnDecode()
         {
             //Arrange
-            var jwt = new JWT
+            var jwt = new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT
                       {
                           Claims = new Dictionary<string, object>()
                                    {
@@ -113,7 +111,7 @@ namespace Zazz.UnitTests.Web
             var validToken = jwt.ToString();
 
             //Act
-            var result = new JWT(validToken);
+            var result = new Zazz.Web.OAuthAuthorizationServer.JsonWebToken.JWT(validToken);
 
             //Assert
             Assert.AreEqual("HS256", result.Header.Algorithm);
