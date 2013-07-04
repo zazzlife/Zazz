@@ -43,9 +43,9 @@ namespace Zazz.Web.Controllers.Api
                                                  IsRead = n.IsRead,
                                                  NotificationType = n.NotificationType,
                                                  Time = n.Time,
-                                                 FriendId = n.UserBId,
-                                                 FriendDisplayName = _userService.GetUserDisplayName(n.UserBId),
-                                                 FriendDisplayPhoto = _photoService.GetUserImageUrl(n.UserBId),
+                                                 UserId = n.UserBId,
+                                                 DisplayName = _userService.GetUserDisplayName(n.UserBId),
+                                                 DisplayPhoto = _photoService.GetUserImageUrl(n.UserBId),
 
                                                  // PHOTO
                                                  Photo = n.NotificationType == NotificationType.CommentOnPhoto
