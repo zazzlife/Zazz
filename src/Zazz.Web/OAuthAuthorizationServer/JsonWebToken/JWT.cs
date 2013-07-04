@@ -93,7 +93,34 @@ namespace Zazz.Web.OAuthAuthorizationServer.JsonWebToken
         /// <returns></returns>
         public override string ToString()
         {
-            throw new NotImplementedException();
+            var header = new JWTHeader { Algorithm = "HS256" };
+
+            Claims.Add("iss", "https://www.zazzlife.com");
+            Claims.Add("aud", "Zazz clients");
+            Claims.Add("nbf", DateTime.UtcNow.ToUnixTimestamp());
+
+            if (ExpirationDate.HasValue)
+                Claims.Add("exp", ExpirationDate.Value.ToUnixTimestamp());
+
+            // converting to json
+            var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
+            var claimsJson = JsonConvert.SerializeObject(Claims, Formatting.None);
+
+            // getting utf8 bytes
+            var headerBytes = Encoding.UTF8.GetBytes(headerJson);
+            var claimsBytes = Encoding.UTF8.GetBytes(claimsJson);
+
+            // converting to base64 url safe
+            var headerBase64 = Base64Helper.Base64UrlEncode(headerBytes);
+            var claimsBase64 = Base64Helper.Base64UrlEncode(claimsBytes);
+
+            // signing
+            var jwtString = headerBase64 + "." + claimsBase64;
+            var signature = SignString(jwtString);
+
+            jwtString += "." + signature;
+
+            return jwtString;
         }
 
         private string SignString(string stringToSign)
