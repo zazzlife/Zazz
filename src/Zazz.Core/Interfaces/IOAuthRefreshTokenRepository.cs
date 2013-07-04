@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface OAuthRefreshTokenRepo : IRepository<OAuthRefreshToken>
+    public interface IOAuthRefreshTokenRepository : IRepository<OAuthRefreshToken>
     {
          
     }
