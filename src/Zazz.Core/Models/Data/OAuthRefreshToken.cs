@@ -12,7 +12,7 @@ namespace Zazz.Core.Models.Data
         [MaxLength(4000)]
         public string Token { get; set; }
 
-        public ICollection<OAuthScope> Scopes { get; set; }
+        public ICollection<OAuthRefreshTokenScope> Scopes { get; set; }
 
         public virtual User User { get; set; }
     }
