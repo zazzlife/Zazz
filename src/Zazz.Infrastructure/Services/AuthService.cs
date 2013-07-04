@@ -154,10 +154,10 @@ namespace Zazz.Infrastructure.Services
             _cacheService.RemovePassword(userId);
         }
 
-        public User GetOAuthUser(OAuthAccount oAuthAccount, string email)
+        public User GetOAuthUser(LinkedAccount linkedAccount, string email)
         {
-            var existingOAuthAccount = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oAuthAccount.ProviderUserId,
-                                                                        oAuthAccount.Provider);
+            var existingOAuthAccount = _uow.LinkedAccountRepository.GetOAuthAccountByProviderId(linkedAccount.ProviderUserId,
+                                                                        linkedAccount.Provider);
             if (existingOAuthAccount != null)
                 return existingOAuthAccount.User; // user and OAuth account exist
 
@@ -166,14 +166,14 @@ namespace Zazz.Infrastructure.Services
             return user;
         }
 
-        public void AddOrUpdateOAuthAccount(OAuthAccount oauthAccount)
+        public void AddOrUpdateOAuthAccount(LinkedAccount oauthAccount)
         {
-            var account = _uow.OAuthAccountRepository.GetOAuthAccountByProviderId(oauthAccount.ProviderUserId,
+            var account = _uow.LinkedAccountRepository.GetOAuthAccountByProviderId(oauthAccount.ProviderUserId,
                                                                                 oauthAccount.Provider);
 
             if (account == null)
             {
-                _uow.OAuthAccountRepository.InsertGraph(oauthAccount);
+                _uow.LinkedAccountRepository.InsertGraph(oauthAccount);
                 
             }
             else

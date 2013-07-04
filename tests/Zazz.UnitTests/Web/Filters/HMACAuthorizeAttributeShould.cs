@@ -28,14 +28,14 @@ namespace Zazz.UnitTests.Web.Filters
         private HttpClient _client;
         private MockRepository _mockRepo;
         private Mock<ICryptoService> _cryptoService;
-        private Mock<IApiAppRepository> _appRepo;
+        private Mock<IOAuthClientRepository> _appRepo;
         private int _appId;
         private string _requestSignature;
         private int _usreId;
         private string _passwordSignature;
         private byte[] _passwordSigningKey;
         private byte[] _requestSigningKey;
-        private ApiApp _app;
+        private OAuthClient _app;
         private Mock<IUserService> _userService;
         private const string BASE_ADDRESS = "http://localhost:8080";
         private const string AUTH_SCHEME = "ZazzApi";
@@ -46,7 +46,7 @@ namespace Zazz.UnitTests.Web.Filters
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _cryptoService = _mockRepo.Create<ICryptoService>();
-            _appRepo = _mockRepo.Create<IApiAppRepository>();
+            _appRepo = _mockRepo.Create<IOAuthClientRepository>();
             _userService = _mockRepo.Create<IUserService>();
 
             var container = SetupIoC();
@@ -71,7 +71,7 @@ namespace Zazz.UnitTests.Web.Filters
             _requestSigningKey = new byte[] {1, 2};
             _passwordSigningKey = new byte[] { 3, 4 };
 
-            _app = new ApiApp
+            _app = new OAuthClient
                    {
                        Id = _appId,
                        Name = "test",
@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Web.Filters
                                         
                                         x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                                         x.For<ICryptoService>().Use(_cryptoService.Object);
-                                        x.For<IApiAppRepository>().Use(_appRepo.Object);
+                                        x.For<IOAuthClientRepository>().Use(_appRepo.Object);
                                         x.For<IUserService>().Use(_userService.Object);
                                     });
         }

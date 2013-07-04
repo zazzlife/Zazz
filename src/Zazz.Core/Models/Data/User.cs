@@ -10,7 +10,7 @@ namespace Zazz.Core.Models.Data
     {
         public User()
         {
-            LinkedAccounts = new HashSet<OAuthAccount>();
+            LinkedAccounts = new HashSet<LinkedAccount>();
             Weeklies = new HashSet<Weekly>();
         }
 
@@ -35,7 +35,7 @@ namespace Zazz.Core.Models.Data
 
         public virtual UserValidationToken UserValidationToken { get; set; }
 
-        public virtual ICollection<OAuthAccount> LinkedAccounts { get; set; }
+        public virtual ICollection<LinkedAccount> LinkedAccounts { get; set; }
 
         public virtual UserPreferences Preferences { get; set; }
 

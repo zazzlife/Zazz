@@ -16,7 +16,7 @@ namespace Zazz.Web.Filters
     public class HMACAuthorizeAttribute : AuthorizeAttribute
     {
         [SetterProperty]
-        public IApiAppRepository ApiAppRepository { get; set; }
+        public IOAuthClientRepository IoAuthClientRepository { get; set; }
 
         [SetterProperty]
         public ICryptoService CryptoService { get; set; }
@@ -149,7 +149,7 @@ namespace Zazz.Web.Filters
                 passwordHash = authSegments[3];
 
 
-            var app = ApiAppRepository.GetById(appId);
+            var app = IoAuthClientRepository.GetById(appId);
             if (app == null)
             {
                 _reason = "app was not found";
@@ -168,7 +168,7 @@ namespace Zazz.Web.Filters
             return true;
         }
 
-        private bool ValidatePasswordSignature(ApiApp app, int userId, string clientPasswordHash)
+        private bool ValidatePasswordSignature(OAuthClient app, int userId, string clientPasswordHash)
         {
             var password = UserService.GetUserPassword(userId);
             if (password == default(byte[]))
@@ -191,7 +191,7 @@ namespace Zazz.Web.Filters
             return isPasswordSignatureValid;
         }
 
-        private bool ValidateRequestSignature(ApiApp app, string requestSignature, HttpRequestMessage request)
+        private bool ValidateRequestSignature(OAuthClient app, string requestSignature, HttpRequestMessage request)
         {
             var content = request.Content == null
                                    ? null

@@ -50,7 +50,7 @@ namespace Zazz.Infrastructure.Services
         public void UpdateUserEvents(long fbUserId, int limit = 5)
         {
             //getting user account
-            var oauthAccount = _uow.OAuthAccountRepository
+            var oauthAccount = _uow.LinkedAccountRepository
                                      .GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook);
 
             if (oauthAccount == null)
@@ -230,7 +230,7 @@ namespace Zazz.Infrastructure.Services
 
         public IEnumerable<FbPage> GetUserPages(int userId)
         {
-            var oAuthAccount = _uow.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook);
+            var oAuthAccount = _uow.LinkedAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook);
 
             if (oAuthAccount == null)
                 throw new OAuthAccountNotFoundException();
@@ -281,7 +281,7 @@ namespace Zazz.Infrastructure.Services
             if (fbFriends.Count == 0)
                 return Enumerable.Empty<User>().AsQueryable();
 
-            var u = _uow.OAuthAccountRepository.GetUsersByProviderId(fbFriends.Select(f => f.Id), OAuthProvider.Facebook);
+            var u = _uow.LinkedAccountRepository.GetUsersByProviderId(fbFriends.Select(f => f.Id), OAuthProvider.Facebook);
             return u;
         }
     }

@@ -8,9 +8,9 @@ namespace Zazz.Data
         private bool _isDisposed;
         private ZazzDbContext _dbContext;
 
-        public IOAuthAccountRepository OAuthAccountRepository
+        public ILinkedAccountRepository LinkedAccountRepository
         {
-            get { return new OAuthAccountRepository(GetContext()); }
+            get { return new LinkedAccountRepository(GetContext()); }
         }
 
         public ICommentRepository CommentRepository

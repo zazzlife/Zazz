@@ -25,9 +25,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         protected HttpClient Client;
         protected MockRepository MockRepo;
         protected Mock<IUserService> UserService;
-        protected Mock<IApiAppRepository> AppRepo;
+        protected Mock<IOAuthClientRepository> AppRepo;
         protected Mock<IPhotoService> PhotoService;
-        protected ApiApp App;
+        protected OAuthClient App;
         protected CryptoService CryptoService;
         protected string Password;
         protected User User;
@@ -45,7 +45,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             App = Mother.GetApiApp();
             MockRepo = new MockRepository(MockBehavior.Strict);
             UserService = MockRepo.Create<IUserService>();
-            AppRepo = MockRepo.Create<IApiAppRepository>();
+            AppRepo = MockRepo.Create<IOAuthClientRepository>();
             PhotoService = MockRepo.Create<IPhotoService>();
             CryptoService = new CryptoService();
 
@@ -79,7 +79,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                 x.For<ICryptoService>().Use<CryptoService>();
                 x.For<IUserService>().Use(UserService.Object);
-                x.For<IApiAppRepository>().Use(AppRepo.Object);
+                x.For<IOAuthClientRepository>().Use(AppRepo.Object);
                 x.For<IPhotoService>().Use(PhotoService.Object);
                 x.For<IObjectMapper>().Use<ObjectMapper>();
                 x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()

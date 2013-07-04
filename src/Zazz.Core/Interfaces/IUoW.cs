@@ -5,7 +5,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUoW : IDisposable
     {
-        IOAuthAccountRepository OAuthAccountRepository { get; }
+        ILinkedAccountRepository LinkedAccountRepository { get; }
         ICommentRepository CommentRepository { get; }
         IEventRepository EventRepository { get; }
         IFollowRepository FollowRepository { get; }

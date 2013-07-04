@@ -31,8 +31,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private string _loginUrl;
         private MockRepository _mockRepo;
         private Mock<IUserService> _userService;
-        private Mock<IApiAppRepository> _appRepo;
-        private ApiApp _testApp;
+        private Mock<IOAuthClientRepository> _appRepo;
+        private OAuthClient _testApp;
         private CryptoService _cryptoService;
         private ApiLoginRequest _apiLoginRequest;
         private Mock<IPhotoService> _photoService;
@@ -46,7 +46,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _userService = _mockRepo.Create<IUserService>();
-            _appRepo = _mockRepo.Create<IApiAppRepository>();
+            _appRepo = _mockRepo.Create<IOAuthClientRepository>();
             _photoService = _mockRepo.Create<IPhotoService>();
 
             var config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -84,7 +84,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                      x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                                      x.For<ICryptoService>().Use<CryptoService>();
                                      x.For<IUserService>().Use(_userService.Object);
-                                     x.For<IApiAppRepository>().Use(_appRepo.Object);
+                                     x.For<IOAuthClientRepository>().Use(_appRepo.Object);
                                      x.For<IPhotoService>().Use(_photoService.Object);
                                  });
         }

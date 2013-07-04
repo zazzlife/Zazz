@@ -17,7 +17,7 @@ namespace Zazz.UnitTests.Infrastructure
         private Mock<ILogger> _logger;
         private Mock<IEmailService> _emailService;
         private ErrorHandler _sut;
-        private OAuthAccount _oauthAccount;
+        private LinkedAccount _oauthAccount;
 
         [SetUp]
         public void Init()
@@ -31,7 +31,7 @@ namespace Zazz.UnitTests.Infrastructure
 
             _emailService.Setup(x => x.Send(It.IsAny<MailMessage>()));
 
-            _oauthAccount = new OAuthAccount
+            _oauthAccount = new LinkedAccount
                                 {
                                     User = new User
                                                {

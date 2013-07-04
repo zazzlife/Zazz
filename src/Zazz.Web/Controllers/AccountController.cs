@@ -19,7 +19,6 @@ using Zazz.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
-using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;
 
 namespace Zazz.Web.Controllers
 {
@@ -30,14 +29,14 @@ namespace Zazz.Web.Controllers
         private readonly ICryptoService _cryptoService;
         private readonly IAppRequestTokenService _appRequestTokenService;
         private readonly IObjectMapper _objectMapper;
-        private readonly IApiAppRepository _appRepository;
+        private readonly IOAuthClientRepository _appRepository;
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
-            IObjectMapper objectMapper, IApiAppRepository appRepository, IFacebookService facebookService,
+            IObjectMapper objectMapper, IOAuthClientRepository appRepository, IFacebookService facebookService,
             IFollowService followService) 
             : base(userService, photoService, defaultImageHelper)
         {
@@ -367,7 +366,7 @@ namespace Zazz.Web.Controllers
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = accessToken,
                                        Provider = provider,
@@ -451,9 +450,9 @@ namespace Zazz.Web.Controllers
                 var user = _objectMapper.RegisterVmToUser(registerVm);
                 user.IsConfirmed = true;
 
-                user.LinkedAccounts = new List<OAuthAccount>
+                user.LinkedAccounts = new List<LinkedAccount>
                                           {
-                                              new OAuthAccount
+                                              new LinkedAccount
                                                   {
                                                       AccessToken = oauthData.AccessToken,
                                                       Provider = oauthData.Provider,

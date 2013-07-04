@@ -583,9 +583,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var provider = OAuthProvider.Facebook;
             var email = "email";
             var user = new User { Email = email };
-            var oauthAccount = new OAuthAccount {ProviderUserId = providerId, Provider = provider, User = new User()};
+            var oauthAccount = new LinkedAccount {ProviderUserId = providerId, Provider = provider, User = new User()};
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oauthAccount);
 
             //Act
@@ -604,9 +604,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var provider = OAuthProvider.Facebook;
             var email = "email";
             var user = new User { Email = email };
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+            var oauthAccount = new LinkedAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
             _uow.Setup(x => x.UserRepository.GetByEmail(email))
                     .Returns(user);
@@ -627,9 +627,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var provider = OAuthProvider.Facebook;
             var email = "email";
             var user = new User { Email = email };
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
+            var oauthAccount = new LinkedAccount { ProviderUserId = providerId, Provider = provider };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
             _uow.Setup(x => x.UserRepository.GetByEmail(email))
                     .Returns(() => null);
@@ -649,9 +649,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
 
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider };
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
-                    .Returns(new OAuthAccount());
+            var oauthAccount = new LinkedAccount { ProviderUserId = providerId, Provider = provider };
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(new LinkedAccount());
 
             _uow.Setup(x => x.SaveChanges());
 
@@ -670,13 +670,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
 
-            var oauthAccount = new OAuthAccount { ProviderUserId = providerId, Provider = provider, UserId = 23};
+            var oauthAccount = new LinkedAccount { ProviderUserId = providerId, Provider = provider, UserId = 23};
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(() => null);
 
-            _uow.Setup(x => x.OAuthAccountRepository
-                             .InsertGraph(It.Is<OAuthAccount>(a => a.AccessToken == oauthAccount.AccessToken &&
+            _uow.Setup(x => x.LinkedAccountRepository
+                             .InsertGraph(It.Is<LinkedAccount>(a => a.AccessToken == oauthAccount.AccessToken &&
                                                                    a.Provider == provider &&
                                                                    a.ProviderUserId == providerId &&
                                                                    a.UserId == oauthAccount.UserId)));
@@ -697,7 +697,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var providerId = 1234L;
             var provider = OAuthProvider.Facebook;
 
-            var oldOAuthAccount = new OAuthAccount
+            var oldOAuthAccount = new LinkedAccount
                                   {
                                       ProviderUserId = providerId,
                                       Provider = provider,
@@ -705,7 +705,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                       AccessToken = "old token"
                                   };
 
-            var newOauthAccount = new OAuthAccount
+            var newOauthAccount = new LinkedAccount
                                   {
                                       ProviderUserId = providerId,
                                       Provider = provider,
@@ -714,7 +714,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                   };
 
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oldOAuthAccount);
 
 
