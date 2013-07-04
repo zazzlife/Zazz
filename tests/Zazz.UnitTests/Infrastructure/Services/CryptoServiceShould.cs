@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -184,12 +185,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [Test, Explicit("This is not a test, using it only for generating keys")]
         public void ThisIsOnlyForGeneratingKeys()
         {
-            const int KEY_SIZE = 128*8;
+            const int KEY_SIZE = 32*8;
 
             var keyBuffer = _sut.GenerateKey(KEY_SIZE, generateNonZero: true);
             //var keyBuffer = _sut.GenerateKey(KEY_SIZE);
 
             var base64 = Convert.ToBase64String(keyBuffer);
+            var urlSafeBase64 = Base64Helper.Base64UrlEncode(keyBuffer);
             Debug.WriteLine(base64);
 
         }
