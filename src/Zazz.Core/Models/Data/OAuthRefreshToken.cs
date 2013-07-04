@@ -9,11 +9,16 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("User")]
         public int UserId { get; set; }
 
+        [ForeignKey("OAuthClient")]
+        public int OAuthClientId { get; set; }
+
         [MaxLength(4000)]
         public string Token { get; set; }
 
         public ICollection<OAuthRefreshTokenScope> Scopes { get; set; }
 
         public virtual User User { get; set; }
+
+        public virtual OAuthClient OAuthClient { get; set; }
     }
 }
