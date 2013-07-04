@@ -285,6 +285,7 @@
     <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
+    <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JsonWebToken\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiAppToken.cs" />
