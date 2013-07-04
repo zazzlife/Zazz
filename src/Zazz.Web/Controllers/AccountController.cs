@@ -120,34 +120,38 @@ namespace Zazz.Web.Controllers
 
         public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
         {
-            var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
-            var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
+            throw new NotImplementedException();
 
-            if (signCheck != sign)
-                throw new HttpException(403, "Forbidden");
+            //TODO: (URGENT) Implement this using new oauth method.
 
-            var request = _appRequestTokenService.Get(requestId);
-            var app = _appRepository.GetById(request.AppId);
+            //var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
+            //var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
 
-            var user = UserService.GetUser(userId);
-            var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
-            var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
+            //if (signCheck != sign)
+            //    throw new HttpException(403, "Forbidden");
 
-            var displayName = UserService.GetUserDisplayName(userId);
-            var displayPhoto = PhotoService.GetUserImageUrl(userId);
+            //var request = _appRequestTokenService.Get(requestId);
+            //var app = _appRepository.GetById(request.AppId);
+
+            //var user = UserService.GetUser(userId);
+            //var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
+            //var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
+
+            //var displayName = UserService.GetUserDisplayName(userId);
+            //var displayPhoto = PhotoService.GetUserImageUrl(userId);
             
 
-            _appRequestTokenService.Remove(request);
+            //_appRequestTokenService.Remove(request);
 
-            return new JsonNetResult(
-                new
-                {
-                    userId,
-                    accountType = user.AccountType,
-                    passwordSignature,
-                    displayName,
-                    displayPhoto
-                });
+            //return new JsonNetResult(
+            //    new
+            //    {
+            //        userId,
+            //        accountType = user.AccountType,
+            //        passwordSignature,
+            //        displayName,
+            //        displayPhoto
+            //    });
         }
 
         #endregion
