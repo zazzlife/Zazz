@@ -128,6 +128,7 @@
     <Compile Include="Interfaces\IVoteService.cs" />
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
+    <Compile Include="Interfaces\OAuthRefreshTokenRepo.cs" />
     <Compile Include="Models\Data\OAuthClient.cs" />
     <Compile Include="Models\Data\AppRequestToken.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
@@ -156,6 +157,8 @@
     <Compile Include="Models\Data\FeedUser.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\Notification.cs" />
+    <Compile Include="Models\Data\OAuthRefreshToken.cs" />
+    <Compile Include="Models\Data\OAuthRefreshTokenScope.cs" />
     <Compile Include="Models\Data\OAuthScope.cs" />
     <Compile Include="Models\Data\PhotoComment.cs" />
     <Compile Include="Models\Data\PhotoTag.cs" />

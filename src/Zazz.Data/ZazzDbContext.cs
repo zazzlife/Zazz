@@ -38,6 +38,9 @@ namespace Zazz.Data
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
         public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }
         public IDbSet<AppRequestToken> AppRequestTokens { get; set; }
+        public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
+        public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
+
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
