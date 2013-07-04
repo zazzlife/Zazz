@@ -35,7 +35,7 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = ExtractUserIdFromHeader();
             var notifications = _notificationService.GetUserNotifications(userId, lastNotification)
-                                                    .Take(10);
+                                                    .Take(30);
 
             return notifications.Select(n => new ApiNotification
                                              {
