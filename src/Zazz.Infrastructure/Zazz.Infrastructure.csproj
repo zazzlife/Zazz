@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Base64Helper.cs" />
     <Compile Include="KeyChain.cs" />
     <Compile Include="CircularBufferCache.cs" />
     <Compile Include="DefaultImageHelper.cs" />

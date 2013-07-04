@@ -24,60 +24,6 @@ namespace Zazz.UnitTests.Web
         }
 
         [Test]
-        public void ReplacePlusWithMinus_OnBase64UrlEncode()
-        {
-            //Arrange
-            Assert.IsTrue(_base64.IndexOf('+') > -1);
-
-            //Act
-            var result = _sut.Base64UrlEncode(Convert.FromBase64String(_base64));
-
-            //Assert
-            Assert.IsFalse(result.IndexOf('+') > -1);
-            Assert.IsTrue(result.IndexOf('-') > -1);
-        }
-
-        [Test]
-        public void ReplaceForwardSlashWithUnderline_OnBase64UrlEncode()
-        {
-            //Arrange
-            Assert.IsTrue(_base64.IndexOf('/') > -1);
-
-            //Act
-            var result = _sut.Base64UrlEncode(Convert.FromBase64String(_base64));
-
-            //Assert
-            Assert.IsFalse(result.IndexOf('/') > -1);
-            Assert.IsTrue(result.IndexOf('_') > -1);
-        }
-
-        [Test]
-        public void RemoveTrailingEqualSymbols_OnBase64UrlEncode()
-        {
-            //Arrange
-            Assert.IsTrue(_base64.EndsWith("="));
-
-            //Act
-            var result = _sut.Base64UrlEncode(Convert.FromBase64String(_base64));
-
-            //Assert
-            Assert.IsFalse(result.EndsWith("="));
-        }
-
-        [Test]
-        public void DecodeUrlSafeBase64Correctly_OnBase64Decode()
-        {
-            //Arrange
-            var urlSafeBas64 = "7UeoUtefyJLpwrOgxFjR1Qyf-oo0_cDGAftSoBQssLxLmBLCE2dxpkv62Z7-RZ7-URmb2UMO6enwJofXLa-CKw";
-
-            //Act
-            var result = _sut.Base64UrlDecode(urlSafeBas64);
-
-            //Assert
-            Assert.AreEqual(_base64, Convert.ToBase64String(result));
-        }
-
-        [Test]
         public void CreateCorrectHeader_OnEncode()
         {
             //Arrange
