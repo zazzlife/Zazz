@@ -333,6 +333,7 @@
     <Compile Include="Models\UserHomeViewModel.cs" />
     <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="Models\WeeklyViewModel.cs" />
+    <Compile Include="OAuthAuthorizationServer\OAuthCredentials.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthError.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthErrorModel.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
