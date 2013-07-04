@@ -1,6 +1,4 @@
-﻿using Zazz.Web.OAuthAuthorizationServer.JsonWebToken;
-
-namespace Zazz.Web.OAuthAuthorizationServer
+﻿namespace Zazz.Web.OAuthAuthorizationServer
 {
     public class OAuthCredentials
     {

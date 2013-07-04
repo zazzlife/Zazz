@@ -286,7 +286,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
-    <Compile Include="OAuthAuthorizationServer\JsonWebToken\JWT.cs" />
+    <Compile Include="OAuthAuthorizationServer\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
     <Compile Include="Models\Api\ApiAppToken.cs" />
     <Compile Include="Models\Api\ApiComment.cs" />
@@ -334,6 +334,7 @@
     <Compile Include="Models\UserHomeViewModel.cs" />
     <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="Models\WeeklyViewModel.cs" />
+    <Compile Include="OAuthAuthorizationServer\OAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthCredentials.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthError.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthErrorModel.cs" />

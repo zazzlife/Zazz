@@ -1,5 +1,4 @@
 ﻿using Zazz.Core.Models.Data;
-using Zazz.Web.OAuthAuthorizationServer.JsonWebToken;
 
 namespace Zazz.Web.OAuthAuthorizationServer
 {
