@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 
-namespace Zazz.UnitTests.Infrastructure.JsonWebToken
+namespace Zazz.UnitTests.Web.OAuthAuthorizationServer.JsonWebToken
 {
     [TestFixture]
     public class JsonWebTokenHandlerShould
