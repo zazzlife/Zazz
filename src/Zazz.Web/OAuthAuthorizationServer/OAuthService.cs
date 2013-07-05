@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -18,7 +19,51 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
         public OAuthCredentials CreateOAuthCredentials(User user, OAuthClient client, List<OAuthScope> scopes)
         {
-            throw new System.NotImplementedException();
+            var scopesName = scopes.Select(s => s.Name).ToList();
+            var verifyToken = Convert.ToBase64String(_cryptoService.GenerateKey(1024));
+
+            var oAuthRefreshToken = new OAuthRefreshToken
+                                    {
+                                        CreatedDate = DateTime.UtcNow,
+                                        OAuthClientId = client.Id,
+                                        Scopes = scopes.Select(s => new OAuthRefreshTokenScope
+                                                                    {
+                                                                        ScopeId = s.Id
+                                                                    }).ToList(),
+                                        UserId = user.Id,
+                                        VerificationCode = verifyToken
+                                    };
+
+            _uow.OAuthRefreshTokenRepository.InsertGraph(oAuthRefreshToken);
+            _uow.SaveChanges();
+
+            var accessToken = new JWT
+                              {
+                                  ClientId = client.Id,
+                                  ExpirationDate = DateTime.UtcNow.AddHours(1),
+                                  IssuedDate = DateTime.UtcNow,
+                                  TokenType = JWT.ACCESS_TOKEN_TYPE,
+                                  Scopes = scopesName,
+                                  UserId = user.Id
+                              };
+
+            var refreshToken = new JWT
+                               {
+                                   ClientId = client.Id,
+                                   IssuedDate = oAuthRefreshToken.CreatedDate,
+                                   TokenType = JWT.REFRESH_TOKEN_TYPE,
+                                   Scopes = scopesName,
+                                   UserId = user.Id,
+                                   VerificationCode = verifyToken
+                               };
+            
+            
+
+            return new OAuthCredentials
+                   {
+                       AccessToken = accessToken,
+                       RefreshToken = refreshToken
+                   };
         }
 
         public JWT RefreshAccessToken(string refreshToken)
