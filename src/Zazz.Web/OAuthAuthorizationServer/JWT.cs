@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
@@ -17,14 +18,34 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
         public Dictionary<string, object> Claims { get; set; }
 
+        public string Signature { get; private set; }
+
+        
+        private const string ISSUED_DATE_KEY = "nbf";
         public DateTime IssuedDate { get; set; }
 
+        private const string EXPIRATION_DATE_KEY = "exp";
         public DateTime? ExpirationDate { get; set; }
 
-        public string Signature { get; set; }
+        private const string TOKEN_TYPE_KEY = "tokenType";
+        public TokenType TokenType { get; set; }
+
+        private const string VERIFY_CODE_KEY = "verify";
+        public string VerificationCode { get; set; }
+        
+        private const string SCOPES_KEY = "scopes";
+        public List<string> Scopes { get; set; }
+
+        private const string CLIENT_ID_KEY = "client";
+        public int ClientId { get; set; }
+
+        private const string USER_ID_KEY = "usr";
+        public int UserId { get; set; }
 
         public JWT()
         {
+            Scopes = new List<string>();
+
             // 64 bytes
             const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
             _key = Convert.FromBase64String(KEY);
@@ -45,13 +66,13 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             var header = segments[0];
             var payload = segments[1];
-            var signature = segments[2];
+            Signature = segments[2];
 
             //checking signature
             var stringToSing = header + "." + payload;
             var signatureCheck = SignString(stringToSing);
 
-            if (signatureCheck != signature)
+            if (signatureCheck != Signature)
                 throw new InvalidTokenException();
 
             // getting back to json format
@@ -64,24 +85,51 @@ namespace Zazz.Web.OAuthAuthorizationServer
             Claims = JsonConvert.DeserializeObject<Dictionary<string, object>>(payloadJson);
 
             // extracting issued date
-            var issuedDate = DateTime.MinValue;
-            if (Claims.ContainsKey("nbf") && (Claims["nbf"] is long))
+            if (Claims.ContainsKey(ISSUED_DATE_KEY) && (Claims[ISSUED_DATE_KEY] is long))
             {
-                var nbf = (long)Claims["nbf"];
-                issuedDate = nbf.UnixTimestampToDateTime();
+                var nbf = (long)Claims[ISSUED_DATE_KEY];
+                IssuedDate = nbf.UnixTimestampToDateTime();
             }
-
-            IssuedDate = issuedDate;
 
             // extracting expiration date
-            var expDate = DateTime.MinValue;
-            if (Claims.ContainsKey("exp") && (Claims["exp"] is long))
+            if (Claims.ContainsKey(EXPIRATION_DATE_KEY) && (Claims[EXPIRATION_DATE_KEY] is long))
             {
-                var exp = (long)Claims["exp"];
-                expDate = exp.UnixTimestampToDateTime();
+                var exp = (long)Claims[EXPIRATION_DATE_KEY];
+                ExpirationDate = exp.UnixTimestampToDateTime();
             }
 
-            ExpirationDate = expDate;
+            // extracting token type
+            if (Claims.ContainsKey(TOKEN_TYPE_KEY) && (Claims[TOKEN_TYPE_KEY] is string))
+            {
+                TokenType t;
+                if (Enum.TryParse((string) Claims[TOKEN_TYPE_KEY], true, out t))
+                    TokenType = t;
+            }
+
+            // extracting verification code
+            if (Claims.ContainsKey(VERIFY_CODE_KEY) && (Claims[VERIFY_CODE_KEY] is string))
+            {
+                VerificationCode = (string) Claims[VERIFY_CODE_KEY];
+            }
+
+            // extracting scopes
+            if (Claims.ContainsKey(SCOPES_KEY) && (Claims[SCOPES_KEY] is string))
+            {
+                var scopes = (string) Claims[SCOPES_KEY];
+                Scopes = scopes.Split(',').ToList();
+            }
+
+            // extracting client id
+            if (Claims.ContainsKey(CLIENT_ID_KEY) && (Claims[CLIENT_ID_KEY] is int))
+            {
+                ClientId = (int) Claims[CLIENT_ID_KEY];
+            }
+
+            // extracting user id
+            if (Claims.ContainsKey(USER_ID_KEY) && (Claims[USER_ID_KEY] is int))
+            {
+                UserId = (int) Claims[USER_ID_KEY];
+            }
         }
 
         /// <summary>
@@ -94,10 +142,28 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             Claims.Add("iss", "https://www.zazzlife.com");
             Claims.Add("aud", "Zazz clients");
-            Claims.Add("nbf", DateTime.UtcNow.ToUnixTimestamp());
+            Claims.Add(ISSUED_DATE_KEY, DateTime.UtcNow.ToUnixTimestamp());
 
+            // expiration date
             if (ExpirationDate.HasValue)
-                Claims.Add("exp", ExpirationDate.Value.ToUnixTimestamp());
+                Claims.Add(EXPIRATION_DATE_KEY, ExpirationDate.Value.ToUnixTimestamp());
+
+            // token type
+            Claims.Add(TOKEN_TYPE_KEY, TokenType);
+
+            // verify token
+            if (!String.IsNullOrWhiteSpace(VerificationCode))
+                Claims.Add(VERIFY_CODE_KEY, VerificationCode);
+
+            // scopes
+            if (Scopes != null && Scopes.Count > 0)
+                Claims.Add(SCOPES_KEY, String.Join(",", Scopes));
+
+            // client id
+            Claims.Add(CLIENT_ID_KEY, ClientId);
+
+            // user id
+            Claims.Add(USER_ID_KEY, UserId);
 
             // converting to json
             var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
@@ -113,9 +179,9 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             // signing
             var jwtString = headerBase64 + "." + claimsBase64;
-            var signature = SignString(jwtString);
+            Signature = SignString(jwtString);
 
-            jwtString += "." + signature;
+            jwtString += "." + Signature;
 
             return jwtString;
         }

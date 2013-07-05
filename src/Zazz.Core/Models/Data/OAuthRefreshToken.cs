@@ -7,6 +7,11 @@ namespace Zazz.Core.Models.Data
 {
     public class OAuthRefreshToken : BaseEntity
     {
+        public OAuthRefreshToken()
+        {
+            Scopes = new HashSet<OAuthRefreshTokenScope>();
+        }
+
         [ForeignKey("User")]
         public int UserId { get; set; }
 

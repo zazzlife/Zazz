@@ -18,7 +18,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             _mocRepo = new MockRepository(MockBehavior.Strict);
             _uow = _mocRepo.Create<IUoW>();
 
-            _sut = new OAuthService(_uow.Object);
+            
         }
     }
 }
