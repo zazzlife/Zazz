@@ -77,7 +77,12 @@ namespace Zazz.Web.OAuthAuthorizationServer
             {
                 throw new InvalidTokenException();
             }
-                
+
+            var check = _uow.OAuthRefreshTokenRepository.GetById(jwt.TokenId.Value);
+            if (check == null)
+            {
+                throw new InvalidTokenException();
+            }
 
             throw new System.NotImplementedException();
         }

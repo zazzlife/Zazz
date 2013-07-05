@@ -168,5 +168,27 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Act
             Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
         }
+
+        [Test]
+        public void ThrowIfRecordDoestExistsInDB_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            _uow.Setup(x => x.OAuthRefreshTokenRepository.GetById(refreshToken.TokenId.Value))
+                .Returns(() => null);
+                
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
     }
 }
