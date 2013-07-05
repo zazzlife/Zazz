@@ -80,6 +80,11 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             var check = _uow.OAuthRefreshTokenRepository.GetById(jwt.TokenId.Value);
             if (check == null)
+                throw new InvalidTokenException();
+
+            if (!check.VerificationCode.Equals(jwt.VerificationCode) ||
+                check.OAuthClientId != jwt.ClientId ||
+                check.UserId != jwt.UserId)
             {
                 throw new InvalidTokenException();
             }

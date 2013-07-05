@@ -190,5 +190,95 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Act
             Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
         }
+
+        [Test]
+        public void ThrowIfVerificationCodesDontMatch_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "invalidCode"
+            };
+
+            var oauthRefreshToken = new OAuthRefreshToken
+                                    {
+                                        OAuthClientId = refreshToken.ClientId,
+                                        UserId = refreshToken.UserId,
+                                        VerificationCode = "verificationCode",
+                                        Id = refreshToken.TokenId.Value
+                                    };
+
+            _uow.Setup(x => x.OAuthRefreshTokenRepository.GetById(refreshToken.TokenId.Value))
+                .Returns(oauthRefreshToken);
+
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfClientIdIsDifferent_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            var oauthRefreshToken = new OAuthRefreshToken
+            {
+                OAuthClientId = 44,
+                UserId = refreshToken.UserId,
+                VerificationCode = "verificationCode",
+                Id = refreshToken.TokenId.Value
+            };
+
+            _uow.Setup(x => x.OAuthRefreshTokenRepository.GetById(refreshToken.TokenId.Value))
+                .Returns(oauthRefreshToken);
+
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfVerificationUserIdIsDifferent_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            var oauthRefreshToken = new OAuthRefreshToken
+            {
+                OAuthClientId = refreshToken.ClientId,
+                UserId = 989,
+                VerificationCode = "verificationCode",
+                Id = refreshToken.TokenId.Value
+            };
+
+            _uow.Setup(x => x.OAuthRefreshTokenRepository.GetById(refreshToken.TokenId.Value))
+                .Returns(oauthRefreshToken);
+
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
     }
 }
