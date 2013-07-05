@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.OAuthAuthorizationServer;
@@ -78,6 +79,94 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             _mocRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfTokenDoesntHaveTokenId_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+                               {
+                                   ClientId = 1,
+                                   Scopes = new List<string> {"full"},
+                                   UserId = 11,
+                                   TokenId = null,
+                                   TokenType = JWT.REFRESH_TOKEN_TYPE,
+                                   VerificationCode = "verificationCode"
+                               };
 
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfTokenDoesntHaveClientId_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 0,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfTokenDoesntHaveUserId_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 0,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfTokenDoesntHaveVerificationCode_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = null
+            };
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
+
+        [Test]
+        public void ThrowIfTokenIsntARefreshToken_OnRefreshAccessToken()
+        {
+            //Arrange
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.ACCESS_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            //Act
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+        }
     }
 }

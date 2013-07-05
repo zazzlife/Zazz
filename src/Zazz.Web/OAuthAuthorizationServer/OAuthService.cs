@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -67,6 +68,17 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
         public JWT RefreshAccessToken(string refreshToken)
         {
+            var jwt = new JWT(refreshToken);
+            if (!jwt.TokenId.HasValue || //no token id
+                jwt.ClientId == 0 || //no client id
+                jwt.UserId == 0 || //no userId
+                String.IsNullOrWhiteSpace(jwt.VerificationCode) || //no verification code
+                jwt.TokenType != JWT.REFRESH_TOKEN_TYPE) // invalid token
+            {
+                throw new InvalidTokenException();
+            }
+                
+
             throw new System.NotImplementedException();
         }
     }
