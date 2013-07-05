@@ -11,11 +11,13 @@ namespace Zazz.Web.OAuthAuthorizationServer
     {
         private readonly IUoW _uow;
         private readonly ICryptoService _cryptoService;
+        private readonly IStaticDataRepository _staticDataRepository;
 
-        public OAuthService(IUoW uow, ICryptoService cryptoService)
+        public OAuthService(IUoW uow, ICryptoService cryptoService, IStaticDataRepository staticDataRepository)
         {
             _uow = uow;
             _cryptoService = cryptoService;
+            _staticDataRepository = staticDataRepository;
         }
 
         public OAuthCredentials CreateOAuthCredentials(User user, OAuthClient client, List<OAuthScope> scopes)
@@ -82,11 +84,28 @@ namespace Zazz.Web.OAuthAuthorizationServer
             if (check == null)
                 throw new InvalidTokenException();
 
+            //checking verification code, client id and user id
             if (!check.VerificationCode.Equals(jwt.VerificationCode) ||
                 check.OAuthClientId != jwt.ClientId ||
                 check.UserId != jwt.UserId)
             {
                 throw new InvalidTokenException();
+            }
+
+            //checking scopes
+            var authorizedScopes = check.Scopes;
+            var availableScopes = _staticDataRepository.GetOAuthScopes().ToList();
+            foreach (var requestedScope in jwt.Scopes)
+            {
+                var scopeId = availableScopes
+                    .Where(s => s.Name.Equals(requestedScope, StringComparison.InvariantCultureIgnoreCase))
+                    .Select(s => s.Id)
+                    .FirstOrDefault();
+
+                if (!authorizedScopes.Any(s => s.ScopeId == scopeId))
+                {
+                    throw new InvalidTokenException();
+                }
             }
 
             throw new System.NotImplementedException();
