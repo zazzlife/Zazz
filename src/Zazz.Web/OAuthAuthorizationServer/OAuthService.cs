@@ -49,6 +49,7 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             var refreshToken = new JWT
                                {
+                                   TokenId = oAuthRefreshToken.Id,
                                    ClientId = client.Id,
                                    IssuedDate = oAuthRefreshToken.CreatedDate,
                                    TokenType = JWT.REFRESH_TOKEN_TYPE,
@@ -56,8 +57,6 @@ namespace Zazz.Web.OAuthAuthorizationServer
                                    UserId = user.Id,
                                    VerificationCode = verifyToken
                                };
-            
-            
 
             return new OAuthCredentials
                    {

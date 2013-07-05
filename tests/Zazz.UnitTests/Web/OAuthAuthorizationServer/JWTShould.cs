@@ -138,7 +138,8 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
                           Scopes = new List<string> {"s1", "s2"},
                           TokenType = JWT.REFRESH_TOKEN_TYPE,
                           UserId = 33,
-                          VerificationCode = "verification code"
+                          VerificationCode = "verification code",
+                          TokenId = 443
                       };
 
             //Act
@@ -152,8 +153,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             Assert.AreEqual(jwt.TokenType, decodedToken.TokenType);
             Assert.AreEqual(jwt.UserId, decodedToken.UserId);
             Assert.AreEqual(jwt.VerificationCode, decodedToken.VerificationCode);
+            Assert.AreEqual(jwt.TokenId, decodedToken.TokenId);
         }
-
-
     }
 }

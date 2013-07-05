@@ -68,6 +68,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             CollectionAssert.AreEqual(scopes.Select(s => s.Name).ToList(), accessToken.Scopes);
 
 
+            Assert.IsNotNull(refreshToken.TokenId);
             Assert.AreEqual(client.Id, refreshToken.ClientId);
             Assert.AreEqual(user.Id, refreshToken.UserId);
             Assert.AreEqual(JWT.REFRESH_TOKEN_TYPE, refreshToken.TokenType);

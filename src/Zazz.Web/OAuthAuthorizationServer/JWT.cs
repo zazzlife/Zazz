@@ -28,6 +28,9 @@ namespace Zazz.Web.OAuthAuthorizationServer
         private const string EXPIRATION_DATE_KEY = "exp";
         public DateTime? ExpirationDate { get; set; }
 
+        private const string TOKEN_ID_KEY = "id";
+        public int? TokenId { get; set; }
+
         public const string REFRESH_TOKEN_TYPE = "refreshToken";
         public const string ACCESS_TOKEN_TYPE = "accessToken";
 
@@ -103,6 +106,14 @@ namespace Zazz.Web.OAuthAuthorizationServer
                 ExpirationDate = exp.UnixTimestampToDateTime();
             }
 
+            // extracting token id
+            if (Claims.ContainsKey(TOKEN_ID_KEY))
+            {
+                int i;
+                if (Int32.TryParse(Claims[TOKEN_ID_KEY].ToString(), out i))
+                    TokenId = i;
+            }
+
             // extracting token type
             if (Claims.ContainsKey(TOKEN_TYPE_KEY))
             {
@@ -154,6 +165,10 @@ namespace Zazz.Web.OAuthAuthorizationServer
             // expiration date
             if (ExpirationDate.HasValue)
                 Claims.Add(EXPIRATION_DATE_KEY, ExpirationDate.Value.ToUnixTimestamp());
+
+            // token id
+            if (TokenId.HasValue)
+                Claims.Add(TOKEN_ID_KEY, TokenId.Value);
 
             // token type
             Claims.Add(TOKEN_TYPE_KEY, TokenType);
