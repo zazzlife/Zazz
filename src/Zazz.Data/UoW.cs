@@ -108,6 +108,11 @@ namespace Zazz.Data
             get { return new AppRequestTokenRepository(GetContext()); }
         }
 
+        public IOAuthRefreshTokenRepository OAuthRefreshTokenRepository
+        {
+            get { return new OAuthRefreshTokenRepository(GetContext()); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)
