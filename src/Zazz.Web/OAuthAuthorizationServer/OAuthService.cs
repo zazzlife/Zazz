@@ -80,20 +80,20 @@ namespace Zazz.Web.OAuthAuthorizationServer
                 throw new InvalidTokenException();
             }
 
-            var check = _uow.OAuthRefreshTokenRepository.GetById(jwt.TokenId.Value);
-            if (check == null)
+            var dbRecord = _uow.OAuthRefreshTokenRepository.GetById(jwt.TokenId.Value);
+            if (dbRecord == null)
                 throw new InvalidTokenException();
 
             //checking verification code, client id and user id
-            if (!check.VerificationCode.Equals(jwt.VerificationCode) ||
-                check.OAuthClientId != jwt.ClientId ||
-                check.UserId != jwt.UserId)
+            if (!dbRecord.VerificationCode.Equals(jwt.VerificationCode) ||
+                dbRecord.OAuthClientId != jwt.ClientId ||
+                dbRecord.UserId != jwt.UserId)
             {
                 throw new InvalidTokenException();
             }
 
             //checking scopes
-            var authorizedScopes = check.Scopes;
+            var authorizedScopes = dbRecord.Scopes;
             var availableScopes = _staticDataRepository.GetOAuthScopes().ToList();
             foreach (var requestedScope in jwt.Scopes)
             {
@@ -108,7 +108,18 @@ namespace Zazz.Web.OAuthAuthorizationServer
                 }
             }
 
-            throw new System.NotImplementedException();
+            dbRecord.User.LastActivity = DateTime.UtcNow;
+            _uow.SaveChanges();
+
+            return new JWT
+                   {
+                       ClientId = dbRecord.OAuthClientId,
+                       ExpirationDate = DateTime.UtcNow.AddHours(1),
+                       IssuedDate = DateTime.UtcNow,
+                       Scopes = jwt.Scopes,
+                       TokenType = JWT.ACCESS_TOKEN_TYPE,
+                       UserId = dbRecord.UserId,
+                   };
         }
     }
 }

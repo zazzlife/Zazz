@@ -406,5 +406,73 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Assert
             _mocRepo.VerifyAll();
         }
+
+        [Test]
+        public void ReturnNewAccessTokenAndUpdateUserLastLogin_OnRefreshAccessToken()
+        {
+            //Arrange
+            var scopes = new[]
+                         {
+                             new OAuthScope {Id = 1, Name = "full"},
+                             new OAuthScope {Id = 2, Name = "scope2"}
+                         };
+
+            var refreshToken = new JWT
+            {
+                ClientId = 1,
+                Scopes = new List<string> { "full", "scope2" },
+                UserId = 11,
+                TokenId = 22,
+                TokenType = JWT.REFRESH_TOKEN_TYPE,
+                VerificationCode = "verificationCode"
+            };
+
+            var oauthRefreshToken = new OAuthRefreshToken
+                                    {
+                                        OAuthClientId = refreshToken.ClientId,
+                                        UserId = refreshToken.UserId,
+                                        VerificationCode = "verificationCode",
+                                        Id = refreshToken.TokenId.Value,
+                                        Scopes = new List<OAuthRefreshTokenScope>
+                                                 {
+                                                     new OAuthRefreshTokenScope
+                                                     {
+                                                         ScopeId = 1
+                                                     },
+                                                     new OAuthRefreshTokenScope
+                                                     {
+                                                         ScopeId = 2
+                                                     }
+                                                 },
+                                        User = new User
+                                               {
+                                                   LastActivity = DateTime.MinValue
+                                               }
+                                    };
+
+            _staticDataRepo.Setup(x => x.GetOAuthScopes())
+                           .Returns(scopes);
+
+            _uow.Setup(x => x.OAuthRefreshTokenRepository.GetById(refreshToken.TokenId.Value))
+                .Returns(oauthRefreshToken);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            var result = _sut.RefreshAccessToken(refreshToken.ToString());
+
+            //Assert
+            Assert.AreEqual(DateTime.UtcNow.Date, oauthRefreshToken.User.LastActivity.Date);
+
+            Assert.AreEqual(refreshToken.ClientId, result.ClientId);
+            Assert.AreEqual(refreshToken.UserId, result.UserId);
+            Assert.IsTrue(result.ExpirationDate > DateTime.UtcNow &&
+                          result.ExpirationDate < DateTime.UtcNow.AddHours(2));
+            Assert.AreEqual(JWT.ACCESS_TOKEN_TYPE, result.TokenType);
+            CollectionAssert.AreEqual(refreshToken.Scopes, result.Scopes);
+            Assert.IsNull(result.TokenId);
+
+            _mocRepo.VerifyAll();
+        }
     }
 }
