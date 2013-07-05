@@ -15,17 +15,6 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
     [TestFixture]
     public class JsonWebTokenHandlerShould
     {
-        [SetUp]
-        public void Init()
-        {
-            var settings = new JsonSerializerSettings
-                           {
-                               ContractResolver = new CamelCasePropertyNamesContractResolver()
-                           };
-
-            JsonConvert.DefaultSettings = () => settings;
-        }
-
         [Test]
         public void CreateCorrectHeader_OnEncode()
         {
@@ -147,7 +136,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
                           ClientId = 44,
                           ExpirationDate = DateTime.UtcNow,
                           Scopes = new List<string> {"s1", "s2"},
-                          TokenType = TokenType.RefreshToken,
+                          TokenType = JWT.REFRESH_TOKEN_TYPE,
                           UserId = 33,
                           VerificationCode = "verification code"
                       };

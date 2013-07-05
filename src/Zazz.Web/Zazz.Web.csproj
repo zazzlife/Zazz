@@ -338,7 +338,6 @@
     <Compile Include="OAuthAuthorizationServer\OAuthCredentials.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthError.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthErrorModel.cs" />
-    <Compile Include="OAuthAuthorizationServer\TokenType.cs" />
     <Compile Include="OAuthClients\CustomFacebookClient.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthException.cs" />
     <Compile Include="ObjectMapper.cs" />

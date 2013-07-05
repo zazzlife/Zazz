@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
 
@@ -27,8 +28,11 @@ namespace Zazz.Web.OAuthAuthorizationServer
         private const string EXPIRATION_DATE_KEY = "exp";
         public DateTime? ExpirationDate { get; set; }
 
+        public const string REFRESH_TOKEN_TYPE = "refreshToken";
+        public const string ACCESS_TOKEN_TYPE = "accessToken";
+
         private const string TOKEN_TYPE_KEY = "tokenType";
-        public TokenType TokenType { get; set; }
+        public string TokenType { get; set; }
 
         private const string VERIFY_CODE_KEY = "verify";
         public string VerificationCode { get; set; }
@@ -100,11 +104,9 @@ namespace Zazz.Web.OAuthAuthorizationServer
             }
 
             // extracting token type
-            if (Claims.ContainsKey(TOKEN_TYPE_KEY) && (Claims[TOKEN_TYPE_KEY] is string))
+            if (Claims.ContainsKey(TOKEN_TYPE_KEY))
             {
-                TokenType t;
-                if (Enum.TryParse((string) Claims[TOKEN_TYPE_KEY], true, out t))
-                    TokenType = t;
+                TokenType = Claims[TOKEN_TYPE_KEY].ToString();
             }
 
             // extracting verification code
