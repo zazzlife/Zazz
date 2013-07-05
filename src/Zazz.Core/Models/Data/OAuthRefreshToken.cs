@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,5 +21,7 @@ namespace Zazz.Core.Models.Data
         public virtual User User { get; set; }
 
         public virtual OAuthClient OAuthClient { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }
