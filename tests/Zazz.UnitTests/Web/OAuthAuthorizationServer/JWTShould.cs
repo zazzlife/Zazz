@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Zazz.Core.Exceptions;
 using Zazz.Infrastructure.Helpers;
+using Zazz.Web;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
@@ -12,6 +15,17 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
     [TestFixture]
     public class JsonWebTokenHandlerShould
     {
+        [SetUp]
+        public void Init()
+        {
+            var settings = new JsonSerializerSettings
+                           {
+                               ContractResolver = new CamelCasePropertyNamesContractResolver()
+                           };
+
+            JsonConvert.DefaultSettings = () => settings;
+        }
+
         [Test]
         public void CreateCorrectHeader_OnEncode()
         {
@@ -123,5 +137,34 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             Assert.AreEqual("val", result.Claims["key"]);
             Assert.AreEqual(1, result.Claims["key2"]);
         }
+
+        [Test]
+        public void AddAndReadDefaultProperties()
+        {
+            //Arrange
+            var jwt = new JWT
+                      {
+                          ClientId = 44,
+                          ExpirationDate = DateTime.UtcNow,
+                          Scopes = new List<string> {"s1", "s2"},
+                          TokenType = TokenType.RefreshToken,
+                          UserId = 33,
+                          VerificationCode = "verification code"
+                      };
+
+            //Act
+            var token = jwt.ToString();
+            var decodedToken = new JWT(token);
+
+            //Assert
+            Assert.AreEqual(jwt.ClientId, decodedToken.ClientId);
+            Assert.AreEqual(jwt.ExpirationDate.Value.Date, decodedToken.ExpirationDate.Value.Date);
+            CollectionAssert.AreEqual(jwt.Scopes, decodedToken.Scopes);
+            Assert.AreEqual(jwt.TokenType, decodedToken.TokenType);
+            Assert.AreEqual(jwt.UserId, decodedToken.UserId);
+            Assert.AreEqual(jwt.VerificationCode, decodedToken.VerificationCode);
+        }
+
+
     }
 }

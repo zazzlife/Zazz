@@ -45,6 +45,7 @@ namespace Zazz.Web.OAuthAuthorizationServer
         public JWT()
         {
             Scopes = new List<string>();
+            Claims = new Dictionary<string, object>();
 
             // 64 bytes
             const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
@@ -120,15 +121,19 @@ namespace Zazz.Web.OAuthAuthorizationServer
             }
 
             // extracting client id
-            if (Claims.ContainsKey(CLIENT_ID_KEY) && (Claims[CLIENT_ID_KEY] is int))
+            if (Claims.ContainsKey(CLIENT_ID_KEY))
             {
-                ClientId = (int) Claims[CLIENT_ID_KEY];
+                int i;
+                if (Int32.TryParse(Claims[CLIENT_ID_KEY].ToString(), out i))
+                    ClientId = i;
             }
 
             // extracting user id
-            if (Claims.ContainsKey(USER_ID_KEY) && (Claims[USER_ID_KEY] is int))
+            if (Claims.ContainsKey(USER_ID_KEY))
             {
-                UserId = (int) Claims[USER_ID_KEY];
+                int i;
+                if (Int32.TryParse(Claims[USER_ID_KEY].ToString(), out i))
+                    UserId = i;
             }
         }
 
