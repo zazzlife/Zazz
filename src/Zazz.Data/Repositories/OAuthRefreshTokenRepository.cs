@@ -18,8 +18,10 @@ namespace Zazz.Data.Repositories
 
         public override OAuthRefreshToken GetById(int id)
         {
-            return DbSet.Include(t => t.Scopes)
-                        .SingleOrDefault(t => t.Id == id);
+            return DbSet
+                .Include(t => t.User)
+                .Include(t => t.Scopes)
+                .SingleOrDefault(t => t.Id == id);
         }
     }
 }
