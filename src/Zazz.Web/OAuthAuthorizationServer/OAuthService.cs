@@ -12,7 +12,7 @@ namespace Zazz.Web.OAuthAuthorizationServer
             _uow = uow;
         }
 
-        public OAuthCredentials CreateOAuthCredentials(User user)
+        public OAuthCredentials CreateOAuthCredentials(User user, OAuthClient client)
         {
             throw new System.NotImplementedException();
         }
