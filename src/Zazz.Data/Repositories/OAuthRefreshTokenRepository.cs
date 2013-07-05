@@ -14,10 +14,5 @@ namespace Zazz.Data.Repositories
         {
             throw new InvalidOperationException("You need to provide the id for updating this record, Use InsertGraph for inserting new record");
         }
-
-        public OAuthRefreshToken Get(int userId, int clientId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
