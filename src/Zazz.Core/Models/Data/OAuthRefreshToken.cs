@@ -13,7 +13,7 @@ namespace Zazz.Core.Models.Data
         public int OAuthClientId { get; set; }
 
         [MaxLength(4000)]
-        public string Token { get; set; }
+        public string VerificationCode { get; set; }
 
         public ICollection<OAuthRefreshTokenScope> Scopes { get; set; }
 
