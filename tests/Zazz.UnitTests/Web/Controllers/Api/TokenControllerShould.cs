@@ -550,6 +550,58 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task RefreshAccessTokenWhenEverythingIsOk_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var refreshToken = "refreshtoken";
+
+            var accessToken = new JWT
+                              {
+                                  IssuedDate = DateTime.UtcNow,
+                                  UserId = 1,
+                                  ClientId = 1,
+                                  TokenType = JWT.ACCESS_TOKEN_TYPE,
+                                  ExpirationDate = DateTime.UtcNow.AddHours(1)
+                              };
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                             new KeyValuePair<string, string>("refresh_token", refreshToken)
+                         };
+
+            var oauthClient = new OAuthClient
+                              {
+                                  ClientId = "adsdsadas",
+                                  Id = 5454,
+                                  IsAllowedToRequestFullScope = true,
+                                  IsAllowedToRequestPasswordGrantType = true,
+                                  Secret = "secret"
+                              };
+
+            _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
+                            .Returns(oauthClient);
+
+            _oauthService.Setup(x => x.RefreshAccessToken(refreshToken))
+                         .Returns(accessToken);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var content = await response.Content.ReadAsStringAsync();
+
+            dynamic json = JObject.Parse(content);
+
+            //Assert
+            Assert.AreEqual(accessToken.ToJWTString(), (string) json.access_token);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
         #endregion
     }
 }

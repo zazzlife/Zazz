@@ -121,19 +121,27 @@ namespace Zazz.Web.Controllers.Api
                        };
             }
             // refresh token
-            else
+            else if (request.grant_type == GrantType.refresh_token)
             {
                 try
                 {
                     var accessToken = _oauthService.RefreshAccessToken(request.refresh_token);
+                    return new OAuthAccessTokenResponse
+                           {
+                               AccessToken = accessToken.ToJWTString(),
+                               TokenType = "Bearer",
+                               ExpiresIn = 60*60
+                           };
                 }
                 catch (InvalidTokenException)
                 {
                     throw new OAuthException(OAuthError.InvalidGrant);
                 }
             }
-
-            throw new NotImplementedException();
+            else
+            {
+                throw new OAuthException(OAuthError.UnsupportedGrantType);
+            }
         }
     }
 
