@@ -96,7 +96,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
                                };
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -117,7 +117,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             };
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -138,7 +138,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             };
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -159,7 +159,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             };
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -180,7 +180,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             };
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -205,7 +205,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -238,7 +238,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -271,7 +271,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -304,7 +304,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -352,7 +352,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -401,7 +401,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
 
 
             //Act
-            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToString()));
+            Assert.Throws<InvalidTokenException>(() => _sut.RefreshAccessToken(refreshToken.ToJWTString()));
 
             //Assert
             _mocRepo.VerifyAll();
@@ -459,7 +459,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            var result = _sut.RefreshAccessToken(refreshToken.ToString());
+            var result = _sut.RefreshAccessToken(refreshToken.ToJWTString());
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.Date, oauthRefreshToken.User.LastActivity.Date);

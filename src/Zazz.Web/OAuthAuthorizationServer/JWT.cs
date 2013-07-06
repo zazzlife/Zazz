@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -17,13 +18,13 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
         public JWTHeader Header { get; set; }
 
-        public Dictionary<string, object> Claims { get; set; }
+        public ConcurrentDictionary<string, object> Claims { get; set; }
 
         public string Signature { get; private set; }
 
         
         private const string ISSUED_DATE_KEY = "nbf";
-        public DateTime IssuedDate { get; set; }
+        public DateTime? IssuedDate { get; set; }
 
         private const string EXPIRATION_DATE_KEY = "exp";
         public DateTime? ExpirationDate { get; set; }
@@ -52,7 +53,7 @@ namespace Zazz.Web.OAuthAuthorizationServer
         public JWT()
         {
             Scopes = new List<string>();
-            Claims = new Dictionary<string, object>();
+            Claims = new ConcurrentDictionary<string, object>();
 
             // 64 bytes
             const string KEY = "3iTZUAxSiDc4QoOS8UWzy1JTgQ6Z2H0hvIZMWtkaTqkCbnNProQH3jv/4HlsG0CcvmbAaubWTLgoGxuwfeQEZQ==";
@@ -90,7 +91,7 @@ namespace Zazz.Web.OAuthAuthorizationServer
             // converting json to object models
             Header = JsonConvert.DeserializeObject<JWTHeader>(headerJson);
 
-            Claims = JsonConvert.DeserializeObject<Dictionary<string, object>>(payloadJson);
+            Claims = JsonConvert.DeserializeObject<ConcurrentDictionary<string, object>>(payloadJson);
 
             // extracting issued date
             if (Claims.ContainsKey(ISSUED_DATE_KEY) && (Claims[ISSUED_DATE_KEY] is long))
@@ -154,38 +155,43 @@ namespace Zazz.Web.OAuthAuthorizationServer
         /// Returns a JWT encoded string based on properties
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public string ToJWTString()
         {
             var header = new JWTHeader { Algorithm = "HS256" };
 
-            Claims.Add("iss", "https://www.zazzlife.com");
-            Claims.Add("aud", "Zazz clients");
-            Claims.Add(ISSUED_DATE_KEY, DateTime.UtcNow.ToUnixTimestamp());
+            Claims.AddOrUpdate("iss", "https://www.zazzlife.com", (s, o) => "https://www.zazzlife.com");
+            Claims.AddOrUpdate("aud", "Zazz clients", (s, o) => "Zazz clients");
+
+            // issued date
+            if (IssuedDate.HasValue)
+                Claims.AddOrUpdate(ISSUED_DATE_KEY, IssuedDate.Value.ToUnixTimestamp(),
+                                   (s, o) => IssuedDate.Value.ToUnixTimestamp());
 
             // expiration date
             if (ExpirationDate.HasValue)
-                Claims.Add(EXPIRATION_DATE_KEY, ExpirationDate.Value.ToUnixTimestamp());
+                Claims.AddOrUpdate(EXPIRATION_DATE_KEY, ExpirationDate.Value.ToUnixTimestamp(),
+                    (s, o) => ExpirationDate.Value.ToUnixTimestamp());
 
             // token id
             if (TokenId.HasValue)
-                Claims.Add(TOKEN_ID_KEY, TokenId.Value);
+                Claims.AddOrUpdate(TOKEN_ID_KEY, TokenId.Value, (s, o) => TokenId.Value);
 
             // token type
-            Claims.Add(TOKEN_TYPE_KEY, TokenType);
+            Claims.AddOrUpdate(TOKEN_TYPE_KEY, TokenType, (s, o) => TokenType);
 
             // verify token
             if (!String.IsNullOrWhiteSpace(VerificationCode))
-                Claims.Add(VERIFY_CODE_KEY, VerificationCode);
+                Claims.AddOrUpdate(VERIFY_CODE_KEY, VerificationCode, (s, o) => VerificationCode);
 
             // scopes
             if (Scopes != null && Scopes.Count > 0)
-                Claims.Add(SCOPES_KEY, String.Join(",", Scopes));
+                Claims.AddOrUpdate(SCOPES_KEY, String.Join(",", Scopes), (s, o) => String.Join(",", Scopes));
 
             // client id
-            Claims.Add(CLIENT_ID_KEY, ClientId);
+            Claims.AddOrUpdate(CLIENT_ID_KEY, ClientId, (s, o) => ClientId);
 
             // user id
-            Claims.Add(USER_ID_KEY, UserId);
+            Claims.AddOrUpdate(USER_ID_KEY, UserId, (s, o) => UserId);
 
             // converting to json
             var headerJson = JsonConvert.SerializeObject(header, Formatting.None);
@@ -207,7 +213,6 @@ namespace Zazz.Web.OAuthAuthorizationServer
 
             return jwtString;
         }
-
         private string SignString(string stringToSign)
         {
             using (var sha256 = new HMACSHA256(_key))

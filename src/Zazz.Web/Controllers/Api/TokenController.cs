@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models;
+using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.Models.Api;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
@@ -13,14 +19,19 @@ namespace Zazz.Web.Controllers.Api
         private readonly IPhotoService _photoService;
         private readonly IOAuthService _oauthService;
         private readonly IOAuthClientRepository _oauthClientRepository;
+        private readonly ICryptoService _cryptoService;
+        private readonly IStaticDataRepository _staticDataRepository;
 
         public TokenController(IUserService userService, IPhotoService photoService,
-            IOAuthService oauthService, IOAuthClientRepository oauthClientRepository)
+            IOAuthService oauthService, IOAuthClientRepository oauthClientRepository, ICryptoService cryptoService,
+            IStaticDataRepository staticDataRepository)
         {
             _userService = userService;
             _photoService = photoService;
             _oauthService = oauthService;
             _oauthClientRepository = oauthClientRepository;
+            _cryptoService = cryptoService;
+            _staticDataRepository = staticDataRepository;
         }
 
         public OAuthAccessTokenResponse Post(OAuthAccessTokenRequest request)
@@ -56,7 +67,21 @@ namespace Zazz.Web.Controllers.Api
 
             if (request.scope.Contains("full") && !client.IsAllowedToRequestFullScope)
                 throw new OAuthException(OAuthError.InvalidScope);
-            
+
+            // extracting scopes
+            var requestsedScopes = request.scope.Split(',');
+            var scopes = new List<OAuthScope>();
+
+            foreach (var rs in requestsedScopes)
+            {
+                var scope = _staticDataRepository
+                    .GetOAuthScopes()
+                    .SingleOrDefault(s => s.Name.Equals(rs, StringComparison.InvariantCultureIgnoreCase));
+
+                if (scope == null)
+                    throw new OAuthException(OAuthError.InvalidScope);
+            }
+
             // password grant type
             if (request.grant_type == GrantType.password)
             {
@@ -65,7 +90,27 @@ namespace Zazz.Web.Controllers.Api
                 if (user == null)
                     throw new OAuthException(OAuthError.InvalidGrant);
 
+                var password = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
+                if (!password.Equals(request.password))
+                    throw new OAuthException(OAuthError.InvalidGrant);
 
+                var creds = _oauthService.CreateOAuthCredentials(user, client, scopes);
+
+                return new OAuthAccessTokenResponse
+                       {
+                           AccessToken = creds.AccessToken.ToJWTString(),
+                           TokenType = "Bearer",
+                           RefreshToken = creds.RefreshToken.ToJWTString(),
+                           User = new ApiBasicUserInfo
+                                  {
+                                      AccountType = user.AccountType,
+                                      DisplayName = _userService.GetUserDisplayName(user.Id),
+                                      DisplayPhoto = _photoService.GetUserImageUrl(user.Id),
+                                      IsConfirmed = user.IsConfirmed,
+                                      UserId = user.Id
+                                  }
+
+                       };
             }
 
 
@@ -93,6 +138,15 @@ namespace Zazz.Web.Controllers.Api
 
     public class OAuthAccessTokenResponse
     {
+        [JsonProperty("access_token")]
+        public string AccessToken { get; set; }
 
+        [JsonProperty("token_type")]
+        public string TokenType { get; set; }
+
+        [JsonProperty("refresh_token")]
+        public string RefreshToken { get; set; }
+
+        public ApiBasicUserInfo User { get; set; }
     }
 }

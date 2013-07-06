@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -21,15 +22,15 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Arrange
             var jwt = new JWT
                       {
-                          Claims = new Dictionary<string, object>()
-                                   {
-                                       {"stringKey", "stringVal"},
-                                       {"intKey", 1234}
-                                   },
+                          Claims = new ConcurrentDictionary<string, object>(),
                           ExpirationDate = DateTime.UtcNow.AddHours(1)
                       };
+
+            jwt.Claims.TryAdd("stringKey", "stringVal");
+            jwt.Claims.TryAdd("intKey", 1234);
+
             //Act
-            var result = jwt.ToString();
+            var result = jwt.ToJWTString();
 
             var segments = result.Split('.');
             dynamic header = JObject.Parse(Encoding.UTF8.GetString(Base64Helper.Base64UrlDecode(segments[0])));
@@ -45,16 +46,14 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Arrange
             var jwt = new JWT
                       {
-                          Claims = new Dictionary<string, object>()
-                                   {
-                                       {"stringKey", "stringVal"},
-                                       {"intKey", 1234}
-                                   },
+                          Claims = new ConcurrentDictionary<string, object>(),
                           ExpirationDate = DateTime.UtcNow.AddHours(1)
                       };
 
+            jwt.Claims.TryAdd("stringKey", "stringVal");
+            jwt.Claims.TryAdd("intKey", 1234);
             //Act
-            var result = jwt.ToString();
+            var result = jwt.ToJWTString();
 
             var segments = result.Split('.');
             dynamic claimsJson = JObject.Parse(Encoding.UTF8.GetString(Base64Helper.Base64UrlDecode(segments[1])));
@@ -84,11 +83,11 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Arrange
             var jwt = new JWT
                       {
-                          Claims = new Dictionary<string, object>(),
+                          Claims = new ConcurrentDictionary<string, object>(),
                           ExpirationDate = DateTime.UtcNow.AddDays(1)
                       };
 
-            var validToken = jwt.ToString();
+            var validToken = jwt.ToJWTString();
             var segments = validToken.Split('.');
             segments[2] = "invalid token";
 
@@ -104,15 +103,14 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             //Arrange
             var jwt = new JWT
                       {
-                          Claims = new Dictionary<string, object>()
-                                   {
-                                       {"key", "val"},
-                                       {"key2", 1}
-                                   },
+                          Claims = new ConcurrentDictionary<string, object>(),
                           ExpirationDate = DateTime.UtcNow.AddDays(1)
                       };
 
-            var validToken = jwt.ToString();
+            jwt.Claims.TryAdd("key", "val");
+            jwt.Claims.TryAdd("key2", 1);
+
+            var validToken = jwt.ToJWTString();
 
             //Act
             var result = new JWT(validToken);
@@ -143,7 +141,7 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
                       };
 
             //Act
-            var token = jwt.ToString();
+            var token = jwt.ToJWTString();
             var decodedToken = new JWT(token);
 
             //Assert

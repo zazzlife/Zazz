@@ -147,6 +147,10 @@
       <Project>{a2879224-80d7-402d-a263-81b66b720f4c}</Project>
       <Name>Zazz.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Zazz.Data\Zazz.Data.csproj">
+      <Project>{0C41E54B-BE21-40FB-B478-D1521DEA1CF4}</Project>
+      <Name>Zazz.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Zazz.Infrastructure\Zazz.Infrastructure.csproj">
       <Project>{C86D475A-5D4B-4D53-8067-7F534F18319F}</Project>
       <Name>Zazz.Infrastructure</Name>
