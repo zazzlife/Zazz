@@ -101,6 +101,7 @@ namespace Zazz.Web.Controllers.Api
                            AccessToken = creds.AccessToken.ToJWTString(),
                            TokenType = "Bearer",
                            RefreshToken = creds.RefreshToken.ToJWTString(),
+                           ExpiresIn = 60*60,
                            User = new ApiBasicUserInfo
                                   {
                                       AccountType = user.AccountType,
@@ -143,6 +144,9 @@ namespace Zazz.Web.Controllers.Api
 
         [JsonProperty("token_type")]
         public string TokenType { get; set; }
+
+        [JsonProperty("expires_in")]
+        public int ExpiresIn { get; set; }
 
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
