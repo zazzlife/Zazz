@@ -217,6 +217,82 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return400IfClientIsNotAllowedToRequestForPasswordGrant_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full")
+                         };
+
+            var oauthClient = new OAuthClient
+                              {
+                                  ClientId = "adsdsadas",
+                                  Id = 1,
+                                  IsAllowedToRequestFullScope = true,
+                                  IsAllowedToRequestPasswordGrantType = false,
+                                  Secret = "secret"
+                              };
+
+            _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
+                            .Returns(oauthClient);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.UnauthorizedClient, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfClientIsNotAllowedToRequestForFullScope_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full")
+                         };
+
+            var oauthClient = new OAuthClient
+                              {
+                                  ClientId = "adsdsadas",
+                                  Id = 1,
+                                  IsAllowedToRequestFullScope = false,
+                                  IsAllowedToRequestPasswordGrantType = true,
+                                  Secret = "secret"
+                              };
+
+            _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
+                            .Returns(oauthClient);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidScope, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
         #endregion
 
     }
