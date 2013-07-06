@@ -152,6 +152,31 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task Return400IfClientAuthorizationIsMissingAndGrantTypeIsPassword_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full")
+                         };
+
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidClient, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
         #endregion
 
     }

@@ -28,11 +28,20 @@ namespace Zazz.Web.Controllers.Api
             if (request == null)
                 throw new OAuthException(OAuthError.InvalidRequest);
 
-            if (request.grant_type == GrantType.password && (String.IsNullOrWhiteSpace(request.password) ||
-                String.IsNullOrWhiteSpace(request.username) ||
-                String.IsNullOrWhiteSpace(request.scope)))
+            if (request.grant_type == GrantType.password &&
+                (
+                    String.IsNullOrWhiteSpace(request.password) ||
+                    String.IsNullOrWhiteSpace(request.username) ||
+                    String.IsNullOrWhiteSpace(request.scope))
+                )
             {
                 throw new OAuthException(OAuthError.InvalidRequest);
+            }
+
+            //authorizing client
+            if (Request.Headers.Authorization == null)
+            {
+                throw new OAuthException(OAuthError.InvalidClient);
             }
 
             // password grant type
