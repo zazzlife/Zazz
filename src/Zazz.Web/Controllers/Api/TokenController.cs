@@ -2,17 +2,25 @@
 using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json;
+using Zazz.Core.Interfaces;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
     public class TokenController : ApiController
     {
-        private readonly IOAuthService _oAuthService;
+        private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
+        private readonly IOAuthService _oauthService;
+        private readonly IOAuthClientRepository _oauthClientRepository;
 
-        public TokenController(IOAuthService oAuthService)
+        public TokenController(IUserService userService, IPhotoService photoService,
+            IOAuthService oauthService, IOAuthClientRepository oauthClientRepository)
         {
-            _oAuthService = oAuthService;
+            _userService = userService;
+            _photoService = photoService;
+            _oauthService = oauthService;
+            _oauthClientRepository = oauthClientRepository;
         }
 
         public OAuthAccessTokenResponse Post(OAuthAccessTokenRequest request)
@@ -26,7 +34,13 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
+
+            // password grant type
+            if (request.grant_type == GrantType.password)
+            {
                 
+            }
+
 
             throw new NotImplementedException();
         }

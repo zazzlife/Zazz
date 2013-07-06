@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
+using Zazz.Core.Interfaces;
 using Zazz.Web;
 using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
@@ -25,12 +26,18 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private HttpClient _client;
         private MockRepository _mockRepo;
         private Mock<IOAuthService> _oauthService;
+        private Mock<IPhotoService> _photoService;
+        private Mock<IUserService> _userService;
+        private Mock<IOAuthClientRepository> _oauthClientRepo;
 
         [SetUp]
         public void Init()
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _oauthService = _mockRepo.Create<IOAuthService>();
+            _userService = _mockRepo.Create<IUserService>();
+            _photoService = _mockRepo.Create<IPhotoService>();
+            _oauthClientRepo = _mockRepo.Create<IOAuthClientRepository>();
 
             const string BASE_ADDRESS = "http://localhost:8080";
             _configuration = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -41,6 +48,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var iocContainer = new Container(x =>
                                              {
                                                  x.For<IOAuthService>().Use(_oauthService.Object);
+                                                 x.For<IUserService>().Use(_userService.Object);
+                                                 x.For<IPhotoService>().Use(_photoService.Object);
+                                                 x.For<IOAuthClientRepository>().Use(_oauthClientRepo.Object);
                                              });
 
             _configuration.DependencyResolver = new StructureMapDependencyResolver(iocContainer);
@@ -141,8 +151,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
-
-        
 
         #endregion
 
