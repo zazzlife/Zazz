@@ -24,11 +24,13 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private HttpSelfHostConfiguration _configuration;
         private HttpClient _client;
         private MockRepository _mockRepo;
+        private Mock<IOAuthService> _oauthService;
 
         [SetUp]
         public void Init()
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
+            _oauthService = _mockRepo.Create<IOAuthService>();
 
             const string BASE_ADDRESS = "http://localhost:8080";
             _configuration = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -38,7 +40,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             var iocContainer = new Container(x =>
                                              {
-                                                 
+                                                 x.For<IOAuthService>().Use(_oauthService.Object);
                                              });
 
             _configuration.DependencyResolver = new StructureMapDependencyResolver(iocContainer);
@@ -65,6 +67,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        #region greant_type=Password
 
         [Test]
         public async Task Return400IfPasswordIsMissingAndGrantTypeIsPassword_OnPost()
@@ -137,5 +141,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        
+
+        #endregion
+
     }
 }

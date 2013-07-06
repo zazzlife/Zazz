@@ -8,6 +8,13 @@ namespace Zazz.Web.Controllers.Api
 {
     public class TokenController : ApiController
     {
+        private readonly IOAuthService _oAuthService;
+
+        public TokenController(IOAuthService oAuthService)
+        {
+            _oAuthService = oAuthService;
+        }
+
         public OAuthAccessTokenResponse Post(OAuthAccessTokenRequest request)
         {
             if (request == null)
