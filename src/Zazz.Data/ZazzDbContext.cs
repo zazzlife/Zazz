@@ -40,7 +40,7 @@ namespace Zazz.Data
         public IDbSet<AppRequestToken> AppRequestTokens { get; set; }
         public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
-
+        public IDbSet<OAuthClient> OAuthClients { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)

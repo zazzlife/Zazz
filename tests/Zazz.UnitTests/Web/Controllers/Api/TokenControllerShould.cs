@@ -20,6 +20,7 @@ using Zazz.Web;
 using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
 using System.Net;
+using Zazz.Web.Models.Api;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
@@ -402,6 +403,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var path = "/api/v1/token";
             var username = "usern";
             var password = "pass";
+            var displayName = "displayname";
 
             var values = new List<KeyValuePair<string, string>>
                          {
@@ -465,7 +467,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                          .Returns(oauthCred);
 
             _userService.Setup(x => x.GetUserDisplayName(user.Id))
-                        .Returns("displayName");
+                        .Returns(displayName);
             _photoService.Setup(x => x.GetUserImageUrl(user.Id))
                          .Returns(new PhotoLinks("photo url"));
 

@@ -10,7 +10,8 @@ namespace Zazz.Core.Interfaces
         IEnumerable<Major> GetMajors();
         IEnumerable<Tag> GetTags();
         IEnumerable<OAuthScope> GetOAuthScopes();
-            
+        IEnumerable<OAuthClient> GetOAuthClients();
+
         Tag GetTagIfExists(string tagName);
     }
 }
