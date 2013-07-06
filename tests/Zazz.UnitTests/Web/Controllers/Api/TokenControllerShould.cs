@@ -12,6 +12,7 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StructureMap;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -493,12 +494,11 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             var path = "/api/v1/token";
-
+            
             var values = new List<KeyValuePair<string, string>>
                          {
                              new KeyValuePair<string, string>("grant_type", "refresh_token"),
                          };
-
 
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
@@ -506,6 +506,46 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Assert
             Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidGrantIfRefreshTokenIsNotValidAndGrantTypeIsRefreshToken_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var refreshToken = "refreshtoken";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                             new KeyValuePair<string, string>("refresh_token", refreshToken)
+                         };
+
+            var oauthClient = new OAuthClient
+                              {
+                                  ClientId = "adsdsadas",
+                                  Id = 5454,
+                                  IsAllowedToRequestFullScope = true,
+                                  IsAllowedToRequestPasswordGrantType = true,
+                                  Secret = "secret"
+                              };
+
+            _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
+                            .Returns(oauthClient);
+
+            _oauthService.Setup(x => x.RefreshAccessToken(refreshToken))
+                         .Throws<InvalidTokenException>();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }

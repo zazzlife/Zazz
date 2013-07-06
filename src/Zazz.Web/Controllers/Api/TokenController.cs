@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Newtonsoft.Json;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -42,6 +43,7 @@ namespace Zazz.Web.Controllers.Api
             if (request.grant_type != GrantType.password && request.grant_type != GrantType.refresh_token)
                 throw new OAuthException(OAuthError.UnsupportedGrantType);
 
+            // checking password arguments
             if (request.grant_type == GrantType.password &&
                 (
                     String.IsNullOrWhiteSpace(request.password) ||
@@ -52,6 +54,7 @@ namespace Zazz.Web.Controllers.Api
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
 
+            // checking refresh token arguments
             if (request.grant_type == GrantType.refresh_token && String.IsNullOrWhiteSpace(request.refresh_token))
                 throw new OAuthException(OAuthError.InvalidRequest);
 
@@ -66,29 +69,29 @@ namespace Zazz.Web.Controllers.Api
             if (client == null)
                 throw new OAuthException(OAuthError.InvalidClient);
 
-            if (request.grant_type == GrantType.password && !client.IsAllowedToRequestPasswordGrantType)
-                throw new OAuthException(OAuthError.UnauthorizedClient);
 
-            if (request.scope.Contains("full") && !client.IsAllowedToRequestFullScope)
-                throw new OAuthException(OAuthError.InvalidScope);
-
-            // extracting scopes
-            var requestsedScopes = request.scope.Split(',');
-            var scopes = new List<OAuthScope>();
-
-            foreach (var rs in requestsedScopes)
-            {
-                var scope = _staticDataRepository
-                    .GetOAuthScopes()
-                    .SingleOrDefault(s => s.Name.Equals(rs, StringComparison.InvariantCultureIgnoreCase));
-
-                if (scope == null)
-                    throw new OAuthException(OAuthError.InvalidScope);
-            }
-
-            // password grant type
             if (request.grant_type == GrantType.password)
             {
+                if (!client.IsAllowedToRequestPasswordGrantType)
+                    throw new OAuthException(OAuthError.UnauthorizedClient);
+
+                if (request.scope.Contains("full") && !client.IsAllowedToRequestFullScope)
+                    throw new OAuthException(OAuthError.InvalidScope);
+
+                // extracting scopes
+                var requestsedScopes = request.scope.Split(',');
+                var scopes = new List<OAuthScope>();
+
+                foreach (var rs in requestsedScopes)
+                {
+                    var scope = _staticDataRepository
+                        .GetOAuthScopes()
+                        .SingleOrDefault(s => s.Name.Equals(rs, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (scope == null)
+                        throw new OAuthException(OAuthError.InvalidScope);
+                }
+            
                 // validating user credentials
                 var user = _userService.GetUser(request.username);
                 if (user == null)
@@ -117,7 +120,18 @@ namespace Zazz.Web.Controllers.Api
 
                        };
             }
-
+            // refresh token
+            else
+            {
+                try
+                {
+                    var accessToken = _oauthService.RefreshAccessToken(request.refresh_token);
+                }
+                catch (InvalidTokenException)
+                {
+                    throw new OAuthException(OAuthError.InvalidGrant);
+                }
+            }
 
             throw new NotImplementedException();
         }
