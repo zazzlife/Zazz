@@ -8,11 +8,13 @@ using System.Web.Http;
 using System.Web.Http.SelfHost;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Web;
 using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
 using System.Net;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -56,8 +58,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await _client.PostAsync(path, null);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
 
             //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
@@ -78,8 +82,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
 
             //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
@@ -100,8 +106,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
 
             //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
@@ -122,8 +130,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
 
             //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
