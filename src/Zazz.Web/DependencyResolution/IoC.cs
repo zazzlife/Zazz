@@ -28,6 +28,7 @@ using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
 using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.DependencyResolution 
 {
@@ -93,6 +94,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IWeeklyService>().Use<WeeklyService>();
                             x.For<IVoteService>().Use<VoteService>();
                             x.For<IAppRequestTokenService>().Use<AppRequestTokenService>();
+                            x.For<IOAuthService>().Use<OAuthService>();
 
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory)
