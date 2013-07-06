@@ -63,30 +63,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return400IfRequestTypeIsNotPassword_OnPost()
-        {
-            //Arrange
-            var path = "/api/v1/token";
-
-            var values = new List<KeyValuePair<string, string>>
-                         {
-                             new KeyValuePair<string, string>("grant_type", "undefined"),
-                             new KeyValuePair<string, string>("password", "pass"),
-                             new KeyValuePair<string, string>("username", "user"),
-                             new KeyValuePair<string, string>("scope", "full"),
-                         };
-            
-
-            //Act
-            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public async Task Return400IfPasswordIsMissing_OnPost()
+        public async Task Return400IfPasswordIsMissingAndGrantTypeIsPassword_OnPost()
         {
             //Arrange
             var path = "/api/v1/token";
@@ -108,7 +85,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return400IfUsernameIsMissing_OnPost()
+        public async Task Return400IfUsernameIsMissingAndGrantTypeIsPassword_OnPost()
         {
             //Arrange
             var path = "/api/v1/token";
@@ -130,7 +107,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         }
 
         [Test]
-        public async Task Return400IfScopeIsMissing_OnPost()
+        public async Task Return400IfScopeIsMissingAndGrantTypeIsPassword_OnPost()
         {
             //Arrange
             var path = "/api/v1/token";

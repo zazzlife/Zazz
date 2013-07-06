@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Web.Http;
+using Newtonsoft.Json;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -8,13 +10,14 @@ namespace Zazz.Web.Controllers.Api
     {
         public OAuthAccessTokenResponse Post(OAuthAccessTokenRequest request)
         {
-            if (request == null ||
-                request.grant_type != GrantType.password ||
-                String.IsNullOrWhiteSpace(request.password) ||
+            if (request == null)
+                throw new OAuthException(OAuthError.InvalidRequest);
+
+            if (request.grant_type == GrantType.password && (String.IsNullOrWhiteSpace(request.password) ||
                 String.IsNullOrWhiteSpace(request.username) ||
-                String.IsNullOrWhiteSpace(request.scope))
+                String.IsNullOrWhiteSpace(request.scope)))
             {
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                throw new OAuthException(OAuthError.InvalidRequest);
             }
                 
 
@@ -36,7 +39,8 @@ namespace Zazz.Web.Controllers.Api
     public enum GrantType
     {
         undefined,
-        password
+        password,
+        refresh_token
     }
 
     public class OAuthAccessTokenResponse
