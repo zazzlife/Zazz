@@ -39,9 +39,18 @@ namespace Zazz.Web.Controllers.Api
             }
 
             //authorizing client
-            if (Request.Headers.Authorization == null)
+            if (Request.Headers.Authorization == null ||
+                String.IsNullOrWhiteSpace(Request.Headers.Authorization.Parameter))
             {
                 throw new OAuthException(OAuthError.InvalidClient);
+            }
+            else
+            {
+                var clientId = Request.Headers.Authorization.Parameter;
+                
+                var client = _oauthClientRepository.GetById(clientId);
+                if (client == null)
+                    throw new OAuthException(OAuthError.InvalidClient);
             }
 
             // password grant type

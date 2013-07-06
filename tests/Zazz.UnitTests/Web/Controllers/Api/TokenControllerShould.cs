@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,6 +12,7 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 using Zazz.Web;
 using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
@@ -166,6 +168,44 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                              new KeyValuePair<string, string>("scope", "full")
                          };
 
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidClient, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return400IfClientNotExists_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "password"),
+                             new KeyValuePair<string, string>("password", "pass"),
+                             new KeyValuePair<string, string>("username", "user"),
+                             new KeyValuePair<string, string>("scope", "full")
+                         };
+
+            var oauthClient = new OAuthClient
+                              {
+                                  ClientId = "adsdsadas",
+                                  Id = 1,
+                                  IsAllowedToRequestFullScope = true,
+                                  IsAllowedToRequestPasswordGrantType = true,
+                                  Secret = "secret"
+                              };
+
+            _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
+                            .Returns(() => null);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
 
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
