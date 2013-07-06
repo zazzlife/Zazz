@@ -38,6 +38,8 @@ namespace Zazz.Web.Controllers.Api
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
 
+            //TODO: validate request if grant type is refresh token
+
             //authorizing client
             if (Request.Headers.Authorization == null ||
                 String.IsNullOrWhiteSpace(Request.Headers.Authorization.Parameter))
@@ -49,16 +51,20 @@ namespace Zazz.Web.Controllers.Api
             if (client == null)
                 throw new OAuthException(OAuthError.InvalidClient);
 
-            if (!client.IsAllowedToRequestPasswordGrantType)
+            if (request.grant_type == GrantType.password && !client.IsAllowedToRequestPasswordGrantType)
                 throw new OAuthException(OAuthError.UnauthorizedClient);
 
-            if (!client.IsAllowedToRequestFullScope)
+            if (request.scope.Contains("full") && !client.IsAllowedToRequestFullScope)
                 throw new OAuthException(OAuthError.InvalidScope);
-
-
+            
             // password grant type
             if (request.grant_type == GrantType.password)
             {
+                // validating user credentials
+                var user = _userService.GetUser(request.username);
+                if (user == null)
+                    throw new OAuthException(OAuthError.InvalidGrant);
+
 
             }
 
