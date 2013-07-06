@@ -486,5 +486,30 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
         #endregion
 
+        #region greant_type=refresh_token
+
+        [Test]
+        public async Task ReturnInvalidRequestIRefreshTokenIsMissingAndGrantTypeIsRefreshToken_OnPost()
+        {
+            //Arrange
+            var path = "/api/v1/token";
+
+            var values = new List<KeyValuePair<string, string>>
+                         {
+                             new KeyValuePair<string, string>("grant_type", "refresh_token"),
+                         };
+
+
+            //Act
+            var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        #endregion
     }
 }
