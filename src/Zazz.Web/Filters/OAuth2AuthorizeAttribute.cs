@@ -29,7 +29,10 @@ namespace Zazz.Web.Filters
             try
             {
                 var token = new JWT(actionContext.Request.Headers.Authorization.Parameter);
-
+                if (token.ExpirationDate < DateTime.UtcNow)
+                {
+                    return false;
+                }
 
                 return true;
             }

@@ -133,6 +133,32 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Test]
+        public async Task ReturnInvalidGrantIfAccessTokenIsExpired()
+        {
+            //Arrange
+            var accessToken = new JWT
+            {
+                UserId = 1,
+                ClientId = 2,
+                ExpirationDate = DateTime.UtcNow.AddHours(-1),
+                Scopes = new List<string> { "full" },
+                TokenType = JWT.ACCESS_TOKEN_TYPE,
+                IssuedDate = DateTime.UtcNow,
+            };
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken.ToJWTString());
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 
     [OAuth2Authorize]
