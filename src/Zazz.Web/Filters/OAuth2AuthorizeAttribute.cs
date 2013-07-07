@@ -1,22 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using Newtonsoft.Json;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Filters
 {
     public class OAuth2AuthorizeAttribute : AuthorizeAttribute
     {
+        private string _errorDescription;
+
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
-            return base.IsAuthorized(actionContext);
+            //checking if authorization is provided
+            if (actionContext.Request.Headers.Authorization == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
         {
             base.HandleUnauthorizedRequest(actionContext);
+
+            var error = new OAuthErrorModel
+                        {
+                            Error = OAuthError.InvalidGrant,
+                            ErrorDescription = _errorDescription
+                        };
+
+            var json = JsonConvert.SerializeObject(error);
+
+            actionContext.Response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            actionContext.Response.StatusCode = HttpStatusCode.BadRequest;
         }
     }
 }

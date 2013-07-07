@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Http.SelfHost;
 using Moq;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Web;
 using Zazz.Web.DependencyResolution;
 using Zazz.Web.Filters;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.UnitTests.Web.Filters
 {
@@ -27,6 +32,8 @@ namespace Zazz.UnitTests.Web.Filters
         {
             var container = SetupIoC();
             _config = new HttpSelfHostConfiguration(BASE_ADDRESS);
+
+            JsonConfig.Configure(_config);
 
             _config.Routes.MapHttpRoute(
                 name: "Dummy Route",
@@ -58,14 +65,31 @@ namespace Zazz.UnitTests.Web.Filters
                                     });
         }
 
+        [Test]
+        public async Task ReturnInvalidGrantIfAccessTokenIsMissing()
+        {
+            //Arrange
 
+            _client.DefaultRequestHeaders.Authorization = null;
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
         
     }
 
     [OAuth2Authorize]
     public class TestController : ApiController
     {
-        public void Get()
-        {}
+        public int Get()
+        {
+            return 1;
+        }
     }
 }
