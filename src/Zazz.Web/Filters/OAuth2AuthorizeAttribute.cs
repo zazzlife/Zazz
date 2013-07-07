@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using Newtonsoft.Json;
+using Zazz.Core.Exceptions;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Filters
@@ -25,7 +26,17 @@ namespace Zazz.Web.Filters
                 return false;
             }
 
-            return true;
+            try
+            {
+                var token = new JWT(actionContext.Request.Headers.Authorization.Parameter);
+
+
+                return true;
+            }
+            catch (Exception) // any exception means that the token is malformed
+            {
+                return false;
+            }
         }
 
         protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)

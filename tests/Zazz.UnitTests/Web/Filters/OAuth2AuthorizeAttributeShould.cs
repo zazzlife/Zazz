@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -101,6 +102,37 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Test]
+        public async Task ReturnInvalidGrantIfAccessTokenSignatureIsInvalid()
+        {
+            //Arrange
+            var accessToken = new JWT
+                              {
+                                  UserId = 1,
+                                  ClientId = 2,
+                                  ExpirationDate = DateTime.UtcNow.AddHours(1),
+                                  Scopes = new List<string> {"full"},
+                                  TokenType = JWT.ACCESS_TOKEN_TYPE,
+                                  IssuedDate = DateTime.UtcNow,
+                              };
+
+            //chaning the signature
+            var accessTokenSegments = accessToken.ToJWTString().Split('.');
+            accessTokenSegments[2] = "invalid signature";
+
+            var token = String.Join(".", accessTokenSegments);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
     }
 
     [OAuth2Authorize]
