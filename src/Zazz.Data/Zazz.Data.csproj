@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\AppRequestTokenRepository.cs" />
-    <Compile Include="Repositories\InMemoryApiAppRepository.cs" />
+    <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />
     <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,12 +67,13 @@
     <Compile Include="Repositories\FacebookSyncRetryRepository.cs" />
     <Compile Include="Repositories\FeedPhotoRepository.cs" />
     <Compile Include="Repositories\NotificationRepository.cs" />
-    <Compile Include="Repositories\OAuthAccountRepository.cs" />
+    <Compile Include="Repositories\LinkedAccountRepository.cs" />
     <Compile Include="Repositories\CommentRepository.cs" />
     <Compile Include="Repositories\EventRepository.cs" />
     <Compile Include="Repositories\FeedRepository.cs" />
     <Compile Include="Repositories\FollowRepository.cs" />
     <Compile Include="Repositories\FollowRequestRepository.cs" />
+    <Compile Include="Repositories\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\PhotoVoteRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />

@@ -71,7 +71,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                         }
                           };
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                 .GetOAuthAccountByProviderId(It.IsAny<long>(), OAuthProvider.Facebook))
                 .Returns(() => null);
             _uow.Setup(x => x.SaveChanges());
@@ -121,13 +121,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var userAId = 1234L;
             var userBId = 5678L;
-            var userAAccount = new OAuthAccount
+            var userAAccount = new LinkedAccount
                                {
                                    AccessToken = "user a token",
                                    UserId = (int)userAId,
                                    ProviderUserId = userAId
                                };
-            var userBAccount = new OAuthAccount
+            var userBAccount = new LinkedAccount
                                {
                                    AccessToken = "user a token",
                                    UserId = (int)userBId,
@@ -151,10 +151,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                         }
             };
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                 .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook))
                 .Returns(() => userAAccount);
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                 .GetOAuthAccountByProviderId(userBId, OAuthProvider.Facebook))
                 .Returns(() => userBAccount);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(It.IsAny<int>()))
@@ -173,7 +173,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var userAId = 1234L;
-            var userAAccount = new OAuthAccount
+            var userAAccount = new LinkedAccount
             {
                 AccessToken = "user a token",
                 UserId = (int)userAId,
@@ -240,7 +240,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var fbEvents = new List<FbEvent> { fbEvent2, fbEvent3 };
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                              .GetOAuthAccountByProviderId(userAId, OAuthProvider.Facebook))
                 .Returns(() => userAAccount);
 
@@ -285,12 +285,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var userId = 1234;
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                {
                                    AccessToken = "token"
                                };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
+            _uow.Setup(x => x.LinkedAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
                 .Returns(() => null);
 
             //Act
@@ -305,12 +305,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var userId = 1234;
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = "token"
             };
 
-            _uow.Setup(x => x.OAuthAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
+            _uow.Setup(x => x.LinkedAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook))
                 .Returns(oauthAccount);
 
             _fbHelper.Setup(x => x.GetPages(oauthAccount.AccessToken))
@@ -433,7 +433,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var fbUserId = 1234L;
-            _uow.Setup(x => x.OAuthAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(fbUserId, OAuthProvider.Facebook))
                 .Returns(() => null);
 
             //Act
@@ -447,14 +447,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdateUserEvents()
         {
             //Arrange
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                {
                                    AccessToken = "token",
                                    ProviderUserId = 1234,
                                    UserId = 111
                                };
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                 .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook))
                 .Returns(() => oauthAccount);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId))
@@ -471,7 +471,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void AddEventsIfTheyDontExists_OnUpdateUserEvents()
         {
             //Arrange
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = "token",
                 ProviderUserId = 1234,
@@ -490,7 +490,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var limit = 12;
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                 .GetOAuthAccountByProviderId(oauthAccount.ProviderUserId, OAuthProvider.Facebook))
                 .Returns(() => oauthAccount);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(oauthAccount.UserId))
@@ -954,7 +954,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             new User {Id = 2},
                         };
 
-            _uow.Setup(x => x.OAuthAccountRepository
+            _uow.Setup(x => x.LinkedAccountRepository
                              .GetUsersByProviderId(It.IsAny<IEnumerable<long>>(), OAuthProvider.Facebook))
                 .Returns(users.AsQueryable());
 

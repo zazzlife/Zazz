@@ -10,13 +10,13 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Data.Repositories
 {
-    public class OAuthAccountRepository : BaseRepository<OAuthAccount>, IOAuthAccountRepository
+    public class LinkedAccountRepository : BaseRepository<LinkedAccount>, ILinkedAccountRepository
     {
-        public OAuthAccountRepository(DbContext dbContext) : base(dbContext)
+        public LinkedAccountRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override int GetItemId(OAuthAccount item)
+        protected override int GetItemId(LinkedAccount item)
         {
             if (item.UserId == default (int))
                 throw new ArgumentException("User id cannot be 0");
@@ -28,19 +28,19 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
-        public OAuthAccount GetUserAccount(int userId, OAuthProvider provider)
+        public LinkedAccount GetUserAccount(int userId, OAuthProvider provider)
         {
             return DbSet.Where(o => o.UserId == userId)
                         .Where(o => o.Provider == provider)
                         .SingleOrDefault();
         }
 
-        public IEnumerable<OAuthAccount> GetUserAccounts(int userId)
+        public IEnumerable<LinkedAccount> GetUserAccounts(int userId)
         {
             return DbSet.Where(o => o.UserId == userId).AsEnumerable();
         }
 
-        public OAuthAccount GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
+        public LinkedAccount GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider)
         {
             return DbSet.Where(o => o.Provider == provider)
                         .Where(o => o.ProviderUserId == providerUserId)

@@ -6,7 +6,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface IOAuthAccountRepository : IRepository<OAuthAccount>
+    public interface ILinkedAccountRepository : IRepository<LinkedAccount>
     {
         /// <summary>
         /// Gets the user's OAuth Account
@@ -14,14 +14,14 @@ namespace Zazz.Core.Interfaces
         /// <param name="userId">The User id on our site</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        OAuthAccount GetUserAccount(int userId, OAuthProvider provider);
+        LinkedAccount GetUserAccount(int userId, OAuthProvider provider);
 
         /// <summary>
         /// Gets all of user OAuth Accounts
         /// </summary>
         /// <param name="userId">The User id on our site</param>
         /// <returns></returns>
-        IEnumerable<OAuthAccount> GetUserAccounts(int userId);
+        IEnumerable<LinkedAccount> GetUserAccounts(int userId);
 
         /// <summary>
         /// Gets the OAuth Account by user's OAuth ID
@@ -29,7 +29,7 @@ namespace Zazz.Core.Interfaces
         /// <param name="providerUserId">OAuth Provider's User ID</param>
         /// <param name="provider"></param>
         /// <returns></returns>
-        OAuthAccount GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider);
+        LinkedAccount GetOAuthAccountByProviderId(long providerUserId, OAuthProvider provider);
 
         /// <summary>
         /// Checks if the third party account exists

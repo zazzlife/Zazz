@@ -5,7 +5,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Models.Data
 {
-    public class OAuthAccount : BaseEntity
+    public class LinkedAccount : BaseEntity
     {
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

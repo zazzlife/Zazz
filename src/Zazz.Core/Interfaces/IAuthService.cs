@@ -19,8 +19,8 @@ namespace Zazz.Core.Interfaces
         
         void ChangePassword(int userId, string currentPassword, string newPassword);
         
-        User GetOAuthUser(OAuthAccount oAuthAccount, string email);
+        User GetOAuthUser(LinkedAccount linkedAccount, string email);
         
-        void AddOrUpdateOAuthAccount(OAuthAccount oauthAccount);
+        void AddOrUpdateOAuthAccount(LinkedAccount oauthAccount);
     }
 }

@@ -142,12 +142,12 @@ namespace Zazz.Infrastructure.Services
 
         public string GetAccessToken(int userId, OAuthProvider provider)
         {
-            return _uoW.OAuthAccountRepository.GetAccessToken(userId, provider);
+            return _uoW.LinkedAccountRepository.GetAccessToken(userId, provider);
         }
 
         public bool OAuthAccountExists(int userId, OAuthProvider provider)
         {
-            return _uoW.OAuthAccountRepository.Exists(userId, provider);
+            return _uoW.LinkedAccountRepository.Exists(userId, provider);
         }
     }
 }

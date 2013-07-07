@@ -50,6 +50,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\Zazz.Web\bin\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -93,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Infrastructure\CircularBufferCacheShould.cs" />
     <Compile Include="Infrastructure\ErrorHandlerShould.cs" />
+    <Compile Include="Infrastructure\Helpers\Base64HelperShould.cs" />
     <Compile Include="Infrastructure\Helpers\StringHelperShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AppRequestTokenServiceShould.cs" />
@@ -130,8 +132,12 @@
     <Compile Include="Web\Controllers\Api\QRCodeControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\RegisterControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\SearchControllerShould.cs" />
+    <Compile Include="Web\Controllers\Api\TokenControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\WeekliesControllerShould.cs" />
     <Compile Include="Web\Filters\HMACAuthorizeAttributeShould.cs" />
+    <Compile Include="Web\Filters\OAuth2AuthorizeAttributeShould.cs" />
+    <Compile Include="Web\OAuthAuthorizationServer\JWTShould.cs" />
+    <Compile Include="Web\OAuthAuthorizationServer\OAuthServiceShould.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -141,6 +147,10 @@
     <ProjectReference Include="..\..\src\Zazz.Core\Zazz.Core.csproj">
       <Project>{a2879224-80d7-402d-a263-81b66b720f4c}</Project>
       <Name>Zazz.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Zazz.Data\Zazz.Data.csproj">
+      <Project>{0C41E54B-BE21-40FB-B478-D1521DEA1CF4}</Project>
+      <Name>Zazz.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Zazz.Infrastructure\Zazz.Infrastructure.csproj">
       <Project>{C86D475A-5D4B-4D53-8067-7F534F18319F}</Project>

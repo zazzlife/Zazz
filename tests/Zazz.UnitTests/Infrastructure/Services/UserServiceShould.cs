@@ -329,7 +329,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var userId = 12;
             var provider = OAuthProvider.Facebook;
 
-            _uow.Setup(x => x.OAuthAccountRepository.Exists(userId, provider))
+            _uow.Setup(x => x.LinkedAccountRepository.Exists(userId, provider))
                 .Returns(true);
 
             //Act

@@ -15,13 +15,13 @@ namespace Zazz.IntegrationTests.Repositories
     public class OAuthAccountRepositoryShould
     {
         private ZazzDbContext _context;
-        private OAuthAccountRepository _repo;
+        private LinkedAccountRepository _repo;
 
         [SetUp]
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new OAuthAccountRepository(_context);
+            _repo = new LinkedAccountRepository(_context);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = AddUser();
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = Guid.NewGuid().ToString(),
                                        Provider = OAuthProvider.Facebook,
@@ -50,7 +50,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = AddUser();
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
@@ -59,7 +59,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -77,7 +77,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = AddUser();
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
@@ -86,7 +86,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -104,7 +104,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var user = AddUser();
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 Provider = OAuthProvider.Facebook,
@@ -113,7 +113,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -156,15 +156,15 @@ namespace Zazz.IntegrationTests.Repositories
         private static User AddUserWithOAuthAccounts()
         {
             var user = Mother.GetUser();
-            user.LinkedAccounts = new List<OAuthAccount>
+            user.LinkedAccounts = new List<LinkedAccount>
                                       {
-                                          new OAuthAccount
+                                          new LinkedAccount
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Facebook,
                                                   UserId = user.Id
                                               },
-                                          new OAuthAccount
+                                          new LinkedAccount
                                               {
                                                   AccessToken = Guid.NewGuid().ToString(),
                                                   Provider = OAuthProvider.Microsoft,
@@ -202,7 +202,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var providerUserId = 123L;
             var user = AddUser();
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = "token",
                                        Provider = OAuthProvider.Facebook,
@@ -212,7 +212,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -242,7 +242,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var providerUserId = 123L;
             var user = AddUser();
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = "token",
                 Provider = OAuthProvider.Facebook,
@@ -252,7 +252,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -282,7 +282,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             var providerUserId = 123L;
             var user = AddUser();
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
             {
                 AccessToken = "token",
                 Provider = OAuthProvider.Facebook,
@@ -292,7 +292,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             using (var context = new ZazzDbContext())
             {
-                context.OAuthAccounts.Add(oauthAccount);
+                context.LinkedAccounts.Add(oauthAccount);
                 context.SaveChanges();
             }
 
@@ -310,7 +310,7 @@ namespace Zazz.IntegrationTests.Repositories
             var userA = AddUser();
             var userB = AddUser();
 
-            var oauthAccountA = new OAuthAccount
+            var oauthAccountA = new LinkedAccount
             {
                 AccessToken = "tokenA facebook",
                 Provider = OAuthProvider.Facebook,
@@ -318,7 +318,7 @@ namespace Zazz.IntegrationTests.Repositories
                 UserId = userA.Id
             };
 
-            var oauthAccountB = new OAuthAccount
+            var oauthAccountB = new LinkedAccount
             {
                 AccessToken = "tokenA ms",
                 Provider = OAuthProvider.Microsoft,
@@ -326,7 +326,7 @@ namespace Zazz.IntegrationTests.Repositories
                 UserId = userA.Id
             };
 
-            var oauthAccountC = new OAuthAccount
+            var oauthAccountC = new LinkedAccount
             {
                 AccessToken = "tokenB facebook",
                 Provider = OAuthProvider.Facebook,
@@ -334,9 +334,9 @@ namespace Zazz.IntegrationTests.Repositories
                 UserId = userB.Id
             };
 
-            _context.OAuthAccounts.Add(oauthAccountA);
-            _context.OAuthAccounts.Add(oauthAccountB);
-            _context.OAuthAccounts.Add(oauthAccountC);
+            _context.LinkedAccounts.Add(oauthAccountA);
+            _context.LinkedAccounts.Add(oauthAccountB);
+            _context.LinkedAccounts.Add(oauthAccountC);
             _context.SaveChanges();
 
             //Act
@@ -355,19 +355,19 @@ namespace Zazz.IntegrationTests.Repositories
 
 
             var user1 = Mother.GetUser();
-            user1.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[0] });
+            user1.LinkedAccounts.Add(new LinkedAccount { Provider = provider, ProviderUserId = providerIds[0] });
 
             var user2 = Mother.GetUser();
-            user2.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[1] });
+            user2.LinkedAccounts.Add(new LinkedAccount { Provider = provider, ProviderUserId = providerIds[1] });
 
             var user3 = Mother.GetUser();
-            user3.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = providerIds[2] });
+            user3.LinkedAccounts.Add(new LinkedAccount { Provider = provider, ProviderUserId = providerIds[2] });
 
             var user4 = Mother.GetUser();
-            user4.LinkedAccounts.Add(new OAuthAccount { Provider = provider, ProviderUserId = 44 });
+            user4.LinkedAccounts.Add(new LinkedAccount { Provider = provider, ProviderUserId = 44 });
 
             var user5 = Mother.GetUser();
-            user5.LinkedAccounts.Add(new OAuthAccount
+            user5.LinkedAccounts.Add(new LinkedAccount
                                      {
                                          Provider = OAuthProvider.Microsoft,
                                          ProviderUserId = providerIds[2]

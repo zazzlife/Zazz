@@ -9,13 +9,14 @@ namespace Zazz.Data
         public IDbSet<Major> Majors { get; set; }
         public IDbSet<School> Schools { get; set; }
         public IDbSet<Tag> Tags { get; set; }
+        public IDbSet<OAuthScope> OAuthScopes { get; set; }
 
         public IDbSet<User> Users { get; set; }
         public IDbSet<UserPreferences> UserPreferences { get; set; }
         public IDbSet<UserDetail> UserDetails { get; set; }
         public IDbSet<ClubDetail> ClubDetails { get; set; }
         public IDbSet<UserValidationToken> ValidationTokens { get; set; }
-        public IDbSet<OAuthAccount> OAuthAccounts { get; set; }
+        public IDbSet<LinkedAccount> LinkedAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
         public IDbSet<PhotoTag> PhotoTags { get; set; }
@@ -37,6 +38,9 @@ namespace Zazz.Data
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
         public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }
         public IDbSet<AppRequestToken> AppRequestTokens { get; set; }
+        public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
+        public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
+        public IDbSet<OAuthClient> OAuthClients { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -73,10 +77,6 @@ namespace Zazz.Data
             modelBuilder.Entity<User>()
                         .HasOptional(u => u.ClubDetail)
                         .WithRequired(c => c.User);
-
-            //modelBuilder.Entity<UserReceivedVotes>()
-            //            .HasRequired(v => v.User)
-            //            .WithOptional(u => u.ReceivedVotesCount);
 
             modelBuilder.Entity<Comment>()
                 .HasRequired(e => e.User)

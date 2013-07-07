@@ -16,15 +16,15 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IUserService _userService;
         private readonly ICryptoService _cryptoService;
-        private readonly IApiAppRepository _apiAppRepository;
+        private readonly IOAuthClientRepository _ioAuthClientRepository;
         private readonly IPhotoService _photoService;
 
         public LoginController(IUserService userService, ICryptoService cryptoService,
-            IApiAppRepository apiAppRepository, IPhotoService photoService)
+            IOAuthClientRepository ioAuthClientRepository, IPhotoService photoService)
         {
             _userService = userService;
             _cryptoService = cryptoService;
-            _apiAppRepository = apiAppRepository;
+            _ioAuthClientRepository = ioAuthClientRepository;
             _photoService = photoService;
         }
 

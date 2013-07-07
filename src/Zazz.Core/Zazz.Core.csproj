@@ -76,7 +76,7 @@
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Exceptions\WeekliesLimitReachedException.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
-    <Compile Include="Interfaces\IApiAppRepository.cs" />
+    <Compile Include="Interfaces\IOAuthClientRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenService.cs" />
     <Compile Include="Interfaces\IAuthService.cs" />
@@ -99,7 +99,7 @@
     <Compile Include="Interfaces\ILongRepository.cs" />
     <Compile Include="Interfaces\INotificationRepository.cs" />
     <Compile Include="Interfaces\INotificationService.cs" />
-    <Compile Include="Interfaces\IOAuthAccountRepository.cs" />
+    <Compile Include="Interfaces\ILinkedAccountRepository.cs" />
     <Compile Include="Interfaces\IAlbumService.cs" />
     <Compile Include="Interfaces\IPhotoService.cs" />
     <Compile Include="Interfaces\IPhotoVoteRepository.cs" />
@@ -128,7 +128,8 @@
     <Compile Include="Interfaces\IVoteService.cs" />
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
-    <Compile Include="Models\Data\ApiApp.cs" />
+    <Compile Include="Interfaces\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="Models\Data\OAuthClient.cs" />
     <Compile Include="Models\Data\AppRequestToken.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
     <Compile Include="Models\Data\City.cs" />
@@ -156,6 +157,9 @@
     <Compile Include="Models\Data\FeedUser.cs" />
     <Compile Include="Models\Data\Major.cs" />
     <Compile Include="Models\Data\Notification.cs" />
+    <Compile Include="Models\Data\OAuthRefreshToken.cs" />
+    <Compile Include="Models\Data\OAuthRefreshTokenScope.cs" />
+    <Compile Include="Models\Data\OAuthScope.cs" />
     <Compile Include="Models\Data\PhotoComment.cs" />
     <Compile Include="Models\Data\PhotoTag.cs" />
     <Compile Include="Models\Data\PhotoVote.cs" />
@@ -167,7 +171,7 @@
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Tag.cs" />
     <Compile Include="Models\Data\User.cs" />
-    <Compile Include="Models\Data\OAuthAccount.cs" />
+    <Compile Include="Models\Data\LinkedAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
     <Compile Include="Models\Data\UserPreferences.cs" />
     <Compile Include="Models\Data\UserReceivedVotes.cs" />

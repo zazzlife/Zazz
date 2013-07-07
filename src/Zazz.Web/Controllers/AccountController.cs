@@ -19,7 +19,6 @@ using Zazz.Data;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
-using OAuthAccount = Zazz.Core.Models.Data.OAuthAccount;
 
 namespace Zazz.Web.Controllers
 {
@@ -30,14 +29,14 @@ namespace Zazz.Web.Controllers
         private readonly ICryptoService _cryptoService;
         private readonly IAppRequestTokenService _appRequestTokenService;
         private readonly IObjectMapper _objectMapper;
-        private readonly IApiAppRepository _appRepository;
+        private readonly IOAuthClientRepository _appRepository;
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
-            IObjectMapper objectMapper, IApiAppRepository appRepository, IFacebookService facebookService,
+            IObjectMapper objectMapper, IOAuthClientRepository appRepository, IFacebookService facebookService,
             IFollowService followService) 
             : base(userService, photoService, defaultImageHelper)
         {
@@ -121,34 +120,38 @@ namespace Zazz.Web.Controllers
 
         public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
         {
-            var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
-            var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
+            throw new NotImplementedException();
 
-            if (signCheck != sign)
-                throw new HttpException(403, "Forbidden");
+            //TODO: (URGENT) Implement this using new oauth method.
 
-            var request = _appRequestTokenService.Get(requestId);
-            var app = _appRepository.GetById(request.AppId);
+            //var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
+            //var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
 
-            var user = UserService.GetUser(userId);
-            var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
-            var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
+            //if (signCheck != sign)
+            //    throw new HttpException(403, "Forbidden");
 
-            var displayName = UserService.GetUserDisplayName(userId);
-            var displayPhoto = PhotoService.GetUserImageUrl(userId);
+            //var request = _appRequestTokenService.Get(requestId);
+            //var app = _appRepository.GetById(request.AppId);
+
+            //var user = UserService.GetUser(userId);
+            //var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
+            //var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
+
+            //var displayName = UserService.GetUserDisplayName(userId);
+            //var displayPhoto = PhotoService.GetUserImageUrl(userId);
             
 
-            _appRequestTokenService.Remove(request);
+            //_appRequestTokenService.Remove(request);
 
-            return new JsonNetResult(
-                new
-                {
-                    userId,
-                    accountType = user.AccountType,
-                    passwordSignature,
-                    displayName,
-                    displayPhoto
-                });
+            //return new JsonNetResult(
+            //    new
+            //    {
+            //        userId,
+            //        accountType = user.AccountType,
+            //        passwordSignature,
+            //        displayName,
+            //        displayPhoto
+            //    });
         }
 
         #endregion
@@ -367,7 +370,7 @@ namespace Zazz.Web.Controllers
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
 
-            var oauthAccount = new OAuthAccount
+            var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = accessToken,
                                        Provider = provider,
@@ -451,9 +454,9 @@ namespace Zazz.Web.Controllers
                 var user = _objectMapper.RegisterVmToUser(registerVm);
                 user.IsConfirmed = true;
 
-                user.LinkedAccounts = new List<OAuthAccount>
+                user.LinkedAccounts = new List<LinkedAccount>
                                           {
-                                              new OAuthAccount
+                                              new LinkedAccount
                                                   {
                                                       AccessToken = oauthData.AccessToken,
                                                       Provider = oauthData.Provider,
