@@ -148,7 +148,8 @@ namespace Zazz.UnitTests.Web.Filters
                 IssuedDate = DateTime.UtcNow,
             };
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken.ToJWTString());
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",
+                                                                                        accessToken.ToJWTString());
 
             //Act
             var response = await _client.GetAsync("/");
@@ -159,13 +160,69 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
+
+        [Test]
+        public async Task ReturnInvalidGrantIfRequiredScopeIsNotGranted()
+        {
+            //Arrange
+            var accessToken = new JWT
+            {
+                UserId = 1,
+                ClientId = 2,
+                ExpirationDate = DateTime.UtcNow.AddHours(1),
+                Scopes = new List<string> { "some other scope!" },
+                TokenType = JWT.ACCESS_TOKEN_TYPE,
+                IssuedDate = DateTime.UtcNow,
+            };
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",
+                                                                                        accessToken.ToJWTString());
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidScope, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Test]
+        public async Task ReturnOKWhenEverythingIsValid()
+        {
+            //Arrange
+            var accessToken = new JWT
+            {
+                UserId = 1,
+                ClientId = 2,
+                ExpirationDate = DateTime.UtcNow.AddHours(1),
+                Scopes = new List<string> { "full" },
+                TokenType = JWT.ACCESS_TOKEN_TYPE,
+                IssuedDate = DateTime.UtcNow,
+            };
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",
+                                                                                        accessToken.ToJWTString());
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 
-    [OAuth2Authorize]
+    [OAuth2Authorize("testScope1", "testScope2")]
     public class TestController : ApiController
     {
         public int Get()
         {
+            var u = User.Identity;
+            if (!u.IsAuthenticated || (Int32.Parse(u.Name) != 1))
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+
             return 1;
         }
     }
