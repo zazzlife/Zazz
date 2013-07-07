@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -66,7 +67,7 @@ namespace Zazz.UnitTests.Web.Filters
         }
 
         [Test]
-        public async Task ReturnInvalidGrantIfAccessTokenIsMissing()
+        public async Task ReturnInvalidGrantIfAuthHeaderIsMissing()
         {
             //Arrange
 
@@ -81,7 +82,25 @@ namespace Zazz.UnitTests.Web.Filters
             Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
-        
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public async Task ReturnInvalidGrantIfAccessTokenIsMissing(string accessToken)
+        {
+            //Arrange
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
+
+            //Act
+            var response = await _client.GetAsync("/");
+            var content = await response.Content.ReadAsStringAsync();
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidGrant, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
     }
 
     [OAuth2Authorize]

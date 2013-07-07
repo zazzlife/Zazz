@@ -19,7 +19,8 @@ namespace Zazz.Web.Filters
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
             //checking if authorization is provided
-            if (actionContext.Request.Headers.Authorization == null)
+            if (actionContext.Request.Headers.Authorization == null ||
+                String.IsNullOrWhiteSpace(actionContext.Request.Headers.Authorization.Parameter))
             {
                 return false;
             }
