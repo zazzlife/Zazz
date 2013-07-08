@@ -44,7 +44,7 @@ namespace Zazz.Data
         public IDbSet<ClubReward> ClubRewards { get; set; }
         public IDbSet<UserReward> UserRewards { get; set; }
         public IDbSet<UserPoint> UserPoints { get; set; }
-
+        public IDbSet<ClubPointRewardScenario> ClubPointRewardScenarios { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)

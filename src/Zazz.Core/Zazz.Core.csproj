@@ -129,7 +129,9 @@
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
     <Compile Include="Interfaces\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="Models\Data\ClubPointRewardScenario.cs" />
     <Compile Include="Models\Data\ClubReward.cs" />
+    <Compile Include="Models\Data\Enums\PointRewardScenario.cs" />
     <Compile Include="Models\Data\OAuthClient.cs" />
     <Compile Include="Models\Data\AppRequestToken.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
