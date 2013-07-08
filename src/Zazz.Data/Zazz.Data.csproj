@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\AppRequestTokenRepository.cs" />
+    <Compile Include="Repositories\ClubPointRewardScenarioRepository.cs" />
+    <Compile Include="Repositories\ClubRewardRepository.cs" />
     <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />
     <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />
@@ -78,8 +80,11 @@
     <Compile Include="Repositories\PhotoVoteRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\TagStatRepository.cs" />
+    <Compile Include="Repositories\UserPointHistoryRepository.cs" />
+    <Compile Include="Repositories\UserPointRepository.cs" />
     <Compile Include="Repositories\UserReceivedVotesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\UserRewardRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
     <Compile Include="Repositories\WeeklyRepository.cs" />
     <Compile Include="StaticData.cs" />

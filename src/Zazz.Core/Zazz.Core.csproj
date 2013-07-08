@@ -76,6 +76,8 @@
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Exceptions\WeekliesLimitReachedException.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
+    <Compile Include="Interfaces\IClubPointRewardScenarioRepository.cs" />
+    <Compile Include="Interfaces\IClubRewardRepository.cs" />
     <Compile Include="Interfaces\IClubRewardService.cs" />
     <Compile Include="Interfaces\IOAuthClientRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenRepository.cs" />
@@ -122,8 +124,11 @@
     <Compile Include="Interfaces\IFollowRepository.cs" />
     <Compile Include="Interfaces\IFollowRequestRepository.cs" />
     <Compile Include="Interfaces\IPhotoRepository.cs" />
+    <Compile Include="Interfaces\IUserPointHistoryRepository.cs" />
+    <Compile Include="Interfaces\IUserPointRepository.cs" />
     <Compile Include="Interfaces\IUserReceivedVotesRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Interfaces\IUserRewardRepository.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />
     <Compile Include="Interfaces\IVoteService.cs" />
