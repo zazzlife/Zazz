@@ -23,7 +23,7 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null)
         {
-            throw new System.NotImplementedException();
+            return _dbSet;
         }
 
         public void InsertGraph(UserPoint point)
