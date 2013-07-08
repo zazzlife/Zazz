@@ -28,6 +28,9 @@ namespace Zazz.Data.Repositories
             if (userId.HasValue)
                 query = query.Where(p => p.UserId == userId);
 
+            if (clubId.HasValue)
+                query = query.Where(p => p.ClubId == clubId);
+
             return query;
         }
 
