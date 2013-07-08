@@ -76,6 +76,7 @@
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Exceptions\WeekliesLimitReachedException.cs" />
     <Compile Include="Interfaces\IAlbumRepository.cs" />
+    <Compile Include="Interfaces\IClubRewardService.cs" />
     <Compile Include="Interfaces\IOAuthClientRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenRepository.cs" />
     <Compile Include="Interfaces\IAppRequestTokenService.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Models\Data\LinkedAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
     <Compile Include="Models\Data\UserPoint.cs" />
+    <Compile Include="Models\Data\UserPointHistory.cs" />
     <Compile Include="Models\Data\UserPreferences.cs" />
     <Compile Include="Models\Data\UserReceivedVotes.cs" />
     <Compile Include="Models\Data\UserReward.cs" />

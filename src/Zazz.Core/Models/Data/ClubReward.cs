@@ -17,5 +17,7 @@ namespace Zazz.Core.Models.Data
         public int Cost { get; set; }
 
         public User Club { get; set; }
+
+        public bool IsEnabled { get; set; }
     }
 }

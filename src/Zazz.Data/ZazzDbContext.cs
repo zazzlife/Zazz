@@ -45,6 +45,7 @@ namespace Zazz.Data
         public IDbSet<UserReward> UserRewards { get; set; }
         public IDbSet<UserPoint> UserPoints { get; set; }
         public IDbSet<ClubPointRewardScenario> ClubPointRewardScenarios { get; set; }
+        public IDbSet<UserPointHistory> UserPointsHistory { get; set; }
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -134,6 +135,21 @@ namespace Zazz.Data
 
             modelBuilder.Entity<UserPoint>()
                 .HasRequired(p => p.Club)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserPointHistory>()
+                .HasRequired(h => h.Club)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserPointHistory>()
+                .HasRequired(h => h.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserPointHistory>()
+                .HasRequired(h => h.Reward)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
