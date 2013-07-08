@@ -86,5 +86,18 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(2, result.Count);
             Assert.AreEqual(2, result.Count(x => x.ClubId == _club.Id));
         }
+
+        [Test]
+        public void OnlyGetUser1Club1Record_OnGetAll()
+        {
+            //Arrange
+
+            //Act
+            var result = _repo.GetAll(_user.Id, _club.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(1, result.Count(x => x.ClubId == _club.Id && x.UserId == _user.Id));
+        }
     }
 }
