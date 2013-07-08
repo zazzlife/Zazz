@@ -60,5 +60,20 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(4, result.Count);
         }
+
+        [Test]
+        public void OnlyGetUser1Records_OnGetAll()
+        {
+            //Arrange
+
+            //Act
+            var result = _repo.GetAll(_user.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(2, result.Count(x => x.UserId == _user.Id));
+        }
+
+
     }
 }

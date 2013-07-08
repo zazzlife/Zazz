@@ -23,7 +23,12 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null)
         {
-            return _dbSet;
+            var query = _dbSet.AsQueryable();
+
+            if (userId.HasValue)
+                query = query.Where(p => p.UserId == userId);
+
+            return query;
         }
 
         public void InsertGraph(UserPoint point)
