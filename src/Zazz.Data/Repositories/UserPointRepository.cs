@@ -36,7 +36,7 @@ namespace Zazz.Data.Repositories
 
         public void InsertGraph(UserPoint point)
         {
-            throw new System.NotImplementedException();
+            _dbSet.Add(point);
         }
     }
 }
