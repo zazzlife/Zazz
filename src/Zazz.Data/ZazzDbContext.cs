@@ -41,6 +41,10 @@ namespace Zazz.Data
         public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
         public IDbSet<OAuthClient> OAuthClients { get; set; }
+        public IDbSet<ClubReward> ClubRewards { get; set; }
+        public IDbSet<UserReward> UserRewards { get; set; }
+        public IDbSet<UserPoint> UserPoints { get; set; }
+
 
 #if DEBUG
         public ZazzDbContext(bool dropDbOnInit = false)
@@ -118,7 +122,20 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
-            // new db design:
+            modelBuilder.Entity<UserReward>()
+                .HasRequired(r => r.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserPoint>()
+                .HasRequired(p => p.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<UserPoint>()
+                .HasRequired(p => p.Club)
+                .WithMany()
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Comment>()
                 .HasOptional(c => c.PhotoComment)

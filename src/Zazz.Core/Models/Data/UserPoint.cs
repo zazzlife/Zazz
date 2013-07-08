@@ -12,5 +12,9 @@ namespace Zazz.Core.Models.Data
         public int ClubId { get; set; }
 
         public int Points { get; set; }
+
+        public User User { get; set; }
+
+        public User Club { get; set; }
     }
 }

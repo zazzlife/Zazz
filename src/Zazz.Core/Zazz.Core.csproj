@@ -129,6 +129,7 @@
     <Compile Include="Interfaces\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\IWeeklyService.cs" />
     <Compile Include="Interfaces\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="Models\Data\ClubReward.cs" />
     <Compile Include="Models\Data\OAuthClient.cs" />
     <Compile Include="Models\Data\AppRequestToken.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
@@ -173,8 +174,10 @@
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\LinkedAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
+    <Compile Include="Models\Data\UserPoint.cs" />
     <Compile Include="Models\Data\UserPreferences.cs" />
     <Compile Include="Models\Data\UserReceivedVotes.cs" />
+    <Compile Include="Models\Data\UserReward.cs" />
     <Compile Include="Models\Data\Weekly.cs" />
     <Compile Include="Models\Data\ZazzEvent.cs" />
     <Compile Include="Models\Data\Comment.cs" />
