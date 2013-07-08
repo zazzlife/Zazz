@@ -83,6 +83,7 @@
     <Compile Include="Repositories\PhotoVoteRepositoryShould.cs" />
     <Compile Include="Repositories\PostRepositoryShould.cs" />
     <Compile Include="Repositories\TagStatRepositoryShould.cs" />
+    <Compile Include="Repositories\UserPointRepositoryShould.cs" />
     <Compile Include="Repositories\UserReceivedVotesRepositoryShould.cs" />
     <Compile Include="Repositories\UserRepositoryShould.cs" />
     <Compile Include="Repositories\ValidationTokenRepositoryShould.cs" />
