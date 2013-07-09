@@ -394,6 +394,53 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfUserIsNotAllowed_OnRemoveClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                Id = 444,
+                ClubId = 33,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = true
+            };
 
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.RemoveClubReward(reward.Id, 99));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void DisableRewardAndNotRemoveIt_OnRemoveClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                Id = 444,
+                ClubId = 33,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = true
+            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.RemoveClubReward(reward.Id, reward.ClubId);
+
+            //Assert
+            Assert.IsFalse(reward.IsEnabled);
+            _mockRepo.VerifyAll();
+        }
     }
 }

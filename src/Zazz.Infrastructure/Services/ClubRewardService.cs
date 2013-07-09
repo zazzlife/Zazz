@@ -76,11 +76,22 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
+        /// <summary>
+        /// Disabling the reward, not removing it because of UserPointsHistory relationship
+        /// </summary>
+        /// <param name="rewardId"></param>
+        /// <param name="currentUserId"></param>
         public void RemoveClubReward(int rewardId, int currentUserId)
         {
             var reward = _uow.ClubRewardRepository.GetById(rewardId);
             if (reward == null)
                 return;
+
+            if (reward.ClubId != currentUserId)
+                throw new SecurityException();
+
+            reward.IsEnabled = false;
+            _uow.SaveChanges();
         }
 
         public UserPoint RewardUserPoints(int clubId, int userId, int amount)
