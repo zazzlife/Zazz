@@ -442,5 +442,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.IsFalse(reward.IsEnabled);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void CreateAHistoryRecordAndUpdateUserPoints_OnRewardUserPoints()
+        {
+            //Arrange
+            var userId = 22;
+            var clubId = 33;
+            var scenraio = PointRewardScenario.QRCodeSan;
+            var amount = 25;
+
+            _uow.Setup(x => x.UserPointRepository.ChangeUserPoints(userId, clubId, amount));
+            _uow.Setup(x => x.UserPointHistoryRepository
+                             .InsertGraph(It.Is<UserPointHistory>(h => h.ClubId == clubId &&
+                                                                       h.UserId == userId &&
+                                                                       h.RewardScenario == scenraio)));
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.RewardUserPoints(userId, clubId, amount, scenraio);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }

@@ -30,7 +30,7 @@ namespace Zazz.Core.Interfaces
         IClubRewardRepository ClubRewardRepository { get; }
         IUserRewardRepository UserRewardRepository { get; }
         IUserPointRepository UserPointRepository { get; }
-        IUserPointHistoryRepository UserPointHistory { get; }
+        IUserPointHistoryRepository UserPointHistoryRepository { get; }
 
         void SaveChanges();
     }

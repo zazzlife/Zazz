@@ -132,7 +132,7 @@ namespace Zazz.Data
             get { return new UserPointRepository(GetContext()); }
         }
 
-        public IUserPointHistoryRepository UserPointHistory
+        public IUserPointHistoryRepository UserPointHistoryRepository
         {
             get { return new UserPointHistoryRepository(GetContext()); }
         }

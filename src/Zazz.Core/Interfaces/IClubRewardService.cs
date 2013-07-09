@@ -19,7 +19,7 @@ namespace Zazz.Core.Interfaces
         void RemoveClubReward(int rewardId, int currentUserId);
 
 
-        UserPoint RewardUserPoints(int clubId, int userId, int amount, PointRewardScenario scenario);
+        void RewardUserPoints(int userId, int clubId, int amount, PointRewardScenario scenario);
 
         UserReward RedeemPoints(int userId, ClubReward reward);
     }

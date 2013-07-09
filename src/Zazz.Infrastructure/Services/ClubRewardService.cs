@@ -95,9 +95,21 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public UserPoint RewardUserPoints(int clubId, int userId, int amount, PointRewardScenario scenario)
+        public void RewardUserPoints(int userId, int clubId, int amount, PointRewardScenario scenario)
         {
-            throw new System.NotImplementedException();
+            _uow.UserPointRepository.ChangeUserPoints(userId, clubId, amount);
+            
+            var historyRecord = new UserPointHistory
+                                {
+                                    ChangedAmount = amount,
+                                    ClubId = clubId,
+                                    Date = DateTime.UtcNow,
+                                    UserId = userId,
+                                    RewardScenario = scenario
+                                };
+
+            _uow.UserPointHistoryRepository.InsertGraph(historyRecord);
+            _uow.SaveChanges();
         }
 
         public UserReward RedeemPoints(int userId, ClubReward reward)
