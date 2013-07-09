@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Interfaces;
+﻿using Zazz.Core.Exceptions;
+using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
@@ -14,7 +15,9 @@ namespace Zazz.Infrastructure.Services
 
         public void AddRewardScenario(ClubPointRewardScenario scenario)
         {
-            throw new System.NotImplementedException();
+            var scenarioExists = _uow.ClubPointRewardScenarioRepository.Exists(scenario.ClubId, scenario.Scenario);
+            if (scenarioExists)
+                throw new AlreadyExistsException();
         }
 
         public void ChangeRewardAmount(int scenarioId, int currentUserId, int amount)
