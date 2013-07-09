@@ -444,7 +444,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CreateAHistoryRecordAndUpdateUserPoints_OnRewardUserPoints()
+        public void CreateAHistoryRecordAndUpdateUserPoints_OnAwardUserPoints()
         {
             //Arrange
             var userId = 22;
@@ -460,7 +460,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.RewardUserPoints(userId, clubId, amount, scenraio);
+            _sut.AwardUserPoints(userId, clubId, amount, scenraio);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void AddRewardAndCreateHistoryRecordAndUpdateUserPoints()
+        {
+            //Arrange
+            var reward = new ClubReward
+                         {
+                             ClubId = 22,
+                             Cost = 88,
+                             Id = 55
+                         };
+
+            var userId = 823;
+
+            _uow.Setup(x => x.UserRewardRepository
+                             .InsertGraph(It.Is<UserReward>(r => r.PointsSepnt == reward.Cost &&
+                                                                 r.RewardId == reward.Id &&
+                                                                 r.UserId == userId)));
+
+            _uow.Setup(x => x.UserPointHistoryRepository
+                             .InsertGraph(It.Is<UserPointHistory>(h => h.ClubId == reward.ClubId &&
+                                                                       h.ChangedAmount == reward.Cost*-1 &&
+                                                                       h.RewardId == reward.Id &&
+                                                                       h.UserId == userId)));
+
+            _uow.Setup(x => x.UserPointRepository.ChangeUserPoints(userId, reward.ClubId, reward.Cost*-1));
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.RedeemPoints(userId, reward);
 
             //Assert
             _mockRepo.VerifyAll();
