@@ -7,6 +7,6 @@ namespace Zazz.Core.Interfaces
     {
         IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null);
 
-        void InsertGraph(UserPoint point);
+        void ChangeUserPoints(int userId, int clubId, int amountToChange);
     }
 }

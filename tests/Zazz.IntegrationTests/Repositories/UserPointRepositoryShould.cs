@@ -99,5 +99,45 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(1, result.Count(x => x.ClubId == _club.Id && x.UserId == _user.Id));
         }
+
+        [TestCase(5)]
+        [TestCase(-5)]
+        public void AddRecordWithAGivenValueWhenNotExists_OnChangeUserPoints(int amount)
+        {
+            //Arrange
+            var newUser = Mother.GetUser();
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+
+            Assert.IsFalse(_context.UserPoints.Any(u => u.UserId == newUser.Id && u.ClubId == _club.Id));
+
+            //Act
+            _repo.ChangeUserPoints(newUser.Id, _club.Id, amount);
+
+            //Assert
+            using (var ctx = new ZazzDbContext())
+            {
+                var record = ctx.UserPoints.Single(u => u.UserId == newUser.Id && u.ClubId == _club.Id);
+                Assert.AreEqual(amount, record.Points);
+            }
+        }
+
+        [TestCase(5)]
+        [TestCase(-5)]
+        public void UpdatePointsValueWhenExists_OnChangeUserPoints(int amountToChange)
+        {
+            //Arrange
+            var originalAmount = _user1Club1Points.Points;
+
+            //Act
+            _repo.ChangeUserPoints(_user.Id, _club.Id, amountToChange);
+
+            //Assert
+            using (var ctx = new ZazzDbContext())
+            {
+                var record = ctx.UserPoints.Single(u => u.UserId == _user.Id && u.ClubId == _club.Id);
+                Assert.AreEqual(originalAmount + amountToChange, record.Points);
+            }
+        }
     }
 }
