@@ -3,6 +3,7 @@ using System.Security;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -94,7 +95,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public UserPoint RewardUserPoints(int clubId, int userId, int amount)
+        public UserPoint RewardUserPoints(int clubId, int userId, int amount, PointRewardScenario scenario)
         {
             throw new System.NotImplementedException();
         }

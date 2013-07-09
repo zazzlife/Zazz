@@ -1,4 +1,5 @@
 ﻿using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Interfaces
 {
@@ -18,7 +19,7 @@ namespace Zazz.Core.Interfaces
         void RemoveClubReward(int rewardId, int currentUserId);
 
 
-        UserPoint RewardUserPoints(int clubId, int userId, int amount);
+        UserPoint RewardUserPoints(int clubId, int userId, int amount, PointRewardScenario scenario);
 
         UserReward RedeemPoints(int userId, ClubReward reward);
     }
