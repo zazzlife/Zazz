@@ -56,6 +56,8 @@ namespace Zazz.Infrastructure.Services
             if (reward.ClubId == 0 || String.IsNullOrWhiteSpace(reward.Name))
                 throw new ArgumentException();
 
+            _uow.ClubRewardRepository.InsertGraph(reward);
+            _uow.SaveChanges();
         }
 
         public void UpdateClubReward(int rewardId, int currentUserId, ClubReward newReward)

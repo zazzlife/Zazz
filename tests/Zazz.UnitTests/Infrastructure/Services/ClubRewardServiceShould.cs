@@ -252,5 +252,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void AddClubReward_OnAddClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+                         {
+                             ClubId = 33,
+                             Name = "name",
+                             Description = "desc",
+                             IsEnabled = true
+                         };
+
+            _uow.Setup(x => x.ClubRewardRepository.InsertGraph(reward));
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.AddClubReward(reward);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
