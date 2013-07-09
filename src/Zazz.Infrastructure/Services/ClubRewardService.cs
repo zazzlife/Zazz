@@ -65,6 +65,9 @@ namespace Zazz.Infrastructure.Services
             var reward = _uow.ClubRewardRepository.GetById(rewardId);
             if (reward == null)
                 throw new NotFoundException();
+
+            if (reward.ClubId != currentUserId)
+                throw new SecurityException();
         }
 
         public void RemoveClubReward(int rewardId, int currentUserId)

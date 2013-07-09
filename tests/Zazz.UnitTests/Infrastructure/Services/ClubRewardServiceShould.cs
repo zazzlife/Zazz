@@ -305,5 +305,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfUserIsNotAllowedToEdit_OnUpdateClubReward()
+        {
+            //Arrange
+            var oldReward = new ClubReward
+                            {
+                                Id = 444,
+                                ClubId = 33,
+                                Name = "name",
+                                Description = "desc",
+                                IsEnabled = true
+                            };
+
+            var newReward = new ClubReward
+                            {
+                                Cost = 4423,
+                                Description = "new desc",
+                                Name = "new name",
+                            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(oldReward.Id))
+                .Returns(oldReward);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.UpdateClubReward(oldReward.Id, 888, newReward));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
