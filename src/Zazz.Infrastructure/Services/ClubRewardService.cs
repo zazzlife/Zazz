@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Exceptions;
+﻿using System.Security;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 
@@ -28,6 +29,9 @@ namespace Zazz.Infrastructure.Services
             var scenario = _uow.ClubPointRewardScenarioRepository.GetById(scenarioId);
             if (scenario == null)
                 throw new NotFoundException();
+
+            if (scenario.ClubId != currentUserId)
+                throw new SecurityException();
         }
 
         public void RemoveRewardScenario(int scenarioId, int currentUserId)

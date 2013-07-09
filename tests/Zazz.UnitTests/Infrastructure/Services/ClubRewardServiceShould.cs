@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System.Security;
+using Moq;
 using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -92,6 +93,28 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfUserIsNotAllowedToChangeScenario_OnChangeRewardAmount()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
 
+            var newAmount = 444;
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(scenario);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.ChangeRewardAmount(scenario.Id, 123, newAmount));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
