@@ -335,5 +335,40 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void UpdateReward_OnUpdateClubReward()
+        {
+            //Arrange
+            var oldReward = new ClubReward
+                            {
+                                Id = 444,
+                                ClubId = 33,
+                                Name = "name",
+                                Description = "desc",
+                                IsEnabled = true
+                            };
+
+            var newReward = new ClubReward
+                            {
+                                Cost = 4423,
+                                Description = "new desc",
+                                Name = "new name",
+                            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(oldReward.Id))
+                .Returns(oldReward);
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.UpdateClubReward(oldReward.Id, oldReward.ClubId, newReward);
+
+            //Assert
+            Assert.AreEqual(newReward.Name, oldReward.Name);
+            Assert.AreEqual(newReward.Description, oldReward.Description);
+            Assert.AreEqual(newReward.Cost, oldReward.Cost);
+
+            _mockRepo.VerifyAll();
+        }
     }
 }

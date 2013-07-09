@@ -68,6 +68,12 @@ namespace Zazz.Infrastructure.Services
 
             if (reward.ClubId != currentUserId)
                 throw new SecurityException();
+
+            reward.Cost = newReward.Cost;
+            reward.Description = newReward.Description;
+            reward.Name = newReward.Name;
+
+            _uow.SaveChanges();
         }
 
         public void RemoveClubReward(int rewardId, int currentUserId)
