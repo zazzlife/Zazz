@@ -143,5 +143,27 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(newAmount, scenario.Amount);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotDoAnythingIfScenarioDoesntExists_OnChangeRewardAmount()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemoveRewardScenario(scenario.Id, scenario.ClubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
