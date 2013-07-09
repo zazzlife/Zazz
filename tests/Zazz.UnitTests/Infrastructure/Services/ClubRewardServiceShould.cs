@@ -67,5 +67,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfScenarioNotExists_OnChangeRewardAmount()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
+
+            var newAmount = 444;
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.ChangeRewardAmount(scenario.Id, scenario.ClubId, newAmount));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }

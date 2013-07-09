@@ -25,7 +25,9 @@ namespace Zazz.Infrastructure.Services
 
         public void ChangeRewardAmount(int scenarioId, int currentUserId, int amount)
         {
-            throw new System.NotImplementedException();
+            var scenario = _uow.ClubPointRewardScenarioRepository.GetById(scenarioId);
+            if (scenario == null)
+                throw new NotFoundException();
         }
 
         public void RemoveRewardScenario(int scenarioId, int currentUserId)
