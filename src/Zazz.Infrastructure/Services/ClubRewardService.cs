@@ -32,6 +32,9 @@ namespace Zazz.Infrastructure.Services
 
             if (scenario.ClubId != currentUserId)
                 throw new SecurityException();
+
+            scenario.Amount = amount;
+            _uow.SaveChanges();
         }
 
         public void RemoveRewardScenario(int scenarioId, int currentUserId)

@@ -116,5 +116,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void UpdateScenario_OnChangeRewardAmount()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
+
+            var newAmount = 444;
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(scenario);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.ChangeRewardAmount(scenario.Id, scenario.ClubId, newAmount);
+
+            //Assert
+            Assert.AreEqual(newAmount, scenario.Amount);
+            _mockRepo.VerifyAll();
+        }
     }
 }
