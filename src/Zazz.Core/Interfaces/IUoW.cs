@@ -26,6 +26,11 @@ namespace Zazz.Core.Interfaces
         IUserReceivedVotesRepository UserReceivedVotesRepository { get; }
         IAppRequestTokenRepository AppRequestTokenRepository { get; }
         IOAuthRefreshTokenRepository OAuthRefreshTokenRepository { get; }
+        IClubPointRewardScenarioRepository ClubPointRewardScenarioRepository { get; }
+        IClubRewardRepository ClubRewardRepository { get; }
+        IUserRewardRepository UserRewardRepository { get; }
+        IUserPointRepository UserPointRepository { get; }
+        IUserPointHistoryRepository UserPointHistory { get; }
 
         void SaveChanges();
     }

@@ -68,9 +68,9 @@ namespace Zazz.Data
             get { return new PostRepository(GetContext()); }
         }
 
-        public IFacebookPageRepository FacebookPageRepository 
+        public IFacebookPageRepository FacebookPageRepository
         {
-            get { return new FacebookPageRepository(GetContext()); } 
+            get { return new FacebookPageRepository(GetContext()); }
         }
 
         public IFeedPhotoRepository FeedPhotoRepository
@@ -113,13 +113,37 @@ namespace Zazz.Data
             get { return new OAuthRefreshTokenRepository(GetContext()); }
         }
 
+        public IClubPointRewardScenarioRepository ClubPointRewardScenarioRepository
+        {
+            get { return new ClubPointRewardScenarioRepository(GetContext()); }
+        }
+        public IClubRewardRepository ClubRewardRepository
+        {
+            get { return new ClubRewardRepository(GetContext()); }
+        }
+
+        public IUserRewardRepository UserRewardRepository
+        {
+            get { return new UserRewardRepository(GetContext()); }
+        }
+
+        public IUserPointRepository UserPointRepository
+        {
+            get { return new UserPointRepository(GetContext()); }
+        }
+
+        public IUserPointHistoryRepository UserPointHistory
+        {
+            get { return new UserPointHistoryRepository(GetContext()); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)
             {
                 _dbContext = new ZazzDbContext();
                 _isDisposed = false;
-            }   
+            }
 
             return _dbContext;
         }
