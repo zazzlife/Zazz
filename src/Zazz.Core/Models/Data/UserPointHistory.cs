@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Core.Models.Data
@@ -24,5 +25,7 @@ namespace Zazz.Core.Models.Data
         public User Club { get; set; }
 
         public ClubReward Reward { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }
