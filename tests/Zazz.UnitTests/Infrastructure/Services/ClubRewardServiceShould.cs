@@ -41,8 +41,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act & Assert
 
             Assert.Throws<AlreadyExistsException>(() => _sut.AddRewardScenario(scenario));
+            _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void SaveNewScenario_OnAddRewardScenario()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
 
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.Exists(scenario.ClubId, scenario.Scenario))
+                .Returns(false);
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.InsertGraph(scenario));
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.AddRewardScenario(scenario);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }

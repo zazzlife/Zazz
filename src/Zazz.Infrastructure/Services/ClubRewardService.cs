@@ -18,6 +18,9 @@ namespace Zazz.Infrastructure.Services
             var scenarioExists = _uow.ClubPointRewardScenarioRepository.Exists(scenario.ClubId, scenario.Scenario);
             if (scenarioExists)
                 throw new AlreadyExistsException();
+
+            _uow.ClubPointRewardScenarioRepository.InsertGraph(scenario);
+            _uow.SaveChanges();
         }
 
         public void ChangeRewardAmount(int scenarioId, int currentUserId, int amount)
