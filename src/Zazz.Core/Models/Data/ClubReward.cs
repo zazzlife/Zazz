@@ -8,7 +8,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Club")]
         public int ClubId { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(100), Required]
         public string Name { get; set; }
 
         [MaxLength(1000)]

@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -52,7 +53,9 @@ namespace Zazz.Infrastructure.Services
 
         public void AddClubReward(ClubReward reward)
         {
-            throw new System.NotImplementedException();
+            if (reward.ClubId == 0 || String.IsNullOrWhiteSpace(reward.Name))
+                throw new ArgumentException();
+
         }
 
         public void UpdateClubReward(int rewardId, int currentUserId, ClubReward newReward)

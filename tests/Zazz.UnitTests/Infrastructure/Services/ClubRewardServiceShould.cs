@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System;
+using System.Security;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Exceptions;
@@ -208,6 +209,45 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
             _sut.RemoveRewardScenario(scenario.Id, scenario.ClubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfClubIdIsMissing_OnAddClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+                         {
+                             Name = "name",
+                             Description = "desc",
+                             IsEnabled = true
+                         };
+
+            //Act
+            Assert.Throws<ArgumentException>(() => _sut.AddClubReward(reward));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void ThrowIfNameIsMissing_OnAddClubReward(string name)
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                ClubId = 232,
+                Name = name,
+                Description = "desc",
+                IsEnabled = true
+            };
+
+            //Act
+            Assert.Throws<ArgumentException>(() => _sut.AddClubReward(reward));
 
             //Assert
             _mockRepo.VerifyAll();
