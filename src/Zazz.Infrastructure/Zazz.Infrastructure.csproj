@@ -107,6 +107,7 @@
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\AzureService.cs" />
     <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Services\ClubRewardService.cs" />
     <Compile Include="Services\CommentService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Services\FacebookService.cs" />
