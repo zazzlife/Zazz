@@ -69,6 +69,7 @@
     <Compile Include="Mother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AlbumRepositoryShould.cs" />
+    <Compile Include="Repositories\ClubPointRewardScenarioRepositoryShould.cs" />
     <Compile Include="Repositories\FacebookPageRepositoryShould.cs" />
     <Compile Include="Repositories\FacebookSyncRetryRepositoryShould.cs" />
     <Compile Include="Repositories\FeedPhotoIdRepositoryShould.cs" />
