@@ -78,7 +78,9 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveClubReward(int rewardId, int currentUserId)
         {
-            throw new System.NotImplementedException();
+            var reward = _uow.ClubRewardRepository.GetById(rewardId);
+            if (reward == null)
+                return;
         }
 
         public UserPoint RewardUserPoints(int clubId, int userId, int amount)

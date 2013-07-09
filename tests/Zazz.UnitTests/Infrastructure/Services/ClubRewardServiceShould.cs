@@ -370,5 +370,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotDoAnythingIfRewardNotExists_OnRemoveClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+                            {
+                                Id = 444,
+                                ClubId = 33,
+                                Name = "name",
+                                Description = "desc",
+                                IsEnabled = true
+                            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemoveClubReward(reward.Id, reward.ClubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
     }
 }
