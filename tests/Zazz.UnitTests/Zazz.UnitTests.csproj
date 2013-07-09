@@ -100,6 +100,7 @@
     <Compile Include="Infrastructure\Services\AppRequestTokenServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CacheServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\ClubRewardServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CommentServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CryptoServiceShould.cs" />
     <Compile Include="Infrastructure\Services\FacebookServiceShould.cs" />
