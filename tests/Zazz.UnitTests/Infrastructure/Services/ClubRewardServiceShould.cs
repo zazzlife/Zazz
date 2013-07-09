@@ -274,5 +274,36 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfRewardNotExists_OnUpdateClubReward()
+        {
+            //Arrange
+            var oldReward = new ClubReward
+                            {
+                                Id = 444,
+                                ClubId = 33,
+                                Name = "name",
+                                Description = "desc",
+                                IsEnabled = true
+                            };
+
+            var newReward = new ClubReward
+                                   {
+                                       Cost = 4423,
+                                       Description = "new desc",
+                                       Name = "new name",
+                                   };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(oldReward.Id))
+                .Returns(() => null);
+
+            //Act
+            
+            Assert.Throws<NotFoundException>(() => _sut.UpdateClubReward(oldReward.Id, oldReward.ClubId, newReward));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }

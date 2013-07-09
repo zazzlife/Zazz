@@ -62,7 +62,9 @@ namespace Zazz.Infrastructure.Services
 
         public void UpdateClubReward(int rewardId, int currentUserId, ClubReward newReward)
         {
-            throw new System.NotImplementedException();
+            var reward = _uow.ClubRewardRepository.GetById(rewardId);
+            if (reward == null)
+                throw new NotFoundException();
         }
 
         public void RemoveClubReward(int rewardId, int currentUserId)
