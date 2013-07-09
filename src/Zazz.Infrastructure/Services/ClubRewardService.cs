@@ -42,6 +42,12 @@ namespace Zazz.Infrastructure.Services
             var scenario = _uow.ClubPointRewardScenarioRepository.GetById(scenarioId);
             if (scenario == null)
                 return;
+
+            if (scenario.ClubId != currentUserId)
+                throw new SecurityException();
+
+            _uow.ClubPointRewardScenarioRepository.Remove(scenario);
+            _uow.SaveChanges();
         }
 
         public void AddClubReward(ClubReward reward)

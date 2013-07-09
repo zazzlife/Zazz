@@ -145,7 +145,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotDoAnythingIfScenarioDoesntExists_OnChangeRewardAmount()
+        public void NotDoAnythingIfScenarioDoesntExists_OnRemoveRewardScenario()
         {
             //Arrange
             var scenario = new ClubPointRewardScenario
@@ -158,6 +158,53 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
                 .Returns(() => null);
+
+            //Act
+            _sut.RemoveRewardScenario(scenario.Id, scenario.ClubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIsNotAllowedToRemove_OnRemoveRewardScenario()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(scenario);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.RemoveRewardScenario(scenario.Id, 1));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemoveScenario_OnRemoveRewardScenario()
+        {
+            //Arrange
+            var scenario = new ClubPointRewardScenario
+                           {
+                               Id = 555,
+                               Amount = 12,
+                               ClubId = 22,
+                               Scenario = PointRewardScenario.QRCodeSan
+                           };
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
+                .Returns(scenario);
+
+            _uow.Setup(x => x.ClubPointRewardScenarioRepository.Remove(scenario));
+            _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.RemoveRewardScenario(scenario.Id, scenario.ClubId);
