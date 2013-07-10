@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ScenariosViewModel>
+@{
+    ViewBag.Title = "Scenarios";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h2>Point Reward Scenarios</h2>
+    </div>
+    
+    <div>
+        <table>
+            @foreach (var s in Model)
+            {
+                <tr>
+                    <td>@s.Scenario.GetEnumDisplay()</td>
+                    <td>@s.Amount</td>
+                    <td><a href="#">Edit</a></td>
+                    <td><a href="#">Remove</a></td>
+                </tr>
+            }
+        </table>
+    </div>
+    
+</div>
+
+

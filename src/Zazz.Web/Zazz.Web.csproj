@@ -254,6 +254,7 @@
     <Compile Include="Controllers\Api\ProfileController.cs" />
     <Compile Include="Controllers\Api\WeekliesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ClubRewardsController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FacebookController.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
+    <Compile Include="Models\ScenariosViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
@@ -604,6 +606,7 @@
     <Content Include="Views\Shared\Errors\404.cshtml" />
     <Content Include="Views\Shared\Errors\500.cshtml" />
     <Content Include="Views\Account\FindFriends.cshtml" />
+    <Content Include="Views\ClubRewards\Scenarios.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
