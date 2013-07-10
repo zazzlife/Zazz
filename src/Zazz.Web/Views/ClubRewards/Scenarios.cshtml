@@ -1,6 +1,6 @@
 ﻿@using Zazz.Core.Models.Data
 @using Zazz.Core.Models.Data.Enums
-@model List<ScenariosViewModel>
+@model List<ClubRewardScenarioViewModel>
 @{
     ViewBag.Title = "Scenarios";
 }
@@ -28,8 +28,8 @@
                     <tr>
                         <td>@s.Scenario.GetEnumDisplay()</td>
                         <td>@s.Amount</td>
-                        <td><a href="#">Edit</a></td>
-                        <td><a href="#">Remove</a></td>
+                        <td><a href="~/clubrewards/editscenario/@s.ScenarioId">Edit</a></td>
+                        <td><a href="~/clubrewards/removescenario/@s.ScenarioId">Remove</a></td>
                     </tr>
                 }
 
@@ -38,7 +38,7 @@
 
         <h3>Create a new scenario</h3>
 
-        @Html.Partial("EditScenarioForm", new ClubPointRewardScenario())
+        @Html.Partial("_EditScenarioFormInLine", new ClubRewardScenarioViewModel())
 
     </div>
 

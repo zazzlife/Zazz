@@ -287,7 +287,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
-    <Compile Include="Models\ScenariosViewModel.cs" />
+    <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
@@ -607,7 +607,8 @@
     <Content Include="Views\Shared\Errors\500.cshtml" />
     <Content Include="Views\Account\FindFriends.cshtml" />
     <Content Include="Views\ClubRewards\Scenarios.cshtml" />
-    <Content Include="Views\ClubRewards\EditScenarioForm.cshtml" />
+    <Content Include="Views\ClubRewards\_EditScenarioFormInLine.cshtml" />
+    <Content Include="Views\ClubRewards\EditScenario.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

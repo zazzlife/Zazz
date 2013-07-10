@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Exceptions;
@@ -60,7 +61,7 @@ namespace Zazz.Web.Controllers
 
             var scenarios = _uow.ClubPointRewardScenarioRepository.GetAll()
                                 .Where(s => s.ClubId == currentUser.Id)
-                                .Select(s => new ScenariosViewModel
+                                .Select(s => new ClubRewardScenarioViewModel
                                              {
                                                  Amount = s.Amount,
                                                  ScenarioId = s.Id,
@@ -91,7 +92,7 @@ namespace Zazz.Web.Controllers
 
                 var scenarios = _uow.ClubPointRewardScenarioRepository.GetAll()
                                     .Where(s => s.ClubId == currentUser.Id)
-                                    .Select(s => new ScenariosViewModel
+                                    .Select(s => new ClubRewardScenarioViewModel
                                                  {
                                                      Amount = s.Amount,
                                                      ScenarioId = s.Id,
@@ -108,9 +109,55 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public ActionResult AddScenario()
+        [HttpGet]
+        public ActionResult EditScenario(int id)
         {
-            return View();
+            if (id == 0)
+                throw new HttpException(404, "not found");
+
+            var currentUserId = GetCurrentUserId();
+            var scenario = _uow.ClubPointRewardScenarioRepository.GetById(id);
+            if (scenario == null || currentUserId != scenario.ClubId)
+                throw new HttpException(404, "not found");
+
+            var vm = new ClubRewardScenarioViewModel
+                     {
+                         Amount = scenario.Amount,
+                         ScenarioId = id,
+                         Scenario = scenario.Scenario
+                     };
+
+            return View("EditScenario", vm);
+        }
+
+        [HttpPost]
+        public ActionResult EditScenario(int id, ClubRewardScenarioViewModel vm)
+        {
+            if (id == 0)
+                throw new HttpException(404, "not found");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var currentUserId = GetCurrentUserId();
+                    _rewardService.ChangeRewardAmount(id, currentUserId, vm.Amount);
+
+                    return RedirectToAction("Scenarios");
+                }
+                catch (NotFoundException)
+                {
+                    throw new HttpException(404, "not found");
+                }
+                catch (SecurityException)
+                {
+                    throw new HttpException(404, "not found");
+                }
+            }
+            else
+            {
+                return View("EditScenario", vm);
+            }
         }
 
         public ActionResult RemoveScenario()
