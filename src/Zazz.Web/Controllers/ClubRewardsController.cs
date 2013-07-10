@@ -160,9 +160,22 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public ActionResult RemoveScenario()
+        public ActionResult RemoveScenario(int id)
         {
-            return View();
+            if (id == 0)
+                throw new HttpException(404, "not found");
+
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                _rewardService.RemoveRewardScenario(id, currentUserId);
+
+                return RedirectToAction("Scenarios");
+            }
+            catch (SecurityException)
+            {
+                throw new HttpException(404, "not found");
+            }
         }
     }
 }
