@@ -97,7 +97,26 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Edit(int id, ClubReward reward)
         {
-            return View("EditReward");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var currentUserId = GetCurrentUserId();
+                    _rewardService.UpdateClubReward(id, currentUserId, reward);
+
+                    return RedirectToAction("List");
+                }
+                catch (NotFoundException)
+                {
+                    throw new HttpException(404, "not found");
+                }
+                catch (SecurityException)
+                {
+                    throw new HttpException(404, "not found");
+                }
+            }
+
+            return View("EditReward", reward);
         }
 
         public ActionResult Delete()
