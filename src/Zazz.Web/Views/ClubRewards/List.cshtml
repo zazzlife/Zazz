@@ -34,7 +34,12 @@
         </tr>
         @foreach (var item in Model)
         {
-            <tr>
+            if (!currentUserIsTheOwner && !item.IsEnabled)
+            {
+                continue;
+            }
+            
+            <tr @(item.IsEnabled ? null : "style=opacity:0.4;")>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
