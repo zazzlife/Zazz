@@ -37,7 +37,15 @@ namespace Zazz.Web.Controllers
 
         public ActionResult List(int? id)
         {
-            return View();
+            if (!id.HasValue)
+                id = GetCurrentUserId();
+
+            var rewards = _uow.ClubRewardRepository
+                              .GetAll()
+                              .Where(c => c.ClubId == id.Value)
+                              .ToList();
+
+            return View(rewards);
         }
 
         public ActionResult Create()
