@@ -444,6 +444,78 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void NotDoAnythingIfRewardNotExists_OnEnableClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                Id = 444,
+                ClubId = 33,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = false
+            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(() => null);
+
+            //Act
+            _sut.EnableClubReward(reward.Id, reward.ClubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIsNotAllowed_OnEnableClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                Id = 444,
+                ClubId = 33,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = false
+            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.EnableClubReward(reward.Id, 99));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void EnableRewardAndNotRemoveIt_OnEnableClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                Id = 444,
+                ClubId = 33,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = false
+            };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.EnableClubReward(reward.Id, reward.ClubId);
+
+            //Assert
+            Assert.IsTrue(reward.IsEnabled);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void CreateAHistoryRecordAndUpdateUserPoints_OnAwardUserPoints()
         {
             //Arrange

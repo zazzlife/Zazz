@@ -90,6 +90,19 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
+        public void EnableClubReward(int rewardId, int currentUserId)
+        {
+            var reward = _uow.ClubRewardRepository.GetById(rewardId);
+            if (reward == null)
+                return;
+
+            if (reward.ClubId != currentUserId)
+                throw new SecurityException();
+
+            reward.IsEnabled = true;
+            _uow.SaveChanges();
+        }
+
         public void AwardUserPoints(int userId, int clubId, int amount, PointRewardScenario scenario)
         {
             _uow.UserPointRepository.ChangeUserPoints(userId, clubId, amount);
