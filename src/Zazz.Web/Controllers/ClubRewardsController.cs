@@ -82,9 +82,22 @@ namespace Zazz.Web.Controllers
             return View("EditReward", reward);
         }
 
-        public ActionResult Edit()
+        [HttpGet]
+        public ActionResult Edit(int id)
         {
-            return View();
+            var currentUserId = GetCurrentUserId();
+
+            var reward = _uow.ClubRewardRepository.GetById(id);
+            if (reward == null || reward.ClubId != currentUserId)
+                throw new HttpException(404, "not found");
+
+            return View("EditReward", reward);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, ClubReward reward)
+        {
+            return View("EditReward");
         }
 
         public ActionResult Delete()
