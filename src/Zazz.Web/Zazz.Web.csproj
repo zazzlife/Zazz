@@ -607,6 +607,7 @@
     <Content Include="Views\Shared\Errors\500.cshtml" />
     <Content Include="Views\Account\FindFriends.cshtml" />
     <Content Include="Views\ClubRewards\Scenarios.cshtml" />
+    <Content Include="Views\ClubRewards\EditScenarioForm.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
