@@ -9,34 +9,39 @@
     <div class="page-header">
         <h2>Point Reward Scenarios</h2>
     </div>
-    
+
     <div>
         @if (Model.Count > 0)
         {
-            <table>
-            <thead>
-                <tr><th>Scenario</th><th>Amount</th><th></th><th></th></tr>
-            </thead>
+            <table class="table table-condensed table-striped" style="margin-bottom: 100px;">
+                <thead>
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Amount</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-            @foreach (var s in Model)
-            {
-                <tr>
-                    <td>@s.Scenario.GetEnumDisplay()</td>
-                    <td>@s.Amount</td>
-                    <td><a href="#">Edit</a></td>
-                    <td><a href="#">Remove</a></td>
-                </tr>
-            }
-            
-        </table>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.Scenario.GetEnumDisplay()</td>
+                        <td>@s.Amount</td>
+                        <td><a href="#">Edit</a></td>
+                        <td><a href="#">Remove</a></td>
+                    </tr>
+                }
+
+            </table>
         }
-        
+
         <h3>Create a new scenario</h3>
-        
+
         @Html.Partial("EditScenarioForm", new ClubPointRewardScenario())
 
     </div>
-    
+
 </div>
 
 
