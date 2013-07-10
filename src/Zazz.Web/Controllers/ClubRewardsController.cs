@@ -29,15 +29,18 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("List");
+            var userId = GetCurrentUserId();
+            var accountType = UserService.GetAccountType(userId);
+
+            return View(accountType);
         }
 
-        public ActionResult List()
+        public ActionResult List(int? id)
         {
             return View();
         }
 
-        public ActionResult New()
+        public ActionResult Create()
         {
             return View();
         }
@@ -47,7 +50,7 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
-        public ActionResult Remove()
+        public ActionResult Delete()
         {
             return View();
         }
