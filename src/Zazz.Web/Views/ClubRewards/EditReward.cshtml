@@ -1,7 +1,7 @@
 ﻿@model Zazz.Core.Models.Data.ClubReward
 
 @{
-    ViewBag.Title = "Create Reward";
+    ViewBag.Title = "Edit - Reward";
 }
 
 <div class="container" style="margin-top: 50px;">
@@ -11,7 +11,7 @@
         @Html.ValidationSummary(true)
 
         <fieldset>
-            <legend>Create new reward</legend>
+            <legend>Edit reward from</legend>
 
             <div class="editor-label">
                 @Html.LabelFor(model => model.Name)
@@ -38,8 +38,8 @@
             </div>
 
             <p class="form-actions">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                @Html.ActionLink("Back to List", "List", null, new { @class = "btn"} )
+                <input type="submit" value="Submit" class="btn btn-primary" />
+                @Html.ActionLink("Cancel", "List", null, new { @class = "btn"} )
             </p>
         </fieldset>
     }

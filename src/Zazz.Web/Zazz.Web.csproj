@@ -611,7 +611,7 @@
     <Content Include="Views\ClubRewards\EditScenario.cshtml" />
     <Content Include="Views\ClubRewards\Index.cshtml" />
     <Content Include="Views\ClubRewards\List.cshtml" />
-    <Content Include="Views\ClubRewards\Create.cshtml" />
+    <Content Include="Views\ClubRewards\EditReward.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

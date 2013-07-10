@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
             if (accountType == AccountType.User)
                 throw new HttpException(404, "not found");
 
-            return View();
+            return View("EditReward");
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -79,7 +79,7 @@ namespace Zazz.Web.Controllers
                 return RedirectToAction("List", new { id = userId });
             }
 
-            return View(reward);
+            return View("EditReward", reward);
         }
 
         public ActionResult Edit()
