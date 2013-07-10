@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Rewards List";
+
+    var currentUserIsTheOwner = (bool)ViewBag.CurrentUserIsTheOwner;
 }
 
 <div class="container">
@@ -10,9 +12,12 @@
         <h2>Rewards</h2>
     </div>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+    @if (currentUserIsTheOwner)
+    {
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    }
 
     <table class="table table-condensed table-striped">
         <tr>
@@ -40,17 +45,18 @@
                     @Html.DisplayFor(modelItem => item.Cost)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @if (item.IsEnabled)
+                    @if (currentUserIsTheOwner)
                     {
-                        @Html.ActionLink("Disable", "Disable", new {id = item.Id})
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
+                        if (item.IsEnabled)
+                        {
+                        @Html.ActionLink("Disable", "Disable", new { id = item.Id })
+                        }
+                        else
+                        {
+                        @Html.ActionLink("Enable", "Enable", new { id = item.Id })
+                        }
                     }
-                    else
-                    {
-                        @Html.ActionLink("Enable", "Enable", new {id = item.Id})
-                    }
-
-                    
                 </td>
             </tr>
         }

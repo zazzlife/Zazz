@@ -37,12 +37,16 @@ namespace Zazz.Web.Controllers
 
         public ActionResult List(int? id)
         {
+            var currentUserId = GetCurrentUserId();
             if (!id.HasValue)
-                id = GetCurrentUserId();
+                id = currentUserId;
 
             var accountType = UserService.GetAccountType(id.Value);
             if (accountType == AccountType.User)
                 throw new HttpException(404, "not found");
+
+            var currentUserIsTheOwner = currentUserId == id.Value;
+            ViewBag.CurrentUserIsTheOwner = currentUserIsTheOwner;
 
             var rewards = _uow.ClubRewardRepository
                               .GetAll()
@@ -144,7 +148,21 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Enable(int id)
         {
-            return View();
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                _rewardService.EnableClubReward(id, currentUserId);
+
+                return RedirectToAction("List");
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpException(404, "not found");
+            }
+            catch (SecurityException)
+            {
+                throw new HttpException(404, "not found");
+            }
         }
 
         [HttpGet]
