@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -73,30 +74,38 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Scenarios(int amount, PointRewardScenario scenario)
         {
-            var currentUser = UserService.GetUser(User.Identity.Name);
-            if (currentUser.AccountType == AccountType.User)
-                return RedirectToAction("List");
+            try
+            {
+                var currentUser = UserService.GetUser(User.Identity.Name);
+                if (currentUser.AccountType == AccountType.User)
+                    return RedirectToAction("List");
 
-            var rewardScenario = new ClubPointRewardScenario
-                                 {
-                                     Amount = amount,
-                                     ClubId = currentUser.Id,
-                                     Scenario = scenario
-                                 };
+                var rewardScenario = new ClubPointRewardScenario
+                                     {
+                                         Amount = amount,
+                                         ClubId = currentUser.Id,
+                                         Scenario = scenario
+                                     };
 
-           _rewardService.AddRewardScenario(rewardScenario);
+                _rewardService.AddRewardScenario(rewardScenario);
 
-            var scenarios = _uow.ClubPointRewardScenarioRepository.GetAll()
-                                .Where(s => s.ClubId == currentUser.Id)
-                                .Select(s => new ScenariosViewModel
-                                {
-                                    Amount = s.Amount,
-                                    ScenarioId = s.Id,
-                                    Scenario = s.Scenario
-                                })
-                                .ToList();
+                var scenarios = _uow.ClubPointRewardScenarioRepository.GetAll()
+                                    .Where(s => s.ClubId == currentUser.Id)
+                                    .Select(s => new ScenariosViewModel
+                                                 {
+                                                     Amount = s.Amount,
+                                                     ScenarioId = s.Id,
+                                                     Scenario = s.Scenario
+                                                 })
+                                    .ToList();
 
-            return View(scenarios);
+                return View(scenarios);
+            }
+            catch (AlreadyExistsException)
+            {
+                ShowAlert("A scenario with the same condition already exists.", AlertType.Error);
+                return Scenarios();
+            }
         }
 
         public ActionResult AddScenario()
