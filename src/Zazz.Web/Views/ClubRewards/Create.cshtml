@@ -1,0 +1,50 @@
+﻿@model Zazz.Core.Models.Data.ClubReward
+
+@{
+    ViewBag.Title = "Create Reward";
+}
+
+<div class="container" style="margin-top: 50px;">
+    
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <fieldset>
+            <legend>Create new reward</legend>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Description)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Cost)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Cost)
+                @Html.ValidationMessageFor(model => model.Cost)
+            </div>
+
+            <p class="form-actions">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                @Html.ActionLink("Back to List", "List", null, new { @class = "btn"} )
+            </p>
+        </fieldset>
+    }
+
+    <div>
+    
+    </div>
+</div>
