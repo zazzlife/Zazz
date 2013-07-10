@@ -40,6 +40,10 @@ namespace Zazz.Web.Controllers
             if (!id.HasValue)
                 id = GetCurrentUserId();
 
+            var accountType = UserService.GetAccountType(id.Value);
+            if (accountType == AccountType.User)
+                throw new HttpException(404, "not found");
+
             var rewards = _uow.ClubRewardRepository
                               .GetAll()
                               .Where(c => c.ClubId == id.Value)
