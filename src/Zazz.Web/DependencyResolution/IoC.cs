@@ -95,6 +95,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IVoteService>().Use<VoteService>();
                             x.For<IAppRequestTokenService>().Use<AppRequestTokenService>();
                             x.For<IOAuthService>().Use<OAuthService>();
+                            x.For<IClubRewardService>().Use<ClubRewardService>();
 
                             x.For<IPhotoService>().Use<PhotoService>()
                              .Ctor<string>("rootPath").Is(rootDirectory)

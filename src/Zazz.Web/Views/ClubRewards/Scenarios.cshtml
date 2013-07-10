@@ -32,11 +32,6 @@
         }
         
         <h3>Create a new scenario</h3>
-        @*<form class="form-inline">
-            @Html.DropDownList("scenario", PointRewardScenario.QRCodeSan.EnumToSelectList(), new { @class="span4"})
-            <input style="margin: 0 5px;" class="span2" name="amount" placeholder="Amount"/>
-            <button type="submit" class="btn">Submit</button>
-        </form>*@
         
         @Html.Partial("EditScenarioForm", new ClubPointRewardScenario())
 

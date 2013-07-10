@@ -6,7 +6,7 @@
     @Html.ValidationSummary(true)
 
     @Html.DropDownListFor(m => m.Scenario, Model.Scenario.EnumToSelectList(), new { @class = "span4" })
-    @Html.TextBoxFor(model => model.Amount, new { @class="span1"})
+    @Html.TextBoxFor(model => model.Amount, new { @class="span1", @style="margin: 0 5px;"})
     @Html.ValidationMessageFor(model => model.Amount)
 
     <input class="btn" type="submit" value="Create" />
