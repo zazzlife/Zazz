@@ -50,7 +50,32 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Create()
         {
+            var userId = GetCurrentUserId();
+
+            var accountType = UserService.GetAccountType(userId);
+            if (accountType == AccountType.User)
+                throw new HttpException(404, "not found");
+
             return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult Create(ClubReward reward)
+        {
+            var userId = GetCurrentUserId();
+            var accountType = UserService.GetAccountType(userId);
+            if (accountType == AccountType.User)
+                throw new HttpException(404, "not found");
+
+            if (ModelState.IsValid)
+            {
+                reward.ClubId = userId;
+                _rewardService.AddClubReward(reward);
+
+                return RedirectToAction("List", new { id = userId });
+            }
+
+            return View(reward);
         }
 
         public ActionResult Edit()
