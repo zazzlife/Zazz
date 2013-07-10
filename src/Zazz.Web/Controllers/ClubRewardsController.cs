@@ -71,6 +71,8 @@ namespace Zazz.Web.Controllers
             if (accountType == AccountType.User)
                 throw new HttpException(404, "not found");
 
+            reward.IsEnabled = true;
+
             if (ModelState.IsValid)
             {
                 reward.ClubId = userId;
@@ -99,6 +101,8 @@ namespace Zazz.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                reward.IsEnabled = true;
+
                 try
                 {
                     var currentUserId = GetCurrentUserId();
@@ -119,7 +123,26 @@ namespace Zazz.Web.Controllers
             return View("EditReward", reward);
         }
 
-        public ActionResult Delete()
+        public ActionResult Disable(int id)
+        {
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                _rewardService.DisableClubReward(id, currentUserId);
+
+                return RedirectToAction("List");
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpException(404, "not found");
+            }
+            catch (SecurityException)
+            {
+                throw new HttpException(404, "not found");
+            }
+        }
+
+        public ActionResult Enable(int id)
         {
             return View();
         }

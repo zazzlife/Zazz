@@ -372,7 +372,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotDoAnythingIfRewardNotExists_OnRemoveClubReward()
+        public void NotDoAnythingIfRewardNotExists_OnDisableClubReward()
         {
             //Arrange
             var reward = new ClubReward
@@ -388,14 +388,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            _sut.RemoveClubReward(reward.Id, reward.ClubId);
+            _sut.DisableClubReward(reward.Id, reward.ClubId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserIsNotAllowed_OnRemoveClubReward()
+        public void ThrowIfUserIsNotAllowed_OnDisableClubReward()
         {
             //Arrange
             var reward = new ClubReward
@@ -411,14 +411,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(reward);
 
             //Act
-            Assert.Throws<SecurityException>(() => _sut.RemoveClubReward(reward.Id, 99));
+            Assert.Throws<SecurityException>(() => _sut.DisableClubReward(reward.Id, 99));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void DisableRewardAndNotRemoveIt_OnRemoveClubReward()
+        public void DisableRewardAndNotRemoveIt_OnDisableClubReward()
         {
             //Arrange
             var reward = new ClubReward
@@ -436,7 +436,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.RemoveClubReward(reward.Id, reward.ClubId);
+            _sut.DisableClubReward(reward.Id, reward.ClubId);
 
             //Assert
             Assert.IsFalse(reward.IsEnabled);

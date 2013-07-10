@@ -41,7 +41,16 @@
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @if (item.IsEnabled)
+                    {
+                        @Html.ActionLink("Disable", "Disable", new {id = item.Id})
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Enable", "Enable", new {id = item.Id})
+                    }
+
+                    
                 </td>
             </tr>
         }

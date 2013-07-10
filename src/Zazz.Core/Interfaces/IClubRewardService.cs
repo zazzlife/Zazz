@@ -16,7 +16,7 @@ namespace Zazz.Core.Interfaces
 
         void UpdateClubReward(int rewardId, int currentUserId, ClubReward newReward);
 
-        void RemoveClubReward(int rewardId, int currentUserId);
+        void DisableClubReward(int rewardId, int currentUserId);
 
 
         void AwardUserPoints(int userId, int clubId, int amount, PointRewardScenario scenario);
