@@ -134,6 +134,10 @@ namespace Zazz.Infrastructure.Services
             if (userPoints == null || userPoints.Points < reward.Cost)
                 throw new NotEnoughPointsException();
 
+            var recordExists = _uow.UserRewardRepository.Exists(userId, rewardId);
+            if (recordExists)
+                throw new AlreadyExistsException();
+
             var historyRecord = new UserPointHistory
                                 {
                                     ChangedAmount = amountToRemove,

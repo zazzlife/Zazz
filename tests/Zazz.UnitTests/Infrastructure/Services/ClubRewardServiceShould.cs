@@ -571,6 +571,41 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfRewardAlreadyExists_OnRedeemPoints()
+        {
+            //Arrange
+            var userPoints = new UserPoint
+            {
+                ClubId = 22,
+                UserId = 44,
+                Points = 50
+            };
+
+            var reward = new ClubReward
+            {
+                ClubId = userPoints.ClubId,
+                Cost = 50,
+                Id = 55
+            };
+
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+                .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
+
+            _uow.Setup(x => x.UserRewardRepository.Exists(userPoints.UserId, reward.Id))
+                .Returns(true);
+
+            //Act
+            Assert.Throws<AlreadyExistsException>(() => _sut.RedeemPoints(userPoints.UserId, reward.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void AddRewardAndCreateHistoryRecordAndUpdateUserPoints_OnRedeemPoints()
         {
             //Arrange
@@ -596,6 +631,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
                 .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
+
+            _uow.Setup(x => x.UserRewardRepository.Exists(userPoints.UserId, reward.Id))
+                .Returns(false);
 
             _uow.Setup(x => x.UserRewardRepository
                              .InsertGraph(It.Is<UserReward>(r => r.PointsSepnt == reward.Cost &&
