@@ -14,6 +14,7 @@ namespace Zazz.Core.Models.Data
         [MaxLength(1000)]
         public string Description { get; set; }
 
+        [Range(0, 1000000)]
         public int Cost { get; set; }
 
         public User Club { get; set; }

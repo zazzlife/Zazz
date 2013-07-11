@@ -255,6 +255,26 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfCostIsLessThan0_OnAddClubReward()
+        {
+            //Arrange
+            var reward = new ClubReward
+            {
+                ClubId = 232,
+                Name = "name",
+                Description = "desc",
+                IsEnabled = true,
+                Cost = -1
+            };
+
+            //Act
+            Assert.Throws<ArgumentException>(() => _sut.AddClubReward(reward));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void AddClubReward_OnAddClubReward()
         {
             //Arrange
