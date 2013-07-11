@@ -45,13 +45,28 @@ namespace Zazz.Web.Controllers
             if (accountType == AccountType.User)
                 throw new HttpException(404, "not found");
 
+            var isCurrentUserOwner = id.Value == currentUserId;
+            var currentUserAccountType = isCurrentUserOwner
+                                             ? accountType
+                                             : UserService.GetAccountType(currentUserId);
+            var currentUserPoints = 0;
+            if (!isCurrentUserOwner && currentUserAccountType == AccountType.User)
+            {
+                currentUserPoints = _uow.UserPointRepository.GetAll(currentUserId, id.Value)
+                                        .Select(p => p.Points)
+                                        .SingleOrDefault();
+            }
+
             var vm = new ClubRewardsListViewModel
                      {
                          IsCurrentUserOwner = currentUserId == id.Value,
                          Rewards = _uow.ClubRewardRepository
                                        .GetAll()
                                        .Where(c => c.ClubId == id.Value)
-                                       .ToList()
+                                       .ToList(),
+                         CurrentUserAccountType = currentUserAccountType,
+                         ClubName = UserService.GetUserDisplayName(id.Value),
+                         CurrentUserPoints = currentUserPoints
                      };
 
             return View(vm);
@@ -290,6 +305,11 @@ namespace Zazz.Web.Controllers
             {
                 throw new HttpException(404, "not found");
             }
+        }
+
+        public ActionResult Redeem(int id)
+        {
+            return View();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model ClubRewardsListViewModel
+﻿@using Zazz.Core.Models.Data.Enums
+@model ClubRewardsListViewModel
 
 @{
     ViewBag.Title = "Rewards List";
@@ -10,16 +11,23 @@
     <div class="page-header">
         <h2>Rewards</h2>
     </div>
-
-    @if (Model.IsCurrentUserOwner)
+    
+    @if (!Model.IsCurrentUserOwner && Model.CurrentUserAccountType == AccountType.User)
     {
-        <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
+        <div class="text-right">
+            <h4>Total Points: @Model.CurrentUserPoints</h4>
+        </div>
     }
+    
+    @if (Model.IsCurrentUserOwner)
+        {
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+        }
 
     <table class="table table-condensed table-striped">
-            <tr>
+        <tr>
             <th>
                 @Html.DisplayColumnNameFor(Model.Rewards, m => m.Name)
             </th>
@@ -31,7 +39,7 @@
             </th>
             <th></th>
         </tr>
-        
+
         @foreach (var item in Model.Rewards)
         {
             if (!Model.IsCurrentUserOwner && !item.IsEnabled)
@@ -53,6 +61,7 @@
                     @if (Model.IsCurrentUserOwner)
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
+
                         if (item.IsEnabled)
                         {
                             @Html.ActionLink("Disable", "Disable", new { id = item.Id })
@@ -60,6 +69,17 @@
                         else
                         {
                             @Html.ActionLink("Enable", "Enable", new { id = item.Id })
+                        }
+                    }
+                    else if (Model.CurrentUserAccountType == AccountType.User)
+                    {
+                        if (Model.CurrentUserPoints >= item.Cost)
+                         {
+                             @Html.ActionLink("Reedem points", "Redeem", new { id = item.Id })
+                         }
+                        else
+                        {
+                            <button style="opacity: 0.4;" title="not enough points" class="btn-link disabled" disabled="disabled">Reedem points</button>
                         }
                     }
                 </td>

@@ -6,6 +6,10 @@ namespace Zazz.Web.Models
 {
     public class ClubRewardsListViewModel
     {
+        public string ClubName { get; set; }
+
+        public int CurrentUserPoints { get; set; }
+
         public bool IsCurrentUserOwner { get; set; }
 
         public AccountType CurrentUserAccountType { get; set; }
