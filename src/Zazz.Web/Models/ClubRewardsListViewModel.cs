@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -22,7 +23,12 @@ namespace Zazz.Web.Models
     {
         public int Id { get; set; }
 
-        [MaxLength(100), Required]
+        public int ClubId { get; set; }
+
+        [Display(Name = "Club")]
+        public string ClubName { get; set; }
+
+        [MaxLength(100), Required, Display(Name = "Reward Name")]
         public string Name { get; set; }
 
         [MaxLength(1000)]
@@ -34,5 +40,8 @@ namespace Zazz.Web.Models
         public bool IsEnabled { get; set; }
 
         public bool AlreadyPurchased { get; set; }
+
+        [Display(Name = "Date")]
+        public DateTime RedeemedDate { get; set; }
     }
 }

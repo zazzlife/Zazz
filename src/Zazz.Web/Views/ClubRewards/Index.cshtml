@@ -8,20 +8,20 @@
     <div class="page-header">
         <h2>Rewards</h2>
     </div>
-    
+
     links:
     
     <ul>
-    
-    @if (Model == AccountType.Club)
-    {
-        <li>@Html.ActionLink("Manage point reward scenarios", "Scenarios")</li>
-        <li>@Html.ActionLink("Manage rewards", "List")</li>
-    }
-    else
-    {
-        
-    }
+
+        @if (Model == AccountType.Club)
+        {
+            <li>@Html.ActionLink("Manage point reward scenarios", "Scenarios")</li>
+            <li>@Html.ActionLink("Manage rewards", "List")</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("Your current rewards", "ActiveRewards")</li>
+        }
 
     </ul>
 </div>

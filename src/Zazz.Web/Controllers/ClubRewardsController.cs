@@ -324,11 +324,11 @@ namespace Zazz.Web.Controllers
         public ActionResult ConfirmRedeem(int id)
         {
             if (id == 0)
-                throw new HttpException(400, "not found");
+                throw new HttpException(404, "not found");
 
             var reward = _uow.ClubRewardRepository.GetById(id);
             if (reward == null)
-                throw new HttpException(400, "not found");
+                throw new HttpException(404, "not found");
 
             return View(reward);
         }
@@ -337,7 +337,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Redeem(int id, int clubId)
         {
             if (id == 0)
-                throw new HttpException(400, "not found");
+                throw new HttpException(404, "not found");
 
             try
             {
@@ -348,7 +348,7 @@ namespace Zazz.Web.Controllers
             }
             catch (NotFoundException)
             {
-                throw new HttpException(400, "not found");
+                throw new HttpException(404, "not found");
             }
             catch (NotEnoughPointsException)
             {
@@ -360,6 +360,28 @@ namespace Zazz.Web.Controllers
             }
 
             return RedirectToAction("List", new {id = clubId});
+        }
+
+        public ActionResult ActiveRewards()
+        {
+            var currentUserId = GetCurrentUserId();
+            var accountType = UserService.GetAccountType(currentUserId);
+            if (accountType == AccountType.Club)
+                throw new HttpException(404, "not found");
+
+            var rewards = _uow.UserRewardRepository
+                              .GetAll()
+                              .Where(r => r.UserId == currentUserId)
+                              .Select(r => new ClubRewardViewModel
+                                           {
+                                               ClubId = r.Reward.ClubId,
+                                               Description = r.Reward.Description,
+                                               Name = r.Reward.Name,
+                                               RedeemedDate = r.RedeemedDate,
+                                               ClubName = r.Reward.Club.ClubDetail.ClubName
+                                           });
+
+            return View(rewards);
         }
     }
 }

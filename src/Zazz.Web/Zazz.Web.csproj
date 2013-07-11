@@ -614,6 +614,7 @@
     <Content Include="Views\ClubRewards\List.cshtml" />
     <Content Include="Views\ClubRewards\EditReward.cshtml" />
     <Content Include="Views\ClubRewards\Redeem.cshtml" />
+    <Content Include="Views\ClubRewards\ActiveRewards.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

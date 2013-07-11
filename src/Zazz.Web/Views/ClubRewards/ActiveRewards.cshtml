@@ -1,0 +1,48 @@
+﻿@using Zazz.Infrastructure.Helpers
+@model IEnumerable<ClubRewardViewModel>
+
+@{
+    ViewBag.Title = "Current Rewards";
+}
+
+<div class="container">
+    <div class="page-header">
+        <h2>Current Rewards</h2>
+    </div>
+
+    <table class="table table-condensed table-striped">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClubName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RedeemedDate)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a href="@Url.Action("Profile", "User", new { id = item.ClubId, friendlySeoName=item.ClubName.ToUrlFriendlyString() })">@item.ClubName</a> 
+                </td>
+                <td>
+                    <span title="@item.RedeemedDate.ToRelativeTime()">@item.RedeemedDate.ToShortDateString()</span>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
