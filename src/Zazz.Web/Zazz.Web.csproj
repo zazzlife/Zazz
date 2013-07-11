@@ -288,6 +288,7 @@
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
+    <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />

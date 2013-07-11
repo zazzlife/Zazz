@@ -101,5 +101,17 @@ namespace Zazz.Web.Helpers
 
             return new SelectList(values, "Id", "Name", enumobj);
         }
+
+        public static IHtmlString DisplayColumnNameFor<TModel, TClass, TProperty>
+            (this HtmlHelper<TModel> helper, IEnumerable<TClass> model,
+             Expression<Func<TClass, TProperty>> expression)
+        {
+            var name = ExpressionHelper.GetExpressionText(expression);
+            name = helper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(name);
+            var metadata = ModelMetadataProviders.Current.GetMetadataForProperty(
+                () => Activator.CreateInstance<TClass>(), typeof (TClass), name);
+
+            return new MvcHtmlString(metadata.DisplayName ?? name);
+        }
     }
 }

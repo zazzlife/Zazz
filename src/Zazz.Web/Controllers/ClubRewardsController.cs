@@ -45,15 +45,16 @@ namespace Zazz.Web.Controllers
             if (accountType == AccountType.User)
                 throw new HttpException(404, "not found");
 
-            var currentUserIsTheOwner = currentUserId == id.Value;
-            ViewBag.CurrentUserIsTheOwner = currentUserIsTheOwner;
+            var vm = new ClubRewardsListViewModel
+                     {
+                         IsCurrentUserOwner = currentUserId == id.Value,
+                         Rewards = _uow.ClubRewardRepository
+                                       .GetAll()
+                                       .Where(c => c.ClubId == id.Value)
+                                       .ToList()
+                     };
 
-            var rewards = _uow.ClubRewardRepository
-                              .GetAll()
-                              .Where(c => c.ClubId == id.Value)
-                              .ToList();
-
-            return View(rewards);
+            return View(vm);
         }
 
         public ActionResult Create()

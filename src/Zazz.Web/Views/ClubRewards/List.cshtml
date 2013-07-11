@@ -1,9 +1,8 @@
-﻿@model IEnumerable<Zazz.Core.Models.Data.ClubReward>
+﻿@model ClubRewardsListViewModel
 
 @{
     ViewBag.Title = "Rewards List";
 
-    var currentUserIsTheOwner = (bool)ViewBag.CurrentUserIsTheOwner;
 }
 
 <div class="container">
@@ -12,7 +11,7 @@
         <h2>Rewards</h2>
     </div>
 
-    @if (currentUserIsTheOwner)
+    @if (Model.IsCurrentUserOwner)
     {
         <p>
             @Html.ActionLink("Create New", "Create")
@@ -20,21 +19,22 @@
     }
 
     <table class="table table-condensed table-striped">
-        <tr>
+            <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayColumnNameFor(Model.Rewards, m => m.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayColumnNameFor(Model.Rewards, m => m.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cost)
+                @Html.DisplayColumnNameFor(Model.Rewards, m => m.Cost)
             </th>
             <th></th>
         </tr>
-        @foreach (var item in Model)
+        
+        @foreach (var item in Model.Rewards)
         {
-            if (!currentUserIsTheOwner && !item.IsEnabled)
+            if (!Model.IsCurrentUserOwner && !item.IsEnabled)
             {
                 continue;
             }
@@ -50,16 +50,16 @@
                     @Html.DisplayFor(modelItem => item.Cost)
                 </td>
                 <td>
-                    @if (currentUserIsTheOwner)
+                    @if (Model.IsCurrentUserOwner)
                     {
                         @Html.ActionLink("Edit", "Edit", new { id = item.Id }) @:|
                         if (item.IsEnabled)
                         {
-                        @Html.ActionLink("Disable", "Disable", new { id = item.Id })
+                            @Html.ActionLink("Disable", "Disable", new { id = item.Id })
                         }
                         else
                         {
-                        @Html.ActionLink("Enable", "Enable", new { id = item.Id })
+                            @Html.ActionLink("Enable", "Enable", new { id = item.Id })
                         }
                     }
                 </td>
