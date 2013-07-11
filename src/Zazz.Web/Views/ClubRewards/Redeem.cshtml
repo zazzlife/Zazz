@@ -13,7 +13,7 @@
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.ClubId)
                 
-                <h4>Are you sure you want to spend @Model.Cost points for "@Model.Name" reward?</h4>
+                <h4>Are you sure you want to spend @Model.Cost @(Model.Cost == 1 ? "point" : "points") for "@Model.Name" reward?</h4>
                 <blockquote>
                     <p>@Model.Description</p>
                 </blockquote>
