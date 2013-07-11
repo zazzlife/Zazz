@@ -129,10 +129,9 @@ namespace Zazz.Infrastructure.Services
 
             var amountToRemove = reward.Cost*-1;
             var userPoints = _uow.UserPointRepository.GetAll(userId, reward.ClubId)
-                                 .Select(p => p.Points)
                                  .SingleOrDefault();
 
-            if (userPoints < reward.Cost)
+            if (userPoints == null || userPoints.Points < reward.Cost)
                 throw new NotEnoughPointsException();
 
             var historyRecord = new UserPointHistory
@@ -154,10 +153,9 @@ namespace Zazz.Infrastructure.Services
 
             _uow.UserPointHistoryRepository.InsertGraph(historyRecord);
             _uow.UserRewardRepository.InsertGraph(userReward);
+            userPoints.Points += amountToRemove;
 
             _uow.SaveChanges();
-
-            _uow.UserPointRepository.ChangeUserPoints(userId, reward.ClubId, amountToRemove);
 
             return userReward;
         }

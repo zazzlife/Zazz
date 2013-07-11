@@ -588,6 +588,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
                              Id = 55
                          };
 
+            var pointsBeforeRedeeming = userPoints.Points;
+            var expectedPointsAfterRedeeming = pointsBeforeRedeeming - reward.Cost;
+
             _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
                 .Returns(reward);
 
@@ -605,14 +608,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                                                        h.RewardId == reward.Id &&
                                                                        h.UserId == userPoints.UserId)));
 
-            _uow.Setup(x => x.UserPointRepository.ChangeUserPoints(userPoints.UserId, reward.ClubId, reward.Cost * -1));
-
             _uow.Setup(x => x.SaveChanges());
 
             //Act
             _sut.RedeemPoints(userPoints.UserId, reward.Id);
 
             //Assert
+            Assert.AreEqual(expectedPointsAfterRedeeming, userPoints.Points);
             _mockRepo.VerifyAll();
         }
 
