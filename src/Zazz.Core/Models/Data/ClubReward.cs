@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
@@ -20,5 +21,7 @@ namespace Zazz.Core.Models.Data
         public User Club { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public virtual ICollection<UserReward> UserRewards { get; set; }
     }
 }

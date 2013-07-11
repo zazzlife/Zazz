@@ -63,6 +63,19 @@ namespace Zazz.Web.Controllers
                          Rewards = _uow.ClubRewardRepository
                                        .GetAll()
                                        .Where(c => c.ClubId == id.Value)
+                                       .Select(c => new ClubRewardViewModel
+                                                    {
+                                                        Id = c.Id,
+                                                        Cost = c.Cost,
+                                                        Description = c.Description,
+                                                        IsEnabled = c.IsEnabled,
+                                                        Name = c.Name,
+                                                        AlreadyPurchased = isCurrentUserOwner 
+                                                            ? false 
+                                                            : currentUserAccountType == AccountType.Club
+                                                                ? false
+                                                                : c.UserRewards.Any(r => r.UserId == currentUserId)
+                                                    })
                                        .ToList(),
                          CurrentUserAccountType = currentUserAccountType,
                          ClubName = UserService.GetUserDisplayName(id.Value),

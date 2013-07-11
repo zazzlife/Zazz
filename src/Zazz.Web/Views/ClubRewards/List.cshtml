@@ -73,13 +73,20 @@
                     }
                     else if (Model.CurrentUserAccountType == AccountType.User)
                     {
-                        if (Model.CurrentUserPoints >= item.Cost)
+                        if (item.AlreadyPurchased)
                         {
-                            @Html.ActionLink("Reedem points", "Redeem", new {id = item.Id})
+                            <i class="icon-check-sign" style="font-size: 20px;color: green;"></i>
                         }
                         else
                         {
-                            <button style="opacity: 0.4;padding: 0;margin-left: -3px;" title="not enough points" class="btn-link disabled">Reedem points</button>
+                            if (Model.CurrentUserPoints >= item.Cost)
+                            {
+                                @Html.ActionLink("Reedem points", "Redeem", new {id = item.Id})
+                            }
+                            else
+                            {
+                                <button style="opacity: 0.4; padding: 0; margin-left: -3px;" title="not enough points" class="btn-link disabled">Reedem points</button>
+                            }
                         }
                     }
                 </td>
