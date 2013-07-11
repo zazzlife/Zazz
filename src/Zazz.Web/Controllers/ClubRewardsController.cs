@@ -310,7 +310,11 @@ namespace Zazz.Web.Controllers
         [HttpGet, ActionName("Redeem")]
         public ActionResult ConfirmRedeem(int id)
         {
-            return View();
+            var reward = _uow.ClubRewardRepository.GetById(id);
+            if (reward == null)
+                throw new HttpException(400, "not found");
+
+            return View(reward);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

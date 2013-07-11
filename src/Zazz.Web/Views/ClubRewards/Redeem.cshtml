@@ -1,0 +1,31 @@
+﻿@model Zazz.Core.Models.Data.ClubReward
+@{
+    ViewBag.Title = "Redeem";
+}
+
+<div class="container" style="margin-top: 50px;">
+
+    <div class="well well-large">
+
+        <div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+            
+                <h4>Are you sure you want to spend @Model.Cost points for "@Model.Name" reward?</h4>
+                <blockquote>
+                    <p>@Model.Description</p>
+                </blockquote>
+                <div class="text-right">
+                    <p>
+                        <input type="submit" class="btn btn-primary" value="Yes" style="width: 80px"/>
+                        @Html.ActionLink("No", "List", new { id = 2 }, new { @class = "btn" })
+                    </p>
+                </div>
+
+            }
+        </div>
+
+
+    </div>
+</div>
