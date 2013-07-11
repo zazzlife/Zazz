@@ -74,9 +74,9 @@
                     else if (Model.CurrentUserAccountType == AccountType.User)
                     {
                         if (Model.CurrentUserPoints >= item.Cost)
-                         {
-                             @Html.ActionLink("Reedem points", "Redeem", new { id = item.Id })
-                         }
+                        {
+                            @Html.ActionLink("Reedem points", "Redeem", new {id = item.Id})
+                        }
                         else
                         {
                             <button style="opacity: 0.4;" title="not enough points" class="btn-link disabled" disabled="disabled">Reedem points</button>

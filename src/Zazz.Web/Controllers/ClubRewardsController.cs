@@ -307,6 +307,13 @@ namespace Zazz.Web.Controllers
             }
         }
 
+        [HttpGet, ActionName("Redeem")]
+        public ActionResult ConfirmRedeem(int id)
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Redeem(int id)
         {
             return View();
