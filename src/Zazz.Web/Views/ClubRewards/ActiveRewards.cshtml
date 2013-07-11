@@ -7,7 +7,7 @@
 
 <div class="container">
     <div class="page-header">
-        <h2>Current Rewards</h2>
+        <h2>Current Active Rewards</h2>
     </div>
 
     <table class="table table-condensed table-striped">
@@ -39,7 +39,7 @@
                     <a href="@Url.Action("Profile", "User", new { id = item.ClubId, friendlySeoName=item.ClubName.ToUrlFriendlyString() })">@item.ClubName</a> 
                 </td>
                 <td>
-                    <span title="@item.RedeemedDate.ToRelativeTime()">@item.RedeemedDate.ToShortDateString()</span>
+                    <span title="@item.RedeemedDate.ToRelativeTime()">@item.RedeemedDate.ToShortDateString() - @item.RedeemedDate.ToShortTimeString()</span>
                 </td>
             </tr>
         }
