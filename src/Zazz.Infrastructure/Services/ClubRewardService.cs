@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -120,9 +121,20 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public UserReward RedeemPoints(int userId, ClubReward reward)
+        public UserReward RedeemPoints(int userId, int rewardId)
         {
+            var reward = _uow.ClubRewardRepository.GetById(rewardId);
+            if (reward == null)
+                throw new NotFoundException();
+
             var amountToRemove = reward.Cost*-1;
+            var userPoints = _uow.UserPointRepository.GetAll(userId, reward.ClubId)
+                                 .Select(p => p.Points)
+                                 .SingleOrDefault();
+
+            if (userPoints < reward.Cost)
+                throw new NotEnoughPointsException();
+
             var historyRecord = new UserPointHistory
                                 {
                                     ChangedAmount = amountToRemove,

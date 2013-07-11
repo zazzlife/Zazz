@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 using Moq;
 using NUnit.Framework;
@@ -299,7 +300,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            
+
             Assert.Throws<NotFoundException>(() => _sut.UpdateClubReward(oldReward.Id, oldReward.ClubId, newReward));
 
             //Assert
@@ -539,35 +540,77 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void AddRewardAndCreateHistoryRecordAndUpdateUserPoints()
+        public void ThrowIfUserDoesntHaveEnoughPoints_OnRedeemPoints()
         {
             //Arrange
+            var userPoints = new UserPoint
+                             {
+                                 ClubId = 22,
+                                 UserId = 44,
+                                 Points = 49
+                             };
+
             var reward = new ClubReward
                          {
-                             ClubId = 22,
-                             Cost = 88,
+                             ClubId = userPoints.ClubId,
+                             Cost = 50,
                              Id = 55
                          };
 
-            var userId = 823;
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+                .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
+
+            //Act
+            Assert.Throws<NotEnoughPointsException>(() => _sut.RedeemPoints(userPoints.UserId, reward.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void AddRewardAndCreateHistoryRecordAndUpdateUserPoints_OnRedeemPoints()
+        {
+            //Arrange
+            var userPoints = new UserPoint
+                             {
+                                 ClubId = 22,
+                                 UserId = 44,
+                                 Points = 50
+                             };
+
+            var reward = new ClubReward
+                         {
+                             ClubId = userPoints.ClubId,
+                             Cost = 50,
+                             Id = 55
+                         };
+
+            _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
+                .Returns(reward);
+
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+                .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
 
             _uow.Setup(x => x.UserRewardRepository
                              .InsertGraph(It.Is<UserReward>(r => r.PointsSepnt == reward.Cost &&
                                                                  r.RewardId == reward.Id &&
-                                                                 r.UserId == userId)));
+                                                                 r.UserId == userPoints.UserId)));
 
             _uow.Setup(x => x.UserPointHistoryRepository
                              .InsertGraph(It.Is<UserPointHistory>(h => h.ClubId == reward.ClubId &&
-                                                                       h.ChangedAmount == reward.Cost*-1 &&
+                                                                       h.ChangedAmount == reward.Cost * -1 &&
                                                                        h.RewardId == reward.Id &&
-                                                                       h.UserId == userId)));
+                                                                       h.UserId == userPoints.UserId)));
 
-            _uow.Setup(x => x.UserPointRepository.ChangeUserPoints(userId, reward.ClubId, reward.Cost*-1));
+            _uow.Setup(x => x.UserPointRepository.ChangeUserPoints(userPoints.UserId, reward.ClubId, reward.Cost * -1));
 
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.RedeemPoints(userId, reward);
+            _sut.RedeemPoints(userPoints.UserId, reward.Id);
 
             //Assert
             _mockRepo.VerifyAll();
