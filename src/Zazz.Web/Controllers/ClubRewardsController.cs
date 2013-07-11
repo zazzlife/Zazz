@@ -310,6 +310,9 @@ namespace Zazz.Web.Controllers
         [HttpGet, ActionName("Redeem")]
         public ActionResult ConfirmRedeem(int id)
         {
+            if (id == 0)
+                throw new HttpException(400, "not found");
+
             var reward = _uow.ClubRewardRepository.GetById(id);
             if (reward == null)
                 throw new HttpException(400, "not found");
@@ -318,9 +321,32 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Redeem(int id)
+        public ActionResult Redeem(int id, int clubId)
         {
-            return View();
+            if (id == 0)
+                throw new HttpException(400, "not found");
+
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+                _rewardService.RedeemPoints(currentUserId, id);
+
+                ShowAlert("Success!", AlertType.Success);
+            }
+            catch (NotFoundException)
+            {
+                throw new HttpException(400, "not found");
+            }
+            catch (NotEnoughPointsException)
+            {
+                ShowAlert("Not enough points.", AlertType.Error);
+            }
+            catch (AlreadyExistsException)
+            {
+                ShowAlert("You already have this reward", AlertType.Error);
+            }
+
+            return RedirectToAction("List", new {id = clubId});
         }
     }
 }

@@ -11,7 +11,8 @@
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-            
+                @Html.HiddenFor(m => m.ClubId)
+                
                 <h4>Are you sure you want to spend @Model.Cost points for "@Model.Name" reward?</h4>
                 <blockquote>
                     <p>@Model.Description</p>
@@ -19,7 +20,7 @@
                 <div class="text-right">
                     <p>
                         <input type="submit" class="btn btn-primary" value="Yes" style="width: 80px"/>
-                        @Html.ActionLink("No", "List", new { id = 2 }, new { @class = "btn" })
+                        @Html.ActionLink("No", "List", new { id = Model.ClubId }, new { @class = "btn" })
                     </p>
                 </div>
 
