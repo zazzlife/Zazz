@@ -17,6 +17,13 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
         }
 
+        public IQueryable<UserReward> GetRewards(int userId, int clubId)
+        {
+            return DbSet.Include(r => r.Reward)
+                        .Where(r => r.UserId == userId)
+                        .Where(r => r.Reward.ClubId == clubId);
+        }
+
         public bool Exists(int userId, int rewardId)
         {
 // ReSharper disable ReplaceWithSingleCallToAny

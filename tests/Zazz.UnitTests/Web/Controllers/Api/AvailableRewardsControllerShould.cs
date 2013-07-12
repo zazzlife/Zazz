@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -11,5 +12,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             ControllerAddress = "/api/v1/availablerewards";
         }
+
+
+
     }
 }

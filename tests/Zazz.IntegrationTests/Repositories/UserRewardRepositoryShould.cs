@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
 using Zazz.Data;
@@ -59,6 +60,17 @@ namespace Zazz.IntegrationTests.Repositories
             _context.UserRewards.Add(userReward1);
             _context.UserRewards.Add(userReward2);
             _context.SaveChanges();
+        }
+
+        [Test]
+        public void ReturnCorrectRewards_OnGetUserRewards()
+        {
+            //Arrange
+            //Act
+            var result = _repo.GetRewards(_user1.Id, _club1.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(1, result.Count);
         }
 
         [Test]
