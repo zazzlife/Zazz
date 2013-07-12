@@ -12,7 +12,7 @@ using Zazz.Web.OAuthAuthorizationServer;
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
     [TestFixture]
-    public class AvailableRewardsControllerShould : BaseOAuthTests
+    public class RewardsControllerShould : BaseOAuthTests
     {
         private Mock<IUoW> _uow;
         private const int USER_ID = 80;
@@ -20,8 +20,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public override void Init()
         {
             base.Init();
-
-            ControllerAddress = "/api/v1/availablerewards/" + USER_ID;
 
             _uow = MockRepo.Create<IUoW>();
             IocContainer.Configure(x =>
@@ -35,6 +33,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task GetRewardsFromRepository_OnGet()
         {
             //Arrange
+            ControllerAddress = "/api/v1/rewards?userId=" + USER_ID;
+
             CreateValidAccessToken();
 
             
@@ -48,6 +48,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
         }
+
 
     }
 }

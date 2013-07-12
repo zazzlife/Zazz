@@ -10,29 +10,37 @@ using Zazz.Web.Filters;
 namespace Zazz.Web.Controllers.Api
 {
     [OAuth2Authorize]
-    public class AvailableRewardsController : BaseApiController
+    public class RewardsController : BaseApiController
     {
         private readonly IUoW _uow;
 
-        public AvailableRewardsController(IUoW uow)
+        public RewardsController(IUoW uow)
         {
             _uow = uow;
         }
 
-        public IEnumerable<ApiUserReward> Get(int id)
+        public IEnumerable<ApiUserReward> Get(int userId)
         {
-            if (id == 0)
+            if (userId == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var rewards = _uow.UserRewardRepository.GetRewards(id, CurrentUserId);
+            var rewards = _uow.UserRewardRepository.GetRewards(userId, CurrentUserId);
             return rewards.Select(r => new ApiUserReward
                                        {
                                            RedeemedDate = r.RedeemedDate,
                                            RewardId = r.Id,
-                                           UserId = id,
+                                           UserId = userId,
                                            RewardName = r.Reward.Name,
                                            RewardDescription = r.Reward.Description
                                        });
+        }
+
+        public void Delete(int id)
+        {
+            if (id == 0)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+
         }
     }
 }

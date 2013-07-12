@@ -228,7 +228,7 @@
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
     <Compile Include="Controllers\Api\ApiUserReward.cs" />
-    <Compile Include="Controllers\Api\AvailableRewardsController.cs" />
+    <Compile Include="Controllers\Api\RewardsController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
     <Compile Include="Controllers\Api\FollowersController.cs" />
