@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Web.Filters;
 
@@ -13,10 +14,12 @@ namespace Zazz.Web.Controllers.Api
     public class RewardsController : BaseApiController
     {
         private readonly IUoW _uow;
+        private readonly IClubRewardService _rewardService;
 
-        public RewardsController(IUoW uow)
+        public RewardsController(IUoW uow, IClubRewardService rewardService)
         {
             _uow = uow;
+            _rewardService = rewardService;
         }
 
         public IEnumerable<ApiUserReward> Get(int userId)
@@ -40,6 +43,13 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            try
+            {
+                _rewardService.RemoveUserReward(id, CurrentUserId);
+            }
+            catch (NotFoundException)
+            {
+            }
 
         }
     }

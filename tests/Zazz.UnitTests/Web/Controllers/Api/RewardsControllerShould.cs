@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Web.OAuthAuthorizationServer;
@@ -15,6 +16,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
     public class RewardsControllerShould : BaseOAuthTests
     {
         private Mock<IUoW> _uow;
+        private Mock<IClubRewardService> _rewardsService;
         private const int USER_ID = 80;
 
         public override void Init()
@@ -22,9 +24,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             base.Init();
 
             _uow = MockRepo.Create<IUoW>();
+            _rewardsService = MockRepo.Create<IClubRewardService>();
+
             IocContainer.Configure(x =>
                                    {
                                        x.For<IUoW>().Use(_uow.Object);
+                                       x.For<IClubRewardService>().Use(_rewardsService.Object);
                                    });
         }
 
@@ -37,7 +42,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
 
-            
+
             _uow.Setup(x => x.UserRewardRepository.GetRewards(USER_ID, User.Id))
                 .Returns(new EnumerableQuery<UserReward>(new List<UserReward>()));
 
@@ -47,6 +52,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             MockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task Return204IfRewardWasNotFound_OnDelete()
+        {
+            //Arrange
+            var rewardId = 48729;
+
+            ControllerAddress = "/api/v1/rewards/" + rewardId;
+
+            CreateValidAccessToken();
+
+            _rewardsService.Setup(x => x.RemoveUserReward(rewardId, User.Id))
+                           .Throws<NotFoundException>();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+
         }
 
 
