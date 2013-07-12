@@ -464,7 +464,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
 
-            _oauthService.Setup(x => x.CreateOAuthCredentials(user, oauthClient, It.IsAny<List<OAuthScope>>()))
+            _oauthService.Setup(x => x.CreateOAuthCredentials(user, oauthClient,
+                         It.Is<List<OAuthScope>>(s => s.Any(sc => sc.Name.Equals("full")))))
                          .Returns(oauthCred);
 
             _userService.Setup(x => x.GetUserDisplayName(user.Id))

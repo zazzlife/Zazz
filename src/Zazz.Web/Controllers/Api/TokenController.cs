@@ -90,6 +90,8 @@ namespace Zazz.Web.Controllers.Api
 
                     if (scope == null)
                         throw new OAuthException(OAuthError.InvalidScope);
+                    
+                    scopes.Add(scope);
                 }
             
                 // validating user credentials

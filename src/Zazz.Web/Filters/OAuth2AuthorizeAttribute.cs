@@ -22,6 +22,9 @@ namespace Zazz.Web.Filters
         private string _errorDescription;
         private OAuthError _oAuthError = OAuthError.InvalidGrant;
 
+        public OAuth2AuthorizeAttribute()
+        {}
+
         public OAuth2AuthorizeAttribute(params string[] scopes)
         {
             _scopes.AddRange(scopes);
