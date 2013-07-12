@@ -53,8 +53,8 @@ namespace Zazz.Web
 
             config.Routes.MapHttpRoute(
                 name: "QRCodeFollow",
-                routeTemplate: "api/v1/follows/qrcode",
-                defaults: new { controller = "CustomActions", action = "QRCodeFollow" }
+                routeTemplate: "api/v1/followers/qrcode",
+                defaults: new { controller = "Followers", action = "QRCodeFollow" }
             );
 
             config.Routes.MapHttpRoute(

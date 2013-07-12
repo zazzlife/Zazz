@@ -7,22 +7,23 @@ using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
-using Zazz.Web.Filters;
 
 namespace Zazz.Web.Controllers.Api
 {
-    public class CustomActionsController : BaseApiController
+    public class FollowersController : BaseApiController
     {
         private readonly IUserService _userService;
         private readonly ICryptoService _cryptoService;
         private readonly IFollowService _followService;
+        private readonly IClubRewardService _rewardService;
 
-        public CustomActionsController(IUserService userService, ICryptoService cryptoService,
-            IFollowService followService)
+        public FollowersController(IUserService userService, ICryptoService cryptoService,
+            IFollowService followService, IClubRewardService rewardService)
         {
             _userService = userService;
             _cryptoService = cryptoService;
             _followService = followService;
+            _rewardService = rewardService;
         }
 
         //POST /api/v1/followers/qrcode

@@ -229,9 +229,9 @@
     <Compile Include="Controllers\Api\AlbumsController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
     <Compile Include="Controllers\Api\CitiesController.cs" />
+    <Compile Include="Controllers\Api\FollowersController.cs" />
     <Compile Include="Controllers\Api\TokenController.cs" />
     <Compile Include="Controllers\Api\CommentsController.cs" />
-    <Compile Include="Controllers\Api\CustomActionsController.cs" />
     <Compile Include="Controllers\Api\EventCommentsController.cs" />
     <Compile Include="Controllers\Api\EventsController.cs" />
     <Compile Include="Controllers\Api\FeedsController.cs" />
