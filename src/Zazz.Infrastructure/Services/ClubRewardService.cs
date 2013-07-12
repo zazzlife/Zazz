@@ -182,6 +182,19 @@ namespace Zazz.Infrastructure.Services
 
             if (currentUserId != reward.UserId && currentUserId != reward.Reward.ClubId)
                 throw new SecurityException();
+
+            var historyRecord = new UserRewardHistory
+                                {
+                                    ClubId = reward.Reward.ClubId,
+                                    Date = DateTime.UtcNow,
+                                    EditorUserId = currentUserId,
+                                    RewardId = rewardId,
+                                    UserId = reward.UserId
+                                };
+
+            _uow.UserRewardRepository.Remove(reward);
+            _uow.UserRewardHistoryRepository.InsertGraph(historyRecord);
+            _uow.SaveChanges();
         }
     }
 }

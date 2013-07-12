@@ -736,6 +736,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void RemoveRewardAndCreateHistoryRecord_OnRemoveUserReward()
+        {
+            //Arrange
+            var clubId = 88;
+            var reward = new UserReward
+                         {
+                             Id = 44,
+                             RewardId = 55,
+                             UserId = 12,
+                             Reward = new ClubReward
+                                      {
+                                          ClubId = clubId,
+                                          Id = 55,
+                                      }
+                         };
 
+            _uow.Setup(x => x.UserRewardRepository.GetById(reward.Id))
+                .Returns(() => reward);
+
+            _uow.Setup(x => x.UserRewardRepository.Remove(reward));
+
+            _uow.Setup(x => x.UserRewardHistoryRepository
+                             .InsertGraph(It.Is<UserRewardHistory>(r => r.ClubId == clubId &&
+                                                                        r.Date != default(DateTime) &&
+                                                                        r.EditorUserId == clubId &&
+                                                                        r.RewardId == reward.Id &&
+                                                                        r.UserId == reward.UserId)));
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.RemoveUserReward(reward.Id, clubId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
