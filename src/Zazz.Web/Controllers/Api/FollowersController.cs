@@ -46,10 +46,14 @@ namespace Zazz.Web.Controllers.Api
                     throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                 var currentUserId = ExtractUserIdFromHeader();
+                _followService.Follow(user.Id, currentUserId);
 
                 //checking if the club would reward points
+                var scenario = _uow.ClubPointRewardScenarioRepository.Get(currentUserId, PointRewardScenario.QRCodeSan);
+                if (scenario == null)
+                    return;
 
-                _followService.Follow(user.Id, currentUserId);
+                _rewardService.AwardUserPoints(user.Id, currentUserId, scenario.Amount, PointRewardScenario.QRCodeSan);
             }
             catch (NotFoundException)
             {
