@@ -155,11 +155,6 @@ namespace Zazz.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<UserRewardHistory>()
-                .HasRequired(h => h.Club)
-                .WithMany()
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<UserRewardHistory>()
                 .HasRequired(h => h.User)
                 .WithMany()
                 .WillCascadeOnDelete(false);

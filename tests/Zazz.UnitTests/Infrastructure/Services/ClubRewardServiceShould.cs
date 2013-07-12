@@ -666,8 +666,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                                                        h.UserId == userPoints.UserId)));
 
             _uow.Setup(x => x.UserRewardHistoryRepository
-                             .InsertGraph(It.Is<UserRewardHistory>(r => r.ClubId == reward.ClubId &&
-                                                                        r.Date != default(DateTime) &&
+                             .InsertGraph(It.Is<UserRewardHistory>(r => r.Date != default(DateTime) &&
                                                                         r.EditorUserId == userPoints.UserId &&
                                                                         r.RewardId == reward.Id &&
                                                                         r.UserId == userPoints.UserId)));
@@ -759,8 +758,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRewardRepository.Remove(reward));
 
             _uow.Setup(x => x.UserRewardHistoryRepository
-                             .InsertGraph(It.Is<UserRewardHistory>(r => r.ClubId == clubId &&
-                                                                        r.Date != default(DateTime) &&
+                             .InsertGraph(It.Is<UserRewardHistory>(r => r.Date != default(DateTime) &&
                                                                         r.EditorUserId == clubId &&
                                                                         r.RewardId == reward.Id &&
                                                                         r.UserId == reward.UserId)));

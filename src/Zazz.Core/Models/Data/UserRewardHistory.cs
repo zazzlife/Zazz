@@ -9,9 +9,9 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("User")]
         public int UserId { get; set; }
 
-        [ForeignKey("Club")]
-        public int ClubId { get; set; }
-
+        /// <summary>
+        /// Id of the user that created or removed this reward.
+        /// </summary>
         [ForeignKey("Editor")]
         public int EditorUserId { get; set; }
 
@@ -20,8 +20,9 @@ namespace Zazz.Core.Models.Data
 
         public User User { get; set; }
 
-        public User Club { get; set; }
-
+        /// <summary>
+        /// the user that created or removed this reward.
+        /// </summary>
         public User Editor { get; set; }
 
         public ClubReward Reward { get; set; }

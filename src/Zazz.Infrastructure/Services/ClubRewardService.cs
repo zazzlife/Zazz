@@ -149,7 +149,6 @@ namespace Zazz.Infrastructure.Services
 
             var rewardsHistoryRecord = new UserRewardHistory
                                        {
-                                           ClubId = reward.ClubId,
                                            Date = DateTime.UtcNow,
                                            EditorUserId = userId,
                                            RewardId = rewardId,
@@ -185,7 +184,6 @@ namespace Zazz.Infrastructure.Services
 
             var historyRecord = new UserRewardHistory
                                 {
-                                    ClubId = reward.Reward.ClubId,
                                     Date = DateTime.UtcNow,
                                     EditorUserId = currentUserId,
                                     RewardId = rewardId,
