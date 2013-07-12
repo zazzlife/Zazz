@@ -138,7 +138,7 @@ namespace Zazz.Infrastructure.Services
             if (recordExists)
                 throw new AlreadyExistsException();
 
-            var historyRecord = new UserPointHistory
+            var pointsHistoryRecord = new UserPointHistory
                                 {
                                     ChangedAmount = amountToRemove,
                                     ClubId = reward.ClubId,
@@ -147,6 +147,15 @@ namespace Zazz.Infrastructure.Services
                                     RewardId = reward.Id
                                 };
 
+            var rewardsHistoryRecord = new UserRewardHistory
+                                       {
+                                           ClubId = reward.ClubId,
+                                           Date = DateTime.UtcNow,
+                                           EditorUserId = userId,
+                                           RewardId = rewardId,
+                                           UserId = userId
+                                       };
+
             var userReward = new UserReward
                              {
                                  RedeemedDate = DateTime.UtcNow,
@@ -154,8 +163,10 @@ namespace Zazz.Infrastructure.Services
                                  UserId = userId
                              };
 
-            _uow.UserPointHistoryRepository.InsertGraph(historyRecord);
+            _uow.UserPointHistoryRepository.InsertGraph(pointsHistoryRecord);
             _uow.UserRewardRepository.InsertGraph(userReward);
+            _uow.UserRewardHistoryRepository.InsertGraph(rewardsHistoryRecord);
+            
             userPoints.Points += amountToRemove;
 
             _uow.SaveChanges();

@@ -665,6 +665,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                                                        h.RewardId == reward.Id &&
                                                                        h.UserId == userPoints.UserId)));
 
+            _uow.Setup(x => x.UserRewardHistoryRepository
+                             .InsertGraph(It.Is<UserRewardHistory>(r => r.ClubId == reward.ClubId &&
+                                                                        r.Date != default(DateTime) &&
+                                                                        r.EditorUserId == userPoints.UserId &&
+                                                                        r.RewardId == reward.Id &&
+                                                                        r.UserId == userPoints.UserId)));
+
             _uow.Setup(x => x.SaveChanges());
 
             //Act
