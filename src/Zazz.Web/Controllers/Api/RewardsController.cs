@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security;
 using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -48,7 +49,10 @@ namespace Zazz.Web.Controllers.Api
                 _rewardService.RemoveUserReward(id, CurrentUserId);
             }
             catch (NotFoundException)
+            {}
+            catch (SecurityException)
             {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
 
         }

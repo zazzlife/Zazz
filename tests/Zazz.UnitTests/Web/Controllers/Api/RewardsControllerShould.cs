@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -76,6 +77,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
         }
 
+        [Test]
+        public async Task Return403IfNotAllowed_OnDelete()
+        {
+            //Arrange
+            var rewardId = 48729;
 
+            ControllerAddress = "/api/v1/rewards/" + rewardId;
+
+            CreateValidAccessToken();
+
+            _rewardsService.Setup(x => x.RemoveUserReward(rewardId, User.Id))
+                           .Throws<SecurityException>();
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
+            MockRepo.VerifyAll();
+
+        }
     }
 }
