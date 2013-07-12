@@ -19,8 +19,7 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<UserReward> GetRewards(int userId, int clubId)
         {
-            return DbSet.Include(r => r.Reward)
-                        .Where(r => r.UserId == userId)
+            return DbSet.Where(r => r.UserId == userId)
                         .Where(r => r.Reward.ClubId == clubId);
         }
 

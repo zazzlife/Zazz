@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -61,6 +62,22 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
                     .Ctor<string>("baseAddress").Is("test.zazzlife.com");
             });
+        }
+
+        protected void CreateValidAccessToken()
+        {
+            AccessToken = new JWT
+                          {
+                              ClientId = 22,
+                              ExpirationDate = DateTime.UtcNow.AddHours(1),
+                              IssuedDate = DateTime.UtcNow,
+                              UserId = User.Id,
+                              Scopes = new List<string> {"full"},
+                              TokenType = JWT.ACCESS_TOKEN_TYPE,
+                          };
+
+            Client.DefaultRequestHeaders.Authorization = 
+                new AuthenticationHeaderValue("bearer", AccessToken.ToJWTString());
         }
 
         [Test]
