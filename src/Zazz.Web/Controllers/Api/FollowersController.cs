@@ -7,6 +7,7 @@ using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -16,14 +17,16 @@ namespace Zazz.Web.Controllers.Api
         private readonly ICryptoService _cryptoService;
         private readonly IFollowService _followService;
         private readonly IClubRewardService _rewardService;
+        private readonly IUoW _uow;
 
         public FollowersController(IUserService userService, ICryptoService cryptoService,
-            IFollowService followService, IClubRewardService rewardService)
+            IFollowService followService, IClubRewardService rewardService, IUoW uow)
         {
             _userService = userService;
             _cryptoService = cryptoService;
             _followService = followService;
             _rewardService = rewardService;
+            _uow = uow;
         }
 
         //POST /api/v1/followers/qrcode
@@ -42,7 +45,11 @@ namespace Zazz.Web.Controllers.Api
                 if (user.Token != check)
                     throw new HttpResponseException(HttpStatusCode.Forbidden);
 
-                _followService.Follow(user.Id, ExtractUserIdFromHeader());
+                var currentUserId = ExtractUserIdFromHeader();
+
+                //checking if the club would reward points
+
+                _followService.Follow(user.Id, currentUserId);
             }
             catch (NotFoundException)
             {

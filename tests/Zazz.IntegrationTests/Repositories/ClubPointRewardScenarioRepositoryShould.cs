@@ -62,5 +62,27 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void ReturnScenarioIfExists_OnGet()
+        {
+            //Arrange
+            //Act
+            var result = _repo.Get(_club.Id, PointRewardScenario.QRCodeSan);
+
+            //Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void ReturnNullIfNotExists_OnGet()
+        {
+            //Arrange
+            //Act
+            var result = _repo.Get(_club2.Id, PointRewardScenario.QRCodeSan);
+
+            //Assert
+            Assert.IsNull(result);
+        }
     }
 }

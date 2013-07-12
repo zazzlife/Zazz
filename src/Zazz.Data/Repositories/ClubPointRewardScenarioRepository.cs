@@ -19,6 +19,15 @@ namespace Zazz.Data.Repositories
             throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
         }
 
+        public ClubPointRewardScenario Get(int clubId, PointRewardScenario scenario)
+        {
+// ReSharper disable ReplaceWithSingleCallToAny
+            return DbSet.Where(c => c.ClubId == clubId)
+                        .Where(c => c.Scenario == scenario)
+                        .SingleOrDefault();
+// ReSharper restore ReplaceWithSingleCallToAny
+        }
+
         public bool Exists(int clubId, PointRewardScenario scenario)
         {
 // ReSharper disable ReplaceWithSingleCallToAny
