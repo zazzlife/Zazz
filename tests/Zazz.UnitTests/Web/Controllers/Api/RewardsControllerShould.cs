@@ -98,5 +98,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             MockRepo.VerifyAll();
 
         }
+
+        [Test]
+        public async Task Return204WhenOk_OnDelete()
+        {
+            //Arrange
+            var rewardId = 48729;
+
+            ControllerAddress = "/api/v1/rewards/" + rewardId;
+
+            CreateValidAccessToken();
+
+            _rewardsService.Setup(x => x.RemoveUserReward(rewardId, User.Id));
+
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+
+        }
     }
 }
