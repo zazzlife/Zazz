@@ -163,5 +163,15 @@ namespace Zazz.Infrastructure.Services
 
             return userReward;
         }
+
+        public void RemoveUserReward(int rewardId, int currentUserId)
+        {
+            var reward = _uow.UserRewardRepository.GetById(rewardId);
+            if (reward == null)
+                throw new NotFoundException();
+
+            if (currentUserId != reward.UserId && currentUserId != reward.Reward.ClubId)
+                throw new SecurityException();
+        }
     }
 }

@@ -23,6 +23,12 @@ namespace Zazz.Data.Repositories
                         .Where(r => r.Reward.ClubId == clubId);
         }
 
+        public override UserReward GetById(int id)
+        {
+            return DbSet.Include(r => r.Reward)
+                        .SingleOrDefault(r => r.Id == id);
+        }
+
         public bool Exists(int userId, int rewardId)
         {
 // ReSharper disable ReplaceWithSingleCallToAny

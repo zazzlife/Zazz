@@ -189,6 +189,7 @@
     <Compile Include="Models\Data\UserPreferences.cs" />
     <Compile Include="Models\Data\UserReceivedVotes.cs" />
     <Compile Include="Models\Data\UserReward.cs" />
+    <Compile Include="Models\Data\UserRewardHistory.cs" />
     <Compile Include="Models\Data\Weekly.cs" />
     <Compile Include="Models\Data\ZazzEvent.cs" />
     <Compile Include="Models\Data\Comment.cs" />

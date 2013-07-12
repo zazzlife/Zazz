@@ -676,6 +676,90 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfRewardWasNotFound_OnRemoveUserReward()
+        {
+            //Arrange
+            var clubId = 88;
+            var reward = new UserReward
+                         {
+                             Id = 44,
+                             RewardId = 55,
+                             UserId = 12,
+                             Reward = new ClubReward
+                                      {
+                                          ClubId = clubId,
+                                          Id = 55,
+                                      }
+                         };
+
+            _uow.Setup(x => x.UserRewardRepository.GetById(reward.Id))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.RemoveUserReward(reward.Id, clubId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfCurrentUserIsNotUserOrClub_OnRemoveUserReward()
+        {
+            //Arrange
+            var clubId = 88;
+            var reward = new UserReward
+            {
+                Id = 44,
+                RewardId = 55,
+                UserId = 12,
+                Reward = new ClubReward
+                {
+                    ClubId = clubId,
+                    Id = 55,
+                }
+            };
+
+            _uow.Setup(x => x.UserRewardRepository.GetById(reward.Id))
+                .Returns(() => reward);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.RemoveUserReward(reward.Id, 999));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemoveTheRewardAndCreateHistoryRecords_OnRemoveUserRewards()
+        {
+            //Arrange
+
+            var clubId = 88;
+            var reward = new UserReward
+            {
+                Id = 44,
+                RewardId = 55,
+                UserId = 12,
+                Reward = new ClubReward
+                {
+                    ClubId = clubId,
+                    Id = 55,
+                }
+            };
+
+            _uow.Setup(x => x.UserRewardRepository.GetById(reward.Id))
+                .Returns(() => reward);
+
+            _uow.Setup(x => x.UserRewardRepository.Remove(reward));
+
+            //Act
+
+
+            //Assert
+
+        }
+
 
     }
 }
