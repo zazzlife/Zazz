@@ -14,6 +14,10 @@
             <table class="club-details">
                 <tbody>
                     <tr>
+                        <td><i class="icon-certificate"></i></td>
+                        <td><a href="@Url.Action("List", "ClubRewards", new {id=Model.UserId})">Rewards</a></td>
+                    </tr>
+                    <tr>
                         <td><i class="icon-glass"></i></td>
                         <td>@Model.ClubType</td>
                     </tr>
