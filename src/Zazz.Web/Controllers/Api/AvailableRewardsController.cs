@@ -11,7 +11,7 @@ namespace Zazz.Web.Controllers.Api
     [OAuth2Authorize]
     public class AvailableRewardsController : ApiController
     {
-        public string Get()
+        public ApiUserReward Get()
         {
             return null;
         }
