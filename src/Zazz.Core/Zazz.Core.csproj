@@ -130,6 +130,7 @@
     <Compile Include="Interfaces\IUserPointRepository.cs" />
     <Compile Include="Interfaces\IUserReceivedVotesRepository.cs" />
     <Compile Include="Interfaces\IUserRepository.cs" />
+    <Compile Include="Interfaces\IUserRewardHistoryRepository.cs" />
     <Compile Include="Interfaces\IUserRewardRepository.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Interfaces\IValidationTokenRepository.cs" />

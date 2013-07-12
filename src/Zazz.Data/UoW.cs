@@ -137,6 +137,11 @@ namespace Zazz.Data
             get { return new UserPointHistoryRepository(GetContext()); }
         }
 
+        public IUserRewardHistoryRepository UserRewardHistoryRepository
+        {
+            get { return new UserRewardHistoryRepository(GetContext()); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)

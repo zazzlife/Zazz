@@ -31,6 +31,7 @@ namespace Zazz.Core.Interfaces
         IUserRewardRepository UserRewardRepository { get; }
         IUserPointRepository UserPointRepository { get; }
         IUserPointHistoryRepository UserPointHistoryRepository { get; }
+        IUserRewardHistoryRepository UserRewardHistoryRepository { get; }
 
         void SaveChanges();
     }

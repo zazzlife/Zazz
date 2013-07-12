@@ -84,6 +84,7 @@
     <Compile Include="Repositories\UserPointRepository.cs" />
     <Compile Include="Repositories\UserReceivedVotesRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\UserRewardHistoryRepository.cs" />
     <Compile Include="Repositories\UserRewardRepository.cs" />
     <Compile Include="Repositories\ValidationTokenRepository.cs" />
     <Compile Include="Repositories\WeeklyRepository.cs" />
