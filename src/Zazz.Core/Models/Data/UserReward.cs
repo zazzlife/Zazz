@@ -11,8 +11,6 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Reward")]
         public int RewardId { get; set; }
 
-        public int PointsSepnt { get; set; }
-
         public DateTime RedeemedDate { get; set; }
 
         public User User { get; set; }

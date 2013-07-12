@@ -656,8 +656,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             _uow.Setup(x => x.UserRewardRepository
-                             .InsertGraph(It.Is<UserReward>(r => r.PointsSepnt == reward.Cost &&
-                                                                 r.RewardId == reward.Id &&
+                             .InsertGraph(It.Is<UserReward>(r => r.RewardId == reward.Id &&
                                                                  r.UserId == userPoints.UserId)));
 
             _uow.Setup(x => x.UserPointHistoryRepository
@@ -728,36 +727,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void RemoveTheRewardAndCreateHistoryRecords_OnRemoveUserRewards()
-        {
-            //Arrange
-
-            var clubId = 88;
-            var reward = new UserReward
-            {
-                Id = 44,
-                RewardId = 55,
-                UserId = 12,
-                Reward = new ClubReward
-                {
-                    ClubId = clubId,
-                    Id = 55,
-                }
-            };
-
-            _uow.Setup(x => x.UserRewardRepository.GetById(reward.Id))
-                .Returns(() => reward);
-
-            _uow.Setup(x => x.UserRewardRepository.Remove(reward));
-
-            //Act
-
-
-            //Assert
-
         }
 
 

@@ -149,7 +149,6 @@ namespace Zazz.Infrastructure.Services
 
             var userReward = new UserReward
                              {
-                                 PointsSepnt = reward.Cost,
                                  RedeemedDate = DateTime.UtcNow,
                                  RewardId = reward.Id,
                                  UserId = userId
