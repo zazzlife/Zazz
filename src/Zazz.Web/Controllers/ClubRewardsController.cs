@@ -217,7 +217,12 @@ namespace Zazz.Web.Controllers
                                              })
                                 .ToList();
 
-            return View(scenarios);
+            var vm = new ClubRewardScenariosListViewModel
+                     {
+                         Scenarios = scenarios
+                     };
+
+            return View(vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -260,7 +265,12 @@ namespace Zazz.Web.Controllers
                                                  })
                                     .ToList();
 
-                return View(scenarios);
+                var model = new ClubRewardScenariosListViewModel
+                         {
+                             Scenarios = scenarios
+                         };
+
+                return View(model);
             }
             catch (AlreadyExistsException)
             {
@@ -293,7 +303,7 @@ namespace Zazz.Web.Controllers
                          SundayAmount = scenario.SundayAmount
                      };
 
-            return View("EditScenario", vm);
+            return View("EditScenarioFrom", vm);
         }
 
         [HttpPost]
@@ -335,7 +345,7 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                return View("EditScenario", vm);
+                return View("EditScenarioFrom", vm);
             }
         }
 

@@ -289,6 +289,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
+    <Compile Include="Models\ClubRewardScenariosListViewModel.cs" />
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
@@ -610,8 +611,7 @@
     <Content Include="Views\Shared\Errors\500.cshtml" />
     <Content Include="Views\Account\FindFriends.cshtml" />
     <Content Include="Views\ClubRewards\Scenarios.cshtml" />
-    <Content Include="Views\ClubRewards\_EditScenarioFormInLine.cshtml" />
-    <Content Include="Views\ClubRewards\EditScenario.cshtml" />
+    <Content Include="Views\ClubRewards\EditScenarioFrom.cshtml" />
     <Content Include="Views\ClubRewards\Index.cshtml" />
     <Content Include="Views\ClubRewards\List.cshtml" />
     <Content Include="Views\ClubRewards\EditReward.cshtml" />
