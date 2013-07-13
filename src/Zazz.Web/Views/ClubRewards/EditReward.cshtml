@@ -1,9 +1,5 @@
 ﻿@model Zazz.Core.Models.Data.ClubReward
 
-@{
-    ViewBag.Title = "Edit - Reward";
-}
-
 <div class="container" style="margin-top: 50px;">
     
     @using (Html.BeginForm()) {
@@ -11,7 +7,7 @@
         @Html.ValidationSummary(true)
 
         <fieldset>
-            <legend>Edit reward from</legend>
+            <legend>@ViewBag.Title</legend>
 
             <div class="editor-label">
                 @Html.LabelFor(model => model.Name)

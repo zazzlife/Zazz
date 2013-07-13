@@ -87,6 +87,8 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Create()
         {
+            ViewBag.Title = "Create Reward";
+
             var userId = GetCurrentUserId();
 
             var accountType = UserService.GetAccountType(userId);
@@ -99,6 +101,8 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Create(ClubReward reward)
         {
+            ViewBag.Title = "Create Reward";
+
             var userId = GetCurrentUserId();
             var accountType = UserService.GetAccountType(userId);
             if (accountType == AccountType.User)
@@ -120,6 +124,8 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
+            ViewBag.Title = "Edit Reward";
+
             var currentUserId = GetCurrentUserId();
 
             var reward = _uow.ClubRewardRepository.GetById(id);
@@ -132,6 +138,8 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Edit(int id, ClubReward reward)
         {
+            ViewBag.Title = "Edit Reward";
+
             if (ModelState.IsValid)
             {
                 reward.IsEnabled = true;
