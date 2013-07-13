@@ -205,9 +205,15 @@ namespace Zazz.Web.Controllers
                                 .Where(s => s.ClubId == currentUser.Id)
                                 .Select(s => new ClubRewardScenarioViewModel
                                              {
-                                                 Amount = s.Amount,
                                                  ScenarioId = s.Id,
-                                                 Scenario = s.Scenario
+                                                 Scenario = s.Scenario,
+                                                 MondayAmount = s.MondayAmount,
+                                                 TuesdayAmount = s.TuesdayAmount,
+                                                 WednesdayAmount = s.WednesdayAmount,
+                                                 ThursdayAmount = s.ThursdayAmount,
+                                                 FridayAmount = s.FridayAmount,
+                                                 SaturdayAmount = s.SaturdayAmount,
+                                                 SundayAmount = s.SundayAmount
                                              })
                                 .ToList();
 
@@ -215,7 +221,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Scenarios(int amount, PointRewardScenario scenario)
+        public ActionResult Scenarios(ClubRewardScenarioViewModel vm)
         {
             try
             {
@@ -225,9 +231,15 @@ namespace Zazz.Web.Controllers
 
                 var rewardScenario = new ClubPointRewardScenario
                                      {
-                                         Amount = amount,
+                                         MondayAmount = vm.MondayAmount,
+                                         TuesdayAmount = vm.TuesdayAmount,
+                                         WednesdayAmount = vm.WednesdayAmount,
+                                         ThursdayAmount = vm.ThursdayAmount,
+                                         FridayAmount = vm.FridayAmount,
+                                         SaturdayAmount = vm.SaturdayAmount,
+                                         SundayAmount = vm.SundayAmount,
                                          ClubId = currentUser.Id,
-                                         Scenario = scenario
+                                         Scenario = vm.Scenario
                                      };
 
                 _rewardService.AddRewardScenario(rewardScenario);
@@ -236,9 +248,15 @@ namespace Zazz.Web.Controllers
                                     .Where(s => s.ClubId == currentUser.Id)
                                     .Select(s => new ClubRewardScenarioViewModel
                                                  {
-                                                     Amount = s.Amount,
                                                      ScenarioId = s.Id,
-                                                     Scenario = s.Scenario
+                                                     Scenario = s.Scenario,
+                                                     MondayAmount = s.MondayAmount,
+                                                     TuesdayAmount = s.TuesdayAmount,
+                                                     WednesdayAmount = s.WednesdayAmount,
+                                                     ThursdayAmount = s.ThursdayAmount,
+                                                     FridayAmount = s.FridayAmount,
+                                                     SaturdayAmount = s.SaturdayAmount,
+                                                     SundayAmount = s.SundayAmount
                                                  })
                                     .ToList();
 
@@ -264,9 +282,15 @@ namespace Zazz.Web.Controllers
 
             var vm = new ClubRewardScenarioViewModel
                      {
-                         Amount = scenario.Amount,
                          ScenarioId = id,
-                         Scenario = scenario.Scenario
+                         Scenario = scenario.Scenario,
+                         MondayAmount = scenario.MondayAmount,
+                         TuesdayAmount = scenario.TuesdayAmount,
+                         WednesdayAmount = scenario.WednesdayAmount,
+                         ThursdayAmount = scenario.ThursdayAmount,
+                         FridayAmount = scenario.FridayAmount,
+                         SaturdayAmount = scenario.SaturdayAmount,
+                         SundayAmount = scenario.SundayAmount
                      };
 
             return View("EditScenario", vm);
@@ -282,8 +306,21 @@ namespace Zazz.Web.Controllers
             {
                 try
                 {
+
+                    var updatedScenario = new ClubPointRewardScenario
+                                          {
+                                              Id = id,
+                                              MondayAmount = vm.MondayAmount,
+                                              TuesdayAmount = vm.TuesdayAmount,
+                                              WednesdayAmount = vm.WednesdayAmount,
+                                              ThursdayAmount = vm.ThursdayAmount,
+                                              FridayAmount = vm.FridayAmount,
+                                              SaturdayAmount = vm.SaturdayAmount,
+                                              SundayAmount = vm.SundayAmount,
+                                          };
+
                     var currentUserId = GetCurrentUserId();
-                    _rewardService.ChangeRewardAmount(id, currentUserId, vm.Amount);
+                    _rewardService.ChangeRewardAmount(updatedScenario, currentUserId);
 
                     return RedirectToAction("Scenarios");
                 }

@@ -27,16 +27,23 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void ChangeRewardAmount(int scenarioId, int currentUserId, int amount)
+        public void ChangeRewardAmount(ClubPointRewardScenario updatedScenario, int currentUserId)
         {
-            var scenario = _uow.ClubPointRewardScenarioRepository.GetById(scenarioId);
+            var scenario = _uow.ClubPointRewardScenarioRepository.GetById(updatedScenario.Id);
             if (scenario == null)
                 throw new NotFoundException();
 
             if (scenario.ClubId != currentUserId)
                 throw new SecurityException();
 
-            scenario.Amount = amount;
+            scenario.MondayAmount = updatedScenario.MondayAmount;
+            scenario.TuesdayAmount = updatedScenario.TuesdayAmount;
+            scenario.WednesdayAmount = updatedScenario.WednesdayAmount;
+            scenario.ThursdayAmount = updatedScenario.ThursdayAmount;
+            scenario.FridayAmount = updatedScenario.FridayAmount;
+            scenario.SaturdayAmount = updatedScenario.SaturdayAmount;
+            scenario.SundayAmount = updatedScenario.SundayAmount;
+
             _uow.SaveChanges();
         }
 

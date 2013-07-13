@@ -27,11 +27,16 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Users.Add(_club);
             _context.Users.Add(_club2);
             _context.SaveChanges();
-
-
+            
             _scenario = new ClubPointRewardScenario
                         {
-                            Amount = 1,
+                            MondayAmount = 1,
+                            TuesdayAmount = 2,
+                            WednesdayAmount = 3,
+                            ThursdayAmount = 4,
+                            FridayAmount = 5,
+                            SaturdayAmount = 6,
+                            SundayAmount = 7,
                             ClubId = _club.Id,
                             Scenario = PointRewardScenario.QRCodeSan
                         };

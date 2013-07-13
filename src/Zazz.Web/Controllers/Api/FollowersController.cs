@@ -53,7 +53,35 @@ namespace Zazz.Web.Controllers.Api
                 if (scenario == null)
                     return;
 
-                _rewardService.AwardUserPoints(user.Id, currentUserId, scenario.Amount, PointRewardScenario.QRCodeSan);
+                var today = DateTime.UtcNow.DayOfWeek;
+                
+                var amount = 0;
+                switch (today)
+                {
+                    case DayOfWeek.Monday:
+                        amount = scenario.MondayAmount;
+                        break;
+                    case DayOfWeek.Tuesday:
+                        amount = scenario.TuesdayAmount;
+                        break;
+                    case DayOfWeek.Wednesday:
+                        amount = scenario.WednesdayAmount;
+                        break;
+                    case DayOfWeek.Thursday:
+                        amount = scenario.ThursdayAmount;
+                        break;
+                    case DayOfWeek.Friday:
+                        amount = scenario.FridayAmount;
+                        break;
+                    case DayOfWeek.Saturday:
+                        amount = scenario.SaturdayAmount;
+                        break;
+                    case DayOfWeek.Sunday:
+                        amount = scenario.SundayAmount;
+                        break;
+                }
+
+                _rewardService.AwardUserPoints(user.Id, currentUserId, amount, PointRewardScenario.QRCodeSan);
             }
             catch (NotFoundException)
             {

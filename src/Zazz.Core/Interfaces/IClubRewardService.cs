@@ -7,7 +7,7 @@ namespace Zazz.Core.Interfaces
     {
         void AddRewardScenario(ClubPointRewardScenario scenario);
 
-        void ChangeRewardAmount(int scenarioId, int currentUserId, int amount);
+        void ChangeRewardAmount(ClubPointRewardScenario updatedScenario, int currentUserId);
 
         void RemoveRewardScenario(int scenarioId, int currentUserId);
 

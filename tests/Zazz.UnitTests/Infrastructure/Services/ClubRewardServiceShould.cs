@@ -33,7 +33,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var scenario = new ClubPointRewardScenario
                                                          {
-                                                             Amount = 12,
+                                                             MondayAmount = 1,
+                                                             TuesdayAmount = 2,
+                                                             WednesdayAmount = 3,
+                                                             ThursdayAmount = 4,
+                                                             FridayAmount = 5,
+                                                             SaturdayAmount = 6,
+                                                             SundayAmount = 7,
                                                              ClubId = 22,
                                                              Scenario = PointRewardScenario.QRCodeSan
                                                          };
@@ -53,7 +59,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var scenario = new ClubPointRewardScenario
                            {
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
@@ -78,18 +90,36 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
 
-            var newAmount = 444;
+            var updatedScenario = new ClubPointRewardScenario
+                                  {
+                                      Id = 555,
+                                      MondayAmount = 11,
+                                      TuesdayAmount = 22,
+                                      WednesdayAmount = 33,
+                                      ThursdayAmount = 44,
+                                      FridayAmount = 55,
+                                      SaturdayAmount = 66,
+                                      SundayAmount = 7,
+                                      ClubId = 22,
+                                      Scenario = PointRewardScenario.QRCodeSan
+                                  };
 
             _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
                 .Returns(() => null);
 
             //Act
-            Assert.Throws<NotFoundException>(() => _sut.ChangeRewardAmount(scenario.Id, scenario.ClubId, newAmount));
+            Assert.Throws<NotFoundException>(() => _sut.ChangeRewardAmount(updatedScenario, scenario.ClubId));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -102,18 +132,36 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
 
-            var newAmount = 444;
+            var updatedScenario = new ClubPointRewardScenario
+                                  {
+                                      Id = 555,
+                                      MondayAmount = 11,
+                                      TuesdayAmount = 22,
+                                      WednesdayAmount = 33,
+                                      ThursdayAmount = 44,
+                                      FridayAmount = 55,
+                                      SaturdayAmount = 66,
+                                      SundayAmount = 7,
+                                      ClubId = 22,
+                                      Scenario = PointRewardScenario.QRCodeSan
+                                  };
 
             _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
                 .Returns(scenario);
 
             //Act
-            Assert.Throws<SecurityException>(() => _sut.ChangeRewardAmount(scenario.Id, 123, newAmount));
+            Assert.Throws<SecurityException>(() => _sut.ChangeRewardAmount(updatedScenario, 123));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -126,12 +174,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
 
-            var newAmount = 444;
+            var updatedScenario = new ClubPointRewardScenario
+                                  {
+                                      Id = 555,
+                                      MondayAmount = 11,
+                                      TuesdayAmount = 22,
+                                      WednesdayAmount = 33,
+                                      ThursdayAmount = 44,
+                                      FridayAmount = 55,
+                                      SaturdayAmount = 66,
+                                      SundayAmount = 7,
+                                      ClubId = 22,
+                                      Scenario = PointRewardScenario.QRCodeSan
+                                  };
 
             _uow.Setup(x => x.ClubPointRewardScenarioRepository.GetById(scenario.Id))
                 .Returns(scenario);
@@ -139,10 +205,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.ChangeRewardAmount(scenario.Id, scenario.ClubId, newAmount);
+            _sut.ChangeRewardAmount(updatedScenario, scenario.ClubId);
 
             //Assert
-            Assert.AreEqual(newAmount, scenario.Amount);
+            Assert.AreEqual(updatedScenario.MondayAmount, scenario.MondayAmount);
+            Assert.AreEqual(updatedScenario.TuesdayAmount, scenario.TuesdayAmount);
+            Assert.AreEqual(updatedScenario.WednesdayAmount, scenario.WednesdayAmount);
+            Assert.AreEqual(updatedScenario.ThursdayAmount, scenario.ThursdayAmount);
+            Assert.AreEqual(updatedScenario.FridayAmount, scenario.FridayAmount);
+            Assert.AreEqual(updatedScenario.SaturdayAmount, scenario.SaturdayAmount);
+            Assert.AreEqual(updatedScenario.SundayAmount, scenario.SundayAmount);
             _mockRepo.VerifyAll();
         }
 
@@ -153,7 +225,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
@@ -175,7 +253,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };
@@ -197,7 +281,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var scenario = new ClubPointRewardScenario
                            {
                                Id = 555,
-                               Amount = 12,
+                               MondayAmount = 1,
+                               TuesdayAmount = 2,
+                               WednesdayAmount = 3,
+                               ThursdayAmount = 4,
+                               FridayAmount = 5,
+                               SaturdayAmount = 6,
+                               SundayAmount = 7,
                                ClubId = 22,
                                Scenario = PointRewardScenario.QRCodeSan
                            };

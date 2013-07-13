@@ -10,8 +10,6 @@ namespace Zazz.Core.Models.Data
         public int ClubId { get; set; }
 
         public PointRewardScenario Scenario { get; set; }
-        
-        public int Amount { get; set; }
 
         public int MondayAmount { get; set; }
 
