@@ -280,6 +280,47 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult CreateScenario()
+        {
+            var vm = new ClubRewardScenarioViewModel();
+
+            return View("EditScenarioFrom", vm);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public ActionResult CreateScenario(ClubRewardScenarioViewModel vm)
+        {
+            try
+            {
+                var currentUser = UserService.GetUser(User.Identity.Name);
+                if (currentUser.AccountType == AccountType.User)
+                    return RedirectToAction("List");
+
+                var rewardScenario = new ClubPointRewardScenario
+                {
+                    MondayAmount = vm.MondayAmount,
+                    TuesdayAmount = vm.TuesdayAmount,
+                    WednesdayAmount = vm.WednesdayAmount,
+                    ThursdayAmount = vm.ThursdayAmount,
+                    FridayAmount = vm.FridayAmount,
+                    SaturdayAmount = vm.SaturdayAmount,
+                    SundayAmount = vm.SundayAmount,
+                    ClubId = currentUser.Id,
+                    Scenario = vm.Scenario
+                };
+
+                _rewardService.AddRewardScenario(rewardScenario);
+            }
+            catch (AlreadyExistsException)
+            {
+                ShowAlert("A scenario with the same condition already exists.", AlertType.Error);
+                return Scenarios();
+            }
+
+            return RedirectToAction("Scenarios");
+        }
+
+        [HttpGet]
         public ActionResult EditScenario(int id)
         {
             if (id == 0)

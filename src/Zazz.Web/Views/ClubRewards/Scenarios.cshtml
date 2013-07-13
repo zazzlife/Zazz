@@ -11,6 +11,10 @@
     </div>
 
     <div>
+        <p>
+            @Html.ActionLink("Create new", "CreateScenario")
+        </p>
+
         @if (Model.Scenarios.Count > 0)
         {
             <table class="table table-condensed table-striped" style="margin-bottom: 100px;">
@@ -68,14 +72,12 @@
                             @Html.DisplayFor(modelItem => item.SundayAmount)
                         </td>
                         <td><a href="~/clubrewards/editscenario/@item.ScenarioId">Edit</a> |
-                        <a href="~/clubrewards/removescenario/@item.ScenarioId">Remove</a></td>
+                            <a href="~/clubrewards/removescenario/@item.ScenarioId">Remove</a></td>
                     </tr>
                 }
 
             </table>
         }
-
-        <h3>Create a new scenario</h3>
 
         @*@Html.Partial("_EditScenarioFormInLine", new ClubRewardScenarioViewModel())*@
 

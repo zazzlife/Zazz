@@ -21,64 +21,64 @@
             </div>
 
             <div class="editor-label">
-            @Html.LabelFor(model => model.MondayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.MondayAmount)
-            @Html.ValidationMessageFor(model => model.MondayAmount)
-        </div>
+                @Html.LabelFor(model => model.MondayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.MondayAmount)
+                @Html.ValidationMessageFor(model => model.MondayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.TuesdayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.TuesdayAmount)
-            @Html.ValidationMessageFor(model => model.TuesdayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.TuesdayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.TuesdayAmount)
+                @Html.ValidationMessageFor(model => model.TuesdayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.WednesdayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.WednesdayAmount)
-            @Html.ValidationMessageFor(model => model.WednesdayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.WednesdayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.WednesdayAmount)
+                @Html.ValidationMessageFor(model => model.WednesdayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.ThursdayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.ThursdayAmount)
-            @Html.ValidationMessageFor(model => model.ThursdayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ThursdayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ThursdayAmount)
+                @Html.ValidationMessageFor(model => model.ThursdayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.FridayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.FridayAmount)
-            @Html.ValidationMessageFor(model => model.FridayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.FridayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.FridayAmount)
+                @Html.ValidationMessageFor(model => model.FridayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.SaturdayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.SaturdayAmount)
-            @Html.ValidationMessageFor(model => model.SaturdayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.SaturdayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SaturdayAmount)
+                @Html.ValidationMessageFor(model => model.SaturdayAmount)
+            </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.SundayAmount)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.SundayAmount)
-            @Html.ValidationMessageFor(model => model.SundayAmount)
-        </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.SundayAmount)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SundayAmount)
+                @Html.ValidationMessageFor(model => model.SundayAmount)
+            </div>
 
             <div class="form-actions">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                @Html.ActionLink("Cancel", "Scenarios", null, new { @class="btn"})
+                @Html.ActionLink("Cancel", "Scenarios", null, new { @class = "btn" })
             </div>
         </fieldset>
     }
