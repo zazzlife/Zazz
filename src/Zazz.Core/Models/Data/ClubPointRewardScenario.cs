@@ -13,6 +13,20 @@ namespace Zazz.Core.Models.Data
         
         public int Amount { get; set; }
 
+        public int MondayAmount { get; set; }
+
+        public int TuesdayAmount { get; set; }
+
+        public int WednesdayAmount { get; set; }
+
+        public int ThursdayAmount { get; set; }
+
+        public int FridayAmount { get; set; }
+
+        public int SaturdayAmount { get; set; }
+
+        public int SundayAmount { get; set; }
+
         public User Club { get; set; }
     }
 }
