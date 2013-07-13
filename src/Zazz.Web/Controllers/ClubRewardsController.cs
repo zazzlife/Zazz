@@ -282,6 +282,8 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult CreateScenario()
         {
+            ViewBag.Title = "Create Scenario";
+
             var vm = new ClubRewardScenarioViewModel();
 
             return View("EditScenarioFrom", vm);
@@ -290,6 +292,8 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult CreateScenario(ClubRewardScenarioViewModel vm)
         {
+            ViewBag.Title = "Create Scenario";
+
             try
             {
                 var currentUser = UserService.GetUser(User.Identity.Name);
@@ -326,6 +330,8 @@ namespace Zazz.Web.Controllers
             if (id == 0)
                 throw new HttpException(404, "not found");
 
+            ViewBag.Title = "Edit Scenario";
+
             var currentUserId = GetCurrentUserId();
             var scenario = _uow.ClubPointRewardScenarioRepository.GetById(id);
             if (scenario == null || currentUserId != scenario.ClubId)
@@ -352,6 +358,8 @@ namespace Zazz.Web.Controllers
         {
             if (id == 0)
                 throw new HttpException(404, "not found");
+
+            ViewBag.Title = "Edit Scenario";
 
             if (ModelState.IsValid)
             {
