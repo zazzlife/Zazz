@@ -202,7 +202,7 @@ namespace Zazz.Web.Controllers
                 zazzEvent.CreatedDate = DateTime.UtcNow;
 
                 _eventService.CreateEvent(zazzEvent);
-                return Redirect("~/events/show/" + zazzEvent.Id);
+                return RedirectToAction("Show", new { zazzEvent.Id });
             }
 
             ViewBag.FormAction = "Create";
@@ -248,7 +248,7 @@ namespace Zazz.Web.Controllers
 
                 _eventService.UpdateEvent(post, userId);
 
-                return Redirect("~/events/show/" + id);
+                return RedirectToAction("Show", new { id });
             }
 
             return View("EditForm", vm);
