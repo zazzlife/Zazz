@@ -5,6 +5,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -15,6 +16,8 @@ namespace Zazz.Infrastructure.Services
         private readonly ICacheService _cacheService;
 
         private const int PASS_MAX_LENGTH = 20;
+
+        private const int TOKEN_SIZE = 512;
 
         public AuthService(IUoW uow, ICryptoService cryptoService, ICacheService cacheService)
         {
@@ -60,7 +63,7 @@ namespace Zazz.Infrastructure.Services
                 user.UserValidationToken = new UserValidationToken
                                            {
                                                ExpirationTime = DateTime.UtcNow.AddYears(1),
-                                               Token = Guid.NewGuid()
+                                               Token = _cryptoService.GenerateKey(TOKEN_SIZE)
                                            };
             }
 
@@ -87,7 +90,7 @@ namespace Zazz.Infrastructure.Services
                 
 
             token.ExpirationTime = DateTime.UtcNow.AddDays(1);
-            token.Token = Guid.NewGuid();
+            token.Token = _cryptoService.GenerateKey(TOKEN_SIZE);
 
             if (!tokenExists)
                 _uow.ValidationTokenRepository.InsertGraph(token);
@@ -97,13 +100,13 @@ namespace Zazz.Infrastructure.Services
             return token;
         }
 
-        public bool IsTokenValid(int userId, Guid token)
+        public bool IsTokenValid(int userId, string token)
         {
             var userToken = _uow.ValidationTokenRepository.GetById(userId);
             return IsTokenValid(userToken, token);
         }
 
-        private bool IsTokenValid(UserValidationToken userToken, Guid providedToken)
+        private bool IsTokenValid(UserValidationToken userToken, string providedToken)
         {
             if (userToken == null)
                 return false;
@@ -111,10 +114,11 @@ namespace Zazz.Infrastructure.Services
             if (userToken.ExpirationTime < DateTime.UtcNow)
                 throw new TokenExpiredException();
 
-            return providedToken.Equals(userToken.Token);
+            var base64Token = Base64Helper.Base64UrlEncode(userToken.Token);
+            return providedToken.Equals(base64Token);
         }
 
-        public void ResetPassword(int userId, Guid token, string newPassword)
+        public void ResetPassword(int userId, string token, string newPassword)
         {
             if (newPassword.Length > PASS_MAX_LENGTH)
                 throw new PasswordTooLongException();

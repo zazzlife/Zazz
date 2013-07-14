@@ -7,6 +7,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Infrastructure.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
@@ -23,10 +24,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private string _pass;
         private MockRepository _mockRepo;
         private Mock<ICacheService> _cacheService;
+        private byte[] _token;
 
         [SetUp]
         public void Init()
         {
+            _token = new byte[] {44, 44, 55, 66};
             _pass = "pass";
             _passBuffer = new byte[] { 1, 2, 3, 4, 5, 6 };
             _iv = new byte[] { 1, 2, 3, 3, 4, 5 };
@@ -194,6 +197,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
                        .Returns(encryptedPass);
 
+            _cryptoService.Setup(x => x.GenerateKey(It.IsAny<int>(), It.IsAny<bool>()))
+                          .Returns(_token);
+
             _uow.Setup(x => x.UserRepository.InsertGraph(It.IsAny<User>()));
             _uow.Setup(x => x.SaveChanges());
 
@@ -241,6 +247,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.ValidationTokenRepository.InsertGraph(It.Is<UserValidationToken>(t => t.Id == userId)));
             _uow.Setup(x => x.SaveChanges());
 
+            _cryptoService.Setup(x => x.GenerateKey(It.IsAny<int>(), It.IsAny<bool>()))
+                          .Returns(_token);
+
             //Act
             var result = _sut.GenerateResetPasswordToken(email);
 
@@ -258,19 +267,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var userId = 12;
             var email = "email";
             var oldTokenExpirationTime = DateTime.UtcNow.AddDays(-1);
-            var oldTokenGuid = Guid.NewGuid();
+            var oldToken = new byte[] {99, 66};
 
             var token = new UserValidationToken
                         {
                             Id = userId,
                             ExpirationTime = oldTokenExpirationTime,
-                            Token = oldTokenGuid,
+                            Token = oldToken,
                         };
 
             _uow.Setup(x => x.UserRepository.GetIdByEmail(email))
                     .Returns(userId);
             _uow.Setup(x => x.ValidationTokenRepository.GetById(userId))
                     .Returns(token);
+
+            _cryptoService.Setup(x => x.GenerateKey(It.IsAny<int>(), It.IsAny<bool>()))
+                          .Returns(_token);
 
             _uow.Setup(x => x.SaveChanges());
 
@@ -279,7 +291,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(DateTime.UtcNow.AddDays(1).Date, result.ExpirationTime.Date);
-            Assert.AreNotEqual(oldTokenGuid, result.Token);
+            CollectionAssert.AreNotEqual(oldToken, result.Token);
             Assert.AreEqual(userId, result.Id);
             _mockRepo.VerifyAll();
         }
@@ -292,12 +304,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void RetrunTrueWhenTokenIsValid_OnIsTokenValid()
         {
             //Arrange
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            var token = new UserValidationToken
+                        {
+                            Id = 12,
+                            Token = _token,
+                            ExpirationTime = DateTime.UtcNow.AddDays(1)
+                        };
+
             _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                     .Returns(() => token);
 
+            var base64Token = Base64Helper.Base64UrlEncode(_token);
+
             //Act
-            var result = _sut.IsTokenValid(token.Id, token.Token);
+            var result = _sut.IsTokenValid(token.Id, base64Token);
 
             //Assert
             Assert.IsTrue(result);
@@ -308,12 +328,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void RetrunFalseWhenTokenIsNotValid_OnIsTokenValid()
         {
             //Arrange
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            var token = new UserValidationToken
+                        {
+                            Id = 12,
+                            Token = _token,
+                            ExpirationTime = DateTime.UtcNow.AddDays(1)
+                        };
             _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                     .Returns(() => token);
 
+            var base64Token = Base64Helper.Base64UrlEncode(new byte[] {1, 2, 3});
+
             //Act
-            var result = _sut.IsTokenValid(token.Id, Guid.NewGuid());
+            var result = _sut.IsTokenValid(token.Id, base64Token);
 
             //Assert
             Assert.IsFalse(result);
@@ -325,12 +352,19 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowExpiredExceptionWhenTokenIsExpired_OnIsTokenValid()
         {
             //Arrange
-            var token = new UserValidationToken { Id = 12, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(-1) };
+            var token = new UserValidationToken
+                        {
+                            Id = 12,
+                            Token = _token,
+                            ExpirationTime = DateTime.UtcNow.AddDays(-1)
+                        };
+
             _uow.Setup(x => x.ValidationTokenRepository.GetById(token.Id))
                     .Returns(() => token);
 
+            var base64Token = Base64Helper.Base64UrlEncode(_token);
             //Act
-            Assert.Throws<TokenExpiredException>(() => _sut.IsTokenValid(token.Id, token.Token));
+            Assert.Throws<TokenExpiredException>(() => _sut.IsTokenValid(token.Id, base64Token));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -348,7 +382,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.IsTrue(_pass.Length > 20);
 
             //Act & Assert
-            Assert.Throws<PasswordTooLongException>(() => _sut.ResetPassword(_user.Id, Guid.NewGuid(), _pass));
+            Assert.Throws<PasswordTooLongException>(
+                () => _sut.ResetPassword(_user.Id, Base64Helper.Base64UrlEncode(_token), _pass));
+
             _mockRepo.VerifyAll();
         }
 
@@ -356,13 +392,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowInvalidTokenExceptionWhenTokenIsNotValid_OnResetPassword()
         {
             //Arrange
-            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            var token = new UserValidationToken { Id = _user.Id, Token = _token, ExpirationTime = DateTime.UtcNow.AddDays(1) };
             _user.UserValidationToken = token;
             _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                 .Returns(_user);
 
+            var base64 = Base64Helper.Base64UrlEncode(new byte[] {1});
+
             //Act & Assert
-            Assert.Throws<InvalidTokenException>(() =>  _sut.ResetPassword(_user.Id, Guid.NewGuid(), ""));
+            Assert.Throws<InvalidTokenException>(() =>  _sut.ResetPassword(_user.Id, base64, ""));
             _mockRepo.VerifyAll();
         }
 
@@ -375,7 +413,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var iv = new byte[] { 67, 89 };
             var ivText = Convert.ToBase64String(iv);
 
-            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            var token = new UserValidationToken { Id = _user.Id, Token = _token, ExpirationTime = DateTime.UtcNow.AddDays(1) };
             _user.UserValidationToken = token;
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
                        .Returns(() => newPassBuffer);
@@ -386,7 +424,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.ResetPassword(_user.Id, token.Token, newPass);
+            _sut.ResetPassword(_user.Id, Base64Helper.Base64UrlEncode(_token), newPass);
 
             //Assert
             CollectionAssert.AreEqual(newPassBuffer, _user.Password);
@@ -403,7 +441,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var iv = new byte[] { 67, 89 };
             var ivText = Convert.ToBase64String(iv);
 
-            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
+            var token = new UserValidationToken { Id = _user.Id, Token = _token, ExpirationTime = DateTime.UtcNow.AddDays(1) };
             _user.UserValidationToken = token;
             _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
                        .Returns(() => newPassBuffer);
@@ -414,7 +452,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.ResetPassword(_user.Id, token.Token, newPass);
+            _sut.ResetPassword(_user.Id, Base64Helper.Base64UrlEncode(_token), newPass);
 
             //Assert
             _mockRepo.VerifyAll();

@@ -16,6 +16,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
+using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
@@ -122,7 +123,7 @@ namespace Zazz.Web.Controllers
         {
             throw new NotImplementedException();
 
-            //TODO: (URGENT) Implement this using new oauth method.
+            //TODO: Remove!
 
             //var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
             //var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
@@ -271,8 +272,9 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     var token = _authService.GenerateResetPasswordToken(email);
+                    var tokenString = Base64Helper.Base64UrlEncode(token.Token);
 
-                    var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, token.Token.ToString());
+                    var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, tokenString);
                     var message = String.Format(
                         "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", email,
                         Environment.NewLine, "test: " + resetLink);
@@ -290,17 +292,17 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ResetPassword(int? id, Guid? token)
+        public ActionResult ResetPassword(int? id, string token)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
-            if (!id.HasValue || !token.HasValue)
+            if (!id.HasValue || String.IsNullOrWhiteSpace(token))
                 throw new HttpException(404, "Requested url is not valid");
 
             try
             {
-                var isTokenValid = _authService.IsTokenValid(id.Value, token.Value);
+                var isTokenValid = _authService.IsTokenValid(id.Value, token);
                 if (!isTokenValid)
                     throw new HttpException(404, "Requested url is not valid");
             }
@@ -314,7 +316,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(int id, Guid token, ResetPasswordModel resetPasswordModel)
+        public ActionResult ResetPassword(int id, string token, ResetPasswordModel resetPasswordModel)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");

@@ -13,9 +13,9 @@ namespace Zazz.Core.Interfaces
 
         UserValidationToken GenerateResetPasswordToken(string email);
 
-        bool IsTokenValid(int userId, Guid token);
+        bool IsTokenValid(int userId, string token);
 
-        void ResetPassword(int userId, Guid token, string newPassword);
+        void ResetPassword(int userId, string token, string newPassword);
         
         void ChangePassword(int userId, string currentPassword, string newPassword);
         

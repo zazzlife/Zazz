@@ -88,7 +88,6 @@
     <Compile Include="Repositories\UserReceivedVotesRepositoryShould.cs" />
     <Compile Include="Repositories\UserRepositoryShould.cs" />
     <Compile Include="Repositories\UserRewardRepositoryShould.cs" />
-    <Compile Include="Repositories\ValidationTokenRepositoryShould.cs" />
     <Compile Include="WebServices\FacebookHelperShould.cs" />
   </ItemGroup>
   <ItemGroup>

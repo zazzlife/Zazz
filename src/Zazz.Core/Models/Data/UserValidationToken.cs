@@ -8,7 +8,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("Id")]
         public User User { get; set; }
 
-        public Guid Token { get; set; }
+        public byte[] Token { get; set; }
 
         public DateTime ExpirationTime { get; set; }
     }
