@@ -257,7 +257,7 @@
     <Compile Include="Controllers\Api\WeekliesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ClubRewardsController.cs" />
-    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FacebookController.cs" />
     <Compile Include="Controllers\FollowController.cs" />

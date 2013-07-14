@@ -56,7 +56,7 @@ $(document).on('keypress', '.comment-textbox', function (e) {
 
     var id = self.data('id');
     var commentType = self.attr('data-commentType');
-    var url = "/comment/new";
+    var url = "/comments/new";
 
     $.ajax({
         url: url,
@@ -96,7 +96,7 @@ $(document).on('click', '.comment-remove', function (e) {
 
     var self = $(this);
     var id = self.data('id');
-    var url = '/comment/remove/' + id;
+    var url = '/comments/remove/' + id;
     var listItem = self.parent().parent().parent().parent();
     //      li       ul      div     li
 
@@ -164,7 +164,7 @@ $(document).on('keypress', '.comment-edit-box', function (e) {
 
     var id = self.data('id');
 
-    var url = '/comment/edit/' + id;
+    var url = '/comments/edit/' + id;
 
     var loadingIndicator = showInputBusy(self);
 
@@ -208,7 +208,7 @@ $(document).on('click', '.load-comments-btn', function () {
     var self = $(this);
     var id = self.data('id');
 
-    var url = '/comment/get/' + id;
+    var url = '/comments/get/' + id;
     var commentType = self.attr('data-commentType');
 
     var ul = self.prev();
@@ -260,7 +260,7 @@ function loadLightboxComments(photoId, commentsContainer) {
         return;
     }
 
-    var url = "/comment/LightboxComments";
+    var url = "/comments/LightboxComments";
 
     $.ajax({
         url: url,
