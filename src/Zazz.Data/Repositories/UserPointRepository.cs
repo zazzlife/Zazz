@@ -23,9 +23,16 @@ namespace Zazz.Data.Repositories
             _dbSet = _context.Set<UserPoint>();
         }
 
-        public IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null)
+        public IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null,
+            bool includeUser = false, bool includeClub = false)
         {
             var query = _dbSet.AsQueryable();
+
+            if (includeUser)
+                query = query.Include(p => p.User);
+
+            if (includeClub)
+                query = query.Include(p => p.Club);
 
             if (userId.HasValue)
                 query = query.Where(p => p.UserId == userId);

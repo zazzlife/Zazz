@@ -5,7 +5,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IUserPointRepository
     {
-        IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null);
+        IQueryable<UserPoint> GetAll(int? userId = null, int? clubId = null,
+            bool includeUser = false, bool includeClub = false);
 
         void ChangeUserPoints(int userId, int clubId, int amountToChange);
     }

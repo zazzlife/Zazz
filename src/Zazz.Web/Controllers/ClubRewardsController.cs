@@ -32,7 +32,40 @@ namespace Zazz.Web.Controllers
             var userId = GetCurrentUserId();
             var accountType = UserService.GetAccountType(userId);
 
-            return View(accountType);
+            var vm = new ClubRewardsIndexViewModel
+                     {
+                         AccountType = accountType
+                     };
+
+            if (accountType == AccountType.User)
+            {
+                var userPoints = _uow.UserPointRepository.GetAll(userId)
+                                     .Select(p => new
+                                                  {
+                                                      points = p.Points,
+                                                      clubId = p.ClubId,
+                                                      clubname = p.Club.ClubDetail.ClubName
+                                                  })
+                                     .ToList();
+
+                if (userPoints.Any())
+                {
+                    vm.TotalPoints = userPoints.Sum(p => p.points);
+                    vm.Clubs = userPoints.Select(p => new ClubRewardsIndexClubViewModel
+                                                      {
+                                                          ClubId = p.clubId,
+                                                          ClubName = p.clubname,
+                                                          Points = p.points
+                                                      })
+                                         .ToList();
+                }
+                else
+                {
+                    vm.Clubs = new List<ClubRewardsIndexClubViewModel>();
+                }
+            }
+
+            return View(vm);
         }
 
         public ActionResult List(int? id)

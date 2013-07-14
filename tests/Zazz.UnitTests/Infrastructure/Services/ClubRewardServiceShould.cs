@@ -670,7 +670,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
                 .Returns(reward);
 
-            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId, false, false))
                 .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
 
             //Act
@@ -702,7 +702,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
                 .Returns(reward);
 
-            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId, false, false))
                 .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
 
             _uow.Setup(x => x.UserRewardRepository.Exists(userPoints.UserId, reward.Id))
@@ -739,7 +739,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.ClubRewardRepository.GetById(reward.Id))
                 .Returns(reward);
 
-            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId))
+            _uow.Setup(x => x.UserPointRepository.GetAll(userPoints.UserId, userPoints.ClubId, false, false))
                 .Returns(new EnumerableQuery<UserPoint>(new[] { userPoints }));
 
             _uow.Setup(x => x.UserRewardRepository.Exists(userPoints.UserId, reward.Id))

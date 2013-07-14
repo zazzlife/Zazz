@@ -291,6 +291,7 @@
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
     <Compile Include="Models\ClubRewardScenariosListViewModel.cs" />
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
+    <Compile Include="Models\ClubRewardsIndexViewModel.cs" />
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JWT.cs" />

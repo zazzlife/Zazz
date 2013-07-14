@@ -1,5 +1,5 @@
 ﻿@using Zazz.Core.Models.Data.Enums
-@model AccountType
+@model ClubRewardsIndexViewModel
 @{
     ViewBag.Title = "Rewards";
 }
@@ -8,19 +8,29 @@
     <div class="page-header">
         <h2>Rewards</h2>
     </div>
-
-    links:
     
+    @if (Model.AccountType == AccountType.User)
+    {
+        <div class="text-right"><h3>Total Points: 222</h3></div>
+    }
+
     <ul>
 
-        @if (Model == AccountType.Club)
+        @if (Model.AccountType == AccountType.Club)
         {
             <li>@Html.ActionLink("Manage point reward scenarios", "Scenarios")</li>
             <li>@Html.ActionLink("Manage rewards", "List")</li>
         }
         else
         {
-            <li>@Html.ActionLink("Your current rewards", "ActiveRewards")</li>
+            <li>@Html.ActionLink("Current rewards", "ActiveRewards")</li>
+
+            if (Model.Clubs.Count > 0)
+            {
+                <li><strong>Clubs:</strong></li>
+                <li><a href="#">Club1 (122)</a></li>
+                <li><a href="#">Club2 (100)</a></li>
+            }
         }
 
     </ul>
