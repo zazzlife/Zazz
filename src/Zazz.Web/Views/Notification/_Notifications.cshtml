@@ -27,7 +27,7 @@
             else if (n.NotificationType == NotificationType.CommentOnPost)
             {
                 @:commented on your
-                <a target="_blank" href="~/post/show/@n.ItemId">post</a>
+                <a target="_blank" href="~/posts/show/@n.ItemId">post</a>
             }
             else if (n.NotificationType == NotificationType.FollowRequestAccepted)
             {
@@ -41,7 +41,7 @@
             else if (n.NotificationType == NotificationType.WallPost)
             {
                 @:posted on your wall.
-                <a target="_blank" href="~/post/show/@n.ItemId">view post</a>
+                <a target="_blank" href="~/posts/show/@n.ItemId">view post</a>
             }
 
             <span title="@n.Time.ToLongDateString() - @n.Time.ToShortTimeString()"

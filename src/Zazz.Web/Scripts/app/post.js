@@ -11,7 +11,7 @@ $(document).on('click', '#submitPostBtn', function () {
     }
 
     showBtnBusy(self);
-    var url = '/post/new';
+    var url = '/posts/new';
 
     $.ajax({
         url: url,
@@ -97,7 +97,7 @@ $(document).on('click', '.submitPostEdit', function () {
     };
 
     $.ajax({
-        url: '/post/edit/' + id,
+        url: '/posts/edit/' + id,
         type: 'POST',
         cache: false,
         data: {

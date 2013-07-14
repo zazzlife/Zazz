@@ -265,7 +265,7 @@
     <Compile Include="Controllers\JsonNetResult.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PhotosController.cs" />
-    <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserPageLayoutBaseController.cs" />
     <Compile Include="Controllers\VoteController.cs" />
@@ -607,7 +607,7 @@
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
     <Content Include="Views\Shared\_WeeklyItem.cshtml" />
     <Content Include="Views\User\EditClub.cshtml" />
-    <Content Include="Views\Post\Show.cshtml" />
+    <Content Include="Views\Posts\Show.cshtml" />
     <Content Include="Views\Shared\Errors\404.cshtml" />
     <Content Include="Views\Shared\Errors\500.cshtml" />
     <Content Include="Views\Account\FindFriends.cshtml" />
