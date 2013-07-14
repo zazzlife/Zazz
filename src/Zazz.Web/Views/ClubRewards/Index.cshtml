@@ -12,6 +12,11 @@
     @if (Model.AccountType == AccountType.User)
     {
         <div class="text-right"><h3>Total Points: 222</h3></div>
+        <form action="~/clubrewards/addpoints">
+            amount: <input name="amount" class="span1"/>
+            club id: <input name="clubId" class="span1"/>
+            <input type="submit" class="btn"/>
+        </form>
     }
 
     <ul>

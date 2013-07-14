@@ -27,6 +27,14 @@ namespace Zazz.Web.Controllers
             _rewardService = rewardService;
         }
 
+        public ActionResult AddPoints(int amount, int clubId)
+        {
+            var currentUserId = GetCurrentUserId();
+            _uow.UserPointRepository.ChangeUserPoints(currentUserId, clubId, amount);
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Index()
         {
             var userId = GetCurrentUserId();
