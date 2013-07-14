@@ -14,8 +14,6 @@
 
         string GenerateHexTextSignature(string clearText);
 
-        string GenerateQRCodeToken(byte[] userPassword);
-
         /// <summary>
         /// Returns HEX
         /// </summary>
