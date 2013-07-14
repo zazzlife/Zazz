@@ -225,7 +225,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BackgroundWorkers\TagsUpdaterTask.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
     <Compile Include="Controllers\Api\ApiUserReward.cs" />
     <Compile Include="Controllers\Api\RewardsController.cs" />

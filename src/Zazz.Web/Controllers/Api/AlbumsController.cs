@@ -55,7 +55,7 @@ namespace Zazz.Web.Controllers.Api
             return albums;
         }
 
-        // GET api/v1/album/5
+        // GET api/v1/albums/5
         public ApiAlbum Get(int id)
         {
             if (id == 0)
@@ -87,7 +87,7 @@ namespace Zazz.Web.Controllers.Api
                    };
         }
 
-        // POST api/v1/album
+        // POST api/v1/albums
         public ApiAlbum Post(ApiAlbum album)
         {
             var a = new Album
@@ -107,7 +107,7 @@ namespace Zazz.Web.Controllers.Api
             return album;
         }
 
-        // PUT api/v1/album/5
+        // PUT api/v1/albums/5
         public void Put(int id, ApiAlbum album)
         {
             if (id == 0)
@@ -127,7 +127,7 @@ namespace Zazz.Web.Controllers.Api
             }
         }
 
-        // DELETE api/v1/album/5
+        // DELETE api/v1/albums/5
         public void Delete(int id)
         {
             if (id == 0)

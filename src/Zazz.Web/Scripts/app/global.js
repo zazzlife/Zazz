@@ -81,7 +81,7 @@ function loadAlbumsDropDownAsync(dropdownElem) {
     var def = $.Deferred();
 
     $.ajax({
-        url: "/album/getalbums",
+        url: "/albums/getalbums",
         error: function () {
             toastr.error("Failed to load the albums. Please try again later.");
             def.reject();

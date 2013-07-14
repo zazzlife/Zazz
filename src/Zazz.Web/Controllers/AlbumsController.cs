@@ -13,11 +13,11 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class AlbumController : BaseController
+    public class AlbumsController : BaseController
     {
         private readonly IAlbumService _albumService;
 
-        public AlbumController(IAlbumService albumService, IUserService userService,
+        public AlbumsController(IAlbumService albumService, IUserService userService,
             IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
             : base(userService, photoService, defaultImageHelper)
         {

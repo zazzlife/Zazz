@@ -7,7 +7,7 @@
 
 var DEFAULT_ERROR_MESSAGE = "An error occured, Please try again later.";
 var REMOVE_PHOTO_URL = "/photo/remove/";
-var REMOVE_ALBUM_URL = "/album/remove/";
+var REMOVE_ALBUM_URL = "/albums/remove/";
 var UPDATE_PROFILE_PIC_URL = "/user/ChangeProfilePic/";
 var UPDATE_COVER_PIC_URL = "/user/ChangeCoverPic/";
 
