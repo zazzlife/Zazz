@@ -13,7 +13,7 @@ namespace Zazz.Web.Models
         public PhotoLinks CurrentUserPhotoUrl { get; set; }
 
         /// <summary>
-        /// This is id of the item that the user can comment on. (post/event/photo/...)
+        /// This is id of the item that the user can comment on. (post/events/photo/...)
         /// </summary>
         public int ItemId { get; set; }
 

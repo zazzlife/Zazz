@@ -16,7 +16,7 @@
     <div class="feed-content well well-small no-padding">
         <div style="margin: 10px;">
             <p>
-                <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/event/show/@Model.EventViewModel.Id">event</a>
+                <a href="~/user/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/events/show/@Model.EventViewModel.Id">event</a>
             </p>
 
             @Html.Partial("_EventPartial", Model.EventViewModel)
