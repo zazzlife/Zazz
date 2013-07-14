@@ -14,6 +14,6 @@
     <div class="clearfix"></div>
 
     <div class="text-center" data-ajax-pagination="1" data-update="#pg-photos">
-        @Html.PagedListPager(Model, page => String.Format("/photo/getphotos/?albumId={0}&page={1}", ViewBag.AlbumId, page))
+        @Html.PagedListPager(Model, page => String.Format("/photos/getphotos/?albumId={0}&page={1}", ViewBag.AlbumId, page))
     </div>
 </div>

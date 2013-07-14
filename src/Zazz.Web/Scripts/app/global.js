@@ -105,7 +105,7 @@ function loadAlbumsDropDownAsync(dropdownElem) {
 function loadPGPhotos() {
     var albumId = $('#pg-albumSelect').val();
 
-    var url = "/photo/getphotos";
+    var url = "/photos/getphotos";
     var photoContainer = $('#pg-photos');
 
     photoContainer.html(LOADING_INDICATOR);
@@ -194,7 +194,7 @@ function initImgUploader(onComplete) {
     imgUploader = new qq.FineUploader({
         element: document.getElementById("upload"),
         request: {
-            endpoint: '/photo/ajaxupload/',
+            endpoint: '/photos/ajaxupload/',
             inputName: "image"
         },
         autoUpload: false,
@@ -272,7 +272,7 @@ $(document).on('show', '#uploadPicModal', function () {
 
 function uploadPicWithFeed(photoId) {
     $.ajax({
-        url: '/photo/feed/' + photoId,
+        url: '/photos/feed/' + photoId,
         error: function () {
             toastr.error('Image was uploaded but failed to get the feed. Please refresh the page.');
         },

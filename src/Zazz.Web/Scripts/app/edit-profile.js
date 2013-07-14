@@ -21,7 +21,7 @@ function updateUserPhotoId(photoId) {
 
 function profilePhotoSelected(photoId, photoUrl) {
     updateUserPhotoId(photoId);
-    var cropLink = '/photo/crop/' + photoId + '?for=' + photoType;
+    var cropLink = '/photos/crop/' + photoId + '?for=' + photoType;
     $('#cropLink').attr('href', cropLink);
     $('#cropPromptModal').modal('show');
 }

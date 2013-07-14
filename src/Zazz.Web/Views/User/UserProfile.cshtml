@@ -67,7 +67,7 @@
         @if (Model.Photos.Any())
         {
             <div class="well pics-widget">
-                <a class="black" href="~/photo/list/@Model.UserId"><h6>Party pics</h6></a>
+                <a class="black" href="~/photos/list/@Model.UserId"><h6>Party pics</h6></a>
                 <ul>
                     @foreach (var p in Model.Photos)
                     {
@@ -80,7 +80,7 @@
                 <div class="clearfix"></div>
 
                 <div class="text-center" style="margin-top: 10px;">
-                    <a href="~/photo/list/@Model.UserId">See more...</a>
+                    <a href="~/photos/list/@Model.UserId">See more...</a>
                 </div>
 
             </div>

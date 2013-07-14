@@ -264,7 +264,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JsonNetResult.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
-    <Compile Include="Controllers\PhotoController.cs" />
+    <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserPageLayoutBaseController.cs" />
@@ -581,7 +581,7 @@
     <Content Include="Views\User\EditUser.cshtml" />
     <Content Include="Views\Follow\_FollowRequestsPartial.cshtml" />
     <Content Include="Views\Events\_EventsListPartial.cshtml" />
-    <Content Include="Views\Photo\_SelectPhoto.cshtml" />
+    <Content Include="Views\Photos\_SelectPhoto.cshtml" />
     <Content Include="Views\Shared\_LightBoxPartial.cshtml" />
     <Content Include="Views\Shared\FeedItems\_FeedComments.cshtml" />
     <Content Include="Views\Shared\FeedItems\_SingleComment.cshtml" />
@@ -591,10 +591,10 @@
     <Content Include="Views\Shared\_PostInputsPartial.cshtml" />
     <Content Include="Views\Shared\_UploadPicModal.cshtml" />
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
-    <Content Include="Views\Photo\Crop.cshtml" />
-    <Content Include="Views\Photo\_PhotoList.cshtml" />
-    <Content Include="Views\Photo\MainView.cshtml" />
-    <Content Include="Views\Photo\_AlbumList.cshtml" />
+    <Content Include="Views\Photos\Crop.cshtml" />
+    <Content Include="Views\Photos\_PhotoList.cshtml" />
+    <Content Include="Views\Photos\MainView.cshtml" />
+    <Content Include="Views\Photos\_AlbumList.cshtml" />
     <Content Include="Views\Shared\_SingleAlbum.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedSinglePhoto.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedTwoPhotos.cshtml" />

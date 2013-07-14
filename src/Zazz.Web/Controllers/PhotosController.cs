@@ -19,12 +19,12 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class PhotoController : BaseController
+    public class PhotosController : BaseController
     {
         private readonly IAlbumService _albumService;
         private readonly IImageValidator _imageValidator;
 
-        public PhotoController(IPhotoService photoService, IAlbumService albumService,
+        public PhotosController(IPhotoService photoService, IAlbumService albumService,
             IUserService userService, IDefaultImageHelper defaultImageHelper, IImageValidator imageValidator) 
             : base (userService, photoService, defaultImageHelper)
         {

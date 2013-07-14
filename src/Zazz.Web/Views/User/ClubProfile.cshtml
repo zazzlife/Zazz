@@ -119,13 +119,13 @@
     @* Photos List *@
     
     <div class="well party-albums">
-        <a class="black" href="~/photo/list/@Model.UserId"><h6>Party Albums</h6></a>
+        <a class="black" href="~/photos/list/@Model.UserId"><h6>Party Albums</h6></a>
         
         @if (Model.PartyAlbums.Any())
         {
             foreach (var a in Model.PartyAlbums)
             {
-                <strong><a href="@String.Format("/photo/list/{0}?albumId={1}", Model.UserId, a.AlbumId)">@a.AlbumName</a> </strong>
+                <strong><a href="@String.Format("/photos/list/{0}?albumId={1}", Model.UserId, a.AlbumId)">@a.AlbumName</a> </strong>
                 <ul class="party-images">
                 
                     @foreach (var p in a.Photos)
@@ -137,7 +137,7 @@
                 <div class="clearfix"></div>
             }
 
-            <div class="text-center"><a href="~/photo/list/@Model.UserId">See more...</a></div>
+            <div class="text-center"><a href="~/photos/list/@Model.UserId">See more...</a></div>
         }
         else
         {
