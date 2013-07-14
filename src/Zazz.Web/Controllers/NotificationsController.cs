@@ -11,13 +11,15 @@ using Zazz.Web.Models;
 namespace Zazz.Web.Controllers
 {
     [Authorize]
-    public class NotificationController : UserPageLayoutBaseController
+    public class NotificationsController : UserPageLayoutBaseController
     {
         private readonly INotificationService _notificationService;
 
+// ReSharper disable MemberCanBePrivate.Global
         public const byte NOTIFICATIONS_PAGE_SIZE = 30;
+// ReSharper restore MemberCanBePrivate.Global
 
-        public NotificationController(IUserService userService, IPhotoService photoService,
+        public NotificationsController(IUserService userService, IPhotoService photoService,
             INotificationService notificationService, IDefaultImageHelper defaultImageHelper, ITagService tagService) 
             : base (userService, photoService, defaultImageHelper, tagService)
         {

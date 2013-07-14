@@ -13,7 +13,7 @@
     <div class="margin-ten">
         @Html.Partial("_Notifications", Model.Notifications)
         
-        @if (Model.Notifications.Count() == NotificationController.NOTIFICATIONS_PAGE_SIZE)
+        @if (Model.Notifications.Count() == NotificationsController.NOTIFICATIONS_PAGE_SIZE)
         {
             <button id="load-notifications" style="margin-top: 25px;" type="button" class="btn btn-inverse btn-block">Show more...</button>
         }
