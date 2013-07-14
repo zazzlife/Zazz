@@ -17,14 +17,14 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class UserController : UserPageLayoutBaseController
+    public class UsersController : UserPageLayoutBaseController
     {
         private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
         private readonly IFeedHelper _feedHelper;
 
-        public UserController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
+        public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ITagService tagService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
             : base(userService, photoService, defaultImageHelper, tagService)
@@ -41,7 +41,7 @@ namespace Zazz.Web.Controllers
             var userId = GetCurrentUserId();
             var displayName = GetCurrentUserDisplayName();
 
-            return RedirectToAction("Profile", "User",
+            return RedirectToAction("Profile", "Users",
                                     new {id = userId, friendlySeoName = displayName.ToUrlFriendlyString()});
         }
 
@@ -55,7 +55,7 @@ namespace Zazz.Web.Controllers
             //SEO
             var realFriendlySeoName = displayName.ToUrlFriendlyString();
             if (!realFriendlySeoName.Equals(friendlySeoName))
-                return RedirectToActionPermanent("Profile", "User", new { id, friendlySeoName = realFriendlySeoName });
+                return RedirectToActionPermanent("Profile", "Users", new { id, friendlySeoName = realFriendlySeoName });
 
 
             var user = _uow.UserRepository.GetById(id, true, true, true);

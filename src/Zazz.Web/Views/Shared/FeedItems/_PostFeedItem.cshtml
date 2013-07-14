@@ -7,7 +7,7 @@
 
 <div class="feed-item" data-id="@Model.FeedId">
     <div class="feed-userimg-container">
-        <a href="~/user/profile/@Model.UserId">
+        <a href="~/users/profile/@Model.UserId">
             <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
                  src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
         </a>
@@ -17,7 +17,7 @@
             <br/>
             <div class="text-center"><i class="icon-caret-down icon-large" style="color: black;"></i></div>
             <div>
-                <a href="~/user/profile/@Model.PostViewModel.ToUserId">
+                <a href="~/users/profile/@Model.PostViewModel.ToUserId">
                     <img alt="@Model.PostViewModel.ToUserDisplayName" title="@Model.PostViewModel.ToUserDisplayName" 
                          src="@Model.PostViewModel.ToUserPhotoUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
                 </a>

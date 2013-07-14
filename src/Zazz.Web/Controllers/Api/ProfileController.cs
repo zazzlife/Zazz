@@ -36,7 +36,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/v1/user/5/profile
+        // GET api/v1/users/5/profile
         public ApiUserProfile Get(int id, int lastFeed = 0)
         {
             if (id == 0)

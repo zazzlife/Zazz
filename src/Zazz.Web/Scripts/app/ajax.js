@@ -8,8 +8,8 @@
 var DEFAULT_ERROR_MESSAGE = "An error occured, Please try again later.";
 var REMOVE_PHOTO_URL = "/photos/remove/";
 var REMOVE_ALBUM_URL = "/albums/remove/";
-var UPDATE_PROFILE_PIC_URL = "/user/ChangeProfilePic/";
-var UPDATE_COVER_PIC_URL = "/user/ChangeCoverPic/";
+var UPDATE_PROFILE_PIC_URL = "/users/ChangeProfilePic/";
+var UPDATE_COVER_PIC_URL = "/users/ChangeCoverPic/";
 
 /*****************************
         REMOVE PHOTO

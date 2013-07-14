@@ -36,7 +36,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a href="@Url.Action("Profile", "User", new { id = item.ClubId, friendlySeoName=item.ClubName.ToUrlFriendlyString() })">@item.ClubName</a> 
+                    <a href="@Url.Action("Profile", "Users", new { id = item.ClubId, friendlySeoName=item.ClubName.ToUrlFriendlyString() })">@item.ClubName</a> 
                 </td>
                 <td>
                     <span title="@item.RedeemedDate.ToRelativeTime()">@item.RedeemedDate.ToShortDateString() - @item.RedeemedDate.ToShortTimeString()</span>

@@ -352,7 +352,7 @@ $('#navbarSearch').autocomplete({
     }
 }).data("ui-autocomplete")._renderItem = function (ul, item) {
 
-    var tmpl = "<a href='/user/profile/" + item.id + "' style='padding: 5px; margin-bottom:50;'><img class='img-rounded' style='margin-right:8px; width:32px; heigth:32px;' src='" + item.img + "' />" + item.value + "</a>";
+    var tmpl = "<a href='/users/profile/" + item.id + "' style='padding: 5px; margin-bottom:50;'><img class='img-rounded' style='margin-right:8px; width:32px; heigth:32px;' src='" + item.img + "' />" + item.value + "</a>";
 
     return $("<li />")
             .data("ui-autocomplete-item", item)
