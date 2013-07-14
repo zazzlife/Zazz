@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Web.Filters;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -33,17 +34,22 @@ namespace Zazz.Web.Controllers.Api
         public HttpResponseMessage Get()
         {
             var userId = ExtractUserIdFromHeader();
-            var userPass = _userService.GetUserPassword(userId);
             var displayName = _userService.GetUserDisplayName(userId);
             var displayPhoto = _photoService.GetUserImageUrl(userId);
+            
+            var token = new JWT
+                        {
+                            UserId = userId,
+                            IssuedDate = DateTime.UtcNow,
+                            ExpirationDate = DateTime.UtcNow.AddHours(1)
+                        };
 
-            var token = _cryptoService.GenerateQRCodeToken(userPass);
             var qrModel = new QRCodeModel
                           {
                               Id = userId,
                               Name = displayName,
                               Photo = displayPhoto.MediumLink,
-                              Token = token,
+                              Token = token.ToJWTString(),
                               Type = QRCodeType.User
                           };
             

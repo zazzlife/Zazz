@@ -8,6 +8,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -39,10 +40,8 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                var userPass = _userService.GetUserPassword(user.Id);
-                var check = _cryptoService.GenerateQRCodeToken(userPass);
-
-                if (user.Token != check)
+                var token = new JWT(user.Token);
+                if (user.Id != token.UserId || token.ExpirationDate < DateTime.UtcNow)
                     throw new HttpResponseException(HttpStatusCode.Forbidden);
 
                 var currentUserId = ExtractUserIdFromHeader();
@@ -54,7 +53,7 @@ namespace Zazz.Web.Controllers.Api
                     return;
 
                 var today = DateTime.UtcNow.DayOfWeek;
-                
+
                 var amount = 0;
                 switch (today)
                 {
@@ -82,6 +81,10 @@ namespace Zazz.Web.Controllers.Api
                 }
 
                 _rewardService.AwardUserPoints(user.Id, currentUserId, amount, PointRewardScenario.QRCodeSan);
+            }
+            catch (InvalidTokenException)
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
             catch (NotFoundException)
             {
