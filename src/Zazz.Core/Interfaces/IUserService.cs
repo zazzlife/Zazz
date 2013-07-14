@@ -21,8 +21,6 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<UserSearchResult> Search(string name);
 
-        byte[] GetUserPassword(int userId);
-
         string GetUserDisplayName(int userId);
 
         string GetUserDisplayName(string username);

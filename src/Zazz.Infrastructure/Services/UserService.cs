@@ -102,24 +102,6 @@ namespace Zazz.Infrastructure.Services
                                      });
         }
 
-        public byte[] GetUserPassword(int userId)
-        {
-            var cache = _cacheService.GetUserPassword(userId);
-            if (cache != default (byte[]))
-                return cache;
-
-            var user = _uoW.UserRepository.GetById(userId);
-            if (user == null)
-                throw new NotFoundException();
-
-            var password = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
-            var passwordBuffer = Encoding.UTF8.GetBytes(password);
-
-            _cacheService.AddUserPassword(userId, passwordBuffer);
-
-            return passwordBuffer;
-        }
-
         public string GetUserDisplayName(int userId)
         {
             var cache = _cacheService.GetUserDisplayName(userId);

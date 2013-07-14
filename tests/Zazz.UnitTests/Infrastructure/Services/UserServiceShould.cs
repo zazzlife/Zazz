@@ -260,69 +260,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ReturnCacheValueIfItExistsInCacheAndNotMakeDbCall_OnGetPassword()
-        {
-            //Arrange
-            var userId = 12;
-            var password = new byte[] { 1, 2, 3 };
-
-            _cacheService.Setup(x => x.GetUserPassword(userId))
-                         .Returns(password);
-
-            //Act
-            var result = _sut.GetUserPassword(userId);
-
-            //Assert
-            CollectionAssert.AreEqual(password, result);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void GetPasswordFromDbAndDecryptItAndSaveItToCacheIfItsNotInCache_OnGetPassword()
-        {
-            //Arrange
-            var userId = 12;
-            var password = new byte[] { 1, 2, 3 };
-
-            var user = new User
-                       {
-                           Id = userId,
-                           Password = new byte[] { 4, 5, 6 },
-                           PasswordIV = new byte[] { 7, 8, 9 }
-                       };
-
-            _cacheService.Setup(x => x.GetUserPassword(userId))
-                         .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetById(userId, false, false, false, false))
-                .Returns(user);
-            _cryptoService.Setup(x => x.DecryptPassword(user.Password, user.PasswordIV))
-                          .Returns(Encoding.UTF8.GetString(password));
-
-            _cacheService.Setup(x => x.AddUserPassword(userId, password));
-
-            //Act
-            var result = _sut.GetUserPassword(userId);
-
-            //Assert
-            CollectionAssert.AreEqual(password, result);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void ThrowNotFoundExceptionWhenUserIsNotExists_OnGetPassword()
-        {
-            //Arrange
-            var userId = 12;
-            _cacheService.Setup(x => x.GetUserPassword(userId))
-                         .Returns(() => null);
-            _uow.Setup(x => x.UserRepository.GetById(userId, false, false, false, false))
-                .Returns(() => null);
-            //Act & Assert
-            Assert.Throws<NotFoundException>(() => _sut.GetUserPassword(userId));
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
         public void ReturnCorrectValue_OnOAuthAccountExists()
         {
             //Arrange
