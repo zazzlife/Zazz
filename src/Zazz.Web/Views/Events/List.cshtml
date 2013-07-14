@@ -1,0 +1,35 @@
+﻿@model EventListViewModel
+@{
+    ViewBag.Title = "Events List";
+}
+
+<div id="mainContent">
+    <div class="container">
+        <div class="text-center">
+            <span class="alfa-slab-font">EVENTS</span><br />
+            <span class="event-city-name">Montreal</span>
+        </div>
+
+        <div class="alfa-slab-font" style="margin-top: 50px;">
+            <span class="pull-left">THIS WEEK</span>
+            <span class="pull-right">THIS MONTH</span>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <hr style="margin: 10px 0;" />
+
+    <div class="container split-two" style="min-height: 418px;">
+
+        @* LEFT ITEMS *@
+        <div class="left-part" data-eventImgSide="right">
+            @Html.Partial("_EventsListPartial", Model.WeekEvents)
+        </div>
+
+        @* RIGHT ITEMS *@
+        <div class="right-part" data-eventImgSide="left">
+            @Html.Partial("_EventsListPartial", Model.MonthEvents)
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
