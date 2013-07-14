@@ -3,7 +3,7 @@
 *********************************/
 
 function markAllNotificationsAsRead() {
-    var url = "/notification/markall";
+    var url = "/notifications/markall";
 
     $.ajax({
         url: url,
@@ -59,12 +59,12 @@ $('#notifications-link').popover({
     var popoverContent = popover.children('.popover-content');
 
     popover.children('.notification-popover-footer').remove();
-    var allNotificationsLink = $('<div class="notification-popover-footer"><a href="/notification">View all</a></div>');
+    var allNotificationsLink = $('<div class="notification-popover-footer"><a href="/notifications">View all</a></div>');
     allNotificationsLink.appendTo(popover);
 
     calculatePopoverPosition(li, popover);
 
-    var url = "/notification/get";
+    var url = "/notifications/get";
     var take = 5;
 
     $.ajax({
@@ -124,7 +124,7 @@ $(document).click(function (e) {
 
 $(document).on('click', '*[data-removeNotification]', function() {
 
-    var url = "/notification/remove";
+    var url = "/notifications/remove";
     var self = $(this);
     var li = self.parent();
 
@@ -167,7 +167,7 @@ $(document).on('click', '#load-notifications', function() {
 
     var btnText = showBtnBusy(self);
 
-    var url = "/notification/get";
+    var url = "/notifications/get";
     var take = 30;
 
     $.ajax({
