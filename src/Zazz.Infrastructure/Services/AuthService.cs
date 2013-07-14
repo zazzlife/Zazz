@@ -130,8 +130,6 @@ namespace Zazz.Infrastructure.Services
 
             _uow.ValidationTokenRepository.Remove(user.Id);
             _uow.SaveChanges();
-
-            _cacheService.RemovePassword(userId);
         }
 
         public void ChangePassword(int userId, string currentPassword, string newPassword)
@@ -150,8 +148,6 @@ namespace Zazz.Infrastructure.Services
             user.PasswordIV = Convert.FromBase64String(iv);
 
             _uow.SaveChanges();
-
-            _cacheService.RemovePassword(userId);
         }
 
         public User GetOAuthUser(LinkedAccount linkedAccount, string email)

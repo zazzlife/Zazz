@@ -384,7 +384,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
             _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ResetPassword(_user.Id, token.Token, newPass);
@@ -413,34 +412,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     .Returns(_user);
             _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
             _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
-
-            //Act
-            _sut.ResetPassword(_user.Id, token.Token, newPass);
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void RemoveOldPasswordFromCache_OnResetPassword()
-        {
-            //Arrange
-            var newPass = "newpass";
-            var newPassBuffer = new byte[] { 12, 34, 45 };
-            var iv = new byte[] { 67, 89 };
-            var ivText = Convert.ToBase64String(iv);
-
-            var token = new UserValidationToken { Id = _user.Id, Token = Guid.NewGuid(), ExpirationTime = DateTime.UtcNow.AddDays(1) };
-            _user.UserValidationToken = token;
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
-                       .Returns(() => newPassBuffer);
-
-            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
-                    .Returns(_user);
-            _uow.Setup(x => x.ValidationTokenRepository.Remove(_user.Id));
-            _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ResetPassword(_user.Id, token.Token, newPass);
@@ -505,7 +476,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(newPassBuffer);
 
             _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
@@ -533,7 +503,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                        .Returns(newPassBuffer);
 
             _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
 
             //Act
             _sut.ChangePassword(_user.Id, pass, newPass);
@@ -543,34 +512,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             CollectionAssert.AreEqual(newPassIvBuffer, _user.PasswordIV);
             _mockRepo.VerifyAll();
         }
-
-        [Test]
-        public void RemovePasswordFromCache_OnChangePassword()
-        {
-            //Arrange
-            var pass = "pass";
-            var newPass = "newPass";
-            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
-            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
-            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
-
-            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
-                    .Returns(_user);
-            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
-                       .Returns(pass);
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
-                       .Returns(newPassBuffer);
-
-            _uow.Setup(x => x.SaveChanges());
-            _cacheService.Setup(x => x.RemovePassword(_user.Id));
-
-            //Act
-            _sut.ChangePassword(_user.Id, pass, newPass);
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
         #endregion
 
         #region Get/Link OAuth User

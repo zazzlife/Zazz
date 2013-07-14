@@ -17,8 +17,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _userId;
         private string _displayName;
         private PhotoLinks _photoUrl;
-        private Mock<ICacheSystem<int, byte[]>> _passwordCache;
-        private byte[] _password;
         private MockRepository _mockRepo;
 
         [SetUp]
@@ -29,18 +27,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _userIdCache = _mockRepo.Create<ICacheSystem<string, int>>();
             _displayNameCache = _mockRepo.Create<ICacheSystem<int, string>>();
             _photoUrlCache = _mockRepo.Create<ICacheSystem<int, PhotoLinks>>();
-            _passwordCache = _mockRepo.Create<ICacheSystem<int, byte[]>>();
 
             _sut = new CacheService();
             CacheService.UserIdCache = _userIdCache.Object;
             CacheService.DisplayNameCache = _displayNameCache.Object;
             CacheService.PhotoUrlCache = _photoUrlCache.Object;
-            CacheService.PasswordCache = _passwordCache.Object;
 
             _username = "soroush";
             _userId = 1;
             _displayName = "display name";
-            _password = new byte[] {1, 2, 3};
             _photoUrl = new PhotoLinks
                         {
                             OriginalLink = "photo",
@@ -138,34 +133,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void AddToPasswordCache_OnAddPassword()
-        {
-            //Arrange
-            _passwordCache.Setup(x => x.Add(_userId, _password));
-
-            //Act
-            _sut.AddUserPassword(_userId, _password);
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void ReturnValueFromPasswordCache_OnGetPassword()
-        {
-            //Arrange
-            _passwordCache.Setup(x => x.TryGet(_userId))
-                          .Returns(_password);
-
-            //Act
-            var userPassword = _sut.GetUserPassword(_userId);
-
-            //Assert
-            CollectionAssert.AreEqual(_password, userPassword);
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
         public void ShouldRemoveUserDisplayName_OnRemoveUserDisplayName()
         {
             //Arrange
@@ -190,20 +157,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
-
-        [Test]
-        public void ShouldRemovePassword_OnRemovePassword()
-        {
-            //Arrange
-            _passwordCache.Setup(x => x.Remove(_userId));
-
-            //Act
-            _sut.RemovePassword(_userId);
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-
+        
     }
 }
