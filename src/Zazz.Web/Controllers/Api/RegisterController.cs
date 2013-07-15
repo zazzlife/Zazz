@@ -15,16 +15,29 @@ namespace Zazz.Web.Controllers.Api
     public class RegisterController : ApiController
     {
         private readonly IAuthService _authService;
+        private readonly IOAuthClientRepository _oauthClientRepository;
 
-        public RegisterController(IAuthService authService)
+        public RegisterController(IAuthService authService, IOAuthClientRepository oauthClientRepository)
         {
             _authService = authService;
+            _oauthClientRepository = oauthClientRepository;
         }
 
         public OAuthAccessTokenResponse Post(ApiRegister request)
         {
             if (request == null)
                 throw new OAuthException(OAuthError.InvalidRequest);
+
+            //authorizing client
+            if (Request.Headers.Authorization == null ||
+                String.IsNullOrWhiteSpace(Request.Headers.Authorization.Parameter))
+                throw new OAuthException(OAuthError.InvalidClient);
+
+            var clientId = Request.Headers.Authorization.Parameter;
+
+            var client = _oauthClientRepository.GetById(clientId);
+            if (client == null)
+                throw new OAuthException(OAuthError.InvalidClient);
 
             return null;
         }

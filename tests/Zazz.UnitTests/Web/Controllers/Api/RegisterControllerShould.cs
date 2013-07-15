@@ -30,6 +30,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private string _registerUrl;
         private MockRepository _mockRepo;
         private Mock<IAuthService> _authService;
+        private ApiRegister _validUser;
+        private ApiRegister _validClub;
+        private Mock<IOAuthClientRepository> _oauthClientRepo;
         private const string BASE_ADDRESS = "http://localhost:8080";
 
         [SetUp]
@@ -38,6 +41,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _authService = _mockRepo.Create<IAuthService>();
+            _oauthClientRepo = _mockRepo.Create<IOAuthClientRepository>();
 
 
             var config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -55,6 +59,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             config.DependencyResolver = new StructureMapDependencyResolver(iocContainer);
 
             _registerUrl = "/api/v1/register";
+
+            _validUser = new ApiRegister
+                         {
+                             AccountType = AccountType.User,
+                             Email = "abc@abc.com",
+                             Password = "1234",
+                             Username = "Soroush",
+                             Gender = Gender.Male
+                         };
+
+            _validClub = new ApiRegister
+                         {
+                             AccountType = AccountType.Club,
+                             ClubName = "Club name",
+                             ClubType = ClubType.Bar,
+                             Email = "abc@abc.com",
+                             Username = "Soroush",
+                             Password = "1234"
+                         };
         }
 
         private IContainer BuildIoC()
@@ -63,6 +86,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             {
                 x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                 x.For<IAuthService>().Use(_authService.Object);
+                x.For<IOAuthClientRepository>().Use(_oauthClientRepo.Object);
             });
         }
 
@@ -79,5 +103,25 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public async Task ReturnInvalidClientIfClientAuthorizationIsMissing_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidClient, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        #region USER
+        #endregion
     }
 }
