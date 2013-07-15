@@ -31,11 +31,12 @@ namespace Zazz.Web.Controllers
         private readonly IObjectMapper _objectMapper;
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
+        private readonly IUoW _uow;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper,IFacebookService facebookService,
-            IFollowService followService) 
+            IFollowService followService, IUoW uow) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
@@ -44,6 +45,7 @@ namespace Zazz.Web.Controllers
             _objectMapper = objectMapper;
             _facebookService = facebookService;
             _followService = followService;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -139,6 +141,14 @@ namespace Zazz.Web.Controllers
             registerVm.Majors = _staticData.GetMajors();
 
             return View(registerVm);
+        }
+
+        public bool IsAvailable(string username)
+        {
+            if (String.IsNullOrWhiteSpace(username) || username.Length < 2 || username.Length > 20)
+                return false;
+
+            return !_uow.UserRepository.ExistsByUsername(username);
         }
 
         [HttpGet]
