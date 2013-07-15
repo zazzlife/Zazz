@@ -146,8 +146,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
-        #region USER
-
         [Test]
         public async Task ReturnInvalidRequestIfUsernameIsMissing_OnPost()
         {
@@ -208,6 +206,26 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
-        #endregion
+        [Test]
+        public async Task ReturnInvalidRequestIfClubNameMissingAndAccountTypeIsClub_OnPost()
+        {
+            //Arrange
+            _validClub.ClubName = "";
+
+            var validClub = JsonConvert.SerializeObject(_validClub);
+            var content = new StringContent(validClub, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
     }
 }

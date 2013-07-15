@@ -30,7 +30,14 @@ namespace Zazz.Web.Controllers.Api
                 String.IsNullOrWhiteSpace(request.Password) ||
                 String.IsNullOrWhiteSpace(request.Email)
                 )
+            {
                 throw new OAuthException(OAuthError.InvalidRequest);
+            }
+
+            if (request.AccountType == AccountType.Club && String.IsNullOrWhiteSpace(request.ClubName))
+            {
+                throw new OAuthException(OAuthError.InvalidRequest);
+            }
 
             //authorizing client
             if (Request.Headers.Authorization == null ||
@@ -43,7 +50,7 @@ namespace Zazz.Web.Controllers.Api
             if (client == null)
                 throw new OAuthException(OAuthError.InvalidClient);
 
-
+            
 
 
             return null;
