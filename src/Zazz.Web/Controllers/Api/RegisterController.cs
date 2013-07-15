@@ -98,6 +98,10 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
+            catch (PasswordTooLongException)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest);
+            }
         }
     }
 }
