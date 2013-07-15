@@ -102,6 +102,10 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
+            catch (UsernameExistsException)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest);
+            }
         }
     }
 }
