@@ -8,6 +8,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -20,8 +21,11 @@ namespace Zazz.Web.Controllers.Api
             _authService = authService;
         }
 
-        public ApiLoginResponse Post(ApiRegister register)
+        public OAuthAccessTokenResponse Post(ApiRegister request)
         {
+            if (request == null)
+                throw new OAuthException(OAuthError.InvalidRequest);
+
             return null;
         }
     }
