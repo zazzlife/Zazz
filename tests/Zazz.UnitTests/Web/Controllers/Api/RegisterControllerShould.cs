@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -227,5 +228,35 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidEmailException_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username)), _validUser.Password, true))
+                        .Throws<InvalidEmailException>();
+            
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
     }
 }
