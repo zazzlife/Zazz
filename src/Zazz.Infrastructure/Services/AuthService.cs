@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
@@ -43,6 +44,15 @@ namespace Zazz.Infrastructure.Services
 
         public User Register(User user, string password, bool createToken)
         {
+            const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
+                                         + "@"
+                                         + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))\z";
+
+            var regex = new Regex(EMAIL_PATTERN);
+            if (!regex.IsMatch(user.Email))
+                throw new InvalidEmailException();
+
+            
             if (password.Length > PASS_MAX_LENGTH)
                 throw new PasswordTooLongException();
 

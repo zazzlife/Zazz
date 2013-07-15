@@ -111,6 +111,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #region Register
 
+        [TestCase("joe")] // should fail
+        [TestCase("joe@home")] // should fail
+        [TestCase("a@b.c")] // should fail because .c is only one character but must be 2-4 characters
+        [TestCase("joe-bob[at]home.com")] // should fail because [at] is not valid
+        [TestCase("joe@his.home.place")] // should fail because place is 5 characters but must be 2-4 characters
+        [TestCase("joe.@bob.com")] // should fail because there is a dot at the end of the local-part
+        [TestCase(".joe@bob.com")] // should fail because there is a dot at the beginning of the local-part
+        [TestCase("john..doe@bob.com")] // should fail because there are two dots in the local-part
+        [TestCase("john.doe@bob..com")] // should fail because there are two dots in the domain
+        [TestCase("joe<>bob@bob.com")] // should fail because <> are not valid
+        [TestCase("joe@his.home.com.")] // should fail because it can't end with a period
+        [TestCase("a@10.1.100.1a")] // Should fail because of the extra character
+        [TestCase("joe<>bob@bob.com\n")] // should fail because it end with \n
+        [TestCase("joe<>bob@bob.com\r")] // should fail because it ends with \r
+        public void ThrowIfEmailIsInvalid_OnRegister(string email)
+        {
+            //Arrange
+            _user.Email = email;
+
+            //Act & Assert
+            Assert.Throws<InvalidEmailException>(() => _sut.Register(_user, _pass, false));
+            _mockRepo.VerifyAll();
+        }
+
         [Test]
         public void ThrowIfPasswordIsMoreThan20Char_OnRegister()
         {
