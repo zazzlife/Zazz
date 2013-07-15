@@ -289,6 +289,7 @@
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
+    <Compile Include="Models\Api\ApiRegister.cs" />
     <Compile Include="Models\ClubRewardScenariosListViewModel.cs" />
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
     <Compile Include="Models\ClubRewardsIndexViewModel.cs" />
@@ -304,7 +305,7 @@
     <Compile Include="Models\Api\ApiFollowRequest.cs" />
     <Compile Include="Models\Api\ApiNotification.cs" />
     <Compile Include="Models\Api\ApiWeekly.cs" />
-    <Compile Include="Models\Api\Login.cs" />
+    <Compile Include="Models\Api\ApiLogin.cs" />
     <Compile Include="Models\Api\ApiPhoto.cs" />
     <Compile Include="Models\Api\ApiPost.cs" />
     <Compile Include="Models\Api\UserModels.cs" />
