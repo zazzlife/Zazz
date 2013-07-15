@@ -25,7 +25,11 @@ namespace Zazz.Web.Controllers.Api
 
         public OAuthAccessTokenResponse Post(ApiRegister request)
         {
-            if (request == null)
+            if (request == null ||
+                String.IsNullOrWhiteSpace(request.Username) ||
+                String.IsNullOrWhiteSpace(request.Password) ||
+                String.IsNullOrWhiteSpace(request.Email)
+                )
                 throw new OAuthException(OAuthError.InvalidRequest);
 
             //authorizing client
@@ -38,6 +42,9 @@ namespace Zazz.Web.Controllers.Api
             var client = _oauthClientRepository.GetById(clientId);
             if (client == null)
                 throw new OAuthException(OAuthError.InvalidClient);
+
+
+
 
             return null;
         }
