@@ -18,11 +18,21 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IAuthService _authService;
         private readonly IOAuthClientRepository _oauthClientRepository;
+        private readonly IOAuthService _oAuthService;
+        private readonly IStaticDataRepository _staticDataRepository;
+        private readonly IUserService _userService;
+        private readonly IPhotoService _photoService;
 
-        public RegisterController(IAuthService authService, IOAuthClientRepository oauthClientRepository)
+        public RegisterController(IAuthService authService, IOAuthClientRepository oauthClientRepository,
+            IOAuthService oAuthService, IStaticDataRepository staticDataRepository,
+            IUserService userService, IPhotoService photoService)
         {
             _authService = authService;
             _oauthClientRepository = oauthClientRepository;
+            _oAuthService = oAuthService;
+            _staticDataRepository = staticDataRepository;
+            _userService = userService;
+            _photoService = photoService;
         }
 
         public OAuthAccessTokenResponse Post(ApiRegister request)
@@ -37,9 +47,7 @@ namespace Zazz.Web.Controllers.Api
             }
 
             if (request.AccountType == AccountType.Club && String.IsNullOrWhiteSpace(request.ClubName))
-            {
                 throw new OAuthException(OAuthError.InvalidRequest);
-            }
 
             //authorizing client
             if (Request.Headers.Authorization == null ||
@@ -67,7 +75,14 @@ namespace Zazz.Web.Controllers.Api
                                         {
                                             FullName = request.FullName,
                                             Gender = request.Gender
-                                        }
+                                        },
+                           Preferences = new UserPreferences
+                                         {
+                                             SendSyncErrorNotifications = true,
+                                             SyncFbEvents = true,
+                                             SyncFbImages = false,
+                                             SyncFbPosts = false,
+                                         }
                        };
             }
             else
@@ -85,14 +100,40 @@ namespace Zazz.Web.Controllers.Api
                                             Address = request.ClubAddress,
                                             ClubName = request.ClubName,
                                             ClubType = request.ClubType
-                                        }
+                                        },
+                           Preferences = new UserPreferences
+                                         {
+                                             SendSyncErrorNotifications = true,
+                                             SyncFbEvents = true,
+                                             SyncFbImages = true,
+                                             SyncFbPosts = true,
+                                         }
                        };
             }
 
             try
             {
                 var u = _authService.Register(user, request.Password, true);
-                return null;
+                var scope = _staticDataRepository.GetOAuthScopes()
+                    .FirstOrDefault(s => s.Name.Contains("full"));
+
+                var oauthCreds = _oAuthService.CreateOAuthCredentials(u, client, new List<OAuthScope> { scope });
+
+                return new OAuthAccessTokenResponse
+                       {
+                           AccessToken = oauthCreds.AccessToken.ToJWTString(),
+                           ExpiresIn = 60*60,
+                           RefreshToken = oauthCreds.RefreshToken.ToJWTString(),
+                           TokenType = "Bearer",
+                           User = new ApiBasicUserInfo
+                                  {
+                                      AccountType = user.AccountType,
+                                      DisplayName = _userService.GetUserDisplayName(u.Id),
+                                      DisplayPhoto = _photoService.GetUserImageUrl(u.Id),
+                                      IsConfirmed = false,
+                                      UserId = u.Id
+                                  }
+                       };
             }
             catch (InvalidEmailException)
             {
@@ -103,6 +144,10 @@ namespace Zazz.Web.Controllers.Api
                 throw new OAuthException(OAuthError.InvalidRequest);
             }
             catch (UsernameExistsException)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest);
+            }
+            catch (EmailExistsException)
             {
                 throw new OAuthException(OAuthError.InvalidRequest);
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,8 +16,10 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Data;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
+using Zazz.Web.Controllers.Api;
 using Zazz.Web.DependencyResolution;
 using Zazz.Web.Models.Api;
 using Zazz.Web.OAuthAuthorizationServer;
@@ -35,6 +38,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private ApiRegister _validClub;
         private Mock<IOAuthClientRepository> _oauthClientRepo;
         private string _clientId;
+        private Mock<IOAuthService> _oauthService;
+        private Mock<IUserService> _userService;
+        private Mock<IPhotoService> _photoService;
         private const string BASE_ADDRESS = "http://localhost:8080";
 
         [SetUp]
@@ -44,6 +50,9 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _authService = _mockRepo.Create<IAuthService>();
             _oauthClientRepo = _mockRepo.Create<IOAuthClientRepository>();
+            _oauthService = _mockRepo.Create<IOAuthService>();
+            _userService = _mockRepo.Create<IUserService>();
+            _photoService = _mockRepo.Create<IPhotoService>();
 
 
             var config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -91,6 +100,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                 x.For<IAuthService>().Use(_authService.Object);
                 x.For<IOAuthClientRepository>().Use(_oauthClientRepo.Object);
+                x.For<IStaticDataRepository>().Use<StaticDataRepository>();
+                x.For<IOAuthService>().Use(_oauthService.Object);
+                x.For<IUserService>().Use(_userService.Object);
+                x.For<IPhotoService>().Use(_photoService.Object);
             });
         }
 
@@ -318,6 +331,94 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Assert
             Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnEmailExistsException_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username)), _validUser.Password, true))
+                        .Throws<EmailExistsException>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task RegisterAndReturnUser_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            var client = new OAuthClient();
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(client);
+
+            var user = new User
+                       {
+                           AccountType = AccountType.User,
+                           Id = 2,
+                       };
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username)), _validUser.Password, true))
+                        .Returns(user);
+
+            var oauthCreds = new OAuthCredentials
+                             {
+                                 AccessToken = new JWT(),
+                                 RefreshToken = new JWT()
+                             };
+
+            _oauthService.Setup(x => x.CreateOAuthCredentials(user, client, It.IsAny<List<OAuthScope>>()))
+                         .Returns(oauthCreds);
+
+            _userService.Setup(x => x.GetUserDisplayName(user.Id))
+                        .Returns("asdf");
+
+            _photoService.Setup(x => x.GetUserImageUrl(user.Id))
+                         .Returns(new PhotoLinks("asdfg"));
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var oauthRes = JsonConvert
+                .DeserializeObject<OAuthAccessTokenResponse>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.IsNotNull(oauthRes.User);
+            Assert.AreEqual(user.Id, oauthRes.User.UserId);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             _mockRepo.VerifyAll();
         }
     }
