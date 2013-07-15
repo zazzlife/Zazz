@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Repositories\AppRequestTokenRepository.cs" />
     <Compile Include="Repositories\ClubPointRewardScenarioRepository.cs" />
     <Compile Include="Repositories\ClubRewardRepository.cs" />
     <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />

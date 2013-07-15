@@ -93,7 +93,6 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ITagService>().Use<TagService>();
                             x.For<IWeeklyService>().Use<WeeklyService>();
                             x.For<IVoteService>().Use<VoteService>();
-                            x.For<IAppRequestTokenService>().Use<AppRequestTokenService>();
                             x.For<IOAuthService>().Use<OAuthService>();
                             x.For<IClubRewardService>().Use<ClubRewardService>();
 

@@ -37,7 +37,6 @@ namespace Zazz.Data
         public IDbSet<Weekly> Weeklies { get; set; }
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
         public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }
-        public IDbSet<AppRequestToken> AppRequestTokens { get; set; }
         public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
         public IDbSet<OAuthClient> OAuthClients { get; set; }

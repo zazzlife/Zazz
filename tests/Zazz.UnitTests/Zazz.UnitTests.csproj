@@ -97,7 +97,6 @@
     <Compile Include="Infrastructure\Helpers\Base64HelperShould.cs" />
     <Compile Include="Infrastructure\Helpers\StringHelperShould.cs" />
     <Compile Include="Infrastructure\Services\AlbumServiceShould.cs" />
-    <Compile Include="Infrastructure\Services\AppRequestTokenServiceShould.cs" />
     <Compile Include="Infrastructure\Services\AuthServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CacheServiceShould.cs" />
     <Compile Include="Infrastructure\Services\ClubRewardServiceShould.cs" />

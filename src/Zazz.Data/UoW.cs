@@ -103,11 +103,6 @@ namespace Zazz.Data
             get { return new UserReceivedVotesRepository(GetContext()); }
         }
 
-        public IAppRequestTokenRepository AppRequestTokenRepository
-        {
-            get { return new AppRequestTokenRepository(GetContext()); }
-        }
-
         public IOAuthRefreshTokenRepository OAuthRefreshTokenRepository
         {
             get { return new OAuthRefreshTokenRepository(GetContext()); }

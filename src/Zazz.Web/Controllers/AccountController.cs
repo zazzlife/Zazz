@@ -28,134 +28,23 @@ namespace Zazz.Web.Controllers
         private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
-        private readonly IAppRequestTokenService _appRequestTokenService;
         private readonly IObjectMapper _objectMapper;
-        private readonly IOAuthClientRepository _appRepository;
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IAppRequestTokenService appRequestTokenService,
-            IObjectMapper objectMapper, IOAuthClientRepository appRepository, IFacebookService facebookService,
+            IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper,IFacebookService facebookService,
             IFollowService followService) 
             : base(userService, photoService, defaultImageHelper)
         {
             _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
-            _appRequestTokenService = appRequestTokenService;
             _objectMapper = objectMapper;
-            _appRepository = appRepository;
             _facebookService = facebookService;
             _followService = followService;
         }
-
-        #region AppRegister
-
-        [HttpGet]
-        public ActionResult AppRegister(long requestId, string token)
-        {
-            if (requestId == 0 || String.IsNullOrWhiteSpace(token))
-                throw new HttpException(400, "bad request");
-
-            var vm = new RegisterViewModel
-                     {
-                         Schools = _staticData.GetSchools(),
-                         Cities = _staticData.GetCities(),
-                         Majors = _staticData.GetMajors(),
-                     };
-
-            return View("Register", vm);
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult AppRegister(RegisterViewModel vm, long requestId, string token)
-        {
-            if (requestId == 0 || String.IsNullOrWhiteSpace(token))
-                throw new HttpException(400, "bad request");
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var requestToken = _appRequestTokenService.Get(requestId);
-                    var t = BitConverter.ToString(requestToken.Token).Replace("-", "");
-
-                    if (requestToken.ExpirationTime < DateTime.UtcNow ||
-                        !t.Equals(token, StringComparison.InvariantCultureIgnoreCase))
-                        throw new HttpException(403, "Forbidden");
-
-                    var user = _objectMapper.RegisterVmToUser(vm);
-                    user.IsConfirmed = false;
-
-                    _authService.Register(user, vm.Password, true);
-
-                    var queryString = String.Format("?requestId={0}&userId={1}", requestId, user.Id);
-                    var sign = _cryptoService.GenerateHexTextSignature(queryString);
-
-                    var redirectUrl = "/account/appauthsuccess" + queryString + "&sign=" + sign;
-                    return Redirect(redirectUrl);
-
-                }
-                catch (UsernameExistsException)
-                {
-                    ShowAlert("Username is already exists.", AlertType.Warning);
-                }
-                catch (EmailExistsException)
-                {
-                    ShowAlert("This email address has registered before. Please login.", AlertType.Warning);
-                }
-                catch (NotFoundException)
-                {
-                    throw new HttpException(403, "Forbidden");
-                }
-            }
-
-            vm.Schools = _staticData.GetSchools();
-            vm.Cities = _staticData.GetCities();
-            vm.Majors = _staticData.GetMajors();
-
-            return View("Register", vm);
-        }
-
-        public JsonNetResult AppAuthSuccess(long requestId, int userId, string sign)
-        {
-            throw new NotImplementedException();
-
-            //TODO: Remove!
-
-            //var queryString = String.Format("?requestId={0}&userId={1}", requestId, userId);
-            //var signCheck = _cryptoService.GenerateHexTextSignature(queryString);
-
-            //if (signCheck != sign)
-            //    throw new HttpException(403, "Forbidden");
-
-            //var request = _appRequestTokenService.Get(requestId);
-            //var app = _appRepository.GetById(request.AppId);
-
-            //var user = UserService.GetUser(userId);
-            //var userPass = Encoding.UTF8.GetBytes(_cryptoService.DecryptPassword(user.Password, user.PasswordIV));
-            //var passwordSignature = _cryptoService.GenerateHMACSHA512Hash(userPass, app.PasswordSigningKey);
-
-            //var displayName = UserService.GetUserDisplayName(userId);
-            //var displayPhoto = PhotoService.GetUserImageUrl(userId);
-            
-
-            //_appRequestTokenService.Remove(request);
-
-            //return new JsonNetResult(
-            //    new
-            //    {
-            //        userId,
-            //        accountType = user.AccountType,
-            //        passwordSignature,
-            //        displayName,
-            //        displayPhoto
-            //    });
-        }
-
-        #endregion
 
         [HttpGet]
         public ActionResult Login(string returnUrl)
