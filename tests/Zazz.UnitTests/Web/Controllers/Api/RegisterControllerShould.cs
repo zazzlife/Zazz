@@ -33,6 +33,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private ApiRegister _validUser;
         private ApiRegister _validClub;
         private Mock<IOAuthClientRepository> _oauthClientRepo;
+        private string _clientId;
         private const string BASE_ADDRESS = "http://localhost:8080";
 
         [SetUp]
@@ -78,6 +79,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                              Username = "Soroush",
                              Password = "1234"
                          };
+
+            _clientId = "clientId";
         }
 
         private IContainer BuildIoC()
@@ -110,6 +113,28 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Arrange
             var validUser = JsonConvert.SerializeObject(_validUser);
             var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidClient, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidClientIfClientIsInvalid_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(() => null);
 
             //Act
             var response = await _client.PostAsync(_registerUrl, content);
