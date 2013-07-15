@@ -137,19 +137,19 @@ namespace Zazz.Web.Controllers.Api
             }
             catch (InvalidEmailException)
             {
-                throw new OAuthException(OAuthError.InvalidRequest);
+                throw new OAuthException(OAuthError.InvalidRequest, "invalid email");
             }
             catch (PasswordTooLongException)
             {
-                throw new OAuthException(OAuthError.InvalidRequest);
+                throw new OAuthException(OAuthError.InvalidRequest, "password too long");
             }
             catch (UsernameExistsException)
             {
-                throw new OAuthException(OAuthError.InvalidRequest);
+                throw new OAuthException(OAuthError.InvalidRequest, "username exists");
             }
             catch (EmailExistsException)
             {
-                throw new OAuthException(OAuthError.InvalidRequest);
+                throw new OAuthException(OAuthError.InvalidRequest, "email exists");
             }
         }
     }
