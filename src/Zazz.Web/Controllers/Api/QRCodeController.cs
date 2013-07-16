@@ -18,15 +18,12 @@ namespace Zazz.Web.Controllers.Api
     {
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
-        private readonly ICryptoService _cryptoService;
         private readonly IQRCodeService _qrCodeService;
 
-        public QRCodeController(IUserService userService, IPhotoService photoService,
-            ICryptoService cryptoService, IQRCodeService qrCodeService)
+        public QRCodeController(IUserService userService, IPhotoService photoService, IQRCodeService qrCodeService)
         {
             _userService = userService;
             _photoService = photoService;
-            _cryptoService = cryptoService;
             _qrCodeService = qrCodeService;
         }
 
