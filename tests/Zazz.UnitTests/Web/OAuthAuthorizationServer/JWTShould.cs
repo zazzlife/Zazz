@@ -104,7 +104,8 @@ namespace Zazz.UnitTests.Web.OAuthAuthorizationServer
             var jwt = new JWT
                       {
                           Claims = new ConcurrentDictionary<string, object>(),
-                          ExpirationDate = DateTime.UtcNow.AddDays(1)
+                          ExpirationDate = DateTime.UtcNow.AddDays(1),
+                          TokenType = JWT.ACCESS_TOKEN_TYPE
                       };
 
             jwt.Claims.TryAdd("key", "val");
