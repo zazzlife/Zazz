@@ -1,124 +1,119 @@
-﻿//using System;
-//using System.Linq;
-//using System.Net;
-//using System.Threading.Tasks;
-//using Moq;
-//using NUnit.Framework;
-//using Zazz.Core.Interfaces;
-//using Zazz.Core.Models.Data;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
+using Zazz.Core.Interfaces;
+using Zazz.Core.Models.Data;
 
-//namespace Zazz.UnitTests.Web.Controllers.Api
-//{
-//    [TestFixture]
-//    public class FollowRequestsControllerShould : BaseHMACTests
-//    {
-//        private Mock<IFollowService> _followService;
-//        private int _userId;
+namespace Zazz.UnitTests.Web.Controllers.Api
+{
+    [TestFixture]
+    public class FollowRequestsControllerShould : BaseOAuthTests
+    {
+        private Mock<IFollowService> _followService;
+        private int _userId;
 
-//        public override void Init()
-//        {
-//            base.Init();
+        public override void Init()
+        {
+            base.Init();
 
-//            _userId = 83;
-//            ControllerAddress = "/api/v1/followrequests/" + _userId;
-//            _followService = MockRepo.Create<IFollowService>();
+            _userId = 83;
+            ControllerAddress = "/api/v1/followrequests/" + _userId;
+            _followService = MockRepo.Create<IFollowService>();
 
-//            IocContainer.Configure(x =>
-//            {
-//                x.For<IFollowService>().Use(_followService.Object);
-//            });
-//        }
+            IocContainer.Configure(x =>
+            {
+                x.For<IFollowService>().Use(_followService.Object);
+            });
+        }
 
-//        [Test]
-//        public async Task ReturnFollowRequests_OnGet()
-//        {
-//            //Arrange
-//            ControllerAddress = "/api/v1/followrequests";
+        [Test]
+        public async Task ReturnFollowRequests_OnGet()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followrequests";
 
-//            _followService.Setup(x => x.GetFollowRequests(User.Id))
-//                          .Returns(new EnumerableQuery<FollowRequest>(Enumerable.Empty<FollowRequest>()));
+            _followService.Setup(x => x.GetFollowRequests(User.Id))
+                          .Returns(new EnumerableQuery<FollowRequest>(Enumerable.Empty<FollowRequest>()));
 
-//            AddValidHMACHeaders("GET");
-//            SetupMocksForHMACAuth();
+            CreateValidAccessToken();
 
-//            //Act
-//            var result = await Client.GetAsync(ControllerAddress);
+            //Act
+            var result = await Client.GetAsync(ControllerAddress);
 
-//            //Assert
-//            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
-//            MockRepo.VerifyAll();
-//        }
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
-//        [Test]
-//        public async Task Return400IfIdIs0_OnGet()
-//        {
-//            //Arrange
-//            ControllerAddress = "/api/v1/followrequests/0?action=accept";
+        [Test]
+        public async Task Return400IfIdIs0_OnGet()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followrequests/0?action=accept";
 
-//            AddValidHMACHeaders("DELETE");
-//            SetupMocksForHMACAuth();
+            CreateValidAccessToken();
 
-//            //Act
-//            var response = await Client.DeleteAsync(ControllerAddress);
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
 
-//            //Assert
-//            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-//            MockRepo.VerifyAll();
-//        }
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
-//        [Test]
-//        public async Task Return400IfActionIsNotValid_OnGet()
-//        {
-//            //Arrange
-//            ControllerAddress = "/api/v1/followrequests/444?action=randomaction";
+        [Test]
+        public async Task Return400IfActionIsNotValid_OnGet()
+        {
+            //Arrange
+            ControllerAddress = "/api/v1/followrequests/444?action=randomaction";
 
-//            AddValidHMACHeaders("DELETE");
-//            SetupMocksForHMACAuth();
+            CreateValidAccessToken();
 
-//            //Act
-//            var response = await Client.DeleteAsync(ControllerAddress);
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
 
-//            //Assert
-//            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-//            MockRepo.VerifyAll();
-//        }
+            //Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
-//        [Test]
-//        public async Task AcceptFollowRequestWhenActionIsAccept_OnGet()
-//        {
-//            //Arrange
-//            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=accept", _userId);
+        [Test]
+        public async Task AcceptFollowRequestWhenActionIsAccept_OnGet()
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=accept", _userId);
 
-//            _followService.Setup(x => x.AcceptFollowRequest(_userId, User.Id));
+            _followService.Setup(x => x.AcceptFollowRequest(_userId, User.Id));
 
-//            AddValidHMACHeaders("DELETE");
-//            SetupMocksForHMACAuth();
+            CreateValidAccessToken();
 
-//            //Act
-//            var response = await Client.DeleteAsync(ControllerAddress);
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
 
-//            //Assert
-//            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-//            MockRepo.VerifyAll();
-//        }
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
 
-//        [Test]
-//        public async Task RejectFollowRequestWhenActionIsReject_OnGet()
-//        {
-//            //Arrange
-//            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=reject", _userId);
+        [Test]
+        public async Task RejectFollowRequestWhenActionIsReject_OnGet()
+        {
+            //Arrange
+            ControllerAddress = String.Format("/api/v1/followrequests/{0}?action=reject", _userId);
 
-//            _followService.Setup(x => x.RejectFollowRequest(_userId, User.Id));
+            _followService.Setup(x => x.RejectFollowRequest(_userId, User.Id));
 
-//            AddValidHMACHeaders("DELETE");
-//            SetupMocksForHMACAuth();
+            CreateValidAccessToken();
 
-//            //Act
-//            var response = await Client.DeleteAsync(ControllerAddress);
+            //Act
+            var response = await Client.DeleteAsync(ControllerAddress);
 
-//            //Assert
-//            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
-//            MockRepo.VerifyAll();
-//        }
-//    }
-//}
+            //Assert
+            Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
+            MockRepo.VerifyAll();
+        }
+    }
+}
