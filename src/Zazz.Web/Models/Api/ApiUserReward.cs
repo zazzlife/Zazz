@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Zazz.Web.Controllers.Api
+namespace Zazz.Web.Models.Api
 {
     public class ApiUserReward
     {
