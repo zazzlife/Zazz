@@ -14,7 +14,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class ProfileController : BaseApiController
     {
         private readonly IUserService _userService;
@@ -42,7 +42,7 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var currentUserId = ExtractUserIdFromHeader();
+            var currentUserId = CurrentUserId;
 
             var user = _userService.GetUser(id, true, true, true);
             if (user == null)

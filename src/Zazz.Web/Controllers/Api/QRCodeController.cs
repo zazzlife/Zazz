@@ -13,7 +13,7 @@ using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class QRCodeController : BaseApiController
     {
         private readonly IUserService _userService;
@@ -33,7 +33,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/qrcode
         public HttpResponseMessage Get()
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var displayName = _userService.GetUserDisplayName(userId);
             var displayPhoto = _photoService.GetUserImageUrl(userId);
             

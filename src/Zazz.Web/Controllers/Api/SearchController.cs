@@ -10,7 +10,7 @@ using Zazz.Web.Filters;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class SearchController : BaseApiController
     {
         private readonly IUserService _userService;

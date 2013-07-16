@@ -16,7 +16,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class PhotosController : BaseApiController
     {
         private readonly IPhotoService _photoService;
@@ -126,7 +126,7 @@ namespace Zazz.Web.Controllers.Api
                         Description = description,
                         IsFacebookPhoto = false,
                         UploadDate = DateTime.UtcNow,
-                        UserId = ExtractUserIdFromHeader()
+                        UserId = CurrentUserId
                     };
 
             try
@@ -168,7 +168,7 @@ namespace Zazz.Web.Controllers.Api
                                 Description = p.Description,
                             };
 
-                _photoService.UpdatePhoto(photo, ExtractUserIdFromHeader());
+                _photoService.UpdatePhoto(photo, CurrentUserId);
             }
             catch (NotFoundException)
             {
@@ -188,7 +188,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _photoService.RemovePhoto(id, ExtractUserIdFromHeader());
+                _photoService.RemovePhoto(id, CurrentUserId);
             }
             catch (SecurityException)
             {

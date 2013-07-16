@@ -13,7 +13,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class NotificationsController : BaseApiController
     {
         private readonly INotificationService _notificationService;
@@ -33,7 +33,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/notifications
         public IEnumerable<ApiNotification> Get(long? lastNotification = null)
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var notifications = _notificationService.GetUserNotifications(userId, lastNotification)
                                                     .Take(30);
 
@@ -80,7 +80,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                var userId = ExtractUserIdFromHeader();
+                var userId = CurrentUserId;
                 _notificationService.Remove(id, userId);
             }
             catch (SecurityException)

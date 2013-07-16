@@ -12,7 +12,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class TaggedFeedsController : BaseApiController
     {
         private readonly IFeedHelper _feedHelper;
@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/tagfeeds/1,2,3,4,5
         public IEnumerable<ApiFeed> Get(string id, int lastFeed = 0)
         {
-            var currentUserId = ExtractUserIdFromHeader();
+            var currentUserId = CurrentUserId;
 
             if (String.IsNullOrEmpty(id))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);

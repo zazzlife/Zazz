@@ -9,7 +9,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class CommentsController : BaseApiController
     {
         private readonly ICommentService _commentService;
@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _commentService.EditComment(id, ExtractUserIdFromHeader(), comment.CommentText);
+                _commentService.EditComment(id, CurrentUserId, comment.CommentText);
             }
             catch (NotFoundException)
             {
@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _commentService.RemoveComment(id, ExtractUserIdFromHeader());
+                _commentService.RemoveComment(id, CurrentUserId);
             }
             catch (SecurityException)
             {

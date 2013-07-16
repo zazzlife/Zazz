@@ -10,7 +10,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class FollowsController : BaseApiController
     {
         private readonly IFollowService _followService;
@@ -28,7 +28,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/follows
         public IEnumerable<ApiFollow> Get()
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var followers = _followService.GetFollowers(userId)
                 .Select(f => f.FromUserId);
 
@@ -46,7 +46,7 @@ namespace Zazz.Web.Controllers.Api
             if (userId == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var currentUserId = ExtractUserIdFromHeader();
+            var currentUserId = CurrentUserId;
             _followService.Follow(currentUserId, userId);
         }
 
@@ -56,7 +56,7 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var currentUserId = ExtractUserIdFromHeader();
+            var currentUserId = CurrentUserId;
             _followService.RemoveFollow(currentUserId, id);
         }
     }

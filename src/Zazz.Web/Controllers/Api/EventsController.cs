@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class EventsController : BaseApiController
     {
         private readonly IEventService _eventService;
@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers.Api
                          Street = e.Street,
                          Time = e.Time,
                          TimeUtc = e.Time.ToUniversalTime().DateTime,
-                         UserId = ExtractUserIdFromHeader()
+                         UserId = CurrentUserId
                      };
 
             _eventService.CreateEvent(ze);
@@ -119,7 +119,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _eventService.UpdateEvent(ze, ExtractUserIdFromHeader());
+                _eventService.UpdateEvent(ze, CurrentUserId);
             }
             catch (NotFoundException)
             {
@@ -139,7 +139,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _eventService.DeleteEvent(id, ExtractUserIdFromHeader());
+                _eventService.DeleteEvent(id, CurrentUserId);
             }
             catch (SecurityException)
             {

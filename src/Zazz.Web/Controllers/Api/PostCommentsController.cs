@@ -12,7 +12,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class PostCommentsController : BaseApiController
     {
         private readonly IFeedHelper _feedHelper;
@@ -34,7 +34,7 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0 || lastComment < 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            return _feedHelper.GetComments(id, CommentType.Post, ExtractUserIdFromHeader(), lastComment, 10)
+            return _feedHelper.GetComments(id, CommentType.Post, CurrentUserId, lastComment, 10)
                               .Select(_objectMapper.CommentViewModelToApiModel);
         }
 
@@ -53,7 +53,7 @@ namespace Zazz.Web.Controllers.Api
                                           PostId = id
                                       },
                         Time = DateTime.UtcNow,
-                        UserId = ExtractUserIdFromHeader()
+                        UserId = CurrentUserId
                     };
 
             try
@@ -66,7 +66,7 @@ namespace Zazz.Web.Controllers.Api
                            CommentText = comment,
                            IsFromCurrentUser = true,
                            Time = c.Time,
-                           UserId = ExtractUserIdFromHeader()
+                           UserId = CurrentUserId
                        };
             }
             catch (Exception)

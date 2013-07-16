@@ -14,7 +14,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class WeekliesController : BaseApiController
     {
         private readonly IWeeklyService _weeklyService;
@@ -46,7 +46,7 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/weeklies
         public ApiWeekly Post(ApiWeekly weekly)
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var w = new Weekly
                     {
                         DayOfTheWeek = weekly.DayOfTheWeek,
@@ -79,7 +79,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                var userId = ExtractUserIdFromHeader();
+                var userId = CurrentUserId;
 
                 var w = new Weekly
                         {
@@ -110,7 +110,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                var userId = ExtractUserIdFromHeader();
+                var userId = CurrentUserId;
                 _weeklyService.RemoveWeekly(id, userId);
             }
             catch (SecurityException)

@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class AlbumsController : BaseApiController
     {
         private readonly IAlbumService _albumService;
@@ -95,7 +95,7 @@ namespace Zazz.Web.Controllers.Api
                         CreatedDate = DateTime.UtcNow,
                         IsFacebookAlbum = false,
                         Name = album.Name,
-                        UserId = ExtractUserIdFromHeader(),
+                        UserId = CurrentUserId
                     };
 
             _albumService.CreateAlbum(a);
@@ -115,7 +115,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _albumService.UpdateAlbum(id, album.Name, ExtractUserIdFromHeader());
+                _albumService.UpdateAlbum(id, album.Name, CurrentUserId);
             }
             catch (NotFoundException)
             {
@@ -135,7 +135,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _albumService.DeleteAlbum(id, ExtractUserIdFromHeader());
+                _albumService.DeleteAlbum(id, CurrentUserId);
             }
             catch (SecurityException)
             {

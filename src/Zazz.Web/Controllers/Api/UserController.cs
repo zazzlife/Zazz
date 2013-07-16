@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class UserController : BaseApiController
     {
         private readonly IUoW _uow;
@@ -35,7 +35,7 @@ namespace Zazz.Web.Controllers.Api
         // GET /api/v1/user
         public ApiUser Get()
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var user = _userService.GetUser(userId, true, true, false, true);
 
             var response = new ApiUser
@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers.Api
         // PUT /api/v1/user
         public void Put([FromBody] ApiUser u)
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var user = _uow.UserRepository.GetById(userId, true, true, false, true);
 
             if (u.Preferences == null ||

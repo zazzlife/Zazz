@@ -14,7 +14,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class PostsController : BaseApiController
     {
         private readonly IPostService _postService;
@@ -48,7 +48,7 @@ namespace Zazz.Web.Controllers.Api
             var p = new Post
                     {
                         CreatedTime = DateTime.UtcNow,
-                        FromUserId = ExtractUserIdFromHeader(),
+                        FromUserId = CurrentUserId,
                         Message = post.Message,
                         ToUserId = post.ToUserId
                     };
@@ -70,7 +70,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _postService.EditPost(id, post.Message, ExtractUserIdFromHeader());
+                _postService.EditPost(id, post.Message, CurrentUserId);
             }
             catch (NotFoundException)
             {
@@ -90,7 +90,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _postService.RemovePost(id, ExtractUserIdFromHeader());
+                _postService.RemovePost(id, CurrentUserId);
             }
             catch (SecurityException)
             {

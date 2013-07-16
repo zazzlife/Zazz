@@ -15,7 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
-    //[HMACAuthorize]
+    [OAuth2Authorize]
     public class FeedsController : BaseApiController
     {
         private readonly IFeedHelper _feedHelper;
@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/feeds?lastFeed=
         public IEnumerable<ApiFeed> GetHomeFeeds(int lastFeed = 0)
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var feeds = _feedHelper.GetFeeds(userId, lastFeed);
 
             return feeds.Select(_objectMapper.FeedViewModelToApiModel);
@@ -39,7 +39,7 @@ namespace Zazz.Web.Controllers.Api
         // GET api/v1/feeds?id=&lastFeed=
         public IEnumerable<ApiFeed> GetUserFeeds(int id, int lastFeed = 0)
         {
-            var userId = ExtractUserIdFromHeader();
+            var userId = CurrentUserId;
             var feeds = _feedHelper.GetUserActivityFeed(id, userId, lastFeed);
 
             return feeds.Select(_objectMapper.FeedViewModelToApiModel);

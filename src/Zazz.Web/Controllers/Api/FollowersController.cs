@@ -8,6 +8,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.Filters;
 using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers.Api
@@ -31,8 +32,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         //POST /api/v1/followers/qrcode
-        //[HMACAuthorize, HttpPost, ActionName("QRCodeFollow")]
-        [HttpPost, ActionName("QRCodeFollow")]
+        [OAuth2Authorize, HttpPost, ActionName("QRCodeFollow")]
         public void AddQRCodeFollow(QRCodeModel user)
         {
             if (user.Id == 0 || String.IsNullOrWhiteSpace(user.Token))
@@ -44,7 +44,7 @@ namespace Zazz.Web.Controllers.Api
                 if (user.Id != token.UserId || token.ExpirationDate < DateTime.UtcNow)
                     throw new HttpResponseException(HttpStatusCode.Forbidden);
 
-                var currentUserId = ExtractUserIdFromHeader();
+                var currentUserId = CurrentUserId;
                 _followService.Follow(user.Id, currentUserId);
 
                 //checking if the club would reward points
