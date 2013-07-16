@@ -32,6 +32,22 @@ namespace Zazz.Web.Filters
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
         {
+            ////////////////TEMP AUTH METHOD///////////////////
+            if (actionContext.Request.Headers.Authorization != null &&
+                actionContext.Request.Headers.Authorization.Scheme.Equals("ZazzApi", StringComparison.InvariantCultureIgnoreCase))
+            {
+
+                int userId;
+                if (Int32.TryParse(actionContext.Request.Headers.Authorization.Parameter, out userId))
+                {
+                    SetPrincipal(actionContext, userId);
+                    return true;
+                }
+
+            }
+            ///////////////////////////////////////////////////
+
+
             //checking if authorization is provided
             if (actionContext.Request.Headers.Authorization == null ||
                 String.IsNullOrWhiteSpace(actionContext.Request.Headers.Authorization.Parameter))
