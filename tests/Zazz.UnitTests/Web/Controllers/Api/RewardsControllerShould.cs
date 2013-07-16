@@ -18,11 +18,14 @@ namespace Zazz.UnitTests.Web.Controllers.Api
     {
         private Mock<IUoW> _uow;
         private Mock<IClubRewardService> _rewardsService;
+        private int _userId;
         private const int USER_ID = 80;
 
         public override void Init()
         {
             base.Init();
+
+            ControllerAddress = "/api/v1/rewards?userId=" + USER_ID;
 
             _uow = MockRepo.Create<IUoW>();
             _rewardsService = MockRepo.Create<IClubRewardService>();
@@ -39,8 +42,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task GetRewardsFromRepository_OnGet()
         {
             //Arrange
-            ControllerAddress = "/api/v1/rewards?userId=" + USER_ID;
-
             CreateValidAccessToken();
 
 
