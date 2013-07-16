@@ -30,11 +30,15 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         protected IContainer IocContainer;
         protected string ControllerAddress;
         protected JWT AccessToken;
+        protected Mock<IPhotoService> PhotoService;
+        protected Mock<IUserService> UserService;
 
         [SetUp]
         public virtual void Init()
         {
             MockRepo = new MockRepository(MockBehavior.Strict);
+            PhotoService = MockRepo.Create<IPhotoService>();
+            UserService = MockRepo.Create<IUserService>();
 
             User = new User
             {
@@ -59,6 +63,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             {
                 x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                 x.For<IObjectMapper>().Use<ObjectMapper>();
+                x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
+                    .Ctor<string>("baseAddress").Is("test.zazzlife.com");
+                x.For<IPhotoService>().Use(PhotoService.Object);
+                x.For<IUserService>().Use(UserService.Object);
                 x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
                     .Ctor<string>("baseAddress").Is("test.zazzlife.com");
             });
