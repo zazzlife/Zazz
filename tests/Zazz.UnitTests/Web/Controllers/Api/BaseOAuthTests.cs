@@ -23,6 +23,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 {
     public abstract class BaseOAuthTests
     {
+        protected HttpMethod DefaultHttpMethod = HttpMethod.Get;
         protected HttpSelfHostServer Server;
         protected HttpClient Client;
         protected MockRepository MockRepo;
@@ -96,7 +97,17 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = null;
 
             //Act
-            var response = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage response;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                response = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                response = await Client.DeleteAsync(ControllerAddress);
+            }
+
+            
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
 
@@ -114,7 +125,16 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", accessToken);
 
             //Act
-            var response = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage response;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                response = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                response = await Client.DeleteAsync(ControllerAddress);
+            }
+
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
 
@@ -146,7 +166,16 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
             //Act
-            var response = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage response;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                response = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                response = await Client.DeleteAsync(ControllerAddress);
+            }
+
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
 
@@ -173,7 +202,16 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                                                                         AccessToken.ToJWTString());
 
             //Act
-            var response = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage response;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                response = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                response = await Client.DeleteAsync(ControllerAddress);
+            }
+
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
 
@@ -200,7 +238,16 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                                                                                         AccessToken.ToJWTString());
 
             //Act
-            var response = await Client.GetAsync(ControllerAddress);
+            HttpResponseMessage response;
+            if (DefaultHttpMethod == HttpMethod.Get)
+            {
+                response = await Client.GetAsync(ControllerAddress);
+            }
+            else
+            {
+                response = await Client.DeleteAsync(ControllerAddress);
+            }
+
             var content = await response.Content.ReadAsStringAsync();
             var error = JsonConvert.DeserializeObject<OAuthErrorModel>(content);
 
