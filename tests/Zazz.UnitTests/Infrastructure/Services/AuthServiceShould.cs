@@ -37,7 +37,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                     {
                         Id = 22,
                         Username = "username",
-                        Email = "email",
+                        Email = "test@test.com",
                         Password = _passBuffer,
                         PasswordIV = _iv,
                     };
