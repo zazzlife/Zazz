@@ -124,7 +124,6 @@
     <Compile Include="Web\Controllers\Api\EventsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\FollowsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\FollowRequestsControllerShould.cs" />
-    <Compile Include="Web\Controllers\Api\LoginControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\NotificationsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PhotoCommentsControllerShould.cs" />
     <Compile Include="Web\Controllers\Api\PhotosControllerShould.cs" />
