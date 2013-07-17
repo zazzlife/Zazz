@@ -19,7 +19,7 @@ namespace Zazz.Data.Repositories
 
         public override Post GetById(int id)
         {
-            return DbSet.Include(p => p.Tags)
+            return DbSet.Include(p => p.Categories)
                         .SingleOrDefault(p => p.Id == id);
         }
 

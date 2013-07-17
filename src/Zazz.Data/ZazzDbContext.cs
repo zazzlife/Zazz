@@ -8,7 +8,7 @@ namespace Zazz.Data
         public IDbSet<City> Cities { get; set; }
         public IDbSet<Major> Majors { get; set; }
         public IDbSet<School> Schools { get; set; }
-        public IDbSet<Category> Tags { get; set; }
+        public IDbSet<Category> Categories { get; set; }
         public IDbSet<OAuthScope> OAuthScopes { get; set; }
 
         public IDbSet<User> Users { get; set; }
@@ -19,11 +19,11 @@ namespace Zazz.Data
         public IDbSet<LinkedAccount> LinkedAccounts { get; set; }
         public IDbSet<Album> Albums { get; set; }
         public IDbSet<Photo> Photos { get; set; }
-        public IDbSet<PhotoCategory> PhotoTags { get; set; }
+        public IDbSet<PhotoCategory> PhotoCategories { get; set; }
         public IDbSet<ZazzEvent> Events { get; set; }
-        public IDbSet<EventCategory> EventTags { get; set; }
+        public IDbSet<EventCategory> EventCategories { get; set; }
         public IDbSet<Post> Posts { get; set; }
-        public IDbSet<PostCategory> PostTags { get; set; }
+        public IDbSet<PostCategory> PostCategories { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
@@ -33,7 +33,7 @@ namespace Zazz.Data
         public IDbSet<FeedUser> FeedUsers { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
         public IDbSet<Notification> Notifications { get; set; }
-        public IDbSet<CategoryStat> TagStats { get; set; }
+        public IDbSet<CategoryStat> CateStats { get; set; }
         public IDbSet<Weekly> Weeklies { get; set; }
         public IDbSet<PhotoVote> PhotoVotes { get; set; }
         public IDbSet<UserReceivedVotes> UserReceivedVotes { get; set; }

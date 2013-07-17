@@ -138,11 +138,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -154,9 +154,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.CreateEvent(_zazzEvent);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]
@@ -175,11 +175,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, tag1Duplicate, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -191,9 +191,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.CreateEvent(_zazzEvent);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]
@@ -212,13 +212,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_zazzEvent.Description))
                          .Returns(new List<string> { tag1, tag2, tag1Duplicate, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1Duplicate.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.InsertGraph(_zazzEvent));
@@ -230,9 +230,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.CreateEvent(_zazzEvent);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]
@@ -325,7 +325,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _zazzEvent.Id = 5;
             _zazzEvent.Description = "sample description";
-            _zazzEvent.Tags = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
+            _zazzEvent.Categories = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
             var updatedEvent = new ZazzEvent
             {
                 Id = _zazzEvent.Id,
@@ -341,11 +341,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
@@ -354,9 +354,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdateEvent(updatedEvent, _zazzEvent.UserId);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]
@@ -365,7 +365,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _zazzEvent.Id = 5;
             _zazzEvent.Description = "sample description";
-            _zazzEvent.Tags = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
+            _zazzEvent.Categories = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
             var updatedEvent = new ZazzEvent
             {
                 Id = _zazzEvent.Id,
@@ -382,11 +382,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag, tag1Duplicate });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
@@ -395,9 +395,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdateEvent(updatedEvent, _zazzEvent.UserId);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]
@@ -406,7 +406,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _zazzEvent.Id = 5;
             _zazzEvent.Description = "sample description";
-            _zazzEvent.Tags = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
+            _zazzEvent.Categories = new List<EventCategory> { new EventCategory(), new EventCategory(), new EventCategory() };
             var updatedEvent = new ZazzEvent
             {
                 Id = _zazzEvent.Id,
@@ -423,13 +423,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(updatedEvent.Description))
                          .Returns(new List<string> { tag1, tag2, unavailableTag, tag1Duplicate });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1Duplicate.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1Duplicate.Replace("#", "")))
                            .Returns(tag1Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tag2Object);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(unavailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(unavailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.EventRepository.GetById(_zazzEvent.Id))
                 .Returns(_zazzEvent);
@@ -438,9 +438,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdateEvent(updatedEvent, _zazzEvent.UserId);
 
             //Assert
-            Assert.AreEqual(2, _zazzEvent.Tags.Count);
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag1Object.Id));
-            Assert.IsTrue(_zazzEvent.Tags.Any(t => t.CategoryId == tag2Object.Id));
+            Assert.AreEqual(2, _zazzEvent.Categories.Count);
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag1Object.Id));
+            Assert.IsTrue(_zazzEvent.Categories.Any(t => t.CategoryId == tag2Object.Id));
         }
 
         [Test]

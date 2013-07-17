@@ -39,10 +39,10 @@ namespace Zazz.Infrastructure.Services
             var extractedTags = _stringHelper.ExtractTags(post.Message);
             foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
-                var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                 if (tag != null)
                 {
-                    post.Tags.Add(new PostCategory
+                    post.Categories.Add(new PostCategory
                                   {
                                       CategoryId = tag.Id
                                   });
@@ -86,14 +86,14 @@ namespace Zazz.Infrastructure.Services
             if (post.FromUserId != currentUserId)
                 throw new SecurityException();
 
-            post.Tags.Clear();
+            post.Categories.Clear();
             var extractedTags = _stringHelper.ExtractTags(newText);
             foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
             {
-                var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                 if (tag != null)
                 {
-                    post.Tags.Add(new PostCategory
+                    post.Categories.Add(new PostCategory
                                   {
                                       CategoryId = tag.Id
                                   });
@@ -119,8 +119,8 @@ namespace Zazz.Infrastructure.Services
             if (!usersWithRemovePermission.Contains(currentUserId))
                 throw new SecurityException();
 
-            if (post.Tags.Any())
-                post.Tags.Clear();
+            if (post.Categories.Any())
+                post.Categories.Clear();
 
             _uow.PostRepository.Remove(post);
             _uow.SaveChanges();

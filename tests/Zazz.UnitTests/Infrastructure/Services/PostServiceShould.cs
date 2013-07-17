@@ -150,15 +150,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2 });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
 
             _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
+                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
+                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -182,15 +182,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2, duplicateTag1 });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
 
             _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
+                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
+                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -214,16 +214,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2, duplicateTag1 });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
 
 
             _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
+                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
+                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -376,7 +376,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            Id = 17,
                            FromUserId = 123,
                            ToUserId = 1234,
-                           Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
+                           Categories = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                            Message = "m"
                        };
 
@@ -388,7 +388,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _stringHelper.Setup(x => x.ExtractTags(newText))
                          .Returns(new[] { tag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
                            .Returns(tagObject);
 
             //Act
@@ -396,8 +396,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
+            Assert.AreEqual(1, post.Categories.Count);
+            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
 
@@ -410,7 +410,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = 17,
                 FromUserId = 123,
                 ToUserId = 1234,
-                Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
+                Categories = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                 Message = "m"
             };
 
@@ -423,7 +423,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _stringHelper.Setup(x => x.ExtractTags(newText))
                          .Returns(new[] { tag, duplicateTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
                            .Returns(tagObject);
 
             //Act
@@ -431,8 +431,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
+            Assert.AreEqual(1, post.Categories.Count);
+            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
 
@@ -445,7 +445,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = 17,
                 FromUserId = 123,
                 ToUserId = 1234,
-                Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
+                Categories = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                 Message = "m"
             };
 
@@ -458,7 +458,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(post);
             _stringHelper.Setup(x => x.ExtractTags(newText))
                          .Returns(new[] { tag, duplicateTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
                            .Returns(tagObject);
 
             //Act
@@ -466,8 +466,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
+            Assert.AreEqual(1, post.Categories.Count);
+            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
     }

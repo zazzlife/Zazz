@@ -17,8 +17,8 @@ namespace Zazz.Data
             foreach (var school in StaticData.GetSchools())
                 context.Schools.Add(school);
 
-            foreach (var tag in StaticData.GetCategories())
-                context.Tags.Add(tag);
+            foreach (var category in StaticData.GetCategories())
+                context.Categories.Add(category);
 
             foreach (var scope in StaticData.GetScopes())
                 context.OAuthScopes.Add(scope);

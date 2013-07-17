@@ -16,17 +16,17 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        public IQueryable<Feed> GetFeedsWithTags(List<byte> tags)
+        public IQueryable<Feed> GetFeedsWithCategories(List<byte> categories)
         {
             var query = (from feed in DbSet
-                         from photoTag in feed.FeedPhotos.SelectMany(p => p.Photo.Tags).DefaultIfEmpty()
-                         from postTag in feed.PostFeed.Post.Tags.DefaultIfEmpty()
-                         from eventTag in feed.EventFeed.Event.Tags.DefaultIfEmpty()
+                         from photoCategory in feed.FeedPhotos.SelectMany(p => p.Photo.Categories).DefaultIfEmpty()
+                         from postCategory in feed.PostFeed.Post.Categories.DefaultIfEmpty()
+                         from eventCategory in feed.EventFeed.Event.Categories.DefaultIfEmpty()
                          orderby feed.Time descending
                          where
-                             tags.Contains(photoTag.CategoryId) ||
-                             tags.Contains(postTag.CategoryId) ||
-                             tags.Contains(eventTag.CategoryId)
+                             categories.Contains(photoCategory.CategoryId) ||
+                             categories.Contains(postCategory.CategoryId) ||
+                             categories.Contains(eventCategory.CategoryId)
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)

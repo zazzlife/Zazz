@@ -28,7 +28,7 @@ namespace Zazz.Data.Repositories
 
         public override ZazzEvent GetById(int id)
         {
-            return DbSet.Include(e => e.Tags)
+            return DbSet.Include(e => e.Categories)
                         .SingleOrDefault(e => e.Id == id);
         }
 

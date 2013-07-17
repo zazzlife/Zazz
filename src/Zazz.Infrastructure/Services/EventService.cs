@@ -46,10 +46,10 @@ namespace Zazz.Infrastructure.Services
                 var extractedTags = _stringHelper.ExtractTags(zazzEvent.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        zazzEvent.Tags.Add(new EventCategory
+                        zazzEvent.Categories.Add(new EventCategory
                                            {
                                                CategoryId = tag.Id
                                            });
@@ -95,16 +95,16 @@ namespace Zazz.Infrastructure.Services
             if (e.UserId != currentUserId)
                 throw new SecurityException();
 
-            e.Tags.Clear();
+            e.Categories.Clear();
             if (!String.IsNullOrEmpty(updatedEvent.Description))
             {
                 var extractedTags = _stringHelper.ExtractTags(updatedEvent.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        e.Tags.Add(new EventCategory
+                        e.Categories.Add(new EventCategory
                                    {
                                        CategoryId = tag.Id
                                    });

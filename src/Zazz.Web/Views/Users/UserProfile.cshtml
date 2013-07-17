@@ -112,7 +112,7 @@
         <ul class="tag-stats" style="position: relative;">
             @foreach (var t in Model.TagsStats)
             {
-                <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                <li class="tag-header"><a href="~/home/categories?select=@t.CategoryName" data-tag="@t.CategoryName">#@t.CategoryName</a></li>
                 <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
             }
         </ul>

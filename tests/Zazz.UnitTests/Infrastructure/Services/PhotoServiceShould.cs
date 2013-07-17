@@ -123,11 +123,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
 
@@ -135,9 +135,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.SavePhoto(photo, Stream.Null, false);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -161,11 +161,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
 
@@ -173,9 +173,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.SavePhoto(photo, Stream.Null, false);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -199,13 +199,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(duplicateTag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(duplicateTag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
 
@@ -213,9 +213,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.SavePhoto(photo, Stream.Null, false);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -950,11 +950,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
@@ -964,9 +964,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdatePhoto(photo, currentUser);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -991,11 +991,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
@@ -1005,9 +1005,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdatePhoto(photo, currentUser);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -1032,13 +1032,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _stringHelper.Setup(x => x.ExtractTags(photo.Description))
                          .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(duplicateTag1.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(duplicateTag1.Replace("#", "")))
                            .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(tag2.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
                            .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetTagIfExists(notAvailableTag.Replace("#", "")))
+            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
                            .Returns(() => null);
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
@@ -1048,9 +1048,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.UpdatePhoto(photo, currentUser);
 
             //Assert
-            Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(2, photo.Categories.Count);
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]

@@ -21,12 +21,12 @@ namespace Zazz.Web.Controllers
             CategoryService = categoryService;
         }
 
-        public IEnumerable<TagStatViewModel> GetTagStats()
+        public IEnumerable<CategoryStatViewModel> GetTagStats()
         {
             return CategoryService.GetAllStats()
-                             .Select(t => new TagStatViewModel
+                             .Select(t => new CategoryStatViewModel
                                           {
-                                              TagName = t.Category.Name,
+                                              CategoryName = t.Category.Name,
                                               UsersCount = t.UsersCount
                                           });
         }

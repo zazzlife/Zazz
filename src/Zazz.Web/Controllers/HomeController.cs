@@ -88,10 +88,10 @@ namespace Zazz.Web.Controllers
             return View("_FeedsPartial", feeds);
         }
 
-        public string GetAllTags()
+        public string GetAllCategories()
         {
-            var tags = _staticDataRepository.GetCategories().Select(t => t.Name);
-            return JsonConvert.SerializeObject(tags, Formatting.None);
+            var categories = _staticDataRepository.GetCategories().Select(c => c.Name);
+            return JsonConvert.SerializeObject(categories, Formatting.None);
         }
 
         public JsonNetResult Search(string q)

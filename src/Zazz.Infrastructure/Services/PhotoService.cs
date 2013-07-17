@@ -111,10 +111,10 @@ namespace Zazz.Infrastructure.Services
                 var extractedTags = _stringHelper.ExtractTags(photo.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        photo.Tags.Add(new PhotoCategory
+                        photo.Categories.Add(new PhotoCategory
                                        {
                                            CategoryId = tag.Id
                                        });
@@ -335,17 +335,17 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            photo.Tags.Clear();
+            photo.Categories.Clear();
 
             if (!String.IsNullOrEmpty(updatedPhoto.Description))
             {
                 var extractedTags = _stringHelper.ExtractTags(updatedPhoto.Description);
                 foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
                 {
-                    var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
+                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        photo.Tags.Add(new PhotoCategory
+                        photo.Categories.Add(new PhotoCategory
                                        {
                                            CategoryId = tag.Id
                                        });

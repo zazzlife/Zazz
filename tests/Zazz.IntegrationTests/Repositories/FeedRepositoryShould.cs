@@ -23,38 +23,38 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectFeeds_OnGetAllFeedsWithTags()
+        public void ReturnCorrectFeeds_OnGetAllFeedsWithCategories()
         {
             //Arrange
             var user = Mother.GetUser();
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            byte tag1 = 1;
-            byte tag2 = 2;
+            byte category1 = 1;
+            byte category2 = 2;
 
-            var requestTags = new List<byte> {tag1, tag2};
+            var requestCategories = new List<byte> {category1, category2};
 
             var normalPhoto = Mother.GetPhoto(user.Id);
-            var photoWithTag = Mother.GetPhoto(user.Id);
-            photoWithTag.Tags.Add(new PhotoCategory {CategoryId = tag1});
+            var photoWithCategory = Mother.GetPhoto(user.Id);
+            photoWithCategory.Categories.Add(new PhotoCategory {CategoryId = category1});
 
             _context.Photos.Add(normalPhoto);
-            _context.Photos.Add(photoWithTag);
+            _context.Photos.Add(photoWithCategory);
 
             var normalPost = Mother.GetPost(user.Id);
-            var postWithTag = Mother.GetPost(user.Id);
-            postWithTag.Tags.Add(new PostCategory {CategoryId = tag1});
+            var postWithCategory = Mother.GetPost(user.Id);
+            postWithCategory.Categories.Add(new PostCategory {CategoryId = category1});
 
             _context.Posts.Add(normalPost);
-            _context.Posts.Add(postWithTag);
+            _context.Posts.Add(postWithCategory);
 
             var normalEvent = Mother.GetEvent(user.Id);
-            var eventWithTag = Mother.GetEvent(user.Id);
-            eventWithTag.Tags.Add(new EventCategory {CategoryId = tag2});
+            var eventWithCategory = Mother.GetEvent(user.Id);
+            eventWithCategory.Categories.Add(new EventCategory {CategoryId = category2});
 
             _context.Events.Add(normalEvent);
-            _context.Events.Add(eventWithTag);
+            _context.Events.Add(eventWithCategory);
 
             _context.SaveChanges();
 
@@ -69,7 +69,7 @@ namespace Zazz.IntegrationTests.Repositories
                                                  },
                                                  new FeedPhoto
                                                  {
-                                                     PhotoId = photoWithTag.Id
+                                                     PhotoId = photoWithCategory.Id
                                                  }
                                              }
                             };
@@ -83,7 +83,7 @@ namespace Zazz.IntegrationTests.Repositories
             var postWithTagFeed = new Feed
                                   {
                                       Time = DateTime.UtcNow,
-                                      PostFeed = new PostFeed {PostId = postWithTag.Id}
+                                      PostFeed = new PostFeed {PostId = postWithCategory.Id}
                                   };
 
             var normalEventFeed = new Feed
@@ -100,7 +100,7 @@ namespace Zazz.IntegrationTests.Repositories
                                        Time = DateTime.UtcNow,
                                        EventFeed = new EventFeed
                                                    {
-                                                       EventId = eventWithTag.Id
+                                                       EventId = eventWithCategory.Id
                                                    }
                                    };
 
@@ -112,7 +112,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetFeedsWithTags(requestTags).ToList();
+            var result = _repo.GetFeedsWithCategories(requestCategories).ToList();
 
             //Assert
             Assert.AreEqual(3, result.Count);

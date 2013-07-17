@@ -41,19 +41,19 @@ namespace Zazz.Infrastructure.Services
             {
                 var photoUsers = _uow.PhotoRepository.GetAll()
                                      .Where(p => p.UploadDate > dateLimit)
-                                     .Where(p => p.Tags.Any(t => t.CategoryId == tag.Id))
+                                     .Where(p => p.Categories.Any(t => t.CategoryId == tag.Id))
                                      .Select(p => p.UserId)
                                      .Distinct();
 
                 var postUsers = _uow.PostRepository.GetAll()
                                     .Where(p => p.CreatedTime > dateLimit)
-                                    .Where(p => p.Tags.Any(t => t.CategoryId == tag.Id))
+                                    .Where(p => p.Categories.Any(t => t.CategoryId == tag.Id))
                                     .Select(p => p.FromUserId)
                                     .Distinct();
 
                 var eventUsers = _uow.EventRepository.GetAll()
                                      .Where(e => e.CreatedDate > dateLimit)
-                                     .Where(e => e.Tags.Any(t => t.CategoryId == tag.Id))
+                                     .Where(e => e.Categories.Any(t => t.CategoryId == tag.Id))
                                      .Select(e => e.UserId)
                                      .Distinct();
 

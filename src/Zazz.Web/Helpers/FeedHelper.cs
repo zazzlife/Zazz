@@ -32,7 +32,7 @@ namespace Zazz.Web.Helpers
         }
 
         /// <summary>
-        /// Retruns all recent feeds that contain the provided tags.
+        /// Retruns all recent feeds that contain the provided categories.
         /// </summary>
         /// <param name="currentUserId">Current User Id</param>
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
@@ -40,7 +40,7 @@ namespace Zazz.Web.Helpers
         /// <returns></returns>
         public List<FeedViewModel> GetTaggedFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0)
         {
-            var query = _uow.FeedRepository.GetFeedsWithTags(tagIds);
+            var query = _uow.FeedRepository.GetFeedsWithCategories(tagIds);
 
             if (lastFeedId != 0)
                 query = query.Where(f => f.Id < lastFeedId);

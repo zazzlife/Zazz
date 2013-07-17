@@ -4,7 +4,7 @@
 @{
     Layout = "_Layout.cshtml";
 
-    IEnumerable<TagStatViewModel> tagStats = null;
+    IEnumerable<CategoryStatViewModel> tagStats = null;
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
     
@@ -57,7 +57,7 @@
             <ul class="tag-stats">
                 @foreach (var t in tagStats.Take(6))
                 {
-                    <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                    <li class="tag-header"><a href="~/home/tags?select=@t.CategoryName" data-tag="@t.CategoryName">#@t.CategoryName</a></li>
                     <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
                 }
             </ul>
@@ -110,7 +110,7 @@
             <ul class="tag-stats">
                 @foreach (var t in tagStats.Skip(6))
                 {
-                    <li class="tag-header"><a href="~/home/tags?select=@t.TagName" data-tag="@t.TagName">#@t.TagName</a></li>
+                    <li class="tag-header"><a href="~/home/tags?select=@t.CategoryName" data-tag="@t.CategoryName">#@t.CategoryName</a></li>
                     <li>@(t.UsersCount == 1 ? "1 person is" : t.UsersCount + " people are") talking about this.</li>
                 }
             </ul>

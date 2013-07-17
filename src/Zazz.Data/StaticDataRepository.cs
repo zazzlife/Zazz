@@ -39,10 +39,10 @@ namespace Zazz.Data
             return StaticData.GetOAuthClients();
         }
 
-        public Category GetTagIfExists(string tagName)
+        public Category GetCategoryIfExists(string categoryName)
         {
             return StaticData.GetCategories()
-                .FirstOrDefault(t => t.Name.Equals(tagName, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(t => t.Name.Equals(categoryName, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

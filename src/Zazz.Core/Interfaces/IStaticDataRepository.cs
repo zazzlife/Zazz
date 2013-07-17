@@ -12,6 +12,6 @@ namespace Zazz.Core.Interfaces
         IEnumerable<OAuthScope> GetOAuthScopes();
         IEnumerable<OAuthClient> GetOAuthClients();
 
-        Category GetTagIfExists(string tagName);
+        Category GetCategoryIfExists(string tagName);
     }
 }

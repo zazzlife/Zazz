@@ -39,8 +39,8 @@ namespace Zazz.IntegrationTests.Repositories
                                CategoryId = tag2Id
                            };
 
-            _context.TagStats.Add(tagStat1);
-            _context.TagStats.Add(tagStat2);
+            _context.CateStats.Add(tagStat1);
+            _context.CateStats.Add(tagStat2);
             _context.SaveChanges();
 
             //Act
@@ -80,9 +80,9 @@ namespace Zazz.IntegrationTests.Repositories
                                    UsersCount = 4322
                                };
 
-            _context.TagStats.Add(tag1);
-            _context.TagStats.Add(tag2);
-            _context.TagStats.Add(unrelatedTag);
+            _context.CateStats.Add(tag1);
+            _context.CateStats.Add(tag2);
+            _context.CateStats.Add(unrelatedTag);
             _context.SaveChanges();
 
             //Act

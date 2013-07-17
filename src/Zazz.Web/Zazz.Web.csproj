@@ -338,7 +338,7 @@
     <Compile Include="Models\OAuthRegisterViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\CategoriesPageViewModel.cs" />
-    <Compile Include="Models\TagStatViewModel.cs" />
+    <Compile Include="Models\CategoryStatViewModel.cs" />
     <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />
     <Compile Include="Models\UserProfileViewModel.cs" />
