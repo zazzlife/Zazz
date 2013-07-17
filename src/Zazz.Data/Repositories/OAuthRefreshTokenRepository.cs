@@ -11,11 +11,6 @@ namespace Zazz.Data.Repositories
         public OAuthRefreshTokenRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        protected override int GetItemId(OAuthRefreshToken item)
-        {
-            throw new InvalidOperationException("You need to provide the id for updating this record, Use InsertGraph for inserting new record");
-        }
-
         public override OAuthRefreshToken GetById(int id)
         {
             return DbSet

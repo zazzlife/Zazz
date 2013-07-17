@@ -12,11 +12,6 @@ namespace Zazz.Data.Repositories
             : base(dbContext)
         { }
 
-        protected override int GetItemId(UserReward item)
-        {
-            throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
-        }
-
         public IQueryable<UserReward> GetRewards(int userId, int clubId)
         {
             return DbSet.Where(r => r.UserId == userId)

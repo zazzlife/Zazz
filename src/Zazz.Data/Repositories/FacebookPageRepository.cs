@@ -12,11 +12,6 @@ namespace Zazz.Data.Repositories
         public FacebookPageRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        protected override int GetItemId(FacebookPage item)
-        {
-            throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
-        }
-
         public List<string> GetUserPageFacebookIds(int userId)
         {
             return DbSet.Where(p => p.UserId == userId)

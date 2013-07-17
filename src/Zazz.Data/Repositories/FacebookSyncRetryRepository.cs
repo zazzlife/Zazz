@@ -13,11 +13,6 @@ namespace Zazz.Data.Repositories
         public FacebookSyncRetryRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        protected override int GetItemId(FacebookSyncRetry item)
-        {
-            throw new InvalidOperationException("You need to provide the id for updating the record. If you want to insert, use insert graph");
-        }
-
         public List<FacebookSyncRetry> GetEligibleRetries()
         {
             return DbSet.OrderBy(r => r.LastTry)

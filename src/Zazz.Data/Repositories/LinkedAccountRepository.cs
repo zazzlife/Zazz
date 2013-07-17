@@ -16,18 +16,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(LinkedAccount item)
-        {
-            if (item.UserId == default (int))
-                throw new ArgumentException("User id cannot be 0");
-
-            return DbSet.Where(o => o.UserId == item.UserId)
-                        .Where(o => o.Provider == item.Provider)
-                        .Where(o => o.ProviderUserId == item.ProviderUserId)
-                        .Select(o => o.Id)
-                        .SingleOrDefault();
-        }
-
         public LinkedAccount GetUserAccount(int userId, OAuthProvider provider)
         {
             return DbSet.Where(o => o.UserId == userId)

@@ -12,11 +12,6 @@ namespace Zazz.Data.Repositories
         public PostRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        protected override int GetItemId(Post item)
-        {
-            throw new InvalidOperationException("You should always provide the id for updating the post, if it's new then use insert graph.");
-        }
-
         public Post GetByFbId(long fbPostId)
         {
             return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbPostId));

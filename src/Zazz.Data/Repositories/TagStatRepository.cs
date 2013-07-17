@@ -17,11 +17,6 @@ namespace Zazz.Data.Repositories
             return DbSet.Include(t => t.Tag);
         }
 
-        protected override int GetItemId(TagStat item)
-        {
-            throw new InvalidOperationException("You must provide Id to update an entity, if you want to insert, user InsertGraph");
-        }
-
         public TagStat GetTagStat(byte tagId)
         {
             return DbSet.SingleOrDefault(t => t.TagId == tagId);

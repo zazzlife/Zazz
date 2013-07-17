@@ -17,11 +17,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(ZazzEvent item)
-        {
-            throw new InvalidOperationException("You should always provide the id for updating the event, if it's new then use insert graph.");
-        }
-
         public override void Remove(int id)
         {
             var zazzEvent = GetById(id);

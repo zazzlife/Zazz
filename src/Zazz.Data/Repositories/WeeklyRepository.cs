@@ -9,10 +9,5 @@ namespace Zazz.Data.Repositories
     {
         public WeeklyRepository(DbContext dbContext) : base(dbContext)
         {}
-
-        protected override int GetItemId(Weekly item)
-        {
-            throw new InvalidOperationException("You must provide the Id for updating. Use InsertGraph for insert");
-        }
     }
 }

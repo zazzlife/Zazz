@@ -14,11 +14,6 @@ namespace Zazz.Data.Repositories
             : base(dbContext)
         { }
 
-        protected override int GetItemId(ClubPointRewardScenario item)
-        {
-            throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
-        }
-
         public ClubPointRewardScenario Get(int clubId, PointRewardScenario scenario)
         {
 // ReSharper disable ReplaceWithSingleCallToAny

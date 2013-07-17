@@ -25,53 +25,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void SetEntityStateAsAdded_OnInsertOrUpdate_WhenRecordNotExistsAndIdIs0()
-        {
-            //Arrange
-            var user = AddUser();
-
-            var oauthAccount = new LinkedAccount
-                                   {
-                                       AccessToken = Guid.NewGuid().ToString(),
-                                       Provider = OAuthProvider.Facebook,
-                                       UserId = user.Id
-                                   };
-
-            //Act
-            _repo.InsertOrUpdate(oauthAccount);
-
-            //Assert
-            Assert.AreEqual(EntityState.Added, _context.Entry(oauthAccount).State);
-        }
-
-        [Test]
-        public void SetEntityStateAsModified_OnInsertOrUpdate_WhenRecordExistsAndIdIs0()
-        {
-            //Arrange
-            var user = AddUser();
-
-            var oauthAccount = new LinkedAccount
-            {
-                AccessToken = Guid.NewGuid().ToString(),
-                Provider = OAuthProvider.Facebook,
-                UserId = user.Id
-            };
-
-            using (var context = new ZazzDbContext())
-            {
-                context.LinkedAccounts.Add(oauthAccount);
-                context.SaveChanges();
-            }
-
-            oauthAccount.Id = 0;
-            //Act
-            _repo.InsertOrUpdate(oauthAccount);
-
-            //Assert
-            Assert.AreEqual(EntityState.Modified, _context.Entry(oauthAccount).State);
-        }
-
-        [Test]
         public void ReturnOAuthAccount_WhenItExists()
         {
             //Arrange

@@ -10,10 +10,5 @@ namespace Zazz.Data.Repositories
         public ClubRewardRepository(DbContext dbContext)
             : base(dbContext)
         { }
-
-        protected override int GetItemId(ClubReward item)
-        {
-            throw new InvalidOperationException("You must provide the Id for updating. Use insert graph for insert");
-        }
     }
 }

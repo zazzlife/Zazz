@@ -46,33 +46,10 @@ namespace Zazz.Data.Repositories
             DbContext.Entry(item).State = EntityState.Modified;
         }
 
-        public virtual void InsertOrUpdate(T item)
-        {
-            if (item.Id == default(int))
-            {
-                var itemId = GetItemId(item);
-                if (itemId == default(int))
-                {
-                    DbContext.Entry(item).State = EntityState.Added;
-                }
-                else
-                {
-                    item.Id = itemId;
-                    DbContext.Entry(item).State = EntityState.Modified;
-                }
-            }
-            else
-            {
-                DbContext.Entry(item).State = EntityState.Modified;
-            }
-        }
-
         public virtual T GetById(int id)
         {
             return DbSet.Find(id);
         }
-
-        protected abstract int GetItemId(T item);
 
         public virtual bool Exists(int id)
         {

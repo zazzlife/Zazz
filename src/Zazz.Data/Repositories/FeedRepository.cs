@@ -16,11 +16,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(Feed item)
-        {
-            throw new InvalidOperationException("You need to provide the id for updating this record, Use InsertGraph for inserting new record");
-        }
-
         public IQueryable<Feed> GetFeedsWithTags(List<byte> tags)
         {
             var query = (from feed in DbSet

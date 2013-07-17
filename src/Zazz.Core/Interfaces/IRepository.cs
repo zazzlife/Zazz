@@ -14,8 +14,6 @@ namespace Zazz.Core.Interfaces
 
         void Update(T item);
 
-        void InsertOrUpdate(T item);
-
         T GetById(int id);
 
         bool Exists(int id);

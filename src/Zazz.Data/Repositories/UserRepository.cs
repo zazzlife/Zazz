@@ -15,12 +15,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(User item)
-        {
-            throw new InvalidOperationException(
-                "You must always provide user id for updating the user, use insert graph for insert");
-        }
-
         public User GetByEmail(string email)
         {
             return DbSet.SingleOrDefault(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));

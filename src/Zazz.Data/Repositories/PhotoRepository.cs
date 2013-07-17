@@ -15,11 +15,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(Photo item)
-        {
-            throw new InvalidOperationException("You should always provide the id for updating the image, if it's new then use insert graph.");
-        }
-
         public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
         {
             return DbSet.Where(p => p.UserId == userId)

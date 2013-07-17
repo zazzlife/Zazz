@@ -15,11 +15,6 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        protected override int GetItemId(Album item)
-        {
-            throw new InvalidOperationException("You should always provide the id for updating the album, if it's new then use insert graph.");
-        }
-
         public Album GetById(int id, bool includePhotos)
         {
             var query = DbSet.AsQueryable();

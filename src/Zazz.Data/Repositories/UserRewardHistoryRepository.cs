@@ -9,10 +9,5 @@ namespace Zazz.Data.Repositories
     {
         public UserRewardHistoryRepository(DbContext dbContext) : base(dbContext)
         {}
-
-        protected override int GetItemId(UserRewardHistory item)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

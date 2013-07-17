@@ -10,10 +10,5 @@ namespace Zazz.Data.Repositories
         public ValidationTokenRepository(DbContext dbContext) : base(dbContext)
         {
         }
-
-        protected override int GetItemId(UserValidationToken item)
-        {
-            throw new InvalidOperationException("You should always provide the id for updating the token, if it's new then use insert graph.");
-        }
     }
 }

@@ -35,35 +35,7 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(EntityState.Added, _context.Entry(user).State);
         }
-
-        [Test]
-        public void Throw_OnInsertOrUpdate_WhenUserIdIsNotProvided_ButUserExists()
-        {
-            //Arrange
-
-            using (var ctx = new ZazzDbContext())
-            {
-                var repo = new UserRepository(ctx);
-                var user = Mother.GetUser();
-
-                repo.InsertGraph(user);
-
-                ctx.SaveChanges();
-            }
-
-            var user2 = Mother.GetUser();
-
-            //Act
-            try
-            {
-                _repo.InsertOrUpdate(user2);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (InvalidOperationException)
-            {
-            }
-        }
-
+        
         [Test]
         public void ShouldReturnNull_OnGetByEmail_WhenUserNotExists()
         {
