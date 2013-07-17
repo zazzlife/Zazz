@@ -10,6 +10,10 @@ namespace Zazz.Core.Interfaces
 
         void InsertGraph(T item);
 
+        void Insert(T item);
+
+        void Update(T item);
+
         void InsertOrUpdate(T item);
 
         T GetById(int id);

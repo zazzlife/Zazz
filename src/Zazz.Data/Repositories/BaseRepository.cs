@@ -33,6 +33,19 @@ namespace Zazz.Data.Repositories
             DbSet.Add(item);
         }
 
+        public void Insert(T item)
+        {
+            DbContext.Entry(item).State = EntityState.Added;
+        }
+
+        public void Update(T item)
+        {
+            if (item.Id == default (int))
+                throw new ArgumentException("Id cannot be 0");
+
+            DbContext.Entry(item).State = EntityState.Modified;
+        }
+
         public virtual void InsertOrUpdate(T item)
         {
             if (item.Id == default(int))
