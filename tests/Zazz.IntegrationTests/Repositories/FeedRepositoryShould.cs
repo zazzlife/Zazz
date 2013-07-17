@@ -50,11 +50,8 @@ namespace Zazz.IntegrationTests.Repositories
             _context.Posts.Add(postWithCategory);
 
             var normalEvent = Mother.GetEvent(user.Id);
-            var eventWithCategory = Mother.GetEvent(user.Id);
-            eventWithCategory.Categories.Add(new EventCategory {CategoryId = category2});
 
             _context.Events.Add(normalEvent);
-            _context.Events.Add(eventWithCategory);
 
             _context.SaveChanges();
 
@@ -94,31 +91,21 @@ namespace Zazz.IntegrationTests.Repositories
                                                       EventId = normalEvent.Id
                                                   }
                                   };
-
-            var eventWithTagFeed = new Feed
-                                   {
-                                       Time = DateTime.UtcNow,
-                                       EventFeed = new EventFeed
-                                                   {
-                                                       EventId = eventWithCategory.Id
-                                                   }
-                                   };
+            
 
             _context.Feeds.Add(photoFeed);
             _context.Feeds.Add(normalPostFeed);
             _context.Feeds.Add(postWithTagFeed);
             _context.Feeds.Add(normalEventFeed);
-            _context.Feeds.Add(eventWithTagFeed);
             _context.SaveChanges();
 
             //Act
             var result = _repo.GetFeedsWithCategories(requestCategories).ToList();
 
             //Assert
-            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.Any(f => f.Id == photoFeed.Id));
             Assert.IsTrue(result.Any(f => f.Id == postWithTagFeed.Id));
-            Assert.IsTrue(result.Any(f => f.Id == eventWithTagFeed.Id));
         }
 
         [Test]

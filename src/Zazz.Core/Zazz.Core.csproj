@@ -160,7 +160,6 @@
     <Compile Include="Models\Data\EventComment.cs" />
     <Compile Include="Models\Data\EventFeed.cs" />
     <Compile Include="Models\Data\EventNotification.cs" />
-    <Compile Include="Models\Data\EventCategory.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedPhoto.cs" />

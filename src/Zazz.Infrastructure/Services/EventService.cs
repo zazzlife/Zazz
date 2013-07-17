@@ -41,22 +41,6 @@ namespace Zazz.Infrastructure.Services
             if (zazzEvent.UserId == 0)
                 throw new ArgumentException("User id cannot be 0");
 
-            if (!String.IsNullOrEmpty(zazzEvent.Description))
-            {
-                var extractedTags = _stringHelper.ExtractTags(zazzEvent.Description);
-                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
-                {
-                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                    if (tag != null)
-                    {
-                        zazzEvent.Categories.Add(new EventCategory
-                                           {
-                                               CategoryId = tag.Id
-                                           });
-                    }
-                }
-            }
-
             if (zazzEvent.CreatedDate != default(DateTime))
                 zazzEvent.CreatedDate = DateTime.UtcNow;
 
@@ -94,23 +78,6 @@ namespace Zazz.Infrastructure.Services
 
             if (e.UserId != currentUserId)
                 throw new SecurityException();
-
-            e.Categories.Clear();
-            if (!String.IsNullOrEmpty(updatedEvent.Description))
-            {
-                var extractedTags = _stringHelper.ExtractTags(updatedEvent.Description);
-                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
-                {
-                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                    if (tag != null)
-                    {
-                        e.Categories.Add(new EventCategory
-                                   {
-                                       CategoryId = tag.Id
-                                   });
-                    }
-                }
-            }
 
             e.City = updatedEvent.City;
             e.Description = updatedEvent.Description;

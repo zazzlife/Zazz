@@ -37,46 +37,39 @@ namespace Zazz.Infrastructure.Services
             const int DAYS_AGO = -5;
             var dateLimit = DateTime.UtcNow.AddDays(DAYS_AGO).Date;
 
-            foreach (var tag in _staticDataRepository.GetCategories())
+            foreach (var category in _staticDataRepository.GetCategories())
             {
                 var photoUsers = _uow.PhotoRepository.GetAll()
                                      .Where(p => p.UploadDate > dateLimit)
-                                     .Where(p => p.Categories.Any(t => t.CategoryId == tag.Id))
+                                     .Where(p => p.Categories.Any(t => t.CategoryId == category.Id))
                                      .Select(p => p.UserId)
                                      .Distinct();
 
                 var postUsers = _uow.PostRepository.GetAll()
                                     .Where(p => p.CreatedTime > dateLimit)
-                                    .Where(p => p.Categories.Any(t => t.CategoryId == tag.Id))
+                                    .Where(p => p.Categories.Any(t => t.CategoryId == category.Id))
                                     .Select(p => p.FromUserId)
                                     .Distinct();
 
-                var eventUsers = _uow.EventRepository.GetAll()
-                                     .Where(e => e.CreatedDate > dateLimit)
-                                     .Where(e => e.Categories.Any(t => t.CategoryId == tag.Id))
-                                     .Select(e => e.UserId)
-                                     .Distinct();
-
 
                 var uniqueUsers = Enumerable.Union(photoUsers, postUsers);
-                uniqueUsers = uniqueUsers.Union(eventUsers);
 
-                var tagStat = _uow.CategoryStatRepository.GetById(tag.Id);
-                if (tagStat == null)
+                var categoryStat = _uow.CategoryStatRepository.GetById(category.Id);
+                if (categoryStat == null)
                 {
-                    tagStat = new CategoryStat
+                    categoryStat = new CategoryStat
                               {
                                   LastUpdate = DateTime.UtcNow,
-                                  CategoryId = tag.Id,
+                                  CategoryId = category.Id,
                                   UsersCount = uniqueUsers.Count()
                               };
 
-                    _uow.CategoryStatRepository.InsertGraph(tagStat);
+                    _uow.CategoryStatRepository.InsertGraph(categoryStat);
                 }
                 else
                 {
-                    tagStat.LastUpdate = DateTime.UtcNow;
-                    tagStat.UsersCount = uniqueUsers.Count();
+                    categoryStat.LastUpdate = DateTime.UtcNow;
+                    categoryStat.UsersCount = uniqueUsers.Count();
                 }
 
                 _uow.SaveChanges();

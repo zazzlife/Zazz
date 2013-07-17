@@ -21,12 +21,10 @@ namespace Zazz.Data.Repositories
             var query = (from feed in DbSet
                          from photoCategory in feed.FeedPhotos.SelectMany(p => p.Photo.Categories).DefaultIfEmpty()
                          from postCategory in feed.PostFeed.Post.Categories.DefaultIfEmpty()
-                         from eventCategory in feed.EventFeed.Event.Categories.DefaultIfEmpty()
                          orderby feed.Time descending
                          where
                              categories.Contains(photoCategory.CategoryId) ||
-                             categories.Contains(postCategory.CategoryId) ||
-                             categories.Contains(eventCategory.CategoryId)
+                             categories.Contains(postCategory.CategoryId)
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)

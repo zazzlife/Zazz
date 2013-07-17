@@ -8,11 +8,6 @@ namespace Zazz.Core.Models.Data
     [Table("Events")]
     public class ZazzEvent : BaseEntity
     {
-        public ZazzEvent()
-        {
-            Categories = new HashSet<EventCategory>();
-        }
-
         [ForeignKey("UserId")]
         public User User { get; set; }
 
@@ -62,7 +57,5 @@ namespace Zazz.Core.Models.Data
         public FacebookPage Page { get; set; }
 
         public int? PageId { get; set; }
-
-        public virtual ICollection<EventCategory> Categories { get; set; }
     }
 }

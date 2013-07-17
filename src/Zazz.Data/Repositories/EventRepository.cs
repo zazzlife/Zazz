@@ -28,8 +28,7 @@ namespace Zazz.Data.Repositories
 
         public override ZazzEvent GetById(int id)
         {
-            return DbSet.Include(e => e.Categories)
-                        .SingleOrDefault(e => e.Id == id);
+            return DbSet.SingleOrDefault(e => e.Id == id);
         }
 
         public IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null)

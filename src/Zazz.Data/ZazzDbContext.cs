@@ -21,7 +21,6 @@ namespace Zazz.Data
         public IDbSet<Photo> Photos { get; set; }
         public IDbSet<PhotoCategory> PhotoCategories { get; set; }
         public IDbSet<ZazzEvent> Events { get; set; }
-        public IDbSet<EventCategory> EventCategories { get; set; }
         public IDbSet<Post> Posts { get; set; }
         public IDbSet<PostCategory> PostCategories { get; set; }
         public IDbSet<Comment> Comments { get; set; }
