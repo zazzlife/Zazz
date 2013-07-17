@@ -9,7 +9,7 @@ namespace Zazz.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected IStaticDataRepository StaticDataRepository { get; set; }
+        public IStaticDataRepository StaticDataRepository { get; set; }
         protected readonly IUserService UserService;
         protected readonly IPhotoService PhotoService;
         protected readonly IDefaultImageHelper DefaultImageHelper;
