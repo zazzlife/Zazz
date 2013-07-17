@@ -9,7 +9,7 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class TagStatRepositoryShould
+    public class CategoryStatRepositoryShould
     {
         private CategoryStatRepository _repo;
         private ZazzDbContext _context;
@@ -22,7 +22,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectTag_OnGetLastTag()
+        public void ReturnCorrectCategory_OnGetLastCategory()
         {
             //Arrange
             byte tagId = 1;

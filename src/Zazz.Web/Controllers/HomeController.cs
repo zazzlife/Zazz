@@ -69,10 +69,10 @@ namespace Zazz.Web.Controllers
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
 
-            var vm = new TagsPageViewModel
+            var vm = new CategoriesPageViewModel
                      {
-                         AvailableTags = availableTags.Select(t => t.Name),
-                         SelectedTags = selectedTags,
+                         AvailableCategories = availableTags.Select(t => t.Name),
+                         SelectedCategories = selectedTags,
                          Feeds = feeds
                      };
 

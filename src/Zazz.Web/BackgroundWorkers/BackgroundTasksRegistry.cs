@@ -13,7 +13,7 @@ namespace Zazz.Web.BackgroundWorkers
         public BackgroundTasksRegistry()
         {
             //Register tasks here
-            Schedule<TagsUpdaterTask>()
+            Schedule<CategoriesUpdaterTask>()
                 .ToRunNow()
                 .AndEvery(5)
                 .Minutes();

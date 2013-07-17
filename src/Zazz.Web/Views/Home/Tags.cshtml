@@ -1,4 +1,4 @@
-﻿@model TagsPageViewModel
+﻿@model CategoriesPageViewModel
 @{
     ViewBag.Title = "Tags";
     Layout = "~/Views/Shared/_UserPageLayout.cshtml";
@@ -10,9 +10,9 @@
         <div class="margin-ten">
             <span style="margin-right: 10px;">Tags:</span>
             <select multiple="multiple" id="tagsSelect" style="width: 512px;">
-                @foreach (var t in Model.AvailableTags)
+                @foreach (var t in Model.AvailableCategories)
                 {
-                    <option value="@t" @(Model.SelectedTags.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
+                    <option value="@t" @(Model.SelectedCategories.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
                 }
             </select>
         </div>

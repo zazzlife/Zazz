@@ -4,11 +4,11 @@ using Zazz.Core.Interfaces;
 
 namespace Zazz.Web.BackgroundWorkers
 {
-    public class TagsUpdaterTask : ITask
+    public class CategoriesUpdaterTask : ITask
     {
         private readonly ICategoryService _categoryService;
 
-        public TagsUpdaterTask(ICategoryService categoryService)
+        public CategoriesUpdaterTask(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }

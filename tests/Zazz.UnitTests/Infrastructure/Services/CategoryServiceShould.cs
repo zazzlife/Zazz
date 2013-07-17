@@ -10,7 +10,7 @@ using Zazz.Infrastructure.Services;
 namespace Zazz.UnitTests.Infrastructure.Services
 {
     [TestFixture]
-    public class TagServiceShould
+    public class CategoryServiceShould
     {
         private MockRepository _mockRepo;
         private Mock<IUoW> _uow;

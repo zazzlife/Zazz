@@ -223,7 +223,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="BackgroundWorkers\TagsUpdaterTask.cs" />
+    <Compile Include="BackgroundWorkers\CategoriesUpdaterTask.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="Controllers\Api\SchoolsController.cs" />
     <Compile Include="Controllers\Api\SearchController.cs" />
     <Compile Include="Controllers\Api\TaggedFeedsController.cs" />
-    <Compile Include="Controllers\Api\TagsController.cs" />
+    <Compile Include="Controllers\Api\CategoriesController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\ProfileController.cs" />
     <Compile Include="Controllers\Api\WeekliesController.cs" />
@@ -337,7 +337,7 @@
     <Compile Include="Models\OAuthLoginResponse.cs" />
     <Compile Include="Models\OAuthRegisterViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
-    <Compile Include="Models\TagsPageViewModel.cs" />
+    <Compile Include="Models\CategoriesPageViewModel.cs" />
     <Compile Include="Models\TagStatViewModel.cs" />
     <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />

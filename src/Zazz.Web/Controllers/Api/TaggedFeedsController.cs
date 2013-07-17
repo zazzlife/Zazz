@@ -13,7 +13,7 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [OAuth2Authorize]
-    public class TaggedFeedsController : BaseApiController
+    public class TaggedFeedsController : BaseApiController //TODO: move this to feeds controller
     {
         private readonly IFeedHelper _feedHelper;
         private readonly IStaticDataRepository _staticDataRepository;
