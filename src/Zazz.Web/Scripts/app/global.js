@@ -33,6 +33,7 @@ function applyPageStyles() {
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
 
+    replaceLinksWithAnchorTags();
     replaceTagsWithAnchorTags();
 
     initInputTags();
@@ -431,6 +432,25 @@ $(document).on('click', '#load-feeds', function () {
     });
 
 });
+
+
+/********************************
+    wrapping link in anchortags
+*********************************/
+
+function replaceLinksWithAnchorTags() {
+    $('*[data-containsLinks]').each(function() {
+
+        var $self = $(this);
+        var text = $self.html();
+        
+
+        var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+        text = text.replace(exp, "<a href='$1'>$1</a>");
+
+        $self.html(text);
+    });
+}
 
 
 
