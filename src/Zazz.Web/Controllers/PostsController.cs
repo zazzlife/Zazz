@@ -45,7 +45,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public ActionResult New(string message, int? toUser)
+        public ActionResult New(string message, int? toUser, List<byte> categories)
         {
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");

@@ -18,8 +18,9 @@ $(document).on('click', '#submitPostBtn', function () {
         type: 'POST',
         data: {
             message: message,
-            toUser: toUser ? toUser : null
+            toUser: toUser ? toUser : null,
         },
+        traditional: true,
         error: function () {
             toastr.error('An error occured, Please try again later.');
             hideBtnBusy(self, "Submit");
