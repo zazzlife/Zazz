@@ -27,31 +27,6 @@
             </div>
             <ul class="nav nav-list" style="height: 36px;">
                 <li class="divider"></li>
-
-                @*<li class="nav-header">ACCOUNT</li>
-                <li>
-                    <a href="#" id="notifications-link" 
-                       data-toggle="popover" data-html="true" data-original-title="Notifications"
-                       data-title="Notifications"
-                       data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
-                        
-                        <i class="icon-globe"></i>Notifications @Html.Action("GetNewNotificationsCount", "Notification")
-                    </a>
-                </li>
-                <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
-                <li><a href="~/events/list"><i class="icon-calendar"></i>Events</a></li>
-                <li><a href="~/photos/"><i class="icon-camera"></i>Photos</a></li>
-                <li><a href="~/users/edit"><i class="icon-pencil"></i>Edit Profile</a></li>
-                <li><a href="~/home/updatetags"><i class="icon-refresh"></i>Update Tags stats</a></li>
-                <li class="divider"></li>
-
-                <li class="nav-header">DISCOVER</li>
-                <li><a href="#"><i class="icon-glass"></i>Clubs</a></li>
-                <li class="divider"></li>
-
-                <li class="nav-header">OTHER LINKS</li>
-                <li><a href="#">Link A</a></li>
-                <li><a href="#">Link B</a></li>*@
             </ul>
             
             <ul class="tag-stats">
@@ -145,5 +120,17 @@
 
 @section ScriptsTop 
 {
+    <script type="text/javascript">
+
+        @{
+            var categorySelect = Html.Partial("_CategoriesSelect").ToString();
+            categorySelect = categorySelect.Replace(Environment.NewLine, "");
+        }
+
+        var categoriesSelectHtml = '@Html.Raw(categorySelect)';
+
+
+    </script>
+
     @RenderSection("ScriptsTop", false)
 }
