@@ -119,9 +119,9 @@
     <Compile Include="Services\PhotoService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\PostService.cs" />
-    <Compile Include="Services\TagService.cs" />
+    <Compile Include="Services\CategoryService.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="TagStatsCache.cs" />
+    <Compile Include="CategoryStatsCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zazz.Core\Zazz.Core.csproj">

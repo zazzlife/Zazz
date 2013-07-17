@@ -11,14 +11,14 @@ namespace Zazz.IntegrationTests.Repositories
     [TestFixture]
     public class TagStatRepositoryShould
     {
-        private TagStatRepository _repo;
+        private CategoryStatRepository _repo;
         private ZazzDbContext _context;
 
         [SetUp]
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new TagStatRepository(_context);
+            _repo = new CategoryStatRepository(_context);
         }
 
         [Test]
@@ -44,7 +44,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var response = _repo.GetTagStat(tagId);
+            var response = _repo.GetById(tagId);
 
             //Assert
             Assert.AreEqual(tagStat1.Id, response.Id);

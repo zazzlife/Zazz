@@ -12,18 +12,18 @@ namespace Zazz.Web.Controllers
 {
     public abstract class UserPageLayoutBaseController : BaseController
     {
-        protected readonly ITagService TagService;
+        protected readonly ICategoryService CategoryService;
 
         protected UserPageLayoutBaseController(IUserService userService, IPhotoService photoService,
-                                            IDefaultImageHelper defaultImageHelper, ITagService tagService)
+                                            IDefaultImageHelper defaultImageHelper, ICategoryService categoryService)
             : base(userService, photoService, defaultImageHelper)
         {
-            TagService = tagService;
+            CategoryService = categoryService;
         }
 
         public IEnumerable<TagStatViewModel> GetTagStats()
         {
-            return TagService.GetAllTagStats()
+            return CategoryService.GetAllStats()
                              .Select(t => new TagStatViewModel
                                           {
                                               TagName = t.Category.Name,

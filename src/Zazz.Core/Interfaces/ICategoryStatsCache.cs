@@ -4,10 +4,10 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces
 {
-    public interface ITagStatsCache
+    public interface ICategoryStatsCache
     {
         DateTime LastUpdate { get; set; }
 
-        IList<CategoryStat> TagStats { get; set; }
+        IList<CategoryStat> CategoryStats { get; set; }
     }
 }

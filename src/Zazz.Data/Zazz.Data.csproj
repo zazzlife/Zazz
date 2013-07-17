@@ -78,7 +78,7 @@
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\PhotoVoteRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
-    <Compile Include="Repositories\TagStatRepository.cs" />
+    <Compile Include="Repositories\CategoryStatRepository.cs" />
     <Compile Include="Repositories\UserPointHistoryRepository.cs" />
     <Compile Include="Repositories\UserPointRepository.cs" />
     <Compile Include="Repositories\UserReceivedVotesRepository.cs" />

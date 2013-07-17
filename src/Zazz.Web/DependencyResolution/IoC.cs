@@ -60,7 +60,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IOAuthClientRepository>().Singleton().Use<InMemoryOAuthClientRepository>();
                             x.For<IImageValidator>().Singleton().Use<ImageValidator>();
                             x.For<IQRCodeService>().Singleton().Use<QRCodeService>();
-                            x.For<ITagStatsCache>().Singleton().Use<TagStatsCache>();
+                            x.For<ICategoryStatsCache>().Singleton().Use<CategoryStatsCache>();
 
                             x.For<IDefaultImageHelper>().Singleton()
                              .Use<DefaultImageHelper>()
@@ -90,7 +90,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IUserService>().Use<UserService>();
                             x.For<INotificationService>().Use<NotificationService>();
                             x.For<ICommentService>().Use<CommentService>();
-                            x.For<ITagService>().Use<TagService>();
+                            x.For<ICategoryService>().Use<CategoryService>();
                             x.For<IWeeklyService>().Use<WeeklyService>();
                             x.For<IVoteService>().Use<VoteService>();
                             x.For<IOAuthService>().Use<OAuthService>();

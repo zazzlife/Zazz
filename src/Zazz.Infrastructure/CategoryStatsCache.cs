@@ -6,9 +6,9 @@ using Zazz.Core.Models.Data;
 namespace Zazz.Infrastructure
 {
     //This class is a singleton
-    public class TagStatsCache : ITagStatsCache
+    public class CategoryStatsCache : ICategoryStatsCache
     {
         public DateTime LastUpdate { get; set; }
-        public IList<CategoryStat> TagStats { get; set; }
+        public IList<CategoryStat> CategoryStats { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Zazz.Core.Interfaces
         IFacebookPageRepository FacebookPageRepository { get; }
         IFeedPhotoRepository FeedPhotoRepository { get; }
         INotificationRepository NotificationRepository { get; }
-        ITagStatRepository TagStatRepository { get; }
+        ICategoryStatRepository CategoryStatRepository { get; }
         IWeeklyRepository WeeklyRepository { get; }
         IPhotoVoteRepository PhotoVoteRepository { get; }
         IUserReceivedVotesRepository UserReceivedVotesRepository { get; }

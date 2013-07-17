@@ -6,16 +6,16 @@ namespace Zazz.Web.BackgroundWorkers
 {
     public class TagsUpdaterTask : ITask
     {
-        private readonly ITagService _tagService;
+        private readonly ICategoryService _categoryService;
 
-        public TagsUpdaterTask(ITagService tagService)
+        public TagsUpdaterTask(ICategoryService categoryService)
         {
-            _tagService = tagService;
+            _categoryService = categoryService;
         }
 
         public void Execute()
         {
-            _tagService.UpdateTagStatistics();
+            _categoryService.UpdateStatistics();
             
             new HybridLifecycle().FindCache().DisposeAndClear();
         }

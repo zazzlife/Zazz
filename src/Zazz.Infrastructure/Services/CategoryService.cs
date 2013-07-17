@@ -6,33 +6,33 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services
 {
-    public class TagService : ITagService
+    public class CategoryService : ICategoryService
     {
         private readonly IUoW _uow;
         private readonly IStaticDataRepository _staticDataRepository;
-        private readonly ITagStatsCache _tagStatsCache;
+        private readonly ICategoryStatsCache _categoryStatsCache;
 
-        public TagService(IUoW uow, IStaticDataRepository staticDataRepository, ITagStatsCache tagStatsCache)
+        public CategoryService(IUoW uow, IStaticDataRepository staticDataRepository, ICategoryStatsCache categoryStatsCache)
         {
             _uow = uow;
             _staticDataRepository = staticDataRepository;
-            _tagStatsCache = tagStatsCache;
+            _categoryStatsCache = categoryStatsCache;
         }
 
-        public IEnumerable<CategoryStat> GetAllTagStats()
+        public IEnumerable<CategoryStat> GetAllStats()
         {
-            if (_tagStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
-                return _tagStatsCache.TagStats;
+            if (_categoryStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
+                return _categoryStatsCache.CategoryStats;
 
-            var freshData = _uow.TagStatRepository.GetAll();
+            var freshData = _uow.CategoryStatRepository.GetAll();
 
-            _tagStatsCache.TagStats = freshData.ToList();
-            _tagStatsCache.LastUpdate = DateTime.UtcNow;
+            _categoryStatsCache.CategoryStats = freshData.ToList();
+            _categoryStatsCache.LastUpdate = DateTime.UtcNow;
 
             return freshData;
         }
 
-        public void UpdateTagStatistics()
+        public void UpdateStatistics()
         {
             const int DAYS_AGO = -5;
             var dateLimit = DateTime.UtcNow.AddDays(DAYS_AGO).Date;
@@ -61,7 +61,7 @@ namespace Zazz.Infrastructure.Services
                 var uniqueUsers = Enumerable.Union(photoUsers, postUsers);
                 uniqueUsers = uniqueUsers.Union(eventUsers);
 
-                var tagStat = _uow.TagStatRepository.GetTagStat(tag.Id);
+                var tagStat = _uow.CategoryStatRepository.GetById(tag.Id);
                 if (tagStat == null)
                 {
                     tagStat = new CategoryStat
@@ -71,7 +71,7 @@ namespace Zazz.Infrastructure.Services
                                   UsersCount = uniqueUsers.Count()
                               };
 
-                    _uow.TagStatRepository.InsertGraph(tagStat);
+                    _uow.CategoryStatRepository.InsertGraph(tagStat);
                 }
                 else
                 {

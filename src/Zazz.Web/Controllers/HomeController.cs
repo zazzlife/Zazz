@@ -21,9 +21,9 @@ namespace Zazz.Web.Controllers
         private readonly IFeedHelper _feedHelper;
 
         public HomeController(IPhotoService photoService, IUserService userService,
-            IStaticDataRepository staticDataRepository, ITagService tagService,
+            IStaticDataRepository staticDataRepository, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) :
-            base(userService, photoService, defaultImageHelper, tagService)
+            base(userService, photoService, defaultImageHelper, categoryService)
         {
             _staticDataRepository = staticDataRepository;
             _feedHelper = feedHelper;

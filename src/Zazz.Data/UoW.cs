@@ -83,9 +83,9 @@ namespace Zazz.Data
             get { return new NotificationRepository(GetContext()); }
         }
 
-        public ITagStatRepository TagStatRepository
+        public ICategoryStatRepository CategoryStatRepository
         {
-            get { return new TagStatRepository(GetContext()); }
+            get { return new CategoryStatRepository(GetContext()); }
         }
 
         public IWeeklyRepository WeeklyRepository

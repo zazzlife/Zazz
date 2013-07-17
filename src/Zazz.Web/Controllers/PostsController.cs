@@ -20,8 +20,8 @@ namespace Zazz.Web.Controllers
 
         public PostsController(IPostService postService, IUserService userService,
             IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
-            IFeedHelper feedHelper, ITagService tagService)
-            : base (userService, photoService, defaultImageHelper, tagService)
+            IFeedHelper feedHelper, ICategoryService categoryService)
+            : base (userService, photoService, defaultImageHelper, categoryService)
         {
             _postService = postService;
             _feedHelper = feedHelper;

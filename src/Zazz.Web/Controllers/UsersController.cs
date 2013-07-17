@@ -25,9 +25,9 @@ namespace Zazz.Web.Controllers
         private readonly IFeedHelper _feedHelper;
 
         public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
-            IUserService userService, ICacheService cacheService, ITagService tagService,
+            IUserService userService, ICacheService cacheService, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
-            : base(userService, photoService, defaultImageHelper, tagService)
+            : base(userService, photoService, defaultImageHelper, categoryService)
         {
             _staticDataRepo = staticDataRepo;
             _uow = uow;
