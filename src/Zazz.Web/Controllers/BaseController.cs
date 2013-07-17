@@ -9,13 +9,15 @@ namespace Zazz.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
+        protected IStaticDataRepository StaticDataRepository { get; set; }
         protected readonly IUserService UserService;
         protected readonly IPhotoService PhotoService;
         protected readonly IDefaultImageHelper DefaultImageHelper;
 
         protected BaseController(IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper, IStaticDataRepository staticDataRepository)
         {
+            StaticDataRepository = staticDataRepository;
             UserService = userService;
             PhotoService = photoService;
             DefaultImageHelper = defaultImageHelper;

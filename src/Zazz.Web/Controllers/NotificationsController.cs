@@ -20,8 +20,9 @@ namespace Zazz.Web.Controllers
 // ReSharper restore MemberCanBePrivate.Global
 
         public NotificationsController(IUserService userService, IPhotoService photoService,
-            INotificationService notificationService, IDefaultImageHelper defaultImageHelper, ICategoryService categoryService) 
-            : base (userService, photoService, defaultImageHelper, categoryService)
+                                       INotificationService notificationService, IDefaultImageHelper defaultImageHelper,
+                                       ICategoryService categoryService, IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
         {
             _notificationService = notificationService;
         }

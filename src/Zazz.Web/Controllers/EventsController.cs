@@ -25,8 +25,9 @@ namespace Zazz.Web.Controllers
         private const int PAGE_SIZE = 10;
 
         public EventsController(IUserService userService, IEventService eventService,
-            IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper, ICategoryService categoryService)
-            : base(userService, photoService, defaultImageHelper, categoryService)
+                                IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
+                                ICategoryService categoryService, IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
         {
             _eventService = eventService;
             _uow = uow;

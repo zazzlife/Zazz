@@ -19,7 +19,6 @@ namespace Zazz.Web.Controllers
 {
     public class UsersController : UserPageLayoutBaseController
     {
-        private readonly IStaticDataRepository _staticDataRepo;
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
         private readonly IFeedHelper _feedHelper;
@@ -27,9 +26,8 @@ namespace Zazz.Web.Controllers
         public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
-            : base(userService, photoService, defaultImageHelper, categoryService)
+            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepo)
         {
-            _staticDataRepo = staticDataRepo;
             _uow = uow;
             _cacheService = cacheService;
             _feedHelper = feedHelper;
@@ -200,11 +198,11 @@ namespace Zazz.Web.Controllers
                          Gender = user.UserDetail.Gender,
                          FullName = user.UserDetail.FullName,
                          CityId = user.UserDetail.CityId,
-                         Cities = _staticDataRepo.GetCities(),
+                         Cities = StaticDataRepository.GetCities(),
                          SchoolId = user.UserDetail.SchoolId,
-                         Schools = _staticDataRepo.GetSchools(),
+                         Schools = StaticDataRepository.GetSchools(),
                          MajorId = user.UserDetail.MajorId,
-                         Majors = _staticDataRepo.GetMajors(),
+                         Majors = StaticDataRepository.GetMajors(),
                          SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                          SyncFbEvents = user.Preferences.SyncFbEvents
                      };
@@ -219,9 +217,9 @@ namespace Zazz.Web.Controllers
             if (user.AccountType != AccountType.User)
                 throw new SecurityException();
 
-            vm.Cities = _staticDataRepo.GetCities();
-            vm.Schools = _staticDataRepo.GetSchools();
-            vm.Majors = _staticDataRepo.GetMajors();
+            vm.Cities = StaticDataRepository.GetCities();
+            vm.Schools = StaticDataRepository.GetSchools();
+            vm.Majors = StaticDataRepository.GetMajors();
 
             if (ModelState.IsValid)
             {

@@ -19,9 +19,10 @@ namespace Zazz.Web.Controllers
         private readonly IFeedHelper _feedHelper;
 
         public PostsController(IPostService postService, IUserService userService,
-            IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
-            IFeedHelper feedHelper, ICategoryService categoryService)
-            : base (userService, photoService, defaultImageHelper, categoryService)
+                               IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
+                               IFeedHelper feedHelper, ICategoryService categoryService,
+                               IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
         {
             _postService = postService;
             _feedHelper = feedHelper;

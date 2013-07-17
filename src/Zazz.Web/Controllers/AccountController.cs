@@ -25,7 +25,6 @@ namespace Zazz.Web.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly IStaticDataRepository _staticData;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
         private readonly IObjectMapper _objectMapper;
@@ -37,9 +36,8 @@ namespace Zazz.Web.Controllers
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper,IFacebookService facebookService,
             IFollowService followService, IUoW uow) 
-            : base(userService, photoService, defaultImageHelper)
+            : base(userService, photoService, defaultImageHelper, staticData)
         {
-            _staticData = staticData;
             _authService = authService;
             _cryptoService = cryptoService;
             _objectMapper = objectMapper;
@@ -100,9 +98,9 @@ namespace Zazz.Web.Controllers
 
             var vm = new RegisterViewModel
                          {
-                             Schools = _staticData.GetSchools(),
-                             Cities = _staticData.GetCities(),
-                             Majors = _staticData.GetMajors(),
+                             Schools = StaticDataRepository.GetSchools(),
+                             Cities = StaticDataRepository.GetCities(),
+                             Majors = StaticDataRepository.GetMajors(),
                          };
 
             return View(vm);
@@ -136,9 +134,9 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            registerVm.Schools = _staticData.GetSchools();
-            registerVm.Cities = _staticData.GetCities();
-            registerVm.Majors = _staticData.GetMajors();
+            registerVm.Schools = StaticDataRepository.GetSchools();
+            registerVm.Cities = StaticDataRepository.GetCities();
+            registerVm.Majors = StaticDataRepository.GetMajors();
 
             return View(registerVm);
         }
@@ -333,9 +331,9 @@ namespace Zazz.Web.Controllers
                 FullName = oAuthResponse.Name,
                 OAuthProvidedData = jsonData,
                 ProvidedDataSignature = jsonSign,
-                Cities = _staticData.GetCities(),
-                Majors = _staticData.GetMajors(),
-                Schools = _staticData.GetSchools(),
+                Cities = StaticDataRepository.GetCities(),
+                Majors = StaticDataRepository.GetMajors(),
+                Schools = StaticDataRepository.GetSchools(),
             };
 
             return View("OAuthRegister", registerPageVM);
@@ -382,9 +380,9 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            registerVm.Cities = _staticData.GetCities();
-            registerVm.Schools = _staticData.GetSchools();
-            registerVm.Majors = _staticData.GetMajors();
+            registerVm.Cities = StaticDataRepository.GetCities();
+            registerVm.Schools = StaticDataRepository.GetSchools();
+            registerVm.Majors = StaticDataRepository.GetMajors();
 
             return View(registerVm);
         }

@@ -15,8 +15,9 @@ namespace Zazz.Web.Controllers
         protected readonly ICategoryService CategoryService;
 
         protected UserPageLayoutBaseController(IUserService userService, IPhotoService photoService,
-                                            IDefaultImageHelper defaultImageHelper, ICategoryService categoryService)
-            : base(userService, photoService, defaultImageHelper)
+                                               IDefaultImageHelper defaultImageHelper, ICategoryService categoryService,
+                                               IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository)
         {
             CategoryService = categoryService;
         }

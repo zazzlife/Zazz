@@ -17,15 +17,13 @@ namespace Zazz.Web.Controllers
 {
     public class HomeController : UserPageLayoutBaseController
     {
-        private readonly IStaticDataRepository _staticDataRepository;
         private readonly IFeedHelper _feedHelper;
 
         public HomeController(IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) :
-            base(userService, photoService, defaultImageHelper, categoryService)
+            base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
         {
-            _staticDataRepository = staticDataRepository;
             _feedHelper = feedHelper;
         }
 
@@ -55,7 +53,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Tags(string @select)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            var availableTags = _staticDataRepository.GetCategories().ToList();
+            var availableTags = StaticDataRepository.GetCategories().ToList();
             var selectedTags = String.IsNullOrEmpty(@select)
                                    ? Enumerable.Empty<string>()
                                    : @select.Split(',');
@@ -90,7 +88,7 @@ namespace Zazz.Web.Controllers
 
         public string GetAllCategories()
         {
-            var categories = _staticDataRepository.GetCategories().Select(c => c.Name);
+            var categories = StaticDataRepository.GetCategories().Select(c => c.Name);
             return JsonConvert.SerializeObject(categories, Formatting.None);
         }
 

@@ -18,8 +18,9 @@ namespace Zazz.Web.Controllers
         private readonly IFollowService _followService;
 
         public FollowController(IFollowService followService, IUserService userService,
-            IPhotoService photoService, IDefaultImageHelper defaultImageHelper)
-            : base(userService, photoService, defaultImageHelper)
+                                IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
+                                IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository)
         {
             _followService = followService;
         }

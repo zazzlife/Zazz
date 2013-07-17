@@ -21,8 +21,10 @@ namespace Zazz.Web.Controllers
         private readonly IFeedHelper _feedHelper;
 
         public CommentsController(IPhotoService photoService, IUserService userService,
-            ICommentService commentService, IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
-            : base(userService, photoService, defaultImageHelper)
+                                  ICommentService commentService, IDefaultImageHelper defaultImageHelper,
+                                  IFeedHelper feedHelper,
+                                  IStaticDataRepository staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository)
         {
             _commentService = commentService;
             _feedHelper = feedHelper;
