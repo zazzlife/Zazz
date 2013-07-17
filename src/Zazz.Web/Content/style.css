@@ -1253,6 +1253,32 @@ a.tag {
 }
 
 /***************************************
+    Categories select
+***************************************/
+
+.categories-select {
+    width: 500px;
+}
+
+.categories-select ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.categories-select ul li {
+    display: inline-block;
+    margin: 5px;
+}
+
+.categories-select ul li button{
+
+    height: 75px;
+    width: 75px;
+    font-size: 25px;
+}
+
+/***************************************
     Footer
 ***************************************/
 footer {
