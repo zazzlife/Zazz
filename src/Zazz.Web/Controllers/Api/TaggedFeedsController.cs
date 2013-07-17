@@ -48,7 +48,7 @@ namespace Zazz.Web.Controllers.Api
             if (tagIds.Count < 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var availableTags = _staticDataRepository.GetTags().Select(t => t.Id);
+            var availableTags = _staticDataRepository.GetCategories().Select(t => t.Id);
             var validRequestedTags = tagIds.Intersect(availableTags).ToList();
 
             if (validRequestedTags.Count < 1)

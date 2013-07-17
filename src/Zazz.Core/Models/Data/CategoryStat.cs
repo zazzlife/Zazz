@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    [Table("TagStatistics")]
-    public class TagStat : BaseEntity
+    [Table("CategoryStatistics")]
+    public class CategoryStat : BaseEntity
     {
         public DateTime LastUpdate { get; set; }
-        
-        public byte TagId { get; set; }
 
-        [ForeignKey("TagId")]
-        public virtual Tag Tag { get; set; }
+        [ForeignKey("Category")]
+        public byte CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
 
         public int UsersCount { get; set; }
     }

@@ -24,9 +24,9 @@ namespace Zazz.Data.Repositories
                          from eventTag in feed.EventFeed.Event.Tags.DefaultIfEmpty()
                          orderby feed.Time descending
                          where
-                             tags.Contains(photoTag.TagId) ||
-                             tags.Contains(postTag.TagId) ||
-                             tags.Contains(eventTag.TagId)
+                             tags.Contains(photoTag.CategoryId) ||
+                             tags.Contains(postTag.CategoryId) ||
+                             tags.Contains(eventTag.CategoryId)
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)

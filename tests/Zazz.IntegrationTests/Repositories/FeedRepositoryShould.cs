@@ -37,21 +37,21 @@ namespace Zazz.IntegrationTests.Repositories
 
             var normalPhoto = Mother.GetPhoto(user.Id);
             var photoWithTag = Mother.GetPhoto(user.Id);
-            photoWithTag.Tags.Add(new PhotoTag {TagId = tag1});
+            photoWithTag.Tags.Add(new PhotoCategory {CategoryId = tag1});
 
             _context.Photos.Add(normalPhoto);
             _context.Photos.Add(photoWithTag);
 
             var normalPost = Mother.GetPost(user.Id);
             var postWithTag = Mother.GetPost(user.Id);
-            postWithTag.Tags.Add(new PostTag {TagId = tag1});
+            postWithTag.Tags.Add(new PostCategory {CategoryId = tag1});
 
             _context.Posts.Add(normalPost);
             _context.Posts.Add(postWithTag);
 
             var normalEvent = Mother.GetEvent(user.Id);
             var eventWithTag = Mother.GetEvent(user.Id);
-            eventWithTag.Tags.Add(new EventTag {TagId = tag2});
+            eventWithTag.Tags.Add(new EventCategory {CategoryId = tag2});
 
             _context.Events.Add(normalEvent);
             _context.Events.Add(eventWithTag);

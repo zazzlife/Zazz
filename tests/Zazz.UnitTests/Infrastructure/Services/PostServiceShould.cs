@@ -145,8 +145,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag1 = "#test1";
             var tag2 = "#test2";
 
-            var tagObject1 = new Tag { Id = 1, Name = "test1" };
-            var tagObject2 = new Tag { Id = 2, Name = "test2" };
+            var tagObject1 = new Category { Id = 1, Name = "test1" };
+            var tagObject2 = new Category { Id = 2, Name = "test2" };
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2 });
@@ -157,8 +157,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.TagId == tagObject1.Id)
-                    && post.Tags.Any(p => p.TagId == tagObject2.Id)))));
+                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -177,8 +177,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var duplicateTag1 = "#test1";
             var tag2 = "#test2";
 
-            var tagObject1 = new Tag { Id = 1, Name = "test1" };
-            var tagObject2 = new Tag { Id = 2, Name = "test2" };
+            var tagObject1 = new Category { Id = 1, Name = "test1" };
+            var tagObject2 = new Category { Id = 2, Name = "test2" };
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2, duplicateTag1 });
@@ -189,8 +189,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.TagId == tagObject1.Id)
-                    && post.Tags.Any(p => p.TagId == tagObject2.Id)))));
+                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -209,8 +209,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var duplicateTag1 = "#TEST1";
             var tag2 = "#test2";
 
-            var tagObject1 = new Tag { Id = 1, Name = "test1" };
-            var tagObject2 = new Tag { Id = 2, Name = "test2" };
+            var tagObject1 = new Category { Id = 1, Name = "test1" };
+            var tagObject2 = new Category { Id = 2, Name = "test2" };
 
             _stringHelper.Setup(x => x.ExtractTags(_post.Message))
                          .Returns(new[] { tag1, tag2, duplicateTag1 });
@@ -222,8 +222,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.PostRepository
                 .InsertGraph(It.Is<Post>(post => (post.Tags.Count == 2
-                    && post.Tags.Any(p => p.TagId == tagObject1.Id)
-                    && post.Tags.Any(p => p.TagId == tagObject2.Id)))));
+                    && post.Tags.Any(p => p.CategoryId == tagObject1.Id)
+                    && post.Tags.Any(p => p.CategoryId == tagObject2.Id)))));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
@@ -376,13 +376,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            Id = 17,
                            FromUserId = 123,
                            ToUserId = 1234,
-                           Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
+                           Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                            Message = "m"
                        };
 
             var tag = "#new-edit";
             var newText = "Edited " + tag;
-            var tagObject = new Tag { Id = 3, Name = "new-edit" };
+            var tagObject = new Category { Id = 3, Name = "new-edit" };
 
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
@@ -397,7 +397,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(newText, post.Message);
             Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
+            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
 
@@ -410,14 +410,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = 17,
                 FromUserId = 123,
                 ToUserId = 1234,
-                Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
+                Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                 Message = "m"
             };
 
             var tag = "#new-edit";
             var duplicateTag = tag;
             var newText = tag + " Edited " + duplicateTag;
-            var tagObject = new Tag { Id = 3, Name = "new-edit" };
+            var tagObject = new Category { Id = 3, Name = "new-edit" };
 
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
@@ -432,7 +432,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(newText, post.Message);
             Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
+            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
 
@@ -445,14 +445,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = 17,
                 FromUserId = 123,
                 ToUserId = 1234,
-                Tags = new List<PostTag> { new PostTag { TagId = 0 }, new PostTag { TagId = 0 } },
+                Tags = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
                 Message = "m"
             };
 
             var tag = "#new-edit";
             var duplicateTag = "#NEW-edit";
             var newText = tag + " Edited " + duplicateTag;
-            var tagObject = new Tag { Id = 3, Name = "new-edit" };
+            var tagObject = new Category { Id = 3, Name = "new-edit" };
 
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
@@ -467,7 +467,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.AreEqual(newText, post.Message);
             Assert.AreEqual(1, post.Tags.Count);
-            Assert.IsTrue(post.Tags.Any(t => t.TagId == tagObject.Id));
+            Assert.IsTrue(post.Tags.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
     }

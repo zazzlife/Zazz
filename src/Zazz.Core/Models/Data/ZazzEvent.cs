@@ -10,7 +10,7 @@ namespace Zazz.Core.Models.Data
     {
         public ZazzEvent()
         {
-            Tags = new HashSet<EventTag>();
+            Tags = new HashSet<EventCategory>();
         }
 
         [ForeignKey("UserId")]
@@ -63,6 +63,6 @@ namespace Zazz.Core.Models.Data
 
         public int? PageId { get; set; }
 
-        public virtual ICollection<EventTag> Tags { get; set; }
+        public virtual ICollection<EventCategory> Tags { get; set; }
     }
 }

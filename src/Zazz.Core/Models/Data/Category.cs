@@ -2,7 +2,7 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class Tag
+    public class Category
     {
         public byte Id { get; set; }
 

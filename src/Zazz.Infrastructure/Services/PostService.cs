@@ -42,9 +42,9 @@ namespace Zazz.Infrastructure.Services
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)
                 {
-                    post.Tags.Add(new PostTag
+                    post.Tags.Add(new PostCategory
                                   {
-                                      TagId = tag.Id
+                                      CategoryId = tag.Id
                                   });
                 }
             }
@@ -93,9 +93,9 @@ namespace Zazz.Infrastructure.Services
                 var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                 if (tag != null)
                 {
-                    post.Tags.Add(new PostTag
+                    post.Tags.Add(new PostCategory
                                   {
-                                      TagId = tag.Id
+                                      CategoryId = tag.Id
                                   });
                 }
             }

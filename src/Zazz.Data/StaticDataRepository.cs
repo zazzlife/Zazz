@@ -24,9 +24,9 @@ namespace Zazz.Data
             return StaticData.GetMajors();
         }
 
-        public IEnumerable<Tag> GetTags()
+        public IEnumerable<Category> GetCategories()
         {
-            return StaticData.GetTags();
+            return StaticData.GetCategories();
         }
 
         public IEnumerable<OAuthScope> GetOAuthScopes()
@@ -39,9 +39,9 @@ namespace Zazz.Data
             return StaticData.GetOAuthClients();
         }
 
-        public Tag GetTagIfExists(string tagName)
+        public Category GetTagIfExists(string tagName)
         {
-            return StaticData.GetTags()
+            return StaticData.GetCategories()
                 .FirstOrDefault(t => t.Name.Equals(tagName, StringComparison.InvariantCultureIgnoreCase));
         }
     }

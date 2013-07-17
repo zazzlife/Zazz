@@ -37,7 +37,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ReturnResultFromCacheIfItWasUpdatedLessThan5MinsAgo_OnGetTagStats(int minutesAgo)
         {
             //Arrange
-            var list = new List<TagStat>();
+            var list = new List<CategoryStat>();
 
             _cache.SetupGet(x => x.LastUpdate)
                   .Returns(DateTime.UtcNow.AddMinutes(minutesAgo));
@@ -57,13 +57,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void GetNewDataFromRepoAndSaveItToCacheIfCacheIsExpired_OnGetTagStats()
         {
             //Arrange
-            var list = new List<TagStat>();
+            var list = new List<CategoryStat>();
 
             _cache.SetupGet(x => x.LastUpdate)
                   .Returns(DateTime.UtcNow.AddMinutes(-5));
 
             _uow.Setup(x => x.TagStatRepository.GetAll())
-                .Returns(() => new EnumerableQuery<TagStat>(list));
+                .Returns(() => new EnumerableQuery<CategoryStat>(list));
 
             _cache.SetupSet(x => x.TagStats = list);
             _cache.SetupSet(x => x.LastUpdate = It.Is<DateTime>(d => d > DateTime.UtcNow.AddMinutes(-1) &&

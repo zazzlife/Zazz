@@ -19,7 +19,7 @@ namespace Zazz.Infrastructure.Services
             _tagStatsCache = tagStatsCache;
         }
 
-        public IEnumerable<TagStat> GetAllTagStats()
+        public IEnumerable<CategoryStat> GetAllTagStats()
         {
             if (_tagStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
                 return _tagStatsCache.TagStats;
@@ -37,23 +37,23 @@ namespace Zazz.Infrastructure.Services
             const int DAYS_AGO = -5;
             var dateLimit = DateTime.UtcNow.AddDays(DAYS_AGO).Date;
 
-            foreach (var tag in _staticDataRepository.GetTags())
+            foreach (var tag in _staticDataRepository.GetCategories())
             {
                 var photoUsers = _uow.PhotoRepository.GetAll()
                                      .Where(p => p.UploadDate > dateLimit)
-                                     .Where(p => p.Tags.Any(t => t.TagId == tag.Id))
+                                     .Where(p => p.Tags.Any(t => t.CategoryId == tag.Id))
                                      .Select(p => p.UserId)
                                      .Distinct();
 
                 var postUsers = _uow.PostRepository.GetAll()
                                     .Where(p => p.CreatedTime > dateLimit)
-                                    .Where(p => p.Tags.Any(t => t.TagId == tag.Id))
+                                    .Where(p => p.Tags.Any(t => t.CategoryId == tag.Id))
                                     .Select(p => p.FromUserId)
                                     .Distinct();
 
                 var eventUsers = _uow.EventRepository.GetAll()
                                      .Where(e => e.CreatedDate > dateLimit)
-                                     .Where(e => e.Tags.Any(t => t.TagId == tag.Id))
+                                     .Where(e => e.Tags.Any(t => t.CategoryId == tag.Id))
                                      .Select(e => e.UserId)
                                      .Distinct();
 
@@ -64,10 +64,10 @@ namespace Zazz.Infrastructure.Services
                 var tagStat = _uow.TagStatRepository.GetTagStat(tag.Id);
                 if (tagStat == null)
                 {
-                    tagStat = new TagStat
+                    tagStat = new CategoryStat
                               {
                                   LastUpdate = DateTime.UtcNow,
-                                  TagId = tag.Id,
+                                  CategoryId = tag.Id,
                                   UsersCount = uniqueUsers.Count()
                               };
 

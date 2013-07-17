@@ -3,17 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    [Table("Event_Tags")]
-    public class EventTag
+    [Table("Event_Categories")]
+    public class EventCategory
     {
         [Key, Column(Order = 0)]
-        public byte TagId { get; set; }
+        public byte CategoryId { get; set; }
 
         [Key, Column(Order = 1)]
         public int EventId { get; set; }
 
-        [ForeignKey("TagId")]
-        public virtual Tag Tag { get; set; }
+        [ForeignKey("CategoryId")]
+        public virtual Category Category { get; set; }
 
         [ForeignKey("EventId")]
         public virtual ZazzEvent Event { get; set; } 

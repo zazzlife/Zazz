@@ -35,20 +35,20 @@ namespace Zazz.Data
             yield return new School { Id = 5, Name = "University of Montreal" };
         }
 
-        public static IEnumerable<Tag> GetTags()
+        public static IEnumerable<Category> GetCategories()
         {
-            yield return new Tag { Id = 1, Name = "Nocover" };
-            yield return new Tag { Id = 2, Name = "Beerpong" };
-            yield return new Tag { Id = 3, Name = "Livemusic" };
-            yield return new Tag { Id = 4, Name = "YOFO" };
-            yield return new Tag { Id = 5, Name = "Houseparty" };
-            yield return new Tag { Id = 6, Name = "Allyoucandrink" };
-            yield return new Tag { Id = 7, Name = "Skitrip" };
-            yield return new Tag { Id = 8, Name = "Ladiesfree" };
-            yield return new Tag { Id = 9, Name = "Predrink" };
-            yield return new Tag { Id = 10, Name = "Fratparty" };
-            yield return new Tag { Id = 11, Name = "Jampacked" };
-            yield return new Tag { Id = 12, Name = "Justchilling" };
+            yield return new Category { Id = 1, Name = "Nocover" };
+            yield return new Category { Id = 2, Name = "Beerpong" };
+            yield return new Category { Id = 3, Name = "Livemusic" };
+            yield return new Category { Id = 4, Name = "YOFO" };
+            yield return new Category { Id = 5, Name = "Houseparty" };
+            yield return new Category { Id = 6, Name = "Allyoucandrink" };
+            yield return new Category { Id = 7, Name = "Skitrip" };
+            yield return new Category { Id = 8, Name = "Ladiesfree" };
+            yield return new Category { Id = 9, Name = "Predrink" };
+            yield return new Category { Id = 10, Name = "Fratparty" };
+            yield return new Category { Id = 11, Name = "Jampacked" };
+            yield return new Category { Id = 12, Name = "Justchilling" };
         }
 
         public static IEnumerable<OAuthScope> GetScopes()

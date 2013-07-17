@@ -8,10 +8,10 @@ namespace Zazz.Core.Interfaces
         IEnumerable<School> GetSchools();
         IEnumerable<City> GetCities();
         IEnumerable<Major> GetMajors();
-        IEnumerable<Tag> GetTags();
+        IEnumerable<Category> GetCategories();
         IEnumerable<OAuthScope> GetOAuthScopes();
         IEnumerable<OAuthClient> GetOAuthClients();
 
-        Tag GetTagIfExists(string tagName);
+        Category GetTagIfExists(string tagName);
     }
 }

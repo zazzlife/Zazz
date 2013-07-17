@@ -26,7 +26,7 @@ namespace Zazz.Web.Controllers
             return TagService.GetAllTagStats()
                              .Select(t => new TagStatViewModel
                                           {
-                                              TagName = t.Tag.Name,
+                                              TagName = t.Category.Name,
                                               UsersCount = t.UsersCount
                                           });
         }

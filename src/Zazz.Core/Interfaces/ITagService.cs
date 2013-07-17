@@ -5,7 +5,7 @@ namespace Zazz.Core.Interfaces
 {
     public interface ITagService
     {
-        IEnumerable<TagStat> GetAllTagStats();
+        IEnumerable<CategoryStat> GetAllTagStats();
         void UpdateTagStatistics();
     }
 }

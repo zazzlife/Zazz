@@ -55,7 +55,7 @@ namespace Zazz.Web.Controllers
         public ActionResult Tags(string @select)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            var availableTags = _staticDataRepository.GetTags().ToList();
+            var availableTags = _staticDataRepository.GetCategories().ToList();
             var selectedTags = String.IsNullOrEmpty(@select)
                                    ? Enumerable.Empty<string>()
                                    : @select.Split(',');
@@ -90,7 +90,7 @@ namespace Zazz.Web.Controllers
 
         public string GetAllTags()
         {
-            var tags = _staticDataRepository.GetTags().Select(t => t.Name);
+            var tags = _staticDataRepository.GetCategories().Select(t => t.Name);
             return JsonConvert.SerializeObject(tags, Formatting.None);
         }
 

@@ -27,16 +27,16 @@ namespace Zazz.IntegrationTests.Repositories
             //Arrange
             byte tagId = 1;
             byte tag2Id = 2;
-            var tagStat1 = new TagStat
+            var tagStat1 = new CategoryStat
                            {
                                LastUpdate = DateTime.UtcNow.AddDays(-10),
-                               TagId = tagId
+                               CategoryId = tagId
                            };
 
-            var tagStat2 = new TagStat
+            var tagStat2 = new CategoryStat
                            {
                                LastUpdate = DateTime.UtcNow.AddDays(-5),
-                               TagId = tag2Id
+                               CategoryId = tag2Id
                            };
 
             _context.TagStats.Add(tagStat1);
@@ -59,24 +59,24 @@ namespace Zazz.IntegrationTests.Repositories
             byte tagId = 1;
             byte tag2Id = 2;
 
-            var tag1 = new TagStat
+            var tag1 = new CategoryStat
                        {
                            LastUpdate = DateTime.UtcNow.AddDays(-7),
-                           TagId = tagId,
+                           CategoryId = tagId,
                            UsersCount = tag1Count
                        };
 
-            var tag2 = new TagStat
+            var tag2 = new CategoryStat
                        {
                            LastUpdate = DateTime.UtcNow.AddDays(-5),
-                           TagId = tag2Id,
+                           CategoryId = tag2Id,
                            UsersCount = tag2Count
                        };
 
-            var unrelatedTag = new TagStat
+            var unrelatedTag = new CategoryStat
                                {
                                    LastUpdate = DateTime.UtcNow.AddDays(-2),
-                                   TagId = 3,
+                                   CategoryId = 3,
                                    UsersCount = 4322
                                };
 

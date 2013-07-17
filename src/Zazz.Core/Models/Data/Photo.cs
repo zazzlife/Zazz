@@ -9,7 +9,7 @@ namespace Zazz.Core.Models.Data
     {
         public Photo()
         {
-            Tags = new HashSet<PhotoTag>();
+            Tags = new HashSet<PhotoCategory>();
         }
 
         [ForeignKey("UserId")]
@@ -37,6 +37,6 @@ namespace Zazz.Core.Models.Data
 
         public int? PageId { get; set; }
 
-        public virtual ICollection<PhotoTag> Tags { get; set; }
+        public virtual ICollection<PhotoCategory> Tags { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Zazz.Core.Interfaces
     {
         DateTime LastUpdate { get; set; }
 
-        IList<TagStat> TagStats { get; set; }
+        IList<CategoryStat> TagStats { get; set; }
     }
 }

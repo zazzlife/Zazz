@@ -16,15 +16,15 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // GET api/v1/tags
-        public IEnumerable<Tag> Get()
+        public IEnumerable<Category> Get()
         {
-            return _staticDataRepository.GetTags();
+            return _staticDataRepository.GetCategories();
         }
 
         // GET api/v1/tags/5
-        public Tag Get(int id)
+        public Category Get(int id)
         {
-            return _staticDataRepository.GetTags()
+            return _staticDataRepository.GetCategories()
                                         .SingleOrDefault(t => t.Id == id);
         }
     }

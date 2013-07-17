@@ -160,7 +160,7 @@
     <Compile Include="Models\Data\EventComment.cs" />
     <Compile Include="Models\Data\EventFeed.cs" />
     <Compile Include="Models\Data\EventNotification.cs" />
-    <Compile Include="Models\Data\EventTag.cs" />
+    <Compile Include="Models\Data\EventCategory.cs" />
     <Compile Include="Models\Data\FacebookPage.cs" />
     <Compile Include="Models\Data\FacebookSyncRetry.cs" />
     <Compile Include="Models\Data\FeedPhoto.cs" />
@@ -171,15 +171,15 @@
     <Compile Include="Models\Data\OAuthRefreshTokenScope.cs" />
     <Compile Include="Models\Data\OAuthScope.cs" />
     <Compile Include="Models\Data\PhotoComment.cs" />
-    <Compile Include="Models\Data\PhotoTag.cs" />
+    <Compile Include="Models\Data\PhotoCategory.cs" />
     <Compile Include="Models\Data\PhotoVote.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\PostComment.cs" />
     <Compile Include="Models\Data\PostFeed.cs" />
     <Compile Include="Models\Data\PostNotification.cs" />
-    <Compile Include="Models\Data\PostTag.cs" />
+    <Compile Include="Models\Data\PostCategory.cs" />
     <Compile Include="Models\Data\School.cs" />
-    <Compile Include="Models\Data\Tag.cs" />
+    <Compile Include="Models\Data\Category.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\LinkedAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />
@@ -216,7 +216,7 @@
     <Compile Include="Models\Facebook\FbVenue.cs" />
     <Compile Include="Models\Facebook\PictureSize.cs" />
     <Compile Include="Models\PhotoLinks.cs" />
-    <Compile Include="Models\Data\TagStat.cs" />
+    <Compile Include="Models\Data\CategoryStat.cs" />
     <Compile Include="Models\QRCodeModel.cs" />
     <Compile Include="Models\QRCodeType.cs" />
     <Compile Include="Models\UserSearchResult.cs" />

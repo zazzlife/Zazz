@@ -7,25 +7,25 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class TagStatRepository : BaseRepository<TagStat>, ITagStatRepository
+    public class TagStatRepository : BaseRepository<CategoryStat>, ITagStatRepository
     {
         public TagStatRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        public override IQueryable<TagStat> GetAll()
+        public override IQueryable<CategoryStat> GetAll()
         {
-            return DbSet.Include(t => t.Tag);
+            return DbSet.Include(t => t.Category);
         }
 
-        public TagStat GetTagStat(byte tagId)
+        public CategoryStat GetTagStat(byte tagId)
         {
-            return DbSet.SingleOrDefault(t => t.TagId == tagId);
+            return DbSet.SingleOrDefault(t => t.CategoryId == tagId);
         }
 
         public int GetUsersCount(int tagId)
         {
             return DbSet
-                .Where(t => t.TagId == tagId)
+                .Where(t => t.CategoryId == tagId)
                 .Select(t => t.UsersCount)
                 .FirstOrDefault();
         }

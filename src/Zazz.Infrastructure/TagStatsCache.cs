@@ -9,6 +9,6 @@ namespace Zazz.Infrastructure
     public class TagStatsCache : ITagStatsCache
     {
         public DateTime LastUpdate { get; set; }
-        public IList<TagStat> TagStats { get; set; }
+        public IList<CategoryStat> TagStats { get; set; }
     }
 }

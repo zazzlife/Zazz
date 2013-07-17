@@ -2,9 +2,9 @@
 
 namespace Zazz.Core.Interfaces
 {
-    public interface ITagStatRepository : IRepository<TagStat>
+    public interface ITagStatRepository : IRepository<CategoryStat>
     {
-        TagStat GetTagStat(byte tagId);
+        CategoryStat GetTagStat(byte tagId);
 
         int GetUsersCount(int tagId);
     }

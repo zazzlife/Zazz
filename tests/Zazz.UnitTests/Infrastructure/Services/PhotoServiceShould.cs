@@ -112,8 +112,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
                         {
@@ -136,8 +136,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -149,8 +149,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
             {
@@ -174,8 +174,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -187,8 +187,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
             {
@@ -214,8 +214,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -938,8 +938,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
             {
@@ -965,8 +965,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -979,8 +979,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
             {
@@ -1006,8 +1006,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]
@@ -1020,8 +1020,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var tag2 = "#tag2";
             var notAvailableTag = "#tag3";
 
-            var tagObject1 = new Tag { Id = 1 };
-            var tagObject2 = new Tag { Id = 2 };
+            var tagObject1 = new Category { Id = 1 };
+            var tagObject2 = new Category { Id = 2 };
 
             var photo = new Photo
             {
@@ -1049,8 +1049,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(2, photo.Tags.Count);
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject1.Id));
-            Assert.IsTrue(photo.Tags.Any(t => t.TagId == tagObject2.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject1.Id));
+            Assert.IsTrue(photo.Tags.Any(t => t.CategoryId == tagObject2.Id));
         }
 
         [Test]

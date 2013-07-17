@@ -49,9 +49,9 @@ namespace Zazz.Infrastructure.Services
                     var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        zazzEvent.Tags.Add(new EventTag
+                        zazzEvent.Tags.Add(new EventCategory
                                            {
-                                               TagId = tag.Id
+                                               CategoryId = tag.Id
                                            });
                     }
                 }
@@ -104,9 +104,9 @@ namespace Zazz.Infrastructure.Services
                     var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        e.Tags.Add(new EventTag
+                        e.Tags.Add(new EventCategory
                                    {
-                                       TagId = tag.Id
+                                       CategoryId = tag.Id
                                    });
                     }
                 }

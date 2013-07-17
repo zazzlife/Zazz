@@ -114,9 +114,9 @@ namespace Zazz.Infrastructure.Services
                     var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        photo.Tags.Add(new PhotoTag
+                        photo.Tags.Add(new PhotoCategory
                                        {
-                                           TagId = tag.Id
+                                           CategoryId = tag.Id
                                        });
                     }
                 }
@@ -345,9 +345,9 @@ namespace Zazz.Infrastructure.Services
                     var tag = _staticDataRepository.GetTagIfExists(t.Replace("#", ""));
                     if (tag != null)
                     {
-                        photo.Tags.Add(new PhotoTag
+                        photo.Tags.Add(new PhotoCategory
                                        {
-                                           TagId = tag.Id
+                                           CategoryId = tag.Id
                                        });
                     }
                 }
