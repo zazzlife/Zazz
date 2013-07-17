@@ -32,15 +32,17 @@ namespace Zazz.Data.Repositories
             DbSet.Add(item);
         }
 
-        public void InsertOrUpdate(T item)
+        public void Insert(T item)
         {
-            if (item.Id == 0)
-            {
-                throw new InvalidOperationException("You need to provide the id for updating the record, if you want to insert use InsertGraph instead");
-            }
+            DbContext.Entry(item).State = EntityState.Added;
+        }
+
+        public void Update(T item)
+        {
+            if (item.Id == default(Int64))
+                throw new ArgumentException("Id cannot be 0");
 
             DbContext.Entry(item).State = EntityState.Modified;
-
         }
 
         public T GetById(long id)

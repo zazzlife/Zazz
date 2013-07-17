@@ -8,7 +8,9 @@ namespace Zazz.Core.Interfaces
 
         void InsertGraph(T item);
 
-        void InsertOrUpdate(T item);
+        void Insert(T item);
+
+        void Update(T item);
 
         T GetById(long id);
 
