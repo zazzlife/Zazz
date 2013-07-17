@@ -21,20 +21,7 @@ function markAllNotificationsAsRead() {
 var isPopoutVisible = false;
 var clickedAwayFromPopout = false;
 
-function calculatePopoverPosition(link, popover) {
-    
-    var linkPosition = link.offset();
-    var linkWidth = link.width();
-    var linkHeight = link.height();
 
-    var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
-    var top = linkPosition.top + linkHeight;
-
-    popover.css({
-        top: top,
-        left: left
-    });
-}
 
 $('#notifications-link').popover({
     html: true,

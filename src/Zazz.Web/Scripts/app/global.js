@@ -45,6 +45,21 @@ function showAjaxErrorMessage(res) {
     toastr.error(res.message);
 }
 
+function calculatePopoverPosition(elem, popover) {
+
+    var linkPosition = elem.offset();
+    var linkWidth = elem.outerWidth();
+    var linkHeight = elem.outerHeight();
+
+    var left = linkPosition.left + (linkWidth / 2) - (popover.width() / 2);
+    var top = linkPosition.top + linkHeight;
+
+    popover.css({
+        top: top,
+        left: left
+    });
+}
+
 // Getting follow requests
 
 $('#party-web-link').click(function () {
@@ -452,6 +467,34 @@ function replaceLinksWithAnchorTags() {
     });
 }
 
+/********************************
+    Open categories
+*********************************/
+
+$(document).on('click', '.open-categories-btn', function() {
+
+    if (!categoriesSelectHtml) {
+        return;
+    }
+
+    var $self = $(this);
+    $self.popover({
+        html: true,
+        placement: 'bottom',
+        title: 'Select Categories',
+        content: categoriesSelectHtml
+    });
+
+    $self.popover('show');
+
+    var $popover = $self.next('.popover');
+    $popover.css('width', '535px');
+    $popover.css('max-width', '535px');
+
+    calculatePopoverPosition($self, $popover);    
+    
+
+});
 
 
 $(function () {
