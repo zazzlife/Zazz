@@ -1,0 +1,59 @@
+﻿@model CategoriesPageViewModel
+@{
+    ViewBag.Title = "Tags";
+    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
+}
+    
+<div>
+    <div class="page-header" style="margin-top: 43px; padding-left: 0;">
+    
+        <div class="margin-ten">
+            <span style="margin-right: 10px;">Tags:</span>
+            <select multiple="multiple" id="tagsSelect" style="width: 512px;">
+                @foreach (var t in Model.AvailableCategories)
+                {
+                    <option value="@t" @(Model.SelectedCategories.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="margin-ten">
+    
+    
+        @Html.Partial("_FeedsPartial", Model.Feeds)
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#tagsSelect').select2();
+
+            $('#tagsSelect').on('change', function(e) {
+                
+                var url = "/home/tags";
+                var container = $('#feedsContainer');
+                container.css('opacity', '0.6');
+
+                $.ajax({
+                    url: url,
+                    data: {
+                        select: e.val.toString()
+                    },
+                    error: function() {
+                        toastr.error("Failed to load the feeds, please try again later.");
+                        container.css('opacity', '1');
+                    },
+                    success: function (res) {
+                        container.html(res);
+                        container.css('opacity', '1');
+                        applyPageStyles();
+                    }
+                });
+
+            });
+        });
+    </script>
+}
