@@ -10,6 +10,12 @@ namespace Zazz.Web
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "CategoryFeeds",
+                routeTemplate: "api/v1/categories/{id}/feeds",
+                defaults: new { controller = "CategoryFeeds", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "UserEvents",
                 routeTemplate: "api/v1/users/{userId}/events",
                 defaults: new { controller = "Events", id = RouteParameter.Optional }

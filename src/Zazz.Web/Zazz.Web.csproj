@@ -249,7 +249,7 @@
     <Compile Include="Controllers\Api\RegisterController.cs" />
     <Compile Include="Controllers\Api\SchoolsController.cs" />
     <Compile Include="Controllers\Api\SearchController.cs" />
-    <Compile Include="Controllers\Api\TaggedFeedsController.cs" />
+    <Compile Include="Controllers\Api\CategoryFeedsController.cs" />
     <Compile Include="Controllers\Api\CategoriesController.cs" />
     <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="Controllers\Api\ProfileController.cs" />

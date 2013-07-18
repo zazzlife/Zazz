@@ -62,7 +62,7 @@ namespace Zazz.Web.Controllers
                 availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
                 .Select(t => t.Id);
 
-            var feeds = _feedHelper.GetTaggedFeeds(userId, selectedTagsIds.ToList());
+            var feeds = _feedHelper.GetCategoryFeeds(userId, selectedTagsIds.ToList());
 
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
