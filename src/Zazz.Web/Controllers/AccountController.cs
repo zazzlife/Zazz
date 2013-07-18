@@ -20,6 +20,7 @@ using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers
 {
@@ -31,11 +32,13 @@ namespace Zazz.Web.Controllers
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
         private readonly IUoW _uow;
+        private readonly IOAuthService _oAuthService;
+        private const string IS_MOBILE_SESSION_KEY = "IsMobile";
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
             IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper,IFacebookService facebookService,
-            IFollowService followService, IUoW uow) 
+            IFollowService followService, IUoW uow, IOAuthService oAuthService) 
             : base(userService, photoService, defaultImageHelper, staticData)
         {
             _authService = authService;
@@ -44,6 +47,7 @@ namespace Zazz.Web.Controllers
             _facebookService = facebookService;
             _followService = followService;
             _uow = uow;
+            _oAuthService = oAuthService;
         }
 
         [HttpGet]
@@ -246,13 +250,17 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public ActionResult OAuth(string id)
+        public ActionResult OAuth(string id, bool? isMobile)
         {
+            if (isMobile.HasValue && isMobile.Value == true)
+                Session[IS_MOBILE_SESSION_KEY] = true;
+
             return new OAuthLoginResult(id, "/account/oauthcallback");
         }
 
         public ActionResult OAuthCallback()
         {
+            var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
             {
@@ -311,7 +319,15 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            return RedirectToAction("Index", "Home");
+            if (isMobile.HasValue && isMobile.Value)
+            {
+                Session.Remove(IS_MOBILE_SESSION_KEY);
+                return HandleMobileClientOAuthCallback(user);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]
@@ -367,7 +383,17 @@ namespace Zazz.Web.Controllers
                     _authService.Register(user, registerVm.Password, false);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
-                    return RedirectToAction("FindFriends");
+                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                    if (isMobile.HasValue && isMobile.Value)
+                    {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        return HandleMobileClientOAuthCallback(user);
+                    }
+                    else
+                    {
+                        return RedirectToAction("FindFriends");
+                    }
+                    
                 }
                 catch (UsernameExistsException)
                 {
@@ -385,6 +411,25 @@ namespace Zazz.Web.Controllers
             registerVm.Majors = StaticDataRepository.GetMajors();
 
             return View(registerVm);
+        }
+
+        private ActionResult HandleMobileClientOAuthCallback(User user)
+        {
+            var scopes = StaticDataRepository.GetOAuthScopes()
+                .Where(s => s.Name.Equals("full", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+
+            var client = StaticDataRepository.GetOAuthClients()
+                .Single(c => c.Name.Equals("Zazz", StringComparison.InvariantCultureIgnoreCase));
+
+            var creds = _oAuthService.CreateOAuthCredentials(user, client, scopes);
+
+            var queryString = HttpUtility.ParseQueryString(String.Empty);
+            queryString["access_token"] = creds.AccessToken.ToJWTString();
+            queryString["refresh_token"] = creds.RefreshToken.ToJWTString();
+
+            var url = "/loginSuccess#" + queryString.ToString();
+            return Redirect(url);
         }
 
         [Authorize]

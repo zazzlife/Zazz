@@ -115,4 +115,12 @@ namespace Zazz.Web.Controllers
             public string Img { get; set; }
         }
     }
+
+    public class LoginSuccessController : Controller
+    {
+        public string Index()
+        {
+            return String.Empty;
+        }
+    }
 }
