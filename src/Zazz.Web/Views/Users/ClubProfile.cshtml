@@ -158,3 +158,17 @@
 
 @Html.Partial("_PhotoGalleryModal")
 
+@section ScriptsTop
+{
+    <script type="text/javascript">
+
+        @{
+            var categorySelect = Html.Partial("_CategoriesSelect").ToString();
+            categorySelect = categorySelect.Replace(Environment.NewLine, "");
+        }
+
+        var categoriesSelectHtml = '@Html.Raw(categorySelect)';
+
+
+    </script>
+}

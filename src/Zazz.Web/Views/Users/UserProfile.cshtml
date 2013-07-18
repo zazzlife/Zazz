@@ -15,34 +15,40 @@
         <div class="party-web">
             <div class="followers-box">@Model.FollowersCount</div>
             <div>Party Web</div>
-            
+
             @if (!Model.IsSelf)
             {
                 if (Model.IsCurrentUserFollowingTargetUser)
                 {
-                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
-                         title="un-follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-remove"></i></button>
+                <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId" data-action="unfollow"
+                         title="un-follow user" data-placement="right" class="btn btn-follow btn-info">
+                    <i class="icon-remove"></i>
+                </button>
                 }
                 else if (Model.FollowRequestAlreadySent)
                 {
-                    <button data-btn-follow="1" title="Follow request has been sent before. You must wait for the user to accept your request."
-                         class="btn btn-follow btn-info disabled" disabled="disabled"><i class="icon-ok"></i></button>
+                <button data-btn-follow="1" title="Follow request has been sent before. You must wait for the user to accept your request."
+                    class="btn btn-follow btn-info disabled" disabled="disabled">
+                    <i class="icon-ok"></i>
+                </button>
                 }
                 else
                 {
-                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" 
-                         title="follow user" data-placement="right" class="btn btn-follow btn-info"><i class="icon-plus"></i></button>
+                <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId" data-action="follow" 
+                         title="follow user" data-placement="right" class="btn btn-follow btn-info">
+                    <i class="icon-plus"></i>
+                </button>
                 }
 
                 <div class="clearfix"></div>
 
                 if (Model.IsTargetUserFollowingCurrentUser)
                 {
-                     <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
+                <p data-id="@Model.UserId" id="followsYouSign" class="label label-success">Follows you <i class="icon icon-ok-sign"></i></p>
                 }
             }
-            
-            
+
+
         </div>
         @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
         {
@@ -63,16 +69,19 @@
                 }
             </ul>
         }
-        
+
         @if (Model.Photos.Any())
         {
             <div class="well pics-widget">
-                <a class="black" href="~/photos/list/@Model.UserId"><h6>Party pics</h6></a>
+                <a class="black" href="~/photos/list/@Model.UserId">
+                    <h6>Party pics</h6>
+                </a>
                 <ul>
                     @foreach (var p in Model.Photos)
                     {
                         <li>
-                            <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink"><img src="@p.PhotoUrl.VerySmallLink" /></a>
+                            <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
+                                <img src="@p.PhotoUrl.VerySmallLink" /></a>
                             @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
                         </li>
                     }
@@ -100,7 +109,7 @@
                     <button type="button" class="btn btn-primary" id="submitPostBtn" data-touser="@Model.UserId">Submit</button>
                 </div>
             }
-            
+
         </div>
 
         <div class="margin-ten">
@@ -117,7 +126,22 @@
             }
         </ul>
     </section>
-    
+
     @Html.Raw(photoLightboxes)
 
 </div>
+
+@section ScriptsTop
+{
+    <script type="text/javascript">
+
+        @{
+            var categorySelect = Html.Partial("_CategoriesSelect").ToString();
+            categorySelect = categorySelect.Replace(Environment.NewLine, "");
+        }
+
+        var categoriesSelectHtml = '@Html.Raw(categorySelect)';
+
+
+    </script>
+}
