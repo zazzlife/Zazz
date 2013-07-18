@@ -109,6 +109,7 @@ namespace Zazz.Web.Controllers.Api
             var providedAlbum = bodyParts.Contents
                 .FirstOrDefault(c => c.Headers
                 .ContentDisposition.Name.Equals("albumId", StringComparison.InvariantCultureIgnoreCase));
+            
 
             if (providedAlbum != null)
             {
@@ -119,6 +120,21 @@ namespace Zazz.Web.Controllers.Api
                     albumId = album;
                 }
             }
+
+
+            // parsin categories
+            var providedCategories = bodyParts.Contents
+                .FirstOrDefault(c => c.Headers
+                .ContentDisposition.Name.Equals("albumId", StringComparison.InvariantCultureIgnoreCase));
+
+            var categories = Enumerable.Empty<byte>();
+
+            if (providedCategories != null)
+            {
+                var c = await providedCategories.ReadAsStringAsync();
+                categories = c.Split(',').Select(byte.Parse);
+            }
+
 
             var photo = new Photo
                     {
@@ -131,7 +147,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _photoService.SavePhoto(photo, photoStream, showInFeed);
+                _photoService.SavePhoto(photo, photoStream, showInFeed, categories);
                 return _objectMapper.PhotoToApiPhoto(photo);
             }
             catch (SecurityException)

@@ -105,120 +105,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ExtractTagsFromDescriptionAndSaveWithImage_OnSavePhoto()
-        {
-            //Arrange
-            var tag1 = "#tag1";
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
-
-            var photo = new Photo
-                        {
-                            Id = 1234,
-                            Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
-                        };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
-            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
-
-            //Act
-            _sut.SavePhoto(photo, Stream.Null, false);
-
-            //Assert
-            Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
-        }
-
-        [Test]
-        public void NotSaveDuplicateTags_OnSavePhoto()
-        {
-            //Arrange
-            var tag1 = "#tag1";
-            var duplicateTag1 = tag1;
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
-
-            var photo = new Photo
-            {
-                Id = 1234,
-                Description = String.Format("some text + {0} and {1} and {2} and duplicate {3}", tag1, tag2,
-                notAvailableTag, duplicateTag1)
-            };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
-            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
-
-            //Act
-            _sut.SavePhoto(photo, Stream.Null, false);
-
-            //Assert
-            Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
-        }
-
-        [Test]
-        public void NotBeCaseSensitiveOnDuplicateTagsCheck_OnSavePhoto()
-        {
-            //Arrange
-            var tag1 = "#tag1";
-            var duplicateTag1 = "#TAG1";
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
-
-            var photo = new Photo
-            {
-                Id = 1234,
-                Description = String.Format("some text + {0} and {1} and {2} and duplicate {3}", tag1, tag2,
-                notAvailableTag, duplicateTag1)
-            };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(duplicateTag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
-            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
-
-            //Act
-            _sut.SavePhoto(photo, Stream.Null, false);
-
-            //Assert
-            Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
-        }
-
-        [Test]
         public void SavePhotoToDBAndCreateAFeedRecordWhenLastFeedIsNullThenReturnPhotoId_OnSavePhoto()
         {
             //Arrange
@@ -236,7 +122,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -245,6 +131,114 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.FeedRepository.GetUserLastFeed(photo.UserId), Times.Once());
             Assert.AreEqual(DateTime.UtcNow.Date, photo.UploadDate.Date);
             Assert.AreEqual(photo.Id, id);
+        }
+
+        [Test]
+        public void AddCategoriesIfAvailable_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
+
+            var categories = new List<Category>
+                             {
+                                 new Category
+                                 {
+                                     Id = 1
+                                 },
+                                 new Category
+                                 {
+                                     Id = 2
+                                 },
+                                 new Category
+                                 {
+                                     Id = 3
+                                 }
+                             };
+
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(categories);
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
+                                                                       p.Categories.Any(c => c.CategoryId == 1) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 2) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 3) &&
+                                                                       p.Categories.Count == 3)));
+
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(() => null);
+
+            //Act
+
+            var id = _sut.SavePhoto(photo, Stream.Null, true, new byte[] {1, 2, 3});
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
+                                                                       p.Categories.Any(c => c.CategoryId == 1) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 2) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 3) &&
+                                                                       p.Categories.Count == 3)), Times.Once());
+        }
+
+        [Test]
+        public void NotAddInvalidCategories_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 1234,
+                AlbumId = 12,
+                Description = "desc",
+                UserId = 17
+            };
+
+            var categories = new List<Category>
+                             {
+                                 new Category
+                                 {
+                                     Id = 1
+                                 },
+                                 new Category
+                                 {
+                                     Id = 2
+                                 },
+                                 new Category
+                                 {
+                                     Id = 3
+                                 }
+                             };
+
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(categories);
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
+                                                                       p.Categories.Any(c => c.CategoryId == 1) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 2) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 3) &&
+                                                                       p.Categories.Count == 3)));
+
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(() => null);
+
+            //Act
+
+            var id = _sut.SavePhoto(photo, Stream.Null, true, new byte[] { 1, 2, 3, 4, 5, 6 });
+
+            //Assert
+            _uow.Verify(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
+                                                                       p.Categories.Any(c => c.CategoryId == 1) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 2) &&
+                                                                       p.Categories.Any(c => c.CategoryId == 3) &&
+                                                                       p.Categories.Count == 3)), Times.Once());
         }
 
         [Test]
@@ -271,7 +265,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -306,7 +300,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -346,7 +340,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -394,7 +388,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -433,7 +427,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(lastFeed);
 
             //Act
-            var id = _sut.SavePhoto(photo, Stream.Null, true);
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -461,7 +455,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, false);
+            var id = _sut.SavePhoto(photo, Stream.Null, false, Enumerable.Empty<byte>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());

@@ -138,7 +138,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         [Test]
         public void AddCategoriesIfAvailable_OnNewPost()
-        // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
             var categories = new List<Category>
@@ -185,7 +184,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         [Test]
         public void NotAddInvalidCategories_OnNewPost()
-        // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
             var categories = new List<Category>

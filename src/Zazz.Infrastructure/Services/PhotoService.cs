@@ -104,22 +104,14 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetDescription(photoId);
         }
 
-        public int SavePhoto(Photo photo, Stream data, bool showInFeed)
+        public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<byte> categories)
         {
-            if (!String.IsNullOrEmpty(photo.Description))
+            foreach (var c in categories)
             {
-                var extractedTags = _stringHelper.ExtractTags(photo.Description);
-                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
-                {
-                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                    if (tag != null)
-                    {
-                        photo.Categories.Add(new PhotoCategory
-                                       {
-                                           CategoryId = tag.Id
-                                       });
-                    }
-                }
+                var cat = _staticDataRepository.GetCategories()
+                                               .SingleOrDefault(cate => cate.Id == c);
+                if (cat != null)
+                    photo.Categories.Add(new PhotoCategory {CategoryId = c});
             }
 
             photo.UploadDate = DateTime.UtcNow;

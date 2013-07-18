@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Zazz.Core.Interfaces
 
         string GetPhotoDescription(int photoId);
         
-        int SavePhoto(Photo photo, Stream data, bool showInFeed);
+        int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<byte> categories);
 
         void RemovePhoto(int photoId, int currentUserId);
 

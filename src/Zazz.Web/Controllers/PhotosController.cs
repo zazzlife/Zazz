@@ -170,7 +170,6 @@ namespace Zazz.Web.Controllers
         public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
             var c = Request.Params["categories"];
-
             var categories = c.Split(',').Select(byte.Parse);
 
             var response = new FineUploadResponse();
@@ -209,7 +208,7 @@ namespace Zazz.Web.Controllers
                             UserId = userId
                         };
 
-            PhotoService.SavePhoto(photo, image, showInFeed);
+            PhotoService.SavePhoto(photo, image, showInFeed, Enumerable.Empty<byte>());
             return photo;
         }
 
