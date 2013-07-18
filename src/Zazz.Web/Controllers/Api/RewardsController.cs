@@ -35,8 +35,8 @@ namespace Zazz.Web.Controllers.Api
                                            RedeemedDate = r.RedeemedDate,
                                            RewardId = r.Id,
                                            UserId = userId,
-                                           RewardName = r.Reward.Name,
-                                           RewardDescription = r.Reward.Description
+                                           Name = r.Reward.Name,
+                                           Description = r.Reward.Description
                                        });
         }
 
