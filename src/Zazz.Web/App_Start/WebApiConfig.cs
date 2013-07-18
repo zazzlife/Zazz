@@ -11,8 +11,8 @@ namespace Zazz.Web
         {
             config.Routes.MapHttpRoute(
                 name: "CategoryFeeds",
-                routeTemplate: "api/v1/categories/{id}/feeds",
-                defaults: new { controller = "CategoryFeeds", id = RouteParameter.Optional }
+                routeTemplate: "api/v1/categories/{id}/feed",
+                defaults: new { controller = "CategoriesFeed", id = RouteParameter.Optional }
             );
 
             config.Routes.MapHttpRoute(

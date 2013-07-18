@@ -13,13 +13,13 @@ using Zazz.Web.Models.Api;
 namespace Zazz.Web.Controllers.Api
 {
     [OAuth2Authorize]
-    public class CategoryFeedsController : BaseApiController //TODO: move this to feeds controller
+    public class CategoriesFeedController : BaseApiController
     {
         private readonly IFeedHelper _feedHelper;
         private readonly IStaticDataRepository _staticDataRepository;
         private readonly IObjectMapper _objectMapper;
 
-        public CategoryFeedsController(IFeedHelper feedHelper, IStaticDataRepository staticDataRepository,
+        public CategoriesFeedController(IFeedHelper feedHelper, IStaticDataRepository staticDataRepository,
             IObjectMapper objectMapper)
         {
             _feedHelper = feedHelper;
@@ -27,7 +27,7 @@ namespace Zazz.Web.Controllers.Api
             _objectMapper = objectMapper;
         }
 
-        // GET api/Categories/1,2,3,4,5/feeds?lastFeed=
+        // GET api/Categories/1,2,3,4,5/feed?lastFeed=
         public IEnumerable<ApiFeed> Get(string id, int lastFeed = 0)
         {
             var currentUserId = CurrentUserId;
