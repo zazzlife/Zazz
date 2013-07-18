@@ -478,6 +478,11 @@ $(document).on('click', '.open-categories-btn', function() {
     }
 
     var $self = $(this);
+
+    var submitBtnId = $self.attr('data-post-btn');
+
+    $self.popover('destroy');
+
     $self.popover({
         html: true,
         placement: 'bottom',
@@ -491,8 +496,10 @@ $(document).on('click', '.open-categories-btn', function() {
     $popover.css('width', '535px');
     $popover.css('max-width', '535px');
 
-    calculatePopoverPosition($self, $popover);    
-    
+    calculatePopoverPosition($self, $popover);
+
+    var $submitBtn = $popover.find('button[data-category-submit');
+    $submitBtn.attr('id', submitBtnId);
 
 });
 
