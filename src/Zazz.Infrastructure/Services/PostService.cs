@@ -34,19 +34,14 @@ namespace Zazz.Infrastructure.Services
             return post;
         }
 
-        public void NewPost(Post post)
+        public void NewPost(Post post, IEnumerable<byte> categories)
         {
-            var extractedTags = _stringHelper.ExtractTags(post.Message);
-            foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
+            foreach (var c in categories)
             {
-                var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                if (tag != null)
-                {
-                    post.Categories.Add(new PostCategory
-                                  {
-                                      CategoryId = tag.Id
-                                  });
-                }
+                var cat = _staticDataRepository.GetCategories()
+                                               .SingleOrDefault(cate => cate.Id == c);
+                if (cat != null)
+                    post.Categories.Add(new PostCategory {CategoryId = c});
             }
 
             _uow.PostRepository.InsertGraph(post);

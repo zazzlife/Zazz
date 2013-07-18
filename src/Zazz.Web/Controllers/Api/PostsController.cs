@@ -53,7 +53,7 @@ namespace Zazz.Web.Controllers.Api
                         ToUserId = post.ToUserId
                     };
 
-            _postService.NewPost(p);
+            _postService.NewPost(p, post.Categories);
             post.PostId = p.Id;
 
             return post;

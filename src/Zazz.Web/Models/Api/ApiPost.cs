@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Zazz.Core.Models;
 
 namespace Zazz.Web.Models.Api
@@ -20,6 +21,8 @@ namespace Zazz.Web.Models.Api
         public string ToUserDisplayName { get; set; }
 
         public PhotoLinks ToUserDisplayPhoto { get; set; }
+
+        public IEnumerable<byte> Categories { get; set; }
 
         public DateTime Time { get; set; }
     }

@@ -85,11 +85,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             _uow.Setup(x => x.PostRepository.InsertGraph(_post));
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
-            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
-                         .Returns(Enumerable.Empty<string>);
 
             //Act
-            _sut.NewPost(_post);
+            _sut.NewPost(_post, Enumerable.Empty<byte>());
 
             //Assert
             Assert.AreEqual(DateTime.MinValue, _post.CreatedTime);
@@ -108,7 +106,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(Enumerable.Empty<string>);
 
             //Act
-            _sut.NewPost(_post);
+            _sut.NewPost(_post, Enumerable.Empty<byte>());
 
 
             //Assert
@@ -129,7 +127,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(Enumerable.Empty<string>);
 
             //Act
-            _sut.NewPost(_post);
+            _sut.NewPost(_post, Enumerable.Empty<byte>());
 
 
             //Assert
@@ -139,99 +137,97 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void AddTagsIfExists_OnNewPost()
+        public void AddCategoriesIfAvailable_OnNewPost()
+        // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
-            var tag1 = "#test1";
-            var tag2 = "#test2";
+            var categories = new List<Category>
+                             {
+                                 new Category
+                                 {
+                                     Id = 1
+                                 },
+                                 new Category
+                                 {
+                                     Id = 2
+                                 },
+                                 new Category
+                                 {
+                                     Id = 3
+                                 }
+                             };
 
-            var tagObject1 = new Category { Id = 1, Name = "test1" };
-            var tagObject2 = new Category { Id = 2, Name = "test2" };
-
-            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
-                         .Returns(new[] { tag1, tag2 });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(categories);
 
             _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
-                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
+                             .InsertGraph(It.Is<Post>(p =>
+                                                      p.Categories.Any(c => c.CategoryId == 1) &&
+                                                      p.Categories.Any(c => c.CategoryId == 2) &&
+                                                      p.Categories.Any(c => c.CategoryId == 3) &&
+                                                      p.Categories.Count == 3)));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
+            
+
             //Act
-            _sut.NewPost(_post);
+            _sut.NewPost(_post, new byte[] {1, 2, 3});
 
             //Assert
-            _mockRepo.VerifyAll();
+            _uow.Verify(x => x.PostRepository
+                             .InsertGraph(It.Is<Post>(p =>
+                                                      p.Categories.Any(c => c.CategoryId == 1) &&
+                                                      p.Categories.Any(c => c.CategoryId == 2) &&
+                                                      p.Categories.Any(c => c.CategoryId == 3) &&
+                                                      p.Categories.Count == 3)), Times.Once());
         }
 
         [Test]
-        public void NotAddDuplicateTags_OnNewPost()
+        public void NotAddInvalidCategories_OnNewPost()
+        // we should not set created time here because facebook gives us its own time.
         {
             //Arrange
-            var tag1 = "#test1";
-            var duplicateTag1 = "#test1";
-            var tag2 = "#test2";
+            var categories = new List<Category>
+                             {
+                                 new Category
+                                 {
+                                     Id = 1
+                                 },
+                                 new Category
+                                 {
+                                     Id = 2
+                                 },
+                                 new Category
+                                 {
+                                     Id = 3
+                                 }
+                             };
 
-            var tagObject1 = new Category { Id = 1, Name = "test1" };
-            var tagObject2 = new Category { Id = 2, Name = "test2" };
-
-            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
-                         .Returns(new[] { tag1, tag2, duplicateTag1 });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(categories);
 
             _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
-                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
+                             .InsertGraph(It.Is<Post>(p =>
+                                                      p.Categories.Any(c => c.CategoryId == 1) &&
+                                                      p.Categories.Any(c => c.CategoryId == 2) &&
+                                                      p.Categories.Any(c => c.CategoryId == 3) &&
+                                                      p.Categories.Count == 3)));
 
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
-            //Act
-            _sut.NewPost(_post);
 
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void DuplicateTagsCheckShouldNotBeCaseSensetive_OnNewPost()
-        {
-            //Arrange
-            var tag1 = "#test1";
-            var duplicateTag1 = "#TEST1";
-            var tag2 = "#test2";
-
-            var tagObject1 = new Category { Id = 1, Name = "test1" };
-            var tagObject2 = new Category { Id = 2, Name = "test2" };
-
-            _stringHelper.Setup(x => x.ExtractTags(_post.Message))
-                         .Returns(new[] { tag1, tag2, duplicateTag1 });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-
-
-            _uow.Setup(x => x.PostRepository
-                .InsertGraph(It.Is<Post>(post => (post.Categories.Count == 2
-                    && post.Categories.Any(p => p.CategoryId == tagObject1.Id)
-                    && post.Categories.Any(p => p.CategoryId == tagObject2.Id)))));
-
-            _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
-            _sut.NewPost(_post);
+            _sut.NewPost(_post, new byte[] { 1, 2, 3, 4, 5, 6 });
 
             //Assert
-            _mockRepo.VerifyAll();
+            _uow.Verify(x => x.PostRepository
+                             .InsertGraph(It.Is<Post>(p =>
+                                                      p.Categories.Any(c => c.CategoryId == 1) &&
+                                                      p.Categories.Any(c => c.CategoryId == 2) &&
+                                                      p.Categories.Any(c => c.CategoryId == 3) &&
+                                                      p.Categories.Count == 3)), Times.Once());
         }
 
         [Test]

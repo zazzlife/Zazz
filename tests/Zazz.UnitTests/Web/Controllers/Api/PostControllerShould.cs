@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Http;
 using System.Security;
@@ -17,6 +19,7 @@ using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
 using Zazz.Web.DependencyResolution;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -26,6 +29,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private Mock<IPostService> _postService;
         private Post _post;
         private int _postId;
+        private ApiPost _apiPost;
 
         public override void Init()
         {
@@ -41,6 +45,14 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                         CreatedTime = DateTime.UtcNow,
                         Message = "Message"
                     };
+
+            _apiPost = new ApiPost
+                       {
+                           PostId = _postId,
+                           FromUserId = User.Id,
+                           Time = _post.CreatedTime,
+                           Categories = new byte[] {1, 2, 3, 4}
+                       };
 
             _postService = MockRepo.Create<IPostService>();
             IocContainer.Configure(x =>
@@ -97,7 +109,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _post.Message = message;
             ControllerAddress = "/api/v1/posts";
 
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
@@ -117,12 +129,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _post.FromUserId = User.Id + 1;
             ControllerAddress = "/api/v1/posts";
 
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var postContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.NewPost(It.Is<Post>(p => p.FromUserId == User.Id)));
+            _postService.Setup(x => x.NewPost(It.Is<Post>(p => p.FromUserId == User.Id), _apiPost.Categories));
 
             //Act
             var response = await Client.PostAsync(ControllerAddress, postContent);
@@ -139,7 +151,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         {
             //Arrange
             _post.Message = message;
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
@@ -156,7 +168,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return404ForNotFoundException_OnPut()
         {
             //Arrange
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
@@ -176,7 +188,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return403ForSecurityException_OnPut()
         {
             //Arrange
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
@@ -196,7 +208,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return204IfSuccessful_OnPut()
         {
             //Arrange
-            var json = JsonConvert.SerializeObject(_post);
+            var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();

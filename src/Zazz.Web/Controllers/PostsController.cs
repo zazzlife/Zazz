@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
                            ToUserId = toUser
                        };
 
-            _postService.NewPost(post);
+            _postService.NewPost(post, categories);
 
             var userPhotoUrl = PhotoService.GetUserImageUrl(userId);
 
