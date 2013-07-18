@@ -34,14 +34,14 @@ namespace Zazz.Infrastructure.Services
             return post;
         }
 
-        public void NewPost(Post post, IEnumerable<byte> categories)
+        public void NewPost(Post post, IEnumerable<int> categories)
         {
             foreach (var c in categories)
             {
                 var cat = _staticDataRepository.GetCategories()
                                                .SingleOrDefault(cate => cate.Id == c);
                 if (cat != null)
-                    post.Categories.Add(new PostCategory {CategoryId = c});
+                    post.Categories.Add(new PostCategory {CategoryId = (byte) c});
             }
 
             _uow.PostRepository.InsertGraph(post);

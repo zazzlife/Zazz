@@ -87,7 +87,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.FeedRepository.InsertGraph(It.IsAny<Feed>()));
 
             //Act
-            _sut.NewPost(_post, Enumerable.Empty<byte>());
+            _sut.NewPost(_post, Enumerable.Empty<int>());
 
             //Assert
             Assert.AreEqual(DateTime.MinValue, _post.CreatedTime);
@@ -106,7 +106,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(Enumerable.Empty<string>);
 
             //Act
-            _sut.NewPost(_post, Enumerable.Empty<byte>());
+            _sut.NewPost(_post, Enumerable.Empty<int>());
 
 
             //Assert
@@ -127,7 +127,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(Enumerable.Empty<string>);
 
             //Act
-            _sut.NewPost(_post, Enumerable.Empty<byte>());
+            _sut.NewPost(_post, Enumerable.Empty <int>());
 
 
             //Assert
@@ -171,7 +171,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             
 
             //Act
-            _sut.NewPost(_post, new byte[] {1, 2, 3});
+            _sut.NewPost(_post, new int[] { 1, 2, 3 });
 
             //Assert
             _uow.Verify(x => x.PostRepository
@@ -217,7 +217,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.NewPost(_post, new byte[] { 1, 2, 3, 4, 5, 6 });
+            _sut.NewPost(_post, new int[] { 1, 2, 3, 4, 5, 6 });
 
             //Assert
             _uow.Verify(x => x.PostRepository

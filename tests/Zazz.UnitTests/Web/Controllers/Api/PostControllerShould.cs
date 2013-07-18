@@ -51,7 +51,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                            PostId = _postId,
                            FromUserId = User.Id,
                            Time = _post.CreatedTime,
-                           Categories = new byte[] {1, 2, 3, 4}
+                           Categories = new int[] { 1, 2, 3, 4 },
+                           Message = _post.Message
                        };
 
             _postService = MockRepo.Create<IPostService>();
@@ -106,7 +107,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfPostMessageIsMissing_OnPost(string message)
         {
             //Arrange
-            _post.Message = message;
+            _apiPost.Message = message;
             ControllerAddress = "/api/v1/posts";
 
             var json = JsonConvert.SerializeObject(_apiPost);
@@ -150,7 +151,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         public async Task Return400IfPostMessageIsEmpty_OnPut(string message)
         {
             //Arrange
-            _post.Message = message;
+            _apiPost.Message = message;
             var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 

@@ -9,7 +9,7 @@ namespace Zazz.Core.Interfaces
     {
         Post GetPost(int postId);
 
-        void NewPost(Post post, IEnumerable<byte> categories);
+        void NewPost(Post post, IEnumerable<int> categories);
 
         void EditPost(int postId, string newText, int currentUserId);
 

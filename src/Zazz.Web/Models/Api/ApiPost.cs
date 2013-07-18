@@ -22,7 +22,7 @@ namespace Zazz.Web.Models.Api
 
         public PhotoLinks ToUserDisplayPhoto { get; set; }
 
-        public IEnumerable<byte> Categories { get; set; }
+        public IEnumerable<int> Categories { get; set; }
 
         public DateTime Time { get; set; }
     }

@@ -673,7 +673,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
                 .Returns(() => null);
-            _postService.Setup(x => x.NewPost(It.IsAny<Post>(), Enumerable.Empty<byte>()));
+            _postService.Setup(x => x.NewPost(It.IsAny<Post>(), Enumerable.Empty<int>()));
 
             _uow.Setup(x => x.SaveChanges());
 

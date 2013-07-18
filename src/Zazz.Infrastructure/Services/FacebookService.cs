@@ -166,7 +166,7 @@ namespace Zazz.Infrastructure.Services
                                    PageId = page.Id
                                };
 
-                    _postService.NewPost(post, Enumerable.Empty<byte>());
+                    _postService.NewPost(post, Enumerable.Empty<int>());
                 }
             }
 
