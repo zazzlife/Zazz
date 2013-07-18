@@ -7,7 +7,7 @@ $(document).on('click', '#submitPostBtn', function () {
         
         var categories = [];
 
-        $('.category-select-btn.active').each(function () {
+        $('.popover-content .category-select-btn.active').each(function () {
             var id = $(this).data('id');
             if (id) {
                 categories.push(id);

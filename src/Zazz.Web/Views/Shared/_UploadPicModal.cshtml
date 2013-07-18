@@ -1,5 +1,15 @@
-﻿@{
+﻿@using Zazz.Core.Models.Data
+@using Zazz.Web.Controllers
+@{
     Layout = null;
+
+    var categories = Enumerable.Empty<Category>();
+    var controller = ViewContext.Controller as BaseController;
+    if (controller != null)
+    {
+        categories = controller.StaticDataRepository.GetCategories();
+    }
+    
 }
 <div class="modal hide fade" id="uploadPicModal">
     <div class="modal-header">
@@ -37,6 +47,21 @@
                 </div>
             </div>
 
+        </div>
+
+        <p>Select Categories:</p>
+        <div class="categories-select">
+            <ul>
+
+                @foreach (var c in categories)
+                {
+                    <li>
+                        <button data-id="@c.Id" type="button" class="btn icon-beer category-select-btn" data-toggle="button"></button>
+                        <div class="text-center">@c.Name</div>
+                    </li>
+                }
+
+            </ul>
         </div>
 
         <p>

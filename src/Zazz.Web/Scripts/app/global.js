@@ -82,6 +82,8 @@ $('#party-web-link').click(function () {
 
 });
 
+
+
 /********************************
    Select Images From gallery
 *********************************/
@@ -247,22 +249,36 @@ function initImgUploader(onComplete) {
 }
 
 $(document).on('click', '#uploadImg', function () {
+
+    var $self = $(this);
+
+    var categories = [];
+
+    $('.category-select-btn.active').each(function () {
+        var id = $(this).data('id');
+        if (id) {
+            categories.push(id);
+        }
+    });
+
     var description = $('#Description').val();
     var albumId = $('#upload-albumSelect').val();
-    var showInFeed = $(this).data('feed');
+    var showInFeed = $self.data('feed');
 
     if (!imgUploader)
         return;
     imgUploader.setParams({
         albumId: albumId,
         description: description,
-        showInFeed: showInFeed
+        showInFeed: showInFeed,
+        categories: categories
     });
 
     imgUploader.uploadStoredFiles();
 
-    showBtnBusy($(this));
-    imgUploadBtn = $(this);
+    showBtnBusy($self);
+    imgUploadBtn = $self;
+    
 });
 
 $(document).on('show', '#uploadPicModal', function () {
@@ -472,7 +488,7 @@ function replaceLinksWithAnchorTags() {
 *********************************/
 
 function showCategories($elem, cb) {
-    
+
     if (!categoriesSelectHtml) {
         return;
     }
