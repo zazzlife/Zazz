@@ -471,15 +471,13 @@ function replaceLinksWithAnchorTags() {
     Open categories
 *********************************/
 
-$(document).on('click', '.open-categories-btn', function() {
-
+function showCategories($elem, cb) {
+    
     if (!categoriesSelectHtml) {
         return;
     }
 
-    var $self = $(this);
-
-    var submitBtnId = $self.attr('data-post-btn');
+    var $self = $elem;
 
     $self.popover('destroy');
 
@@ -498,11 +496,15 @@ $(document).on('click', '.open-categories-btn', function() {
 
     calculatePopoverPosition($self, $popover);
 
-    var $submitBtn = $popover.find('button[data-category-submit');
-    $submitBtn.attr('id', submitBtnId);
+    var $submitBtn = $popover.find('button[data-category-submit]');
+    $submitBtn.on('click', function () {
 
-});
+        cb($popover, $submitBtn);
 
+        $submitBtn.off('click');
+
+    });
+}
 
 $(function () {
 

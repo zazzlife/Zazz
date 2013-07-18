@@ -1,42 +1,62 @@
 ﻿// ADD
 $(document).on('click', '#submitPostBtn', function () {
 
-    var self = $(this);
-    var message = $('#postInput').val();
-    var toUser = self.data('touser');
+    var $self = $(this);
 
-    if (!message) {
-        toastr.error("Post message cannot be empty!");
-        return;
-    }
+    showCategories($self, function($popover, $btn) {
+        
+        var categories = [];
 
-    showBtnBusy(self);
-    var url = '/posts/new';
+        $('.category-select-btn.active').each(function () {
+            var id = $(this).data('id');
+            if (id) {
+                categories.push(id);
+            }
 
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: {
-            message: message,
-            toUser: toUser ? toUser : null,
-        },
-        traditional: true,
-        error: function () {
-            toastr.error('An error occured, Please try again later.');
-            hideBtnBusy(self, "Submit");
-        },
-        success: function (res) {
-            var feed = $(res.trim());
-            feed.prependTo($('#feedsContainer')).hide().slideDown();
+        });
 
-            hideBtnBusy(self, "Submit");
-            applyPageStyles();
+        var message = $('#postInput').val();
+        var toUser = $self.data('touser');
 
-            $('#postInput').val("");
+        if (!message) {
+            toastr.error("Post message cannot be empty!");
+            return;
         }
-    });
 
+        showBtnBusy($btn);
+        var url = '/posts/new';
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                message: message,
+                toUser: toUser ? toUser : null,
+                categories: categories
+            },
+            traditional: true,
+            error: function () {
+                toastr.error('An error occured, Please try again later.');
+                hideBtnBusy($btn, "Submit");
+                
+                $self.popover('destroy');
+            },
+            success: function (res) {
+                var feed = $(res.trim());
+                feed.prependTo($('#feedsContainer')).hide().slideDown();
+
+                hideBtnBusy($btn, "Submit");
+                applyPageStyles();
+
+                $('#postInput').val("");
+
+                $self.popover('destroy');
+            }
+        });
+
+    })
 });
+
 
 //Edit
 var originalPostText;
