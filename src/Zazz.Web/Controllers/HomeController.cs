@@ -50,27 +50,28 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Tags(string @select)
+        public ActionResult Categories(string @select)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            var availableTags = StaticDataRepository.GetCategories().ToList();
-            var selectedTags = String.IsNullOrEmpty(@select)
+            var availableCategories = StaticDataRepository.GetCategories().ToList();
+            var selectedCategories = String.IsNullOrEmpty(@select)
                                    ? Enumerable.Empty<string>()
                                    : @select.Split(',');
 
-            var selectedTagsIds =
-                availableTags.Where(t => selectedTags.Contains(t.Name, StringComparer.InvariantCultureIgnoreCase))
-                .Select(t => t.Id);
+            var selectedCategoriesId =
+                availableCategories.Where(t => selectedCategories.Contains(t.Name,
+                                                                           StringComparer.InvariantCultureIgnoreCase))
+                                   .Select(t => t.Id);
 
-            var feeds = _feedHelper.GetCategoryFeeds(userId, selectedTagsIds.ToList());
+            var feeds = _feedHelper.GetCategoryFeeds(userId, selectedCategoriesId.ToList());
 
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
 
             var vm = new CategoriesPageViewModel
                      {
-                         AvailableCategories = availableTags.Select(t => t.Name),
-                         SelectedCategories = selectedTags,
+                         AvailableCategories = availableCategories.Select(t => t.Name),
+                         SelectedCategories = selectedCategories,
                          Feeds = feeds
                      };
 

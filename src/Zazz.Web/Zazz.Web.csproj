@@ -602,7 +602,7 @@
     <Content Include="Views\Shared\FeedItems\_PhotoFeedThreePhotos.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Notifications\_Notifications.cshtml" />
-    <Content Include="Views\Home\Tags.cshtml" />
+    <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\Users\UserProfile.cshtml" />
     <Content Include="Views\Shared\_WeeklyEditForm.cshtml" />
     <Content Include="Views\Shared\_PhotoGalleryModal.cshtml" />
