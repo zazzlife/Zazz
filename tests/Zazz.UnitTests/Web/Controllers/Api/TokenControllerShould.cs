@@ -468,11 +468,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                          It.Is<List<OAuthScope>>(s => s.Any(sc => sc.Name.Equals("full")))))
                          .Returns(oauthCred);
 
-            _userService.Setup(x => x.GetUserDisplayName(user.Id))
-                        .Returns(displayName);
-            _photoService.Setup(x => x.GetUserImageUrl(user.Id))
-                         .Returns(new PhotoLinks("photo url"));
-
             //Act
             var response = await _client.PostAsync(path, new FormUrlEncodedContent(values));
             var content = await response.Content.ReadAsStringAsync();

@@ -17,18 +17,16 @@ namespace Zazz.Web.Controllers.Api
     public class TokenController : ApiController
     {
         private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
         private readonly IOAuthService _oauthService;
         private readonly IOAuthClientRepository _oauthClientRepository;
         private readonly ICryptoService _cryptoService;
         private readonly IStaticDataRepository _staticDataRepository;
 
-        public TokenController(IUserService userService, IPhotoService photoService,
-            IOAuthService oauthService, IOAuthClientRepository oauthClientRepository, ICryptoService cryptoService,
+        public TokenController(IUserService userService, IOAuthService oauthService,
+            IOAuthClientRepository oauthClientRepository, ICryptoService cryptoService,
             IStaticDataRepository staticDataRepository)
         {
             _userService = userService;
-            _photoService = photoService;
             _oauthService = oauthService;
             _oauthClientRepository = oauthClientRepository;
             _cryptoService = cryptoService;
@@ -110,16 +108,7 @@ namespace Zazz.Web.Controllers.Api
                            AccessToken = creds.AccessToken.ToJWTString(),
                            TokenType = "Bearer",
                            RefreshToken = creds.RefreshToken.ToJWTString(),
-                           ExpiresIn = 60*60,
-                           User = new ApiBasicUserInfo
-                                  {
-                                      AccountType = user.AccountType,
-                                      DisplayName = _userService.GetUserDisplayName(user.Id),
-                                      DisplayPhoto = _photoService.GetUserImageUrl(user.Id),
-                                      IsConfirmed = user.IsConfirmed,
-                                      UserId = user.Id
-                                  }
-
+                           ExpiresIn = 60*60
                        };
             }
             // refresh token
@@ -180,7 +169,5 @@ namespace Zazz.Web.Controllers.Api
 
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
-
-        public ApiBasicUserInfo User { get; set; }
     }
 }

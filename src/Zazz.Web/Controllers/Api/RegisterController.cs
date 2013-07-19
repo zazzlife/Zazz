@@ -20,19 +20,14 @@ namespace Zazz.Web.Controllers.Api
         private readonly IOAuthClientRepository _oauthClientRepository;
         private readonly IOAuthService _oAuthService;
         private readonly IStaticDataRepository _staticDataRepository;
-        private readonly IUserService _userService;
-        private readonly IPhotoService _photoService;
 
         public RegisterController(IAuthService authService, IOAuthClientRepository oauthClientRepository,
-            IOAuthService oAuthService, IStaticDataRepository staticDataRepository,
-            IUserService userService, IPhotoService photoService)
+            IOAuthService oAuthService, IStaticDataRepository staticDataRepository)
         {
             _authService = authService;
             _oauthClientRepository = oauthClientRepository;
             _oAuthService = oAuthService;
             _staticDataRepository = staticDataRepository;
-            _userService = userService;
-            _photoService = photoService;
         }
 
         public OAuthAccessTokenResponse Post(ApiRegister request)
@@ -124,15 +119,7 @@ namespace Zazz.Web.Controllers.Api
                            AccessToken = oauthCreds.AccessToken.ToJWTString(),
                            ExpiresIn = 60*60,
                            RefreshToken = oauthCreds.RefreshToken.ToJWTString(),
-                           TokenType = "Bearer",
-                           User = new ApiBasicUserInfo
-                                  {
-                                      AccountType = user.AccountType,
-                                      DisplayName = _userService.GetUserDisplayName(u.Id),
-                                      DisplayPhoto = _photoService.GetUserImageUrl(u.Id),
-                                      IsConfirmed = false,
-                                      UserId = u.Id
-                                  }
+                           TokenType = "Bearer"
                        };
             }
             catch (InvalidEmailException)

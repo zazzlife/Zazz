@@ -39,8 +39,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private Mock<IOAuthClientRepository> _oauthClientRepo;
         private string _clientId;
         private Mock<IOAuthService> _oauthService;
-        private Mock<IUserService> _userService;
-        private Mock<IPhotoService> _photoService;
         private const string BASE_ADDRESS = "http://localhost:8080";
 
         [SetUp]
@@ -51,8 +49,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _authService = _mockRepo.Create<IAuthService>();
             _oauthClientRepo = _mockRepo.Create<IOAuthClientRepository>();
             _oauthService = _mockRepo.Create<IOAuthService>();
-            _userService = _mockRepo.Create<IUserService>();
-            _photoService = _mockRepo.Create<IPhotoService>();
 
 
             var config = new HttpSelfHostConfiguration(BASE_ADDRESS);
@@ -102,8 +98,6 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IOAuthClientRepository>().Use(_oauthClientRepo.Object);
                 x.For<IStaticDataRepository>().Use<StaticDataRepository>();
                 x.For<IOAuthService>().Use(_oauthService.Object);
-                x.For<IUserService>().Use(_userService.Object);
-                x.For<IPhotoService>().Use(_photoService.Object);
             });
         }
 
@@ -403,20 +397,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _oauthService.Setup(x => x.CreateOAuthCredentials(user, client, It.IsAny<List<OAuthScope>>()))
                          .Returns(oauthCreds);
 
-            _userService.Setup(x => x.GetUserDisplayName(user.Id))
-                        .Returns("asdf");
-
-            _photoService.Setup(x => x.GetUserImageUrl(user.Id))
-                         .Returns(new PhotoLinks("asdfg"));
-
             //Act
             var response = await _client.PostAsync(_registerUrl, content);
             var oauthRes = JsonConvert
                 .DeserializeObject<OAuthAccessTokenResponse>(await response.Content.ReadAsStringAsync());
 
             //Assert
-            Assert.IsNotNull(oauthRes.User);
-            Assert.AreEqual(user.Id, oauthRes.User.UserId);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             _mockRepo.VerifyAll();
