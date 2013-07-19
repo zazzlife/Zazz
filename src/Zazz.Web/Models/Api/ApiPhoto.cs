@@ -1,4 +1,5 @@
-﻿using Zazz.Core.Models;
+﻿using System.Collections.Generic;
+using Zazz.Core.Models;
 
 namespace Zazz.Web.Models.Api
 {
@@ -17,5 +18,7 @@ namespace Zazz.Web.Models.Api
         public string UserDisplayName { get; set; }
 
         public PhotoLinks UserDisplayPhoto { get; set; }
+
+        public IEnumerable<int> Categories { get; set; }
     }
 }
