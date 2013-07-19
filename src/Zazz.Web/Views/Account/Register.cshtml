@@ -35,7 +35,7 @@
                                 @Html.LabelFor(model => model.UserName, new { @class = "control-label required" })
                             </div>
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.UserName, new { @class = "span4", @data_checkusername="1" })
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "span4" })
                                 @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
                             </div>
                         </div>

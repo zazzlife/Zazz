@@ -145,12 +145,13 @@ namespace Zazz.Web.Controllers
             return View(registerVm);
         }
 
-        public bool IsAvailable(string username)
+        public JsonNetResult IsAvailable(string username)
         {
             if (String.IsNullOrWhiteSpace(username) || username.Length < 2 || username.Length > 20)
-                return false;
+                return new JsonNetResult(false);
 
-            return !_uow.UserRepository.ExistsByUsername(username);
+            var usernameExists = _uow.UserRepository.ExistsByUsername(username);
+            return usernameExists ? new JsonNetResult(false) : new JsonNetResult(true);
         }
 
         [HttpGet]
