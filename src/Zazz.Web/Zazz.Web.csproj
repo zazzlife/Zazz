@@ -487,7 +487,6 @@
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\comments.js" />
     <Content Include="Scripts\app\event.js" />
-    <Content Include="Scripts\app\input-mention.js" />
     <Content Include="Scripts\app\notification.js" />
     <Content Include="Scripts\app\post.js" />
     <Content Include="Scripts\app\scroll-pagination.js" />
@@ -499,7 +498,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\jquery-2.0.2.js" />
     <Content Include="Scripts\jquery-2.0.2.min.js" />
-    <Content Include="Scripts\jquery.atwho.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.extends.js" />
     <Content Include="Images\auth-icons.png" />

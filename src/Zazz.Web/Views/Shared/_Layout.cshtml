@@ -76,10 +76,6 @@
             <span>&copy; @DateTime.UtcNow.Year ZazzLife.com</span>
         </div>
     </footer>
-    
-    <script type="text/javascript">
-        var availableTags = @Html.Action("GetAllCategories", "Home")
-    </script>
 
     @RenderSection("ScriptsTop", false)
     @Scripts.Render("~/js")

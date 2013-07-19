@@ -2,44 +2,27 @@
     wrapping tags in anchortags
 *********************************/
 
-function replaceTagsWithAnchorTags() {
-    if (availableTags) {
-        
-        $('*[data-containsTags]').each(function () {
+function highlightTags() {
 
-            var self = $(this);
-            var text = self.html();
+    $('*[data-containsTags]').each(function () {
 
-            var allTags = text.match(/#\w*/gi);
-            if (!allTags) {
-                return;
-            }
+        var self = $(this);
+        var text = self.html();
 
-            var baseAddress = "/home/tags?select=";
+        var allTags = text.match(/#\w*/gi);
+        if (!allTags) {
+            return;
+        }
 
-            for (var i = 0; i < allTags.length; i++) {
-                var tag = allTags[i];
-                var tagWithoutHash = tag.replace("#", "");
 
-                var exists = false;
-                for (var j = 0; j < availableTags.length; j++) {
-                    var availTag = availableTags[j].toLowerCase();
+        for (var i = 0; i < allTags.length; i++) {
+            var tag = allTags[i];
+            var highlighted = '<strong>' + tag + '</strong>';
 
-                    if (tagWithoutHash.toLowerCase() === availTag) {
-                        exists = true;
-                    }
-                }
+            text = text.replace(tag, highlighted);
+        }
 
-                if (exists) {
-                    var url = baseAddress + tagWithoutHash;
-                    var anchorTag = '<a class="tag" href="' + url + '">' + tag + '</a>';
+        self.html(text);
+    });
 
-                    text = text.replace(tag, anchorTag);
-                }
-            }
-
-            self.html(text);
-        });
-
-    }
 }

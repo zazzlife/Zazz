@@ -34,9 +34,8 @@ function applyPageStyles() {
     $('*[data-toggle="popover"]').popover();
 
     replaceLinksWithAnchorTags();
-    replaceTagsWithAnchorTags();
+    highlightTags();
 
-    initInputTags();
     initWeeklies();
     loadVoteButtons();
 }
