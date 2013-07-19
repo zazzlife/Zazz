@@ -18,12 +18,16 @@ namespace Zazz.Data.Repositories
                 .Include(n => n.EventNotification)
                 .Include(n => n.EventNotification.Event)
                 .Include(n => n.PostNotification)
+                .Include(n => n.PostNotification.Post.Categories)
                 .Include(n => n.UserB)
                 .Include(n => n.CommentNotification)
                 .Include(n => n.CommentNotification.Comment.PhotoComment)
                 .Include(n => n.CommentNotification.Comment.PostComment)
                 .Include(n => n.CommentNotification.Comment.EventComment)
                 .Include(n => n.CommentNotification.Comment.PhotoComment.Photo)
+                .Include(n => n.CommentNotification.Comment.PhotoComment.Photo.Categories)
+                .Include(n => n.CommentNotification.Comment.PostComment.Post)
+                .Include(n => n.CommentNotification.Comment.PostComment.Post.Categories)
                 .Include(n => n.CommentNotification.Comment.EventComment.Event)
                 .Where(n => n.UserId == userId);
 
