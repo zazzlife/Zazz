@@ -33,6 +33,6 @@ namespace Zazz.Core.Models.Data
 
         public DateTime CreatedTime { get; set; }
 
-        public virtual ICollection<PostCategory> Categories { get; set; }
+        public ICollection<PostCategory> Categories { get; set; }
     }
 }

@@ -95,6 +95,7 @@ namespace Zazz.Data.Repositories
             if (includePhotos)
                 query = query.Include(a => a.Photos);
 
+
             return query;
         }
     }

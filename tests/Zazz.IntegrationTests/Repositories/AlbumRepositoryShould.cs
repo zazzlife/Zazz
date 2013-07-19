@@ -150,12 +150,50 @@ namespace Zazz.IntegrationTests.Repositories
             var result = _repo.GetLatestAlbums(user.Id).ToList();
 
             //Assert
-            Assert.AreEqual(2, result.Count());
+            Assert.AreEqual(2, result.Count);
             Assert.IsTrue(result.All(a => a.UserId == user.Id));
             Assert.AreEqual(album2.Id, result[0].Id);
             Assert.AreEqual(album2.Photos.Count, result[0].Photos.Count);
             Assert.AreEqual(album1.Id, result[1].Id);
             Assert.AreEqual(album1.Photos.Count, result[1].Photos.Count);
+        }
+
+        [Test]
+        public void ReturnCorrectAlbumsAndItsPhotos_OnGetUserAlbums()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var user2 = Mother.GetUser();
+
+            _context.Users.Add(user);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var album1 = Mother.GetAlbum(user.Id);
+            var photo1 = Mother.GetPhoto(user.Id);
+            var photo2 = Mother.GetPhoto(user.Id);
+            album1.Photos.Add(photo1);
+            album1.Photos.Add(photo2);
+
+            var album2 = Mother.GetAlbum(user.Id);
+            var photo3 = Mother.GetPhoto(user.Id);
+            album2.Photos.Add(photo3);
+
+            var album3 = Mother.GetAlbum(user2.Id);
+            var photo4 = Mother.GetPhoto(user2.Id);
+            album3.Photos.Add(photo4);
+
+            _context.Albums.Add(album1);
+            _context.Albums.Add(album2);
+            _context.Albums.Add(album3);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetUserAlbums(user.Id, true).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.All(a => a.UserId == user.Id));
         }
     }
 }

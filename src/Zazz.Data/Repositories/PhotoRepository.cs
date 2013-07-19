@@ -15,6 +15,12 @@ namespace Zazz.Data.Repositories
         {
         }
 
+        public override Photo GetById(int id)
+        {
+            return DbSet.Include(p => p.Categories)
+                        .SingleOrDefault(p => p.Id == id);
+        }
+
         public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
         {
             return DbSet.Where(p => p.UserId == userId)

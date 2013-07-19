@@ -37,6 +37,6 @@ namespace Zazz.Core.Models.Data
 
         public int? PageId { get; set; }
 
-        public virtual ICollection<PhotoCategory> Categories { get; set; }
+        public ICollection<PhotoCategory> Categories { get; set; }
     }
 }
