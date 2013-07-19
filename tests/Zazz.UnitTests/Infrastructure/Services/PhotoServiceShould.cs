@@ -122,7 +122,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -177,7 +177,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, new byte[] {1, 2, 3});
+            var id = _sut.SavePhoto(photo, Stream.Null, true, new [] {1, 2, 3});
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
@@ -231,7 +231,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, new byte[] { 1, 2, 3, 4, 5, 6 });
+            var id = _sut.SavePhoto(photo, Stream.Null, true, new [] { 1, 2, 3, 4, 5, 6 });
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(It.Is<Photo>(p =>
@@ -265,7 +265,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -300,7 +300,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -340,7 +340,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -388,7 +388,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -427,7 +427,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(lastFeed);
 
             //Act
-            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());
@@ -455,7 +455,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Act
 
-            var id = _sut.SavePhoto(photo, Stream.Null, false, Enumerable.Empty<byte>());
+            var id = _sut.SavePhoto(photo, Stream.Null, false, Enumerable.Empty<int>());
 
             //Assert
             _uow.Verify(x => x.PhotoRepository.InsertGraph(photo), Times.Once());

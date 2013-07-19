@@ -104,14 +104,14 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetDescription(photoId);
         }
 
-        public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<byte> categories)
+        public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)
         {
             foreach (var c in categories)
             {
                 var cat = _staticDataRepository.GetCategories()
                                                .SingleOrDefault(cate => cate.Id == c);
                 if (cat != null)
-                    photo.Categories.Add(new PhotoCategory {CategoryId = c});
+                    photo.Categories.Add(new PhotoCategory {CategoryId = (byte)c});
             }
 
             photo.UploadDate = DateTime.UtcNow;

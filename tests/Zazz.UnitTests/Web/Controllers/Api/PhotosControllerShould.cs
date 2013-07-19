@@ -296,7 +296,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //             .Returns(1);
 
             _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(),
-                                                 It.IsAny<Stream>(), showInFeed, It.IsAny<IEnumerable<byte>>()))
+                                                 It.IsAny<Stream>(), showInFeed, It.IsAny<IEnumerable<int>>()))
                          .Returns(1);
             _objectMapper.Setup(x => x.PhotoToApiPhoto(It.IsAny<Photo>()))
                          .Returns(new ApiPhoto());
@@ -346,7 +346,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                            .Returns(true);
 
             _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(),
-                                                 It.IsAny<Stream>(), showInFeed, It.IsAny<IEnumerable<byte>>()))
+                                                 It.IsAny<Stream>(), showInFeed, It.IsAny<IEnumerable<int>>()))
                          .Throws<SecurityException>();
 
             //Act

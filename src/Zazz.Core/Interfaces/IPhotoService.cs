@@ -25,7 +25,7 @@ namespace Zazz.Core.Interfaces
 
         string GetPhotoDescription(int photoId);
         
-        int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<byte> categories);
+        int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories);
 
         void RemovePhoto(int photoId, int currentUserId);
 

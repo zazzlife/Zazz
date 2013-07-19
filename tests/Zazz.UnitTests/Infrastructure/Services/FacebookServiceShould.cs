@@ -855,7 +855,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
                 .Returns(() => null);
             _uow.Setup(x => x.AlbumRepository.InsertGraph(It.IsAny<Album>()));
-            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true, Enumerable.Empty<byte>()))
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true, Enumerable.Empty<int>()))
                          .Returns(1);
 
             //Act
@@ -907,7 +907,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _uow.Setup(x => x.AlbumRepository.GetByFacebookId(fbPhoto.AlbumId))
                 .Returns(album);
-            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true, Enumerable.Empty<byte>()))
+            _photoService.Setup(x => x.SavePhoto(It.IsAny<Photo>(), Stream.Null, true, Enumerable.Empty<int>()))
                          .Returns(1);
 
             //Act

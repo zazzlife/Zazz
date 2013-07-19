@@ -221,7 +221,7 @@ namespace Zazz.Infrastructure.Services
                                 };
                     
                     var photoStream = new HttpClient().GetStreamAsync(fbPhoto.Source).Result; //TODO: use async/await
-                    _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<byte>());
+                    _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<int>());
                 }
             }
 

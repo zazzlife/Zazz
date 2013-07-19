@@ -127,14 +127,13 @@ namespace Zazz.Web.Controllers.Api
                 .FirstOrDefault(c => c.Headers
                 .ContentDisposition.Name.Equals("albumId", StringComparison.InvariantCultureIgnoreCase));
 
-            var categories = Enumerable.Empty<byte>();
+            var categories = Enumerable.Empty<int>();
 
             if (providedCategories != null)
             {
                 var c = await providedCategories.ReadAsStringAsync();
-                categories = c.Split(',').Select(byte.Parse);
+                categories = c.Split(',').Select(Int32.Parse);
             }
-
 
             var photo = new Photo
                     {

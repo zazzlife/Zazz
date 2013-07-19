@@ -162,7 +162,7 @@ namespace Zazz.Web.Controllers
                 return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
             }
 
-            SaveImage(image.InputStream, description, albumId, showInFeed);
+            SaveImage(image.InputStream, description, albumId, showInFeed, Enumerable.Empty<int>());
 
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
@@ -170,7 +170,7 @@ namespace Zazz.Web.Controllers
         public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
             var c = Request.Params["categories"];
-            var categories = c.Split(',').Select(byte.Parse);
+            var categories = c.Split(',').Select(Int32.Parse);
 
             var response = new FineUploadResponse();
             var errorMessage = "Image was not valid";
@@ -181,7 +181,7 @@ namespace Zazz.Web.Controllers
                 return new JsonNetResult(response);
             }
 
-            var photo = SaveImage(image.InputStream, description, albumId, showInFeed);
+            var photo = SaveImage(image.InputStream, description, albumId, showInFeed, categories);
             response.PhotoId = photo.Id;
             response.Success = true;
             response.PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
@@ -189,7 +189,8 @@ namespace Zazz.Web.Controllers
             return new JsonNetResult(response);
         }
 
-        private Photo SaveImage(Stream image, string description, int? albumId, bool showInFeed)
+        private Photo SaveImage(Stream image, string description, int? albumId, bool showInFeed,
+            IEnumerable<int> categories)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
 
@@ -208,7 +209,7 @@ namespace Zazz.Web.Controllers
                             UserId = userId
                         };
 
-            PhotoService.SavePhoto(photo, image, showInFeed, Enumerable.Empty<byte>());
+            PhotoService.SavePhoto(photo, image, showInFeed, categories);
             return photo;
         }
 
