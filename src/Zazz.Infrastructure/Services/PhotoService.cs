@@ -106,12 +106,15 @@ namespace Zazz.Infrastructure.Services
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)
         {
-            foreach (var c in categories)
+            if (categories != null)
             {
-                var cat = _staticDataRepository.GetCategories()
-                                               .SingleOrDefault(cate => cate.Id == c);
-                if (cat != null)
-                    photo.Categories.Add(new PhotoCategory {CategoryId = (byte)c});
+                foreach (var c in categories)
+                {
+                    var cat = _staticDataRepository.GetCategories()
+                                                   .SingleOrDefault(cate => cate.Id == c);
+                    if (cat != null)
+                        photo.Categories.Add(new PhotoCategory { CategoryId = (byte)c });
+                }
             }
 
             photo.UploadDate = DateTime.UtcNow;

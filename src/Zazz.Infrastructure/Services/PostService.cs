@@ -36,12 +36,15 @@ namespace Zazz.Infrastructure.Services
 
         public void NewPost(Post post, IEnumerable<int> categories)
         {
-            foreach (var c in categories)
+            if (categories != null)
             {
-                var cat = _staticDataRepository.GetCategories()
-                                               .SingleOrDefault(cate => cate.Id == c);
-                if (cat != null)
-                    post.Categories.Add(new PostCategory {CategoryId = (byte) c});
+                foreach (var c in categories)
+                {
+                    var cat = _staticDataRepository.GetCategories()
+                                                   .SingleOrDefault(cate => cate.Id == c);
+                    if (cat != null)
+                        post.Categories.Add(new PostCategory { CategoryId = (byte)c });
+                }
             }
 
             _uow.PostRepository.InsertGraph(post);
@@ -72,7 +75,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void EditPost(int postId, string newText, int currentUserId)
+        public void EditPost(int postId, string newText, IEnumerable<int> categories, int currentUserId)
         {
             var post = _uow.PostRepository.GetById(postId);
             if (post == null)
@@ -81,17 +84,15 @@ namespace Zazz.Infrastructure.Services
             if (post.FromUserId != currentUserId)
                 throw new SecurityException();
 
-            post.Categories.Clear();
-            var extractedTags = _stringHelper.ExtractTags(newText);
-            foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
+            if (categories != null)
             {
-                var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                if (tag != null)
+                post.Categories.Clear();
+                foreach (var c in categories)
                 {
-                    post.Categories.Add(new PostCategory
-                                  {
-                                      CategoryId = tag.Id
-                                  });
+                    var cat = _staticDataRepository.GetCategories()
+                                                   .SingleOrDefault(cate => cate.Id == c);
+                    if (cat != null)
+                        post.Categories.Add(new PostCategory { CategoryId = (byte)c });
                 }
             }
 

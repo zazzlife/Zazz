@@ -107,7 +107,7 @@ namespace Zazz.Web.Controllers
         public void Edit(int id, string text)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            _postService.EditPost(id, text, userId);
+            _postService.EditPost(id, text, null, userId);
         }
     }
 }

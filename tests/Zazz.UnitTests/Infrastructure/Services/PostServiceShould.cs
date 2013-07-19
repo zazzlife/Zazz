@@ -23,6 +23,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IStringHelper> _stringHelper;
         private Mock<IStaticDataRepository> _staticDataRepo;
         private MockRepository _mockRepo;
+        private List<Category> _categories;
 
         [SetUp]
         public void Init()
@@ -47,6 +48,30 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         Message = "message",
                         FromUserId = 12
                     };
+
+            _categories = new List<Category>
+                          {
+                              new Category
+                              {
+                                  Id = 1
+                              },
+                              new Category
+                              {
+                                  Id = 2
+                              },
+                              new Category
+                              {
+                                  Id = 3
+                              },
+                              new Category
+                              {
+                                  Id = 4
+                              },
+                              new Category
+                              {
+                                  Id = 5
+                              },
+                          };
         }
 
         [Test]
@@ -316,7 +341,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            Assert.Throws<NotFoundException>(() =>  _sut.EditPost(_post.Id, "new text", _post.FromUserId));
+            Assert.Throws<NotFoundException>(() =>  _sut.EditPost(_post.Id, "new text", Enumerable.Empty<int>(), _post.FromUserId));
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -331,7 +356,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(_post);
 
             //Act
-            Assert.Throws<SecurityException>(() => _sut.EditPost(_post.Id, "new text", 99));
+            Assert.Throws<SecurityException>(() => _sut.EditPost(_post.Id, "new text", Enumerable.Empty<int>(), 99));
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -349,7 +374,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                _sut.EditPost(_post.Id, "new text", _post.ToUserId.Value);
+                _sut.EditPost(_post.Id, "new text", Enumerable.Empty<int>(), _post.ToUserId.Value);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -374,29 +399,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            Message = "m"
                        };
 
-            var tag = "#new-edit";
-            var newText = "Edited " + tag;
-            var tagObject = new Category { Id = 3, Name = "new-edit" };
+            var newText = "Edited ";
 
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
-            _stringHelper.Setup(x => x.ExtractTags(newText))
-                         .Returns(new[] { tag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
-                           .Returns(tagObject);
 
             //Act
-            _sut.EditPost(post.Id, newText, post.FromUserId);
+            _sut.EditPost(post.Id, newText, Enumerable.Empty<int>(), post.FromUserId);
 
             //Assert
             Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Categories.Count);
-            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotSaveDuplicateTags_OnEditPost()
+        public void ChangeCategories_OnEditPost()
         {
             //Arrange
             var post = new Post
@@ -404,64 +421,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = 17,
                 FromUserId = 123,
                 ToUserId = 1234,
-                Categories = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
+                Categories = new List<PostCategory>
+                             {
+                                 new PostCategory { CategoryId = 1 }, new PostCategory { CategoryId = 2 }
+                             },
                 Message = "m"
             };
 
-            var tag = "#new-edit";
-            var duplicateTag = tag;
-            var newText = tag + " Edited " + duplicateTag;
-            var tagObject = new Category { Id = 3, Name = "new-edit" };
+            var newText = "Edited ";
+            
 
             _uow.Setup(x => x.PostRepository.GetById(post.Id))
                 .Returns(post);
-            _stringHelper.Setup(x => x.ExtractTags(newText))
-                         .Returns(new[] { tag, duplicateTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
-                           .Returns(tagObject);
 
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(_categories);
+
+            var categories = new[] {3, 4};
+            
             //Act
-            _sut.EditPost(post.Id, newText, post.FromUserId);
+            _sut.EditPost(post.Id, newText, categories, post.FromUserId);
 
             //Assert
-            Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Categories.Count);
-            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void DuplicateTagsCheckShouldNotBeCaseSensitive_OnEditPost()
-        {
-            //Arrange
-            var post = new Post
-            {
-                Id = 17,
-                FromUserId = 123,
-                ToUserId = 1234,
-                Categories = new List<PostCategory> { new PostCategory { CategoryId = 0 }, new PostCategory { CategoryId = 0 } },
-                Message = "m"
-            };
-
-            var tag = "#new-edit";
-            var duplicateTag = "#NEW-edit";
-            var newText = tag + " Edited " + duplicateTag;
-            var tagObject = new Category { Id = 3, Name = "new-edit" };
-
-            _uow.Setup(x => x.PostRepository.GetById(post.Id))
-                .Returns(post);
-            _stringHelper.Setup(x => x.ExtractTags(newText))
-                         .Returns(new[] { tag, duplicateTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag.Replace("#", "")))
-                           .Returns(tagObject);
-
-            //Act
-            _sut.EditPost(post.Id, newText, post.FromUserId);
-
-            //Assert
-            Assert.AreEqual(newText, post.Message);
-            Assert.AreEqual(1, post.Categories.Count);
-            Assert.IsTrue(post.Categories.Any(t => t.CategoryId == tagObject.Id));
+            Assert.IsFalse(post.Categories.Any(c => c.CategoryId == 1));
+            Assert.IsFalse(post.Categories.Any(c => c.CategoryId == 2));
+            Assert.IsTrue(post.Categories.Any(c => c.CategoryId == 3));
+            Assert.IsTrue(post.Categories.Any(c => c.CategoryId == 4));
+            Assert.AreEqual(2, post.Categories.Count);
             _mockRepo.VerifyAll();
         }
     }

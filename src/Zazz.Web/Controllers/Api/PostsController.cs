@@ -70,7 +70,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _postService.EditPost(id, post.Message, CurrentUserId);
+                _postService.EditPost(id, post.Message, post.Categories, CurrentUserId);
             }
             catch (NotFoundException)
             {

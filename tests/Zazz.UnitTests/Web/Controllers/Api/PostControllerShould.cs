@@ -174,7 +174,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id))
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, _apiPost.Categories, User.Id))
                         .Throws<NotFoundException>();
 
             //Act
@@ -194,7 +194,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id))
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, _apiPost.Categories, User.Id))
                         .Throws<SecurityException>();
 
             //Act
@@ -214,7 +214,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.EditPost(_postId, _post.Message, User.Id));
+            _postService.Setup(x => x.EditPost(_postId, _post.Message, _apiPost.Categories, User.Id));
 
             //Act
             var response = await Client.PutAsync(ControllerAddress, httpContent);
