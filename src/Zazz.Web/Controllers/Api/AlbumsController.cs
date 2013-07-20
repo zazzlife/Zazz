@@ -88,7 +88,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/albums
-        public ApiAlbum Post(ApiAlbum album)
+        public HttpResponseMessage Post(ApiAlbum album)
         {
             var a = new Album
                     {
@@ -104,7 +104,8 @@ namespace Zazz.Web.Controllers.Api
             album.CreatedDate = a.CreatedDate;
             album.Thumbnail = _defaultImageHelper.GetDefaultAlbumImage();
 
-            return album;
+            var response = Request.CreateResponse(HttpStatusCode.Created, album);
+            return response;
         }
 
         // PUT api/v1/albums/5
