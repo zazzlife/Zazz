@@ -403,8 +403,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 .DeserializeObject<OAuthAccessTokenResponse>(await response.Content.ReadAsStringAsync());
 
             //Assert
-
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsNotNull(oauthRes);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             _mockRepo.VerifyAll();
         }
     }

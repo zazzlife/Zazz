@@ -30,7 +30,7 @@ namespace Zazz.Web.Controllers.Api
             _staticDataRepository = staticDataRepository;
         }
 
-        public OAuthAccessTokenResponse Post(ApiRegister request)
+        public HttpResponseMessage Post(ApiRegister request)
         {
             if (request == null ||
                 String.IsNullOrWhiteSpace(request.Username) ||
@@ -114,13 +114,16 @@ namespace Zazz.Web.Controllers.Api
 
                 var oauthCreds = _oAuthService.CreateOAuthCredentials(u, client, new List<OAuthScope> { scope });
 
-                return new OAuthAccessTokenResponse
+                var token = new OAuthAccessTokenResponse
                        {
                            AccessToken = oauthCreds.AccessToken.ToJWTString(),
                            ExpiresIn = 60*60,
                            RefreshToken = oauthCreds.RefreshToken.ToJWTString(),
                            TokenType = "Bearer"
                        };
+
+                var response = Request.CreateResponse(HttpStatusCode.Created, token);
+                return response;
             }
             catch (InvalidEmailException)
             {
