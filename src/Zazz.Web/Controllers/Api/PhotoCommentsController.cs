@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
@@ -40,7 +41,7 @@ namespace Zazz.Web.Controllers.Api
 
         // POST /api/v1/comments/photos/5
 
-        public ApiComment Post(int id, [FromBody] string comment)
+        public HttpResponseMessage Post(int id, [FromBody] string comment)
         {
             if (id == 0 || String.IsNullOrWhiteSpace(comment))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -60,7 +61,7 @@ namespace Zazz.Web.Controllers.Api
             {
                 var cid = _commentService.CreateComment(c, CommentType.Photo);
 
-                return new ApiComment
+                var com = new ApiComment
                        {
                            CommentId = cid,
                            CommentText = comment,
@@ -68,6 +69,9 @@ namespace Zazz.Web.Controllers.Api
                            Time = c.Time,
                            UserId = CurrentUserId
                        };
+
+                var response = Request.CreateResponse(HttpStatusCode.Created, com);
+                return response;
             }
             catch (Exception)
             {

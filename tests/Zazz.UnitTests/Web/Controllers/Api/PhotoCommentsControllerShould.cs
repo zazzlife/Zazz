@@ -138,9 +138,11 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await Client.PostAsync(ControllerAddress, httpContent);
+            var model = JsonConvert.DeserializeObject<ApiComment>(await response.Content.ReadAsStringAsync());
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsNotNull(model);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             MockRepo.VerifyAll();
         }
     }
