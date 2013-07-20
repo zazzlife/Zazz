@@ -56,6 +56,7 @@ namespace Zazz.Web.Controllers.Api
             _postService.NewPost(p, post.Categories);
             post.PostId = p.Id;
             post.Time = p.CreatedTime;
+            post.FromUserId = p.FromUserId;
 
             return post;
         }
