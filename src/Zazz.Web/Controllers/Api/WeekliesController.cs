@@ -44,7 +44,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/weeklies
-        public ApiWeekly Post(ApiWeekly weekly)
+        public HttpResponseMessage Post(ApiWeekly weekly)
         {
             var userId = CurrentUserId;
             var w = new Weekly
@@ -59,7 +59,10 @@ namespace Zazz.Web.Controllers.Api
             try
             {
                 _weeklyService.CreateWeekly(w);
-                return _objectMapper.WeeklyToApiWeekly(w);
+                var model = _objectMapper.WeeklyToApiWeekly(w);
+
+                var response = Request.CreateResponse(HttpStatusCode.Created, model);
+                return response;
             }
             catch (InvalidOperationException)
             {

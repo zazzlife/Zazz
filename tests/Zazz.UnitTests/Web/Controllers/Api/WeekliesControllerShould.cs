@@ -12,6 +12,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Web.Models.Api;
 
 namespace Zazz.UnitTests.Web.Controllers.Api
 {
@@ -177,10 +178,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
             //Act
-            var result = await Client.PostAsync(ControllerAddress, content);
+            var response = await Client.PostAsync(ControllerAddress, content);
+            var model = JsonConvert.DeserializeObject<ApiWeekly>(await response.Content.ReadAsStringAsync());
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsNotNull(model);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             MockRepo.VerifyAll();
         }
 
