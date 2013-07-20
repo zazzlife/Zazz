@@ -230,10 +230,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             CreateValidAccessToken();
 
             //Act
-            var result = await Client.PostAsync(ControllerAddress, httpContent);
+            var response = await Client.PostAsync(ControllerAddress, httpContent);
+            var model = JsonConvert.DeserializeObject<ApiEvent>(await response.Content.ReadAsStringAsync());
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsNotNull(model);
+            Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
             MockRepo.VerifyAll();
         }
 

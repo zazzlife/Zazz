@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/events
-        public ApiEvent Post([FromBody]ApiEvent e)
+        public HttpResponseMessage Post([FromBody]ApiEvent e)
         {
             if (String.IsNullOrWhiteSpace(e.Name) ||
                 String.IsNullOrWhiteSpace(e.Description))
@@ -91,7 +91,8 @@ namespace Zazz.Web.Controllers.Api
             e.EventId = ze.Id;
             e.UserId = ze.UserId;
 
-            return e;
+            var response = Request.CreateResponse(HttpStatusCode.Created, e);
+            return response;
         }
 
         // PUT api/v1/events/5
