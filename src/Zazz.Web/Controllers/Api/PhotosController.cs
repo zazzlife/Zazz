@@ -57,7 +57,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/photos
-        public async Task<ApiPhoto> Post()
+        public async Task<HttpResponseMessage> Post()
         {
             if (!Request.Content.IsMimeMultipartContent("form-data"))
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
@@ -147,7 +147,10 @@ namespace Zazz.Web.Controllers.Api
             try
             {
                 _photoService.SavePhoto(photo, photoStream, showInFeed, categories);
-                return _objectMapper.PhotoToApiPhoto(photo);
+                var apiPhoto = _objectMapper.PhotoToApiPhoto(photo);
+
+                var response = Request.CreateResponse(HttpStatusCode.Created, apiPhoto);
+                return response;
             }
             catch (SecurityException)
             {
