@@ -138,7 +138,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await Client.PostAsync(ControllerAddress, httpContent);
-            var model = JsonConvert.DeserializeObject<ApiAlbum>(await response.Content.ReadAsStringAsync());
+            var model = JsonConvert.DeserializeObject<ApiComment>(await response.Content.ReadAsStringAsync());
 
             //Assert
             Assert.IsNotNull(model);

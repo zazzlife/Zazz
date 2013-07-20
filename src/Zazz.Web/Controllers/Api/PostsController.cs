@@ -40,7 +40,7 @@ namespace Zazz.Web.Controllers.Api
         }
 
         // POST api/v1/posts
-        public ApiPost Post([FromBody] ApiPost post)
+        public HttpResponseMessage Post([FromBody] ApiPost post)
         {
             if (String.IsNullOrWhiteSpace(post.Message))
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -58,7 +58,8 @@ namespace Zazz.Web.Controllers.Api
             post.Time = p.CreatedTime;
             post.FromUserId = p.FromUserId;
 
-            return post;
+            var response = Request.CreateResponse(HttpStatusCode.Created, post);
+            return response;
         }
 
         // PUT api/v1/posts/5

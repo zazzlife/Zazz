@@ -303,7 +303,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             //Act
             var response = await Client.PostAsync(ControllerAddress, content);
-            var model = JsonConvert.DeserializeObject<ApiAlbum>(await response.Content.ReadAsStringAsync());
+            var model = JsonConvert.DeserializeObject<ApiPhoto>(await response.Content.ReadAsStringAsync());
 
             //Assert
             Assert.IsNotNull(model);
