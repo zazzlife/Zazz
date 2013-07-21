@@ -169,8 +169,11 @@ namespace Zazz.Web.Controllers
 
         public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
+            var categories = Enumerable.Empty<int>();
+
             var c = Request.Params["categories"];
-            var categories = c.Split(',').Select(Int32.Parse);
+            if (!String.IsNullOrWhiteSpace(c))
+                categories = c.Split(',').Select(Int32.Parse);
 
             var response = new FineUploadResponse();
             var errorMessage = "Image was not valid";
