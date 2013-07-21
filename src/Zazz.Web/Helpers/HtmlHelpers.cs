@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.Helpers
 {
@@ -112,6 +113,17 @@ namespace Zazz.Web.Helpers
                 () => Activator.CreateInstance<TClass>(), typeof (TClass), name);
 
             return new MvcHtmlString(metadata.DisplayName ?? name);
+        }
+
+        public static MvcHtmlString Timeago(this HtmlHelper helper, DateTime time)
+        {
+            var tag = new TagBuilder("time");
+            tag.AddCssClass("timeago");
+            tag.Attributes.Add("title", time.ToString("s") + "Z");
+            tag.SetInnerText(time.ToRelativeTime());
+
+
+            return MvcHtmlString.Create(tag.ToString());
         }
     }
 }
