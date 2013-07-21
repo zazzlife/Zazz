@@ -33,6 +33,8 @@ function applyPageStyles() {
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
 
+    $("time.timeago").timeago();
+
     replaceLinksWithAnchorTags();
     highlightTags();
 
