@@ -34,7 +34,7 @@
                 
 
                 <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right"
-                     class="pull-right font-verysmall">@Model.Time.ToRelativeTime()
+                     class="pull-right font-verysmall">@Html.RelativeTime(Model.Time)
                 </div>
             </div>
             <div class="clearfix"></div>

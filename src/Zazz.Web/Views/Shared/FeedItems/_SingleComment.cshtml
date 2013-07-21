@@ -21,7 +21,7 @@
         }
 
         <span title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()"
-              data-placement="right" class="pull-right font-verysmall">@Model.Time.ToRelativeTime()</span>
+              data-placement="right" class="pull-right font-verysmall">@Html.RelativeTime(Model.Time)</span>
     </div>
     
     <div class="clearfix"></div>
