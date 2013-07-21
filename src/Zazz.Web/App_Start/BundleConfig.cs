@@ -54,9 +54,14 @@ namespace Zazz.Web
             bootstrapOrder.Files.Add("bootstrap-lightbox.js");
             bootstrapOrder.Files.Add("bootstrap-editable.js");
 
+            var timeOrder = new BundleFileSetOrdering("TimeOrder");
+            timeOrder.Files.Add("moment.js");
+            timeOrder.Files.Add("livestamp.js");
+
             bundles.FileSetOrderList.Add(fineUploadOrder);
             bundles.FileSetOrderList.Add(cssOrder);
             bundles.FileSetOrderList.Add(bootstrapOrder);
+            bundles.FileSetOrderList.Add(timeOrder);
 
             bundles.Add(css);
             bundles.Add(jqueryUiCss);

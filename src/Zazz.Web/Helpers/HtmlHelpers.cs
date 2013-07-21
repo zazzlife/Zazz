@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using System.Web.Routing;
 using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.Helpers
@@ -115,13 +116,14 @@ namespace Zazz.Web.Helpers
             return new MvcHtmlString(metadata.DisplayName ?? name);
         }
 
-        public static MvcHtmlString Timeago(this HtmlHelper helper, DateTime time)
+        public static MvcHtmlString RelativeTime(this HtmlHelper helper, DateTime time, object htmlAttributes = null)
         {
             var tag = new TagBuilder("time");
-            tag.AddCssClass("timeago");
-            tag.Attributes.Add("title", time.ToString("s") + "Z");
+            tag.Attributes.Add("data-livestamp", time.ToString("s") + "z");
             tag.SetInnerText(time.ToRelativeTime());
 
+            if (htmlAttributes != null)
+                tag.MergeAttributes(new RouteValueDictionary(htmlAttributes));
 
             return MvcHtmlString.Create(tag.ToString());
         }
