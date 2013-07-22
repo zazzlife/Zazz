@@ -69,9 +69,13 @@ namespace Zazz.Web.DependencyResolution
                              .Use<DefaultImageHelper>()
                              .Ctor<string>("baseAddress").Is(websiteAddress);
 
+#if DEBUG
+                            x.For<IStorageService>().Singleton().Use<FileStorageService>();
+#else
                             x.For<IStorageService>().Singleton()
                              .Use<AzureBlobService>()
                              .Ctor<string>("storageConnString").Is(blobConnString);
+#endif
 
                             x.For<IKeyChain>().Singleton()
                              .Use<KeyChain>()
