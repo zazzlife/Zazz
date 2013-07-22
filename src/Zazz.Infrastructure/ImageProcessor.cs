@@ -61,7 +61,14 @@ namespace Zazz.Infrastructure
 
         public Stream CropPhoto(Stream img, Rectangle cropArea)
         {
-            throw new NotImplementedException();
+            using (var b = new Bitmap(img))
+            using (var c = b.Clone(cropArea, b.PixelFormat))
+            {
+                var ms = new MemoryStream();
+                c.Save(ms, ImageFormat.Jpeg);
+
+                return ms;
+            }
         }
 
         private ImageCodecInfo GetEncoder(ImageFormat format)
