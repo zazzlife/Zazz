@@ -70,7 +70,10 @@ namespace Zazz.Web.DependencyResolution
                              .Ctor<string>("baseAddress").Is(websiteAddress);
 
 #if DEBUG
-                            x.For<IStorageService>().Singleton().Use<FileStorageService>();
+                            x.For<IStorageService>().Singleton()
+                             .Use<FileStorageService>()
+                             .Ctor<string>("rootDirectory").Is(rootDirectory)
+                             .Ctor<string>("websiteAddress").Is(websiteAddress);
 #else
                             x.For<IStorageService>().Singleton()
                              .Use<AzureBlobService>()

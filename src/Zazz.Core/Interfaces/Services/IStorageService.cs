@@ -4,6 +4,8 @@ namespace Zazz.Core.Interfaces.Services
 {
     public interface IStorageService
     {
+        string BasePhotoUrl { get; set; }
+
         void SavePhotoBlob(string fileName, Stream data);
     }
 }

@@ -18,6 +18,8 @@ namespace Zazz.Infrastructure.Services
             _storageConnString = storageConnString;
         }
 
+        public string BasePhotoUrl { get; set; }
+
         public void SavePhotoBlob(string fileName, Stream data)
         {
             SaveBlob(PIC_CONTAINER_NAME, fileName, data, "image/jpeg");
