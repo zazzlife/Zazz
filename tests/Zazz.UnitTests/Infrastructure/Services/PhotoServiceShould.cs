@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.DTOs;

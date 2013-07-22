@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories

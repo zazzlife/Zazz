@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {

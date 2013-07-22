@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 

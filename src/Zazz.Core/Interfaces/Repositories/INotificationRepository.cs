@@ -1,7 +1,7 @@
-﻿using System.Linq;
+using System.Linq;
 using Zazz.Core.Models.Data;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Repositories
 {
     public interface INotificationRepository : ILongRepository<Notification>
     {

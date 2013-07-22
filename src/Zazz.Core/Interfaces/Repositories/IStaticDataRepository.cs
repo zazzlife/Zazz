@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Zazz.Core.Models.Data;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Repositories
 {
     public interface IStaticDataRepository
     {

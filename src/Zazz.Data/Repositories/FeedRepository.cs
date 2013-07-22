@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories

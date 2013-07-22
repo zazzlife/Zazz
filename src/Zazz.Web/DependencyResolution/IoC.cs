@@ -21,6 +21,7 @@ using System.Web.Hosting;
 using System.Web.Http.Filters;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Data;
 using Zazz.Data.Repositories;
 using Zazz.Infrastructure;

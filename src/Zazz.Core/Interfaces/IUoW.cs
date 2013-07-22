@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Zazz.Core.Interfaces.Repositories;
 
 namespace Zazz.Core.Interfaces
 {

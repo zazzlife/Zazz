@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;

@@ -1,6 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Repositories
 {
     public interface ILongRepository<T> where T : class
     {

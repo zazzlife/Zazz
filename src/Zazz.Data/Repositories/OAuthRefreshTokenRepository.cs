@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Linq;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories

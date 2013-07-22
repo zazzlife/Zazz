@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Models;

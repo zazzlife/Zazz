@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Controllers.Api

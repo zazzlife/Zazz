@@ -1,12 +1,9 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.DTOs;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Repositories
 {
     public interface IPhotoRepository : IRepository<Photo>
     {

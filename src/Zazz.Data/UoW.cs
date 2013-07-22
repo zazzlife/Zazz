@@ -1,4 +1,5 @@
 ﻿using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Data.Repositories;
 
 namespace Zazz.Data
