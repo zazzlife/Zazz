@@ -84,6 +84,7 @@
     <Compile Include="Interfaces\IErrorHandler.cs" />
     <Compile Include="Interfaces\IKeyChain.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IImageProcessor.cs" />
     <Compile Include="Interfaces\IStringHelper.cs" />
     <Compile Include="Interfaces\ICategoryStatsCache.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
