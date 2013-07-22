@@ -12,7 +12,8 @@ using Encoder = System.Drawing.Imaging.Encoder;
 
 namespace Zazz.Infrastructure
 {
-    class ImageProcessor : IImageProcessor
+    // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
+    public class ImageProcessor : IImageProcessor
     {
         public Stream ResizeImage(Stream img, Size size, long quality)
         {
@@ -74,16 +75,7 @@ namespace Zazz.Infrastructure
         private ImageCodecInfo GetEncoder(ImageFormat format)
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-
-            return null;
+            return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
         }
     }
 }

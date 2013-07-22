@@ -63,6 +63,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IImageValidator>().Singleton().Use<ImageValidator>();
                             x.For<IQRCodeService>().Singleton().Use<QRCodeService>();
                             x.For<ICategoryStatsCache>().Singleton().Use<CategoryStatsCache>();
+                            x.For<IImageProcessor>().Singleton().Use<ImageProcessor>();
 
                             x.For<IDefaultImageHelper>().Singleton()
                              .Use<DefaultImageHelper>()
@@ -108,10 +109,9 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IFeedHelper>().Use<FeedHelper>();
 
                             x.For<ILogger>().Use<Logger>();
-
                             x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
-                            
                             x.For<IObjectMapper>().Use<ObjectMapper>();
+                            
 
 #if DEBUG
                             x.For<IEmailService>().Use<FakeEmailService>();
