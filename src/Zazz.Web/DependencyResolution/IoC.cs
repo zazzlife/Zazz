@@ -70,7 +70,7 @@ namespace Zazz.Web.DependencyResolution
                              .Ctor<string>("baseAddress").Is(websiteAddress);
 
                             x.For<IStorageService>().Singleton()
-                             .Use<AzureService>()
+                             .Use<AzureBlobService>()
                              .Ctor<string>("storageConnString").Is(blobConnString);
 
                             x.For<IKeyChain>().Singleton()

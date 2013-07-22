@@ -6,14 +6,14 @@ using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Infrastructure.Services
 {
-    public class AzureService : IStorageService
+    public class AzureBlobService : IStorageService
     {
         private readonly string _storageConnString;
 
         private const string PIC_CONTAINER_NAME = "pictures";
         
         // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
-        public AzureService(string storageConnString) 
+        public AzureBlobService(string storageConnString) 
         {
             _storageConnString = storageConnString;
         }
