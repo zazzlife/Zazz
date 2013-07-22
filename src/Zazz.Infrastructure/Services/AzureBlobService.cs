@@ -11,14 +11,17 @@ namespace Zazz.Infrastructure.Services
         private readonly string _storageConnString;
 
         private const string PIC_CONTAINER_NAME = "pictures";
-        
+
+        public string BasePhotoUrl
+        {
+            get { return "TODO: RETURN BLOB URL"; }
+        }
+
         // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public AzureBlobService(string storageConnString) 
         {
             _storageConnString = storageConnString;
         }
-
-        public string BasePhotoUrl { get; set; }
 
         public void SavePhotoBlob(string fileName, Stream data)
         {

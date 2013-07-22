@@ -10,7 +10,7 @@ namespace Zazz.Infrastructure.Services
 {
     public class FileStorageService : IStorageService
     {
-        public string BasePhotoUrl { get; set; }
+        public string BasePhotoUrl { get; private set; }
         
         private readonly string _rootDirectory;
 
