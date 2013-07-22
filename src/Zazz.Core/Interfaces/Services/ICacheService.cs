@@ -1,6 +1,6 @@
-﻿using Zazz.Core.Models;
+using Zazz.Core.Models;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     /// <summary>
     /// High level caching service. It should be a singleton

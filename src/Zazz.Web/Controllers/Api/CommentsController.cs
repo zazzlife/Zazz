@@ -4,6 +4,7 @@ using System.Security;
 using System.Web.Http;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 

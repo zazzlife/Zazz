@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 

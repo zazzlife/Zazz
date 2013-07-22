@@ -12,6 +12,7 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 using Zazz.Web;
 using Zazz.Web.DependencyResolution;

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
 using Zazz.Core.Models.Data;
-using Zazz.Core.Models.Data.Enums;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IAuthService
     {

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Infrastructure.Services
 {

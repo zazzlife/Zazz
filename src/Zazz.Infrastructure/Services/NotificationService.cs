@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 

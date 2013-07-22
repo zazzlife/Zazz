@@ -1,7 +1,7 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IFileService
     {

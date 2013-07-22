@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Web.Controllers
 {

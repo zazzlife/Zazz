@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Infrastructure.Services
 {

@@ -1,4 +1,5 @@
 ﻿using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 
 namespace Zazz.Infrastructure.Services

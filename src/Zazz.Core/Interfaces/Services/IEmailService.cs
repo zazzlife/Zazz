@@ -1,7 +1,6 @@
-﻿using System.Net.Mail;
-using System.Threading.Tasks;
+using System.Net.Mail;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IEmailService
     {

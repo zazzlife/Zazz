@@ -1,13 +1,11 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IPhotoService
     {

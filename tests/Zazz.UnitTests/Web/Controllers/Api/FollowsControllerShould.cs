@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Web.Models.Api;

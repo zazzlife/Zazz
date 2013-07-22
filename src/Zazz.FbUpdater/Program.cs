@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using StructureMap;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Data;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;

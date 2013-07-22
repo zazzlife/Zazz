@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Infrastructure.Services
 {

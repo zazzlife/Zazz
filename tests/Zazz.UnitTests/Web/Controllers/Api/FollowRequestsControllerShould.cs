@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.UnitTests.Web.Controllers.Api

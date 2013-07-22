@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.FbUpdater
 {

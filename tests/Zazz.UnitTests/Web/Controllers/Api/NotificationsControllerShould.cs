@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;

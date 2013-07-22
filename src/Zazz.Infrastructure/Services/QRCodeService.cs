@@ -4,6 +4,7 @@ using Gma.QrCodeNet.Encoding;
 using Gma.QrCodeNet.Encoding.Windows.Render;
 using Zazz.Core.Interfaces;
 using System.Windows.Media;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Infrastructure.Services
 {

@@ -1,6 +1,7 @@
 ﻿using FluentScheduler;
 using StructureMap.Pipeline;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.Web.BackgroundWorkers
 {

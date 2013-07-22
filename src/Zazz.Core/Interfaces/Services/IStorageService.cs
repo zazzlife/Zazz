@@ -1,6 +1,6 @@
-﻿using System.IO;
+using System.IO;
 
-namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IStorageService
     {

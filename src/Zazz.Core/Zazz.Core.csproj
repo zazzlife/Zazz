@@ -78,35 +78,15 @@
     <Compile Include="Exceptions\UsernameExistsException.cs" />
     <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Exceptions\WeekliesLimitReachedException.cs" />
-    <Compile Include="Interfaces\IClubRewardService.cs" />
-    <Compile Include="Interfaces\IAuthService.cs" />
-    <Compile Include="Interfaces\ICacheService.cs" />
     <Compile Include="Interfaces\ICacheSystem.cs" />
-    <Compile Include="Interfaces\ICommentService.cs" />
-    <Compile Include="Interfaces\ICryptoService.cs" />
     <Compile Include="Interfaces\IDefaultImageHelper.cs" />
-    <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IFacebookHelper.cs" />
-    <Compile Include="Interfaces\IFacebookService.cs" />
-    <Compile Include="Interfaces\IFileService.cs" />
-    <Compile Include="Interfaces\IFollowService.cs" />
     <Compile Include="Interfaces\IErrorHandler.cs" />
     <Compile Include="Interfaces\IKeyChain.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
-    <Compile Include="Interfaces\INotificationService.cs" />
-    <Compile Include="Interfaces\IAlbumService.cs" />
-    <Compile Include="Interfaces\IPhotoService.cs" />
-    <Compile Include="Interfaces\IPostService.cs" />
-    <Compile Include="Interfaces\IQRCodeService.cs" />
-    <Compile Include="Interfaces\IStorageService.cs" />
     <Compile Include="Interfaces\IStringHelper.cs" />
-    <Compile Include="Interfaces\ICategoryService.cs" />
     <Compile Include="Interfaces\ICategoryStatsCache.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
-    <Compile Include="Interfaces\IEventService.cs" />
-    <Compile Include="Interfaces\IUserService.cs" />
-    <Compile Include="Interfaces\IVoteService.cs" />
-    <Compile Include="Interfaces\IWeeklyService.cs" />
     <Compile Include="Interfaces\Repositories\IAlbumRepository.cs" />
     <Compile Include="Interfaces\Repositories\ICategoryStatRepository.cs" />
     <Compile Include="Interfaces\Repositories\IClubPointRewardScenarioRepository.cs" />
@@ -137,6 +117,26 @@
     <Compile Include="Interfaces\Repositories\IUserRewardRepository.cs" />
     <Compile Include="Interfaces\Repositories\IValidationTokenRepository.cs" />
     <Compile Include="Interfaces\Repositories\IWeeklyRepository.cs" />
+    <Compile Include="Interfaces\Services\IAlbumService.cs" />
+    <Compile Include="Interfaces\Services\IAuthService.cs" />
+    <Compile Include="Interfaces\Services\ICacheService.cs" />
+    <Compile Include="Interfaces\Services\ICategoryService.cs" />
+    <Compile Include="Interfaces\Services\IClubRewardService.cs" />
+    <Compile Include="Interfaces\Services\ICommentService.cs" />
+    <Compile Include="Interfaces\Services\ICryptoService.cs" />
+    <Compile Include="Interfaces\Services\IEmailService.cs" />
+    <Compile Include="Interfaces\Services\IEventService.cs" />
+    <Compile Include="Interfaces\Services\IFacebookService.cs" />
+    <Compile Include="Interfaces\Services\IFileService.cs" />
+    <Compile Include="Interfaces\Services\IFollowService.cs" />
+    <Compile Include="Interfaces\Services\INotificationService.cs" />
+    <Compile Include="Interfaces\Services\IPhotoService.cs" />
+    <Compile Include="Interfaces\Services\IPostService.cs" />
+    <Compile Include="Interfaces\Services\IQRCodeService.cs" />
+    <Compile Include="Interfaces\Services\IStorageService.cs" />
+    <Compile Include="Interfaces\Services\IUserService.cs" />
+    <Compile Include="Interfaces\Services\IVoteService.cs" />
+    <Compile Include="Interfaces\Services\IWeeklyService.cs" />
     <Compile Include="Models\Data\ClubPointRewardScenario.cs" />
     <Compile Include="Models\Data\ClubReward.cs" />
     <Compile Include="Models\Data\Enums\PointRewardScenario.cs" />
@@ -225,9 +225,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

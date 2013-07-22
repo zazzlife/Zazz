@@ -1,4 +1,4 @@
-﻿namespace Zazz.Core.Interfaces
+namespace Zazz.Core.Interfaces.Services
 {
     public interface IVoteService
     {

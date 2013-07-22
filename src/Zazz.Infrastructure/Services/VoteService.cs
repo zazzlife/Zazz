@@ -1,6 +1,7 @@
 ﻿using System;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Infrastructure.Services

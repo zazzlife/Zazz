@@ -4,6 +4,7 @@ using System.Linq;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.OAuthAuthorizationServer

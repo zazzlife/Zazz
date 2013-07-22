@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using Newtonsoft.Json;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 using Zazz.Web.Filters;
 using Zazz.Web.OAuthAuthorizationServer;
