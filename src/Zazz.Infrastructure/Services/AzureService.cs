@@ -23,7 +23,7 @@ namespace Zazz.Infrastructure.Services
             SaveBlob(PIC_CONTAINER_NAME, fileName, data, "image/jpeg");
         }
 
-        public void SaveBlob(string containerName, string fileName, Stream data, string contentType)
+        private void SaveBlob(string containerName, string fileName, Stream data, string contentType)
         {
             var storageAccount = CloudStorageAccount.Parse(_storageConnString);
             var client = storageAccount.CreateCloudBlobClient();
