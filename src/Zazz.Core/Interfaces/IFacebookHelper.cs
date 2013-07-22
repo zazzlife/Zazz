@@ -21,6 +21,8 @@ namespace Zazz.Core.Interfaces
         /// <param name="accessToken"></param>
         /// <returns></returns>
         IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit);
+
+        IEnumerable<FbEvent> GetUserAttendingEvents(string accessToken);
         
         IEnumerable<FbPage> GetPages(string accessToken);
 
@@ -33,7 +35,7 @@ namespace Zazz.Core.Interfaces
         IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit);
 
         IEnumerable<FbFriend> GetFriends(string accessToken);
-
+        
         Task SendAppInviteRequests(IEnumerable<long> users, string appId, string appSecret, string message);
 
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);

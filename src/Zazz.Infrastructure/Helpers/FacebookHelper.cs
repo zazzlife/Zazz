@@ -95,6 +95,14 @@ namespace Zazz.Infrastructure.Helpers
             return QueryForEvents(query);
         }
 
+        public IEnumerable<FbEvent> GetUserAttendingEvents(string accessToken)
+        {
+            const string QUERY = "SELECT description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me() AND rsvp_status = \"attending\") AND privacy = \"OPEN\"";
+
+            var events = QueryForEvents(QUERY).Where(e => e.StartTime > DateTime.UtcNow);
+            return events;
+        }
+
         private IEnumerable<FbEvent> QueryForEvents(string q)
         {
             dynamic result = _client.Get("fql", new { q }); // the async method is buggy!
