@@ -45,34 +45,6 @@ namespace Zazz.UnitTests.Infrastructure
                                 };
         }
 
-        [Test]
-        public void NAME()
-        {
-            //Arrange
-
-            var t = typeof (PhotoLinks);
-            var properties = t.GetProperties();
-            var links = new PhotoLinks();
-
-            foreach (var p in properties)
-            {
-                var attr = p.GetCustomAttributes(typeof(PhotoAttribute), false)
-                                            .Cast<PhotoAttribute>()
-                                            .FirstOrDefault();
-
-                p.SetValue(links, attr.Suffix, null);
-            }
-
-
-            //Act
-
-
-            //Assert
-
-        }
-
-
-
         //[Test]
         //public void UpdateRecordOnDB_OnAccessTokenExpired()
         //{
