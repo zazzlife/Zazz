@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Zazz.Core.Attributes;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Services;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
@@ -41,6 +44,34 @@ namespace Zazz.UnitTests.Infrastructure
                                                }
                                 };
         }
+
+        [Test]
+        public void NAME()
+        {
+            //Arrange
+
+            var t = typeof (PhotoLinks);
+            var properties = t.GetProperties();
+            var links = new PhotoLinks();
+
+            foreach (var p in properties)
+            {
+                var attr = p.GetCustomAttributes(typeof(PhotoAttribute), false)
+                                            .Cast<PhotoAttribute>()
+                                            .FirstOrDefault();
+
+                p.SetValue(links, attr.Suffix, null);
+            }
+
+
+            //Act
+
+
+            //Assert
+
+        }
+
+
 
         //[Test]
         //public void UpdateRecordOnDB_OnAccessTokenExpired()

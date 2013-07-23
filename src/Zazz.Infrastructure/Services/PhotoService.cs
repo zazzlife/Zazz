@@ -82,16 +82,33 @@ namespace Zazz.Infrastructure.Services
 
         public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
-            return new PhotoLinks
-                   {
-                       VerySmallLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
-                                                     _baseBlobUrl, userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
-                       SmallLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
-                                                 _baseBlobUrl, userId, photoId, SMALL_IMAGE_SUFFIX),
-                       MediumLink = String.Format("{0}/picture/user/{1}/{2}-{3}.jpg",
-                                                  _baseBlobUrl, userId, photoId, MEDIUM_IMAGE_SUFFIX),
-                       OriginalLink = String.Format("{0}/picture/user/{1}/{2}.jpg", _baseBlobUrl, userId, photoId)
-                   };
+            var baseUrl = _storageService.BasePhotoUrl; //sample: http://test.zazzlife.com/picture/user
+            
+            var links = new PhotoLinks();
+            var type = typeof (PhotoLinks);
+
+            foreach (var p in type.GetProperties())
+            {
+                var attr = p.GetCustomAttributes(typeof(PhotoAttribute), false)
+                                            .Cast<PhotoAttribute>()
+                                            .FirstOrDefault();
+
+                if (attr == null)
+                    continue;
+
+                var fileName = GenerateFileName(userId, photoId, attr.Suffix); //sample: /1/2-m.jpg
+                var fullPath = baseUrl + fileName;
+                p.SetValue(links, fullPath);
+            }
+
+            return links;
+        }
+
+        private string GenerateFileName(int userId, int photoId, string suffix)
+        {
+            return String.IsNullOrEmpty(suffix)
+                       ? String.Format("/{0}/{1}.jpg", userId, photoId)
+                       : String.Format("/{0}/{1}-{2}.jpg", userId, photoId, suffix);
         }
 
         public PhotoLinks GeneratePhotoFilePath(int userId, int photoId)
@@ -192,13 +209,6 @@ namespace Zazz.Infrastructure.Services
                 var fileName = GenerateFileName(userId, photoId, attr.Suffix);
                 _storageService.SavePhotoBlob(fileName, resizedImg);
             }
-        }
-
-        private string GenerateFileName(int userId, int photoId, string suffix)
-        {
-            return String.IsNullOrEmpty(suffix)
-                       ? String.Format("/{0}/{1}.jpg", userId, photoId)
-                       : String.Format("/{0}/{1}-{2}.jpg", userId, photoId, suffix);
         }
 
         public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
