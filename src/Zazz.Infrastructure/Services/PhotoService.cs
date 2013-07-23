@@ -23,9 +23,6 @@ namespace Zazz.Infrastructure.Services
     public class PhotoService : IPhotoService
     {
         private readonly IUoW _uow;
-        private readonly IFileService _fileService;
-        private readonly string _rootPath;
-        private readonly string _baseBlobUrl;
         private readonly ICacheService _cacheService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
@@ -33,19 +30,11 @@ namespace Zazz.Infrastructure.Services
         private readonly IImageProcessor _imageProcessor;
         private readonly IStorageService _storageService;
 
-        private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
-        private const string SMALL_IMAGE_SUFFIX = "s";
-        private const string MEDIUM_IMAGE_SUFFIX = "m";
-
-        public PhotoService(IUoW uow, IFileService fileService, ICacheService cacheService,
+        public PhotoService(IUoW uow, ICacheService cacheService,
             IStringHelper stringHelper, IStaticDataRepository staticDataRepository,
-            IDefaultImageHelper defaultImageHelper, IImageProcessor imageProcessor, IStorageService storageService,
-            string rootPath, string baseBlobUrl)
+            IDefaultImageHelper defaultImageHelper, IImageProcessor imageProcessor, IStorageService storageService)
         {
             _uow = uow;
-            _fileService = fileService;
-            _rootPath = rootPath;
-            _baseBlobUrl = baseBlobUrl;
             _cacheService = cacheService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
@@ -114,20 +103,6 @@ namespace Zazz.Infrastructure.Services
             return String.IsNullOrEmpty(suffix)
                        ? String.Format("/{0}/{1}.jpg", userId, photoId)
                        : String.Format("/{0}/{1}-{2}.jpg", userId, photoId, suffix);
-        }
-
-        public PhotoLinks GeneratePhotoFilePath(int userId, int photoId)
-        {
-            return new PhotoLinks
-                   {
-                       VerySmallLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
-                                                     _rootPath, userId, photoId, VERY_SMALL_IMAGE_SUFFIX),
-                       SmallLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
-                                                 _rootPath, userId, photoId, SMALL_IMAGE_SUFFIX),
-                       MediumLink = String.Format(@"{0}\picture\user\{1}\{2}-{3}.jpg",
-                                                  _rootPath, userId, photoId, MEDIUM_IMAGE_SUFFIX),
-                       OriginalLink = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId)
-                   };
         }
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)

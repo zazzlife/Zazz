@@ -106,9 +106,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IOAuthService>().Use<OAuthService>();
                             x.For<IClubRewardService>().Use<ClubRewardService>();
 
-                            x.For<IPhotoService>().Use<PhotoService>()
-                             .Ctor<string>("rootPath").Is(rootDirectory)
-                             .Ctor<string>("baseBlobUrl").Is(baseBlobAddress);
+                            x.For<IPhotoService>().Use<PhotoService>();
 
                             // Helpers
                             x.For<IErrorHandler>().Use<ErrorHandler>();
