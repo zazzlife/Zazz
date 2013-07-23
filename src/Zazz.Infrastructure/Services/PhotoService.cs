@@ -216,19 +216,22 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            var imgPath = GeneratePhotoFilePath(photo.UserId, photo.Id);
-
-            using (var bmp = new Bitmap(imgPath.OriginalLink))
-            using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
+            var fileName = GenerateFileName(currentUserId, photo.Id, suffix: null); //suffix should be null to get the original one
+            using (var file = _storageService.GetBlob(fileName))
             {
-                bmp.Dispose();
-
-                using (var ms = new MemoryStream())
+                using (var bmp = new Bitmap(file))
+                using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
                 {
-                    croppedBmp.Save(ms, ImageFormat.Jpeg);
-                    croppedBmp.Dispose();
+                    bmp.Dispose();
+                    file.Dispose();
 
-                    ResizeAndSaveImages(ms, photo.UserId, photo.Id);
+                    using (var ms = new MemoryStream())
+                    {
+                        croppedBmp.Save(ms, ImageFormat.Jpeg);
+                        croppedBmp.Dispose();
+
+                        ResizeAndSaveImages(ms, photo.UserId, photo.Id);
+                    }
                 }
             }
         }
