@@ -157,41 +157,46 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Upload(HttpPostedFileBase image, string description, int? albumId, bool showInFeed)
         {
-            var errorMessage = "Image was not valid";
-            if (image == null || !_imageValidator.IsValid(image, out errorMessage))
+            using (image.InputStream)
             {
-                ShowAlert(errorMessage, AlertType.Error);
+                var errorMessage = "Image was not valid";
+                if (!_imageValidator.IsValid(image, out errorMessage))
+                {
+                    ShowAlert(errorMessage, AlertType.Error);
+                    return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+                }
+
+                SaveImage(image.InputStream, description, albumId, showInFeed, Enumerable.Empty<int>());
                 return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
             }
-
-            SaveImage(image.InputStream, description, albumId, showInFeed, Enumerable.Empty<int>());
-
-            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 
         public JsonNetResult AjaxUpload(string description, int? albumId, HttpPostedFileBase image, bool showInFeed)
         {
-            var categories = Enumerable.Empty<int>();
-
-            var c = Request.Params["categories"];
-            if (!String.IsNullOrWhiteSpace(c))
-                categories = c.Split(',').Select(Int32.Parse);
-
-            var response = new FineUploadResponse();
-            var errorMessage = "Image was not valid";
-            if (image == null || !_imageValidator.IsValid(image, out errorMessage))
+            using (image.InputStream)
             {
-                response.Success = false;
-                response.Error = errorMessage;
+                var categories = Enumerable.Empty<int>();
+
+                var c = Request.Params["categories"];
+                if (!String.IsNullOrWhiteSpace(c))
+                    categories = c.Split(',').Select(Int32.Parse);
+
+                var response = new FineUploadResponse();
+                var errorMessage = "Image was not valid";
+                if (!_imageValidator.IsValid(image, out errorMessage))
+                {
+                    response.Success = false;
+                    response.Error = errorMessage;
+                    return new JsonNetResult(response);
+                }
+
+                var photo = SaveImage(image.InputStream, description, albumId, showInFeed, categories);
+                response.PhotoId = photo.Id;
+                response.Success = true;
+                response.PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
+
                 return new JsonNetResult(response);
             }
-
-            var photo = SaveImage(image.InputStream, description, albumId, showInFeed, categories);
-            response.PhotoId = photo.Id;
-            response.Success = true;
-            response.PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
-
-            return new JsonNetResult(response);
         }
 
         private Photo SaveImage(Stream image, string description, int? albumId, bool showInFeed,

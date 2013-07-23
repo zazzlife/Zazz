@@ -42,10 +42,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _tempRootPath = Path.GetTempPath();
             _stringHelper = new Mock<IStringHelper>();
             _staticDataRepo = new Mock<IStaticDataRepository>();
+            var imageProcessor = new Mock<IImageProcessor>();
+            var storageService = new Mock<IStorageService>();
             _baseBlobUrl = "http://localhost:17433";
             _defaultImageHelperHelper = new DefaultImageHelper("");
+
             _sut = new PhotoService(_uow.Object, _fs.Object, _cacheService.Object, _stringHelper.Object,
-                                    _staticDataRepo.Object, _defaultImageHelperHelper, _tempRootPath, _baseBlobUrl);
+                                    _staticDataRepo.Object, _defaultImageHelperHelper, imageProcessor.Object,
+                                    storageService.Object, _tempRootPath, _baseBlobUrl);
+            
             _uow.Setup(x => x.SaveChanges());
         }
 

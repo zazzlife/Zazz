@@ -220,9 +220,10 @@ namespace Zazz.Infrastructure.Services
                                     UserId = page.UserId,
                                     PageId = page.Id
                                 };
-                    
-                    var photoStream = new HttpClient().GetStreamAsync(fbPhoto.Source).Result; //TODO: use async/await
-                    _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<int>());
+
+                    //TODO: use async/await
+                    using (var photoStream = new HttpClient().GetStreamAsync(fbPhoto.Source).Result)
+                        _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<int>());
                 }
             }
 

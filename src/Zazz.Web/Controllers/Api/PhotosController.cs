@@ -122,7 +122,6 @@ namespace Zazz.Web.Controllers.Api
                 }
             }
 
-
             // parsin categories
             var providedCategories = bodyParts.Contents
                 .FirstOrDefault(c => c.Headers

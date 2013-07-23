@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
+using Zazz.Core.Attributes;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
@@ -29,14 +30,17 @@ namespace Zazz.Infrastructure.Services
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
         private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly IImageProcessor _imageProcessor;
+        private readonly IStorageService _storageService;
 
         private const string VERY_SMALL_IMAGE_SUFFIX = "vs";
         private const string SMALL_IMAGE_SUFFIX = "s";
         private const string MEDIUM_IMAGE_SUFFIX = "m";
 
-        public PhotoService(IUoW uow, IFileService fileService,ICacheService cacheService,
-            IStringHelper stringHelper, IStaticDataRepository staticDataRepository, IDefaultImageHelper defaultImageHelper, string rootPath,
-            string baseBlobUrl)
+        public PhotoService(IUoW uow, IFileService fileService, ICacheService cacheService,
+            IStringHelper stringHelper, IStaticDataRepository staticDataRepository,
+            IDefaultImageHelper defaultImageHelper, IImageProcessor imageProcessor, IStorageService storageService,
+            string rootPath, string baseBlobUrl)
         {
             _uow = uow;
             _fileService = fileService;
@@ -46,6 +50,8 @@ namespace Zazz.Infrastructure.Services
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
             _defaultImageHelper = defaultImageHelper;
+            _imageProcessor = imageProcessor;
+            _storageService = storageService;
         }
 
         public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
@@ -109,6 +115,9 @@ namespace Zazz.Infrastructure.Services
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)
         {
+            if (data == Stream.Null)
+                throw new ArgumentNullException("data");
+
             if (categories != null)
             {
                 foreach (var c in categories)
@@ -133,27 +142,27 @@ namespace Zazz.Infrastructure.Services
                     lastFeed.Time >= DateTime.UtcNow.AddDays(-1) && //last upload date check
                     lastFeed.FeedPhotos.Count < 9 && //maximum number of photos check 
                     lastFeed.FeedPhotos.First().Photo.AlbumId == photo.AlbumId  //same album check
-                    ) 
+                    )
                 {
                     lastFeed.FeedPhotos.Add(new FeedPhoto
-                                              {
-                                                  PhotoId = photo.Id
-                                              });
+                    {
+                        PhotoId = photo.Id
+                    });
                 }
                 else
                 {
                     var feed = new Feed
-                               {
-                                   FeedType = FeedType.Photo,
-                                   Time = photo.UploadDate,
-                               };
+                    {
+                        FeedType = FeedType.Photo,
+                        Time = photo.UploadDate,
+                    };
 
                     feed.FeedUsers.Add(new FeedUser { UserId = photo.UserId });
 
                     feed.FeedPhotos.Add(new FeedPhoto
-                                          {
-                                              PhotoId = photo.Id
-                                          });
+                    {
+                        PhotoId = photo.Id
+                    });
 
                     _uow.FeedRepository.InsertGraph(feed);
                 }
@@ -161,104 +170,35 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
             }
 
-            if (data != Stream.Null)
-                ResizeAndSaveImages(Image.FromStream(data), photo.UserId, photo.Id);
+            ResizeAndSaveImages(data, photo.UserId, photo.Id);
 
             return photo.Id;
         }
 
-        private void ResizeAndSaveImages(Image sourceImage, int userId, int photoId)
+        private void ResizeAndSaveImages(Stream img, int userId, int photoId)
         {
-            using (sourceImage)
+            var properties = typeof(PhotoLinks).GetProperties();
+            foreach (var p in properties)
             {
-                var pathes = GeneratePhotoFilePath(userId, photoId);
-                var images = new[]
-                             {
-                                 new
-                                 {
-                                     path = pathes.VerySmallLink,
-                                     size = new Size(55, 55),
-                                     quality = 95L
-                                 },
-                                 new
-                                 {
-                                     path = pathes.SmallLink,
-                                     size = new Size(175, 175),
-                                     quality = 85L
-                                 },
-                                 new
-                                 {
-                                     path = pathes.MediumLink,
-                                     size = new Size(500, 500),
-                                     quality = 70L
-                                 },
-                                 new
-                                 {
-                                     path = pathes.OriginalLink,
-                                     size = new Size(1600, 1600),
-                                     quality = 60L
-                                 }
-                             };
+                var attr = p.GetCustomAttributes(typeof(PhotoAttribute), false)
+                                            .Cast<PhotoAttribute>()
+                                            .FirstOrDefault();
 
-                ImageCodecInfo jpg = GetEncoder(ImageFormat.Jpeg);
-                EncoderParameters encoderParams = new EncoderParameters(1);
+                if (attr == null)
+                    return;
 
-                foreach (var image in images)
-                {
-                    EncoderParameter encoderParam = new EncoderParameter(Encoder.Quality, image.quality);
-                    encoderParams.Param[0] = encoderParam;
-
-                    if (sourceImage.Width > image.size.Width || sourceImage.Height > image.size.Height)
-                    {
-                        // Figure out the ratio
-                        double ratioX = (double)image.size.Width / (double)sourceImage.Width;
-                        double ratioY = (double)image.size.Height / (double)sourceImage.Height;
-
-                        // use whichever multiplier is smaller
-                        var ratio = ratioX < ratioY ? ratioX : ratioY;
-
-                        // now we can get the new height and width
-                        var newHeight = Convert.ToInt32(sourceImage.Height * ratio);
-                        var newWidth = Convert.ToInt32(sourceImage.Width * ratio);
-
-                        using (var b = new Bitmap(newWidth, newHeight))
-                        using (var g = Graphics.FromImage(b))
-                        {
-                            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            g.SmoothingMode = SmoothingMode.HighQuality;
-                            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                            g.CompositingQuality = CompositingQuality.HighQuality;
-
-                            g.DrawImage(sourceImage, 0, 0, newWidth, newHeight);
-
-                            var path = _fileService.RemoveFileNameFromPath(image.path);
-                            _fileService.CreateDirIfNotExists(path); //TODO: instead of checking the path for every image try a better solution.
-
-                            b.Save(image.path, jpg, encoderParams);
-                        }
-                    }
-                    else
-                    {
-                        // resize is not needed because the image is already smaller
-                        sourceImage.Save(image.path, jpg, encoderParams);
-                    }
-                }
+                var size = new Size(attr.Width, attr.Height);
+                var resizedImg = _imageProcessor.ResizeImage(img, size, attr.Quality);
+                var fileName = GenerateFileName(userId, photoId, attr.Suffix);
+                _storageService.SavePhotoBlob(fileName, resizedImg);
             }
         }
 
-        private ImageCodecInfo GetEncoder(ImageFormat format)
+        private string GenerateFileName(int userId, int photoId, string suffix)
         {
-
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-
-            foreach (ImageCodecInfo codec in codecs)
-            {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
-            }
-            return null;
+            return String.IsNullOrEmpty(suffix)
+                       ? String.Format("/{0}/{1}.jpg", userId, photoId)
+                       : String.Format("/{0}/{1}-{2}.jpg", userId, photoId, suffix);
         }
 
         public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
@@ -272,7 +212,14 @@ namespace Zazz.Infrastructure.Services
             using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
             {
                 bmp.Dispose();
-                ResizeAndSaveImages(croppedBmp, photo.UserId, photo.Id);
+
+                using (var ms = new MemoryStream())
+                {
+                    croppedBmp.Save(ms, ImageFormat.Jpeg);
+                    croppedBmp.Dispose();
+
+                    ResizeAndSaveImages(ms, photo.UserId, photo.Id);
+                }
             }
         }
 
@@ -295,7 +242,7 @@ namespace Zazz.Infrastructure.Services
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
             var feedId = _uow.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
             _uow.SaveChanges();
-            
+
             if (feedId != 0)
             {
                 var remainingPhotosCount = _uow.FeedPhotoRepository.GetCount(feedId);
@@ -353,7 +300,7 @@ namespace Zazz.Infrastructure.Services
 
             photo.Description = updatedPhoto.Description;
             photo.AlbumId = updatedPhoto.AlbumId;
-            
+
             _uow.SaveChanges();
         }
 
