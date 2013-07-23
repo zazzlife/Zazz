@@ -40,5 +40,15 @@ namespace Zazz.Infrastructure.Services
                 data.CopyTo(fileStream);
             }
         }
+
+        public Stream GetBlob(string fileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveBlob(string fileName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

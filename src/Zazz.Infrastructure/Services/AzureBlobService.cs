@@ -28,6 +28,16 @@ namespace Zazz.Infrastructure.Services
             SaveBlob(PIC_CONTAINER_NAME, fileName, data, "image/jpeg");
         }
 
+        public Stream GetBlob(string fileName)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveBlob(string fileName)
+        {
+            throw new System.NotImplementedException();
+        }
+
         private void SaveBlob(string containerName, string fileName, Stream data, string contentType)
         {
             var storageAccount = CloudStorageAccount.Parse(_storageConnString);

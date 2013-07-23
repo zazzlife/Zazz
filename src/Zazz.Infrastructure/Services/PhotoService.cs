@@ -80,6 +80,11 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetById(id);
         }
 
+        public string GetPhotoDescription(int photoId)
+        {
+            return _uow.PhotoRepository.GetDescription(photoId);
+        }
+
         public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
             var baseUrl = _storageService.BasePhotoUrl; //sample: http://test.zazzlife.com/picture/user
@@ -123,11 +128,6 @@ namespace Zazz.Infrastructure.Services
                                                   _rootPath, userId, photoId, MEDIUM_IMAGE_SUFFIX),
                        OriginalLink = String.Format(@"{0}\picture\user\{1}\{2}.jpg", _rootPath, userId, photoId)
                    };
-        }
-
-        public string GetPhotoDescription(int photoId)
-        {
-            return _uow.PhotoRepository.GetDescription(photoId);
         }
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)

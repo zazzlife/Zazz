@@ -7,5 +7,9 @@ namespace Zazz.Core.Interfaces.Services
         string BasePhotoUrl { get; }
 
         void SavePhotoBlob(string fileName, Stream data);
+
+        Stream GetBlob(string fileName);
+
+        void RemoveBlob(string fileName);
     }
 }
