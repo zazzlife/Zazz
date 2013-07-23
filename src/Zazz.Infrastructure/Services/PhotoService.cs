@@ -202,7 +202,7 @@ namespace Zazz.Infrastructure.Services
                                             .FirstOrDefault();
 
                 if (attr == null)
-                    return;
+                    continue;
 
                 var size = new Size(attr.Width, attr.Height);
                 var resizedImg = _imageProcessor.ResizeImage(img, size, attr.Quality);
@@ -242,7 +242,6 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-
             if (photo.User.ProfilePhotoId.HasValue && photo.Id == photo.User.ProfilePhotoId)
                 photo.User.ProfilePhotoId = null;
 
@@ -274,11 +273,19 @@ namespace Zazz.Infrastructure.Services
             if (picWasProfilePic)
                 _cacheService.RemoveUserPhotoUrl(photo.UserId);
 
-            var paths = GeneratePhotoFilePath(photo.UserId, photo.Id);
-            _fileService.RemoveFile(paths.VerySmallLink);
-            _fileService.RemoveFile(paths.SmallLink);
-            _fileService.RemoveFile(paths.MediumLink);
-            _fileService.RemoveFile(paths.OriginalLink);
+            var properties = typeof(PhotoLinks).GetProperties();
+            foreach (var p in properties)
+            {
+                var attr = p.GetCustomAttributes(typeof (PhotoAttribute), false)
+                            .Cast<PhotoAttribute>()
+                            .FirstOrDefault();
+
+                if (attr == null)
+                    continue;
+
+                var filename = GenerateFileName(photo.UserId, photo.Id, attr.Suffix);
+                _storageService.RemoveBlob(filename);
+            }
         }
 
         public void UpdatePhoto(Photo updatedPhoto, int currentUserId)
