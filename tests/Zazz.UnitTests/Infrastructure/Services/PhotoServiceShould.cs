@@ -388,9 +388,147 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void CreateANewFeedIfLastFeedWasPhotoAndItHas9Photos_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Photo,
+                Time = DateTime.UtcNow.AddMinutes(-1),
+            };
+
+            for (int i = 0; i < 9; i++)
+                lastFeed.FeedPhotos.Add(new FeedPhoto());
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewFeedIfLastFeedWasPhotoAndItWasOnADifferentAlbum_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Photo,
+                Time = DateTime.UtcNow.AddMinutes(-1),
+            };
+
+            lastFeed.FeedPhotos.Add(new FeedPhoto
+                                    {
+                                        Photo = new Photo
+                                                {
+                                                    AlbumId = 432
+                                                }
+                                    });
 
 
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
 
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewFeedIfLastFeedWasPhotoAndItWasOnADifferentAlbum2_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44,
+                AlbumId = 2
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Photo,
+                Time = DateTime.UtcNow.AddMinutes(-1),
+            };
+
+            lastFeed.FeedPhotos.Add(new FeedPhoto
+            {
+                Photo = new Photo
+                {
+                    AlbumId = 432
+                }
+            });
+
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
 
 
 
