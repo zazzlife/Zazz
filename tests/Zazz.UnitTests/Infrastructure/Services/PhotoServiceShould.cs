@@ -51,6 +51,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                     _storageService.Object);
         }
 
+        [Test]
+        public void ReturnCorrectUrl_OnGeneratePhotoUrl()
+        {
+            //Arrange
+            var baseUrl = "http://test.zazzlife.com/picture/user";
+            var userId = 22;
+            var photoId = 44;
+
+            _storageService.SetupGet(x => x.BasePhotoUrl)
+                           .Returns(baseUrl);
+
+            var expectedVSUrl = String.Format("{0}/{1}/{2}-vs.jpg", baseUrl, userId, photoId);
+            var expectedSmallUrl = String.Format("{0}/{1}/{2}-s.jpg", baseUrl, userId, photoId);
+            var expectedMediumUrl = String.Format("{0}/{1}/{2}-m.jpg", baseUrl, userId, photoId);
+            var expectedOriginalUrl = String.Format("{0}/{1}/{2}.jpg", baseUrl, userId, photoId);
+
+            //Act
+            var result = _sut.GeneratePhotoUrl(userId, photoId);
+
+            //Assert
+            Assert.AreEqual(expectedVSUrl, result.VerySmallLink);
+            Assert.AreEqual(expectedSmallUrl, result.SmallLink);
+            Assert.AreEqual(expectedMediumUrl, result.MediumLink);
+            Assert.AreEqual(expectedOriginalUrl, result.OriginalLink);
+        }
 
 
         [Test]
