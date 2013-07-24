@@ -102,11 +102,14 @@ namespace Zazz.Infrastructure.Services
 
         public int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories)
         {
-            if (data == Stream.Null)
-                throw new ArgumentNullException("data");
-
             if (photo == null)
                 throw new ArgumentNullException("photo");
+
+            if (photo.UserId == 0)
+                throw new ArgumentException("User id cannot be 0");
+
+            if (data == Stream.Null)
+                throw new ArgumentNullException("data");
 
             if (categories != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -32,7 +33,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IStorageService> _storageService;
         private Mock<IImageProcessor> _imageProcessor;
         private MockRepository _mockRepo;
-        private MemoryStream _photo;
+        private MemoryStream _photoStream;
+        private List<Category> _categories;
 
         [SetUp]
         public void Init()
@@ -51,7 +53,23 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                     _staticDataRepo.Object, _defaultImageHelper.Object, _imageProcessor.Object,
                                     _storageService.Object);
 
-            _photo = new MemoryStream(new byte[] {1, 2, 3, 4});
+            _photoStream = new MemoryStream(new byte[] {1, 2, 3, 4});
+
+            _categories = new List<Category>
+                          {
+                              new Category
+                              {
+                                  Id = 1,
+                              },
+                              new Category
+                              {
+                                  Id = 2,
+                              },
+                              new Category
+                              {
+                                  Id = 3,
+                              }
+                          };
         }
 
         [Test]
@@ -87,7 +105,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             //Act
             Assert.Throws<ArgumentNullException>(
-                () => _sut.SavePhoto(null, _photo, true, Enumerable.Empty<int>()));
+                () => _sut.SavePhoto(null, _photoStream, true, Enumerable.Empty<int>()));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowUserIdIs0_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 0
+            };
+
+            //Act
+            Assert.Throws<ArgumentException>(
+                () => _sut.SavePhoto(photo, _photoStream, true, Enumerable.Empty<int>()));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -108,6 +143,44 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotAddCategoriesIfNull_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+                        {
+                            UserId = 44
+                        };
+            var resizedImageStream = new MemoryStream(new byte[] {4, 5, 6});
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, false, null);
+
+            //Assert
+            CollectionAssert.IsEmpty(photo.Categories);
+            _mockRepo.VerifyAll();
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
         [Test]
@@ -852,7 +925,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [TearDown]
         public void Cleanup()
         {
-            _photo.Dispose();
+            _photoStream.Dispose();
         }
     }
 }
