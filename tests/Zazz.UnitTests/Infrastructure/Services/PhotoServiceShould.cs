@@ -236,6 +236,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void CreateANewFeedIfLastFeedIsNull_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+            
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(() => null);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void CreateANewFeedIfLastFeedWasPost_OnSavePhoto()
         {
             //Arrange
@@ -247,8 +280,89 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var lastFeed = new Feed
                            {
                                Id = 444,
-                               FeedType = FeedType.Post
+                               FeedType = FeedType.Post,
+                               Time = DateTime.UtcNow.AddHours(-1)
                            };
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewFeedIfLastFeedWasEvent_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Event,
+                Time = DateTime.UtcNow.AddHours(-1)
+            };
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewFeedIfLastFeedWasPhotoAndOverADayAgo_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Photo,
+                Time = DateTime.UtcNow.AddDays(-1)
+            };
 
             var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
 
