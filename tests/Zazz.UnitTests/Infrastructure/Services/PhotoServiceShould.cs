@@ -688,6 +688,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void RemoveFeedIfItsTheLastPhoto_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44,
+                User = new User
+                {
+                    AccountType = AccountType.User,
+                }
+            };
+
+            var feedId = 5;
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
+                .Returns(5);
+
+            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
+                .Returns(0);
+
+            _uow.Setup(x => x.FeedRepository.Remove(feedId));
+
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
+            _uow.Setup(x => x.PhotoRepository.Remove(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _storageService.Setup(x => x.RemoveBlob(It.IsAny<string>()));
+
+            //Act
+            _sut.RemovePhoto(photo.Id, photo.UserId);
+
+            //Assert
+            Assert.IsNull(photo.User.ClubDetail.CoverPhotoId);
+            _mockRepo.VerifyAll();
+        }
+
 
         [Test]
         public void ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()

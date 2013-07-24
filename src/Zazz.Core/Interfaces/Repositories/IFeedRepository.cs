@@ -12,6 +12,8 @@ namespace Zazz.Core.Interfaces.Repositories
 
         IQueryable<Feed> GetUserFeeds(int userId);
 
+        Feed GetPhotoFeed(int photoId);
+
         Feed GetPostFeed(int postId);
 
         Feed GetUserLastFeed(int userId);

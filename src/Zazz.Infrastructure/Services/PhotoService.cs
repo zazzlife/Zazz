@@ -212,22 +212,20 @@ namespace Zazz.Infrastructure.Services
             }
 
             // removing photo id from the feed photo ids and if it's the last one in the collection, will delete the feed.
-            var feedId = _uow.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId);
-            _uow.SaveChanges();
-
-            if (feedId != 0)
+            var feed = _uow.FeedRepository.GetPhotoFeed(photoId);
+            if (feed != null)
             {
-                var remainingPhotosCount = _uow.FeedPhotoRepository.GetCount(feedId);
-                if (remainingPhotosCount == 0)
-                {
-                    _uow.FeedRepository.Remove(feedId);
-                }
+                var feedPhotoToRemove = feed.FeedPhotos.FirstOrDefault(f => f.PhotoId == photoId);
+                if (feedPhotoToRemove != null)
+                    feed.FeedPhotos.Remove(feedPhotoToRemove);
+
+                if (feed.FeedPhotos.Count == 0)
+                    _uow.FeedRepository.Remove(feed);
             }
 
             _uow.EventRepository.ResetPhotoId(photoId);
             _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();
-            
 
             var properties = typeof(PhotoLinks).GetProperties();
             foreach (var p in properties)

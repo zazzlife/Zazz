@@ -60,6 +60,13 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.EventFeed.Event);
         }
 
+        public Feed GetPhotoFeed(int photoId)
+        {
+            return DbSet.Include(f => f.FeedPhotos)
+                        .Where(f => f.FeedPhotos.Any(p => p.PhotoId == photoId))
+                        .SingleOrDefault();
+        }
+
         public Feed GetPostFeed(int postId)
         {
             return DbSet
