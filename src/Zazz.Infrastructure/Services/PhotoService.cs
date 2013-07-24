@@ -69,11 +69,6 @@ namespace Zazz.Infrastructure.Services
             return _uow.PhotoRepository.GetById(id);
         }
 
-        public string GetPhotoDescription(int photoId)
-        {
-            return _uow.PhotoRepository.GetDescription(photoId);
-        }
-
         public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
             var baseUrl = _storageService.BasePhotoUrl; //sample: http://test.zazzlife.com/picture/user

@@ -18,8 +18,6 @@ namespace Zazz.Core.Interfaces.Services
         Photo GetPhoto(int id);
 
         PhotoLinks GeneratePhotoUrl(int userId, int photoId);
-
-        string GetPhotoDescription(int photoId);
         
         int SavePhoto(Photo photo, Stream data, bool showInFeed, IEnumerable<int> categories);
 
