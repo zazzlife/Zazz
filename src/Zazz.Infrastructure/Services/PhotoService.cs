@@ -314,16 +314,7 @@ namespace Zazz.Infrastructure.Services
             }
             else
             {
-                var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(photoId.Value);
-                if (photo == null)
-                {
-                    var gender = _uow.UserRepository.GetUserGender(userId);
-                    img = _defaultImageHelper.GetUserDefaultImage(gender);
-                }
-                else
-                {
-                    img = GeneratePhotoUrl(photo.UserId, photo.Id);
-                }
+                img = GeneratePhotoUrl(userId, photoId.Value);
             }
 
             _cacheService.AddUserPhotoUrl(userId, img);

@@ -992,7 +992,78 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
-        
+        [Test]
+        public void ReturnPhotoFromCacheIfExists_OnGetUserPhoto()
+        {
+            //Arrange
+            var userId = 2;
+            var photos = new PhotoLinks("test");
+
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(photos);
+
+            //Act
+            var result = _sut.GetUserPhoto(userId);
+
+            //Assert
+            Assert.AreSame(photos, result);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void GetPhotoFromDbAndAddToCache_OnGetUserPhoto()
+        {
+            //Arrange
+            var userId = 2;
+            int? photoId = 44;
+
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(photoId);
+
+            _storageService.SetupGet(x => x.BasePhotoUrl)
+                           .Returns("test");
+
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()));
+
+            //Act
+            var result = _sut.GetUserPhoto(userId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void GetGenderFromDbAndGenerateDefaultPhotoAndAddToCache_OnGetUserPhoto()
+        {
+            //Arrange
+            var userId = 2;
+            var photos = new PhotoLinks("test");
+            
+
+            _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
+                         .Returns(() => null);
+
+            _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
+                .Returns(() => null);
+
+            _uow.Setup(x => x.UserRepository.GetUserGender(userId))
+                .Returns(Gender.Male);
+
+            _defaultImageHelper.Setup(x => x.GetUserDefaultImage(Gender.Male))
+                               .Returns(photos);
+
+            _cacheService.Setup(x => x.AddUserPhotoUrl(userId, photos));
+
+            //Act
+            var result = _sut.GetUserPhoto(userId);
+
+            //Assert
+            Assert.AreSame(photos, result);
+            _mockRepo.VerifyAll();
+        }
 
         [TearDown]
         public void Cleanup()
