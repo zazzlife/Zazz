@@ -105,6 +105,9 @@ namespace Zazz.Infrastructure.Services
             if (data == Stream.Null)
                 throw new ArgumentNullException("data");
 
+            if (photo == null)
+                throw new ArgumentNullException("photo");
+
             if (categories != null)
             {
                 foreach (var c in categories)

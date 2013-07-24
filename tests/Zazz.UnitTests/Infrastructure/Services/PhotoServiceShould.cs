@@ -32,6 +32,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IStorageService> _storageService;
         private Mock<IImageProcessor> _imageProcessor;
         private MockRepository _mockRepo;
+        private MemoryStream _photo;
 
         [SetUp]
         public void Init()
@@ -49,6 +50,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut = new PhotoService(_uow.Object, _cacheService.Object, _stringHelper.Object,
                                     _staticDataRepo.Object, _defaultImageHelper.Object, _imageProcessor.Object,
                                     _storageService.Object);
+
+            _photo = new MemoryStream(new byte[] {1, 2, 3, 4});
         }
 
         [Test]
@@ -75,6 +78,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(expectedSmallUrl, result.SmallLink);
             Assert.AreEqual(expectedMediumUrl, result.MediumLink);
             Assert.AreEqual(expectedOriginalUrl, result.OriginalLink);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfPhotoIsNull_OnSavePhoto()
+        {
+            //Arrange
+            //Act
+            Assert.Throws<ArgumentNullException>(
+                () => _sut.SavePhoto(null, _photo, true, Enumerable.Empty<int>()));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfStreamIsEmpty_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+                        {
+                            UserId = 44
+                        };
+            //Act
+            Assert.Throws<ArgumentNullException>(
+                () => _sut.SavePhoto(photo, Stream.Null, true, Enumerable.Empty<int>()));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
 
@@ -815,6 +847,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Verify(x => x.PhotoRepository.GetPhotoWithMinimalData(photoId), Times.Never());
             _cacheService.Verify(x => x.GetUserPhotoUrl(userId), Times.Once());
             _cacheService.Verify(x => x.AddUserPhotoUrl(userId, expected), Times.Never());
+        }
+
+        [TearDown]
+        public void Cleanup()
+        {
+            _photo.Dispose();
         }
     }
 }
