@@ -632,8 +632,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _cacheService.Setup(x => x.RemoveUserPhotoUrl(photo.UserId));
 
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
-                .Returns(0);
+            _uow.Setup(x => x.FeedRepository.GetPhotoFeed(photo.Id))
+                .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
             _uow.Setup(x => x.PhotoRepository.Remove(photo));
@@ -671,8 +671,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
-                .Returns(0);
+            _uow.Setup(x => x.FeedRepository.GetPhotoFeed(photo.Id))
+                .Returns(() => null);
 
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
             _uow.Setup(x => x.PhotoRepository.Remove(photo));
@@ -702,18 +702,24 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 }
             };
 
-            var feedId = 5;
+            var feed = new Feed
+                       {
+                           FeedPhotos = new List<FeedPhoto>
+                                        {
+                                            new FeedPhoto
+                                            {
+                                                PhotoId = photo.Id
+                                            }
+                                        }
+                       };
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
-                .Returns(5);
+            _uow.Setup(x => x.FeedRepository.GetPhotoFeed(photo.Id))
+                .Returns(feed);
 
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(0);
-
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
+            _uow.Setup(x => x.FeedRepository.Remove(feed));
 
             _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
             _uow.Setup(x => x.PhotoRepository.Remove(photo));
@@ -725,323 +731,56 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.RemovePhoto(photo.Id, photo.UserId);
 
             //Assert
-            Assert.IsNull(photo.User.ClubDetail.CoverPhotoId);
             _mockRepo.VerifyAll();
         }
 
-
         [Test]
-        public void ThrowIfTheCurrentUserIsNotTheOwner_OnRemovePhoto()
+        public void NotRemoveFeedIfItsNotTheLastPhoto_OnRemovePhoto()
         {
             //Arrange
-            var photoId = 124;
-            var userId = 12;
-            var photo = new Photo
-                            {
-                                Id = photoId,
-                                AlbumId = 123,
-                                UserId = 999
-                            };
-
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-            //Act
-            try
-            {
-                _sut.RemovePhoto(photoId, userId);
-                Assert.Fail("Expected exception wasn't thrown");
-            }
-            catch (SecurityException)
-            {
-            }
-
-            //Assert
-            _uow.Verify(x => x.PhotoRepository.GetById(photoId), Times.Once());
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Never());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Never());
-        }
-
-        [Test]
-        public void SetCoverPhotoIdToNullAndNotResetCacheIfThePhotoIsCoverPhotoAndNotProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
-        {
-            //Arrange
-
-            var feedId = 12;
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = photoId;
-            var profilePhotoId = 2;
-
             var photo = new Photo
             {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
+                Id = 3232,
+                UserId = 44,
                 User = new User
                 {
-                    AccountType = AccountType.Club,
-                    ProfilePhotoId = profilePhotoId,
-                    ClubDetail = new ClubDetail()
-                    {
-                        CoverPhotoId = coverPhotoId,
-                    }
+                    AccountType = AccountType.User,
                 }
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
-                .Returns(false);
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(1);
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
-
-            //Act
-            _sut.RemovePhoto(photoId, userId);
-
-            //Assert
-            Assert.AreEqual(null, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
-            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
-            _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
-            _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Never());
-        }
-
-        [Test]
-        public void SetProfilePhotoIdToNullAndResetCacheIfThePhotoIsProfilePhotoAndResetEventPhotoId_OnRemovePhoto()
-        {
-            //Arrange
-            var feedId = 12;
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = 2;
-            var profilePhotoId = photoId;
-
-            var photo = new Photo
+            var feed = new Feed
             {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
-                User = new User
-                {
-                    ProfilePhotoId = profilePhotoId,
-                    ClubDetail = new ClubDetail()
-                    {
-                        CoverPhotoId = coverPhotoId,
-                    }
-                }
+                FeedPhotos = new List<FeedPhoto>
+                                        {
+                                            new FeedPhoto
+                                            {
+                                                PhotoId = photo.Id
+                                            },
+                                            new FeedPhoto
+                                            {
+                                                PhotoId = photo.Id + 1
+                                            }
+                                        }
             };
 
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId))
-                .Returns(true);
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(1);
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
+            _uow.Setup(x => x.FeedRepository.GetPhotoFeed(photo.Id))
+                .Returns(feed);
+
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
+            _uow.Setup(x => x.PhotoRepository.Remove(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _storageService.Setup(x => x.RemoveBlob(It.IsAny<string>()));
 
             //Act
-            _sut.RemovePhoto(photoId, userId);
+            _sut.RemovePhoto(photo.Id, photo.UserId);
 
             //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(null, photo.User.ProfilePhotoId);
-            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
-            _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
-            _cacheService.Verify(x => x.RemoveUserPhotoUrl(userId), Times.Once());
-        }
-
-        [Test]
-        public void RemoveFileAndDbAndFeedRecordIfThePictureIsTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
-        {
-            //Arrange
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = 4;
-            var profilePhotoId = 2;
-            var feedId = 888;
-
-            var photo = new Photo
-            {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
-                User = new User
-                {
-                    ProfilePhotoId = profilePhotoId,
-                    ClubDetail = new ClubDetail()
-                    {
-                        CoverPhotoId = coverPhotoId,
-                    }
-                }
-            };
-
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(0);
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
-
-            //Act
-            _sut.RemovePhoto(photoId, userId);
-
-            //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
-            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
-            _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Once());
-        }
-
-        [Test]
-        public void RemoveFileAndDbAndNotDeleteFeedRecordIfThePictureIsNotTheLastOneOfFeedAndResetEventPhotoIdAndNotTouchCoverAndProfilePhotoIdsIfTheyAreDifferent_OnRemovePhoto()
-        {
-            //Arrange
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = 4;
-            var profilePhotoId = 2;
-            var feedId = 888;
-
-            var photo = new Photo
-            {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
-                User = new User
-                {
-                    ProfilePhotoId = profilePhotoId,
-                    ClubDetail = new ClubDetail()
-                    {
-                        CoverPhotoId = coverPhotoId,
-                    }
-                }
-            };
-
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(feedId);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(feedId))
-                .Returns(1);
-            _uow.Setup(x => x.FeedRepository.Remove(feedId));
-
-            //Act
-            _sut.RemovePhoto(photoId, userId);
-
-            //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
-            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.GetCount(feedId), Times.Once());
-            _uow.Verify(x => x.FeedRepository.Remove(feedId), Times.Never());
-        }
-
-        [Test]
-        public void NotTryToRemoveFeedWhenTheFeedDoesntExists_OnRemovePhoto()
-        {
-            //Arrange
-            var photoId = 124;
-            var userId = 12;
-            var albumId = 444;
-            var coverPhotoId = 4;
-            var profilePhotoId = 2;
-
-            var photo = new Photo
-            {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId,
-                User = new User
-                {
-                    ProfilePhotoId = profilePhotoId,
-                    ClubDetail = new ClubDetail()
-                    {
-                        CoverPhotoId = coverPhotoId,
-                    }
-                }
-            };
-
-            _uow.Setup(x => x.PhotoRepository.GetById(photoId))
-                .Returns(photo);
-
-
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photoId))
-                .Returns(userId);
-            _uow.Setup(x => x.PhotoRepository.Remove(photoId));
-            _uow.Setup(x => x.EventRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.UserRepository.ResetPhotoId(photoId));
-            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId))
-                .Returns(0);
-            _uow.Setup(x => x.FeedPhotoRepository.GetCount(It.IsAny<int>()))
-                .Returns(0);
-            _uow.Setup(x => x.FeedRepository.Remove(It.IsAny<int>()));
-
-            //Act
-            _sut.RemovePhoto(photoId, userId);
-
-            //Assert
-            Assert.AreEqual(coverPhotoId, photo.User.ClubDetail.CoverPhotoId);
-            Assert.AreEqual(profilePhotoId, photo.User.ProfilePhotoId);
-            _uow.Verify(x => x.PhotoRepository.Remove(photo), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Exactly(2));
-            _uow.Verify(x => x.EventRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.UserRepository.ResetPhotoId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photoId), Times.Once());
-            _uow.Verify(x => x.FeedPhotoRepository.GetCount(It.IsAny<int>()), Times.Never());
-            _uow.Verify(x => x.FeedRepository.Remove(It.IsAny<int>()), Times.Never());
+            Assert.AreEqual(1, feed.FeedPhotos.Count);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
