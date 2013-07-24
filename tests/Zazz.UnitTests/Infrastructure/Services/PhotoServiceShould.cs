@@ -505,7 +505,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 }
             });
 
-
             var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
 
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
@@ -529,6 +528,52 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void AddPhotoToCurrentFeedWhenTheLastOneIsPhotoAndItHasLessThan0PhotosAndIsInASameAlbumAndWasCreatedLessThan24HoursAgo_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44,
+            };
+
+            var lastFeed = new Feed
+            {
+                Id = 444,
+                FeedType = FeedType.Photo,
+                Time = DateTime.UtcNow.AddHours(-23),
+            };
+
+            for (int i = 0; i < 8; i++)
+                lastFeed.FeedPhotos.Add(new FeedPhoto
+                                        {
+                                            Photo = new Photo()
+                                        });
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            Assert.AreEqual(9, lastFeed.FeedPhotos.Count);
+            _mockRepo.VerifyAll();
+        }
+
+
+
 
 
 
