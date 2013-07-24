@@ -64,7 +64,7 @@ namespace Zazz.Web.Controllers.Api
             }
 
             var userDisplayName = _userService.GetUserDisplayName(id);
-            var userDisplayPhoto = _photoService.GetUserImageUrl(id);
+            var userDisplayPhoto = _photoService.GetUserPhoto(id);
 
             return new ApiUserProfile
                    {

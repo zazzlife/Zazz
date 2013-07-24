@@ -37,7 +37,7 @@ namespace Zazz.Web.Controllers.Api
                                          {
                                              UserId = x,
                                              DisplayName = _userService.GetUserDisplayName(x),
-                                             DisplayPhoto = _photoService.GetUserImageUrl(x)
+                                             DisplayPhoto = _photoService.GetUserPhoto(x)
                                          });
         }
 

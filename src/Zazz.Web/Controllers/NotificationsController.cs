@@ -91,7 +91,7 @@ namespace Zazz.Web.Controllers
 
                     NotificationType = n.NotificationType,
                     UserDisplayName = UserService.GetUserDisplayName(n.UserBId),
-                    UserPhoto = PhotoService.GetUserImageUrl(n.UserBId),
+                    UserPhoto = PhotoService.GetUserPhoto(n.UserBId),
                     PhotoViewModel = n.NotificationType != NotificationType.CommentOnPhoto ? null
                     : new PhotoViewModel
                     {
@@ -99,7 +99,7 @@ namespace Zazz.Web.Controllers
 
                         FromUserId = n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 
-                        FromUserPhotoUrl = PhotoService.GetUserImageUrl(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
+                        FromUserPhotoUrl = PhotoService.GetUserPhoto(n.CommentNotification.Comment.PhotoComment.Photo.UserId),
 
                         IsFromCurrentUser = userId == n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 

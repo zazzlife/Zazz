@@ -25,7 +25,7 @@ namespace Zazz.Core.Interfaces.Services
 
         void UpdatePhoto(Photo updatedPhoto, int currentUserId, IEnumerable<int> categories);
 
-        PhotoLinks GetUserImageUrl(int userId);
+        PhotoLinks GetUserPhoto(int userId);
 
         void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea);
     }

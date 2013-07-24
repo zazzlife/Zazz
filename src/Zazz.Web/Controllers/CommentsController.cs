@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
                      {
                          CommentType = CommentType.Photo,
                          ItemId = id,
-                         CurrentUserPhotoUrl = PhotoService.GetUserImageUrl(currentUserId),
+                         CurrentUserPhotoUrl = PhotoService.GetUserPhoto(currentUserId),
                          Comments = _feedHelper.GetComments(id, CommentType.Photo, currentUserId)
                      };
 
@@ -113,7 +113,7 @@ namespace Zazz.Web.Controllers
                                 Time = c.Time,
                                 UserId = c.UserId,
                                 UserDisplayName = UserService.GetUserDisplayName(userId),
-                                UserPhotoUrl = PhotoService.GetUserImageUrl(userId)
+                                UserPhotoUrl = PhotoService.GetUserPhoto(userId)
                             };
 
             return View("FeedItems/_SingleComment", commentVm);

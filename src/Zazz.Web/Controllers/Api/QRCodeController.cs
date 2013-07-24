@@ -33,7 +33,7 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = CurrentUserId;
             var displayName = _userService.GetUserDisplayName(userId);
-            var displayPhoto = _photoService.GetUserImageUrl(userId);
+            var displayPhoto = _photoService.GetUserPhoto(userId);
             
             var token = new JWT
                         {

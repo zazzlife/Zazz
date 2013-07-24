@@ -46,7 +46,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             UserService.Setup(x => x.GetUserDisplayName(User.Id))
                        .Returns(displayName);
 
-            PhotoService.Setup(x => x.GetUserImageUrl(User.Id))
+            PhotoService.Setup(x => x.GetUserPhoto(User.Id))
                         .Returns(displayPhoto);
 
             var ms = new MemoryStream();

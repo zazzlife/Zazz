@@ -69,7 +69,7 @@ namespace Zazz.Web.Controllers
 
         private PhotoLinks GetDisplayPicture(int id)
         {
-            return PhotoService.GetUserImageUrl(id);
+            return PhotoService.GetUserPhoto(id);
         }
 
         public void ShowAlert(string message, AlertType alertType)

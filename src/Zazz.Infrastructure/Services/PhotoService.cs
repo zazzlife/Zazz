@@ -297,7 +297,7 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public PhotoLinks GetUserImageUrl(int userId)
+        public PhotoLinks GetUserPhoto(int userId)
         {
             var cache = _cacheService.GetUserPhotoUrl(userId);
             if (cache != null)

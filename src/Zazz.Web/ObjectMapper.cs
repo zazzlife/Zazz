@@ -76,7 +76,7 @@ namespace Zazz.Web
             return new ApiPost
                    {
                        FromUserDisplayName = _userService.GetUserDisplayName(post.FromUserId),
-                       FromUserDisplayPhoto = _photoService.GetUserImageUrl(post.FromUserId),
+                       FromUserDisplayPhoto = _photoService.GetUserPhoto(post.FromUserId),
                        FromUserId = post.FromUserId,
                        Message = post.Message,
                        PostId = post.Id,
@@ -86,7 +86,7 @@ namespace Zazz.Web
                                                ? _userService.GetUserDisplayName(post.ToUserId.Value)
                                                : null,
                        ToUserDisplayPhoto = post.ToUserId.HasValue
-                                                ? _photoService.GetUserImageUrl(post.ToUserId.Value)
+                                                ? _photoService.GetUserPhoto(post.ToUserId.Value)
                                                 : null,
 
                        Categories = post.Categories.Select(c => (int)c.CategoryId)
@@ -103,7 +103,7 @@ namespace Zazz.Web
                        PhotoLinks = _photoService.GeneratePhotoUrl(photo.UserId, photo.Id),
                        UserId = photo.UserId,
                        UserDisplayName = _userService.GetUserDisplayName(photo.UserId),
-                       UserDisplayPhoto = _photoService.GetUserImageUrl(photo.UserId),
+                       UserDisplayPhoto = _photoService.GetUserPhoto(photo.UserId),
                        Categories = photo.Categories.Select(c => (int)c.CategoryId)
                    };
         }
@@ -136,7 +136,7 @@ namespace Zazz.Web
                        Time = e.Time,
                        UtcTime = e.Time.UtcDateTime,
                        UserDisplayName = _userService.GetUserDisplayName(e.UserId),
-                       UserDisplayPhoto = _photoService.GetUserImageUrl(e.UserId)
+                       UserDisplayPhoto = _photoService.GetUserPhoto(e.UserId)
                    };
         }
 

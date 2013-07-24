@@ -56,7 +56,7 @@ namespace Zazz.Web.Controllers.Api
                                Id = user.Id,
                                AccountType = user.AccountType,
                                DisplayName = _userService.GetUserDisplayName(user.Id),
-                               DisplayPhoto = _photoService.GetUserImageUrl(user.Id),
+                               DisplayPhoto = _photoService.GetUserPhoto(user.Id),
                                IsConfirmed = user.IsConfirmed
                            };
 

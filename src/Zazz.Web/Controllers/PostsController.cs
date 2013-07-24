@@ -64,7 +64,7 @@ namespace Zazz.Web.Controllers
 
             _postService.NewPost(post, categories);
 
-            var userPhotoUrl = PhotoService.GetUserImageUrl(userId);
+            var userPhotoUrl = PhotoService.GetUserPhoto(userId);
 
             var vm = new FeedViewModel
                      {
@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers
                                                                      ? UserService.GetUserDisplayName(toUser.Value)
                                                                      : null,
                                              ToUserPhotoUrl = toUser.HasValue
-                                                                  ? PhotoService.GetUserImageUrl(toUser.Value)
+                                                                  ? PhotoService.GetUserPhoto(toUser.Value)
                                                                   : null
                                          },
                          CommentsViewModel = new CommentsViewModel

@@ -122,7 +122,7 @@ namespace Zazz.Web.Helpers
 
         private FeedViewModel ConvertFeedToFeedViewModel(Feed feed, int currentUserId)
         {
-            var currentUserPhotoUrl = _photoService.GetUserImageUrl(currentUserId);
+            var currentUserPhotoUrl = _photoService.GetUserPhoto(currentUserId);
             var feedVm = new FeedViewModel
             {
                 FeedId = feed.Id,
@@ -240,7 +240,7 @@ namespace Zazz.Web.Helpers
                     var toUserId = post.ToUserId.Value;
                     feedVm.PostViewModel.ToUserId = toUserId;
                     feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
-                    feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserImageUrl(toUserId);
+                    feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserPhoto(toUserId);
                     feedVm.CurrentUserCanRemoveFeed = post.ToUserId == currentUserId;
                 }
 
@@ -265,7 +265,7 @@ namespace Zazz.Web.Helpers
         {
             feedVm.UserId = userId;
             feedVm.UserDisplayName = _userService.GetUserDisplayName(userId);
-            feedVm.UserImageUrl = _photoService.GetUserImageUrl(userId);
+            feedVm.UserImageUrl = _photoService.GetUserPhoto(userId);
             feedVm.IsFromCurrentUser = userId == currentUserId;
         }
 
@@ -308,7 +308,7 @@ namespace Zazz.Web.Helpers
                                          Time = c.Time,
                                          UserDisplayName = _userService.GetUserDisplayName(c.UserId),
                                          UserId = c.UserId,
-                                         UserPhotoUrl = _photoService.GetUserImageUrl(c.UserId)
+                                         UserPhotoUrl = _photoService.GetUserPhoto(c.UserId)
                                      }).ToList();
         }
     }
