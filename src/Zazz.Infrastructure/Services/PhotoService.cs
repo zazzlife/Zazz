@@ -197,8 +197,13 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
-            if (photo.User.ProfilePhotoId.HasValue && photo.Id == photo.User.ProfilePhotoId)
+            var picWasProfilePic = photo.User.ProfilePhotoId.HasValue && photo.Id == photo.User.ProfilePhotoId;
+
+            if (picWasProfilePic)
+            {
                 photo.User.ProfilePhotoId = null;
+                _cacheService.RemoveUserPhotoUrl(photo.UserId);
+            }
 
             if (photo.User.AccountType == AccountType.Club)
             {
@@ -220,13 +225,9 @@ namespace Zazz.Infrastructure.Services
             }
 
             _uow.EventRepository.ResetPhotoId(photoId);
-            var picWasProfilePic = _uow.UserRepository.ResetPhotoId(photoId);
-
             _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();
-
-            if (picWasProfilePic)
-                _cacheService.RemoveUserPhotoUrl(photo.UserId);
+            
 
             var properties = typeof(PhotoLinks).GetProperties();
             foreach (var p in properties)

@@ -612,9 +612,81 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void SetProfilePhotoIdNullAndResetCacheIfPhotoIsTheProfilePhoto_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44,
+                User = new User
+                       {
+                           AccountType = AccountType.User,
+                           ProfilePhotoId = 3232
+                       }
+            };
 
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
 
-        
+            _cacheService.Setup(x => x.RemoveUserPhotoUrl(photo.UserId));
+
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
+                .Returns(0);
+
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
+            _uow.Setup(x => x.PhotoRepository.Remove(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _storageService.Setup(x => x.RemoveBlob(It.IsAny<string>()));
+
+            //Act
+            _sut.RemovePhoto(photo.Id, photo.UserId);
+
+            //Assert
+            Assert.IsNull(photo.User.ProfilePhotoId);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void SetCoverPhotoIdNullIfPhotoIsTheCoverPhoto_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44,
+                User = new User
+                {
+                    AccountType = AccountType.Club,
+                    ProfilePhotoId = 3231,
+                    ClubDetail = new ClubDetail
+                                 {
+                                     CoverPhotoId = 3232
+                                 }
+                },
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.FeedPhotoRepository.RemoveByPhotoIdAndReturnFeedId(photo.Id))
+                .Returns(0);
+
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
+            _uow.Setup(x => x.PhotoRepository.Remove(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _storageService.Setup(x => x.RemoveBlob(It.IsAny<string>()));
+
+            //Act
+            _sut.RemovePhoto(photo.Id, photo.UserId);
+
+            //Assert
+            Assert.IsNull(photo.User.ClubDetail.CoverPhotoId);
+            _mockRepo.VerifyAll();
+        }
 
 
         [Test]
