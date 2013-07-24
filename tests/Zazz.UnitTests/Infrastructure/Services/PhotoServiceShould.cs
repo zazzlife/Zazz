@@ -572,9 +572,49 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void NotDoAnythingIfPhotoNotExists_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(() => null);
+
+            //Act
+            _sut.RemovePhoto(photo.Id, photo.UserId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfUserIsNotFromCurrentUser_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.RemovePhoto(photo.Id, 233));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
 
 
 
+        
 
 
         [Test]

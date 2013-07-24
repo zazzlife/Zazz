@@ -188,34 +188,12 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
-        public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
-        {
-            if (photo.UserId != currentUserId)
-                throw new SecurityException();
-
-            var fileName = GenerateFileName(currentUserId, photo.Id, suffix: null); //suffix should be null to get the original one
-            using (var file = _storageService.GetBlob(fileName))
-            {
-                using (var bmp = new Bitmap(file))
-                using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
-                {
-                    bmp.Dispose();
-                    file.Dispose();
-
-                    using (var ms = new MemoryStream())
-                    {
-                        croppedBmp.Save(ms, ImageFormat.Jpeg);
-                        croppedBmp.Dispose();
-
-                        ResizeAndSaveImages(ms, photo.UserId, photo.Id);
-                    }
-                }
-            }
-        }
-
         public void RemovePhoto(int photoId, int currentUserId)
         {
             var photo = _uow.PhotoRepository.GetById(photoId);
+            if (photo == null)
+                return;
+
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
@@ -262,6 +240,31 @@ namespace Zazz.Infrastructure.Services
 
                 var filename = GenerateFileName(photo.UserId, photo.Id, attr.Suffix);
                 _storageService.RemoveBlob(filename);
+            }
+        }
+
+        public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
+        {
+            if (photo.UserId != currentUserId)
+                throw new SecurityException();
+
+            var fileName = GenerateFileName(currentUserId, photo.Id, suffix: null); //suffix should be null to get the original one
+            using (var file = _storageService.GetBlob(fileName))
+            {
+                using (var bmp = new Bitmap(file))
+                using (var croppedBmp = bmp.Clone(cropArea, bmp.PixelFormat))
+                {
+                    bmp.Dispose();
+                    file.Dispose();
+
+                    using (var ms = new MemoryStream())
+                    {
+                        croppedBmp.Save(ms, ImageFormat.Jpeg);
+                        croppedBmp.Dispose();
+
+                        ResizeAndSaveImages(ms, photo.UserId, photo.Id);
+                    }
+                }
             }
         }
 
