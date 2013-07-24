@@ -53,7 +53,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                     _staticDataRepo.Object, _defaultImageHelper.Object, _imageProcessor.Object,
                                     _storageService.Object);
 
-            _photoStream = new MemoryStream(new byte[] {1, 2, 3, 4});
+            _photoStream = new MemoryStream(new byte[] { 1, 2, 3, 4 });
 
             _categories = new List<Category>
                           {
@@ -152,7 +152,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         {
                             UserId = 44
                         };
-            var resizedImageStream = new MemoryStream(new byte[] {4, 5, 6});
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
 
             _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
             _uow.Setup(x => x.SaveChanges());
@@ -171,11 +171,108 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void AddCategories_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            var categories = new[] { 1, 2 };
+
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(_categories);
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
 
 
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, false, categories);
+
+            //Assert
+            Assert.AreEqual(categories.Length, photo.Categories.Count);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void IgnoreInvalidCategories_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            var categories = new[] { 1, 2, 98, 34 };
+
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(_categories);
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
 
 
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
 
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, false, categories);
+
+            //Assert
+            Assert.AreEqual(2, photo.Categories.Count);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void CreateANewFeedIfLastFeedWasPost_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44
+            };
+
+            var lastFeed = new Feed
+                           {
+                               Id = 444,
+                               FeedType = FeedType.Post
+                           };
+
+            var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
+
+            _uow.Setup(x => x.PhotoRepository.InsertGraph(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _uow.Setup(x => x.FeedRepository.GetUserLastFeed(photo.UserId))
+                .Returns(lastFeed);
+
+            _uow.Setup(x => x.FeedRepository.InsertGraph(It.Is<Feed>(f =>
+                                                                     f.FeedType == FeedType.Photo &&
+                                                                     f.FeedUsers.Any(u => u.UserId == photo.UserId))));
+
+            _imageProcessor.Setup(x => x.ResizeImage(_photoStream, It.IsAny<Size>(), It.IsAny<long>()))
+                           .Returns(resizedImageStream);
+
+            _storageService.Setup(x => x.SavePhotoBlob(It.IsAny<string>(), resizedImageStream));
+
+            //Act
+            _sut.SavePhoto(photo, _photoStream, true, null);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
 
 
 
@@ -810,7 +907,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = userId
             };
 
-//            var expected = _defaultImageHelper.GetUserDefaultImage(gender);
+            //            var expected = _defaultImageHelper.GetUserDefaultImage(gender);
 
             _uow.Setup(x => x.UserRepository.GetUserPhotoId(userId))
                 .Returns(photoId);
@@ -820,7 +917,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
             _cacheService.Setup(x => x.GetUserPhotoUrl(userId))
                          .Returns(() => null);
-  //          _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
+            //          _cacheService.Setup(x => x.AddUserPhotoUrl(userId, expected));
 
             //Act
             var result = _sut.GetUserImageUrl(userId);
