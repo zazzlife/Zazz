@@ -1003,7 +1003,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(photos);
 
             //Act
-            var result = _sut.GetUserPhoto(userId);
+            var result = _sut.GetUserDisplayPhoto(userId);
 
             //Assert
             Assert.AreSame(photos, result);
@@ -1029,7 +1029,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cacheService.Setup(x => x.AddUserPhotoUrl(userId, It.IsAny<PhotoLinks>()));
 
             //Act
-            var result = _sut.GetUserPhoto(userId);
+            var result = _sut.GetUserDisplayPhoto(userId);
 
             //Assert
             _mockRepo.VerifyAll();
@@ -1058,7 +1058,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _cacheService.Setup(x => x.AddUserPhotoUrl(userId, photos));
 
             //Act
-            var result = _sut.GetUserPhoto(userId);
+            var result = _sut.GetUserDisplayPhoto(userId);
 
             //Assert
             Assert.AreSame(photos, result);

@@ -76,7 +76,7 @@ namespace Zazz.Web.Controllers
                                                   FromUserId = id,
                                                   FromUserDisplayName = UserService.GetUserDisplayName(id),
                                                   PhotoDescription = p.description,
-                                                  FromUserPhotoUrl = PhotoService.GetUserPhoto(id)
+                                                  FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(id)
                                               })
                                  .ToList();
 
@@ -228,7 +228,7 @@ namespace Zazz.Web.Controllers
         {
             var userId = UserService.GetUserId(User.Identity.Name);
             var userDisplayName = UserService.GetUserDisplayName(userId);
-            var userPhoto = PhotoService.GetUserPhoto(userId);
+            var userPhoto = PhotoService.GetUserDisplayPhoto(userId);
             var photo = PhotoService.GetPhoto(id);
 
             var vm = new FeedViewModel

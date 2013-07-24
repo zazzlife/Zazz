@@ -46,7 +46,7 @@ namespace Zazz.Web.Controllers.Api
                                                  Time = n.Time,
                                                  UserId = n.UserBId,
                                                  DisplayName = _userService.GetUserDisplayName(n.UserBId),
-                                                 DisplayPhoto = _photoService.GetUserPhoto(n.UserBId),
+                                                 DisplayPhoto = _photoService.GetUserDisplayPhoto(n.UserBId),
 
                                                  // PHOTO
                                                  Photo = n.NotificationType == NotificationType.CommentOnPhoto

@@ -86,7 +86,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             UserService.Setup(x => x.GetUserDisplayName(User.Id))
                        .Returns("display name");
 
-            PhotoService.Setup(x => x.GetUserPhoto(User.Id))
+            PhotoService.Setup(x => x.GetUserDisplayPhoto(User.Id))
                         .Returns(new PhotoLinks("link"));
 
             PhotoService.Setup(x => x.GetLatestUserPhotos(User.Id, It.IsAny<int>()))

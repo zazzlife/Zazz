@@ -52,7 +52,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             UserService.Setup(x => x.GetUserDisplayName(It.IsAny<int>()))
                        .Returns("asdf");
-            PhotoService.Setup(x => x.GetUserPhoto(It.IsAny<int>()))
+            PhotoService.Setup(x => x.GetUserDisplayPhoto(It.IsAny<int>()))
                         .Returns(new PhotoLinks(""));
 
             CreateValidAccessToken();

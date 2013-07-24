@@ -31,7 +31,7 @@ namespace Zazz.Web.Controllers.Api
                    {
                        AccountType = user.AccountType,
                        DisplayName = _userService.GetUserDisplayName(user.Id),
-                       DisplayPhoto = _photoService.GetUserPhoto(user.Id),
+                       DisplayPhoto = _photoService.GetUserDisplayPhoto(user.Id),
                        IsConfirmed = user.IsConfirmed,
                        UserId = user.Id
                    };

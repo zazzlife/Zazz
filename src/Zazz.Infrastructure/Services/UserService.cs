@@ -99,7 +99,7 @@ namespace Zazz.Infrastructure.Services
                                                               !String.IsNullOrEmpty(u.FullName))
                                                                  ? u.FullName
                                                                  : u.Username,
-                                         DisplayPhoto = _photoService.GetUserPhoto(u.Id)
+                                         DisplayPhoto = _photoService.GetUserDisplayPhoto(u.Id)
                                      });
         }
 

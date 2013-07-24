@@ -91,7 +91,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             UserService.Setup(x => x.GetUserDisplayName(_post.FromUserId))
                        .Returns("display name");
-            PhotoService.Setup(x => x.GetUserPhoto(_post.FromUserId))
+            PhotoService.Setup(x => x.GetUserDisplayPhoto(_post.FromUserId))
                         .Returns(new PhotoLinks("url"));
 
             //Act

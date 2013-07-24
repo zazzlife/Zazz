@@ -60,7 +60,7 @@ namespace Zazz.Web.Controllers
 
             var user = _uow.UserRepository.GetById(id, true, true, true);
 
-            var profilePhotoUrl = PhotoService.GetUserPhoto(user.Id);
+            var profilePhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id);
 
             var currentUserId = 0;
             if (User.Identity.IsAuthenticated)

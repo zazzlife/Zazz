@@ -468,7 +468,7 @@ namespace Zazz.Web.Controllers
                                                             {
                                                                 UserId = id,
                                                                 Name = UserService.GetUserDisplayName(id),
-                                                                Photo = PhotoService.GetUserPhoto(id)
+                                                                Photo = PhotoService.GetUserDisplayPhoto(id)
                                                             })
                      };
 
