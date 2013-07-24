@@ -787,21 +787,18 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowIfUserPhotoIdIs0_OnUpdatePhoto()
         {
             //Arrange
-
             var photo = new Photo
             {
                 Id = 0,
                 UserId = 124,
                 AlbumId = 123
             };
-            _uow.Setup(x => x.PhotoRepository.GetOwnerId(photo.Id))
-                .Returns(photo.UserId);
 
             //Act
-            Assert.Throws<ArgumentException>(() => _sut.UpdatePhoto(photo, 1234));
+            Assert.Throws<ArgumentException>(() => _sut.UpdatePhoto(photo, 1234, null));
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetOwnerId(photo.Id), Times.Never());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -823,10 +820,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            Assert.Throws<NotFoundException>(() => _sut.UpdatePhoto(photo, userId));
+            Assert.Throws<NotFoundException>(() => _sut.UpdatePhoto(photo, userId, null));
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -848,10 +845,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(photo);
 
             //Act
-            Assert.Throws<SecurityException>(() => _sut.UpdatePhoto(photo, userId));
+            Assert.Throws<SecurityException>(() => _sut.UpdatePhoto(photo, userId, null));
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
@@ -872,170 +869,127 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.UpdatePhoto(photo, userId);
+            _sut.UpdatePhoto(photo, userId, null);
 
             //Assert
-            _uow.Verify(x => x.PhotoRepository.GetById(photo.Id), Times.Once());
-            _uow.Verify(x => x.SaveChanges(), Times.Once());
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void UpdateDescription_OnUpdatePhoto()
+        public void RemoveCategoriesIfNull_OnUpdatePhoto()
         {
             //Arrange
             var photoId = 124;
             var userId = 12;
-
-            var oldPhoto = new Photo
-                           {
-                               Id = photoId,
-                               Description = "old desc",
-                               UserId = userId
-                           };
-
-            var newPhoto = new Photo
-                           {
-                               Id = photoId,
-                               Description = "new Desc",
-                               UserId = userId,
-                               AlbumId = 12
-                           };
-            _stringHelper.Setup(x => x.ExtractTags(It.IsAny<string>()))
-                         .Returns(Enumerable.Empty<string>);
-            _uow.Setup(x => x.PhotoRepository.GetById(newPhoto.Id))
-                .Returns(oldPhoto);
-
-            //Act
-            _sut.UpdatePhoto(newPhoto, userId);
-
-            //Assert
-            Assert.AreEqual(oldPhoto.Description, newPhoto.Description);
-            Assert.AreEqual(oldPhoto.AlbumId, newPhoto.AlbumId);
-        }
-
-        [Test]
-        public void UpdateTags_OnUpdatePhoto()
-        {
-            //Arrange
-            var currentUser = 444;
-            var tag1 = "#tag1";
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
+            var albumId = 444;
 
             var photo = new Photo
-            {
-                Id = 1234,
-                UserId = currentUser,
-                Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
-            };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
+                        {
+                            Id = photoId,
+                            AlbumId = albumId,
+                            UserId = userId,
+                            Categories = new List<PhotoCategory>
+                                         {
+                                             new PhotoCategory(),
+                                             new PhotoCategory(),
+                                             new PhotoCategory(),
+                                             new PhotoCategory(),
+                                             new PhotoCategory()
+                                         }
+                        };
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.UpdatePhoto(photo, currentUser);
+            _sut.UpdatePhoto(photo, userId, null);
 
             //Assert
-            Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
+            Assert.AreEqual(0, photo.Categories.Count);
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotAddDuplicateTags_OnUpdatePhoto()
+        public void UpdateCategories_OnUpdatePhoto()
         {
             //Arrange
-            var currentUser = 444;
-            var tag1 = "#tag1";
-            var duplicateTag1 = tag1;
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
 
             var photo = new Photo
             {
-                Id = 1234,
-                UserId = currentUser,
-                Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = userId,
+                Categories = new List<PhotoCategory>
+                             {
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory()
+                             }
             };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(_categories);
+
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.UpdatePhoto(photo, currentUser);
+            _sut.UpdatePhoto(photo, userId, new[] {1, 2});
 
             //Assert
             Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
+            _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void IgnoreCaseOnDuplicateTagsCheck_OnUpdatePhoto()
+        public void IgnoreInvalidCategoryIds_OnUpdatePhoto()
         {
             //Arrange
-            var currentUser = 444;
-            var tag1 = "#tag1";
-            var duplicateTag1 = "#TAG1";
-            var tag2 = "#tag2";
-            var notAvailableTag = "#tag3";
-
-            var tagObject1 = new Category { Id = 1 };
-            var tagObject2 = new Category { Id = 2 };
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
 
             var photo = new Photo
             {
-                Id = 1234,
-                UserId = currentUser,
-                Description = String.Format("some text + {0} and {1} and {2}", tag1, tag2, notAvailableTag)
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = userId,
+                Categories = new List<PhotoCategory>
+                             {
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory(),
+                                 new PhotoCategory()
+                             }
             };
-
-            _stringHelper.Setup(x => x.ExtractTags(photo.Description))
-                         .Returns(new List<string> { tag1, tag2, duplicateTag1, notAvailableTag });
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(duplicateTag1.Replace("#", "")))
-                           .Returns(tagObject1);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(tag2.Replace("#", "")))
-                           .Returns(tagObject2);
-            _staticDataRepo.Setup(x => x.GetCategoryIfExists(notAvailableTag.Replace("#", "")))
-                           .Returns(() => null);
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
+            _staticDataRepo.Setup(x => x.GetCategories())
+                           .Returns(_categories);
+
+            _uow.Setup(x => x.SaveChanges());
+
             //Act
-            _sut.UpdatePhoto(photo, currentUser);
+            _sut.UpdatePhoto(photo, userId, new[] { 1, 2, 75, 28 });
 
             //Assert
             Assert.AreEqual(2, photo.Categories.Count);
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject1.Id));
-            Assert.IsTrue(photo.Categories.Any(t => t.CategoryId == tagObject2.Id));
+            _mockRepo.VerifyAll();
         }
 
         [Test]

@@ -53,6 +53,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IObjectMapper>().Use(_objectMapper.Object);
                 x.For<IImageValidator>().Use(_imageValidator.Object);
             });
+
+            var categories = new[] { 1, 2, 3 };
         }
 
         [TestCase(0)]
@@ -387,7 +389,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             CreateValidAccessToken();
 
-            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id))
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id, null))
                          .Throws<NotFoundException>();
 
             //Act
@@ -406,7 +408,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
-            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id))
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id, null))
                          .Throws<SecurityException>();
 
             //Act
@@ -425,7 +427,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
             CreateValidAccessToken();
-            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id));
+            _photoService.Setup(x => x.UpdatePhoto(It.IsAny<Photo>(), User.Id, null));
 
             //Act
             var response = await Client.PutAsync(ControllerAddress, stringContent);

@@ -23,7 +23,7 @@ namespace Zazz.Core.Interfaces.Services
 
         void RemovePhoto(int photoId, int currentUserId);
 
-        void UpdatePhoto(Photo updatedPhoto, int currentUserId);
+        void UpdatePhoto(Photo updatedPhoto, int currentUserId, IEnumerable<int> categories);
 
         PhotoLinks GetUserImageUrl(int userId);
 

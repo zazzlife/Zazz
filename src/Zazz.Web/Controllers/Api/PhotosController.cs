@@ -171,8 +171,8 @@ namespace Zazz.Web.Controllers.Api
             }
         }
 
-        // PUT api/v1photos/5
-        public void Put(int id, [FromBody]ApiPhoto p)
+        // PUT api/v1/photos/5
+        public void Put(int id, [FromBody]ApiPhoto p, [FromBody]IEnumerable<int> categories)
         {
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -186,7 +186,7 @@ namespace Zazz.Web.Controllers.Api
                                 Description = p.Description,
                             };
 
-                _photoService.UpdatePhoto(photo, CurrentUserId);
+                _photoService.UpdatePhoto(photo, CurrentUserId, categories);
             }
             catch (NotFoundException)
             {

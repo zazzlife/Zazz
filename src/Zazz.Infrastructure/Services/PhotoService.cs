@@ -242,6 +242,36 @@ namespace Zazz.Infrastructure.Services
             }
         }
 
+        public void UpdatePhoto(Photo updatedPhoto, int currentUserId, IEnumerable<int> categories)
+        {
+            if (updatedPhoto.Id == 0)
+                throw new ArgumentException();
+
+            var photo = _uow.PhotoRepository.GetById(updatedPhoto.Id);
+            if (photo == null)
+                throw new NotFoundException();
+
+            if (photo.UserId != currentUserId)
+                throw new SecurityException();
+
+            photo.Categories.Clear();
+            if (categories != null)
+            {
+                foreach (var c in categories)
+                {
+                    var cat = _staticDataRepository.GetCategories()
+                                                   .SingleOrDefault(cate => cate.Id == c);
+                    if (cat != null)
+                        photo.Categories.Add(new PhotoCategory { CategoryId = (byte)c });
+                }
+            }
+
+            photo.Description = updatedPhoto.Description;
+            photo.AlbumId = updatedPhoto.AlbumId;
+
+            _uow.SaveChanges();
+        }
+
         public void CropPhoto(Photo photo, int currentUserId, Rectangle cropArea)
         {
             if (photo.UserId != currentUserId)
@@ -265,42 +295,6 @@ namespace Zazz.Infrastructure.Services
                     }
                 }
             }
-        }
-
-        public void UpdatePhoto(Photo updatedPhoto, int currentUserId)
-        {
-            if (updatedPhoto.Id == 0)
-                throw new ArgumentException();
-
-            var photo = _uow.PhotoRepository.GetById(updatedPhoto.Id);
-            if (photo == null)
-                throw new NotFoundException();
-
-            if (photo.UserId != currentUserId)
-                throw new SecurityException();
-
-            photo.Categories.Clear();
-
-            if (!String.IsNullOrEmpty(updatedPhoto.Description))
-            {
-                var extractedTags = _stringHelper.ExtractTags(updatedPhoto.Description);
-                foreach (var t in extractedTags.Distinct(StringComparer.InvariantCultureIgnoreCase))
-                {
-                    var tag = _staticDataRepository.GetCategoryIfExists(t.Replace("#", ""));
-                    if (tag != null)
-                    {
-                        photo.Categories.Add(new PhotoCategory
-                                       {
-                                           CategoryId = tag.Id
-                                       });
-                    }
-                }
-            }
-
-            photo.Description = updatedPhoto.Description;
-            photo.AlbumId = updatedPhoto.AlbumId;
-
-            _uow.SaveChanges();
         }
 
         public PhotoLinks GetUserImageUrl(int userId)
