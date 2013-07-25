@@ -114,6 +114,9 @@ namespace Zazz.Infrastructure.Services
             if (photo.AlbumId.HasValue)
             {
                 var album = _uow.AlbumRepository.GetById(photo.AlbumId.Value);
+                if (album == null)
+                    throw new NotFoundException();
+
                 if (album.UserId != photo.UserId)
                     throw new SecurityException();
             }
