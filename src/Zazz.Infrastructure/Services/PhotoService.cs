@@ -264,6 +264,13 @@ namespace Zazz.Infrastructure.Services
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
+            if (updatedPhoto.AlbumId.HasValue)
+            {
+                var album = _uow.AlbumRepository.GetById(updatedPhoto.AlbumId.Value);
+                if (album == null)
+                    throw new NotFoundException();
+            }
+
             photo.Categories.Clear();
             if (categories != null)
             {
@@ -277,7 +284,6 @@ namespace Zazz.Infrastructure.Services
             }
 
             photo.Description = updatedPhoto.Description;
-            photo.AlbumId = updatedPhoto.AlbumId;
 
             _uow.SaveChanges();
         }
