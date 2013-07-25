@@ -939,6 +939,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserIsNotOwnerOfTheAlbum_OnUpdatePhoto()
+        {
+            //Arrange
+            var photoId = 124;
+            var userId = 12;
+            var albumId = 444;
+
+            var photo = new Photo
+            {
+                Id = photoId,
+                AlbumId = albumId,
+                UserId = userId
+            };
+
+            var album = new Album
+                        {
+                            UserId = userId + 1
+                        };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.AlbumRepository.GetById(albumId))
+                .Returns(album);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.UpdatePhoto(photo, userId, null));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void Save_OnUpdatePhoto()
         {
             //Arrange

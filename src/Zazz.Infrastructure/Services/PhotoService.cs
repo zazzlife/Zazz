@@ -269,6 +269,11 @@ namespace Zazz.Infrastructure.Services
                 var album = _uow.AlbumRepository.GetById(updatedPhoto.AlbumId.Value);
                 if (album == null)
                     throw new NotFoundException();
+
+                if (album.UserId != currentUserId)
+                    throw new SecurityException();
+
+                photo.AlbumId = updatedPhoto.AlbumId;
             }
 
             photo.Categories.Clear();
