@@ -203,15 +203,6 @@ namespace Zazz.Web.Controllers
             IEnumerable<int> categories)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-
-            if (albumId.HasValue)
-            {
-                var album = _albumService.GetAlbum(albumId.Value);
-
-                if (album.UserId != userId)
-                    throw new SecurityException();
-            }
-
             var photo = new Photo
                         {
                             AlbumId = albumId,
