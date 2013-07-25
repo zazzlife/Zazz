@@ -541,7 +541,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var photo = new Photo
             {
                 UserId = 44,
-                AlbumId = 2
             };
 
             var lastFeed = new Feed
@@ -977,24 +976,43 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var photoId = 124;
             var userId = 12;
-            var albumId = 444;
 
             var photo = new Photo
-            {
-                Id = photoId,
-                AlbumId = albumId,
-                UserId = userId
-            };
+                        {
+                            Id = photoId,
+                            UserId = userId,
+                            AlbumId = 25,
+                            Description = "old desc"
+                        };
+
+            var album = new Album
+                        {
+                            Id = 4343,
+                            UserId = userId
+                        };
+
+            var updatedPhoto = new Photo
+                               {
+                                   Id = photoId,
+                                   UserId = userId,
+                                   Description = "new desc",
+                                   AlbumId = album.Id
+                               };
 
             _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
                 .Returns(photo);
 
+            _uow.Setup(x => x.AlbumRepository.GetById(album.Id))
+                .Returns(album);
+
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePhoto(photo, userId, null);
+            _sut.UpdatePhoto(updatedPhoto, userId, null);
 
             //Assert
+            Assert.AreEqual(updatedPhoto.Description, photo.Description);
+            Assert.AreEqual(updatedPhoto.AlbumId, photo.AlbumId);
             _mockRepo.VerifyAll();
         }
 
@@ -1009,7 +1027,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var photo = new Photo
                         {
                             Id = photoId,
-                            AlbumId = albumId,
                             UserId = userId,
                             Categories = new List<PhotoCategory>
                                          {
@@ -1040,12 +1057,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var photoId = 124;
             var userId = 12;
-            var albumId = 444;
 
             var photo = new Photo
             {
                 Id = photoId,
-                AlbumId = albumId,
                 UserId = userId,
                 Categories = new List<PhotoCategory>
                              {
@@ -1084,7 +1099,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var photo = new Photo
             {
                 Id = photoId,
-                AlbumId = albumId,
                 UserId = userId,
                 Categories = new List<PhotoCategory>
                              {
