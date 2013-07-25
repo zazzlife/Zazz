@@ -111,6 +111,13 @@ namespace Zazz.Infrastructure.Services
             if (data == Stream.Null)
                 throw new ArgumentNullException("data");
 
+            if (photo.AlbumId.HasValue)
+            {
+                var album = _uow.AlbumRepository.GetById(photo.AlbumId.Value);
+                if (album.UserId != photo.UserId)
+                    throw new SecurityException();
+            }
+
             if (categories != null)
             {
                 foreach (var c in categories)

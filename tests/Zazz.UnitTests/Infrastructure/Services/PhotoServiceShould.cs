@@ -145,6 +145,33 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfAlbumIsNotOwnerByUser_OnSavePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                UserId = 44,
+                AlbumId = 24
+            };
+
+            var album = new Album
+                        {
+                            Id = 24,
+                            UserId = 45,
+                        };
+
+            _uow.Setup(x => x.AlbumRepository.GetById(photo.AlbumId.Value))
+                .Returns(album);
+                
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.SavePhoto(photo, _photoStream, false, null));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void NotAddCategoriesIfNull_OnSavePhoto()
         {
             //Arrange
