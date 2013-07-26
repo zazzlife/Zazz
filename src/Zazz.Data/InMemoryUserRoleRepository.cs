@@ -9,6 +9,7 @@ namespace Zazz.Data
 {
     public class InMemoryUserRoleRepository : IUserRoleRepository
     {
+        //This class is registered as a singleton.
         public IQueryable<string> GetUserRoles(string username)
         {
             // Very quick and dirty solution, since we don't keep roles in db right now.

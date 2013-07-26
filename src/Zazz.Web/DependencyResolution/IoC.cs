@@ -64,6 +64,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<IQRCodeService>().Singleton().Use<QRCodeService>();
                             x.For<ICategoryStatsCache>().Singleton().Use<CategoryStatsCache>();
                             x.For<IImageProcessor>().Singleton().Use<ImageProcessor>();
+                            x.For<IUserRoleRepository>().Singleton().Use<InMemoryUserRoleRepository>();
 
                             x.For<IDefaultImageHelper>().Singleton()
                              .Use<DefaultImageHelper>()

@@ -2,20 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Security;
+using StructureMap;
+using Zazz.Core.Interfaces.Repositories;
 
 namespace Zazz.Web
 {
     public class ZazzRoleProvider : RoleProvider
     {
+        private IUserRoleRepository _repository
+        {
+            get { return ObjectFactory.Container.GetInstance<IUserRoleRepository>(); }
+        }
+
         public override bool IsUserInRole(string username, string roleName)
         {
-            throw new NotImplementedException();
+            return _repository.GetUserRoles(username)
+                       .Any(r => r.Equals(roleName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public override string[] GetRolesForUser(string username)
         {
-            throw new NotImplementedException();
+            return _repository.GetUserRoles(username).ToArray();
         }
 
         public override void CreateRole(string roleName)
