@@ -117,6 +117,7 @@
     <Compile Include="Interfaces\Repositories\IUserRepository.cs" />
     <Compile Include="Interfaces\Repositories\IUserRewardHistoryRepository.cs" />
     <Compile Include="Interfaces\Repositories\IUserRewardRepository.cs" />
+    <Compile Include="Interfaces\Repositories\IUserRoleRepository.cs" />
     <Compile Include="Interfaces\Repositories\IValidationTokenRepository.cs" />
     <Compile Include="Interfaces\Repositories\IWeeklyRepository.cs" />
     <Compile Include="Interfaces\Services\IAlbumService.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Models\Data\PostFeed.cs" />
     <Compile Include="Models\Data\PostNotification.cs" />
     <Compile Include="Models\Data\PostCategory.cs" />
+    <Compile Include="Models\Data\Role.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Category.cs" />
     <Compile Include="Models\Data\User.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Models\Data\UserReceivedVotes.cs" />
     <Compile Include="Models\Data\UserReward.cs" />
     <Compile Include="Models\Data\UserRewardHistory.cs" />
+    <Compile Include="Models\Data\UserRole.cs" />
     <Compile Include="Models\Data\Weekly.cs" />
     <Compile Include="Models\Data\ZazzEvent.cs" />
     <Compile Include="Models\Data\Comment.cs" />

@@ -370,6 +370,7 @@
     <Compile Include="ObjectMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidateImageAttribute.cs" />
+    <Compile Include="ZazzRoleProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\dbo.TRIGGER_EventComments_DELETE.sql" />
