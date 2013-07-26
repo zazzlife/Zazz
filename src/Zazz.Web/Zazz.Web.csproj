@@ -112,6 +112,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\PagedList.Mvc.4.2.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="PoliteCaptcha">
+      <HintPath>..\..\packages\PoliteCaptcha.0.4.0.1\lib\net40\PoliteCaptcha.dll</HintPath>
+    </Reference>
+    <Reference Include="Recaptcha">
+      <HintPath>..\..\packages\recaptcha.1.0.5.0\lib\.NetFramework 4.0\Recaptcha.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
