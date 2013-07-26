@@ -95,6 +95,30 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult RegisterUser()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
+        public ActionResult RegisterUser(RegisterUserViewModel vm)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult RegisterClub()
+        {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
+        public ActionResult RegisterClub(RegisterClubViewModel vm)
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult Register()
         {
             if (User.Identity.IsAuthenticated)
