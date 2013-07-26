@@ -147,6 +147,9 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
+
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+                    return RedirectToAction("Index", "Home");
                 }
                 catch (InvalidEmailException)
                 {
