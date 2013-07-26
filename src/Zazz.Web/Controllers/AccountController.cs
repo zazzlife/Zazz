@@ -95,6 +95,12 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult SelectAccountType()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public ActionResult RegisterUser()
         {
             return View();
