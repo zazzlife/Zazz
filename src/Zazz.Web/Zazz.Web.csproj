@@ -646,6 +646,7 @@
     <Content Include="Views\ClubRewards\Redeem.cshtml" />
     <Content Include="Views\ClubRewards\ActiveRewards.cshtml" />
     <Content Include="Views\Shared\_CategoriesSelect.cshtml" />
+    <Content Include="Views\Account\SelectAccountType.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
