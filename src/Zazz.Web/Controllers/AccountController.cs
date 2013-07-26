@@ -107,7 +107,8 @@ namespace Zazz.Web.Controllers
                      {
                          Schools = StaticDataRepository.GetSchools(),
                          Majors = StaticDataRepository.GetMajors(),
-                         Cities = StaticDataRepository.GetCities()
+                         Cities = StaticDataRepository.GetCities(),
+                         Gender = Gender.NotSpecified
                      };
 
             return View(vm);
@@ -118,7 +119,51 @@ namespace Zazz.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Register
+                var user = new User
+                           {
+                               AccountType = AccountType.User,
+                               Email = vm.Email,
+                               IsConfirmed = false,
+                               JoinedDate = DateTime.UtcNow,
+                               LastActivity = DateTime.UtcNow,
+                               Preferences = new UserPreferences
+                                             {
+                                                 SyncFbEvents = true,
+                                                 SyncFbImages = false,
+                                                 SyncFbPosts = false,
+                                                 SendSyncErrorNotifications = true
+                                             },
+                               Username = vm.UserName,
+                               UserDetail = new UserDetail
+                                            {
+                                                CityId = vm.CityId,
+                                                FullName = vm.FullName,
+                                                Gender = vm.Gender,
+                                                MajorId = vm.MajorId,
+                                                SchoolId = vm.SchoolId
+                                            }
+                           };
+
+                try
+                {
+                    _authService.Register(user, vm.Password, !user.IsConfirmed);
+                }
+                catch (InvalidEmailException)
+                {
+                    ModelState.AddModelError("Email", "Invalid email address");
+                }
+                catch (PasswordTooLongException)
+                {
+                    ModelState.AddModelError("Password", "Password too long");
+                }
+                catch (UsernameExistsException)
+                {
+                    ModelState.AddModelError("Username", "Username not available");
+                }
+                catch (EmailExistsException)
+                {
+                    ModelState.AddModelError("Email", "Email address already registered");
+                }
             }
             
             vm.Schools = StaticDataRepository.GetSchools();
