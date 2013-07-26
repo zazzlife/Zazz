@@ -11,6 +11,7 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using Newtonsoft.Json;
+using PoliteCaptcha;
 using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
@@ -112,7 +113,7 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public ActionResult Register(RegisterViewModel registerVm)
         {
             if (User.Identity.IsAuthenticated)

@@ -1,4 +1,5 @@
-﻿@model Zazz.Web.Models.RegisterViewModel
+﻿@using PoliteCaptcha
+@model Zazz.Web.Models.RegisterViewModel
 
 @{
     ViewBag.Title = "Register";
@@ -16,7 +17,7 @@
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-
+            
             <fieldset>
                 <legend>Register</legend>
                 @if (TempData["alert"] != null && ((bool)TempData["alert"]))
@@ -171,6 +172,10 @@
                             </div>
                         </div>
                         
+                        <div class="control-group">
+                            @Html.SpamPreventionFields()
+                        </div>
+
                         <hr/>
                         <p>
                             <input type="submit" value="Register" class="btn btn-primary" style="margin-top: 25px;"/>
@@ -191,4 +196,5 @@
 
 @section Scripts {
     @Scripts.Render("~/js")
+    @Html.SpamPreventionScript()
 }
