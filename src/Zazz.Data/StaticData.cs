@@ -56,6 +56,12 @@ namespace Zazz.Data
             yield return new OAuthScope { Id = 1, Name = "full" };
         }
 
+        public static IEnumerable<Role> GetRoles()
+        {
+            yield return new Role { Id = 1, Name = "Admin" };
+            yield return new Role { Id = 2, Name = "User" };
+        }
+
         public static IEnumerable<OAuthClient> GetOAuthClients()
         {
             yield return new OAuthClient
