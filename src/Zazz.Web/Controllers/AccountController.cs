@@ -121,6 +121,7 @@ namespace Zazz.Web.Controllers
             {
                 var user = new User
                            {
+                               Username = vm.UserName,
                                AccountType = AccountType.User,
                                Email = vm.Email,
                                IsConfirmed = false,
@@ -133,7 +134,6 @@ namespace Zazz.Web.Controllers
                                                  SyncFbPosts = false,
                                                  SendSyncErrorNotifications = true
                                              },
-                               Username = vm.UserName,
                                UserDetail = new UserDetail
                                             {
                                                 CityId = vm.CityId,
@@ -187,7 +187,57 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public ActionResult RegisterClub(RegisterClubViewModel vm)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    Username = vm.UserName,
+                    AccountType = AccountType.Club,
+                    Email = vm.Email,
+                    IsConfirmed = false,
+                    JoinedDate = DateTime.UtcNow,
+                    LastActivity = DateTime.UtcNow,
+                    Preferences = new UserPreferences
+                    {
+                        SyncFbEvents = true,
+                        SyncFbImages = true,
+                        SyncFbPosts = true,
+                        SendSyncErrorNotifications = true
+                    },
+                    ClubDetail = new ClubDetail
+                                 {
+                                     Address = vm.ClubAddress,
+                                     ClubName = vm.ClubName,
+                                     ClubType = vm.ClubType,
+                                 }
+                };
+
+                try
+                {
+                    _authService.Register(user, vm.Password, !user.IsConfirmed);
+
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (InvalidEmailException)
+                {
+                    ModelState.AddModelError("Email", "Invalid email address");
+                }
+                catch (PasswordTooLongException)
+                {
+                    ModelState.AddModelError("Password", "Password too long");
+                }
+                catch (UsernameExistsException)
+                {
+                    ModelState.AddModelError("Username", "Username not available");
+                }
+                catch (EmailExistsException)
+                {
+                    ModelState.AddModelError("Email", "Email address already registered");
+                }
+            }
+
+            return View(vm);
         }
 
         [HttpGet]
