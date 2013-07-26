@@ -1,6 +1,7 @@
 ﻿@using PoliteCaptcha
 @model RegisterUserViewModel
 @{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
     ViewBag.Title = "Register";
 }
 
@@ -123,7 +124,6 @@
                             @Html.SpamPreventionFields()
                         </div>
 
-                        <hr/>
                         <p>
                             <input type="submit" value="Register" class="btn btn-primary" style="margin-top: 25px;"/>
                         </p>

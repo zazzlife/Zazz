@@ -103,19 +103,37 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult RegisterUser()
         {
-            return View();
+            var vm = new RegisterUserViewModel
+                     {
+                         Schools = StaticDataRepository.GetSchools(),
+                         Majors = StaticDataRepository.GetMajors(),
+                         Cities = StaticDataRepository.GetCities()
+                     };
+
+            return View(vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public ActionResult RegisterUser(RegisterUserViewModel vm)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                //Register
+            }
+            
+            vm.Schools = StaticDataRepository.GetSchools();
+            vm.Majors = StaticDataRepository.GetMajors();
+            vm.Cities = StaticDataRepository.GetCities();
+
+            return View(vm);
         }
 
         [HttpGet]
         public ActionResult RegisterClub()
         {
-            return View();
+            var vm = new RegisterClubViewModel();
+
+            return View(vm);
         }
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
