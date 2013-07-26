@@ -166,7 +166,7 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public ActionResult Recover(string email)
         {
             if (User.Identity.IsAuthenticated)
