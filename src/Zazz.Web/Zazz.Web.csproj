@@ -592,8 +592,6 @@
     <Content Include="Views\Home\LandingPage.cshtml" />
     <Content Include="Views\Shared\_EmptyLayout.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\OAuthRegister.cshtml" />
     <Content Include="Views\Account\Recover.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Home\UserHome.cshtml" />

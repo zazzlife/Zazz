@@ -59,6 +59,15 @@ namespace Zazz.Web.Controllers
             _oAuthService = oAuthService;
         }
 
+        public JsonNetResult IsAvailable(string username)
+        {
+            if (String.IsNullOrWhiteSpace(username) || username.Length < 2 || username.Length > 20)
+                return new JsonNetResult(false);
+
+            var usernameExists = _uow.UserRepository.ExistsByUsername(username);
+            return usernameExists ? new JsonNetResult(false) : new JsonNetResult(true);
+        }
+
         [HttpGet]
         public ActionResult Login(string returnUrl)
         {
@@ -164,7 +173,8 @@ namespace Zazz.Web.Controllers
                                             }
                            };
 
-                if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+                var isOAuth = (bool?)Session[IS_OAUTH_KEY];
+                if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
                     {
@@ -203,9 +213,22 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
-
                     FormsAuthentication.SetAuthCookie(user.Username, true);
-                    return RedirectToAction("Index", "Home");
+
+                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                    if (isMobile.HasValue && isMobile.Value)
+                    {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        return HandleMobileClientOAuthCallback(user);
+                    }
+                    else if (isOAuth.HasValue && isOAuth.Value)
+                    {
+                        return RedirectToAction("FindFriends");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 catch (InvalidEmailException)
                 {
@@ -276,7 +299,8 @@ namespace Zazz.Web.Controllers
                                  }
                 };
 
-                if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+                var isOAuth = (bool?) Session[IS_OAUTH_KEY];
+                if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
                     {
@@ -315,9 +339,22 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
-
                     FormsAuthentication.SetAuthCookie(user.Username, true);
-                    return RedirectToAction("Index", "Home");
+
+                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                    if (isMobile.HasValue && isMobile.Value)
+                    {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        return HandleMobileClientOAuthCallback(user);
+                    }
+                    else if (isOAuth.HasValue && isOAuth.Value)
+                    {
+                        return RedirectToAction("FindFriends");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 catch (InvalidEmailException)
                 {
@@ -340,67 +377,23 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        [HttpGet]
-        public ActionResult Register()
+        private ActionResult HandleMobileClientOAuthCallback(User user)
         {
-            if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
+            var scopes = StaticDataRepository.GetOAuthScopes()
+                .Where(s => s.Name.Equals("full", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
 
-            if (User.Identity.IsAuthenticated)
-                RedirectToAction("Index", "Home");
+            var client = StaticDataRepository.GetOAuthClients()
+                .Single(c => c.Name.Equals("Zazz", StringComparison.InvariantCultureIgnoreCase));
 
-            var vm = new RegisterViewModel
-                         {
-                             Schools = StaticDataRepository.GetSchools(),
-                             Cities = StaticDataRepository.GetCities(),
-                             Majors = StaticDataRepository.GetMajors(),
-                         };
+            var creds = _oAuthService.CreateOAuthCredentials(user, client, scopes);
 
-            return View(vm);
-        }
+            var queryString = HttpUtility.ParseQueryString(String.Empty);
+            queryString["access_token"] = creds.AccessToken.ToJWTString();
+            queryString["refresh_token"] = creds.RefreshToken.ToJWTString();
 
-        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
-        public ActionResult Register(RegisterViewModel registerVm)
-        {
-            if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
-
-            if (ModelState.IsValid)
-            {
-                var user = _objectMapper.RegisterVmToUser(registerVm);
-                user.IsConfirmed = false;
-
-                try
-                {
-                    _authService.Register(user, registerVm.Password, true);
-                    FormsAuthentication.SetAuthCookie(user.Username, true);
-
-                    return RedirectToAction("Index", "Home");
-                }
-                catch (UsernameExistsException)
-                {
-                    ShowAlert("Username is already exists.", AlertType.Warning);
-                }
-                catch (EmailExistsException)
-                {
-                    ShowAlert("This email address has registered before. Please login.", AlertType.Warning);
-                }
-            }
-
-            registerVm.Schools = StaticDataRepository.GetSchools();
-            registerVm.Cities = StaticDataRepository.GetCities();
-            registerVm.Majors = StaticDataRepository.GetMajors();
-
-            return View(registerVm);
-        }
-
-        public JsonNetResult IsAvailable(string username)
-        {
-            if (String.IsNullOrWhiteSpace(username) || username.Length < 2 || username.Length > 20)
-                return new JsonNetResult(false);
-
-            var usernameExists = _uow.UserRepository.ExistsByUsername(username);
-            return usernameExists ? new JsonNetResult(false) : new JsonNetResult(true);
+            var url = "/loginSuccess#" + queryString.ToString();
+            return Redirect(url);
         }
 
         [HttpGet]
@@ -574,108 +567,6 @@ namespace Zazz.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-        }
-
-        [HttpGet]
-        public ActionResult OAuthRegister()
-        {
-            if (User.Identity.IsAuthenticated)
-                return RedirectToAction("Index", "Home");
-
-            var oAuthResponse = TempData["oauthData"] as OAuthLoginResponse;
-
-            var jsonData = JsonConvert.SerializeObject(oAuthResponse, Formatting.None);
-            var jsonSign = _cryptoService.GenerateTextSignature(jsonData);
-
-            var registerPageVM = new OAuthRegisterViewModel
-            {
-                Email = oAuthResponse.Email,
-                FullName = oAuthResponse.Name,
-                OAuthProvidedData = jsonData,
-                ProvidedDataSignature = jsonSign,
-                Cities = StaticDataRepository.GetCities(),
-                Majors = StaticDataRepository.GetMajors(),
-                Schools = StaticDataRepository.GetSchools(),
-            };
-
-            return View("OAuthRegister", registerPageVM);
-        }
-
-        [HttpPost]
-        public ActionResult OAuthRegister(OAuthRegisterViewModel registerVm)
-        {
-            if (ModelState.IsValid)
-            {
-                var oauthDataSignature = _cryptoService.GenerateTextSignature(registerVm.OAuthProvidedData);
-                if (oauthDataSignature != registerVm.ProvidedDataSignature)
-                    throw new SecurityException("Unable to verify data integrity.");
-
-                var oauthData = JsonConvert.DeserializeObject<OAuthLoginResponse>(registerVm.OAuthProvidedData);
-
-                var user = _objectMapper.RegisterVmToUser(registerVm);
-                user.IsConfirmed = true;
-
-                user.LinkedAccounts = new List<LinkedAccount>
-                                          {
-                                              new LinkedAccount
-                                                  {
-                                                      AccessToken = oauthData.AccessToken,
-                                                      Provider = oauthData.Provider,
-                                                      ProviderUserId = oauthData.ProviderUserId
-                                                  }
-                                          };
-                try
-                {
-                    _authService.Register(user, registerVm.Password, false);
-                    FormsAuthentication.SetAuthCookie(user.Username, true);
-
-                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
-                    if (isMobile.HasValue && isMobile.Value)
-                    {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
-                        return HandleMobileClientOAuthCallback(user);
-                    }
-                    else
-                    {
-                        return RedirectToAction("FindFriends");
-                    }
-                    
-                }
-                catch (UsernameExistsException)
-                {
-                    ShowAlert("Username is already exists.", AlertType.Warning);
-                }
-                catch (EmailExistsException)
-                {
-                    ShowAlert("Sorry we're unable to register you at this moment. Please contact us.", AlertType.Warning);
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-
-            registerVm.Cities = StaticDataRepository.GetCities();
-            registerVm.Schools = StaticDataRepository.GetSchools();
-            registerVm.Majors = StaticDataRepository.GetMajors();
-
-            return View(registerVm);
-        }
-
-        private ActionResult HandleMobileClientOAuthCallback(User user)
-        {
-            var scopes = StaticDataRepository.GetOAuthScopes()
-                .Where(s => s.Name.Equals("full", StringComparison.InvariantCultureIgnoreCase))
-                .ToList();
-
-            var client = StaticDataRepository.GetOAuthClients()
-                .Single(c => c.Name.Equals("Zazz", StringComparison.InvariantCultureIgnoreCase));
-
-            var creds = _oAuthService.CreateOAuthCredentials(user, client, scopes);
-
-            var queryString = HttpUtility.ParseQueryString(String.Empty);
-            queryString["access_token"] = creds.AccessToken.ToJWTString();
-            queryString["refresh_token"] = creds.RefreshToken.ToJWTString();
-
-            var url = "/loginSuccess#" + queryString.ToString();
-            return Redirect(url);
         }
 
         [Authorize]
