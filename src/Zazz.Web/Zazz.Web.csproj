@@ -650,6 +650,7 @@
     <Content Include="Views\Account\SelectAccountType.cshtml" />
     <Content Include="Views\Account\RegisterUser.cshtml" />
     <Content Include="Views\Account\RegisterClub.cshtml" />
+    <Content Include="Views\Account\SessionExpired.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

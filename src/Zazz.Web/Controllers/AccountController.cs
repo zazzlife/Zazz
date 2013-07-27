@@ -36,7 +36,13 @@ namespace Zazz.Web.Controllers
         private readonly IFollowService _followService;
         private readonly IUoW _uow;
         private readonly IOAuthService _oAuthService;
+
         private const string IS_MOBILE_SESSION_KEY = "IsMobile";
+        private const string IS_OAUTH_KEY = "IsOAuth";
+        private const string OAUTH_PROVIDER_KEY = "OAUTH_Provider";
+        private const string OAUTH_PROVIDER_USERID_KEY = "OAUTH_ProviderUserId";
+        private const string OAUTH_EMAIL_KEY = "OAUTH_Email";
+        private const string OAUTH_ACCESS_TOKEN_KEY = "OAUTH_AccessToken";
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
@@ -94,6 +100,11 @@ namespace Zazz.Web.Controllers
             return View();
         }
 
+        public ActionResult SessionExpired()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult SelectAccountType()
         {
@@ -104,12 +115,21 @@ namespace Zazz.Web.Controllers
         public ActionResult RegisterUser()
         {
             var vm = new RegisterUserViewModel
-                     {
-                         Schools = StaticDataRepository.GetSchools(),
-                         Majors = StaticDataRepository.GetMajors(),
-                         Cities = StaticDataRepository.GetCities(),
-                         Gender = Gender.NotSpecified
-                     };
+            {
+                Schools = StaticDataRepository.GetSchools(),
+                Majors = StaticDataRepository.GetMajors(),
+                Cities = StaticDataRepository.GetCities(),
+                Gender = Gender.NotSpecified
+            };
+
+
+            if (Session[IS_OAUTH_KEY] != null && ((bool) Session[IS_OAUTH_KEY]))
+            {
+                var email = (string)Session[OAUTH_EMAIL_KEY];
+
+                vm.IsOAuth = true;
+                vm.Email = email;
+            }
 
             return View(vm);
         }
@@ -143,6 +163,42 @@ namespace Zazz.Web.Controllers
                                                 SchoolId = vm.SchoolId
                                             }
                            };
+
+                if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+                {
+                    try
+                    {
+                        var provider = (OAuthProvider) Session[OAUTH_PROVIDER_KEY];
+                        var providerUserId = Int64.Parse((string) Session[OAUTH_PROVIDER_USERID_KEY]);
+                        var email = (string) Session[OAUTH_EMAIL_KEY];
+                        var accessToken = (string) Session[OAUTH_ACCESS_TOKEN_KEY];
+
+                        if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
+                            throw new ApplicationException("Session expired!");
+
+                        user.IsConfirmed = true;
+                        user.Email = email;
+
+                        user.LinkedAccounts.Add(new LinkedAccount
+                                                {
+                                                    AccessToken = accessToken,
+                                                    Provider = provider,
+                                                    ProviderUserId = providerUserId
+                                                });
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("SessionExpired");
+                    }
+                    finally
+                    {
+                        Session.Remove(IS_OAUTH_KEY);
+                        Session.Remove(OAUTH_PROVIDER_KEY);
+                        Session.Remove(OAUTH_PROVIDER_USERID_KEY);
+                        Session.Remove(OAUTH_EMAIL_KEY);
+                        Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+                    }
+                }
 
                 try
                 {
@@ -455,17 +511,13 @@ namespace Zazz.Web.Controllers
                 }
                 else
                 {
-                    var oauthData = new OAuthLoginResponse
-                    {
-                        AccessToken = accessToken,
-                        Email = email,
-                        Name = name,
-                        Provider = provider,
-                        ProviderUserId = long.Parse(providerId),
-                    };
-
-                    TempData["oauthData"] = oauthData;
-                    return RedirectToAction("OAuthRegister");
+                    Session[IS_OAUTH_KEY] = true;
+                    Session[OAUTH_PROVIDER_KEY] = provider;
+                    Session[OAUTH_PROVIDER_USERID_KEY] = providerId;
+                    Session[OAUTH_EMAIL_KEY] = email;
+                    Session[OAUTH_ACCESS_TOKEN_KEY] = accessToken;
+                    
+                    return RedirectToAction("SelectAccountType");
                 }
             }
 

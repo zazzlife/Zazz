@@ -39,16 +39,23 @@
                                 @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
                             </div>
                         </div>
-
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                        
+                        @if (!Model.IsOAuth)
+                        {
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.Email, new {@class = "control-label required"})
+                                </div>
+                                <div class="editor-field">
+                                    @Html.TextBoxFor(model => model.Email, new {@class = "span4", @placeholder = "Thie email remains private"})
+                                    @Html.ValidationMessageFor(model => model.Email, null, new {@class = "help-inline"})
+                                </div>
                             </div>
-                            <div class="editor-field">
-                                @Html.TextBoxFor(model => model.Email, new { @class = "span4", @placeholder="Thie email remains private" })
-                                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(m => m.Email)
+                        }
 
                         <div class="control-group">
                             <div class="editor-label">
@@ -130,9 +137,12 @@
 
                     </div>
 
-                    <div class="span3">
-                        <a href="~/account/oauth/facebook" class="btn-auth btn-facebook large">Register with facebook</a>
-                    </div>
+                    @if (!Model.IsOAuth)
+                    {
+                        <div class="span3">
+                            <a href="@Url.Action("OAuth", "Account", new {id="facebook"})" class="btn-auth btn-facebook large">Register with facebook</a>
+                        </div>
+                    }
 
                 </div>
             </fieldset>

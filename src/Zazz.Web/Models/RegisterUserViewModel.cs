@@ -44,5 +44,8 @@ namespace Zazz.Web.Models
         public IEnumerable<City> Cities { get; set; }
 
         public IEnumerable<Major> Majors { get; set; }
+
+        [HiddenInput]
+        public bool IsOAuth { get; set; }
     }
 }
