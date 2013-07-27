@@ -1,5 +1,18 @@
 ﻿@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
     ViewBag.Title = "SessionExpired";
 }
 
-<h2>SessionExpired</h2>
+<div class="container">
+    <div>
+        <h1>Zazz</h1>
+    </div>
+    
+    <div class="page-header" style="margin-top: 50px;">
+        <h3>Session Expired</h3>
+    </div>
+
+    <p>Your session has been expired. Please <a href="@Url.Action("OAuth", "Account", new {id="facebook"})">Click here</a> to try again.</p>
+</div>
+
+
