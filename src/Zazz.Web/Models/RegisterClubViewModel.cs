@@ -35,5 +35,8 @@ namespace Zazz.Web.Models
 
         [Display(Name = "Club Address")]
         public string ClubAddress { get; set; }
+
+        [HiddenInput]
+        public bool IsOAuth { get; set; }
     }
 }

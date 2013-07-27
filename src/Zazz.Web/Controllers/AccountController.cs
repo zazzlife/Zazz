@@ -237,6 +237,14 @@ namespace Zazz.Web.Controllers
         {
             var vm = new RegisterClubViewModel();
 
+            if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+            {
+                var email = (string)Session[OAUTH_EMAIL_KEY];
+
+                vm.IsOAuth = true;
+                vm.Email = email;
+            }
+
             return View(vm);
         }
 
@@ -267,6 +275,42 @@ namespace Zazz.Web.Controllers
                                      ClubType = vm.ClubType,
                                  }
                 };
+
+                if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+                {
+                    try
+                    {
+                        var provider = (OAuthProvider)Session[OAUTH_PROVIDER_KEY];
+                        var providerUserId = Int64.Parse((string)Session[OAUTH_PROVIDER_USERID_KEY]);
+                        var email = (string)Session[OAUTH_EMAIL_KEY];
+                        var accessToken = (string)Session[OAUTH_ACCESS_TOKEN_KEY];
+
+                        if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
+                            throw new ApplicationException("Session expired!");
+
+                        user.IsConfirmed = true;
+                        user.Email = email;
+
+                        user.LinkedAccounts.Add(new LinkedAccount
+                        {
+                            AccessToken = accessToken,
+                            Provider = provider,
+                            ProviderUserId = providerUserId
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("SessionExpired");
+                    }
+                    finally
+                    {
+                        Session.Remove(IS_OAUTH_KEY);
+                        Session.Remove(OAUTH_PROVIDER_KEY);
+                        Session.Remove(OAUTH_PROVIDER_USERID_KEY);
+                        Session.Remove(OAUTH_EMAIL_KEY);
+                        Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+                    }
+                }
 
                 try
                 {
