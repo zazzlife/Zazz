@@ -1,20 +1,29 @@
 ﻿@{
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
     ViewBag.Title = "Select Account Type";
 }
 
-<div class="container" style="padding-top: 80px;">
-    
+<div class="container">
+    <div>
+        <h1>Zazz</h1>
+    </div>
+
+    <div class="page-header" style="margin-top: 50px;">
+        <h3>Select Account Type</h3>
+    </div>
+
     <div class="well" style="display: inline-block; width: 450px; text-align: center">
         <a href="@Url.Action("RegisterUser")" style="color: black">
-            <i class="icon-user" style="font-size: 128px"></i> 
-            <div style="font-size: 28px; margin-top: 10px">User</div> 
+            <i class="icon-user" style="font-size: 128px"></i>
+            <div style="font-size: 28px; margin-top: 10px">User</div>
         </a>
     </div>
     <div class="well" style="display: inline-block; width: 450px; text-align: center">
         <a href="@Url.Action("RegisterClub")" style="color: black">
-            <i class="icon-glass" style="font-size: 128px"></i> 
-            <div style="font-size: 28px; margin-top: 10px">Club</div> 
+            <i class="icon-glass" style="font-size: 128px"></i>
+            <div style="font-size: 28px; margin-top: 10px">Club</div>
         </a>
     </div>
+
 
 </div>
