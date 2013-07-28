@@ -172,7 +172,8 @@ namespace Zazz.Web.Controllers
                                                 SchoolId = vm.SchoolId
                                             }
                            };
-
+                
+                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 if (isOAuth.HasValue && isOAuth.Value)
                 {
@@ -198,10 +199,12 @@ namespace Zazz.Web.Controllers
                     }
                     catch (Exception)
                     {
+                        ViewBag.IsMobile = (isMobile.HasValue && isMobile.Value);
                         return RedirectToAction("SessionExpired");
                     }
                     finally
                     {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
                         Session.Remove(IS_OAUTH_KEY);
                         Session.Remove(OAUTH_PROVIDER_KEY);
                         Session.Remove(OAUTH_PROVIDER_USERID_KEY);
@@ -214,8 +217,7 @@ namespace Zazz.Web.Controllers
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
-
-                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                    
                     if (isMobile.HasValue && isMobile.Value)
                     {
                         Session.Remove(IS_MOBILE_SESSION_KEY);
@@ -299,7 +301,8 @@ namespace Zazz.Web.Controllers
                                  }
                 };
 
-                var isOAuth = (bool?) Session[IS_OAUTH_KEY];
+                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
@@ -324,10 +327,12 @@ namespace Zazz.Web.Controllers
                     }
                     catch (Exception)
                     {
+                        ViewBag.IsMobile = (isMobile.HasValue && isMobile.Value);
                         return RedirectToAction("SessionExpired");
                     }
                     finally
                     {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
                         Session.Remove(IS_OAUTH_KEY);
                         Session.Remove(OAUTH_PROVIDER_KEY);
                         Session.Remove(OAUTH_PROVIDER_USERID_KEY);
@@ -341,7 +346,6 @@ namespace Zazz.Web.Controllers
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
-                    var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                     if (isMobile.HasValue && isMobile.Value)
                     {
                         Session.Remove(IS_MOBILE_SESSION_KEY);
@@ -548,6 +552,7 @@ namespace Zazz.Web.Controllers
                 }
                 else
                 {
+                    //user does not have an account (there is a check if it's a mobile client on Post register pages)
                     Session[IS_OAUTH_KEY] = true;
                     Session[OAUTH_PROVIDER_KEY] = provider;
                     Session[OAUTH_PROVIDER_USERID_KEY] = providerId;
@@ -558,6 +563,8 @@ namespace Zazz.Web.Controllers
                 }
             }
 
+
+            //user had an account, checking if it's mobile to redirect to the right place
             if (isMobile.HasValue && isMobile.Value)
             {
                 Session.Remove(IS_MOBILE_SESSION_KEY);
