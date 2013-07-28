@@ -40,6 +40,7 @@ namespace Zazz.Web.Controllers
         private const string IS_MOBILE_SESSION_KEY = "IsMobile";
         private const string IS_OAUTH_KEY = "IsOAuth";
         private const string OAUTH_PROVIDER_KEY = "OAUTH_Provider";
+        private const string OAUTH_FULLNAME_KEY = "OAUTH_FullName";
         private const string OAUTH_PROVIDER_USERID_KEY = "OAUTH_ProviderUserId";
         private const string OAUTH_EMAIL_KEY = "OAUTH_Email";
         private const string OAUTH_ACCESS_TOKEN_KEY = "OAUTH_AccessToken";
@@ -135,9 +136,11 @@ namespace Zazz.Web.Controllers
             if (Session[IS_OAUTH_KEY] != null && ((bool) Session[IS_OAUTH_KEY]))
             {
                 var email = (string)Session[OAUTH_EMAIL_KEY];
+                var fullName = (string) Session[OAUTH_FULLNAME_KEY];
 
                 vm.IsOAuth = true;
                 vm.Email = email;
+                vm.FullName = fullName;
             }
 
             return View(vm);
@@ -204,12 +207,7 @@ namespace Zazz.Web.Controllers
                     }
                     finally
                     {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
-                        Session.Remove(IS_OAUTH_KEY);
-                        Session.Remove(OAUTH_PROVIDER_KEY);
-                        Session.Remove(OAUTH_PROVIDER_USERID_KEY);
-                        Session.Remove(OAUTH_EMAIL_KEY);
-                        Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+                        ReleaseOAuthSessionValues();
                     }
                 }
 
@@ -332,12 +330,7 @@ namespace Zazz.Web.Controllers
                     }
                     finally
                     {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
-                        Session.Remove(IS_OAUTH_KEY);
-                        Session.Remove(OAUTH_PROVIDER_KEY);
-                        Session.Remove(OAUTH_PROVIDER_USERID_KEY);
-                        Session.Remove(OAUTH_EMAIL_KEY);
-                        Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+                        ReleaseOAuthSessionValues();
                     }
                 }
 
@@ -379,6 +372,17 @@ namespace Zazz.Web.Controllers
             }
 
             return View(vm);
+        }
+
+        private void ReleaseOAuthSessionValues()
+        {
+            Session.Remove(IS_MOBILE_SESSION_KEY);
+            Session.Remove(IS_OAUTH_KEY);
+            Session.Remove(OAUTH_PROVIDER_KEY);
+            Session.Remove(OAUTH_FULLNAME_KEY);
+            Session.Remove(OAUTH_PROVIDER_USERID_KEY);
+            Session.Remove(OAUTH_EMAIL_KEY);
+            Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
         }
 
         private ActionResult HandleMobileClientOAuthCallback(User user)
@@ -555,6 +559,7 @@ namespace Zazz.Web.Controllers
                     //user does not have an account (there is a check if it's a mobile client on Post register pages)
                     Session[IS_OAUTH_KEY] = true;
                     Session[OAUTH_PROVIDER_KEY] = provider;
+                    Session[OAUTH_FULLNAME_KEY] = name;
                     Session[OAUTH_PROVIDER_USERID_KEY] = providerId;
                     Session[OAUTH_EMAIL_KEY] = email;
                     Session[OAUTH_ACCESS_TOKEN_KEY] = accessToken;
