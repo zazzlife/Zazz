@@ -18,6 +18,7 @@ using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Core.Models.Facebook;
 using Zazz.Data;
 using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Filters;
@@ -36,6 +37,7 @@ namespace Zazz.Web.Controllers
         private readonly IFollowService _followService;
         private readonly IUoW _uow;
         private readonly IOAuthService _oAuthService;
+        private readonly IFacebookHelper _facebookHelper;
 
         private const string IS_MOBILE_SESSION_KEY = "IsMobile";
         private const string IS_OAUTH_KEY = "IsOAuth";
@@ -44,11 +46,15 @@ namespace Zazz.Web.Controllers
         private const string OAUTH_PROVIDER_USERID_KEY = "OAUTH_ProviderUserId";
         private const string OAUTH_EMAIL_KEY = "OAUTH_Email";
         private const string OAUTH_ACCESS_TOKEN_KEY = "OAUTH_AccessToken";
+        private const string OAUTH_GENDER_KEY = "OAUTH_Gender";
+        private const string OAUTH_PROFILE_PIC_KEY = "OAUTH_ProfilePic";
+        private const string OAUTH_COVER_PIC_KEY = "OAUTH_CoverPic";
+
 
         public AccountController(IStaticDataRepository staticData, IAuthService authService,
             ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper,IFacebookService facebookService,
-            IFollowService followService, IUoW uow, IOAuthService oAuthService) 
+            IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper, IFacebookService facebookService,
+            IFollowService followService, IUoW uow, IOAuthService oAuthService, IFacebookHelper facebookHelper)
             : base(userService, photoService, defaultImageHelper, staticData)
         {
             _authService = authService;
@@ -58,6 +64,7 @@ namespace Zazz.Web.Controllers
             _followService = followService;
             _uow = uow;
             _oAuthService = oAuthService;
+            _facebookHelper = facebookHelper;
         }
 
         public JsonNetResult IsAvailable(string username)
@@ -132,15 +139,16 @@ namespace Zazz.Web.Controllers
                 Gender = Gender.NotSpecified
             };
 
-
-            if (Session[IS_OAUTH_KEY] != null && ((bool) Session[IS_OAUTH_KEY]))
+            if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
                 var email = (string)Session[OAUTH_EMAIL_KEY];
-                var fullName = (string) Session[OAUTH_FULLNAME_KEY];
+                var fullName = (string)Session[OAUTH_FULLNAME_KEY];
+                var gender = (Gender) Session[OAUTH_GENDER_KEY];
 
                 vm.IsOAuth = true;
                 vm.Email = email;
                 vm.FullName = fullName;
+                vm.Gender = gender;
             }
 
             return View(vm);
@@ -175,17 +183,17 @@ namespace Zazz.Web.Controllers
                                                 SchoolId = vm.SchoolId
                                             }
                            };
-                
+
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
                     {
-                        var provider = (OAuthProvider) Session[OAUTH_PROVIDER_KEY];
-                        var providerUserId = Int64.Parse((string) Session[OAUTH_PROVIDER_USERID_KEY]);
-                        var email = (string) Session[OAUTH_EMAIL_KEY];
-                        var accessToken = (string) Session[OAUTH_ACCESS_TOKEN_KEY];
+                        var provider = (OAuthProvider)Session[OAUTH_PROVIDER_KEY];
+                        var providerUserId = Int64.Parse((string)Session[OAUTH_PROVIDER_USERID_KEY]);
+                        var email = (string)Session[OAUTH_EMAIL_KEY];
+                        var accessToken = (string)Session[OAUTH_ACCESS_TOKEN_KEY];
 
                         if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
                             throw new ApplicationException("Session expired!");
@@ -215,7 +223,7 @@ namespace Zazz.Web.Controllers
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
-                    
+
                     if (isMobile.HasValue && isMobile.Value)
                     {
                         Session.Remove(IS_MOBILE_SESSION_KEY);
@@ -247,7 +255,7 @@ namespace Zazz.Web.Controllers
                     ModelState.AddModelError("Email", "Email address already registered");
                 }
             }
-            
+
             vm.Schools = StaticDataRepository.GetSchools();
             vm.Majors = StaticDataRepository.GetMajors();
             vm.Cities = StaticDataRepository.GetCities();
@@ -383,6 +391,9 @@ namespace Zazz.Web.Controllers
             Session.Remove(OAUTH_PROVIDER_USERID_KEY);
             Session.Remove(OAUTH_EMAIL_KEY);
             Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+            Session.Remove(OAUTH_GENDER_KEY);
+            Session.Remove(OAUTH_PROFILE_PIC_KEY);
+            Session.Remove(OAUTH_COVER_PIC_KEY);
         }
 
         private ActionResult HandleMobileClientOAuthCallback(User user)
@@ -557,13 +568,32 @@ namespace Zazz.Web.Controllers
                 else
                 {
                     //user does not have an account (there is a check if it's a mobile client on Post register pages)
+
+                    //getting some basic user info for later use.
+                    var fbBasicUserInfo = new FbBasicUserInfo
+                                          {
+                                              Gender = Gender.NotSpecified,
+                                              CoverPicUrl = null,
+                                              ProfilePicUrl = null
+                                          };
+
+                    try
+                    {
+                        fbBasicUserInfo = _facebookHelper.GetBasicUserInfo(accessToken);
+                    }
+                    catch (Exception)
+                    {}
+
                     Session[IS_OAUTH_KEY] = true;
                     Session[OAUTH_PROVIDER_KEY] = provider;
                     Session[OAUTH_FULLNAME_KEY] = name;
                     Session[OAUTH_PROVIDER_USERID_KEY] = providerId;
                     Session[OAUTH_EMAIL_KEY] = email;
                     Session[OAUTH_ACCESS_TOKEN_KEY] = accessToken;
-                    
+                    Session[OAUTH_GENDER_KEY] = fbBasicUserInfo.Gender;
+                    Session[OAUTH_PROFILE_PIC_KEY] = fbBasicUserInfo.ProfilePicUrl;
+                    Session[OAUTH_COVER_PIC_KEY] = fbBasicUserInfo.CoverPicUrl;
+
                     return RedirectToAction("SelectAccountType");
                 }
             }
@@ -585,7 +615,7 @@ namespace Zazz.Web.Controllers
         public ActionResult FindFriends()
         {
             var userId = GetCurrentUserId();
-            
+
             //Getting user access token
             var fbAccessToken = UserService.GetAccessToken(userId, OAuthProvider.Facebook);
             if (String.IsNullOrEmpty(fbAccessToken))
