@@ -132,5 +132,16 @@ namespace Zazz.Infrastructure.Services
         {
             return _uoW.LinkedAccountRepository.Exists(userId, provider);
         }
+
+
+        public void ChangeProfilePic(int userId, int? photoId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeCoverPic(int userId, int? photoId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

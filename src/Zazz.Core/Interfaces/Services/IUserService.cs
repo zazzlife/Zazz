@@ -26,5 +26,9 @@ namespace Zazz.Core.Interfaces.Services
         string GetAccessToken(int userId, OAuthProvider provider);
 
         bool OAuthAccountExists(int userId, OAuthProvider provider);
+
+        void ChangeProfilePic(int userId, int? photoId);
+
+        void ChangeCoverPic(int userId, int? photoId);
     }
 }
