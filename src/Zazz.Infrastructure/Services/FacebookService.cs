@@ -40,11 +40,6 @@ namespace Zazz.Infrastructure.Services
             _albumService = albumService;
         }
 
-        public void UpdateUserBasicInfo(int userId, string accessToken)
-        {
-            
-        }
-
         public void HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
         {
             foreach (var entry in changes.Entries.Where(c => c.ChangedFields.Contains("events")))
