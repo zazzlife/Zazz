@@ -7,6 +7,8 @@ namespace Zazz.Core.Interfaces.Services
 {
     public interface IFacebookService
     {
+        void UpdateUserBasicInfo(int userId, string accessToken);
+
         void HandleRealtimeUserUpdatesAsync(FbUserChanges changes);
 
         //Task HandleRealtimePageUpdatesAsync(FbPageChanges changes);

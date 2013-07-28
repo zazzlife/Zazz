@@ -8,6 +8,8 @@ namespace Zazz.Core.Interfaces
 {
     public interface IFacebookHelper
     {
+        FbBasicUserInfo GetBasicUserInfo(string accessToken);
+
         /// <summary>
         /// Use this only for getting user events until the FQL bug is fixed
         /// </summary>

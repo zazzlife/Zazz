@@ -214,6 +214,7 @@
     <Compile Include="Models\Facebook\FbPost.cs" />
     <Compile Include="Models\Facebook\FbPostType.cs" />
     <Compile Include="Models\Facebook\FbStatus.cs" />
+    <Compile Include="Models\Facebook\FbBasicUserInfo.cs" />
     <Compile Include="Models\Facebook\FbUserChanges.cs" />
     <Compile Include="Models\Facebook\FbUser.cs" />
     <Compile Include="Models\Facebook\FbUserChangesEntry.cs" />

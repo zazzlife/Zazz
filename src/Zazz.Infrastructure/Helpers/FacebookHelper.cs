@@ -8,6 +8,7 @@ using Facebook;
 using Microsoft.CSharp.RuntimeBinder;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 
 namespace Zazz.Infrastructure.Helpers
@@ -28,6 +29,71 @@ namespace Zazz.Infrastructure.Helpers
         private string GenerateFql(string fields, string table, string where)
         {
             return String.Format("SELECT {0} FROM {1} WHERE {2}", fields, table, where);
+        }
+
+        public FbBasicUserInfo GetBasicUserInfo(string accessToken)
+        {
+            _client.AccessToken = accessToken;
+            
+            const string PROFILE_PIC_QUERY = "SELECT pic_crop FROM profile WHERE id = me()";
+            const string INFO_QUERY = "SELECT pic_cover, sex FROM user WHERE uid = me()";
+
+            dynamic result = _client.Get("fql",
+                                         new
+                                         {
+                                             q = new
+                                                 {
+                                                     pic = PROFILE_PIC_QUERY,
+                                                     info = INFO_QUERY
+                                                 }
+                                         });
+
+            dynamic info = null;
+            dynamic pic = null;
+
+            if (result.data[0].name == "info")
+            {
+                info = result.data[0].fql_result_set[0];
+            }
+            else
+            {
+                pic = result.data[0].fql_result_set[0];
+            }
+
+            if (result.data[1].name == "info")
+            {
+                info = result.data[1].fql_result_set[0];
+            }
+            else
+            {
+                pic = result.data[1].fql_result_set[0];
+            }
+
+            if (info == null || pic == null)
+                return null;
+
+            string picUrl = null;
+            if (pic.pic_crop != null)
+            {
+                picUrl = pic.pic_crop.uri;
+            }
+
+            string coverUrl = null;
+            if (info.pic_cover != null)
+            {
+                coverUrl = info.pic_cover.source;
+            }
+
+
+            Gender gender = Gender.NotSpecified;
+            Enum.TryParse((string) info.sex, true, out gender);
+
+            return new FbBasicUserInfo
+                   {
+                       Gender = gender,
+                       CoverPicUrl = coverUrl,
+                       ProfilePicUrl = picUrl
+                   };
         }
 
         public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5)
