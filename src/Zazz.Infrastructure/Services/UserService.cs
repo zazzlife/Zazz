@@ -139,7 +139,7 @@ namespace Zazz.Infrastructure.Services
         {
             var user = _uoW.UserRepository.GetById(userId);
             if (user == null)
-                throw new NotFoundException();
+                throw new NotFoundException("user not found");
 
             if (!photoId.HasValue)
             {
@@ -149,7 +149,7 @@ namespace Zazz.Infrastructure.Services
             {
                 var photo = _uoW.PhotoRepository.GetById(photoId.Value);
                 if (photo == null)
-                    throw new NotFoundException();
+                    throw new NotFoundException("photo not found");
 
                 if (user.Id != photo.UserId)
                     throw new SecurityException();
@@ -165,10 +165,10 @@ namespace Zazz.Infrastructure.Services
         {
             var user = _uoW.UserRepository.GetById(userId, false, true);
             if (user == null)
-                throw new NotFoundException();
+                throw new NotFoundException("user not found");
 
             if (user.AccountType != AccountType.Club)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("user was not club");
 
             if (!photoId.HasValue)
             {
@@ -176,7 +176,9 @@ namespace Zazz.Infrastructure.Services
             }
             else
             {
-                
+                var photo = _uoW.PhotoRepository.GetById(photoId.Value);
+                if (photo == null)
+                    throw new NotFoundException("photo not found");
             }
 
             _uoW.SaveChanges();
