@@ -153,8 +153,11 @@ namespace Zazz.Infrastructure.Services
 
                 if (user.Id != photo.UserId)
                     throw new SecurityException();
+
+                user.ProfilePhotoId = photoId;
             }
 
+            _cacheService.RemoveUserPhotoUrl(userId);
             _uoW.SaveChanges();
         }
 

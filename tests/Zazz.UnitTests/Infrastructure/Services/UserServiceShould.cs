@@ -320,6 +320,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.SaveChanges());
 
+            _cacheService.Setup(x => x.RemoveUserPhotoUrl(user.Id));
+
             //Act
             _sut.ChangeProfilePic(user.Id, null);
 
@@ -386,6 +388,38 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void UpdateProfilePhotoAndRemoveCacheRecord_OnChangeProfilePic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222
+            };
 
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 32
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, false, false))
+                .Returns(user);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            _cacheService.Setup(x => x.RemoveUserPhotoUrl(user.Id));
+
+            //Act
+            _sut.ChangeProfilePic(user.Id, photo.Id);
+
+            //Assert
+            Assert.AreEqual(photo.Id, user.ProfilePhotoId.Value);
+            _mockRepo.VerifyAll();
+        }
     }
 }
