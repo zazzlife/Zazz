@@ -542,5 +542,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfUserIsNotPhotoOwner_OnChangeCoverPic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222,
+                AccountType = AccountType.Club,
+                ClubDetail = new ClubDetail
+                {
+                    CoverPhotoId = 444
+                }
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 323
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, true, false, false))
+                .Returns(user);
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.ChangeCoverPic(user.Id, photo.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }

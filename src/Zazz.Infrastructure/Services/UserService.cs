@@ -179,6 +179,9 @@ namespace Zazz.Infrastructure.Services
                 var photo = _uoW.PhotoRepository.GetById(photoId.Value);
                 if (photo == null)
                     throw new NotFoundException("photo not found");
+
+                if (user.Id != photo.UserId)
+                    throw new SecurityException();
             }
 
             _uoW.SaveChanges();
