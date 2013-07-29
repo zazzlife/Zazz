@@ -306,6 +306,29 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void SetUserProfilePicToNul_OnChangeProfilePic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, false, false))
+                .Returns(user);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.ChangeProfilePic(user.Id, null);
+
+            //Assert
+            Assert.AreEqual(null, user.ProfilePhotoId);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ThrowIfPhotoIsNotFromCurrentUser_OnChangeProfilePic()
         {
             //Arrange

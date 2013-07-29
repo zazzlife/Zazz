@@ -141,10 +141,19 @@ namespace Zazz.Infrastructure.Services
             if (user == null)
                 throw new NotFoundException();
 
-            var photo = _uoW.PhotoRepository.GetById(photoId.Value);
+            if (!photoId.HasValue)
+            {
+                user.ProfilePhotoId = null;
+            }
+            else
+            {
+                var photo = _uoW.PhotoRepository.GetById(photoId.Value);
 
-            if (user.Id != photo.UserId)
-                throw new SecurityException();
+                if (user.Id != photo.UserId)
+                    throw new SecurityException();
+            }
+
+            _uoW.SaveChanges();
         }
 
         public void ChangeCoverPic(int userId, int? photoId)
