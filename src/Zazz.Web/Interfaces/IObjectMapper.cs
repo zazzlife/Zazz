@@ -6,8 +6,6 @@ namespace Zazz.Web.Interfaces
 {
     public interface IObjectMapper
     {
-        User RegisterVmToUser(RegisterViewModel register);
-
         ApiPost PostToApiPost(Post post);
 
         ApiPhoto PhotoToApiPhoto(Photo photo);

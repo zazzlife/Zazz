@@ -31,8 +31,6 @@ namespace Zazz.Web.Controllers
     public class AccountController : BaseController
     {
         private readonly IAuthService _authService;
-        private readonly ICryptoService _cryptoService;
-        private readonly IObjectMapper _objectMapper;
         private readonly IFacebookService _facebookService;
         private readonly IFollowService _followService;
         private readonly IUoW _uow;
@@ -51,15 +49,14 @@ namespace Zazz.Web.Controllers
         private const string OAUTH_COVER_PIC_KEY = "OAUTH_CoverPic";
 
 
-        public AccountController(IStaticDataRepository staticData, IAuthService authService,
-            ICryptoService cryptoService, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IObjectMapper objectMapper, IFacebookService facebookService,
-            IFollowService followService, IUoW uow, IOAuthService oAuthService, IFacebookHelper facebookHelper)
+        public AccountController(IStaticDataRepository staticData, IAuthService authService
+                                 , IUserService userService, IPhotoService photoService,
+                                 IDefaultImageHelper defaultImageHelper, IFacebookService facebookService,
+                                 IFollowService followService, IUoW uow, IOAuthService oAuthService,
+                                 IFacebookHelper facebookHelper)
             : base(userService, photoService, defaultImageHelper, staticData)
         {
             _authService = authService;
-            _cryptoService = cryptoService;
-            _objectMapper = objectMapper;
             _facebookService = facebookService;
             _followService = followService;
             _uow = uow;

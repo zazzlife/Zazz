@@ -360,9 +360,6 @@
     <Compile Include="Models\PostViewModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Models\OAuthLoginResponse.cs" />
-    <Compile Include="Models\OAuthRegisterViewModel.cs" />
-    <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\CategoriesPageViewModel.cs" />
     <Compile Include="Models\CategoryStatViewModel.cs" />
     <Compile Include="Models\UploadPicModalModel.cs" />

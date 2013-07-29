@@ -25,50 +25,6 @@ namespace Zazz.Web
             _defaultImageHelper = defaultImageHelper;
         }
 
-        public User RegisterVmToUser(RegisterViewModel registerVm)
-        {
-            var user = new User
-                       {
-                           Email = registerVm.Email,
-                           LastActivity = DateTime.UtcNow,
-                           Username = registerVm.UserName,
-                           AccountType = registerVm.AccountType,
-                           JoinedDate = DateTime.UtcNow,
-                           Preferences = new UserPreferences
-                                         {
-                                             SendSyncErrorNotifications = true,
-                                             SyncFbEvents = true,
-                                             SyncFbImages = registerVm.AccountType == AccountType.Club,
-                                             SyncFbPosts = registerVm.AccountType == AccountType.Club
-                                         }
-                       };
-
-            if (registerVm.AccountType == AccountType.Club)
-            {
-                user.ClubDetail = new ClubDetail
-                                  {
-                                      ClubName = registerVm.ClubName,
-                                      Address = registerVm.ClubAddress,
-                                      ClubType = registerVm.ClubType,
-                                  };
-            }
-            else
-            {
-                user.UserDetail = new UserDetail
-                                  {
-                                      Gender = registerVm.Gender,
-                                      PublicEmail = registerVm.PublicEmail,
-                                      SchoolId = registerVm.SchoolId,
-                                      FullName = registerVm.FullName,
-                                      MajorId = registerVm.MajorId,
-                                      CityId = registerVm.CityId,
-                                  };
-            }
-
-            return user;
-        }
-
-
         #region API
 
         public ApiPost PostToApiPost(Post post)
