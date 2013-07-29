@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -276,6 +277,35 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             Assert.IsTrue(result);
             _uow.VerifyAll();
+        }
+
+        [Test]
+        public void ThrowIfPhotoIsNotFromCurrentUser_OnChangeProfilePic()
+        {
+            //Arrange
+            var user = new User
+                       {
+                           Id = 32,
+                           ProfilePhotoId = 222
+                       };
+
+            var photo = new Photo
+                        {
+                            Id = 232,
+                            UserId = 50
+                        };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, false, false))
+                .Returns(user);
+
+            //Act
+            Assert.Throws<SecurityException>(() => _sut.ChangeProfilePic(user.Id, photo.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Zazz.Core.Exceptions;
@@ -136,7 +137,11 @@ namespace Zazz.Infrastructure.Services
 
         public void ChangeProfilePic(int userId, int? photoId)
         {
-            throw new NotImplementedException();
+            var user = _uoW.UserRepository.GetById(userId);
+            var photo = _uoW.PhotoRepository.GetById(photoId.Value);
+
+            if (user.Id != photo.UserId)
+                throw new SecurityException();
         }
 
         public void ChangeCoverPic(int userId, int? photoId)
