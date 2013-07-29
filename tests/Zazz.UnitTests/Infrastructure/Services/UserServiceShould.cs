@@ -447,5 +447,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfUserTypeIsNotClub_OnChangeCoverPic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222,
+                AccountType = AccountType.User
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 32
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, true, false, false))
+                .Returns(user);
+
+            //Act
+            Assert.Throws<InvalidOperationException>(() => _sut.ChangeCoverPic(user.Id, photo.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
