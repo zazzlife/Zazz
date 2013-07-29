@@ -172,7 +172,7 @@ namespace Zazz.Infrastructure.Services
 
             if (!photoId.HasValue)
             {
-                user.ClubDetail.CoverPhotoId = photoId;
+                user.ClubDetail.CoverPhotoId = null;
             }
             else
             {
@@ -182,6 +182,8 @@ namespace Zazz.Infrastructure.Services
 
                 if (user.Id != photo.UserId)
                     throw new SecurityException();
+
+                user.ClubDetail.CoverPhotoId = photo.Id;
             }
 
             _uoW.SaveChanges();

@@ -576,5 +576,42 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void SetNetCoverPhoto_OnChangeCoverPic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222,
+                AccountType = AccountType.Club,
+                ClubDetail = new ClubDetail
+                {
+                    CoverPhotoId = 444
+                }
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 32
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, true, false, false))
+                .Returns(user);
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.ChangeCoverPic(user.Id, photo.Id);
+
+            //Assert
+            Assert.AreEqual(photo.Id, user.ClubDetail.CoverPhotoId);
+            _mockRepo.VerifyAll();
+        }
     }
 }
