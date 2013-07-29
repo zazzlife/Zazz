@@ -170,7 +170,16 @@ namespace Zazz.Infrastructure.Services
             if (user.AccountType != AccountType.Club)
                 throw new InvalidOperationException();
 
+            if (!photoId.HasValue)
+            {
+                user.ClubDetail.CoverPhotoId = photoId;
+            }
+            else
+            {
+                
+            }
 
+            _uoW.SaveChanges();
         }
     }
 }

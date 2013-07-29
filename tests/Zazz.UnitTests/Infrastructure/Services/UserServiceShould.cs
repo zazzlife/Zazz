@@ -474,5 +474,39 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void SetCoverPhotoToNull_OnChangeCoverPic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222,
+                AccountType = AccountType.Club,
+                ClubDetail = new ClubDetail
+                             {
+                                 CoverPhotoId = 444
+                             }
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 32
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, true, false, false))
+                .Returns(user);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.ChangeCoverPic(user.Id, null);
+
+            //Assert
+            Assert.AreEqual(null, user.ClubDetail.CoverPhotoId);
+            _mockRepo.VerifyAll();
+        }
     }
 }
