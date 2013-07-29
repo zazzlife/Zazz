@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,7 +142,7 @@ namespace Zazz.Web.Controllers
             {
                 var email = (string)Session[OAUTH_EMAIL_KEY];
                 var fullName = (string)Session[OAUTH_FULLNAME_KEY];
-                var gender = (Gender) Session[OAUTH_GENDER_KEY];
+                var gender = (Gender)Session[OAUTH_GENDER_KEY];
 
                 vm.IsOAuth = true;
                 vm.Email = email;
@@ -152,7 +154,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
-        public ActionResult RegisterUser(RegisterUserViewModel vm)
+        public async Task<ActionResult> RegisterUser(RegisterUserViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -183,6 +185,8 @@ namespace Zazz.Web.Controllers
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
+                string profilePhotoUrl = null;
+
                 if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
@@ -191,6 +195,7 @@ namespace Zazz.Web.Controllers
                         var providerUserId = Int64.Parse((string)Session[OAUTH_PROVIDER_USERID_KEY]);
                         var email = (string)Session[OAUTH_EMAIL_KEY];
                         var accessToken = (string)Session[OAUTH_ACCESS_TOKEN_KEY];
+                        profilePhotoUrl = (string)Session[OAUTH_PROFILE_PIC_KEY];
 
                         if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
                             throw new ApplicationException("Session expired!");
@@ -220,6 +225,8 @@ namespace Zazz.Web.Controllers
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
+
+                    await TryUpdateUserPic(user, profilePhotoUrl, null);
 
                     if (isMobile.HasValue && isMobile.Value)
                     {
@@ -277,7 +284,7 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
-        public ActionResult RegisterClub(RegisterClubViewModel vm)
+        public async Task<ActionResult> RegisterClub(RegisterClubViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -306,6 +313,10 @@ namespace Zazz.Web.Controllers
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
+
+                string profilePhotoUrl = null;
+                string coverPhotoUrl = null;
+
                 if (isOAuth.HasValue && isOAuth.Value)
                 {
                     try
@@ -314,6 +325,8 @@ namespace Zazz.Web.Controllers
                         var providerUserId = Int64.Parse((string)Session[OAUTH_PROVIDER_USERID_KEY]);
                         var email = (string)Session[OAUTH_EMAIL_KEY];
                         var accessToken = (string)Session[OAUTH_ACCESS_TOKEN_KEY];
+                        profilePhotoUrl = (string)Session[OAUTH_PROFILE_PIC_KEY];
+                        coverPhotoUrl = (string)Session[OAUTH_COVER_PIC_KEY];
 
                         if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
                             throw new ApplicationException("Session expired!");
@@ -343,6 +356,8 @@ namespace Zazz.Web.Controllers
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
                     FormsAuthentication.SetAuthCookie(user.Username, true);
+
+                    await TryUpdateUserPic(user, profilePhotoUrl, coverPhotoUrl);
 
                     if (isMobile.HasValue && isMobile.Value)
                     {
@@ -377,6 +392,56 @@ namespace Zazz.Web.Controllers
             }
 
             return View(vm);
+        }
+
+        private async Task TryUpdateUserPic(User user, string profilePhotoUrl, string coverPhotoUrl)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(profilePhotoUrl))
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var photoData = await client.GetByteArrayAsync(profilePhotoUrl);
+
+                        var photo = new Photo
+                                    {
+                                        UploadDate = DateTime.UtcNow,
+                                        UserId = user.Id
+                                    };
+
+                        using (var ms = new MemoryStream(photoData))
+                        {
+                            var photoId = PhotoService.SavePhoto(photo, ms, false, null);
+                            UserService.ChangeProfilePic(user.Id, photoId);
+                        }
+                    }
+                }
+
+                if (user.AccountType == AccountType.Club && !String.IsNullOrEmpty(coverPhotoUrl))
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var photoData = await client.GetByteArrayAsync(coverPhotoUrl);
+
+                        var photo = new Photo
+                        {
+                            UploadDate = DateTime.UtcNow,
+                            UserId = user.Id
+                        };
+
+                        using (var ms = new MemoryStream(photoData))
+                        {
+                            var photoId = PhotoService.SavePhoto(photo, ms, false, null);
+                            UserService.ChangeCoverPic(user.Id, photoId);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         private void ReleaseOAuthSessionValues()
@@ -579,7 +644,7 @@ namespace Zazz.Web.Controllers
                         fbBasicUserInfo = _facebookHelper.GetBasicUserInfo(accessToken);
                     }
                     catch (Exception)
-                    {}
+                    { }
 
                     Session[IS_OAUTH_KEY] = true;
                     Session[OAUTH_PROVIDER_KEY] = provider;

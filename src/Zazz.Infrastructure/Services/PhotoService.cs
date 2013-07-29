@@ -111,6 +111,9 @@ namespace Zazz.Infrastructure.Services
             if (data == Stream.Null)
                 throw new ArgumentNullException("data");
 
+            if (!data.CanSeek)
+                throw new ArgumentException("the stream is not seek-able", "data");
+
             if (photo.AlbumId.HasValue)
             {
                 var album = _uow.AlbumRepository.GetById(photo.AlbumId.Value);
