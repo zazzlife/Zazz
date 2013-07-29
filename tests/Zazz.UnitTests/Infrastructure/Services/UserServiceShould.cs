@@ -421,5 +421,31 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(photo.Id, user.ProfilePhotoId.Value);
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void ThrowIfUserNotExists_OnChangeCoverPic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 32
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, true, false, false))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.ChangeCoverPic(user.Id, photo.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }

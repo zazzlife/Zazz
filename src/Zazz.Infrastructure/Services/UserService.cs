@@ -163,7 +163,9 @@ namespace Zazz.Infrastructure.Services
 
         public void ChangeCoverPic(int userId, int? photoId)
         {
-            throw new NotImplementedException();
+            var club = _uoW.UserRepository.GetById(userId, false, true);
+            if (club == null)
+                throw new NotFoundException();
         }
     }
 }
