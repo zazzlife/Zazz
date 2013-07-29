@@ -280,6 +280,32 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfUserNotExists_OnChangeProfilePic()
+        {
+            //Arrange
+            var user = new User
+            {
+                Id = 32,
+                ProfilePhotoId = 222
+            };
+
+            var photo = new Photo
+            {
+                Id = 232,
+                UserId = 50
+            };
+
+            _uow.Setup(x => x.UserRepository.GetById(user.Id, false, false, false, false))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.ChangeProfilePic(user.Id, photo.Id));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void ThrowIfPhotoIsNotFromCurrentUser_OnChangeProfilePic()
         {
             //Arrange

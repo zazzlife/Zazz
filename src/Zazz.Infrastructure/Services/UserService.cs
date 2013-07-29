@@ -138,6 +138,9 @@ namespace Zazz.Infrastructure.Services
         public void ChangeProfilePic(int userId, int? photoId)
         {
             var user = _uoW.UserRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException();
+
             var photo = _uoW.PhotoRepository.GetById(photoId.Value);
 
             if (user.Id != photo.UserId)
