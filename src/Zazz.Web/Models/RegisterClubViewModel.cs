@@ -15,6 +15,7 @@ namespace Zazz.Web.Models
         [Display(Name = "Username")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "{0} must be between {2} and {1} characters.")]
         [Remote("IsAvailable", "Account", ErrorMessage = "{0} is not available.")]
+        [RegularExpression(@"^([a-zA-Z0-9._]+)$", ErrorMessage = "{0} contains invalid character(s)")]
         public string UserName { get; set; }
 
         [StringLength(40), Required, DataType(DataType.EmailAddress)]
