@@ -62,6 +62,10 @@ article#layout .container {
     font-size: 28px;
 }
 
+.validation-summary-errors {
+    color: red;
+}
+
 .textSeperator {
     margin: 0 10px;
     font-size: 40px;
