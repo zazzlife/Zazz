@@ -105,15 +105,15 @@ namespace Zazz.Web.Controllers
                 }
                 catch (InvalidPasswordException)
                 {
-                    ShowAlert("Invalid login information.", AlertType.Warning);
+                    ModelState.AddModelError("", "Invalid login information");
                 }
-                catch (UserNotExistsException)
+                catch (NotFoundException)
                 {
-                    ShowAlert("Invalid login information.", AlertType.Warning);
+                    ModelState.AddModelError("", "Invalid login information");
                 }
             }
 
-            return View();
+            return View(login);
         }
 
         public ActionResult SessionExpired()

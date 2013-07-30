@@ -77,7 +77,6 @@
     <Compile Include="Exceptions\PasswordTooLongException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Exceptions\UsernameExistsException.cs" />
-    <Compile Include="Exceptions\UserNotExistsException.cs" />
     <Compile Include="Exceptions\WeekliesLimitReachedException.cs" />
     <Compile Include="Interfaces\ICacheSystem.cs" />
     <Compile Include="Interfaces\IDefaultImageHelper.cs" />
