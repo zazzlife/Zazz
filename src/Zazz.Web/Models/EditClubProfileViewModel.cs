@@ -7,7 +7,8 @@ namespace Zazz.Web.Models
 {
     public class EditClubProfileViewModel
     {
-        [Display(Name = "Club Name")]
+        [Required, StringLength(30), Display(Name = "Club Name")]
+        [RegularExpression(@"^([a-zA-Z0-9 ._']+)$", ErrorMessage = "{0} contains invalid character(s)")]
         public string ClubName { get; set; }
 
         [Display(Name = "Club Address")]

@@ -11,7 +11,8 @@ namespace Zazz.Web.Models
     {
         public Gender Gender { get; set; }
 
-        [Display(Name = "Full Name")]
+        [StringLength(30), Display(Name = "Full name")]
+        [RegularExpression(@"^([a-zA-Z0-9 ._']+)$", ErrorMessage = "{0} contains invalid character(s)")]
         public string FullName { get; set; }
 
         public IEnumerable<School> Schools { get; set; }
