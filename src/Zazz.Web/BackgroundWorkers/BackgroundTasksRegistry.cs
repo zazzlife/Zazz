@@ -17,6 +17,10 @@ namespace Zazz.Web.BackgroundWorkers
                 .ToRunNow()
                 .AndEvery(5)
                 .Minutes();
+
+            Schedule<FbPageUpdaterTask>()
+                .ToRunEvery(15)
+                .Minutes();
         }
 
         public override ITask GetTaskInstance<T>()

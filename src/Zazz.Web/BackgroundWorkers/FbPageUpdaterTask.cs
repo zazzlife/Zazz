@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using FluentScheduler;
+using StructureMap.Pipeline;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Services;
 
@@ -37,6 +38,8 @@ namespace Zazz.Web.BackgroundWorkers
 
                 Task.Delay(1000).Wait();
             }
+
+            new HybridLifecycle().FindCache().DisposeAndClear();
         }
     }
 }
