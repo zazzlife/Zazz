@@ -246,6 +246,7 @@
     <Compile Include="App_Start\StructuremapConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BackgroundWorkers\CategoriesUpdaterTask.cs" />
+    <Compile Include="BackgroundWorkers\FbPageUpdaterTask.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
