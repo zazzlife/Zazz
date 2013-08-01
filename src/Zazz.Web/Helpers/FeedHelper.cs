@@ -128,7 +128,7 @@ namespace Zazz.Web.Helpers
                 FeedId = feed.Id,
                 FeedType = feed.FeedType,
                 Time = feed.Time,
-                CommentsViewModel = new CommentsViewModel
+                Comments = new CommentsViewModel
                 {
                     CurrentUserPhotoUrl = currentUserPhotoUrl,
                 }
@@ -141,7 +141,7 @@ namespace Zazz.Web.Helpers
 
                 FillUserDetails(ref feedVm, feed.EventFeed.Event.UserId, currentUserId);
 
-                feedVm.EventViewModel = new EventViewModel
+                feedVm.Event = new EventViewModel
                 {
                     City = feed.EventFeed.Event.City,
                     CreatedDate = feed.EventFeed.Event.CreatedDate,
@@ -163,24 +163,24 @@ namespace Zazz.Web.Helpers
                     FacebookEventId = feed.EventFeed.Event.FacebookEventId
                 };
 
-                feedVm.CommentsViewModel.CommentType = CommentType.Event;
+                feedVm.Comments.CommentType = CommentType.Event;
 
-                if (feedVm.EventViewModel.PhotoId.HasValue)
+                if (feedVm.Event.PhotoId.HasValue)
                 {
-                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.EventViewModel.PhotoId.Value);
-                    feedVm.EventViewModel.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId,
+                    var photo = _uow.PhotoRepository.GetPhotoWithMinimalData(feedVm.Event.PhotoId.Value);
+                    feedVm.Event.ImageUrl = _photoService.GeneratePhotoUrl(photo.UserId,
                                                                                     photo.Id);
                 }
 
-                if (feedVm.EventViewModel.ImageUrl == null)
+                if (feedVm.Event.ImageUrl == null)
                 {
                     // this event doesn't have a picture
-                    feedVm.EventViewModel.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
+                    feedVm.Event.ImageUrl = _defaultImageHelper.GetDefaultEventImage();
                 }
 
-                feedVm.CommentsViewModel.ItemId = feed.EventFeed.EventId;
-                feedVm.CommentsViewModel.Comments = GetComments(feed.EventFeed.EventId,
-                                                                feedVm.CommentsViewModel.CommentType,
+                feedVm.Comments.ItemId = feed.EventFeed.EventId;
+                feedVm.Comments.Comments = GetComments(feed.EventFeed.EventId,
+                                                                feedVm.Comments.CommentType,
                                                                 currentUserId);
 
             #endregion
@@ -196,26 +196,26 @@ namespace Zazz.Web.Helpers
                     FillUserDetails(ref feedVm, photos.First().UserId, currentUserId);
                 }
 
-                feedVm.PhotoViewModel = photos
+                feedVm.Photos = photos
                     .Select(p => new PhotoViewModel
                     {
                         PhotoId = p.Id,
                         AlbumId = p.AlbumId,
                         PhotoDescription = p.Description,
                         FromUserDisplayName = feedVm.UserDisplayName,
-                        FromUserPhotoUrl = feedVm.UserImageUrl,
+                        FromUserPhotoUrl = feedVm.UserDisplayPhoto,
                         FromUserId = p.UserId,
                         PhotoUrl = _photoService.GeneratePhotoUrl(p.UserId, p.Id)
                     }).ToList();
 
-                feedVm.CommentsViewModel.CommentType = CommentType.Photo;
+                feedVm.Comments.CommentType = CommentType.Photo;
 
                 if (photos.Count == 1)
                 {
                     var photoId = photos.First().Id;
-                    feedVm.CommentsViewModel.ItemId = photoId;
-                    feedVm.CommentsViewModel.Comments = GetComments(photoId,
-                                                                    feedVm.CommentsViewModel.CommentType,
+                    feedVm.Comments.ItemId = photoId;
+                    feedVm.Comments.Comments = GetComments(photoId,
+                                                                    feedVm.Comments.CommentType,
                                                                     currentUserId);
                 }
 
@@ -229,7 +229,7 @@ namespace Zazz.Web.Helpers
                 FillUserDetails(ref feedVm, feed.PostFeed.Post.FromUserId, currentUserId);
 
                 var post = feed.PostFeed.Post;
-                feedVm.PostViewModel = new PostViewModel
+                feedVm.Post = new PostViewModel
                 {
                     PostId = post.Id,
                     PostText = post.Message
@@ -238,17 +238,17 @@ namespace Zazz.Web.Helpers
                 if (post.ToUserId.HasValue)
                 {
                     var toUserId = post.ToUserId.Value;
-                    feedVm.PostViewModel.ToUserId = toUserId;
-                    feedVm.PostViewModel.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
-                    feedVm.PostViewModel.ToUserPhotoUrl = _photoService.GetUserDisplayPhoto(toUserId);
-                    feedVm.CurrentUserCanRemoveFeed = post.ToUserId == currentUserId;
+                    feedVm.Post.ToUserId = toUserId;
+                    feedVm.Post.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
+                    feedVm.Post.ToUserPhotoUrl = _photoService.GetUserDisplayPhoto(toUserId);
+                    feedVm.CanCurrentUserRemoveFeed = post.ToUserId == currentUserId;
                 }
 
-                feedVm.CommentsViewModel.CommentType = CommentType.Post;
+                feedVm.Comments.CommentType = CommentType.Post;
 
-                feedVm.CommentsViewModel.ItemId = feed.PostFeed.PostId;
-                feedVm.CommentsViewModel.Comments = GetComments(feed.PostFeed.PostId,
-                                                                feedVm.CommentsViewModel.CommentType,
+                feedVm.Comments.ItemId = feed.PostFeed.PostId;
+                feedVm.Comments.Comments = GetComments(feed.PostFeed.PostId,
+                                                                feedVm.Comments.CommentType,
                                                                 currentUserId);
 
                 #endregion
@@ -265,7 +265,7 @@ namespace Zazz.Web.Helpers
         {
             feedVm.UserId = userId;
             feedVm.UserDisplayName = _userService.GetUserDisplayName(userId);
-            feedVm.UserImageUrl = _photoService.GetUserDisplayPhoto(userId);
+            feedVm.UserDisplayPhoto = _photoService.GetUserDisplayPhoto(userId);
             feedVm.IsFromCurrentUser = userId == currentUserId;
         }
 

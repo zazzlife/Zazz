@@ -225,12 +225,12 @@ namespace Zazz.Web.Controllers
             var vm = new FeedViewModel
                      {
                          UserId = userId,
-                         UserImageUrl = userPhoto,
+                         UserDisplayPhoto = userPhoto,
                          UserDisplayName = userDisplayName,
                          Time = photo.UploadDate,
                          FeedType = FeedType.Photo,
                          IsFromCurrentUser = true,
-                         PhotoViewModel = new List<PhotoViewModel>
+                         Photos = new List<PhotoViewModel>
                                               {
                                                   new PhotoViewModel
                                                   {
@@ -243,7 +243,7 @@ namespace Zazz.Web.Controllers
                                                       FromUserPhotoUrl = userPhoto
                                                   }
                                               },
-                         CommentsViewModel = new CommentsViewModel
+                         Comments = new CommentsViewModel
                                              {
                                                  Comments = new List<CommentViewModel>(),
                                                  CommentType = CommentType.Photo,

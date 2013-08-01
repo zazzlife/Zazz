@@ -73,8 +73,8 @@ namespace Zazz.Web.Controllers
                          UserId = userId,
                          Time = post.CreatedTime,
                          UserDisplayName = UserService.GetUserDisplayName(userId),
-                         UserImageUrl = userPhotoUrl,
-                         PostViewModel = new PostViewModel
+                         UserDisplayPhoto = userPhotoUrl,
+                         Post = new PostViewModel
                                          {
                                              PostId = post.Id,
                                              PostText = message,
@@ -86,7 +86,7 @@ namespace Zazz.Web.Controllers
                                                                   ? PhotoService.GetUserDisplayPhoto(toUser.Value)
                                                                   : null
                                          },
-                         CommentsViewModel = new CommentsViewModel
+                         Comments = new CommentsViewModel
                                              {
                                                  Comments = new List<CommentViewModel>(),
                                                  CurrentUserPhotoUrl = userPhotoUrl,

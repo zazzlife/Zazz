@@ -119,13 +119,13 @@ namespace Zazz.Web
                 FeedType = feed.FeedType,
                 UserId = feed.UserId,
                 UserDisplayName = feed.UserDisplayName,
-                UserDisplayPhoto = feed.UserImageUrl,
-                CanCurrentUserRemoveFeed = feed.CurrentUserCanRemoveFeed || feed.IsFromCurrentUser,
+                UserDisplayPhoto = feed.UserDisplayPhoto,
+                CanCurrentUserRemoveFeed = feed.CanCurrentUserRemoveFeed || feed.IsFromCurrentUser,
                 Time = feed.Time,
 
-                Comments = feed.CommentsViewModel.Comments == null
+                Comments = feed.Comments.Comments == null
                 ? null //Enumerable.Empty<ApiComment>()
-                : feed.CommentsViewModel.Comments.Select(c => new ApiComment
+                : feed.Comments.Comments.Select(c => new ApiComment
                 {
                     CommentId = c.CommentId,
                     CommentText = c.CommentText,
@@ -137,7 +137,7 @@ namespace Zazz.Web
                 }),
 
                 Photos = feed.FeedType == FeedType.Photo
-                ? feed.PhotoViewModel.Select(p => new ApiPhoto
+                ? feed.Photos.Select(p => new ApiPhoto
                 {
                     PhotoId = p.PhotoId,
                     AlbumId = p.AlbumId,
@@ -152,14 +152,14 @@ namespace Zazz.Web
                 Post = feed.FeedType == FeedType.Post
                 ? new ApiPost
                 {
-                    Message = feed.PostViewModel.PostText,
-                    PostId = feed.PostViewModel.PostId,
+                    Message = feed.Post.PostText,
+                    PostId = feed.Post.PostId,
                     FromUserId = feed.UserId,
                     FromUserDisplayName = feed.UserDisplayName,
-                    FromUserDisplayPhoto = feed.UserImageUrl,
-                    ToUserDisplayName = feed.PostViewModel.ToUserDisplayName,
-                    ToUserId = feed.PostViewModel.ToUserId,
-                    ToUserDisplayPhoto = feed.PostViewModel.ToUserPhotoUrl,
+                    FromUserDisplayPhoto = feed.UserDisplayPhoto,
+                    ToUserDisplayName = feed.Post.ToUserDisplayName,
+                    ToUserId = feed.Post.ToUserId,
+                    ToUserDisplayPhoto = feed.Post.ToUserPhotoUrl,
                     Time = feed.Time
                 }
                 : null,
@@ -167,28 +167,28 @@ namespace Zazz.Web
                 ApiEvent = feed.FeedType == FeedType.Event
                 ? new ApiEvent
                 {
-                    City = feed.EventViewModel.City,
-                    CreatedTime = feed.EventViewModel.CreatedDate.HasValue
-                    ? feed.EventViewModel.CreatedDate.Value
+                    City = feed.Event.City,
+                    CreatedTime = feed.Event.CreatedDate.HasValue
+                    ? feed.Event.CreatedDate.Value
                     : DateTime.MinValue,
-                    Description = feed.EventViewModel.Description,
-                    EventId = feed.EventViewModel.Id,
-                    FacebookLink = feed.EventViewModel.FacebookEventId.HasValue
-                        ? "https://www.facebook.com/events/" + feed.EventViewModel.FacebookEventId.Value
+                    Description = feed.Event.Description,
+                    EventId = feed.Event.Id,
+                    FacebookLink = feed.Event.FacebookEventId.HasValue
+                        ? "https://www.facebook.com/events/" + feed.Event.FacebookEventId.Value
                         : null,
-                    ImageUrl = feed.EventViewModel.ImageUrl,
-                    IsDateOnly = feed.EventViewModel.IsDateOnly,
-                    IsFacebookEvent = feed.EventViewModel.IsFacebookEvent,
-                    Latitude = feed.EventViewModel.Latitude,
-                    Longitude = feed.EventViewModel.Longitude,
-                    Location = feed.EventViewModel.Location,
-                    Name = feed.EventViewModel.Name,
-                    Price = feed.EventViewModel.Price,
-                    Street = feed.EventViewModel.Street,
-                    Time = feed.EventViewModel.Time,
-                    UtcTime = feed.EventViewModel.Time.ToUniversalTime().DateTime,
+                    ImageUrl = feed.Event.ImageUrl,
+                    IsDateOnly = feed.Event.IsDateOnly,
+                    IsFacebookEvent = feed.Event.IsFacebookEvent,
+                    Latitude = feed.Event.Latitude,
+                    Longitude = feed.Event.Longitude,
+                    Location = feed.Event.Location,
+                    Name = feed.Event.Name,
+                    Price = feed.Event.Price,
+                    Street = feed.Event.Street,
+                    Time = feed.Event.Time,
+                    UtcTime = feed.Event.Time.ToUniversalTime().DateTime,
                     UserDisplayName = feed.UserDisplayName,
-                    UserDisplayPhoto = feed.UserImageUrl,
+                    UserDisplayPhoto = feed.UserDisplayPhoto,
                     UserId = feed.UserId
                 }
                 : null

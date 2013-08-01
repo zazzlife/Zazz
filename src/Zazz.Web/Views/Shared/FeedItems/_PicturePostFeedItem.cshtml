@@ -1,13 +1,13 @@
 ﻿@model FeedViewModel
 @{
     Layout = null;
-    var photosCount = Model.PhotoViewModel.Count;
+    var photosCount = Model.Photos.Count;
 }
 <div class="feed-item" data-id="@Model.FeedId">
     <div class="feed-userimg-container">
         <a href="~/users/profile/@Model.UserId">
             <img title="@Model.UserDisplayName" alt="@Model.UserDisplayName" 
-             src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+             src="@Model.UserDisplayPhoto.VerySmallLink" class="feed-user-img img-small-rounded" />
         </a>
     </div>
 
@@ -16,19 +16,19 @@
         @if (photosCount == 1)
         {
 
-            Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.PhotoViewModel[0]);
+            Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.Photos[0]);
 
             
             <div style="margin: 5px 5px 0 0;">
                 <div class="pull-left">
                     <button data-vote-btn="1" data-isloaded="0"
-                            class="btn-link disabled" data-id="@Model.PhotoViewModel[0].PhotoId" disabled="disabled">
+                            class="btn-link disabled" data-id="@Model.Photos[0].PhotoId" disabled="disabled">
                         
                         <i class="icon-thumbs-up"></i> 
                         Vote
                     </button>
                     
-                    <span style="margin-left: -6px;" id="photoVotesCount-@Model.PhotoViewModel[0].PhotoId"><i class="icon-spin icon-spinner"></i></span>
+                    <span style="margin-left: -6px;" id="photoVotesCount-@Model.Photos[0].PhotoId"><i class="icon-spin icon-spinner"></i></span>
                 </div>
                 
 
@@ -47,22 +47,22 @@
 
             <div class="clearfix" style="margin-bottom: 10px;"></div>
 
-            Html.RenderPartial("FeedItems/_FeedComments", Model.CommentsViewModel);
+            Html.RenderPartial("FeedItems/_FeedComments", Model.Comments);
         }
         else
         {
             if (photosCount == 2) // 2 photos
             {
                 Html.RenderPartial("FeedItems/_PhotoFeedTwoPhotos",
-                                   new[] { Model.PhotoViewModel[0], Model.PhotoViewModel[1] });
+                                   new[] { Model.Photos[0], Model.Photos[1] });
             }
             else if (photosCount == 3) // 3 photos
             {
             <ul class="thumbnail-rows">
-                <li>@Html.Partial("FeedItems/_PhotoFeedSinglePhoto", Model.PhotoViewModel[2])</li>
+                <li>@Html.Partial("FeedItems/_PhotoFeedSinglePhoto", Model.Photos[2])</li>
                 <li>
                     @Html.Partial("FeedItems/_PhotoFeedTwoPhotos",
-                                      new[] { Model.PhotoViewModel[0], Model.PhotoViewModel[1] })
+                                      new[] { Model.Photos[0], Model.Photos[1] })
                 </li>
             </ul>
             }
@@ -78,9 +78,9 @@
                     <li>
                         @Html.Partial("FeedItems/_PhotoFeedThreePhotos", new[]
                                                                                  {
-                                                                                     Model.PhotoViewModel[i],
-                                                                                     Model.PhotoViewModel[i - 1],
-                                                                                     Model.PhotoViewModel[i - 2]
+                                                                                     Model.Photos[i],
+                                                                                     Model.Photos[i - 1],
+                                                                                     Model.Photos[i - 2]
                                                                                  })
                         <div class="clearfix"></div>
                     </li>
@@ -91,7 +91,7 @@
                     // 1 full width + rows of 3
 
                     <li>
-                        @Html.Partial("FeedItems/_PhotoFeedSinglePhoto", Model.PhotoViewModel.Last())
+                        @Html.Partial("FeedItems/_PhotoFeedSinglePhoto", Model.Photos.Last())
                     </li>
 
 
@@ -101,9 +101,9 @@
                         @Html.Partial("FeedItems/_PhotoFeedThreePhotos",
                                               new[]
                                               {
-                                                  Model.PhotoViewModel[i],
-                                                  Model.PhotoViewModel[i - 1],
-                                                  Model.PhotoViewModel[i - 2]
+                                                  Model.Photos[i],
+                                                  Model.Photos[i - 1],
+                                                  Model.Photos[i - 2]
 
                                               })
                         <div class="clearfix"></div>
@@ -115,7 +115,7 @@
                     // 2 large pics + rows of 3
                     <li>
                         @Html.Partial("FeedItems/_PhotoFeedTwoPhotos",
-                                          new[] { Model.PhotoViewModel[photosCount - 1], Model.PhotoViewModel[photosCount - 2] })
+                                          new[] { Model.Photos[photosCount - 1], Model.Photos[photosCount - 2] })
                         <div class="clearfix"></div>
                     </li>
 
@@ -125,9 +125,9 @@
                         @Html.Partial("FeedItems/_PhotoFeedThreePhotos",
                                               new[]
                                               {
-                                                  Model.PhotoViewModel[i],
-                                                  Model.PhotoViewModel[i - 1],
-                                                  Model.PhotoViewModel[i - 2]
+                                                  Model.Photos[i],
+                                                  Model.Photos[i - 1],
+                                                  Model.Photos[i - 2]
                                               })
                         <div class="clearfix"></div>
                     </li>
@@ -140,7 +140,7 @@
         }
 
 
-        @foreach (var p in Model.PhotoViewModel)
+        @foreach (var p in Model.Photos)
         {
             Html.RenderPartial("_LightBoxPartial", p);
         }

@@ -7,17 +7,17 @@
     <div class="feed-userimg-container">
         <a href="~/users/profile/@Model.UserId">
             <img alt="@Model.UserDisplayName" title="@Model.UserDisplayName" 
-                 src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+                 src="@Model.UserDisplayPhoto.VerySmallLink" class="feed-user-img img-small-rounded" />
         </a>
 
-        @if (Model.PostViewModel.ToUserId.HasValue)
+        @if (Model.Post.ToUserId.HasValue)
         {
             <br/>
             <div class="text-center"><i class="icon-caret-down icon-large" style="color: black;"></i></div>
             <div>
-                <a href="~/users/profile/@Model.PostViewModel.ToUserId">
-                    <img alt="@Model.PostViewModel.ToUserDisplayName" title="@Model.PostViewModel.ToUserDisplayName" 
-                         src="@Model.PostViewModel.ToUserPhotoUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+                <a href="~/users/profile/@Model.Post.ToUserId">
+                    <img alt="@Model.Post.ToUserDisplayName" title="@Model.Post.ToUserDisplayName" 
+                         src="@Model.Post.ToUserPhotoUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
                 </a>
             </div>
             
@@ -25,17 +25,17 @@
 
     </div>
     <div class="feed-content well well-small no-padding">
-        @if (Model.IsFromCurrentUser || Model.CurrentUserCanRemoveFeed)
+        @if (Model.IsFromCurrentUser || Model.CanCurrentUserRemoveFeed)
         {
             <div class="feed-actions btn-group">
                 @if (Model.IsFromCurrentUser)
                 {
                     <button title="Edit Post" type="button"
-                            class="btn editFeedBtn icononly-btn" data-id="@Model.PostViewModel.PostId">
+                            class="btn editFeedBtn icononly-btn" data-id="@Model.Post.PostId">
                         <i class="icon-pencil"></i>
                     </button>
                 }
-                <button title="Remove Post" type="button" data-url="/posts/remove/@Model.PostViewModel.PostId"
+                <button title="Remove Post" type="button" data-url="/posts/remove/@Model.Post.PostId"
                         class="btn removeFeedBtn icononly-btn">
                     <i class="icon-remove"></i>
                 </button>
@@ -43,12 +43,12 @@
         }
 
         <p class="post-feed-message" data-containsTags="1" data-containsLinks="1">
-            @Model.PostViewModel.PostText
+            @Model.Post.PostText
         </p>
         
         <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Html.RelativeTime(Model.Time)</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 
-        @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
+        @Html.Partial("FeedItems/_FeedComments", Model.Comments)
     </div>
 </div>

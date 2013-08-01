@@ -15,7 +15,7 @@ namespace Zazz.Web.Models
         /// <summary>
         /// Image url of owner of the feed. Not necessarily the current user.
         /// </summary>
-        public PhotoLinks UserImageUrl { get; set; }
+        public PhotoLinks UserDisplayPhoto { get; set; }
 
         /// <summary>
         /// Owner of this feed. Not necessarily the current user.
@@ -29,15 +29,15 @@ namespace Zazz.Web.Models
 
         public bool IsFromCurrentUser { get; set; }
 
-        public bool CurrentUserCanRemoveFeed { get; set; }
+        public bool CanCurrentUserRemoveFeed { get; set; }
 
-        public EventViewModel EventViewModel { get; set; }
+        public EventViewModel Event { get; set; }
 
-        public List<PhotoViewModel> PhotoViewModel { get; set; }
+        public List<PhotoViewModel> Photos { get; set; }
 
-        public PostViewModel PostViewModel { get; set; }
+        public PostViewModel Post { get; set; }
 
-        public CommentsViewModel CommentsViewModel { get; set; }
+        public CommentsViewModel Comments { get; set; }
 
         public DateTime Time { get; set; }
     }

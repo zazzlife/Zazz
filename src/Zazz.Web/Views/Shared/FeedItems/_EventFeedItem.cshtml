@@ -6,7 +6,7 @@
     <div class="feed-userimg-container">
         <a href="~/users/profile/@Model.UserId">
             <img title="@Model.UserDisplayName" alt="@Model.UserDisplayName"
-             src="@Model.UserImageUrl.VerySmallLink" class="feed-user-img img-small-rounded" />
+             src="@Model.UserDisplayPhoto.VerySmallLink" class="feed-user-img img-small-rounded" />
         </a>
     </div>
 
@@ -14,17 +14,17 @@
     <div class="feed-content well well-small no-padding">
         <div style="margin: 10px;">
             <p>
-                <a href="~/users/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/events/show/@Model.EventViewModel.Id">event</a>
+                <a href="~/users/profile/@Model.UserId">@Model.UserDisplayName</a> has created a new <a href="~/events/show/@Model.Event.Id">event</a>
             </p>
 
-            @Html.Partial("_EventPartial", Model.EventViewModel)
+            @Html.Partial("_EventPartial", Model.Event)
 
             <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" class="pull-right font-verysmall" data-placement="right">@Html.RelativeTime(Model.Time)</div>
             <div class="clearfix"></div>
 
         </div>
 
-        @Html.Partial("FeedItems/_FeedComments", Model.CommentsViewModel)
+        @Html.Partial("FeedItems/_FeedComments", Model.Comments)
 
     </div>
 
