@@ -75,7 +75,7 @@ namespace Zazz.Web.Controllers
                                                   PhotoUrl = PhotoService.GeneratePhotoUrl(p.userId, p.id),
                                                   FromUserId = id,
                                                   FromUserDisplayName = UserService.GetUserDisplayName(id),
-                                                  PhotoDescription = p.description,
+                                                  Description = p.description,
                                                   FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(id)
                                               })
                                  .ToList();
@@ -236,7 +236,7 @@ namespace Zazz.Web.Controllers
                                                   {
                                                       PhotoId = photo.Id,
                                                       PhotoUrl = PhotoService.GeneratePhotoUrl(userId, photo.Id),
-                                                      PhotoDescription = photo.Description,
+                                                      Description = photo.Description,
                                                       IsFromCurrentUser = true,
                                                       FromUserDisplayName = userDisplayName,
                                                       FromUserId = userId,
@@ -247,7 +247,7 @@ namespace Zazz.Web.Controllers
                                              {
                                                  Comments = new List<CommentViewModel>(),
                                                  CommentType = CommentType.Photo,
-                                                 CurrentUserPhotoUrl = userPhoto,
+                                                 CurrentUserDisplayPhoto = userPhoto,
                                                  ItemId = photo.Id
                                              }
                      };

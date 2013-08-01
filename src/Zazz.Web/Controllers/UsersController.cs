@@ -123,7 +123,7 @@ namespace Zazz.Web.Controllers
                                    FromUserId = user.Id,
                                    FromUserPhotoUrl = profilePhotoUrl,
                                    IsFromCurrentUser = currentUserId == user.Id,
-                                   PhotoDescription = p.Description,
+                                   Description = p.Description,
                                    PhotoId = p.Id,
                                    PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                                })
@@ -154,7 +154,7 @@ namespace Zazz.Web.Controllers
                              FromUserId = user.Id,
                              FromUserPhotoUrl = profilePhotoUrl,
                              IsFromCurrentUser = currentUserId == user.Id,
-                             PhotoDescription = p.Description,
+                             Description = p.Description,
                              PhotoId = p.Id,
                              PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                          }),

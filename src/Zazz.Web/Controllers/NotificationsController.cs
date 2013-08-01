@@ -103,7 +103,7 @@ namespace Zazz.Web.Controllers
 
                         IsFromCurrentUser = userId == n.CommentNotification.Comment.PhotoComment.Photo.UserId,
 
-                        PhotoDescription = n.CommentNotification.Comment.PhotoComment.Photo.Description,
+                        Description = n.CommentNotification.Comment.PhotoComment.Photo.Description,
 
                         PhotoId = n.CommentNotification.Comment.PhotoComment.PhotoId,
 

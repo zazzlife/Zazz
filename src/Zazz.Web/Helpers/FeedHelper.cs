@@ -130,7 +130,7 @@ namespace Zazz.Web.Helpers
                 Time = feed.Time,
                 Comments = new CommentsViewModel
                 {
-                    CurrentUserPhotoUrl = currentUserPhotoUrl,
+                    CurrentUserDisplayPhoto = currentUserPhotoUrl,
                 }
             };
 
@@ -201,7 +201,7 @@ namespace Zazz.Web.Helpers
                     {
                         PhotoId = p.Id,
                         AlbumId = p.AlbumId,
-                        PhotoDescription = p.Description,
+                        Description = p.Description,
                         FromUserDisplayName = feedVm.UserDisplayName,
                         FromUserPhotoUrl = feedVm.UserDisplayPhoto,
                         FromUserId = p.UserId,
@@ -240,7 +240,7 @@ namespace Zazz.Web.Helpers
                     var toUserId = post.ToUserId.Value;
                     feedVm.Post.ToUserId = toUserId;
                     feedVm.Post.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
-                    feedVm.Post.ToUserPhotoUrl = _photoService.GetUserDisplayPhoto(toUserId);
+                    feedVm.Post.ToUserDisplayPhoto = _photoService.GetUserDisplayPhoto(toUserId);
                     feedVm.CanCurrentUserRemoveFeed = post.ToUserId == currentUserId;
                 }
 
@@ -308,7 +308,7 @@ namespace Zazz.Web.Helpers
                                          Time = c.Time,
                                          UserDisplayName = _userService.GetUserDisplayName(c.UserId),
                                          UserId = c.UserId,
-                                         UserPhotoUrl = _photoService.GetUserDisplayPhoto(c.UserId)
+                                         UserDisplayPhoto = _photoService.GetUserDisplayPhoto(c.UserId)
                                      }).ToList();
         }
     }

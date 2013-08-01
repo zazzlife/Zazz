@@ -132,7 +132,7 @@ namespace Zazz.Web
                     IsFromCurrentUser = c.IsFromCurrentUser,
                     UserId = c.UserId,
                     UserDisplayName = c.UserDisplayName,
-                    UserDisplayPhoto = c.UserPhotoUrl,
+                    UserDisplayPhoto = c.UserDisplayPhoto,
                     Time = c.Time
                 }),
 
@@ -141,7 +141,7 @@ namespace Zazz.Web
                 {
                     PhotoId = p.PhotoId,
                     AlbumId = p.AlbumId,
-                    Description = p.PhotoDescription,
+                    Description = p.Description,
                     UserId = p.FromUserId,
                     UserDisplayName = p.FromUserDisplayName,
                     UserDisplayPhoto = p.FromUserPhotoUrl,
@@ -159,7 +159,7 @@ namespace Zazz.Web
                     FromUserDisplayPhoto = feed.UserDisplayPhoto,
                     ToUserDisplayName = feed.Post.ToUserDisplayName,
                     ToUserId = feed.Post.ToUserId,
-                    ToUserDisplayPhoto = feed.Post.ToUserPhotoUrl,
+                    ToUserDisplayPhoto = feed.Post.ToUserDisplayPhoto,
                     Time = feed.Time
                 }
                 : null,
@@ -204,7 +204,7 @@ namespace Zazz.Web
                 IsFromCurrentUser = commentViewModel.IsFromCurrentUser,
                 Time = commentViewModel.Time,
                 UserDisplayName = commentViewModel.UserDisplayName,
-                UserDisplayPhoto = commentViewModel.UserPhotoUrl,
+                UserDisplayPhoto = commentViewModel.UserDisplayPhoto,
                 UserId = commentViewModel.UserId
             };
         }

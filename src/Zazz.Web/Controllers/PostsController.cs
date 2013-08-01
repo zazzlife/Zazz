@@ -82,14 +82,14 @@ namespace Zazz.Web.Controllers
                                              ToUserDisplayName = toUser.HasValue
                                                                      ? UserService.GetUserDisplayName(toUser.Value)
                                                                      : null,
-                                             ToUserPhotoUrl = toUser.HasValue
+                                             ToUserDisplayPhoto = toUser.HasValue
                                                                   ? PhotoService.GetUserDisplayPhoto(toUser.Value)
                                                                   : null
                                          },
                          Comments = new CommentsViewModel
                                              {
                                                  Comments = new List<CommentViewModel>(),
-                                                 CurrentUserPhotoUrl = userPhotoUrl,
+                                                 CurrentUserDisplayPhoto = userPhotoUrl,
                                                  CommentType = CommentType.Post,
                                                  ItemId = post.Id
                                              }

@@ -49,7 +49,7 @@ namespace Zazz.Web.Models
 
         public int? AlbumId { get; set; }
 
-        public string PhotoDescription { get; set; }
+        public string Description { get; set; }
 
         public PhotoLinks PhotoUrl { get; set; }
 
