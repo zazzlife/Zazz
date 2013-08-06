@@ -568,6 +568,7 @@
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -640,6 +641,7 @@
     <Content Include="Views\Account\RegisterUser.cshtml" />
     <Content Include="Views\Account\RegisterClub.cshtml" />
     <Content Include="Views\Account\SessionExpired.cshtml" />
+    <Content Include="Scripts\underscore.min.map" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
