@@ -94,7 +94,7 @@
     <Compile Include="Helpers\Base64Helper.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="KeyChain.cs" />
-    <Compile Include="CircularBufferCache.cs" />
+    <Compile Include="LeastRecentlyUsedCache.cs" />
     <Compile Include="DefaultImageHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FakeEMailService.cs" />

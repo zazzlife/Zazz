@@ -6,7 +6,7 @@ namespace Zazz.UnitTests.Infrastructure
     [TestFixture]
     public class CircularBufferCacheShould
     {
-        private CircularBufferCache<string, int> _sut;
+        private LeastRecentlyUsedCache<string, int> _sut;
         private string _key;
         private int _val;
         private const int MAXIMUM_SIZE = 2;
@@ -14,7 +14,7 @@ namespace Zazz.UnitTests.Infrastructure
         [SetUp]
         public void Init()
         {
-            _sut = new CircularBufferCache<string, int>(MAXIMUM_SIZE);
+            _sut = new LeastRecentlyUsedCache<string, int>(MAXIMUM_SIZE);
 
             _key = "soroush";
             _val = 1;

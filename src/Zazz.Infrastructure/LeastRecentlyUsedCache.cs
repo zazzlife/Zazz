@@ -7,13 +7,13 @@ using Zazz.Core.Interfaces;
 
 namespace Zazz.Infrastructure
 {
-    public class CircularBufferCache<TKey, TVal> : ICacheSystem<TKey, TVal>
+    public class LeastRecentlyUsedCache<TKey, TVal> : ICacheSystem<TKey, TVal>
     {
         private readonly int _maximumSize;
         internal readonly ConcurrentDictionary<TKey, TVal> Items;
         internal readonly ConcurrentDictionary<TKey, int> RequestsCounter;
 
-        public CircularBufferCache(int maximumSize)
+        public LeastRecentlyUsedCache(int maximumSize)
         {
             if (maximumSize < 1)
                 throw new ArgumentOutOfRangeException("maximumSize");
@@ -26,13 +26,13 @@ namespace Zazz.Infrastructure
         public void Add(TKey key, TVal val)
         {
             if (Items.Count >= _maximumSize)
-                RemoveLowestItem();
+                RemoveLeastUsedItem();
 
             Items.TryAdd(key, val);
             RequestsCounter.TryAdd(key, 0);
         }
 
-        private void RemoveLowestItem()
+        private void RemoveLeastUsedItem()
         {
             try
             {

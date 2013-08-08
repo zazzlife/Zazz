@@ -8,9 +8,9 @@ namespace Zazz.Infrastructure.Services
     public class CacheService : ICacheService
     {
         //These properties should be internal so they are accessable by unit test project.
-        internal static ICacheSystem<string, int> UserIdCache = new CircularBufferCache<string, int>(500);
-        internal static ICacheSystem<int, PhotoLinks> PhotoUrlCache = new CircularBufferCache<int, PhotoLinks>(200);
-        internal static ICacheSystem<int, string> DisplayNameCache = new CircularBufferCache<int, string>(200);
+        internal static ICacheSystem<string, int> UserIdCache = new LeastRecentlyUsedCache<string, int>(500);
+        internal static ICacheSystem<int, PhotoLinks> PhotoUrlCache = new LeastRecentlyUsedCache<int, PhotoLinks>(200);
+        internal static ICacheSystem<int, string> DisplayNameCache = new LeastRecentlyUsedCache<int, string>(200);
 
         public void AddUserId(string username, int userId)
         {
