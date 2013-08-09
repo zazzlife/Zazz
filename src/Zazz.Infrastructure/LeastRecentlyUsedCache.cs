@@ -47,7 +47,7 @@ namespace Zazz.Infrastructure
                 Remove(key);
             }
             catch (Exception)
-            { } // we dont really want to break the request only because it failed to remove because of race condition
+            { } // we dont really want to break the request just because it failed to remove because of race condition
         }
 
         public void Remove(TKey key)
