@@ -9,8 +9,8 @@ namespace Zazz.Infrastructure.Services
 {
     public class AzureBlobService : IStorageService
     {
-        private readonly string _storageConnString;
         private readonly string _storageAccountName;
+        private readonly CloudStorageAccount _storageAccount;
 
         private const string PIC_CONTAINER_NAME = "pictures";
 
@@ -23,8 +23,8 @@ namespace Zazz.Infrastructure.Services
         // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public AzureBlobService(string storageConnString, string storageAccountName)
         {
-            _storageConnString = storageConnString;
             _storageAccountName = storageAccountName;
+            _storageAccount = CloudStorageAccount.Parse(storageConnString);
         }
 
         public void SavePhotoBlob(string fileName, Stream data)
@@ -34,7 +34,7 @@ namespace Zazz.Infrastructure.Services
 
         public Stream GetBlob(string fileName)
         {
-            throw new System.NotImplementedException();
+            return GetBlob(PIC_CONTAINER_NAME, fileName);
         }
 
         public void RemoveBlob(string fileName)
@@ -42,13 +42,24 @@ namespace Zazz.Infrastructure.Services
             throw new System.NotImplementedException();
         }
 
-        private void SaveBlob(string containerName, string fileName, Stream data, string contentType)
+        private Stream GetBlob(string containerName, string fileName)
         {
-            var storageAccount = CloudStorageAccount.Parse(_storageConnString);
-            var client = storageAccount.CreateCloudBlobClient();
-
+            var client = _storageAccount.CreateCloudBlobClient();
             var container = client.GetContainerReference(containerName);
             var blob = container.GetBlockBlobReference(fileName);
+
+            var ms = new MemoryStream();
+            blob.DownloadToStream(ms);
+
+            return ms;
+        }
+
+        private void SaveBlob(string containerName, string fileName, Stream data, string contentType)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+            var container = client.GetContainerReference(containerName);
+            var blob = container.GetBlockBlobReference(fileName);
+
             blob.Properties.ContentType = contentType;
 
             blob.UploadFromStream(data);
