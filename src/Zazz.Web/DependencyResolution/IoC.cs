@@ -42,6 +42,7 @@ namespace Zazz.Web.DependencyResolution
             var baseBlobAddress = ConfigurationManager.AppSettings["BaseBlobUrl"];
             var websiteAddress = ConfigurationManager.AppSettings["WebsiteAddress"];
             var blobConnString = ConfigurationManager.AppSettings["BlobConnectionString"];
+            var blobAccountName = ConfigurationManager.AppSettings["BlobAccountName"];
 
             var facebookRealtimeToken = ConfigurationManager.AppSettings["FacebookRealtimeVerifyToken"];
             var facebookAppId = ConfigurationManager.AppSettings["FacebookAppId"];
@@ -78,7 +79,8 @@ namespace Zazz.Web.DependencyResolution
 #else
                             x.For<IStorageService>().Singleton()
                              .Use<AzureBlobService>()
-                             .Ctor<string>("storageConnString").Is(blobConnString);
+                             .Ctor<string>("storageConnString").Is(blobConnString)
+                            .Ctor<string>("storageAccountName").Is(blobAccountName);
 #endif
 
                             x.For<IKeyChain>().Singleton()
