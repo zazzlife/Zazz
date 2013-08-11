@@ -39,7 +39,16 @@ namespace Zazz.Infrastructure.Services
 
         public void RemoveBlob(string fileName)
         {
-            throw new System.NotImplementedException();
+            RemoveBlob(PIC_CONTAINER_NAME, fileName);
+        }
+
+        private void RemoveBlob(string containerName, string fileName)
+        {
+            var client = _storageAccount.CreateCloudBlobClient();
+            var container = client.GetContainerReference(containerName);
+            var blob = container.GetBlockBlobReference(fileName);
+
+            blob.DeleteIfExists();
         }
 
         private Stream GetBlob(string containerName, string fileName)
