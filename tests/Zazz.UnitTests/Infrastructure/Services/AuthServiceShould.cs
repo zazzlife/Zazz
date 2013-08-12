@@ -706,7 +706,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                       ProviderUserId = providerId,
                                       Provider = provider,
                                       UserId = 23,
-                                      AccessToken = "old token"
+                                      AccessToken = "old token",
+                                      User = new User
+                                             {
+                                                 AccountType = AccountType.User
+                                             }
                                   };
 
             var newOauthAccount = new LinkedAccount

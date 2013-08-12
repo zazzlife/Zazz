@@ -185,7 +185,6 @@ namespace Zazz.Infrastructure.Services
             if (account == null)
             {
                 _uow.LinkedAccountRepository.InsertGraph(oauthAccount);
-                
             }
             else
             {
