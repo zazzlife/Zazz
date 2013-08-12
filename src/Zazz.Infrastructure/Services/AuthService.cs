@@ -15,18 +15,16 @@ namespace Zazz.Infrastructure.Services
     {
         private readonly IUoW _uow;
         private readonly ICryptoService _cryptoService;
-        private readonly ICacheService _cacheService;
         private readonly IFacebookService _facebookService;
 
         private const int PASS_MAX_LENGTH = 20;
 
         private const int TOKEN_SIZE = 512;
 
-        public AuthService(IUoW uow, ICryptoService cryptoService, ICacheService cacheService, IFacebookService facebookService)
+        public AuthService(IUoW uow, ICryptoService cryptoService,IFacebookService facebookService)
         {
             _uow = uow;
             _cryptoService = cryptoService;
-            _cacheService = cacheService;
             _facebookService = facebookService;
         }
 

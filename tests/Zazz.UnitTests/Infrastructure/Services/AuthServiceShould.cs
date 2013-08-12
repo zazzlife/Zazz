@@ -24,7 +24,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private User _user;
         private string _pass;
         private MockRepository _mockRepo;
-        private Mock<ICacheService> _cacheService;
         private byte[] _token;
         private Mock<IFacebookService> _fbService;
 
@@ -47,12 +46,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
             
-            _cacheService = _mockRepo.Create<ICacheService>();
             _uow = _mockRepo.Create<IUoW>();
             _cryptoService = _mockRepo.Create<ICryptoService>();
             _fbService = _mockRepo.Create<IFacebookService>();
 
-            _sut = new AuthService(_uow.Object, _cryptoService.Object, _cacheService.Object, _fbService.Object);
+            _sut = new AuthService(_uow.Object, _cryptoService.Object, _fbService.Object);
         }
 
         #region Login
