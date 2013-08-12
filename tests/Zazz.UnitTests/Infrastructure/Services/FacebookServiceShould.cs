@@ -430,6 +430,22 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ThrowIfPageNotExists_OnUpdatePageAccessToken()
+        {
+            //Arrange
+            var pageId = "1234567";
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(pageId))
+                .Returns(() => null);
+
+            //Act
+            Assert.Throws<NotFoundException>(() => _sut.UpdatePageAccessToken(pageId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
+
+
+        [Test]
         public void NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()
         {
             //Arrange

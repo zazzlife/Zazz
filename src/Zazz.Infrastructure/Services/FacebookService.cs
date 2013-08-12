@@ -279,7 +279,9 @@ namespace Zazz.Infrastructure.Services
 
         public void UpdatePageAccessToken(string pageId)
         {
-            throw new NotImplementedException();
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
+            if (page == null)
+                throw new NotFoundException();
         }
 
         public IQueryable<User> FindZazzFbFriends(string accessToken)
