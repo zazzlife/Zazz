@@ -235,7 +235,6 @@ namespace Zazz.Infrastructure.Services
         public IEnumerable<FbPage> GetUserPages(int userId)
         {
             var oAuthAccount = _uow.LinkedAccountRepository.GetUserAccount(userId, OAuthProvider.Facebook);
-
             if (oAuthAccount == null)
                 throw new OAuthAccountNotFoundException();
 
@@ -277,26 +276,6 @@ namespace Zazz.Infrastructure.Services
 
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();
-        }
-
-        public void UpdatePageAccessToken(string pageId)
-        {
-            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
-            if (page == null)
-                throw new NotFoundException();
-
-            var fbAccount = page.User.LinkedAccounts.SingleOrDefault(a => a.Provider == OAuthProvider.Facebook);
-            if (fbAccount == null)
-            {
-                //this should not happen!
-                var message = String.Format("Page owner didn't have a fb account! pageId:{0} UserId:{1}", pageId,
-                                            page.UserId);
-
-                _logger.LogError("Zazz.Infrastructure.Services.FacebookService.UpdatePageAccessToken", message);
-                throw new Exception(message);
-            }
-
-
         }
 
         public IQueryable<User> FindZazzFbFriends(string accessToken)

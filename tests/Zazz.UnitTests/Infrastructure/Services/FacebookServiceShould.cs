@@ -432,52 +432,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void ThrowIfPageNotExists_OnUpdatePageAccessToken()
-        {
-            //Arrange
-            var pageId = "1234567";
-            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(pageId))
-                .Returns(() => null);
-
-            //Act
-            Assert.Throws<NotFoundException>(() => _sut.UpdatePageAccessToken(pageId));
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
-        public void ThrowIfPageOwnerDoesntHaveFbAccount_OnUpdatePageAccessToken()
-        {
-            //Arrange
-            var pageId = "1234567";
-            var userId = 2323;
-
-            var page = new FacebookPage
-                       {
-                           AccessToken = "old access token",
-                           FacebookId = pageId,
-                           UserId = userId,
-                           User = new User
-                                  {
-                                      Id = userId,
-                                      LinkedAccounts = new List<LinkedAccount>()
-                                  }
-                       };
-
-            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(pageId))
-                .Returns(page);
-
-            _logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()));
-
-            //Act
-            Assert.Throws<Exception>(() => _sut.UpdatePageAccessToken(pageId));
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-        [Test]
         public void NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()
         {
             //Arrange
