@@ -277,6 +277,11 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
+        public void UpdatePageAccessToken(string pageId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<User> FindZazzFbFriends(string accessToken)
         {
             var fbFriends = _facebookHelper.GetFriends(accessToken).ToList();

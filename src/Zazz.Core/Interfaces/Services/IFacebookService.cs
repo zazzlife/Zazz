@@ -25,6 +25,8 @@ namespace Zazz.Core.Interfaces.Services
 
         void UnlinkPage(string fbPageId, int currentUserId);
 
+        void UpdatePageAccessToken(string pageId);
+
         IQueryable<User> FindZazzFbFriends(string accessToken);
     }
 }
