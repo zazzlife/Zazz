@@ -26,6 +26,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private MockRepository _mockRepo;
         private Mock<ICacheService> _cacheService;
         private byte[] _token;
+        private Mock<IFacebookService> _fbService;
 
         [SetUp]
         public void Init()
@@ -45,12 +46,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             _mockRepo = new MockRepository(MockBehavior.Strict);
+            
             _cacheService = _mockRepo.Create<ICacheService>();
-
             _uow = _mockRepo.Create<IUoW>();
             _cryptoService = _mockRepo.Create<ICryptoService>();
+            _fbService = _mockRepo.Create<IFacebookService>();
 
-            _sut = new AuthService(_uow.Object, _cryptoService.Object, _cacheService.Object);
+            _sut = new AuthService(_uow.Object, _cryptoService.Object, _cacheService.Object, _fbService.Object);
         }
 
         #region Login
@@ -725,6 +727,50 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oldOAuthAccount);
 
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.AddOrUpdateOAuthAccount(newOauthAccount);
+
+            //Assert
+            Assert.AreEqual(newOauthAccount.AccessToken, oldOAuthAccount.AccessToken);
+
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void UpdatePagesAccessTokenIfAccountTypeIsClub_OnAddOrUpdateOAuthAccount()
+        {
+            //Arrange
+            var providerId = 1234L;
+            var provider = OAuthProvider.Facebook;
+
+            var oldOAuthAccount = new LinkedAccount
+            {
+                ProviderUserId = providerId,
+                Provider = provider,
+                UserId = 23,
+                AccessToken = "old token",
+                User = new User
+                {
+                    AccountType = AccountType.Club
+                }
+            };
+
+            var newOauthAccount = new LinkedAccount
+            {
+                ProviderUserId = providerId,
+                Provider = provider,
+                UserId = 23,
+                AccessToken = "new token"
+            };
+
+
+            _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
+                    .Returns(oldOAuthAccount);
+
+            _fbService.Setup(x => x.UpdatePagesAccessToken(oldOAuthAccount.UserId));
 
             _uow.Setup(x => x.SaveChanges());
 
