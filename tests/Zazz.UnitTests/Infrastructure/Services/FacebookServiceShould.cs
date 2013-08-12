@@ -31,6 +31,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IPostService> _postService;
         private Mock<IAlbumService> _albumService;
         private MockRepository _mockRepo;
+        private Mock<ILogger> _logger;
 
         [SetUp]
         public void Init()
@@ -43,10 +44,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _postService = _mockRepo.Create<IPostService>();
             _photoService = _mockRepo.Create<IPhotoService>();
             _albumService = _mockRepo.Create<IAlbumService>();
-
             _uow = _mockRepo.Create<IUoW>();
+            _logger = _mockRepo.Create<ILogger>();
+
             _sut = new FacebookService(_fbHelper.Object, _errorHander.Object, _uow.Object, _eventService.Object,
-                                       _postService.Object, _photoService.Object, _albumService.Object);
+                                       _postService.Object, _photoService.Object, _albumService.Object, _logger.Object);
         }
 
         [Test]
@@ -444,6 +446,36 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _mockRepo.VerifyAll();
         }
 
+        [Test]
+        public void ThrowIfPageOwnerDoesntHaveFbAccount_OnUpdatePageAccessToken()
+        {
+            //Arrange
+            var pageId = "1234567";
+            var userId = 2323;
+
+            var page = new FacebookPage
+                       {
+                           AccessToken = "old access token",
+                           FacebookId = pageId,
+                           UserId = userId,
+                           User = new User
+                                  {
+                                      Id = userId,
+                                      LinkedAccounts = new List<LinkedAccount>()
+                                  }
+                       };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(pageId))
+                .Returns(page);
+
+            _logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()));
+
+            //Act
+            Assert.Throws<Exception>(() => _sut.UpdatePageAccessToken(pageId));
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
 
         [Test]
         public void NotDoAnythingIfOAuthAccountNotExists_OnUpdateUserEvents()

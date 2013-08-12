@@ -26,10 +26,11 @@ namespace Zazz.Infrastructure.Services
         private readonly IPostService _postService;
         private readonly IPhotoService _photoService;
         private readonly IAlbumService _albumService;
+        private readonly ILogger _logger;
 
         public FacebookService(IFacebookHelper facebookHelper, IErrorHandler errorHandler, IUoW uow,
                                IEventService eventService, IPostService postService, IPhotoService photoService,
-                               IAlbumService albumService)
+                               IAlbumService albumService, ILogger logger)
         {
             _facebookHelper = facebookHelper;
             _errorHandler = errorHandler;
@@ -38,6 +39,7 @@ namespace Zazz.Infrastructure.Services
             _postService = postService;
             _photoService = photoService;
             _albumService = albumService;
+            _logger = logger;
         }
 
         public void HandleRealtimeUserUpdatesAsync(FbUserChanges changes)
@@ -282,6 +284,19 @@ namespace Zazz.Infrastructure.Services
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
                 throw new NotFoundException();
+
+            var fbAccount = page.User.LinkedAccounts.SingleOrDefault(a => a.Provider == OAuthProvider.Facebook);
+            if (fbAccount == null)
+            {
+                //this should not happen!
+                var message = String.Format("Page owner didn't have a fb account! pageId:{0} UserId:{1}", pageId,
+                                            page.UserId);
+
+                _logger.LogError("Zazz.Infrastructure.Services.FacebookService.UpdatePageAccessToken", message);
+                throw new Exception(message);
+            }
+
+
         }
 
         public IQueryable<User> FindZazzFbFriends(string accessToken)
