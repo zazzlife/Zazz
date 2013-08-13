@@ -280,7 +280,7 @@ namespace Zazz.Infrastructure.Services
 
         public void UpdatePagesAccessToken(int userId)
         {
-            throw new NotImplementedException();
+            //TODO:Implement this!
         }
 
         public IQueryable<User> FindZazzFbFriends(string accessToken)
