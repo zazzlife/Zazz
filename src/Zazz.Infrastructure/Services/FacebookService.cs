@@ -280,6 +280,15 @@ namespace Zazz.Infrastructure.Services
 
         public void UpdatePagesAccessToken(int userId)
         {
+            var pages = _uow.FacebookPageRepository.GetUserPages(userId)
+                .ToList();
+
+            if (pages.Count < 1)
+                return;
+
+
+
+
             //TODO:Implement this!
         }
 

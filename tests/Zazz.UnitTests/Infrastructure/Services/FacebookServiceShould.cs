@@ -971,5 +971,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void NotDoAnythingIfUserHasNoLinkedPages_OnUpdatePagesAccessToken()
+        {
+            //Arrange
+            var userId = 4343;
+            _uow.Setup(x => x.FacebookPageRepository.GetUserPages(userId))
+                .Returns(new EnumerableQuery<FacebookPage>(Enumerable.Empty<FacebookPage>()));
+
+            //Act
+            _sut.UpdatePagesAccessToken(userId);
+
+            //Assert
+            _mockRepo.VerifyAll();
+        }
     }
 }
