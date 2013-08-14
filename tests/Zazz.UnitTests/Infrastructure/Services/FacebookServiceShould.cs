@@ -977,11 +977,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var userId = 4343;
+            var token = "accesstoken";
+
             _uow.Setup(x => x.FacebookPageRepository.GetUserPages(userId))
                 .Returns(new EnumerableQuery<FacebookPage>(Enumerable.Empty<FacebookPage>()));
 
             //Act
-            _sut.UpdatePagesAccessToken(userId);
+            _sut.UpdatePagesAccessToken(userId, token);
 
             //Assert
             _mockRepo.VerifyAll();

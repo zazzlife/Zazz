@@ -278,7 +278,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UpdatePagesAccessToken(int userId)
+        public void UpdatePagesAccessToken(int userId, string accessToken)
         {
             var pages = _uow.FacebookPageRepository.GetUserPages(userId)
                 .ToList();

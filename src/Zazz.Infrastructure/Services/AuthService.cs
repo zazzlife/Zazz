@@ -191,7 +191,7 @@ namespace Zazz.Infrastructure.Services
                 account.AccessToken = oauthAccount.AccessToken;
 
                 if (account.User.AccountType == AccountType.Club)
-                    _facebookService.UpdatePagesAccessToken(account.UserId);
+                    _facebookService.UpdatePagesAccessToken(account.UserId, oauthAccount.AccessToken);
             }
 
             _uow.SaveChanges();

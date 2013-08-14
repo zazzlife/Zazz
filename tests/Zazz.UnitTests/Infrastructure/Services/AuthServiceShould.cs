@@ -768,7 +768,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
                     .Returns(oldOAuthAccount);
 
-            _fbService.Setup(x => x.UpdatePagesAccessToken(oldOAuthAccount.UserId));
+            _fbService.Setup(x => x.UpdatePagesAccessToken(oldOAuthAccount.UserId, newOauthAccount.AccessToken));
 
             _uow.Setup(x => x.SaveChanges());
 
