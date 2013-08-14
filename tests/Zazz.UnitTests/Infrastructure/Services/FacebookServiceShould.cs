@@ -988,5 +988,74 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             _mockRepo.VerifyAll();
         }
+
+        [Test]
+        public void GetNewAccessTokens_OnUpdatePagesAccessToken()
+        {
+            //Arrange
+            var userId = 4343;
+            var token = "accesstoken";
+
+            var p1 = new FacebookPage
+                     {
+                         FacebookId = "1",
+                         AccessToken = "oldToken1",
+                         Name = "old name1"
+                     };
+
+            var p2 = new FacebookPage
+                     {
+                         FacebookId = "2",
+                         AccessToken = "oldToken2",
+                         Name = "old name2"
+                     };
+
+            var userPages = new List<FacebookPage>
+                            {
+                                p1,p2
+                            };
+
+
+            var updated1 = new FbPage
+                           {
+                               AcessToken = "new token1",
+                               Id = "1",
+                               Name = "new name1"
+                           };
+
+
+            var updated2 = new FbPage
+                           {
+                               AcessToken = "new token2",
+                               Id = "2",
+                               Name = "new name2"
+                           };
+
+            var newPages = new List<FbPage>
+                            {
+                                updated1,
+                                updated2
+                            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetUserPages(userId))
+                .Returns(new EnumerableQuery<FacebookPage>(userPages));
+
+            _fbHelper.Setup(x => x.GetPages(token))
+                     .Returns(newPages);
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.UpdatePagesAccessToken(userId, token);
+
+            //Assert
+            Assert.AreEqual(updated1.AcessToken, p1.AccessToken);
+            Assert.AreEqual(updated1.Name, p1.Name);
+
+            Assert.AreEqual(updated2.AcessToken, p2.AccessToken);
+            Assert.AreEqual(updated2.Name, p2.Name);
+
+            _mockRepo.VerifyAll();
+        }
     }
 }

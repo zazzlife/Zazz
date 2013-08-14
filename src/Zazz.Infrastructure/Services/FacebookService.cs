@@ -286,10 +286,19 @@ namespace Zazz.Infrastructure.Services
             if (pages.Count < 1)
                 return;
 
+            var updatedPages = _facebookHelper.GetPages(accessToken).ToList();
 
+            foreach (var fbPage in pages)
+            {
+                var updatedPage = updatedPages.SingleOrDefault(p => p.Id == fbPage.FacebookId);
 
+                fbPage.AccessToken = updatedPage.AcessToken;
+                fbPage.Name = updatedPage.Name;
 
-            //TODO:Implement this!
+                //TODO: if the page was deleted, we need to remove its data
+            }
+
+            _uow.SaveChanges();
         }
 
         public IQueryable<User> FindZazzFbFriends(string accessToken)
