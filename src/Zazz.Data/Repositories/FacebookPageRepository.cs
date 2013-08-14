@@ -13,11 +13,9 @@ namespace Zazz.Data.Repositories
         public FacebookPageRepository(DbContext dbContext) : base(dbContext)
         {}
 
-        public List<string> GetUserPageFacebookIds(int userId)
+        public IQueryable<FacebookPage> GetUserPages(int userId)
         {
-            return DbSet.Where(p => p.UserId == userId)
-                        .Select(p => p.FacebookId)
-                        .ToList();
+            return DbSet.Where(f => f.UserId == userId);
         }
 
         public FacebookPage GetByFacebookPageId(string fbPageId)

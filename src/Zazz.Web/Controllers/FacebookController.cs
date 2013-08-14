@@ -91,7 +91,9 @@ namespace Zazz.Web.Controllers
             var userId = _userService.GetUserId(User.Identity.Name);
 
             var allPages = _facebookService.GetUserPages(userId);
-            var existingPageIds = _uow.FacebookPageRepository.GetUserPageFacebookIds(userId);
+            var existingPageIds = _uow.FacebookPageRepository.GetUserPages(userId)
+                                      .Select(f => f.FacebookId)
+                                      .ToList();
 
             var vm = new List<FbPageViewModel>();
             foreach (var fbPage in allPages)

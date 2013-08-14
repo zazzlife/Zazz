@@ -51,12 +51,12 @@ namespace Zazz.IntegrationTests.Repositories
         {
             //Arrange
             //Act
-            var result = _repo.GetUserPageFacebookIds(_user.Id);
+            var result = _repo.GetUserPages(_user.Id).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);
-            CollectionAssert.Contains(result, _page1.FacebookId);
-            CollectionAssert.Contains(result, _page2.FacebookId);
+            Assert.IsTrue(result.Any(f => f.FacebookId == _page1.FacebookId));
+            Assert.IsTrue(result.Any(f => f.FacebookId == _page2.FacebookId));
         }
 
         [Test]
