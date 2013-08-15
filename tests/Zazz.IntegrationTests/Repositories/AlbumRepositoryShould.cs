@@ -103,7 +103,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetPageAlbumIds(page.Id).ToList();
+            var result = _repo.GetPageAlbums(page.Id).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);

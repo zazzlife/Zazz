@@ -13,7 +13,7 @@ namespace Zazz.Core.Interfaces.Repositories
 
         Album GetByFacebookId(string fbId);
 
-        IEnumerable<int> GetPageAlbumIds(int pageId);
+        IQueryable<Album> GetPageAlbums(int pageId);
         
         AlbumWithThumbnailDTO GetAlbumWithThumbnail(int albumId);
         
