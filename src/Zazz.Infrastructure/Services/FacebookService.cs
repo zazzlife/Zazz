@@ -187,7 +187,7 @@ namespace Zazz.Infrastructure.Services
 
             var photos = _facebookHelper.GetPhotos(page.AccessToken, limit);
             foreach (var fbPhoto in photos)
-            {   
+            {
                 var dbPhoto = _uow.PhotoRepository.GetByFacebookId(fbPhoto.Id);
                 if (dbPhoto != null)
                 {
@@ -261,6 +261,8 @@ namespace Zazz.Infrastructure.Services
             if (page.UserId != currentUserId)
                 throw new SecurityException();
 
+            //TODO: remove page id from these records instead of deleting them.
+
             var pageAlbums = _uow.AlbumRepository.GetPageAlbums(page.Id)
                 .Select(a => a.Id)
                 .ToList();
@@ -299,14 +301,41 @@ namespace Zazz.Infrastructure.Services
             foreach (var fbPage in pages)
             {
                 var updatedPage = updatedPages.SingleOrDefault(p => p.Id == fbPage.FacebookId);
-                if (updatedPage == null)
+                
+                if (updatedPage != null)
+                {
+                    fbPage.AccessToken = updatedPage.AcessToken;
+                    fbPage.Name = updatedPage.Name;
+                }
+                else
                 {
                     //page was deleted from fb.
-                    //TODO: remove everything...
-                }
+                    var pageAlbums = _uow.AlbumRepository.GetPageAlbums(fbPage.Id)
+                                         .Select(a => a.Id);
 
-                fbPage.AccessToken = updatedPage.AcessToken;
-                fbPage.Name = updatedPage.Name;
+                    var pagePhotos = _uow.PhotoRepository.GetPagePhotos(fbPage.Id)
+                                         .Select(p => p.Id);
+
+                    var pagePosts = _uow.PostRepository.GetPagePosts(fbPage.Id)
+                                        .Select(p => p.Id);
+
+                    var pageEvents = _uow.EventRepository.GetPageEvents(fbPage.Id)
+                                         .Select(e => e.Id);
+
+                    foreach (var a in pageAlbums)
+                        _albumService.DeleteAlbum(a, userId);
+
+                    foreach (var p in pagePhotos)
+                        _photoService.RemovePhoto(p, userId);
+
+                    foreach (var p in pagePosts)
+                        _postService.DeletePost(p, userId);
+
+                    foreach (var e in pageEvents)
+                        _eventService.DeleteEvent(e, userId);
+
+                    _uow.FacebookPageRepository.Remove(fbPage);
+                }
             }
 
             _uow.SaveChanges();

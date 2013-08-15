@@ -286,7 +286,6 @@ namespace Zazz.IntegrationTests.Repositories
                 UserId = user2.Id
             };
 
-
             _context.Photos.Add(p1);
             _context.Photos.Add(p2);
             _context.Photos.Add(p3);
