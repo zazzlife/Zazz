@@ -413,7 +413,13 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             new Post {Id = 5},
                         };
 
-            var eventIds = new List<int> { 6, 7, 8, 9 };
+            var events = new[]
+                         {
+                             new ZazzEvent {Id = 6},
+                             new ZazzEvent {Id = 7},
+                             new ZazzEvent {Id = 8},
+                             new ZazzEvent {Id = 9}
+                         };
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
@@ -421,8 +427,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(new EnumerableQuery<Album>(albums));
             _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
                 .Returns(new EnumerableQuery<Post>(posts));
-            _uow.Setup(x => x.EventRepository.GetPageEventIds(page.Id))
-                .Returns(eventIds);
+            _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
+                .Returns(new EnumerableQuery<ZazzEvent>(events));
 
             _uow.Setup(x => x.FacebookPageRepository.Remove(page));
 
@@ -433,7 +439,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _postService.Setup(x => x.DeletePost(
                 It.IsInRange(posts.Select(p => p.Id).Min(), posts.Select(p => p.Id).Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
-                It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId));
+                It.IsInRange(events.Select(e => e.Id).Min(), events.Select(e => e.Id).Max(), Range.Inclusive), page.UserId));
 
 
             //Act

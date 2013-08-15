@@ -308,7 +308,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetPageEventIds(page.Id).ToList();
+            var result = _repo.GetPageEvents(page.Id).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);

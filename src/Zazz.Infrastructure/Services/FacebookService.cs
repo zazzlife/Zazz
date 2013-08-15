@@ -269,7 +269,9 @@ namespace Zazz.Infrastructure.Services
                 .Select(p => p.Id)
                 .ToList();
 
-            var pageEvents = _uow.EventRepository.GetPageEventIds(page.Id).ToList();
+            var pageEvents = _uow.EventRepository.GetPageEvents(page.Id)
+                .Select(e => e.Id)
+                .ToList();
 
             foreach (var a in pageAlbums)
                 _albumService.DeleteAlbum(a, currentUserId);
