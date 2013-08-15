@@ -265,7 +265,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                _sut.RemovePost(_post.Id, 1);
+                _sut.DeletePost(_post.Id, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -288,7 +288,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Act
             try
             {
-                _sut.RemovePost(_post.Id, 1);
+                _sut.DeletePost(_post.Id, 1);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (SecurityException)
@@ -309,7 +309,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.Remove(_post));
 
             //Act
-            _sut.RemovePost(_post.Id, _post.FromUserId);
+            _sut.DeletePost(_post.Id, _post.FromUserId);
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(_post.Id), Times.Once());
@@ -327,7 +327,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.PostRepository.Remove(post));
 
             //Act
-            _sut.RemovePost(post.Id, post.ToUserId.Value);
+            _sut.DeletePost(post.Id, post.ToUserId.Value);
 
             //Assert
             _uow.Verify(x => x.PostRepository.GetById(post.Id), Times.Once());

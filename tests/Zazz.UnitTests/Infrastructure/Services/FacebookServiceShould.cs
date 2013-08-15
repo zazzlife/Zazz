@@ -418,7 +418,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _albumService.Setup(x => x.DeleteAlbum(
                 It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId));
-            _postService.Setup(x => x.RemovePost(
+            _postService.Setup(x => x.DeletePost(
                 It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
                 It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId));

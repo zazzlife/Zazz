@@ -233,7 +233,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Arrange
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.RemovePost(_postId, User.Id))
+            _postService.Setup(x => x.DeletePost(_postId, User.Id))
                         .Throws<SecurityException>();
 
             //Act
@@ -250,7 +250,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Arrange
             CreateValidAccessToken();
 
-            _postService.Setup(x => x.RemovePost(_postId, User.Id));
+            _postService.Setup(x => x.DeletePost(_postId, User.Id));
 
             //Act
             var response = await Client.DeleteAsync(ControllerAddress);

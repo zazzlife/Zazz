@@ -102,7 +102,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void RemovePost(int postId, int currentUserId)
+        public void DeletePost(int postId, int currentUserId)
         {
             var post = _uow.PostRepository.GetById(postId);
             if (post == null)

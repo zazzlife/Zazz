@@ -11,6 +11,6 @@ namespace Zazz.Core.Interfaces.Services
 
         void EditPost(int postId, string newText, IEnumerable<int> categories, int currentUserId);
 
-        void RemovePost(int postId, int currentUserId);
+        void DeletePost(int postId, int currentUserId);
     }
 }

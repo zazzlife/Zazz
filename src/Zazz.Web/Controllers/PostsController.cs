@@ -102,7 +102,7 @@ namespace Zazz.Web.Controllers
         public void Remove(int id)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
-            _postService.RemovePost(id, userId);
+            _postService.DeletePost(id, userId);
         }
 
         [Authorize, HttpPost]

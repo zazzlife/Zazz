@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers.Api
 
             try
             {
-                _postService.RemovePost(id, CurrentUserId);
+                _postService.DeletePost(id, CurrentUserId);
             }
             catch (SecurityException)
             {

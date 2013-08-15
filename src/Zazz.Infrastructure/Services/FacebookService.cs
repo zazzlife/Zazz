@@ -269,7 +269,7 @@ namespace Zazz.Infrastructure.Services
                 _albumService.DeleteAlbum(a, currentUserId);
 
             foreach (var p in pagePosts)
-                _postService.RemovePost(p, currentUserId);
+                _postService.DeletePost(p, currentUserId);
 
             foreach (var e in pageEvents)
                 _eventService.DeleteEvent(e, currentUserId);
