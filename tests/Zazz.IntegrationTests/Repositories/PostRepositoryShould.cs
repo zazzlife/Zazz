@@ -105,8 +105,8 @@ namespace Zazz.IntegrationTests.Repositories
             //Assert
             Assert.AreEqual(2, result.Count);
 
-            CollectionAssert.Contains(result, p1.Id);
-            CollectionAssert.Contains(result, p2.Id);
+            Assert.IsTrue(result.Any(p => p.Id == p1.Id));
+            Assert.IsTrue(result.Any(p => p.Id == p2.Id));
         }
 
 
