@@ -34,6 +34,11 @@ namespace Zazz.Data.Repositories
             return DbSet.Where(p => photoIds.Contains(p.Id));
         }
 
+        public IQueryable<Photo> GetPagePhotos(int pageId)
+        {
+            return DbSet.Where(p => p.PageId == pageId);
+        }
+
         public PhotoMinimalDTO GetPhotoWithMinimalData(int photoId)
         {
             return DbSet.Where(p => p.Id == photoId)

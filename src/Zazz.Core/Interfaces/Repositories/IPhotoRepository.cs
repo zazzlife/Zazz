@@ -11,6 +11,8 @@ namespace Zazz.Core.Interfaces.Repositories
 
         IQueryable<Photo> GetPhotos(IEnumerable<int> photoIds);
 
+        IQueryable<Photo> GetPagePhotos(int pageId);
+            
         PhotoMinimalDTO GetPhotoWithMinimalData(int photoId);
 
         string GetDescription(int photoId);

@@ -42,7 +42,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectRecords_OnGetPagePostIds()
+        public void ReturnCorrectRecords_OnGetPagePosts()
         {
             //Arrange
             var user1 = Mother.GetUser();

@@ -239,6 +239,70 @@ namespace Zazz.IntegrationTests.Repositories
 
         }
 
+        [Test]
+        public void ReturnCorrectRecords_OnGetPagePhotos()
+        {
+            //Arrange
+            var user1 = Mother.GetUser();
+            var user2 = Mother.GetUser();
+            _context.Users.Add(user1);
+            _context.Users.Add(user2);
+            _context.SaveChanges();
+
+            var page = new FacebookPage
+            {
+                AccessToken = "asdf",
+                FacebookId = "1234",
+                Name = "name",
+                UserId = user1.Id
+            };
+
+            _context.FacebookPages.Add(page);
+            _context.SaveChanges();
+
+            var p1 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                PageId = page.Id,
+                UserId = user1.Id
+            };
+
+            var p2 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                PageId = page.Id,
+                UserId = user1.Id
+            };
+
+            var p3 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                UserId = user1.Id
+            };
+
+            var p4 = new Photo
+            {
+                UploadDate = DateTime.UtcNow,
+                UserId = user2.Id
+            };
+
+
+            _context.Photos.Add(p1);
+            _context.Photos.Add(p2);
+            _context.Photos.Add(p3);
+            _context.Photos.Add(p4);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetPagePhotos(page.Id).ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+
+            Assert.IsTrue(result.Any(p => p.Id== p1.Id));
+            Assert.IsTrue(result.Any(p => p.Id == p2.Id));
+        }
+
 
     }
 }
