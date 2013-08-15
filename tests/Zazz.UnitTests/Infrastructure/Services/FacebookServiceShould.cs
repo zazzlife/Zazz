@@ -401,7 +401,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var albums = new[]
                          {
-
                              new Album {Id = 1},
                              new Album {Id = 2},
                          };
@@ -1085,6 +1084,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var p1 = new FacebookPage
             {
+                Id = 1,
                 FacebookId = "1",
                 AccessToken = "oldToken1",
                 Name = "old name1"
@@ -1092,6 +1092,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var p2 = new FacebookPage
             {
+                Id = 2,
                 FacebookId = "2",
                 AccessToken = "oldToken2",
                 Name = "old name2"
@@ -1115,36 +1116,61 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                 updated1,
                             };
 
-            var deletedAlbum = new Album
-                               {
-                                   Id = 3232
-                               };
+            var albums = new[]
+                         {
+                             new Album {Id = 1},
+                             new Album {Id = 2},
+                         };
 
-            var deletedPost = new Post
-            {
-                Id = 123
-            };
+            var posts = new[]
+                        {
+                            new Post {Id = 3},
+                            new Post {Id = 4},
+                            new Post {Id = 5},
+                        };
 
-            var deletedEvent = new ZazzEvent
-            {
-                Id = 11
-            };
+            var events = new[]
+                         {
+                             new ZazzEvent {Id = 6},
+                             new ZazzEvent {Id = 7},
+                             new ZazzEvent {Id = 8},
+                             new ZazzEvent {Id = 9}
+                         };
 
-            var deletedPhoto = new Photo
-            {
-                Id = 888
-            };
+            var photos = new[]
+                         {
+                             new Photo {Id = 10},
+                             new Photo {Id = 11},
+                         };
 
             _uow.Setup(x => x.FacebookPageRepository.GetUserPages(userId))
                 .Returns(new EnumerableQuery<FacebookPage>(userPages));
-            
+
+            _uow.Setup(x => x.AlbumRepository.GetPageAlbums(p2.Id))
+                .Returns(new EnumerableQuery<Album>(albums));
+
+            _uow.Setup(x => x.PostRepository.GetPagePosts(p2.Id))
+                .Returns(new EnumerableQuery<Post>(posts));
+
+            _uow.Setup(x => x.EventRepository.GetPageEvents(p2.Id))
+                .Returns(new EnumerableQuery<ZazzEvent>(events));
+
+            _uow.Setup(x => x.PhotoRepository.GetPagePhotos(p2.Id))
+                .Returns(new EnumerableQuery<Photo>(photos));
 
             _fbHelper.Setup(x => x.GetPages(token))
                      .Returns(newPages);
 
-            _uow.Setup(x => x.AlbumRepository.GetPageAlbums(p2.Id))
-                .Returns(new EnumerableQuery<Album>(new [] {deletedAlbum}));
+            _albumService.Setup(x => x.DeleteAlbum(
+                It.IsInRange(albums.Select(a => a.Id).Min(), albums.Select(a => a.Id).Max(), Range.Inclusive), userId));
+            _postService.Setup(x => x.DeletePost(
+                It.IsInRange(posts.Select(p => p.Id).Min(), posts.Select(p => p.Id).Max(), Range.Inclusive), userId));
+            _eventService.Setup(x => x.DeleteEvent(
+                It.IsInRange(events.Select(e => e.Id).Min(), events.Select(e => e.Id).Max(), Range.Inclusive), userId));
+            _photoService.Setup(x => x.RemovePhoto(
+                It.IsInRange(photos.Select(e => e.Id).Min(), photos.Select(e => e.Id).Max(), Range.Inclusive), userId));
 
+            _uow.Setup(x => x.FacebookPageRepository.Remove(p2));
             _uow.Setup(x => x.SaveChanges());
 
             //Act
