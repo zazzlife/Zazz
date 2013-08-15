@@ -399,14 +399,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 UserId = 123
             };
 
-            var albumIds = new List<int> { 1, 2 };
+            var albums = new[]
+                         {
+
+                             new Album {Id = 1},
+                             new Album {Id = 2},
+                         };
+
             var postIds = new List<int> { 3, 4, 5 };
             var eventIds = new List<int> { 6, 7, 8, 9 };
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
-            _uow.Setup(x => x.AlbumRepository.GetPageAlbumIds(page.Id))
-                .Returns(albumIds);
+            _uow.Setup(x => x.AlbumRepository.GetPageAlbums(page.Id))
+                .Returns(new EnumerableQuery<Album>(albums));
             _uow.Setup(x => x.PostRepository.GetPagePostIds(page.Id))
                 .Returns(postIds);
             _uow.Setup(x => x.EventRepository.GetPageEventIds(page.Id))
@@ -417,7 +423,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             _albumService.Setup(x => x.DeleteAlbum(
-                It.IsInRange(albumIds.Min(), albumIds.Max(), Range.Inclusive), page.UserId));
+                It.IsInRange(albums.Select(a => a.Id).Min(), albums.Select(a => a.Id).Max(), Range.Inclusive), page.UserId));
             _postService.Setup(x => x.DeletePost(
                 It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
@@ -1054,6 +1060,89 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             Assert.AreEqual(updated2.AcessToken, p2.AccessToken);
             Assert.AreEqual(updated2.Name, p2.Name);
+
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemovePageRecordsIfItIsDeleted_OnUpdatePagesAccessToken()
+        {
+            //Arrange
+            var userId = 4343;
+            var token = "accesstoken";
+
+            var p1 = new FacebookPage
+            {
+                FacebookId = "1",
+                AccessToken = "oldToken1",
+                Name = "old name1"
+            };
+
+            var p2 = new FacebookPage
+            {
+                FacebookId = "2",
+                AccessToken = "oldToken2",
+                Name = "old name2"
+            };
+
+            var userPages = new List<FacebookPage>
+                            {
+                                p1,p2
+                            };
+
+
+            var updated1 = new FbPage
+            {
+                AcessToken = "new token1",
+                Id = "1",
+                Name = "new name1"
+            };
+
+            var newPages = new List<FbPage>
+                            {
+                                updated1,
+                            };
+
+            var deletedAlbum = new Album
+                               {
+                                   Id = 3232
+                               };
+
+            var deletedPost = new Post
+            {
+                Id = 123
+            };
+
+            var deletedEvent = new ZazzEvent
+            {
+                Id = 11
+            };
+
+            var deletedPhoto = new Photo
+            {
+                Id = 888
+            };
+
+            _uow.Setup(x => x.FacebookPageRepository.GetUserPages(userId))
+                .Returns(new EnumerableQuery<FacebookPage>(userPages));
+            
+
+            _fbHelper.Setup(x => x.GetPages(token))
+                     .Returns(newPages);
+
+            _uow.Setup(x => x.AlbumRepository.GetPageAlbums(p2.Id))
+                .Returns(new EnumerableQuery<Album>(new [] {deletedAlbum}));
+                
+            _uow.Setup(x => x.PostRepository.ge)
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.UpdatePagesAccessToken(userId, token);
+
+            //Assert
+            Assert.AreEqual(updated1.AcessToken, p1.AccessToken);
+            Assert.AreEqual(updated1.Name, p1.Name);
 
             _mockRepo.VerifyAll();
         }

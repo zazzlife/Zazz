@@ -261,7 +261,10 @@ namespace Zazz.Infrastructure.Services
             if (page.UserId != currentUserId)
                 throw new SecurityException();
 
-            var pageAlbums = _uow.AlbumRepository.GetPageAlbumIds(page.Id).ToList();
+            var pageAlbums = _uow.AlbumRepository.GetPageAlbums(page.Id)
+                .Select(a => a.Id)
+                .ToList();
+
             var pagePosts = _uow.PostRepository.GetPagePostIds(page.Id).ToList();
             var pageEvents = _uow.EventRepository.GetPageEventIds(page.Id).ToList();
 
@@ -291,11 +294,14 @@ namespace Zazz.Infrastructure.Services
             foreach (var fbPage in pages)
             {
                 var updatedPage = updatedPages.SingleOrDefault(p => p.Id == fbPage.FacebookId);
+                if (updatedPage == null)
+                {
+                    //page was deleted from fb.
+                    //TODO: remove everything...
+                }
 
                 fbPage.AccessToken = updatedPage.AcessToken;
                 fbPage.Name = updatedPage.Name;
-
-                //TODO: if the page was deleted, we need to remove its data
             }
 
             _uow.SaveChanges();
