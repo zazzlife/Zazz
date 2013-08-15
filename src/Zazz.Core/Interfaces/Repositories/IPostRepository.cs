@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Zazz.Core.Models.Data;
 
 namespace Zazz.Core.Interfaces.Repositories
@@ -7,6 +8,6 @@ namespace Zazz.Core.Interfaces.Repositories
     {
         Post GetByFbId(long fbPostId);
 
-        IEnumerable<int> GetPagePostIds(int pageId);
+        IQueryable<Post> GetPagePosts(int pageId);
     }
 }

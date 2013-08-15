@@ -100,7 +100,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var result = _repo.GetPagePostIds(page.Id).ToList();
+            var result = _repo.GetPagePosts(page.Id).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);

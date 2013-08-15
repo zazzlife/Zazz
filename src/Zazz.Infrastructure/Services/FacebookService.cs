@@ -265,7 +265,10 @@ namespace Zazz.Infrastructure.Services
                 .Select(a => a.Id)
                 .ToList();
 
-            var pagePosts = _uow.PostRepository.GetPagePostIds(page.Id).ToList();
+            var pagePosts = _uow.PostRepository.GetPagePosts(page.Id)
+                .Select(p => p.Id)
+                .ToList();
+
             var pageEvents = _uow.EventRepository.GetPageEventIds(page.Id).ToList();
 
             foreach (var a in pageAlbums)

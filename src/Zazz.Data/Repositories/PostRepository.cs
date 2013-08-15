@@ -24,10 +24,9 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<int> GetPagePostIds(int pageId)
+        public IQueryable<Post> GetPagePosts(int pageId)
         {
-            return DbSet.Where(p => p.PageId == pageId)
-                        .Select(p => p.Id);
+            return DbSet.Where(p => p.PageId == pageId);
         }
     }
 }

@@ -406,15 +406,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
                              new Album {Id = 2},
                          };
 
-            var postIds = new List<int> { 3, 4, 5 };
+            var posts = new[]
+                        {
+                            new Post {Id = 3},
+                            new Post {Id = 4},
+                            new Post {Id = 5},
+                        };
+
             var eventIds = new List<int> { 6, 7, 8, 9 };
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.AlbumRepository.GetPageAlbums(page.Id))
                 .Returns(new EnumerableQuery<Album>(albums));
-            _uow.Setup(x => x.PostRepository.GetPagePostIds(page.Id))
-                .Returns(postIds);
+            _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
+                .Returns(new EnumerableQuery<Post>(posts));
             _uow.Setup(x => x.EventRepository.GetPageEventIds(page.Id))
                 .Returns(eventIds);
 
@@ -425,7 +431,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _albumService.Setup(x => x.DeleteAlbum(
                 It.IsInRange(albums.Select(a => a.Id).Min(), albums.Select(a => a.Id).Max(), Range.Inclusive), page.UserId));
             _postService.Setup(x => x.DeletePost(
-                It.IsInRange(postIds.Min(), postIds.Max(), Range.Inclusive), page.UserId));
+                It.IsInRange(posts.Select(p => p.Id).Min(), posts.Select(p => p.Id).Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
                 It.IsInRange(eventIds.Min(), eventIds.Max(), Range.Inclusive), page.UserId));
 
@@ -1132,8 +1138,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             _uow.Setup(x => x.AlbumRepository.GetPageAlbums(p2.Id))
                 .Returns(new EnumerableQuery<Album>(new [] {deletedAlbum}));
-                
-            _uow.Setup(x => x.PostRepository.ge)
 
             _uow.Setup(x => x.SaveChanges());
 
