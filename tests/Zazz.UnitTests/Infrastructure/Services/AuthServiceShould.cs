@@ -655,7 +655,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var oauthAccount = new LinkedAccount { ProviderUserId = providerId, Provider = provider };
             _uow.Setup(x => x.LinkedAccountRepository.GetOAuthAccountByProviderId(providerId, provider))
-                    .Returns(new LinkedAccount());
+                    .Returns(new LinkedAccount
+                             {
+                                 User = new User {AccountType = AccountType.User}
+                             });
 
             _uow.Setup(x => x.SaveChanges());
 
