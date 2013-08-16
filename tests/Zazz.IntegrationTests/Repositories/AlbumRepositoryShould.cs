@@ -107,8 +107,8 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(2, result.Count);
-            CollectionAssert.Contains(result, album1.Id);
-            CollectionAssert.Contains(result, album2.Id);
+            Assert.IsTrue(result.Any(a => a.Id == album1.Id));
+            Assert.IsTrue(result.Any(a => a.Id == album2.Id));
         }
 
         [Test]
