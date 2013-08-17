@@ -405,6 +405,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                              new Album {Id = 2},
                          };
 
+            var photos = new[]
+                         {
+                             new Photo {Id = 10},
+                             new Photo {Id = 11},
+                         };
+
             var posts = new[]
                         {
                             new Post {Id = 3},
@@ -428,6 +434,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(new EnumerableQuery<Post>(posts));
             _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
                 .Returns(new EnumerableQuery<ZazzEvent>(events));
+            _uow.Setup(x => x.PhotoRepository.GetPagePhotos(page.Id))
+                .Returns(new EnumerableQuery<Photo>(photos));
 
             _uow.Setup(x => x.FacebookPageRepository.Remove(page));
 
@@ -439,7 +447,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 It.IsInRange(posts.Select(p => p.Id).Min(), posts.Select(p => p.Id).Max(), Range.Inclusive), page.UserId));
             _eventService.Setup(x => x.DeleteEvent(
                 It.IsInRange(events.Select(e => e.Id).Min(), events.Select(e => e.Id).Max(), Range.Inclusive), page.UserId));
-
+            _photoService.Setup(x => x.RemovePhoto(
+                It.IsInRange(photos.Select(e => e.Id).Min(), photos.Select(e => e.Id).Max(), Range.Inclusive), page.UserId));
 
             //Act
             _sut.UnlinkPage(page.FacebookId, page.UserId);

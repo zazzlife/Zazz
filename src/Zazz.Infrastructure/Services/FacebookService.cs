@@ -261,11 +261,14 @@ namespace Zazz.Infrastructure.Services
             if (page.UserId != currentUserId)
                 throw new SecurityException();
 
-            //TODO: remove page id from these records instead of deleting them.
+            //TODO: don't delete the records!
 
             var pageAlbums = _uow.AlbumRepository.GetPageAlbums(page.Id)
                 .Select(a => a.Id)
                 .ToList();
+
+            var pagePhotos = _uow.PhotoRepository.GetPagePhotos(page.Id)
+                                        .Select(p => p.Id);
 
             var pagePosts = _uow.PostRepository.GetPagePosts(page.Id)
                 .Select(p => p.Id)
@@ -277,6 +280,9 @@ namespace Zazz.Infrastructure.Services
 
             foreach (var a in pageAlbums)
                 _albumService.DeleteAlbum(a, currentUserId);
+
+            foreach (var p in pagePhotos)
+                _photoService.RemovePhoto(p, currentUserId);
 
             foreach (var p in pagePosts)
                 _postService.DeletePost(p, currentUserId);
