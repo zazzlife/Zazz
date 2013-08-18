@@ -762,6 +762,65 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void DeletePostIfItWasDeletedFromFb_OnUpdatePageStatuses()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbStatus = new FbStatus
+            {
+                Id = 1,
+                Message = "message",
+                Time = DateTime.UtcNow.ToUnixTimestamp()
+            };
+
+            var oldPost = new Post
+            {
+                CreatedTime = DateTime.UtcNow.AddDays(-1),
+                FacebookId = fbStatus.Id,
+                Id = 1234,
+                Message = "old msg",
+                FromUserId = page.UserId
+            };
+
+            var oldPost2 = new Post
+            {
+                CreatedTime = DateTime.UtcNow.AddDays(-1),
+                FacebookId = 546456,
+                Id = 1345,
+                Message = "old msg",
+                FromUserId = page.UserId
+            };
+
+            var limit = 30;
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
+                     .Returns(new List<FbStatus> { fbStatus });
+            _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
+                .Returns(new EnumerableQuery<Post>(new List<Post> { oldPost, oldPost2 }));
+            _uow.Setup(x => x.PostRepository.Remove(oldPost2));
+            _uow.Setup(x => x.SaveChanges());
+            
+
+            //Act
+            _sut.UpdatePageStatuses(page.FacebookId, limit);
+
+            //Assert
+            Assert.AreEqual(fbStatus.Message, oldPost.Message);
+
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void NotDoAnythingIfPageNotExists_OnUpdatePagePhotosAsync()
         {
             //Arrange
