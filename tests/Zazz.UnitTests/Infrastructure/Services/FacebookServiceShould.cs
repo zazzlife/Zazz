@@ -748,8 +748,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(true);
             _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
                      .Returns(new List<FbStatus> { fbStatus });
-            _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
-                .Returns(oldPost);
+            _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
+                .Returns(new EnumerableQuery<Post>(new List<Post> {oldPost}));
             _uow.Setup(x => x.SaveChanges());
 
             //Act
