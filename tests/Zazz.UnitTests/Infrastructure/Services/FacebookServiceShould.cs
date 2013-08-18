@@ -681,6 +681,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var page = new FacebookPage
             {
+                Id = 3222,
                 AccessToken = "token",
                 FacebookId = "12345",
                 UserId = 12
@@ -700,8 +701,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(true);
             _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
                      .Returns(new List<FbStatus> { fbStatus });
-            _uow.Setup(x => x.PostRepository.GetByFbId(fbStatus.Id))
-                .Returns(() => null);
+            _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
+                .Returns(new EnumerableQuery<Post>(new List<Post>()));
             _postService.Setup(x => x.NewPost(It.IsAny<Post>(), Enumerable.Empty<int>()));
 
             _uow.Setup(x => x.SaveChanges());
