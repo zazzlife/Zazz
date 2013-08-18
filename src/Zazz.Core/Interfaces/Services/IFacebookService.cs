@@ -15,7 +15,7 @@ namespace Zazz.Core.Interfaces.Services
 
         void UpdatePageEvents(string pageId, int limit = 10);
 
-        void UpdatePageStatuses(string pageId, int limit = 25);
+        void UpdatePageStatuses(string pageFbId, int limit = 25);
 
         void UpdatePagePhotos(string pageId, int limit = 25);
 

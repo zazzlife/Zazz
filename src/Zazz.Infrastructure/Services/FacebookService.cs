@@ -141,22 +141,27 @@ namespace Zazz.Infrastructure.Services
             dbEvent.Longitude = convertedEvent.Longitude;
         }
 
-        public void UpdatePageStatuses(string pageId, int limit = 25)
+        public void UpdatePageStatuses(string pageFbId, int limit = 25)
         {
-            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
+            var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageFbId);
             if (page == null)
                 return;
 
             if (!_uow.UserRepository.WantsFbPostsSynced(page.UserId))
                 return;
 
-            var statuses = _facebookHelper.GetStatuses(page.AccessToken, limit);
-            foreach (var s in statuses)
+            var fbStatuses = _facebookHelper.GetStatuses(page.AccessToken, limit);
+            var dbPosts = _uow.PostRepository.GetPagePosts(page.Id).ToList();
+
+            foreach (var s in fbStatuses)
             {
-                var dbPost = _uow.PostRepository.GetByFbId(s.Id);
+                var dbPost = dbPosts.SingleOrDefault(p => p.FacebookId == s.Id);
+
                 if (dbPost != null)
                 {
+                    dbPost.PageId = page.Id;
                     dbPost.Message = s.Message;
+                    dbPosts.Remove(dbPost); // we remove the synced items from collection, if there is anything left, means it was deleted from fb
                 }
                 else
                 {
@@ -172,6 +177,9 @@ namespace Zazz.Infrastructure.Services
                     _postService.NewPost(post, Enumerable.Empty<int>());
                 }
             }
+
+            foreach (var dbPost in dbPosts)
+                _uow.PostRepository.Remove(dbPost);
 
             _uow.SaveChanges();
         }
