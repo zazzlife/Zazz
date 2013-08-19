@@ -102,18 +102,19 @@ namespace Zazz.Infrastructure.Services
                 return;
 
             var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken, limit);
+            var dbEvents = _uow.EventRepository.GetPageEvents(page.Id).ToList();
+
             foreach (var fbEvent in fbEvents)
             {
-                var dbEvent = _uow.EventRepository.GetByFacebookId(fbEvent.Id);
+                var dbEvent = dbEvents.SingleOrDefault(e => e.FacebookEventId == fbEvent.Id);
+                
                 var convertedEvent = _facebookHelper.FbEventToZazzEvent(fbEvent);
                 convertedEvent.PageId = page.Id;
 
                 if (dbEvent != null)
                 {
-                    if (!dbEvent.CreatedDate.Equals(convertedEvent.CreatedDate))
-                    {
-                        UpdateDbEvent(ref dbEvent, ref convertedEvent);
-                    }
+                    UpdateDbEvent(ref dbEvent, ref convertedEvent);
+                    dbEvents.Remove(dbEvent); // we remove the synced items from collection, if there is anything left, means it was deleted from fb
                 }
                 else
                 {
@@ -121,6 +122,9 @@ namespace Zazz.Infrastructure.Services
                     _eventService.CreateEvent(convertedEvent);
                 }
             }
+
+            foreach (var e in dbEvents)
+                _eventService.DeleteEvent(e.Id, page.UserId);
 
             _uow.SaveChanges(); // remove this if you save changes somewhere else
         }

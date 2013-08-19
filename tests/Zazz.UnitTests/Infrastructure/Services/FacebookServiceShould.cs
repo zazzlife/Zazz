@@ -614,8 +614,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(true);
             _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit))
                      .Returns(new List<FbEvent> { fbEvent });
-            _uow.Setup(x => x.EventRepository.GetByFacebookId(fbEvent.Id))
-                .Returns(() => null);
+            _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
+                .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent>()));
             _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
                      .Returns(zazzEvent);
             _eventService.Setup(x => x.CreateEvent(zazzEvent));
@@ -627,6 +627,60 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             Assert.AreEqual(page.Id, zazzEvent.PageId);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void DeleteEventIfItsBeenDeleted_OnUpdatePageEvents()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                Id = 333,
+                AccessToken = "token",
+                FacebookId = "1234",
+                UserId = 123
+            };
+
+            var fbEvent = new FbEvent
+            {
+                Id = 12345
+            };
+
+            var oldEvent = new ZazzEvent
+                           {
+                               Id = 555,
+                               FacebookEventId = fbEvent.Id
+                           };
+
+            var deletedEvent = new ZazzEvent
+            {
+                Id = 444,
+                FacebookEventId = 333333
+            };
+
+            var limit = 15;
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit))
+                     .Returns(new List<FbEvent> { fbEvent });
+            _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
+                .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent> {deletedEvent, oldEvent}));
+            _fbHelper.Setup(x => x.FbEventToZazzEvent(fbEvent))
+                     .Returns(deletedEvent);
+            _eventService.Setup(x => x.DeleteEvent(deletedEvent.Id, page.UserId));
+
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.UpdatePageEvents(page.FacebookId, limit);
+
+            //Assert
+            Assert.AreEqual(page.Id, deletedEvent.PageId);
             _mockRepo.VerifyAll();
         }
 
