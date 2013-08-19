@@ -32,7 +32,7 @@ namespace Zazz.Web.BackgroundWorkers
             foreach (var page in pages)
             {
                 // not sending them in parallel so facebook won't block us!
-                _facebookService.UpdatePageEvents(page);
+                _facebookService.SyncPageEvents(page);
                 _facebookService.UpdatePagePhotos(page);
                 _facebookService.UpdatePageStatuses(page);
 

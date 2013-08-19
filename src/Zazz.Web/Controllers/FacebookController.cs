@@ -130,7 +130,7 @@ namespace Zazz.Web.Controllers
                                  };
 
                     _facebookService.LinkPage(fbPage);
-                    _facebookService.UpdatePageEvents(fbPage.FacebookId);
+                    _facebookService.SyncPageEvents(fbPage.FacebookId);
                 }
 
                 return new JsonNetResult("ok");
@@ -156,7 +156,7 @@ namespace Zazz.Web.Controllers
 
         public void SyncPage(string pageId)
         {
-            _facebookService.UpdatePageEvents(pageId, 25);
+            _facebookService.SyncPageEvents(pageId, 25);
             _facebookService.UpdatePagePhotos(pageId);
             _facebookService.UpdatePageStatuses(pageId);
         }

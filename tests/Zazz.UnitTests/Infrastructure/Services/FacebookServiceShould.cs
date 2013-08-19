@@ -541,7 +541,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotDoAnythingIfPageDoesntExists_OnUpdatePageEvents()
+        public void NotDoAnythingIfPageDoesntExists_OnSyncPageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -555,14 +555,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            _sut.UpdatePageEvents(page.FacebookId);
+            _sut.SyncPageEvents(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnUpdatePageEvents()
+        public void NotDoAnythingIfUserDoesntWantEventsToBeSynced_OnSyncPageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -578,14 +578,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            _sut.UpdatePageEvents(page.FacebookId);
+            _sut.SyncPageEvents(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void AddEventsIfTheyDontExist_OnUpdatePageEvents()
+        public void AddEventsIfTheyDontExist_OnSyncPageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -623,7 +623,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePageEvents(page.FacebookId, limit);
+            _sut.SyncPageEvents(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(page.Id, zazzEvent.PageId);
@@ -631,7 +631,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void DeleteEventIfItsBeenDeleted_OnUpdatePageEvents()
+        public void DeleteEventIfItsBeenDeleted_OnSyncPageEvents()
         {
             //Arrange
             var page = new FacebookPage
@@ -677,7 +677,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePageEvents(page.FacebookId, limit);
+            _sut.SyncPageEvents(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(page.Id, deletedEvent.PageId);

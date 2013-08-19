@@ -13,7 +13,7 @@ namespace Zazz.Core.Interfaces.Services
 
         void UpdateUserEvents(long fbUserId, int limit = 5);
 
-        void UpdatePageEvents(string pageId, int limit = 10);
+        void SyncPageEvents(string pageId, int limit = 10);
 
         void UpdatePageStatuses(string pageFbId, int limit = 25);
 

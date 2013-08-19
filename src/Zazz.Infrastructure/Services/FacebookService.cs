@@ -92,7 +92,7 @@ namespace Zazz.Infrastructure.Services
         //{
         //}
 
-        public void UpdatePageEvents(string pageId, int limit = 10)
+        public void SyncPageEvents(string pageId, int limit = 10)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
