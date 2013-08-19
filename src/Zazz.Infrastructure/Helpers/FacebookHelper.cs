@@ -107,7 +107,7 @@ namespace Zazz.Infrastructure.Helpers
             return QueryForEvents(query);
         }
 
-        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit)
+        public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
         {
             _client.AccessToken = accessToken;
 
@@ -153,8 +153,7 @@ namespace Zazz.Infrastructure.Helpers
 
             var ids = String.Join(",", allEvents
                                            .OrderByDescending(e => e.Key)
-                                           .Select(e => e.Value)
-                                           .Take(limit));
+                                           .Select(e => e.Value));
 
             var where = String.Format("eid in ({0}) AND start_time > now() ORDER BY update_time DESC", ids);
             var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);

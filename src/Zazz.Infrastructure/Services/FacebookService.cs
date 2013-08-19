@@ -92,7 +92,7 @@ namespace Zazz.Infrastructure.Services
         //{
         //}
 
-        public void SyncPageEvents(string pageId, int limit = 10)
+        public void SyncPageEvents(string pageId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -101,7 +101,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbEventsSynced(page.UserId))
                 return;
 
-            var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken, limit);
+            var fbEvents = _facebookHelper.GetPageEvents(pageId, page.AccessToken);
             var dbEvents = _uow.EventRepository.GetPageEvents(page.Id).ToList();
 
             foreach (var fbEvent in fbEvents)

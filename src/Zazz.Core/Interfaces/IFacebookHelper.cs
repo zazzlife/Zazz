@@ -22,7 +22,7 @@ namespace Zazz.Core.Interfaces
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
-        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken, int limit);
+        IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken);
 
         IEnumerable<FbEvent> GetUserAttendingEvents(string accessToken);
         

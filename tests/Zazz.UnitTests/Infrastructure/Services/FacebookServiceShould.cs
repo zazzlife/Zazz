@@ -606,13 +606,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                 FacebookEventId = fbEvent.Id
                             };
 
-            var limit = 15;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken))
                      .Returns(new List<FbEvent> { fbEvent });
             _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
                 .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent>()));
@@ -623,7 +622,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPageEvents(page.FacebookId, limit);
+            _sut.SyncPageEvents(page.FacebookId);
 
             //Assert
             Assert.AreEqual(page.Id, zazzEvent.PageId);
@@ -659,13 +658,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FacebookEventId = 333333
             };
 
-            var limit = 15;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbEventsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPageEvents(page.FacebookId, page.AccessToken))
                      .Returns(new List<FbEvent> { fbEvent });
             _uow.Setup(x => x.EventRepository.GetPageEvents(page.Id))
                 .Returns(new EnumerableQuery<ZazzEvent>(new List<ZazzEvent> {deletedEvent, oldEvent}));
@@ -677,7 +675,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPageEvents(page.FacebookId, limit);
+            _sut.SyncPageEvents(page.FacebookId);
 
             //Assert
             Assert.AreEqual(page.Id, deletedEvent.PageId);
