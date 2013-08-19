@@ -184,7 +184,7 @@ namespace Zazz.Infrastructure.Services
 
             // if there is anything left in the collection means, it's been deleted from fb.
             foreach (var dbPost in dbPosts)
-                _uow.PostRepository.Remove(dbPost);
+                _postService.DeletePost(dbPost.Id, page.UserId);
 
             _uow.SaveChanges();
         }
