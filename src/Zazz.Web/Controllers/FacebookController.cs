@@ -158,7 +158,7 @@ namespace Zazz.Web.Controllers
         {
             _facebookService.SyncPageEvents(pageId, 25);
             _facebookService.UpdatePagePhotos(pageId);
-            _facebookService.UpdatePageStatuses(pageId);
+            _facebookService.SyncPageStatuses(pageId);
         }
     }
 }

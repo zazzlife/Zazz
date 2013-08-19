@@ -685,7 +685,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotDoAnythingIfPageDoesntExists_OnUpdatePageStatuses()
+        public void NotDoAnythingIfPageDoesntExists_OnSyncPageStatuses()
         {
             //Arrange
             var page = new FacebookPage
@@ -700,14 +700,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId);
+            _sut.SyncPageStatuses(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotQueryIfUserDoestWantPostsToBeSynced_OnUpdatePageStatuses()
+        public void NotQueryIfUserDoestWantPostsToBeSynced_OnSyncPageStatuses()
         {
             //Arrange
             var page = new FacebookPage
@@ -723,14 +723,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId);
+            _sut.SyncPageStatuses(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void InsertPostIfDoesntExists_OnUpdatePageStatuses()
+        public void InsertPostIfDoesntExists_OnSyncPageStatuses()
         {
             //Arrange
             var page = new FacebookPage
@@ -762,14 +762,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId, limit);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void UpdatePostIfExists_OnUpdatePageStatuses()
+        public void UpdatePostIfExists_OnSyncPageStatuses()
         {
             //Arrange
             var page = new FacebookPage
@@ -807,7 +807,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
@@ -816,7 +816,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void DeletePostIfItWasDeletedFromFb_OnUpdatePageStatuses()
+        public void DeletePostIfItWasDeletedFromFb_OnSyncPageStatuses()
         {
             //Arrange
             var page = new FacebookPage
@@ -866,7 +866,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             
 
             //Act
-            _sut.UpdatePageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
