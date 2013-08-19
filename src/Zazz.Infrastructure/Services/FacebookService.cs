@@ -145,7 +145,7 @@ namespace Zazz.Infrastructure.Services
             dbEvent.Longitude = convertedEvent.Longitude;
         }
 
-        public void SyncPageStatuses(string pageFbId, int limit = 25)
+        public void SyncPageStatuses(string pageFbId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageFbId);
             if (page == null)

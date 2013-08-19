@@ -793,7 +793,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                               Message = "old msg",
                               FromUserId = page.UserId
                           };
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
@@ -806,7 +805,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
@@ -850,8 +849,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FromUserId = page.UserId
             };
 
-            var limit = 30;
-
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
@@ -865,7 +862,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             
 
             //Act
-            _sut.SyncPageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId);
 
             //Assert
             Assert.AreEqual(fbStatus.Message, oldPost.Message);
