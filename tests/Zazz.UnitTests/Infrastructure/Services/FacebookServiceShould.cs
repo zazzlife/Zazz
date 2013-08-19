@@ -875,7 +875,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void NotDoAnythingIfPageNotExists_OnUpdatePagePhotosAsync()
+        public void NotDoAnythingIfPageNotExists_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -889,14 +889,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(() => null);
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotDoAnythingIfUserDoesntWantToSyncPhotos_OnUpdatePagePhotosAsync()
+        public void NotDoAnythingIfUserDoesntWantToSyncPhotos_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -912,14 +912,14 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(false);
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void UpdatePhotoIfExists_OnUpdatePagePhotosAsync()
+        public void UpdatePhotoIfExists_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -959,7 +959,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
@@ -968,7 +968,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void RemovePhotoIfItWasDeleted_OnUpdatePagePhotosAsync()
+        public void RemovePhotoIfItWasDeleted_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -1018,7 +1018,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId, limit);
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
@@ -1027,7 +1027,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test, Ignore("Right now it has direct reference to HttpClient, and tries to download an actual image")]
-        public void InsertPhotoAndCreateAlbumIfNotExists_OnUpdatePagePhotosAsync()
+        public void InsertPhotoAndCreateAlbumIfNotExists_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -1063,7 +1063,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(1);
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId, limit);
 
             //Assert
 
@@ -1071,7 +1071,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test, Ignore("Right now it has direct reference to HttpClient, and tries to download an actual image")]
-        public void InsertPhotoAndUseExistingAlbumIfExists_OnUpdatePagePhotosAsync()
+        public void InsertPhotoAndUseExistingAlbumIfExists_OnSyncPagePhotosAsync()
         {
             //Arrange
             var page = new FacebookPage
@@ -1115,7 +1115,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(1);
 
             //Act
-            _sut.UpdatePagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId, limit);
 
             //Assert
 

@@ -189,7 +189,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void UpdatePagePhotos(string pageId, int limit = 25)
+        public void SyncPagePhotos(string pageId, int limit = 25)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)

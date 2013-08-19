@@ -33,7 +33,7 @@ namespace Zazz.Web.BackgroundWorkers
             {
                 // not sending them in parallel so facebook won't block us!
                 _facebookService.SyncPageEvents(page);
-                _facebookService.UpdatePagePhotos(page);
+                _facebookService.SyncPagePhotos(page);
                 _facebookService.SyncPageStatuses(page);
 
                 Task.Delay(1000).Wait();
