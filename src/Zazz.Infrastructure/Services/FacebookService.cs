@@ -178,6 +178,7 @@ namespace Zazz.Infrastructure.Services
                 }
             }
 
+            // if there is anything left in the collection means, it's been deleted from fb.
             foreach (var dbPost in dbPosts)
                 _uow.PostRepository.Remove(dbPost);
 
@@ -193,13 +194,16 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbImagesSynced(page.UserId))
                 return;
 
-            var photos = _facebookHelper.GetPhotos(page.AccessToken, limit);
-            foreach (var fbPhoto in photos)
+            var fbPhotos = _facebookHelper.GetPhotos(page.AccessToken, limit);
+            var dbPhotos = _uow.PhotoRepository.GetPagePhotos(page.Id).ToList();
+
+            foreach (var fbPhoto in fbPhotos)
             {
-                var dbPhoto = _uow.PhotoRepository.GetByFacebookId(fbPhoto.Id);
+                var dbPhoto = dbPhotos.SingleOrDefault(p => p.FacebookId == fbPhoto.Id);
                 if (dbPhoto != null)
                 {
                     dbPhoto.Description = fbPhoto.Description;
+                    dbPhotos.Remove(dbPhoto); // we remove the synced items from collection, if there is anything left, means it was deleted from fb
                 }
                 else
                 {
@@ -236,6 +240,10 @@ namespace Zazz.Infrastructure.Services
                         _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<int>());
                 }
             }
+
+            // if there is anything left in the collection means, it's been deleted from fb.
+            foreach (var dbPhoto in dbPhotos)
+                _photoService.RemovePhoto(dbPhoto.Id, page.UserId);
 
             _uow.SaveChanges();
         }

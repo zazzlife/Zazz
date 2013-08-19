@@ -870,6 +870,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Arrange
             var page = new FacebookPage
             {
+                Id = 23232,
                 AccessToken = "token",
                 FacebookId = "12345",
                 UserId = 12
@@ -886,6 +887,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             var oldPhoto = new Photo
                            {
+                               FacebookId = fbPhoto.Id,
                                Description = "old desc"
                            };
 
@@ -897,8 +899,67 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(true);
             _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
                      .Returns(new List<FbPhoto> { fbPhoto });
-            _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
-                .Returns(oldPhoto);
+            _uow.Setup(x => x.PhotoRepository.GetPagePhotos(page.Id))
+                .Returns(new EnumerableQuery<Photo>(new List<Photo> {oldPhoto}));
+
+            _uow.Setup(x => x.SaveChanges());
+
+            //Act
+            _sut.UpdatePagePhotos(page.FacebookId, limit);
+
+            //Assert
+            Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
+
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public void RemovePhotoIfItWasDeleted_OnUpdatePagePhotosAsync()
+        {
+            //Arrange
+            var page = new FacebookPage
+            {
+                Id = 23232,
+                AccessToken = "token",
+                FacebookId = "12345",
+                UserId = 12
+            };
+
+            var fbPhoto = new FbPhoto
+            {
+                AlbumId = "albumId",
+                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                Description = "desc",
+                Source = "src",
+                Id = "id"
+            };
+
+            var oldPhoto = new Photo
+            {
+                Id = 1,
+                FacebookId = fbPhoto.Id,
+                Description = "old desc"
+            };
+
+            var deletedPhoto = new Photo
+            {
+                Id = 2,
+                FacebookId = "deleted!",
+                Description = "old desc"
+            };
+
+            var limit = 30;
+
+            _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
+                .Returns(page);
+            _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
+                .Returns(true);
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
+                     .Returns(new List<FbPhoto> { fbPhoto });
+            _uow.Setup(x => x.PhotoRepository.GetPagePhotos(page.Id))
+                .Returns(new EnumerableQuery<Photo>(new List<Photo> { oldPhoto, deletedPhoto }));
+
+            _photoService.Setup(x => x.RemovePhoto(deletedPhoto.Id, page.UserId));
 
             _uow.Setup(x => x.SaveChanges());
 
