@@ -254,16 +254,13 @@ namespace Zazz.Infrastructure.Helpers
             return result.data[0].name;
         }
 
-        public IEnumerable<FbStatus> GetStatuses(string accessToken, int limit)
+        public IEnumerable<FbStatus> GetStatuses(string accessToken)
         {
             _client.AccessToken = accessToken;
 
-            const string TABLE = "status";
-            const string FIELDS = "message, status_id, time";
-            var where = String.Format("uid = me() ORDER BY time DESC LIMIT {0}", limit);
-            var query = GenerateFql(FIELDS, TABLE, where);
+            const string QUERY = "SELECT message, status_id, time FROM status WHERE uid = me() ORDER BY time DESC";
 
-            dynamic result = _client.Get("fql", new { q = query });
+            dynamic result = _client.Get("fql", new { q = QUERY });
             var statuses = new List<FbStatus>();
 
             foreach (var s in result.data)

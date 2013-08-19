@@ -32,7 +32,7 @@ namespace Zazz.Core.Interfaces
 
         string GetAlbumName(string albumId, string accessToken);
 
-        IEnumerable<FbStatus> GetStatuses(string accessToken, int limit);
+        IEnumerable<FbStatus> GetStatuses(string accessToken);
 
         IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit);
 

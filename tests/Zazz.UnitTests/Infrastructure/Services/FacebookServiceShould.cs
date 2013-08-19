@@ -747,13 +747,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                Message = "message",
                                Time = DateTime.UtcNow.ToUnixTimestamp()
                            };
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
                 .Returns(new EnumerableQuery<Post>(new List<Post>()));
@@ -762,7 +761,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPageStatuses(page.FacebookId, limit);
+            _sut.SyncPageStatuses(page.FacebookId);
 
             //Assert
             _mockRepo.VerifyAll();
@@ -800,7 +799,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
                 .Returns(new EnumerableQuery<Post>(new List<Post> {oldPost}));
@@ -857,7 +856,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbPostsSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetStatuses(page.AccessToken))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
                 .Returns(new EnumerableQuery<Post>(new List<Post> { oldPost, deletedPost }));

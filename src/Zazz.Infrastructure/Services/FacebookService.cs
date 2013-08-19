@@ -154,7 +154,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbPostsSynced(page.UserId))
                 return;
 
-            var fbStatuses = _facebookHelper.GetStatuses(page.AccessToken, limit);
+            var fbStatuses = _facebookHelper.GetStatuses(page.AccessToken);
             var dbPosts = _uow.PostRepository.GetPagePosts(page.Id).ToList();
 
             foreach (var s in fbStatuses)
