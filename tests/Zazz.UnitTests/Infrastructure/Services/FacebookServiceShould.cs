@@ -842,7 +842,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 FromUserId = page.UserId
             };
 
-            var oldPost2 = new Post
+            var deletedPost = new Post
             {
                 CreatedTime = DateTime.UtcNow.AddDays(-1),
                 FacebookId = 546456,
@@ -860,8 +860,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _fbHelper.Setup(x => x.GetStatuses(page.AccessToken, limit))
                      .Returns(new List<FbStatus> { fbStatus });
             _uow.Setup(x => x.PostRepository.GetPagePosts(page.Id))
-                .Returns(new EnumerableQuery<Post>(new List<Post> { oldPost, oldPost2 }));
-            _uow.Setup(x => x.PostRepository.Remove(oldPost2));
+                .Returns(new EnumerableQuery<Post>(new List<Post> { oldPost, deletedPost }));
+            _postService.Setup(x => x.DeletePost(deletedPost.Id, page.UserId));
             _uow.Setup(x => x.SaveChanges());
             
 
