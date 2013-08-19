@@ -941,13 +941,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                                Description = "old desc"
                            };
 
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetPagePhotos(page.Id))
                 .Returns(new EnumerableQuery<Photo>(new List<Photo> {oldPhoto}));
@@ -955,7 +954,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
@@ -998,13 +997,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Description = "old desc"
             };
 
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetPagePhotos(page.Id))
                 .Returns(new EnumerableQuery<Photo>(new List<Photo> { oldPhoto, deletedPhoto }));
@@ -1014,7 +1012,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.SyncPagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
             Assert.AreEqual(fbPhoto.Description, oldPhoto.Description);
@@ -1042,13 +1040,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                 Id = "id"
             };
 
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(() => null);
@@ -1059,7 +1056,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(1);
 
             //Act
-            _sut.SyncPagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
 
@@ -1095,13 +1092,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
                             UserId = page.UserId
                         };
 
-            var limit = 30;
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
                 .Returns(page);
             _uow.Setup(x => x.UserRepository.WantsFbImagesSynced(page.UserId))
                 .Returns(true);
-            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken, limit))
+            _fbHelper.Setup(x => x.GetPhotos(page.AccessToken))
                      .Returns(new List<FbPhoto> { fbPhoto });
             _uow.Setup(x => x.PhotoRepository.GetByFacebookId(fbPhoto.Id))
                 .Returns(() => null);
@@ -1111,7 +1107,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                          .Returns(1);
 
             //Act
-            _sut.SyncPagePhotos(page.FacebookId, limit);
+            _sut.SyncPagePhotos(page.FacebookId);
 
             //Assert
 

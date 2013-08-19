@@ -276,16 +276,13 @@ namespace Zazz.Infrastructure.Helpers
             return statuses;
         }
 
-        public IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit)
+        public IEnumerable<FbPhoto> GetPhotos(string accessToken)
         {
             _client.AccessToken = accessToken;
 
-            const string TABLE = "photo";
-            const string FIELDS = "aid, caption, created, owner, pid, modified, images";
-            var where = String.Format("owner = me() ORDER BY modified DESC LIMIT {0}", limit);
-            var query = GenerateFql(FIELDS, TABLE, where);
+            const string QUERY = "SELECT aid, caption, created, owner, pid, modified, images FROM photo WHERE owner = me() ORDER BY modified DESC";
 
-            dynamic result = _client.Get("fql", new { q = query });
+            dynamic result = _client.Get("fql", new { q = QUERY });
 
             var photos = new List<FbPhoto>();
 

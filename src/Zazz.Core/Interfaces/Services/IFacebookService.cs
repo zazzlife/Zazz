@@ -17,7 +17,7 @@ namespace Zazz.Core.Interfaces.Services
 
         void SyncPageStatuses(string pageFbId);
 
-        void SyncPagePhotos(string pageId, int limit = 25);
+        void SyncPagePhotos(string pageId);
 
         IEnumerable<FbPage> GetUserPages(int userId);
 

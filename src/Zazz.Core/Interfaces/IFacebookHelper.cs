@@ -34,7 +34,7 @@ namespace Zazz.Core.Interfaces
 
         IEnumerable<FbStatus> GetStatuses(string accessToken);
 
-        IEnumerable<FbPhoto> GetPhotos(string accessToken, int limit);
+        IEnumerable<FbPhoto> GetPhotos(string accessToken);
 
         IEnumerable<FbFriend> GetFriends(string accessToken);
         

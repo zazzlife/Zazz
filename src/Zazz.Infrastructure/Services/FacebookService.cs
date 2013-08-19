@@ -189,7 +189,7 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
-        public void SyncPagePhotos(string pageId, int limit = 25)
+        public void SyncPagePhotos(string pageId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(pageId);
             if (page == null)
@@ -198,7 +198,7 @@ namespace Zazz.Infrastructure.Services
             if (!_uow.UserRepository.WantsFbImagesSynced(page.UserId))
                 return;
 
-            var fbPhotos = _facebookHelper.GetPhotos(page.AccessToken, limit);
+            var fbPhotos = _facebookHelper.GetPhotos(page.AccessToken);
             var dbPhotos = _uow.PhotoRepository.GetPagePhotos(page.Id).ToList();
 
             foreach (var fbPhoto in fbPhotos)
