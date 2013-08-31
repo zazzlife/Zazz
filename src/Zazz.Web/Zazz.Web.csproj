@@ -498,7 +498,6 @@
     <Content Include="Images\home3.png" />
     <Content Include="Images\home4.png" />
     <Content Include="Images\home5.png" />
-    <Content Include="Images\home\Thumbs.db" />
     <None Include="Properties\PublishProfiles\Dev - debug %28no folder wipe%29.pubxml" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\3-vs.jpg" />

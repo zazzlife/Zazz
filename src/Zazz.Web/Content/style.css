@@ -5,6 +5,13 @@
     src: local('Alfa Slab One'), local('AlfaSlabOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/alfaslabone/v2/Qx6FPcitRwTC_k88tLPc-fn8qdNnd5eCmWXua5W-n7c.woff) format('woff');
 }
 
+@font-face {
+  font-family: 'Comfortaa';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Comfortaa Light'), local('Comfortaa-Light'), url(http://themes.googleusercontent.com/static/fonts/comfortaa/v4/r_tUZNl0G8xCoOmp_JkSCnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+
 .icon-spin {
     display: inline-block;
     -moz-animation: spin 1.3s infinite linear;
@@ -44,9 +51,6 @@
 /***************************************
         Global
 ***************************************/
-body {
-    font-family: 'Open Sans';
-}
 
 article#layout .container {
     padding-top: 45px;
@@ -1299,23 +1303,14 @@ footer {
     NEW DESING
 ***************************************/
 
-@charset "utf-8";
-/* CSS Document */
-
-
 body {
     background-color: #E9E9E9 !important;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Open Sans';
     font-weight: normal;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'Comfortaa', cursive;
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Comfortaa';
 }
 
 .lead-1 {
