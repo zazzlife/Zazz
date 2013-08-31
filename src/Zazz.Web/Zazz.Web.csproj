@@ -622,7 +622,6 @@
     <Content Include="Views\Users\ClubProfile.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PicturePostFeedItem.cshtml" />
     <Content Include="Views\Shared\FeedItems\_EventFeedItem.cshtml" />
-    <Content Include="Views\Home\Unknown.cshtml" />
     <Content Include="Views\Events\EditForm.cshtml" />
     <Content Include="Views\Shared\_UserPageLayout.cshtml" />
     <Content Include="Views\Events\Show.cshtml" />
