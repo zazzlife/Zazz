@@ -3,83 +3,78 @@
     ViewBag.Title = "TODO: Add page title and description.";
 }
 
-<div id="landing-page">
+<div class="content-3">
+    <header>
+        <div class="row-fluid">
+            <div class="container">
+                <div class="row-fluid margin-top-20">
+                    <div class="span4"></div>
+                    <div class="span4 center-align">
+                        <a href="#"><img src="/Images/home-page-logo.png"></a>
+                    </div>
+                    <div class="span4 margin-top-10">
+                        <form action="@Url.Action("Login", "Account")" method="POST">
+                            <input class="login-input" type="text" placeholder="Username" name="Username">
+                            <input class="login-input  border-left-0" type="password" placeholder="Password" name="Password">
+                            <button type="submit" class="login-btn-home">Login</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="row-fluid center-align">
+                    <h1 class="lead-1">
+                        "Find out who's throwing the craziest parties.<br/>
+                        Stay up to date with all your favorite events"
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="top_line-2"></div>
+    </header>
+    <div class="nav white-bg" style="margin-bottom:0px;">
+        <div class="container" >
+            <div class="row">
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-01.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-02.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-03.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-04.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-05.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-07.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-08.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-09.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-10.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-11.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-12.png"></a></div>
+                <div class="span2"><a href="#"><img src="/Images/home/Icon-png-13.png"></a></div>
+            </div>
+        </div>
+    </div> 
+    <!--=======================================middle icon end======================================================-->
+    <div>
+        <div class="row-fluid color-white-bg">
+            <div class="container padding-top-17">
+                <div class="span4 center-align">
+                    <a class="home-nav" href="#">What is Zazz?</a>
+                </div>
+                <div class="span4 center-align">
+                    <a href="@Url.Action("SelectAccountType","Account")" class="btn btn-primary slider-btn">Join the Party</a>
+                </div>
+                <div class="span4 center-align"><a class="home-nav" href="#">Contact us</a></div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="pull-left">
-            <h1>Zazz</h1>
-        </div>
-
-        <div class="pull-right">
-            <form class="form-inline" id="login-form" action="~/account/login" method="POST">
-                @Html.AntiForgeryToken()
-                <input type="text" name="Username" class="input-small" placeholder="Username">
-                <input type="password" name="Password" class="input-small" placeholder="Password">
-                <button type="submit" class="btn btn-primary">log in</button>
-            </form>
-            <div style="margin-top: 10px;">
-                <a class="pull-right" href="~/account/oauth/facebook/"><img src="~/Images/fb-login-btn.jpg"/></a>
-                <a class="forgot-password" href="~/account/recover">Forgot password?</a>    
+        <div class="row-fluid">
+            <div class="span"12>
+                <div class="add-box margin-top-60"><img src="/Images/home1.png"></div>
+                <div class="add-box margin-top-60"><img src="/Images/home2.png"></div>
+                <div class="add-box margin-top-60"><img src="/Images/home3.png"></div>
+                <div class="add-box"><img src="/Images/home4.png"></div>
+                <div class="add-box"><img src="/Images/home5.png"></div>
             </div>
-        </div>
-        <div class="clearfix"></div>
-
-        <div class="text-center welcome-text">
-            <h2 class="font-light">"Find out who's throwing the craziest parties. <br/> Stay up to date with all your favorite events"</h2>
-        </div>
-
-    </div>
-
-    <div class="hero-unit" style="height: 200px"></div>
-
-    <div class="text-center">
-        <a class="btn btn-extralarge btn-primary" href="@Url.Action("SelectAccountType", "Account")">Join the party</a>
-    </div>
-
-    <div class="container">
-
-        <div class="uni-showcase">
-
-            <div class="uni-item">
-                <img class="uni-item-image" src="~/Images/victoria-uni.png" />
-                <div class="uni-item-text">
-                    University<br />
-                    of<br />
-                    Victoria
-
-                </div>
-            </div>
-
-            <div class="uni-item">
-                <img class="uni-item-image" src="~/Images/ubc.png" />
-                <div class="uni-item-text">
-                    University<br />
-                    of<br />
-                    British Columbia
-
-                </div>
-            </div>
-
-            <div class="uni-item">
-                <img class="uni-item-image" src="~/Images/concorida.png" />
-                <div class="uni-item-text" style="margin-top: 10px;">
-                    Concordia<br />
-                    University
-                </div>
-            </div>
-
-            <div class="uni-item">
-                <img class="uni-item-image" src="~/Images/mcgill.png" />
-                <div class="uni-item-text" style="margin-top: 10px;">
-                    McGill<br />
-                    University
-                </div>
-            </div>
-
         </div>
     </div>
-
-    <div class="clearfix"></div>
-
+    <!--=========================================Left========================================================-->
     @Html.Partial("_Footer")
 
 </div>
