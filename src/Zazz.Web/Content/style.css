@@ -1286,17 +1286,11 @@ a.tag {
     Footer
 ***************************************/
 footer {
-    /*background-color: #020202;
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-top-color: goldenrod;
-    color: lightgray;*/
-    background-color: #f1f1f1;
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-top-color: #272727;
-    border-top-color: rgba(39, 39, 39, 0.27);
-    padding-top: 10px;
-    margin-top: 50px;
-    padding-bottom: 30px;
+    border-top: 7px solid #FBCE0E;
+    padding-top: 0!important;
+    color: white;
+}
+
+footer .navbar {
+    margin-bottom: 0;
 }

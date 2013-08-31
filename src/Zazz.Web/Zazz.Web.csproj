@@ -640,6 +640,7 @@
     <Content Include="Views\Account\RegisterClub.cshtml" />
     <Content Include="Views\Account\SessionExpired.cshtml" />
     <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
