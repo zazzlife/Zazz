@@ -26,6 +26,7 @@
                     </div>
                     <div class="span4 margin-top-10">
                         <form action="@Url.Action("Login", "Account")" method="POST">
+                            @Html.AntiForgeryToken()
                             <input class="login-input" type="text" placeholder="Username" name="Username">
                             <input class="login-input  border-left-0" type="password" placeholder="Password" name="Password">
                             <button type="submit" class="login-btn-home">Login</button>
