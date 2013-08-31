@@ -389,6 +389,7 @@
     <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap-lightbox.css" />
     <Content Include="Content\bootstrap-overrides.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\fineuploader.css" />
     <Content Include="Content\font-awesome-ie7.css" />
