@@ -7,6 +7,8 @@ namespace Zazz.Web
     {
         public RuntimePolicy Execute(IRuntimePolicyContext policyContext)
         {
+            return RuntimePolicy.Off; //Keeping it off for now.
+
             // You can perform a check like the one below to control Glimpse's permissions within your application.
 			// More information about RuntimePolicies can be found at http://getglimpse.com/Help/Custom-Runtime-Policy
             var httpContext = policyContext.GetHttpContext();
