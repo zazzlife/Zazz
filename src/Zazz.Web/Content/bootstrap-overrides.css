@@ -1,13 +1,4 @@
-﻿/*body {
-    background-color: #222222;
-    color: white;
-}*/
-.container {
-    width: 1000px !important;
-    height: 100%;
-}
-
-.tooltip {
+﻿.tooltip {
     white-space: pre-line;
 }
 
