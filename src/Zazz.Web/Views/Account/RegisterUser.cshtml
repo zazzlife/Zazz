@@ -93,7 +93,7 @@
                                 @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School")
+                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new {@class="selectyze1"})
                                 @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
                             </div>
                         </div>

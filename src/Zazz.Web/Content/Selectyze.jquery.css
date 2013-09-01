@@ -1,0 +1,88 @@
+
+.DivSelectyze {
+	float: right;
+    margin-bottom:10px;
+    position: relative;
+    width:100%;
+	
+}
+
+.DivSelectyze .selectyzeValue {
+	position:relative;
+	z-index:10;
+	display:block;
+	text-decoration:none;
+}
+
+.DivSelectyze ul {list-style:none;}
+.DivSelectyze .UlSelectize {
+	position:absolute;
+	z-index:9999;
+	display:none;
+}
+
+.DivSelectyze li a {
+	display:block;
+	text-decoration:none;
+}
+
+.optgroupTitle {
+	display:block;
+}
+/*******************************/
+
+/*-----------------------------------------------------------------------------------*/
+
+	.skype .selectyzeValue {
+	background: url("../Images/Register-input.png") no-repeat scroll 0 0 transparent;
+    color: #999999;
+    font: italic 13px/46px Arial;
+    height: 48px;
+    padding-left: 12px;
+    width:100%;
+	}
+
+	.skype .UlSelectize {
+	 background-color: #F9F9F9;
+    border: 1px solid #999999;
+    left: 2px;
+    margin: 0;
+    padding: 0;
+    top: 46px;
+    width:100%;
+	}
+	
+	.text{margin-top:-19px;}
+
+	.skype li a {
+		background-color: rgba(0, 0, 0, 0);
+    border-top: 1px solid #999999;
+    color: #666666;
+    font: 14px/30px Arial;
+    height: 35px;
+    padding-left: 10px;
+	}
+
+	.skype .optgroupTitle {
+		margin-top:1px;
+		font-size:13px;
+		font-style:italic;
+		padding-left:10px;
+		background-color:#0fb1ef;
+		color:#fff;
+	}
+	
+	.UlSelectize  li a:hover{
+		color:#000;
+		background:#FFF;
+		
+	}
+/*-----------------------------------------------------------*/
+	@media (max-width: 220px) {
+		.skype .selectyzeValue {
+	background:url(. no-repeat scroll 0 0 transparent;
+	height:26px;
+	width:100%;
+	
+	}
+}

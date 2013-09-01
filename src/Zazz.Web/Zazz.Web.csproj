@@ -404,6 +404,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2.css" />
+    <Content Include="Content\Selectyze.jquery.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
@@ -528,6 +529,7 @@
     <Content Include="Images\m.png" />
     <Content Include="Images\mcgill.png" />
     <Content Include="Images\p.png" />
+    <Content Include="Images\Register-input.png" />
     <Content Include="Images\Register.png" />
     <Content Include="Images\select2-spinner.gif" />
     <Content Include="Images\select2.png" />
@@ -597,6 +599,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\mvc-bootstrap-integration.js" />
     <Content Include="Scripts\select2.js" />
+    <Content Include="Scripts\Selectyze.jquery.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Web.config" />

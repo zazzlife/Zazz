@@ -33,6 +33,10 @@ function applyPageStyles() {
     $('*[title]').tooltip();
     $('*[data-toggle="popover"]').popover();
 
+    $('.selectyze1').Selectyze({
+        theme: 'skype'
+    });
+
     replaceLinksWithAnchorTags();
     highlightTags();
 
