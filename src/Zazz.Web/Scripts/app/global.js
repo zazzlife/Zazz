@@ -355,45 +355,47 @@ function hideSearchIconBusy() {
 
 var searchAutocompleteCache = {};
 
-$('#navbarSearch').autocomplete({
-    delay: 500,
-    minLength: 2,
-    source: function (req, res) {
+if ($('#navbarSearch').length) {
+    $('#navbarSearch').autocomplete({
+        delay: 500,
+        minLength: 2,
+        source: function (req, res) {
 
-        showSearchIconBusy(function () {
+            showSearchIconBusy(function () {
 
-            var q = req.term;
+                var q = req.term;
 
-            if (q in searchAutocompleteCache) {
-                res(searchAutocompleteCache[q]);
-                hideSearchIconBusy();
-                return;
-            }
-
-            $.ajax({
-                url: '/home/search',
-                data: {
-                    q: q
-                },
-                success: function (data) {
+                if (q in searchAutocompleteCache) {
+                    res(searchAutocompleteCache[q]);
                     hideSearchIconBusy();
-                    searchAutocompleteCache[q] = data;
-                    res(data);
+                    return;
                 }
+
+                $.ajax({
+                    url: '/home/search',
+                    data: {
+                        q: q
+                    },
+                    success: function (data) {
+                        hideSearchIconBusy();
+                        searchAutocompleteCache[q] = data;
+                        res(data);
+                    }
+                });
+
             });
 
-        });
+        }
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
 
-    }
-}).data("ui-autocomplete")._renderItem = function (ul, item) {
+        var tmpl = "<a href='/users/profile/" + item.id + "' style='padding: 5px; margin-bottom:50;'><img class='img-rounded' style='margin-right:8px; width:32px; heigth:32px;' src='" + item.img + "' />" + item.value + "</a>";
 
-    var tmpl = "<a href='/users/profile/" + item.id + "' style='padding: 5px; margin-bottom:50;'><img class='img-rounded' style='margin-right:8px; width:32px; heigth:32px;' src='" + item.img + "' />" + item.value + "</a>";
-
-    return $("<li />")
-            .data("ui-autocomplete-item", item)
-            .append(tmpl)
-            .appendTo(ul);
-};
+        return $("<li />")
+                .data("ui-autocomplete-item", item)
+                .append(tmpl)
+                .appendTo(ul);
+    };
+}
 
 /********************************
     Feed
