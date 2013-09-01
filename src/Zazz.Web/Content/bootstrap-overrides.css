@@ -158,6 +158,7 @@ input, textarea, select {
 
 .navbar {
     margin-bottom: 0;
+    border-bottom: 7px solid #FBCE0E;
 }
 
 .navbar-inner, footer {
