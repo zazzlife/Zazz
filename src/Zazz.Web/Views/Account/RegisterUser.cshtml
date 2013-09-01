@@ -5,37 +5,38 @@
     ViewBag.Title = "Register";
 }
 
-<div class="container">
-    <div>
-        <h1>Zazz</h1>
+<div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5">
+    <div class="row-fluid">
+        <div class="span12 border-bottom-2">
+            <h4 class="lead-1">
+                <i><img src="/Images/Register.png"></i>
+                Register
+            </h4>
+        </div>
     </div>
-
-    <div class="well" style="margin-top: 50px;">
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-            
-            <fieldset>
-                <legend>Register</legend>
-                @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+    
+    <div class="row-fluid margin-top-10 margin-bottam-20">
+        
+        <div class="span6">
+            <div class="zazz-form zazz-form2">
+                @using (Html.BeginForm())
                 {
-                    <div class="alert alert-block @TempData["alertClass"]">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <p>@TempData["alertMessage"]</p>
-                    </div>
-                }
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            
+                    <fieldset>
+                        @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                        {
+                            <div class="alert alert-block @TempData["alertClass"]">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <p>@TempData["alertMessage"]</p>
+                            </div>
+                        }
 
-                <div class="row">
-                    <div class="span8">
 
                         <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.UserName, new { @class = "control-label required" })
-                            </div>
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.UserName, new { @class = "span4" })
+                                @Html.TextBoxFor(model => model.UserName, new { @placeholder = "Username" })
                                 @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -43,11 +44,8 @@
                         @if (!Model.IsOAuth)
                         {
                             <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.Email, new {@class = "control-label required"})
-                                </div>
                                 <div class="editor-field">
-                                    @Html.TextBoxFor(model => model.Email, new {@class = "span4", @placeholder = "Thie email remains private"})
+                                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email" })
                                     @Html.ValidationMessageFor(model => model.Email, null, new {@class = "help-inline"})
                                 </div>
                             </div>
@@ -58,28 +56,22 @@
                         }
 
                         <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.Password, new { @class = "control-label required" })
-                            </div>
                             <div class="editor-field">
-                                @Html.PasswordFor(model => model.Password, new { @class = "span4" })
+                                @Html.PasswordFor(model => model.Password, new { @placeholder = "Password" })
                                 @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
                             </div>
 
                         </div>
                         <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label required" })
-                            </div>
                             <div class="editor-field">
-                                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "span4" })
+                                @Html.PasswordFor(model => model.ConfirmPassword, new { @placeholder = "Confirm Password" })
                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
                             </div>
                         </div>
                         
                         <div class="control-group">
                             <div class="editor-label">
-                                @Html.LabelFor(model => model.Gender, new { @class = "control-label required" })
+                                @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
                                 @Html.RadioButtonForEnum(model => model.Gender)
@@ -90,11 +82,8 @@
                         <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
                         <hr style="margin-top: 0;"/>
                         <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
-                            </div>
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.FullName, new { @class = "span4" })
+                                @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Your name" })
                                 @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -104,7 +93,7 @@
                                 @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new { @class = "span4" })
+                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School")
                                 @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -113,7 +102,7 @@
                                 @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City", new { @class = "span4" })
+                                @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City")
                                 @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -122,7 +111,7 @@
                                 @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Select Major", new { @class = "span4" })
+                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Select Major")
                                 @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
                             </div>
                         </div>
@@ -131,25 +120,22 @@
                             @Html.SpamPreventionFields()
                         </div>
 
-                        <p>
-                            <input type="submit" value="Register" class="btn btn-primary" style="margin-top: 25px;"/>
-                        </p>
-
-                    </div>
-
-                    @if (!Model.IsOAuth)
-                    {
-                        <div class="span3">
-                            <a href="@Url.Action("OAuth", "Account", new {id="facebook"})" class="btn-auth btn-facebook large">Register with facebook</a>
-                        </div>
-                    }
-
-                </div>
-            </fieldset>
+                        <button type="submit" value="Register" class="btn btn-primary" style="margin-top: 25px;">Register</button>
+                    </fieldset>
             
-        }
+                }
+            </div>
+        </div>
+
+        <div class="span6">
+            @if (!Model.IsOAuth)
+            {
+                <a href="@Url.Action("OAuth", "Account", new {id = "facebook"})" class="btn-auth btn-facebook large">Register with facebook</a>
+            }
+        </div>
+        
+        </div>
     </div>
-</div>
 
 @section Scripts {
     @Scripts.Render("~/js")

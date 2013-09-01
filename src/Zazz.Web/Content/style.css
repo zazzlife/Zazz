@@ -1434,6 +1434,14 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: 45px;
 }
 
+.margin-bottam-20{
+	margin-bottom:20px;
+}
+
+.border-radius-5 {
+    border-radius: 5px;
+}
+
 .login-input {
     border: 1px solid #7DDFFB !important;
     border-radius: 0 !important;
@@ -1479,3 +1487,122 @@ a:hover, a:focus {
     margin-top: 50px;
     margin-bottom: 50px;
 }
+
+.border-bottom-2{
+	border-bottom:2px solid #E8E8E8;
+}
+
+/* ----- Form ----- */
+
+.zazz-form {
+    padding-bottom: 50px;
+    text-align: left;
+}
+
+    .zazz-form h4 {
+        margin-top: 25px;
+        padding: 0 20px;
+        font-family: 'Droid Sans', Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        color: #5d5d5d;
+        text-transform: uppercase;
+        -webkit-text-shadow: 0 1px 0 rgba(255,255,255,.7);
+        text-shadow: 0 1px 0 rgba(255,255,255,.7);
+    }
+
+.zazz-form p {
+    padding: 0 20px;
+    line-height: 28px;
+    font-size: 13px;
+}
+
+.zazz-form2 {
+    padding: 10px 0;
+}
+
+.zazz-form2 p {
+    margin-top: 15px;
+}
+
+.zazz-form form {
+
+    padding: 0 20px;
+}
+
+.zazz-form form input[type="text"],
+input[type="password"], .zazz-form form textarea {
+    width: 97%;
+    height: 30px;
+    border: 1px solid #FBCE0E;
+    -moz-border-radius: 5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-style: italic;
+	background:#F9F9F9;
+}
+
+.zazz-form form input[type="text"]:focus,
+input[type="password"]:focus, .zazz-form form textarea:focus {
+    border: 1px solid #FBCE0E;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.zazz-form form textarea {
+    height: 160px;
+}
+
+    .zazz-form form button {
+        width: 120px;
+        height: 30px;
+        margin-top: 15px;
+        background: #4C4C4C;
+        border: 0;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        color: #fff;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        -moz-box-shadow: 0 1px 25px 0 rgba(0,0,0,.05) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+        -webkit-box-shadow: 0 1px 25px 0 rgba(0,0,0,.05) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+        box-shadow: 0 1px 25px 0 rgba(0,0,0,.05) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+        -o-transition: all .3s;
+        -moz-transition: all .3s;
+        -webkit-transition: all .3s;
+        -ms-transition: all .3s;
+        transition: all .3s;
+    }
+
+.zazz-form form button:hover {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.zazz-form form button:active {
+    -moz-box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    -webkit-box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+}
+
+.zazz-form form label {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.zazz-form form input:-moz-placeholder, .zazz-form form textarea:-moz-placeholder { color: #ccc; }
+.zazz-form form input:-ms-input-placeholder, .zazz-form form textarea:-ms-input-placeholder { color: #ccc; }
+.zazz-form form input::-webkit-input-placeholder, .zazz-form form textarea::-webkit-input-placeholder { color: #ccc; }
