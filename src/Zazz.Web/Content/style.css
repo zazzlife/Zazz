@@ -1606,3 +1606,31 @@ input[type="password"]:focus, .zazz-form form textarea:focus {
 .zazz-form form input:-moz-placeholder, .zazz-form form textarea:-moz-placeholder { color: #ccc; }
 .zazz-form form input:-ms-input-placeholder, .zazz-form form textarea:-ms-input-placeholder { color: #ccc; }
 .zazz-form form input::-webkit-input-placeholder, .zazz-form form textarea::-webkit-input-placeholder { color: #ccc; }
+
+
+/****************************************/
+
+.social-media-box{
+    height: auto;
+    margin-left: 50px;
+   
+}
+
+.social-media-box h1{
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.social-media-box-f{
+	margin:35px 0 0 0;
+	width:182px;
+	height:31px;
+	cursor:pointer;
+}
+
+.social-media-box-t{
+	margin:23px 0 0 0;
+	width:182px;
+	height:31px;
+	cursor:pointer;
+}

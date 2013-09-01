@@ -130,7 +130,11 @@
         <div class="span6">
             @if (!Model.IsOAuth)
             {
-                <a href="@Url.Action("OAuth", "Account", new {id = "facebook"})" class="btn-auth btn-facebook large">Register with facebook</a>
+                <div class="social-media-box">
+                    <h1>Login with social media</h1>
+                    <div class="span12"><a href="@Url.Action("OAuth", "Account", new {id = "facebook"})"><img src="~/Images/F-login.png"></a></div>
+                    @*<div class="span12 margin-top-10"><a href="#"><img src="~/Images/T-login.png"></a></div>*@
+                </div>
             }
         </div>
         
