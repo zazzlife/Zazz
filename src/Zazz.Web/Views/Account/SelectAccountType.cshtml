@@ -3,13 +3,16 @@
     ViewBag.Title = "Select Account Type";
 }
 
-<style>
+@section CSS
+{
+    <style>
     
-    a, a:hover {
-        text-decoration: none;
-    }
+        a, a:hover {
+            text-decoration: none;
+        }
 
-</style>
+    </style>
+}
 
 <div class="container">
     <div>
@@ -19,19 +22,20 @@
     <div class="page-header" style="margin-top: 50px;">
         <h3>Select Account Type</h3>
     </div>
-
-    <div class="well" style="display: inline-block; width: 450px; text-align: center">
-        <a href="@Url.Action("RegisterUser")" style="color: black">
-            <i class="icon-user" style="font-size: 128px"></i>
-            <div style="font-size: 28px; margin-top: 10px">User</div>
-        </a>
+    
+    <div class="row-fluid">
+        <div class="well span6 text-center">
+            <a href="@Url.Action("RegisterUser")" style="color: black">
+                <i class="icon-user" style="font-size: 128px"></i>
+                <div style="font-size: 28px; margin-top: 10px">User</div>
+            </a>
+        </div>
+        <div class="well span6 text-center">
+            <a href="@Url.Action("RegisterClub")" style="color: black">
+                <i class="icon-glass" style="font-size: 128px"></i>
+                <div style="font-size: 28px; margin-top: 10px">Club</div>
+            </a>
+        </div>
     </div>
-    <div class="well" style="display: inline-block; width: 450px; text-align: center">
-        <a href="@Url.Action("RegisterClub")" style="color: black">
-            <i class="icon-glass" style="font-size: 128px"></i>
-            <div style="font-size: 28px; margin-top: 10px">Club</div>
-        </a>
-    </div>
-
 
 </div>
