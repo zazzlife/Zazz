@@ -1530,7 +1530,7 @@ a:hover, a:focus {
 }
 
 .zazz-form form input[type="text"],
-input[type="password"], .zazz-form form textarea {
+.zazz-form form input[type="password"], .zazz-form form textarea {
     width: 97%;
     height: 30px;
     border: 1px solid #FBCE0E;
@@ -1547,7 +1547,7 @@ input[type="password"], .zazz-form form textarea {
 }
 
 .zazz-form form input[type="text"]:focus,
-input[type="password"]:focus, .zazz-form form textarea:focus {
+.zazz-form form input[type="password"]:focus, .zazz-form form textarea:focus {
     border: 1px solid #FBCE0E;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
