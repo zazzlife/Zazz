@@ -1,68 +1,70 @@
-﻿@model Zazz.Web.Models.LoginViewModel
+﻿@model LoginViewModel
 
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
-
-<div class="container">
-    <div>
-        <h1>Zazz</h1>
+<div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5">
+    <div class="row-fluid">
+        <div class="span12 border-bottom-2">
+            <h4 class="lead-1">
+                <i class="icon-lock icon-2x"></i>
+                Login
+            </h4>
+        </div>
     </div>
 
-    <div class="well" style="margin-top: 50px;">
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-                    
-            <fieldset>
-                <legend>Login</legend>
-                @if (TempData["alert"] != null && ((bool)TempData["alert"]))
-                {
-                    <div class="alert alert-block @TempData["alertClass"]">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <p>@TempData["alertMessage"]</p>
-                    </div>
-                }
+    <div class="row-fluid margin-top-10 margin-bottam-20">
 
-                <div class="row">
-                    <div class="span8">
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+        <div class="span6">
+            <div class="zazz-form zazz-form2">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            
+                    <fieldset>
+                        @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                        {
+                            <div class="alert alert-block @TempData["alertClass"]">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <p>@TempData["alertMessage"]</p>
                             </div>
+                        }
+
+                        <div class="control-group">
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.Username, new { @class = "span4" })
+                                @Html.TextBoxFor(model => model.Username, new { @class = "span4", @placeholder = "Username", @style="height:40px;" })
                                 @Html.ValidationMessageFor(model => model.Username, null, new { @class = "help-inline" })
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
-                            </div>
                             <div class="editor-field">
-                                @Html.PasswordFor(model => model.Password, new { @class = "span4" })
+                                @Html.PasswordFor(model => model.Password, new { @class = "span4", @placeholder = "Password", @style="height:40px;" })
                                 @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
                             </div>
                         </div>
-
-                        <a href="~/account/recover" style="float: left; margin-bottom: 15px;" class="forgot-password">Forgot password?</a>
+                        
+                        <a href="@Url.Action("Recover")">Forgot Password</a>
                         <div class="clearfix"></div>
-                        <p>
-                            <input type="submit" value="Login" class="btn btn-primary" />
-                        </p>
-                    </div>
-                    <div class="span3">
-                        <a href="~/account/oauth/facebook" class="btn-auth btn-facebook large">Login with facebook</a>
-                    </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Login</button>
+                    </fieldset>
+            
+                }
+            </div>
+        </div>
+
+        <div class="span6">
+            <div class="social-media-box">
+                <h1>Login with social media</h1>
+                <div class="span12">
+                    <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
+                        <img src="~/Images/F-login.png"></a>
                 </div>
-
-
-
-            </fieldset>
-        }
+            </div>
+        </div>
 
     </div>
 </div>
