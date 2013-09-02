@@ -507,7 +507,7 @@ namespace Zazz.Web.Controllers
                     ShowAlert(message, AlertType.Success);
 
                 }
-                catch (EmailNotExistsException)
+                catch (NotFoundException)
                 {
                     ShowAlert("Email not found", AlertType.Warning);
                 }
