@@ -64,7 +64,6 @@
     <Compile Include="Exceptions\AlreadyExistsException.cs" />
     <Compile Include="Exceptions\AlreadyVotedException.cs" />
     <Compile Include="Exceptions\EmailExistsException.cs" />
-    <Compile Include="Exceptions\EmailNotExistsException.cs" />
     <Compile Include="Exceptions\FacebookPageExistsException.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
     <Compile Include="Exceptions\InvalidFollowException.cs" />
