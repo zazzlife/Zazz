@@ -483,11 +483,11 @@ namespace Zazz.Web.Controllers
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
 
-            return View();
+            return View(new RecoverAccountViewModel());
         }
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
-        public ActionResult Recover(string email)
+        public ActionResult Recover(RecoverAccountViewModel vm)
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Home");
@@ -496,12 +496,12 @@ namespace Zazz.Web.Controllers
             {
                 try
                 {
-                    var token = _authService.GenerateResetPasswordToken(email);
+                    var token = _authService.GenerateResetPasswordToken(vm.Email);
                     var tokenString = Base64Helper.Base64UrlEncode(token.Token);
 
                     var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, tokenString);
                     var message = String.Format(
-                        "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", email,
+                        "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", vm.Email,
                         Environment.NewLine, "test: " + resetLink);
 
                     ShowAlert(message, AlertType.Success);
@@ -513,7 +513,7 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            return View();
+            return View(vm);
         }
 
         [HttpGet]
