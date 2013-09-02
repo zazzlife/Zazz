@@ -6,49 +6,55 @@
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
 
-<div class="container">
-    <div>
-        <h1>Zazz</h1>
+<div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5">
+    <div class="row-fluid">
+        <div class="span12 border-bottom-2">
+            <h4 class="lead-1">
+                <i class="icon-lock icon-2x"></i>
+                Recover Account
+            </h4>
+        </div>
     </div>
 
-    <div class="well" style="margin-top: 50px;">
+    <div class="row-fluid margin-top-10 margin-bottam-20">
 
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-
-            <fieldset>
-                <legend>@ViewBag.Title</legend>
-                @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+        <div class="span6">
+            <div class="zazz-form zazz-form2">
+                @using (Html.BeginForm())
                 {
-                    <div class="alert alert-block @TempData["alertClass"]">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <p>@TempData["alertMessage"]</p>
-                    </div>
-                }
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+            
+                    <fieldset>
+                        @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+                        {
+                            <div class="alert alert-block @TempData["alertClass"]">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <p>@TempData["alertMessage"]</p>
+                            </div>
+                        }
 
-                <div class="control-group">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
-                    </div>
-                    <div class="editor-field">
-                        @Html.TextBoxFor(model => model.Email, new { @class = "span4"})
-                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
-                    </div>
-                </div>
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Email)
+                                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
 
-                
-                <div class="control-group">
+
+                        <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
-                <hr />
-                <p>
-                    <input type="submit" value="Submit" class="btn btn-primary" style="margin-top: 25px;" />
-                </p>
-            </fieldset>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Send</button>
+                    </fieldset>
             
-        }
+                }
+            </div>
+        </div>
     </div>
 </div>
 
