@@ -151,6 +151,13 @@ input, textarea, select {
 .nav-list > li > a {
     color: #252525;
 }
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus {
+    color: #FBCE0E;
+}
+
 /***************************************
     Navbar
 ***************************************/
