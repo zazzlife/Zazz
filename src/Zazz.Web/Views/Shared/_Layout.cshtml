@@ -70,11 +70,7 @@
     </article>
     @*<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>*@
     
-    <footer>
-        <div class="container">
-            <span>&copy; @DateTime.UtcNow.Year ZazzLife.com</span>
-        </div>
-    </footer>
+    @Html.Partial("_Footer")
 
     @RenderSection("ScriptsTop", false)
     @Scripts.Render("~/js")
