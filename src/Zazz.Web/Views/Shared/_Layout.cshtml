@@ -68,9 +68,41 @@
     <article class="content-2">
         @RenderBody()
     </article>
+    
+    <div class="clearfix">
+        <div class="modal hide fade" id="party-web-requests">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Party web requests</h3>
+            </div>
+            
+            <div class="modal-body" id="party-web-requests-body">
+                <div class="text-center">
+                    <i class="icon-large icon-refresh icon-spin"></i>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn">Close</a>
+            </div>
+        </div>
+    </div>
+
     @*<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>*@
     
     @Html.Partial("_Footer")
+    
+        <script type="text/javascript">
+
+        @{
+            var categorySelect = Html.Partial("_CategoriesSelect").ToString();
+            categorySelect = categorySelect.Replace(Environment.NewLine, "");
+        }
+
+        var categoriesSelectHtml = '@Html.Raw(categorySelect)';
+
+
+    </script>
 
     @RenderSection("ScriptsTop", false)
     @Scripts.Render("~/js")

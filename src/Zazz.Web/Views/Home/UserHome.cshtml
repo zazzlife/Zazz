@@ -38,7 +38,7 @@
                         @Html.Action("GetNewNotificationsCount", "Notifications")
                     </a>
                 </li>
-                <li><a href="#"><i class="icon-beer"></i>&nbsp; Party Web</a></li>
+                <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>&nbsp; Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                 <li><a href="#"><i class="icon-calendar"></i>&nbsp; Event</a></li>
                 <li><a href="#"><i class="icon-camera"></i>&nbsp; Photo</a></li>
                 <li><a href="#"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
