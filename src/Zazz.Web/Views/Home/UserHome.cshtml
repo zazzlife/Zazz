@@ -30,7 +30,14 @@
             
             
             <ul class="nav nav-stacked right-nav">
-                <li><a href="#"><i class="icon-exclamation-sign"></i>&nbsp; Notifications</a></li>
+                <li>
+                    <a href="#" id="notifications-link"  data-toggle="popover" data-html="true" data-original-title="Notifications"
+                       data-title="Notifications"
+                       data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
+                        <i class="icon-exclamation-sign"></i>&nbsp; Notifications
+                        @Html.Action("GetNewNotificationsCount", "Notifications")
+                    </a>
+                </li>
                 <li><a href="#"><i class="icon-beer"></i>&nbsp; Party Web</a></li>
                 <li><a href="#"><i class="icon-calendar"></i>&nbsp; Event</a></li>
                 <li><a href="#"><i class="icon-camera"></i>&nbsp; Photo</a></li>

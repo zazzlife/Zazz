@@ -214,6 +214,10 @@ hr.gold-line {
         text-decoration: none;
     }
 
+.right-nav {
+    padding-left: 5px;
+}
+
 .right-nav ul li {
     margin: 10px 0 0 10px;
 }
