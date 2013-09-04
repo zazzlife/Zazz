@@ -52,15 +52,6 @@
         Global
 ***************************************/
 
-article#layout .container {
-    padding-top: 45px;
-}
-
-/*img {
-    max-height: 100%;
-    max-width: 100%;
-}*/
-
 .alfa-slab-font {
     font-family: 'Alfa Slab One';
     font-size: 28px;
@@ -205,50 +196,33 @@ hr.gold-line {
         USER PAGE LAYOUT
 ***************************************/
 
-#user-home-page-content {
-    padding-top: 50px;
-}
-
 /**********LEFT PANEL***********/
-.left-panel {
-    width: 200px;
-    font-size: 13px;
-    float: left;
-    height: 100%;
+.user {
+    margin-bottom: 20px;
 }
 
-    .left-panel .user-img {
+    .user .user-img {
         width: 42px;
         height: 42px;
     }
 
-    .left-panel .nav-list {
-        padding: 0;
+    .user .username {
+        margin-left: 5px;
+        font-weight: 600;
+        /*color: white;*/
+        color: #141414;
+        text-decoration: none;
     }
 
-        .left-panel .nav-list > li > a {
-            margin: 0;
-        }
+.right-nav ul li {
+    margin: 10px 0 0 10px;
+}
 
-            .left-panel .nav-list > li > a > i {
-                margin-right: 7px;
-            }
-
-    .left-panel .badge {
-        margin-left: 10px;
-    }
-
-    .left-panel .user {
-        margin-bottom: 20px;
-    }
-
-        .left-panel .user .username {
-            margin-left: 5px;
-            font-weight: 600;
-            /*color: white;*/
-            color: #141414;
-            text-decoration: none;
-        }
+.right-nav a {
+    text-decoration: none;
+    color: #000;
+    margin-top: 10px;
+}
 
 /**********MIDDLE PANEL***********/
 
@@ -1434,8 +1408,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: 45px;
 }
 
-.margin-bottam-20{
-	margin-bottom:20px;
+.margin-bottam-20 {
+    margin-bottom: 20px;
 }
 
 .border-radius-5 {
@@ -1488,8 +1462,8 @@ a:hover, a:focus {
     margin-bottom: 50px;
 }
 
-.border-bottom-2{
-	border-bottom:2px solid #E8E8E8;
+.border-bottom-2 {
+    border-bottom: 2px solid #E8E8E8;
 }
 
 /* ----- Form ----- */
@@ -1510,53 +1484,52 @@ a:hover, a:focus {
         text-shadow: 0 1px 0 rgba(255,255,255,.7);
     }
 
-.zazz-form p {
-    padding: 0 20px;
-    line-height: 28px;
-    font-size: 13px;
-}
+    .zazz-form p {
+        padding: 0 20px;
+        line-height: 28px;
+        font-size: 13px;
+    }
 
 .zazz-form2 {
     padding: 10px 0;
 }
 
-.zazz-form2 p {
-    margin-top: 15px;
-}
+    .zazz-form2 p {
+        margin-top: 15px;
+    }
 
 .zazz-form form {
-
     padding: 0 20px;
 }
 
-.zazz-form form input[type="text"],
-.zazz-form form input[type="password"], .zazz-form form textarea {
-    width: 97%;
-    height: 30px;
-    border: 1px solid #FBCE0E;
-    -moz-border-radius: 5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    font-style: italic;
-	background:#F9F9F9;
-}
+    .zazz-form form input[type="text"],
+    .zazz-form form input[type="password"], .zazz-form form textarea {
+        width: 97%;
+        height: 30px;
+        border: 1px solid #FBCE0E;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        font-style: italic;
+        background: #F9F9F9;
+    }
 
-.zazz-form form input[type="text"]:focus,
-.zazz-form form input[type="password"]:focus, .zazz-form form textarea:focus {
-    border: 1px solid #FBCE0E;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
+        .zazz-form form input[type="text"]:focus,
+        .zazz-form form input[type="password"]:focus, .zazz-form form textarea:focus {
+            border: 1px solid #FBCE0E;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
 
-.zazz-form form textarea {
-    height: 160px;
-}
+    .zazz-form form textarea {
+        height: 160px;
+    }
 
     .zazz-form form button {
         width: 120px;
@@ -1580,57 +1553,58 @@ a:hover, a:focus {
         transition: all .3s;
     }
 
-.zazz-form form button:hover {
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
+        .zazz-form form button:hover {
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
 
-.zazz-form form button:active {
-    -moz-box-shadow:
-        0 5px 10px 0 rgba(0,0,0,.15) inset,
-        0 -1px 25px 0 rgba(0,0,0,.05) inset;
-    -webkit-box-shadow:
-        0 5px 10px 0 rgba(0,0,0,.15) inset,
-        0 -1px 25px 0 rgba(0,0,0,.05) inset;
-    box-shadow:
-        0 5px 10px 0 rgba(0,0,0,.15) inset,
-        0 -1px 25px 0 rgba(0,0,0,.05) inset;
-}
+        .zazz-form form button:active {
+            -moz-box-shadow: 0 5px 10px 0 rgba(0,0,0,.15) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+            -webkit-box-shadow: 0 5px 10px 0 rgba(0,0,0,.15) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+            box-shadow: 0 5px 10px 0 rgba(0,0,0,.15) inset, 0 -1px 25px 0 rgba(0,0,0,.05) inset;
+        }
 
-.zazz-form form label {
-    margin-top: 10px;
-    font-size: 13px;
-}
+    .zazz-form form label {
+        margin-top: 10px;
+        font-size: 13px;
+    }
 
-.zazz-form form input:-moz-placeholder, .zazz-form form textarea:-moz-placeholder { color: #ccc; }
-.zazz-form form input:-ms-input-placeholder, .zazz-form form textarea:-ms-input-placeholder { color: #ccc; }
-.zazz-form form input::-webkit-input-placeholder, .zazz-form form textarea::-webkit-input-placeholder { color: #ccc; }
+    .zazz-form form input:-moz-placeholder, .zazz-form form textarea:-moz-placeholder {
+        color: #ccc;
+    }
+
+    .zazz-form form input:-ms-input-placeholder, .zazz-form form textarea:-ms-input-placeholder {
+        color: #ccc;
+    }
+
+    .zazz-form form input::-webkit-input-placeholder, .zazz-form form textarea::-webkit-input-placeholder {
+        color: #ccc;
+    }
 
 
 /****************************************/
 
-.social-media-box{
+.social-media-box {
     height: auto;
     margin-left: 50px;
-   
 }
 
-.social-media-box h1{
-    font-size: 20px;
-    font-weight: normal;
+    .social-media-box h1 {
+        font-size: 20px;
+        font-weight: normal;
+    }
+
+.social-media-box-f {
+    margin: 35px 0 0 0;
+    width: 182px;
+    height: 31px;
+    cursor: pointer;
 }
 
-.social-media-box-f{
-	margin:35px 0 0 0;
-	width:182px;
-	height:31px;
-	cursor:pointer;
-}
-
-.social-media-box-t{
-	margin:23px 0 0 0;
-	width:182px;
-	height:31px;
-	cursor:pointer;
+.social-media-box-t {
+    margin: 23px 0 0 0;
+    width: 182px;
+    height: 31px;
+    cursor: pointer;
 }

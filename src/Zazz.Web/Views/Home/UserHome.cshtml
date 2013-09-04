@@ -1,11 +1,47 @@
 ﻿@using Zazz.Core.Models.Data.Enums
+@using Zazz.Web.Controllers
 @model UserHomeViewModel
 @{
     ViewBag.Title = "Home page";
-    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //IEnumerable<CategoryStatViewModel> tagStats = null;
+    var currentUserDisplayName = "Unknown user";
+    var currentUserId = 0;
+
+    var controller = ViewContext.Controller as BaseController;
+    if (controller != null)
+    {
+        //tagStats = controller.GetTagStats();
+        currentUserDisplayName = controller.GetCurrentUserDisplayName();
+        currentUserId = controller.GetCurrentUserId();
+    }
 }
 
-<div>
+<div class="container">
+    <div class="row-fluid">
+        
+        @*LEFT SIDE*@
+        <div class="span3 margin-top-15">
+            <div class="user">
+                <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
+                <a href="@Url.Action("Profile", "Users", new {id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString()})" class="username">@currentUserDisplayName</a>
+            </div>
+            
+            
+            <ul class="nav nav-stacked right-nav">
+                <li><a href="#"><i class="icon-exclamation-sign"></i>&nbsp; Notifications</a></li>
+                <li><a href="#"><i class="icon-beer"></i>&nbsp; Party Web</a></li>
+                <li><a href="#"><i class="icon-calendar"></i>&nbsp; Event</a></li>
+                <li><a href="#"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="#"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+@*<div>
     @Html.Partial("_PostInputsPartial")
 </div>
 
@@ -51,4 +87,4 @@
                 <li><a href="~/account/oauth/facebook"><i class="icon-facebook"></i> Link facebook account</a></li>
             }
     </ul>
-}
+}*@
