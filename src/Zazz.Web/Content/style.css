@@ -1612,3 +1612,8 @@ a:hover, a:focus {
     height: 31px;
     cursor: pointer;
 }
+
+.box-shadow {
+    -webkit-box-shadow: 0 5px 17px 0 #666666;
+    box-shadow: 0 5px 17px 0 #666666;
+}
