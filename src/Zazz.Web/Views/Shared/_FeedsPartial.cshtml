@@ -7,23 +7,25 @@
 <div id="feedsContainer">
     @foreach (var feed in Model)
     {
-        if (feed.FeedType == FeedType.Event)
-        {
-        @Html.Partial("FeedItems/_EventFeedItem", feed)
-        }
-        else if (feed.FeedType == FeedType.Photo)
-        {
-        @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
-        }
-        else if (feed.FeedType == FeedType.Post)
-        {
-        @Html.Partial("FeedItems/_PostFeedItem", feed)
-        }
+        <div class="row-fluid">
+            @if (feed.FeedType == FeedType.Event)
+            {
+                @Html.Partial("FeedItems/_EventFeedItem", feed)
+            }
+            else if (feed.FeedType == FeedType.Photo)
+            {
+                @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+            }
+            else if (feed.FeedType == FeedType.Post)
+            {
+                @Html.Partial("FeedItems/_PostFeedItem", feed)
+            }
+        </div>
     }
-    
+
     @if (Model.Count() == 10)
     {
         <button data-url="@Url.Action("LoadMoreFeeds")" class="btn btn-block btn-inverse" id="load-feeds">Load More...</button>
     }
-    
+
 </div>

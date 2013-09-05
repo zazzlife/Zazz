@@ -20,20 +20,20 @@
 
 <div class="container">
     <div class="row-fluid">
-        
+
         @*LEFT SIDE*@
         <div class="span3 margin-top-15">
             <div class="user">
                 <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
-                <a href="@Url.Action("Profile", "Users", new {id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString()})" class="username">@currentUserDisplayName</a>
+                <a href="@Url.Action("Profile", "Users", new { id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString() })" class="username">@currentUserDisplayName</a>
             </div>
-            
-            
+
+
             <ul class="nav nav-stacked right-nav">
                 <li>
-                    <a href="#" id="notifications-link"  data-toggle="popover" data-html="true" data-original-title="Notifications"
-                       data-title="Notifications"
-                       data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
+                    <a href="#" id="notifications-link" data-toggle="popover" data-html="true" data-original-title="Notifications"
+                        data-title="Notifications"
+                        data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
                         <i class="icon-exclamation-sign"></i>&nbsp; Notifications
                         @Html.Action("GetNewNotificationsCount", "Notifications")
                     </a>
@@ -42,13 +42,28 @@
                 <li><a href="@Url.Action("List", "Events")"><i class="icon-calendar"></i>&nbsp; Events</a></li>
                 <li><a href="@Url.Action("Index", "Photos")"><i class="icon-camera"></i>&nbsp; Photo</a></li>
                 <li><a href="#"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
+                @if (Model.HasFacebookAccount)
+                {
+                    if (Model.AccountType == AccountType.Club)
+                    {
+                    <li><a href="#manageFbPagesModal" data-toggle="modal" id="manageFbPages"><i class="icon-facebook"></i>Manage Facebook Pages</a></li>
+                    }
+                }
+                else
+                {
+                    <li><a href="@Url.Action("OAuth", "Account", new {id="facebook"})"><i class="icon-facebook"></i>Link facebook account</a></li>
+                }
             </ul>
 
         </div>
-        
+
         @*CENTER*@
-        
-        <div class="span6 color-white-bg box-shadow padding-bottom-100 margin-left-10"></div>
+
+        <div class="span6 color-white-bg box-shadow padding-bottom-100 margin-left-10">
+            @Html.Partial("_PostInputsPartial")
+
+            @Html.Partial("_FeedsPartial", Model.Feeds)
+        </div>
 
     </div>
 </div>
