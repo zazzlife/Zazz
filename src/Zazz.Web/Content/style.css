@@ -384,7 +384,7 @@ hr.gold-line {
     .feed-comments-section .comment-textbox {
         margin: 0;
         font-size: 12px;
-        width: 427px;
+        /*width: 427px;*/
     }
 
 .feed-comments {

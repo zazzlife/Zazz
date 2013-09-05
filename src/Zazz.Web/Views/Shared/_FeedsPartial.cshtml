@@ -8,18 +8,20 @@
     @foreach (var feed in Model)
     {
         <div class="row-fluid">
-            @if (feed.FeedType == FeedType.Event)
-            {
-                @Html.Partial("FeedItems/_EventFeedItem", feed)
-            }
-            else if (feed.FeedType == FeedType.Photo)
-            {
-                @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
-            }
-            else if (feed.FeedType == FeedType.Post)
-            {
-                @Html.Partial("FeedItems/_PostFeedItem", feed)
-            }
+            <div class="span12">
+                @if (feed.FeedType == FeedType.Event)
+                {
+                    @Html.Partial("FeedItems/_EventFeedItem", feed)
+                }
+                else if (feed.FeedType == FeedType.Photo)
+                {
+                    @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
+                }
+                else if (feed.FeedType == FeedType.Post)
+                {
+                    @Html.Partial("FeedItems/_PostFeedItem", feed)
+                }
+            </div>
         </div>
     }
 
