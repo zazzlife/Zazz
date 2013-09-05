@@ -1613,6 +1613,6 @@ a:hover, a:focus {
 }
 
 .box-shadow {
-    -webkit-box-shadow: 0 5px 17px 0 #666666;
-    box-shadow: 0 5px 17px 0 #666666;
+    -webkit-box-shadow: 0 0 10px 0 #666666;
+    box-shadow: 0 0 10px 0 #666666;
 }
