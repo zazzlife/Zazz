@@ -5,7 +5,7 @@
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    IEnumerable<CategoryStatViewModel> categoryStats = null;
+    IEnumerable<CategoryStatViewModel> categoryStats = Enumerable.Empty<CategoryStatViewModel>();
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
 
@@ -68,6 +68,14 @@
             @Html.Partial("_PostInputsPartial")
 
             @Html.Partial("_FeedsPartial", Model.Feeds)
+        </div>
+        
+        @*RIGHT*@
+        <div class="span3" style="margin-top: 255px;">
+            @foreach (var c in categoryStats.Skip(5).Take(5))
+            {
+                Html.RenderPartial("_CategoryStatusItem", c);
+            }
         </div>
 
     </div>
