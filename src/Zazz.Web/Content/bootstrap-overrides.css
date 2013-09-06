@@ -31,10 +31,6 @@ hr {
     border-bottom: 1px solid #bbb;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: inherit;
-}
-
 /*.form-actions {
     background-color: rgb(49, 49, 49);
     border-top: 1px solid rgba(255, 255, 255, 0.5);

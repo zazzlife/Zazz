@@ -218,15 +218,15 @@ hr.gold-line {
     padding-left: 5px;
 }
 
-.right-nav ul li {
-    margin: 10px 0 0 10px;
-}
+    .right-nav ul li {
+        margin: 10px 0 0 10px;
+    }
 
-.right-nav a {
-    text-decoration: none;
-    color: #000;
-    margin-top: 10px;
-}
+    .right-nav a {
+        text-decoration: none;
+        color: #000;
+        margin-top: 10px;
+    }
 
 /**********MIDDLE PANEL***********/
 
@@ -989,9 +989,6 @@ a.tag {
 
 .tag-header {
     font-weight: 600;
-    font-size: 14px;
-    color: black;
-    margin-top: 15px;
 }
 
     .tag-header a {
@@ -1615,4 +1612,17 @@ a:hover, a:focus {
 .box-shadow {
     -webkit-box-shadow: 0 0 10px 0 #666666;
     box-shadow: 0 0 10px 0 #666666;
+}
+
+.color-bg-3 {
+    background: #F4F4F4;
+}
+
+.border-3 {
+    border: 1px solid #000;
+}
+
+.p3 {
+    color: #000000;
+    font-size: 14px;
 }
