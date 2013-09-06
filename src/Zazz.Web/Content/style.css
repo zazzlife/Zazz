@@ -317,8 +317,8 @@ hr.gold-line {
     /*width: 555px;*/
 }
 
-    .feed-item a {
-        font-weight: 600;
+    .feed-item a, .feed-item button.btn-link {
+        color: black;
     }
 
     .feed-item .feed-userimg-container {
