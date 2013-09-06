@@ -55,8 +55,8 @@ namespace Zazz.Web.Controllers
                                  , IUserService userService, IPhotoService photoService,
                                  IDefaultImageHelper defaultImageHelper, IFacebookService facebookService,
                                  IFollowService followService, IUoW uow, IOAuthService oAuthService,
-                                 IFacebookHelper facebookHelper)
-            : base(userService, photoService, defaultImageHelper, staticData)
+                                 IFacebookHelper facebookHelper, ICategoryService categoryService)
+            : base(userService, photoService, defaultImageHelper, staticData, categoryService)
         {
             _authService = authService;
             _facebookService = facebookService;

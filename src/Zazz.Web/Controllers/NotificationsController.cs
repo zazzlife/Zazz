@@ -13,7 +13,7 @@ using Zazz.Web.Models;
 namespace Zazz.Web.Controllers
 {
     [Authorize]
-    public class NotificationsController : UserPageLayoutBaseController
+    public class NotificationsController : BaseController
     {
         private readonly INotificationService _notificationService;
 
@@ -24,7 +24,7 @@ namespace Zazz.Web.Controllers
         public NotificationsController(IUserService userService, IPhotoService photoService,
                                        INotificationService notificationService, IDefaultImageHelper defaultImageHelper,
                                        ICategoryService categoryService, IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _notificationService = notificationService;
         }

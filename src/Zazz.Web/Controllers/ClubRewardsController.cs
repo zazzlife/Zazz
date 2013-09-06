@@ -22,8 +22,9 @@ namespace Zazz.Web.Controllers
 
         public ClubRewardsController(IUserService userService, IPhotoService photoService,
                                      IDefaultImageHelper defaultImageHelper, IUoW uow,
-                                     IClubRewardService rewardService, IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, staticDataRepository)
+                                     IClubRewardService rewardService, IStaticDataRepository staticDataRepository,
+                                     ICategoryService categoryService)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _uow = uow;
             _rewardService = rewardService;

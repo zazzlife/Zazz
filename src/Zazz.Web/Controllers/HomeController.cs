@@ -17,14 +17,14 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class HomeController : UserPageLayoutBaseController
+    public class HomeController : BaseController
     {
         private readonly IFeedHelper _feedHelper;
 
         public HomeController(IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) :
-            base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
+            base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _feedHelper = feedHelper;
         }

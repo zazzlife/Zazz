@@ -19,7 +19,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class EventsController : UserPageLayoutBaseController
+    public class EventsController : BaseController
     {
         private readonly IEventService _eventService;
         private readonly IUoW _uow;
@@ -29,7 +29,7 @@ namespace Zazz.Web.Controllers
         public EventsController(IUserService userService, IEventService eventService,
                                 IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
                                 ICategoryService categoryService, IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _eventService = eventService;
             _uow = uow;

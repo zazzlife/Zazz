@@ -15,7 +15,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class PostsController : UserPageLayoutBaseController
+    public class PostsController : BaseController
     {
         private readonly IPostService _postService;
         private readonly IFeedHelper _feedHelper;
@@ -24,7 +24,7 @@ namespace Zazz.Web.Controllers
                                IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
                                IFeedHelper feedHelper, ICategoryService categoryService,
                                IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepository)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _postService = postService;
             _feedHelper = feedHelper;

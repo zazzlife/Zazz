@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
@@ -15,14 +17,27 @@ namespace Zazz.Web.Controllers
         protected readonly IUserService UserService;
         protected readonly IPhotoService PhotoService;
         protected readonly IDefaultImageHelper DefaultImageHelper;
+        protected readonly ICategoryService CategoryService;
 
         protected BaseController(IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IStaticDataRepository staticDataRepository)
+            IDefaultImageHelper defaultImageHelper, IStaticDataRepository staticDataRepository,
+            ICategoryService categoryService)
         {
             StaticDataRepository = staticDataRepository;
             UserService = userService;
             PhotoService = photoService;
             DefaultImageHelper = defaultImageHelper;
+            CategoryService = categoryService;
+        }
+
+        public IEnumerable<CategoryStatViewModel> GetTagStats()
+        {
+            return CategoryService.GetAllStats()
+                             .Select(t => new CategoryStatViewModel
+                             {
+                                 CategoryName = t.Category.Name,
+                                 UsersCount = t.UsersCount
+                             });
         }
 
         public string GetCurrentUserDisplayName()

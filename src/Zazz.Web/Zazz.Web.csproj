@@ -290,7 +290,6 @@
     <Compile Include="Controllers\PhotosController.cs" />
     <Compile Include="Controllers\PostsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\UserPageLayoutBaseController.cs" />
     <Compile Include="Controllers\VoteController.cs" />
     <Compile Include="Controllers\WeeklyController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />

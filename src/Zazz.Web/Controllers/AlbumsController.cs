@@ -21,8 +21,8 @@ namespace Zazz.Web.Controllers
 
         public AlbumsController(IAlbumService albumService, IUserService userService,
                                 IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
-                                IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, staticDataRepository)
+                                IStaticDataRepository staticDataRepository, ICategoryService categoryService)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _albumService = albumService;
         }

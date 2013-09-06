@@ -28,9 +28,9 @@ namespace Zazz.Web.Controllers
 
         public PhotosController(IPhotoService photoService, IAlbumService albumService,
                                 IUserService userService, IDefaultImageHelper defaultImageHelper,
-                                IImageValidator imageValidator,
-                                IStaticDataRepository staticDataRepository)
-            : base(userService, photoService, defaultImageHelper, staticDataRepository)
+                                IImageValidator imageValidator, IStaticDataRepository staticDataRepository,
+                                ICategoryService categoryService)
+            : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _albumService = albumService;
             _imageValidator = imageValidator;

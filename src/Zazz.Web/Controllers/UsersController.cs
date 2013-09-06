@@ -19,7 +19,7 @@ using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
 {
-    public class UsersController : UserPageLayoutBaseController
+    public class UsersController : BaseController
     {
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
@@ -28,7 +28,7 @@ namespace Zazz.Web.Controllers
         public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ICategoryService categoryService,
             IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
-            : base(userService, photoService, defaultImageHelper, categoryService, staticDataRepo)
+            : base(userService, photoService, defaultImageHelper, staticDataRepo, categoryService)
         {
             _uow = uow;
             _cacheService = cacheService;
