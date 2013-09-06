@@ -5,14 +5,14 @@
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    IEnumerable<CategoryStatViewModel> tagStats = null;
+    IEnumerable<CategoryStatViewModel> categoryStats = null;
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
 
     var controller = ViewContext.Controller as BaseController;
     if (controller != null)
     {
-        tagStats = controller.GetTagStats();
+        categoryStats = controller.GetTagStats();
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
     }
@@ -55,7 +55,10 @@
                 }
             </ul>
             
-
+            @foreach (var c in categoryStats.Take(5))
+            {
+                Html.RenderPartial("_CategoryStatusItem", c);
+            }
 
         </div>
 

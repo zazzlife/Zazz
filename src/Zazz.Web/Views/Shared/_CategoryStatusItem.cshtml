@@ -1,6 +1,6 @@
 ﻿@model CategoryStatViewModel
 
-<div class="border-3 color-bg-3 text-center">
+<div class="border-3 color-bg-3 text-center margin-bottam-20">
     <a href="@Url.Action("Categories", "Home", new { @select=Model.CategoryName })"><h4 class="category-header">@Model.CategoryName</h4></a>
     <p>@Model.UsersCount @(Model.UsersCount == 1 ? "person" : "people") are talking about this.</p>
 </div>
