@@ -965,15 +965,15 @@ li.new-notification {
 }
 
 /***************************************
-    Tags
+    Categories
 ***************************************/
 
-a.tag {
+a.category {
     text-decoration: none;
     color: black;
 }
 
-.tag-stats {
+.category-stats {
     list-style: none;
     text-align: center;
     margin-left: 0;
@@ -983,19 +983,19 @@ a.tag {
     position: fixed;
 }
 
-    .tag-stats a {
+    .category-stats a {
         color: black;
     }
 
-.tag-header {
+.category-header {
     font-weight: 600;
 }
 
-    .tag-header a {
+    .category-header a {
         text-decoration: none;
     }
 
-.tags-lastupdate {
+.category-lastupdate {
     font-size: 12px;
     text-align: right;
     margin-top: 15px;

@@ -5,14 +5,14 @@
     ViewBag.Title = "Home page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    //IEnumerable<CategoryStatViewModel> tagStats = null;
+    IEnumerable<CategoryStatViewModel> tagStats = null;
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
 
     var controller = ViewContext.Controller as BaseController;
     if (controller != null)
     {
-        //tagStats = controller.GetTagStats();
+        tagStats = controller.GetTagStats();
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
     }
@@ -55,10 +55,7 @@
                 }
             </ul>
             
-            <div class="border-3 color-bg-3 text-center">
-                <h4 class="tag-header">Nocover</h4>
-                <p>0 people are talking about this.</p>
-            </div>
+
 
         </div>
 
