@@ -1611,6 +1611,11 @@ a:hover, a:focus {
     background: #F4F4F4;
 }
 
+.border-2 {
+    border: 2px solid #FBCE0E;
+    border-radius: 5px;
+}
+
 .border-3 {
     border: 1px solid #000;
 }
@@ -1632,3 +1637,55 @@ a:hover, a:focus {
     font-weight: 600;
     font-size: 18px;
 }
+
+.event-h {
+   color: #000000;
+    font-size: 20px;
+    font-weight:normal;
+    margin: 0;
+}
+.event-p {
+    color: #000000;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: justify;
+   
+}
+.event-socal {
+    height: 20px;
+    width: auto;
+}
+.event-socal ul {
+	margin-left:0 !important;
+
+}
+.event-socal ul li {
+    display: inline;
+    text-decoration: none;
+	margin:0;
+}
+.event-socal li a:hover {
+    opacity: 0.5;
+}
+
+.event-read-more {
+    color: #000000;
+    font-size: 14px;
+}
+    .event-read-more a {
+        margin-top: 4px;
+        float: left;
+        color: #000000;
+        text-decoration: none;
+        -moz-transition: all .4s ease-in;
+        -o-transition: all .4s ease-in;
+        -webkit-transition: all .4s ease-in;
+        transition: all .4s ease-in;
+    }
+        .event-read-more a:hover {
+            color: #333;
+            -webkit-transition: all .4s ease-in;
+            -moz-transition: all .4s ease-in;
+            -o-transition: all .4s ease-in;
+            transition: all .4s ease-in;
+        }
