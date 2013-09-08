@@ -9,7 +9,9 @@
     @foreach (var e in Model.Events)
     {
         <div class="row-fluid">
-            @Html.Partial("_EventPartial", e)
+            <div class="span12">
+                @Html.Partial("_EventPartial", e)
+            </div>
         </div>
     }
 
