@@ -2,8 +2,6 @@
 
 @{
     ViewBag.Title = Model.EventViewModel.Name;
-    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
-
     var isMapAvailable = (Model != null && Model.EventViewModel.Latitude.HasValue && Model.EventViewModel.Longitude.HasValue);
 }
 
