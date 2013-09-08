@@ -14,126 +14,124 @@
         </div>
     </div>
 
-    <div class="margin-top-10 margin-bottam-20">
-        <div class="span6 zazz-form zazz-form2">
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
+    <div class="span6 zazz-form zazz-form2" style="margin-left: 0;">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
             
-                @Html.HiddenFor(m => m.EventViewModel.CreatedDate)
+            @Html.HiddenFor(m => m.EventViewModel.CreatedDate)
             
-                <div class="margin-ten">
+            <div class="margin-ten">
 
-                    <div class="control-group">
-                        <div class="editor-label">
-                            <label class="control-label">Picture</label>
-                        </div>
-                        @if (Model != null && Model.EventViewModel.PhotoId.HasValue)
-                        {
-                            <input name="EventViewModel.PhotoId" id="photoId" type="hidden" value="@Model.EventViewModel.PhotoId.Value"/>
-                        }
-                        else
-                        {
-                            <input name="EventViewModel.PhotoId" id="photoId" type="hidden" />
-                        }
-
-                        <img src="@Model.EventViewModel.ImageUrl.SmallLink" id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
-
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="eventPhotoSelected">From gallery</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="eventPhotoSelected">Upload picture</a></li>
-                            </ul>
-                        </div>
+                <div class="control-group">
+                    <div class="editor-label">
+                        <label class="control-label">Picture</label>
                     </div>
+                    @if (Model != null && Model.EventViewModel.PhotoId.HasValue)
+                    {
+                        <input name="EventViewModel.PhotoId" id="photoId" type="hidden" value="@Model.EventViewModel.PhotoId.Value"/>
+                    }
+                    else
+                    {
+                        <input name="EventViewModel.PhotoId" id="photoId" type="hidden" />
+                    }
 
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Name, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.Name, new { @class = "span4" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Name, null, new { @class = "help-inline" })
-                        </div>
+                    <img src="@Model.EventViewModel.ImageUrl.SmallLink" id="selectedImg-thumbnail" class="img-polaroid" style="width: 64px;"/>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">Select Picture</button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="eventPhotoSelected">From gallery</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="eventPhotoSelected">Upload picture</a></li>
+                        </ul>
                     </div>
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Description, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextAreaFor(model => model.EventViewModel.Description, new { @class = "span4", @style = "height: 180px;", @data_tag = "1" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Description, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-                    @Html.HiddenFor(m => m.EventViewModel.UtcTime)
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Time, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.Time, new { @class = "span4 datepicker" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Time, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Location, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.Location, new { @class = "span4" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Location, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Street, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.Street, new { @class = "span4" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Street, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.City, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.City, new { @class = "span4" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.City, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.EventViewModel.Price, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.EventViewModel.Price, new { @class = "span4" })
-                            @Html.ValidationMessageFor(model => model.EventViewModel.Price, null, new { @class = "help-inline" })
-                        </div>
-                    </div>
-
-
-                    <hr />
-
-                    @Html.HiddenFor(m => m.EventViewModel.Latitude)
-                    @Html.HiddenFor(m => m.EventViewModel.Longitude)
-                    <div id="map-canvas" style="height: 400px;"></div>
-
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Name, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.Name, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Name, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Description, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.EventViewModel.Description, new { @class = "span4", @style = "height: 180px;", @data_tag = "1" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Description, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                @Html.HiddenFor(m => m.EventViewModel.UtcTime)
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Time, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.Time, new { @class = "span4 datepicker" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Time, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Location, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.Location, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Location, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Street, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.Street, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Street, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.City, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.City, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.City, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EventViewModel.Price, new { @class = "control-label" })
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EventViewModel.Price, new { @class = "span4" })
+                        @Html.ValidationMessageFor(model => model.EventViewModel.Price, null, new { @class = "help-inline" })
+                    </div>
+                </div>
+
+
+                <hr />
+
+                @Html.HiddenFor(m => m.EventViewModel.Latitude)
+                @Html.HiddenFor(m => m.EventViewModel.Longitude)
+                <div id="map-canvas" style="height: 400px;"></div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
         
-            }
-        </div>
+        }
     </div>
 </div>
 
