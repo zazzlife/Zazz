@@ -1,11 +1,25 @@
 ﻿@model EventDetailsPageViewModel
 
 @{
-    Layout = "~/Views/Shared/_UserPageLayout.cshtml";
     ViewBag.Title = ViewBag.FormAction + " Event";
 }
 
-<div>
+<div class="container white-bg border-radius-5" style="padding: 0 20px 100px 20px;">
+
+    <div class="row-fluid">
+        <div class="lead span12 border-bottom-2">
+            <h4>
+                <i class="icon-plus icon-2x pull-left"></i>
+                New Event
+            </h4>
+        </div>
+    </div>
+    
+    
+
+</div>
+
+@*<div>
     <div class="page-header">
         <h3>@ViewBag.FormAction Event</h3>
     </div>
@@ -135,7 +149,7 @@
         </p>
         
     }
-</div>
+</div>*@
 
 
 @Html.Partial("_PhotoGalleryModal")
