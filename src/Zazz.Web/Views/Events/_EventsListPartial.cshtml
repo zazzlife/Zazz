@@ -8,7 +8,9 @@
 
     @foreach (var e in Model.Events)
     {
-        @Html.Partial("_EventPartial", e)
+        <div class="row-fluid">
+            @Html.Partial("_EventPartial", e)
+        </div>
     }
 
     <div data-ajax-pagination="1" data-update="#eventrange-@Model.EventsRange">
