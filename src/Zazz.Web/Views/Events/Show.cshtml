@@ -33,43 +33,44 @@
             <img src="@Model.EventViewModel.ImageUrl.MediumLink"/>
         </div>
         
-        <div class="span8 well">
-            <p>
-                @Model.EventViewModel.Description
-            </p>
+        <div class="span8">
+            <div class="well">
+                <p>
+                    @Model.EventViewModel.Description
+                </p>
 
-            <h3 style="margin: 0;">@Model.EventViewModel.Location</h3>
-            <address>
-                @Model.EventViewModel.Street, @Model.EventViewModel.City<br/>
+                <h3 style="margin: 0;">@Model.EventViewModel.Location</h3>
+                <address>
+                    @Model.EventViewModel.Street, @Model.EventViewModel.City<br/>
                 
-                @Model.EventViewModel.Time.Date.ToLongDateString()
+                    @Model.EventViewModel.Time.Date.ToLongDateString()
 
-                @if (!Model.EventViewModel.IsDateOnly)
-                {
-                    <text> - </text>
-                    @Model.EventViewModel.Time.DateTime.ToShortTimeString()
-                }
+                    @if (!Model.EventViewModel.IsDateOnly)
+                    {
+                        <text> - </text>
+                        @Model.EventViewModel.Time.DateTime.ToShortTimeString()
+                    }
 
-            </address>
+                </address>
             
-            <div class="row-fluid">
-                <div class="span2">
-                    @if (Model.EventViewModel.IsFacebookEvent)
-                    {
-                        <a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="btn"><i class="icon-facebook"></i>View this event on facebook</a>
-                    }
-                </div>
-                <div class="span2 offset8 text-right">
-                    @if (Model.EventViewModel.Price.HasValue)
-                    {
-                        <h4>@Model.EventViewModel.Price.Value.ToString("C")</h4>
-                    }
+                <div class="row-fluid">
+                    <div class="span2">
+                        @if (Model.EventViewModel.IsFacebookEvent)
+                        {
+                            <a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="btn"><i class="icon-facebook"></i>View this event on facebook</a>
+                        }
+                    </div>
+                    <div class="span2 offset8 text-right">
+                        @if (Model.EventViewModel.Price.HasValue)
+                        {
+                            <h4>@Model.EventViewModel.Price.Value.ToString("C")</h4>
+                        }
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
-
     </div>
     
     @if (isMapAvailable)
