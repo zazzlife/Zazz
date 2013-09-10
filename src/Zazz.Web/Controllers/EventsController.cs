@@ -15,6 +15,7 @@ using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
+using Zazz.Web.Helpers;
 using Zazz.Web.Models;
 
 namespace Zazz.Web.Controllers
@@ -213,9 +214,13 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet, Authorize]
-        public ActionResult Show(int id)
+        public ActionResult Show(int id, string friendlySeoName)
         {
             var eventVm = GetEvent(id, false);
+
+            var realFriendlySeoName = eventVm.Name.ToUrlFriendlyString();
+            if (!realFriendlySeoName.Equals(friendlySeoName))
+                return RedirectToActionPermanent("Show", "Events", new { id, friendlySeoName = realFriendlySeoName });
 
             var vm = new EventDetailsPageViewModel
                      {
