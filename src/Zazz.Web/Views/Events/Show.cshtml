@@ -5,10 +5,37 @@
     var isMapAvailable = (Model != null && Model.EventViewModel.Latitude.HasValue && Model.EventViewModel.Longitude.HasValue);
 }
 
+<div class="container white-bg border-radius-5"  style="padding: 10px 20px 100px 20px;">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header row-fluid">
+                <div class="span4">
+                    <h4>
+                        @Model.EventViewModel.Name
+                    </h4>
+                </div>
+                
+                @if (Model.EventViewModel.IsOwner)
+                {
+                    <div class="offset2 span6 text-right">
+                        <a href="@Url.Action("Edit", "Events", new {id=Model.EventViewModel.Id})" class="btn"><i class="icon-pencil"></i> Edit</a>
+                        <a href="@Url.Action("Remove", "Events", new {id=Model.EventViewModel.Id})" class="btn"><i class="icon-remove"></i> Remove</a>
+                    </div>
+                }
+                
+            </div>
+        </div>
+    </div>
 
-<div>
-    <div class="page-header">
-        <h3>@Model.EventViewModel.Name</h3>
+</div>
+
+@*<div class="container white-bg border-radius-5">
+    <div class="row-fluid">
+        <div class="lead span12 border-bottom-2">
+            <h4>
+                <h3>@Model.EventViewModel.Name</h3>
+            </h4>
+        </div>
     </div>
 
     <div class="margin-ten">
@@ -31,7 +58,7 @@
         @if (isMapAvailable)
         {
             <div id="map-canvas" style="height: 400px;"></div>
-            <div style="margin-bottom: 200px;"></div> @* TODO: Remove this line later *@
+            <div style="margin-bottom: 200px;"></div>
         }
 
     </div>
@@ -90,4 +117,4 @@
 
         </script>
     }
-}
+}*@
