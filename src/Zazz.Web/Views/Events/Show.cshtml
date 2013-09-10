@@ -18,14 +18,88 @@
                 @if (Model.EventViewModel.IsOwner)
                 {
                     <div class="offset2 span6 text-right">
-                        <a href="@Url.Action("Edit", "Events", new {id=Model.EventViewModel.Id})" class="btn"><i class="icon-pencil"></i> Edit</a>
-                        <a href="@Url.Action("Remove", "Events", new {id=Model.EventViewModel.Id})" class="btn"><i class="icon-remove"></i> Remove</a>
+                        <a href="@Url.Action("Edit", "Events", new { id = Model.EventViewModel.Id })" class="btn"><i class="icon-pencil"></i> Edit</a>
+                        <a href="@Url.Action("Remove", "Events", new { id = Model.EventViewModel.Id })" class="btn"><i class="icon-remove"></i> Remove</a>
                     </div>
                 }
                 
             </div>
         </div>
     </div>
+    
+    <div class="row-fluid">
+        
+        <div class="span4">
+            <img src="@Model.EventViewModel.ImageUrl.MediumLink"/>
+        </div>
+        
+        <div class="span8 well">
+            <p>
+                @Model.EventViewModel.Description
+            </p>
+
+            <h3 style="margin: 0;">@Model.EventViewModel.Location</h3>
+            <address>
+                @Model.EventViewModel.Street, @Model.EventViewModel.City<br/>
+                
+                @Model.EventViewModel.Time.Date.ToLongDateString()
+
+                @if (!Model.EventViewModel.IsDateOnly)
+                {
+                    <text> - </text>
+                    @Model.EventViewModel.Time.DateTime.ToShortTimeString()
+                }
+
+            </address>
+            
+            <div class="row-fluid">
+                <div class="span2">
+                    @if (Model.EventViewModel.IsFacebookEvent)
+                    {
+                        <a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="btn"><i class="icon-facebook"></i>View this event on facebook</a>
+                    }
+                </div>
+                <div class="span2 offset8 text-right">
+                    @if (Model.EventViewModel.Price.HasValue)
+                    {
+                        <h4>@Model.EventViewModel.Price.Value.ToString("C")</h4>
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    @if (isMapAvailable)
+    {
+        <div id="map-canvas"></div>
+        
+        
+        @section ScriptsTop
+        {
+            <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyC-ZWW7fhSaFI1i3i3jjpJUuGPJZI87A6s&sensor=true" type="text/javascript"></script>
+        }
+
+        @section Scripts
+        {
+            <script type="text/javascript">
+
+                $(function() {
+
+                    var lat = @Model.EventViewModel.Latitude.Value;
+                    var lng = @Model.EventViewModel.Longitude.Value;
+
+                    var latlng = new google.maps.LatLng(lat, lng, false);
+                    initMap(lat, lng);
+                    placeMarker(latlng, 14);
+                });
+
+            </script>
+        }
+
+    }
 
 </div>
 
