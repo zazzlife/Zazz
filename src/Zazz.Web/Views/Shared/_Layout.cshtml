@@ -1,5 +1,4 @@
-﻿@using Zazz.Web.Controllers
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -19,26 +18,32 @@
 </head>
 <body>
     <!--[if lt IE 7]> <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;'> <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today." /></a></div> <![endif]-->
-
+    
     <nav class="navbar">
         <div class="navbar-inner">
             <div class="container">
+                
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                
                 <a class="brand" href="~/"><img src="~/Images/logo.png" alt="Zazz" /></a>
-                <div class="pull-left">
-                    <!--LEFT ITEMS-->
-                    <form class="navbar-form" style="margin-left: 134px;">
+                
+                <div class="nav-collapse">
+                    
+                    <form class="navbar-form offset2 pull-left">
                         <i class="icon-search" id="searchIcon"></i>
                         <input id="navbarSearch" class="span3" type="search" placeholder="Search"/>    
                     </form>
-                    
-                </div>
-                <div class="pull-right">
-                    <!--RIGHT ITEMS-->
-                    <ul class="nav">
+
+                    <ul class="nav pull-right">
                         @Html.MenuLink("Home", "Index", "Home", "Index")
                         @Html.MenuLink("Events", "List", "Events", "List")
                         @Html.MenuLink("My Zazz Life", "", "Users", "Me", "Index")
                         @*@Html.MenuLink("Club Rewards", "Index", "ClubRewards", "Index", "Scenarios", "EditScenario", "List", "Create", "Edit")*@
+                        
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i><i style="margin-left: 5px;" class="icon-caret-down"></i></a>
                             <ul class="dropdown-menu">
@@ -49,11 +54,13 @@
                             </ul>
                         </li>
                     </ul>
+
                 </div>
-                <div class="clearfix"></div>
+
             </div>
         </div>
     </nav>
+
     
     @if (TempData["alert"] != null && ((bool) TempData["alert"]))
     {
