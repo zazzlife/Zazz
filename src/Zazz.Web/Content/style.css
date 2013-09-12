@@ -602,6 +602,24 @@ hr.gold-line {
     color: black;
 }
 
+.follow-btn {
+    background: url("../Images/fallow-aero.png") no-repeat scroll 6px 6px #FBCE0E;
+    border-radius: 5px 5px 5px 5px;
+    color: #000000;
+    cursor: pointer;
+    height: 38px;
+    margin: 25px auto 0 auto;
+    text-align: center;
+    width: 200px;
+}
+
+    .follow-btn p {
+        margin: 0;
+        padding-top: 8px;
+        font-size: 20px;
+        color: #666666;
+    }
+
 .club-details {
     font-size: 16px;
 }
