@@ -21,12 +21,23 @@
                 <p>Follow</p>
             </div>
             
-            <div class="margin-top-25">
-                <div style="border-bottom: 2px solid #858585;margin-right: -8px;">
-                    <ul>
-                        <li></li>
-                    </ul>
-                </div>
+            <div class="user-details">
+                <ul>
+                    @if (!String.IsNullOrEmpty(Model.City))
+                    {
+                        <li><i class="icon-globe"></i>City: @Model.City</li>
+                    }
+
+                    @if (!String.IsNullOrEmpty(Model.School))
+                    {
+                        <li><i class="icon-building"></i> @Model.School</li>
+                    }
+                    
+                    @if (!String.IsNullOrEmpty(Model.Major))
+                    {
+                        <li><i class="icon-book"></i> @Model.Major</li>
+                    }
+                </ul>
             </div>
 
         </div>

@@ -602,6 +602,29 @@ hr.gold-line {
     color: black;
 }
 
+.user-details {
+    margin-top: 25px;
+    border-top: 2px solid #858585;
+    margin-right: -8px;
+    text-align: left;
+    color: black;
+    font-size: 14px;
+}
+
+.user-details ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-details li {
+    margin-top: 5px;
+}
+
+.user-details li i {
+    margin-right: 5px;
+}
+
 .follow-btn {
     background: url("../Images/fallow-aero.png") no-repeat scroll 6px 6px #FBCE0E;
     border-radius: 5px 5px 5px 5px;
