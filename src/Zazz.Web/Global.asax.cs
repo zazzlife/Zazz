@@ -36,7 +36,7 @@ namespace Zazz.Web
 #if DEBUG
             new Zazz.Data.ZazzDbContext();
 #endif
-            //log4net.Config.XmlConfigurator.Configure();
+            log4net.Config.XmlConfigurator.Configure();
 
             //var log = LogManager.GetLogger("Global.asax");
             //log.Info("=========================");
