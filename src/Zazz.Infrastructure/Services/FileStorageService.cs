@@ -10,7 +10,7 @@ namespace Zazz.Infrastructure.Services
 {
     public class FileStorageService : IStorageService
     {
-        private const string PHOTOS_DIR = @"\picture\user";
+        private const string PHOTOS_DIR = @"picture\user\";
         public string BasePhotoUrl { get; private set; }
         
         private readonly string _rootDirectory;
@@ -24,11 +24,15 @@ namespace Zazz.Infrastructure.Services
 
         public void SavePhotoBlob(string fileName, Stream data)
         {
-            var fullDirPath = _rootDirectory + PHOTOS_DIR;
+            //extracting folder name from file name
+            var fileNameSegments = fileName.Split('/');
+            var userFolder = fileNameSegments.Length == 3 ? fileNameSegments[1] : fileNameSegments[0];
+            fileName = fileNameSegments.Length == 3 ? fileNameSegments[2] : fileNameSegments[1];
+            
+            var fullDirPath = _rootDirectory + PHOTOS_DIR + userFolder;
 
             if (!Directory.Exists(fullDirPath))
                 Directory.CreateDirectory(fullDirPath);
-
 
             var filePath = String.Format(@"{0}\{1}", fullDirPath, fileName);
             if (File.Exists(filePath))

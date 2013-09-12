@@ -742,6 +742,47 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
+        public void ClearCategories_OnRemovePhoto()
+        {
+            //Arrange
+            var photo = new Photo
+            {
+                Id = 3232,
+                UserId = 44,
+                User = new User
+                {
+                    AccountType = AccountType.Club,
+                    ProfilePhotoId = 3231,
+                    ClubDetail = new ClubDetail()
+                },
+                Categories = new List<PhotoCategory>
+                             {
+                                 new PhotoCategory(),
+                                 new PhotoCategory()
+                             }
+            };
+
+            _uow.Setup(x => x.PhotoRepository.GetById(photo.Id))
+                .Returns(photo);
+
+            _uow.Setup(x => x.FeedRepository.GetPhotoFeed(photo.Id))
+                .Returns(() => null);
+
+            _uow.Setup(x => x.EventRepository.ResetPhotoId(photo.Id));
+            _uow.Setup(x => x.PhotoRepository.Remove(photo));
+            _uow.Setup(x => x.SaveChanges());
+
+            _storageService.Setup(x => x.RemoveBlob(It.IsAny<string>()));
+
+            //Act
+            _sut.RemovePhoto(photo.Id, photo.UserId);
+
+            //Assert
+            CollectionAssert.IsEmpty(photo.Categories);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
         public void RemoveFeedIfItsTheLastPhoto_OnRemovePhoto()
         {
             //Arrange
