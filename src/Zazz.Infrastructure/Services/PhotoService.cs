@@ -72,9 +72,9 @@ namespace Zazz.Infrastructure.Services
         public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
             var baseUrl = _storageService.BasePhotoUrl; //sample: http://test.zazzlife.com/picture/user
-            
+
             var links = new PhotoLinks();
-            var type = typeof (PhotoLinks);
+            var type = typeof(PhotoLinks);
 
             foreach (var p in type.GetProperties())
             {
@@ -206,7 +206,7 @@ namespace Zazz.Infrastructure.Services
             var photo = _uow.PhotoRepository.GetById(photoId);
             if (photo == null)
                 return;
-
+            
             if (photo.UserId != currentUserId)
                 throw new SecurityException();
 
@@ -236,6 +236,8 @@ namespace Zazz.Infrastructure.Services
                     _uow.FeedRepository.Remove(feed);
             }
 
+            photo.Categories.Clear();
+
             _uow.EventRepository.ResetPhotoId(photoId);
             _uow.PhotoRepository.Remove(photo);
             _uow.SaveChanges();
@@ -243,7 +245,7 @@ namespace Zazz.Infrastructure.Services
             var properties = typeof(PhotoLinks).GetProperties();
             foreach (var p in properties)
             {
-                var attr = p.GetCustomAttributes(typeof (PhotoAttribute), false)
+                var attr = p.GetCustomAttributes(typeof(PhotoAttribute), false)
                             .Cast<PhotoAttribute>()
                             .FirstOrDefault();
 
