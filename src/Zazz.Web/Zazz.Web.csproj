@@ -491,6 +491,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.extends.js" />
     <Content Include="Images\auth-icons.png" />
