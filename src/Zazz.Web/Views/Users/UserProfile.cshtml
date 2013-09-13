@@ -21,24 +21,28 @@
                 <p>Follow</p>
             </div>
             
-            <div class="user-details">
-                <ul>
-                    @if (!String.IsNullOrEmpty(Model.City))
-                    {
-                        <li><i class="icon-globe"></i>City: @Model.City</li>
-                    }
+            @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
+            {
+                <div class="user-details">
+                    <ul>
+                        @if (!String.IsNullOrEmpty(Model.City))
+                        {
+                            <li><i class="icon-globe"></i>City: @Model.City</li>
+                        }
 
-                    @if (!String.IsNullOrEmpty(Model.School))
-                    {
-                        <li><i class="icon-building"></i> @Model.School</li>
-                    }
+                        @if (!String.IsNullOrEmpty(Model.School))
+                        {
+                            <li><i class="icon-building"></i> @Model.School</li>
+                        }
                     
-                    @if (!String.IsNullOrEmpty(Model.Major))
-                    {
-                        <li><i class="icon-book"></i> @Model.Major</li>
-                    }
-                </ul>
-            </div>
+                        @if (!String.IsNullOrEmpty(Model.Major))
+                        {
+                            <li><i class="icon-book"></i> @Model.Major</li>
+                        }
+                    </ul>
+                </div>
+            }
+            
 
         </div>
         
