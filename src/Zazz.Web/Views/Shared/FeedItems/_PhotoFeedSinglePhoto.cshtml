@@ -3,8 +3,10 @@
     Layout = null;
 }
 
-<div>
-    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
-        <img style="width: 100%" src="@Model.PhotoUrl.MediumLink" />
-    </a>
+<div class="row-fluid">
+    <div class="span12">
+        <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
+            <img style="width: 100%" src="@Model.PhotoUrl.MediumLink" />
+        </a>
+    </div>
 </div>

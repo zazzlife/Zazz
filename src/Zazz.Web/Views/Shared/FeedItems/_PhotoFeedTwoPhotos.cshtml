@@ -3,15 +3,17 @@
     Layout = null;
 }
 
-<div class="thumbnail-247">
-    <a data-toggle="lightbox" data-target="#photo-@Model[0].PhotoId" href="@Model[0].PhotoUrl.OriginalLink">
-        <img src="@Model[0].PhotoUrl.MediumLink"/>
-    </a>
+<div class="row-fluid">
+    <div class="span6">
+        <a data-toggle="lightbox" data-target="#photo-@Model[0].PhotoId" href="@Model[0].PhotoUrl.OriginalLink">
+            <img src="@Model[0].PhotoUrl.MediumLink"/>
+        </a>
 
-</div>
+    </div>
 
-<div class="thumbnail-247" style="float: right;">
-    <a data-toggle="lightbox" data-target="#photo-@Model[1].PhotoId" href="@Model[1].PhotoUrl.OriginalLink">
-        <img src="@Model[1].PhotoUrl.MediumLink"/>
-    </a>
+    <div class="span6" >
+        <a data-toggle="lightbox" data-target="#photo-@Model[1].PhotoId" href="@Model[1].PhotoUrl.OriginalLink">
+            <img src="@Model[1].PhotoUrl.MediumLink"/>
+        </a>
+    </div>
 </div>
