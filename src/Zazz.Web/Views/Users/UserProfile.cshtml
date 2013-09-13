@@ -50,14 +50,30 @@
                         <h6>Party pics</h6>
                     </a>
                     <ul>
-                        @foreach (var p in Model.Photos)
-                        {
-                            <li>
-                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
-                                    <img src="@p.PhotoUrl.VerySmallLink" /></a>
-                                @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
-                            </li>
+                        @{
+                            var i = 1;
+                            
+                            foreach (var p in Model.Photos)
+                            {
+                                <li>
+                                    <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
+                                        @if (i == 1)
+                                        {
+                                            <img src="@p.PhotoUrl.MediumLink" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@p.PhotoUrl.VerySmallLink" />
+                                        }    
+                                    </a>
+                                    
+                                    @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
+                                </li>
+
+                                i++;
+                            }
                         }
+                        
                     </ul>
                     <div class="clearfix"></div>
 

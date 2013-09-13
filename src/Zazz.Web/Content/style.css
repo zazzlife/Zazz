@@ -1174,10 +1174,16 @@ a.category {
         float: left;
         margin: 2px;
     }
+    
+        .pics-widget li:first-child > a > img {
+            width: auto;
+            height: auto;
+            border-radius: 3px;
+        }
 
         .pics-widget li > a > img {
-            width: 58px;
-            height: 58px;
+            width: 61px;
+            height: 61px;
             border-radius: 3px;
         }
 
