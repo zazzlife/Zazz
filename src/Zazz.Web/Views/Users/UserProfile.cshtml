@@ -43,6 +43,30 @@
                 </div>
             }
             
+            @if (Model.Photos.Any())
+            {
+                <div class="pics-widget">
+                    <a class="black" href="@Url.Action("List", "Photos", new {id=Model.UserId})">
+                        <h6>Party pics</h6>
+                    </a>
+                    <ul>
+                        @foreach (var p in Model.Photos)
+                        {
+                            <li>
+                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
+                                    <img src="@p.PhotoUrl.VerySmallLink" /></a>
+                                @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
+                            </li>
+                        }
+                    </ul>
+                    <div class="clearfix"></div>
+
+                    <div class="text-center" style="margin-top: 10px;">
+                        <a href="@Url.Action("List", "Photos", new {id=Model.UserId})">See more...</a>
+                    </div>
+
+                </div>
+            }
 
         </div>
         

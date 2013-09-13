@@ -611,19 +611,19 @@ hr.gold-line {
     font-size: 14px;
 }
 
-.user-details ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+    .user-details ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
 
-.user-details li {
-    margin-top: 5px;
-}
+    .user-details li {
+        margin-top: 5px;
+    }
 
-.user-details li i {
-    margin-right: 5px;
-}
+        .user-details li i {
+            margin-right: 5px;
+        }
 
 .follow-btn {
     background: url("../Images/fallow-aero.png") no-repeat scroll 6px 6px #FBCE0E;
@@ -1152,48 +1152,33 @@ a.category {
     margin-left: 5px;
 }
 
-#user-profile-container .user-info {
-    padding: 5px;
-    margin: 0 0 15px 0;
-    text-align: left;
-    font-size: 14px;
-    list-style: none;
-}
-
-    #user-profile-container .user-info li {
-        margin-bottom: 5px;
-    }
-
-        #user-profile-container .user-info li i {
-            margin-right: 6px;
-        }
-
-#user-profile-container .pics-widget {
+.pics-widget {
     padding: 5px;
     text-align: left;
 }
 
-    #user-profile-container .pics-widget h6 {
+    .pics-widget h6 {
         margin: 0;
         font-weight: 600;
         border-bottom: 1px solid;
         margin-bottom: 5px;
     }
 
-    #user-profile-container .pics-widget ul {
+    .pics-widget ul {
         list-style: none;
         margin: 0;
         padding: 0;
     }
 
-    #user-profile-container .pics-widget li {
+    .pics-widget li {
         float: left;
         margin: 2px;
     }
 
-        #user-profile-container .pics-widget li > a > img {
+        .pics-widget li > a > img {
             width: 58px;
             height: 58px;
+            border-radius: 3px;
         }
 
 /***************************************
@@ -1686,39 +1671,43 @@ a:hover, a:focus {
 }
 
 .event-h {
-   color: #000000;
+    color: #000000;
     font-size: 20px;
-    font-weight:normal;
+    font-weight: normal;
     margin: 0;
 }
+
 .event-p {
     color: #000000;
     font-size: 12px;
     line-height: 16px;
     text-align: justify;
-   
 }
+
 .event-socal {
     height: 20px;
     width: auto;
 }
-.event-socal ul {
-	margin-left:0 !important;
 
-}
-.event-socal ul li {
-    display: inline;
-    text-decoration: none;
-	margin:0;
-}
-.event-socal li a:hover {
-    opacity: 0.5;
-}
+    .event-socal ul {
+        margin-left: 0 !important;
+    }
+
+        .event-socal ul li {
+            display: inline;
+            text-decoration: none;
+            margin: 0;
+        }
+
+    .event-socal li a:hover {
+        opacity: 0.5;
+    }
 
 .event-read-more {
     color: #000000;
     font-size: 14px;
 }
+
     .event-read-more a {
         margin-top: 4px;
         float: left;
@@ -1729,6 +1718,7 @@ a:hover, a:focus {
         -webkit-transition: all .4s ease-in;
         transition: all .4s ease-in;
     }
+
         .event-read-more a:hover {
             color: #333;
             -webkit-transition: all .4s ease-in;
