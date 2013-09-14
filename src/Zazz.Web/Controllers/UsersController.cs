@@ -149,6 +149,7 @@ namespace Zazz.Web.Controllers
                          currentUserId),
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
+                         ReceivedVotesCount = _uow.PhotoVoteRepository.GetReceivedVotes(user.Id).Count(),
                          Photos = photos.Select(p => new PhotoViewModel
                          {
                              FromUserDisplayName = displayName,
