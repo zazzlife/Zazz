@@ -54,7 +54,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var votesCount = 444;
-            _uow.Setup(x => x.PhotoVoteRepository.GetVotesCount(_photoId))
+            _uow.Setup(x => x.PhotoVoteRepository.GetPhotoVotesCount(_photoId))
                 .Returns(votesCount);
 
             //Act

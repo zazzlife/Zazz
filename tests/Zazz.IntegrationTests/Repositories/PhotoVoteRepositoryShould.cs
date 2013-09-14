@@ -104,7 +104,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectNumber_OnGetVotesCount()
+        public void ReturnCorrectNumber_OnGetPhotoVotesCount()
         {
             //Arrange
             // photo1: 1 vote
@@ -133,10 +133,10 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Act
-            var p1Result = _repo.GetVotesCount(_photo1.Id);
-            var p2Result = _repo.GetVotesCount(_photo2.Id);
-            var p3Result = _repo.GetVotesCount(_photo3.Id);
-            var p4Result = _repo.GetVotesCount(_photo4.Id);
+            var p1Result = _repo.GetPhotoVotesCount(_photo1.Id);
+            var p2Result = _repo.GetPhotoVotesCount(_photo2.Id);
+            var p3Result = _repo.GetPhotoVotesCount(_photo3.Id);
+            var p4Result = _repo.GetPhotoVotesCount(_photo4.Id);
 
             //Assert
             Assert.AreEqual(1, p1Result);

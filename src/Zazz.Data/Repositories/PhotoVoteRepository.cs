@@ -31,7 +31,7 @@ namespace Zazz.Data.Repositories
                 .Any();
         }
 
-        public int GetVotesCount(int photoId)
+        public int GetPhotoVotesCount(int photoId)
         {
             return _dbSet.Count(v => v.PhotoId == photoId);
         }

@@ -8,7 +8,7 @@ namespace Zazz.Core.Interfaces.Repositories
 
         bool Exists(int photoId, int userId);
 
-        int GetVotesCount(int photoId);
+        int GetPhotoVotesCount(int photoId);
 
         void Remove(PhotoVote vote);
 
