@@ -48,6 +48,73 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
+        public void ReturnCorrectRows_OnGetReceivedVotes()
+        {
+            //Arrange
+            //photo 1: 3 votes
+            //photo 2: 1 votes
+
+            //photo 3: 1 vote
+            //photo 4: 2 votes
+
+            var votes = new[]
+                        {
+                            new PhotoVote
+                            {
+                                PhotoId = _photo1.Id,
+                                UserId = _user1.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo1.Id,
+                                UserId = _user2.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo3.Id,
+                                UserId = _user2.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo4.Id,
+                                UserId = _user1.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo4.Id,
+                                UserId = _user3.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo1.Id,
+                                UserId = _user3.Id
+                            },
+                            new PhotoVote
+                            {
+                                PhotoId = _photo2.Id,
+                                UserId = _user3.Id
+                            }
+                        };
+
+            foreach (var v in votes)
+            {
+                _context.PhotoVotes.Add(v);
+            }
+
+            _context.SaveChanges();
+
+            //Act
+            var user1Result = _repo.GetReceivedVotes(_user1.Id).Count();
+            var user2Result = _repo.GetReceivedVotes(_user2.Id).Count();
+            var user3Result = _repo.GetReceivedVotes(_user3.Id).Count();
+
+            //Assert
+            Assert.AreEqual(4, user1Result);
+            Assert.AreEqual(3, user2Result);
+            Assert.AreEqual(0, user3Result);
+        }
+
+        [Test]
         public void InsertRecord_OnInsertGraph()
         {
             //Arrange

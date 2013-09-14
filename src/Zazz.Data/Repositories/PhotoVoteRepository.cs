@@ -18,6 +18,11 @@ namespace Zazz.Data.Repositories
             _dbSet = _context.Set<PhotoVote>();
         }
 
+        public IQueryable<PhotoVote> GetReceivedVotes(int userId)
+        {
+            return _dbSet.Where(v => v.Photo.UserId == userId);
+        }
+
         public void InsertGraph(PhotoVote vote)
         {
             _dbSet.Add(vote);
