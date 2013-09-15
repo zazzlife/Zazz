@@ -33,7 +33,7 @@ namespace Zazz.Web.Models
 
         public List<FeedViewModel> Feeds { get; set; }
 
-        public IEnumerable<CategoryStatViewModel> TagsStats { get; set; }
+        public IEnumerable<CategoryStatViewModel> CategoriesStats { get; set; }
 
         public IEnumerable<PhotoViewModel> Photos { get; set; }
     }

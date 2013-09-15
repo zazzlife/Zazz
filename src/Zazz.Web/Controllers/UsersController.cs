@@ -160,7 +160,7 @@ namespace Zazz.Web.Controllers
                              PhotoId = p.Id,
                              PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                          }),
-                         TagsStats = GetTagStats(),
+                         CategoriesStats = GetTagStats(),
                          City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
                          Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
                          School = user.UserDetail.School == null ? null : user.UserDetail.School.Name
