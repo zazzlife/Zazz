@@ -16,10 +16,13 @@
                 <img class="img-polaroid img-rounded" src="@Model.UserPhoto.SmallLink"/>
                 <p class="username-display">@Model.UserName</p>
             </div>
-
-            <div class="follow-btn">
-                <p>Follow</p>
-            </div>
+            
+            @if (!Model.IsSelf)
+            {
+                <div class="follow-btn" data-follow-btn="1">
+                    <p>Follow</p>
+                </div>
+            }
 
             @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
             {
