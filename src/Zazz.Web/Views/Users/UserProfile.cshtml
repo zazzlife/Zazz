@@ -19,9 +19,33 @@
             
             @if (!Model.IsSelf)
             {
-                <div class="follow-btn" data-follow-btn="1">
+                if (Model.IsCurrentUserFollowingTargetUser)
+                {
+                    <div data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId"
+                            data-action="unfollow" data-placement="right" class="follow-btn">
+                        <p>Unfollow</p>
+                    </div>
+                }
+                else if (Model.FollowRequestAlreadySent)
+                {
+                    <button data-btn-follow="1"
+                            title="Follow request has been sent before. You must wait for the user to accept your request."
+                            class="btn btn-follow btn-info disabled" disabled="disabled">
+                        <i class="icon-ok"></i>
+                    </button>
+                }
+                else
+                {
+                    <div data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId"
+                            data-action="follow" class="follow-btn">
+                        <p>Follow</p>
+                    </div>
+                }
+
+
+                @*<div class="follow-btn" data-follow-btn="1">
                     <p>Follow</p>
-                </div>
+                </div>*@
             }
 
             @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
