@@ -24,7 +24,6 @@
                     <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId"
                          data-action="unfollow" data-placement="right" class="btn btn-zazz follow-btn">
                         <i class="icon-remove"></i> Unfollow
-                        
                     </button>
                 }
                 else if (Model.FollowRequestAlreadySent)
@@ -37,10 +36,10 @@
                 }
                 else
                 {
-                    <div data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId"
-                            data-action="follow" class="follow-btn">
-                        <p>Follow</p>
-                    </div>
+                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId"
+                            data-action="follow" class="btn btn-zazz follow-btn">
+                        <i class="icon-plus"></i> Follow
+                    </button>
                 }
 
 

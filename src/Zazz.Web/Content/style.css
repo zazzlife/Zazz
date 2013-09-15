@@ -640,10 +640,12 @@ hr.gold-line {
 .follow-btn {
     padding: 8px 35px 8px 10px;
     font-size: 18px;
+    width: 200px;
 }
 
     .follow-btn > i {
-        margin-right: 20px;
+        margin-right: 30px;
+        margin-left: -30px;
         background-color: #D59900;
         border-radius: 12px;
         padding: 4px 6px;
