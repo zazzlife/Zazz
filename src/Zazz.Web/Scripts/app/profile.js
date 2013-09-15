@@ -60,11 +60,15 @@ $('#followsYouSign').click(function(e) {
 
 $(document).on('click', '*[data-btn-follow]', function () {
     var self = $(this);
+    var icon = self.find('i');
     var action = self.data('action');
-    var originalBtnText = showBtnBusy(self, true);
     var id = self.data('id');
-
     var url = self.data('url');
+
+    setBtnDisabled(self);
+    icon.removeClass();
+    icon.addClass('icon-spin');
+    icon.addClass('icon-refresh');
 
     var options = {
         url: url,
@@ -86,8 +90,9 @@ $(document).on('click', '*[data-btn-follow]', function () {
         //    self.attr("data-action", "follow");
         //}
 
-        setBtnDisabled(self);
-        self.html("<i class='icon-ok'></i>");
+        
+        icon.removeClass();
+        icon.addClass('icon-ok');
         applyPageStyles();
     });
 });
