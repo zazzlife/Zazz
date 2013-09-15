@@ -45,11 +45,23 @@
         Global
 ***************************************/
 
-.alfa-slab-font {
-    font-family: 'Alfa Slab One';
-    font-size: 28px;
+.btn-zazz {
+    background-color: #FBCE0E !important;
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fedf2d", endColorstr="#e5c300");
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#fedf2d), to(#FBCE0E));
+    background-image: -moz-linear-gradient(top, #fedf2d, #FBCE0E);
+    background-image: -ms-linear-gradient(top, #fedf2d, #FBCE0E);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fedf2d), color-stop(100%, #FBCE0E));
+    background-image: -webkit-linear-gradient(top, #fedf2d, #FBCE0E);
+    background-image: -o-linear-gradient(top, #fedf2d, #FBCE0E);
+    background-image: linear-gradient(#fedf2d, #FBCE0E);
+    border-color: #e5c300 #FBCE0E #d4b400;
+    color: #666666 !important;
+    -webkit-text-shadow: 0 1px 1px rgba(255, 255, 255, 0.23);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.23);
+    -webkit-font-smoothing: antialiased;
 }
-
 .validation-summary-errors {
     color: red;
 }
