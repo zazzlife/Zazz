@@ -20,8 +20,9 @@
             @if (!Model.IsSelf)
             {
                 if (Model.IsCurrentUserFollowingTargetUser)
-                {
-                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId"
+                {   
+                    <button data-btn-follow="1" data-id="@Model.UserId"
+                         data-url="@Url.Action("Unfollow", "Follow", new {id=Model.UserId})"
                          data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
                         <i class="icon-remove"></i> Unfollow
                     </button>
@@ -36,16 +37,11 @@
                 }
                 else
                 {
-                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId"
+                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="@Url.Action("FollowUser", "Follow", new {id=Model.UserId})"
                             data-action="follow" class="btn btn-zazz btn-follow">
                         <i class="icon-plus"></i> Follow
                     </button>
                 }
-
-
-                @*<div class="follow-btn" data-follow-btn="1">
-                    <p>Follow</p>
-                </div>*@
             }
 
             @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
