@@ -22,7 +22,7 @@
                 if (Model.IsCurrentUserFollowingTargetUser)
                 {
                     <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/unfollow/@Model.UserId"
-                         data-action="unfollow" data-placement="right" class="btn btn-zazz follow-btn">
+                         data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
                         <i class="icon-remove"></i> Unfollow
                     </button>
                 }
@@ -30,14 +30,14 @@
                 {
                     <button data-btn-follow="1"
                             title="Follow request has been sent before. You must wait for the user to accept your request."
-                            class="btn btn-follow btn-info disabled" disabled="disabled">
-                        <i class="icon-ok"></i>
+                            class="btn btn-follow btn-zazz disabled" disabled="disabled">
+                        <i class="icon-ok"></i> Follow
                     </button>
                 }
                 else
                 {
                     <button data-btn-follow="1" data-id="@Model.UserId" data-url="/follow/followuser/@Model.UserId"
-                            data-action="follow" class="btn btn-zazz follow-btn">
+                            data-action="follow" class="btn btn-zazz btn-follow">
                         <i class="icon-plus"></i> Follow
                     </button>
                 }
