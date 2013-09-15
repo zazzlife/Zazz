@@ -51,10 +51,10 @@
                     </a>
                     <ul>
                         @{
-                var i = 1;
+                        var i = 1;
 
-                foreach (var p in Model.Photos)
-                {
+                        foreach (var p in Model.Photos)
+                        {
                             <li>
                                 <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
                                     @if (i == 1)
@@ -71,7 +71,7 @@
                             </li>
 
                                    i++;
-                }
+                            }
                         }
 
                     </ul>
@@ -95,7 +95,7 @@
                 <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
                 <div class="span3 margin-top-10">Votes<span class="follow-no-bg margin-left-10">@Model.ReceivedVotesCount</span></div>
             </div>
-            
+
             <div style="margin-top: 100px;" class="visible-phone"></div>
 
             <div class="padding-L-R-10">
