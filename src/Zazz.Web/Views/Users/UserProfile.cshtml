@@ -107,7 +107,12 @@
 
 
         @*RIGHT*@
-        <div class="span3"></div>
+        <div class="span3" style="padding-top: 22px;">
+            @foreach (var c in Model.TagsStats)
+            {
+                Html.RenderPartial("_CategoryStatusItem", c);
+            }
+        </div>
 
     </div>
 
