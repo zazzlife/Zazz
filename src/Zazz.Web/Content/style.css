@@ -1176,11 +1176,19 @@ a.category {
     text-align: left;
 }
 
+.pics-widget-title {
+    border-bottom: 1px solid;
+}
+
+    .pics-widget .album-name {
+        color: black;
+        font-size: 14px;
+    }
+
     .pics-widget h6 {
         margin: 0;
         font-weight: 600;
-        border-bottom: 1px solid;
-        margin-bottom: 5px;
+        margin: 5px 0;
     }
 
     .pics-widget ul {
