@@ -667,14 +667,6 @@ hr.gold-line {
         max-height: 380px;
     }
 
-
-
-
-
-
-
-
-
 .club-details {
     font-size: 16px;
     color: black;
@@ -688,9 +680,11 @@ hr.gold-line {
         margin-right: 5px;
     }
 
-    .club-details td {
-        padding-bottom: 5px;
-    }
+
+#addWeekly {
+    color: black;
+    font-size: 16px;
+}
 
 .club-party-web-info {
     font-size: 22px;
