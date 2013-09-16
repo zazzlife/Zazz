@@ -62,6 +62,7 @@
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.23);
     -webkit-font-smoothing: antialiased;
 }
+
 .validation-summary-errors {
     color: red;
 }
@@ -652,6 +653,28 @@ hr.gold-line {
         color: #FFE196;
     }
 
+
+.banner {
+    border-bottom: 3px solid #FBCE0E;
+    border-left: 3px solid #FBCE0E;
+    border-radius: 0 0 10px 10px;
+    border-right: 3px solid #FBCE0E;
+}
+
+    .banner img {
+        border-radius: 0 0 7px 7px;
+        width: 100%;
+        max-height: 380px;
+    }
+
+
+
+
+
+
+
+
+
 .club-details {
     font-size: 16px;
 }
@@ -1171,7 +1194,7 @@ a.category {
         float: left;
         margin: 2px;
     }
-    
+
         .pics-widget li:first-child > a > img {
             width: auto;
             height: auto;

@@ -3,13 +3,20 @@
     ViewBag.Title = Model.UserName;
 }
 
-<div class="container">
-    @*COVER IMAGE*@
+<div class="container" style="margin-top: -15px">
+    <div class="banner">
+        <img src="@Model.CoverPhotoUrl" />
+    </div>
+</div>
+
+
+
+
+@*<div class="container">
     <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
 
     <div style="min-height: 120px;">
 
-        @*LEFT ITEMS*@
         <div class="pull-left">
             <table class="club-details">
                 <tbody>
@@ -29,7 +36,6 @@
             </table>
         </div>
 
-        @*RIGHT ITEMS*@
         <div class="pull-right">
             
             <div class="club-party-web-info text-center">
@@ -57,7 +63,6 @@
 
         </div>
 
-        @*CENTER ITEMS*@
         <div class="profile-center">
             <img id="profilePic" class="img-polaroid img-rounded" src="@Model.UserPhoto.SmallLink" />
             <h3>@Model.UserName</h3>
@@ -70,7 +75,6 @@
         @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
     </div>
     
-    @*Weeklies*@
     <div class="weeklies-container">
         <div class="weeklies-text-container">
             @if (Model.IsSelf)
@@ -101,7 +105,6 @@
     <div class="clearfix"></div>
     
 
-    @* TABS *@
     @if (Model.IsSelf)
     {
         <div>
@@ -115,8 +118,6 @@
             <button type="button" class="btn btn-primary" id="submitPostBtn" data-touser="@Model.UserId">Submit</button>
         </div>
     }
-    
-    @* Photos List *@
     
     <div class="well party-albums">
         <a class="black" href="~/photos/list/@Model.UserId"><h6>Party Albums</h6></a>
@@ -147,8 +148,6 @@
     </div>
 
 
-    @* FEEDS *@
-
     <div id="feedContent">
         @Html.Partial("_FeedsPartial", Model.Feeds)
     </div>
@@ -171,4 +170,4 @@
 
 
     </script>
-}
+}*@
