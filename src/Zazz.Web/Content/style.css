@@ -677,6 +677,11 @@ hr.gold-line {
 
 .club-details {
     font-size: 16px;
+    color: black;
+}
+
+.club-details li {
+    margin: 10px 0 0 10px;
 }
 
     .club-details i {
