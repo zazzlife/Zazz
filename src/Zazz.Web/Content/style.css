@@ -718,7 +718,11 @@ hr.gold-line {
 
 .weeklies-items {
     list-style: none;
-    margin: 12px;
+    margin: 25px;
+}
+
+.weeklies-items li {
+    margin: 8px 2px;
 }
 
 .weekly {
