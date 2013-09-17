@@ -113,8 +113,8 @@
 
             <div style="margin-top: 100px;" class="visible-phone"></div>
             
-            <div>
-                <ul>
+            <div class="weeklies-container">
+                <ul class="weeklies-items">
                     @foreach (var w in Model.Weeklies)
                     {
                         @Html.Partial("_WeeklyItem", w)
