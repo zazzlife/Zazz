@@ -399,7 +399,6 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery.atwho.css" />
-    <Content Include="Content\jquery.horizontal.scroll.css" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
@@ -526,7 +525,6 @@
     <Content Include="Scripts\css-transit.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.color.js" />
-    <Content Include="Scripts\jquery.horizontal.scroll.js" />
     <Content Include="Scripts\jquery.Jcrop.js" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

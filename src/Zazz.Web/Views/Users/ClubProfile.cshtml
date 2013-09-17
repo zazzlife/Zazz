@@ -110,25 +110,18 @@
             </div>
 
             <div style="margin-top: 100px;" class="visible-phone"></div>
-
-            @*<ul id="horiz_container_outer">
-                <li id="horiz_container_inner">
-                    <ul id="horiz_container">
-                        @foreach (var w in Model.Weeklies)
-                        {
-                            @Html.Partial("_WeeklyItem", w)
-                        }
-                    </ul>
-                </li>
-            </ul>
-            <div id="scrollbar" class="margin-bottam-20">
-                <!--	<a id="left_scroll" class="mouseover_left" href="#"></a>-->
-                <div id="track">
-                    <div id="dragBar"></div>
-                </div>
-                <!--	<a id="right_scroll" class="mouseover_right" href="#"></a>-->
-            </div>*@
             
+            <div>
+                <ul>
+                    @foreach (var w in Model.Weeklies)
+                    {
+                        @Html.Partial("_WeeklyItem", w)
+                    }
+                </ul>
+            </div>
+            
+            
+
             <div class="padding-L-R-10">
                 @Html.Partial("_PostInputsPartial")
 
@@ -143,18 +136,6 @@
 
     </div>
 </div>
-
-@section Scripts
-{
-    <script type="text/javascript">
-		
-			$(document).ready(function(){
-				$('#horiz_container_outer').horizontalScroll();
-			
-			});
-		
-		</script>}
-
 
 @*<div class="container">
     <img id="coverImg" class="img-polaroid" src="@Model.CoverPhotoUrl" />
