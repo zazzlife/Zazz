@@ -11,7 +11,7 @@
     </div>
 
     <div class="row-fluid">
-        
+
         @*LEFT SIDE*@
         <div class="span3">
             <div>
@@ -36,48 +36,50 @@
             @if (Model.PartyAlbums.Any())
             {
                 <div class="pics-widget">
-                    <a class="black" href="@Url.Action("List", "Photos", new {id = Model.UserId})">
+                    <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">
                         <h6 class="pics-widget-title">Party pics</h6>
                     </a>
-                
+
                     @foreach (var a in Model.PartyAlbums)
                     {
                         <div>
-                            <a class="album-name" href="@Url.Action("List", "Photos", new {id=Model.UserId, albumId=a.AlbumId})"><h6>@a.AlbumName</h6></a>
+                            <a class="album-name" href="@Url.Action("List", "Photos", new { id = Model.UserId, albumId = a.AlbumId })">
+                                <h6>@a.AlbumName</h6>
+                            </a>
                         </div>
                         <ul>
                             @{
-                                var i = 1;
-                                
-                                foreach (var p in a.Photos)
-                                {
-                                    <li>
-                                        <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" 
+                        var i = 1;
+
+                        foreach (var p in a.Photos)
+                        {
+                                <li>
+                                    <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" 
                                            href="@p.PhotoUrl.OriginalLink">
-                                            
-                                            @if (i == 1)
-                                            {
-                                                <img src="@p.PhotoUrl.MediumLink" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@p.PhotoUrl.VerySmallLink" />
-                                            }
 
-                                        </a>
-                                        @Html.Partial("_LightBoxPartial", p)
-                                    </li>
+                                        @if (i == 1)
+                                        {
+                                            <img src="@p.PhotoUrl.MediumLink" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@p.PhotoUrl.VerySmallLink" />
+                                        }
+
+                                    </a>
+                                    @Html.Partial("_LightBoxPartial", p)
+                                </li>
                                 
-                                    i++;
+                                        i++;
 
-                                }
+                        }
                             }
                         </ul>
                         <div class="clearfix"></div>
                     }
 
                     <div class="text-center">
-                        <a href="@Url.Action("List", "Photos", new {id=Model.UserId})">See more...</a>
+                        <a href="@Url.Action("List", "Photos", new { id = Model.UserId })">See more...</a>
                     </div>
                 </div>
             }
@@ -86,12 +88,12 @@
 
         @*CENTER*@
         <div class="span6 color-white-bg box-shadow padding-bottom-100 margin-left-10">
-            
+
             <div class="text-center margin-bottam-20">
                 <div class="club-profile-pic">
                     <img src="@Model.UserPhoto.SmallLink"/>
                 </div>
-                
+
                 <h3>@Model.UserName</h3>
 
             </div>
@@ -106,21 +108,50 @@
 
             <div style="margin-top: 100px;" class="visible-phone"></div>
 
+            <ul id="horiz_container_outer">
+                <li id="horiz_container_inner">
+                    <ul id="horiz_container">
+                        @foreach (var w in Model.Weeklies)
+                        {
+                            @Html.Partial("_WeeklyItem", w)
+                        }
+                        @*<li><a href="#"><img src="~/Images/placeholder.gif" width="140" height="135" /></a></li>*@
+                    </ul>
+                </li>
+            </ul>
+            <div id="scrollbar" class="margin-bottam-20">
+                <!--	<a id="left_scroll" class="mouseover_left" href="#"></a>-->
+                <div id="track">
+                    <div id="dragBar"></div>
+                </div>
+                <!--	<a id="right_scroll" class="mouseover_right" href="#"></a>-->
+            </div>
+            
             <div class="padding-L-R-10">
                 @Html.Partial("_PostInputsPartial")
 
                 @Html.Partial("_FeedsPartial", Model.Feeds)
             </div>
         </div>
-       
-        
+
+
         @*RIGHT*@
-        
-        
+
+
 
     </div>
 </div>
 
+@section Scripts
+{
+    <script type="text/javascript">
+		
+			$(document).ready(function(){
+				$('#horiz_container_outer').horizontalScroll();
+			
+			});
+		
+		</script>}
 
 
 @*<div class="container">
