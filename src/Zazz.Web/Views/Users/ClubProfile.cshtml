@@ -28,7 +28,9 @@
             <div class="margin-top-35">
                 @if (Model.IsSelf)
                 {
-                    <a id="addWeekly" href="#"  data-popover-holder="0"><i class="icon-plus-sign" style="margin-right: 5px;"></i>New</a>
+                    <button id="addWeekly" data-popover-holder="0" class="btn-link">
+                        <i class="icon-plus-sign" style="margin-right: 5px;"></i>New
+                    </button>
                     <div id="addWeeklyContent" class="hidden">
                         @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
                     </div>

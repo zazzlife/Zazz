@@ -686,6 +686,9 @@ hr.gold-line {
     font-size: 16px;
 }
 
+#addWeekly:hover {
+    text-decoration: none;
+}
 
 .club-profile-pic {
     margin-top: -88px;
