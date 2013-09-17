@@ -28,7 +28,10 @@
             <div class="margin-top-35">
                 @if (Model.IsSelf)
                 {
-                    <a id="addWeekly" href="#"><i class="icon-plus-sign" style="margin-right: 5px;"></i>New</a>
+                    <a id="addWeekly" href="#"  data-popover-holder="0"><i class="icon-plus-sign" style="margin-right: 5px;"></i>New</a>
+                    <div id="addWeeklyContent" class="hidden">
+                        @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
+                    </div>
                 }
                 <h3>Weeklies</h3>
             </div>
@@ -108,14 +111,13 @@
 
             <div style="margin-top: 100px;" class="visible-phone"></div>
 
-            <ul id="horiz_container_outer">
+            @*<ul id="horiz_container_outer">
                 <li id="horiz_container_inner">
                     <ul id="horiz_container">
                         @foreach (var w in Model.Weeklies)
                         {
                             @Html.Partial("_WeeklyItem", w)
                         }
-                        @*<li><a href="#"><img src="~/Images/placeholder.gif" width="140" height="135" /></a></li>*@
                     </ul>
                 </li>
             </ul>
@@ -125,7 +127,7 @@
                     <div id="dragBar"></div>
                 </div>
                 <!--	<a id="right_scroll" class="mouseover_right" href="#"></a>-->
-            </div>
+            </div>*@
             
             <div class="padding-L-R-10">
                 @Html.Partial("_PostInputsPartial")

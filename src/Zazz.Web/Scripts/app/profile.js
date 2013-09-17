@@ -261,10 +261,10 @@ function createWeeklyEditable(elem) {
 }
 
 function initWeeklies() {
-    var addWeekly = $('#add-weekly');
+    var addWeekly = $('#addWeekly');
     if (addWeekly) {
 
-        var addWeeklyContent = $('#add-weekly-content');
+        var addWeeklyContent = $('#addWeeklyContent');
 
         addWeekly.popover({
             html: true,
