@@ -318,7 +318,7 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void ReturnCorrectCount_OnGetUpcomingEventsCount()
+        public void ReturnCorrectRows_OnGetUpcomingEvents()
         {
             //Arrange
             var user = Mother.GetUser();
@@ -349,10 +349,10 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(_context.Events.Count() >= 4);
 
             //Act
-            var result = _repo.GetUpcomingEventsCount(user.Id);
+            var result = _repo.GetUpcomingEvents(user.Id).ToList();
 
             //Assert
-            Assert.AreEqual(2, result);
+            Assert.AreEqual(2, result.Count);
         }
     }
 }

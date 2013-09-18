@@ -95,7 +95,27 @@ namespace Zazz.Web.Controllers
                          : DefaultImageHelper.GetDefaultCoverImage().OriginalLink,
 
                          FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
-                         SpecialEventsCount = _uow.EventRepository.GetUpcomingEventsCount(user.Id),
+                         Events = _uow.EventRepository.GetUpcomingEvents(user.Id).ToList()
+                            .Select(e => new EventViewModel
+                                          {
+                                              City = e.City,
+                                              Id = e.Id,
+                                              CreatedDate = e.CreatedDate,
+                                              Description = e.Description,
+                                              Latitude = e.Latitude,
+                                              Longitude = e.Longitude,
+                                              Location = e.Location,
+                                              Name = e.Name,
+                                              Price = e.Price,
+                                              Street = e.Street,
+                                              Time = e.Time,
+                                              PhotoId = e.PhotoId,
+                                              IsFacebookEvent = e.IsFacebookEvent,
+                                              FacebookPhotoUrl = e.FacebookPhotoLink,
+                                              IsDateOnly = e.IsDateOnly,
+                                              FacebookEventId = e.FacebookEventId
+                                          })
+                             .ToList(),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
                          Feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId),
                          Weeklies = weeklies.Select(w => new WeeklyViewModel

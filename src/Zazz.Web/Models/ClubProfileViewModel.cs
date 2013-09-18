@@ -32,7 +32,7 @@ namespace Zazz.Web.Models
 
         public IEnumerable<WeeklyViewModel> Weeklies { get; set; }
 
-        public int SpecialEventsCount { get; set; }
+        public List<EventViewModel> Events { get; set; }
 
         public IEnumerable<PartyAlbumViewModel> PartyAlbums { get; set; }
     }

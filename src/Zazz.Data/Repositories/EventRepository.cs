@@ -44,14 +44,13 @@ namespace Zazz.Data.Repositories
                 .Take(take);
         }
 
-        public int GetUpcomingEventsCount(int userId)
+        public IQueryable<ZazzEvent> GetUpcomingEvents(int userId)
         {
             var today = DateTime.UtcNow.Date;
 
             return DbSet
                 .Where(e => e.UserId == userId)
-                .Where(e => EntityFunctions.TruncateTime(e.TimeUtc) >= today)
-                .Count();
+                .Where(e => EntityFunctions.TruncateTime(e.TimeUtc) >= today);
         }
 
         public int GetOwnerId(int eventId)

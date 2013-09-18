@@ -9,7 +9,7 @@ namespace Zazz.Core.Interfaces.Repositories
     {
         IQueryable<ZazzEvent> GetUserEvents(int userId, int take, int? lastEventId = null);
 
-        int GetUpcomingEventsCount(int userId);
+        IQueryable<ZazzEvent> GetUpcomingEvents(int userId);
 
         int GetOwnerId(int eventId);
 
