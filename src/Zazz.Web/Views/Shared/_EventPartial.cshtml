@@ -5,7 +5,7 @@
 
 <div class="border-2 color-white-bg margin-top-10 padding-5">
     <div class="media">
-        <a href="#" class="pull-left">
+        <a href="@Url.Action("Show", "Events" , new {id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString()})" class="pull-left">
             <img src="@Model.ImageUrl.SmallLink"></a>
         <div class="media-body">
             <h1 class="event-h">@Model.Name</h1>

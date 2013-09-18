@@ -6,7 +6,7 @@
 <div class="row-fluid">
     <div class="span12 border-2 color-white-bg margin-top-10"  style="padding:5px">
         <div class="media">
-            <a href="#" class="pull-left"><img src="@Model.ImageUrl.SmallLink"></a>
+            <a href="@Url.Action("Show", "Events" , new {id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString()})" class="pull-left"><img src="@Model.ImageUrl.SmallLink"></a>
             <div class="media-body">
                 <p style="font-size:18px; margin-bottom:2px !important; color:#000;">@Model.Name</p>
                 <p style=" font-size:12px;">@Model.Description</p>
