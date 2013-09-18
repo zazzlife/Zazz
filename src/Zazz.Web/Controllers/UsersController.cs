@@ -113,7 +113,12 @@ namespace Zazz.Web.Controllers
                                               IsFacebookEvent = e.IsFacebookEvent,
                                               FacebookPhotoUrl = e.FacebookPhotoLink,
                                               IsDateOnly = e.IsDateOnly,
-                                              FacebookEventId = e.FacebookEventId
+                                              FacebookEventId = e.FacebookEventId,
+                                              ImageUrl = e.IsFacebookEvent 
+                                                ? new PhotoLinks(e.FacebookPhotoLink) 
+                                                : e.PhotoId.HasValue
+                                                    ? PhotoService.GeneratePhotoUrl(e.UserId, e.PhotoId.Value)
+                                                    : DefaultImageHelper.GetDefaultEventImage()
                                           })
                              .ToList(),
                          IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),

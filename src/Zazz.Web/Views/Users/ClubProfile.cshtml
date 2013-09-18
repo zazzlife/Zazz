@@ -166,6 +166,12 @@
                 <h3>Special Events</h3>
                 <div class="club-events">
                     <h6 class="club-events-title">Events</h6>
+                    
+                    @foreach (var e in Model.Events)
+                    {
+                        @Html.Partial("_EventPartial", e)
+                    }
+
                 </div>
             </div>
         </div>
