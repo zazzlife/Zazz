@@ -23,7 +23,7 @@
 
         @*LEFT SIDE*@
         <div class="span3">
-            <div>
+            <div style="height: 50px">
                 <ul class="nav nav-stacked club-details">
                     <li><i class="icon-glass"></i><strong>@Model.ClubType</strong></li>
                     @if (!String.IsNullOrEmpty(Model.Address))
@@ -161,6 +161,13 @@
                     </button>
                 }
             }
+            
+            <div style="margin-top: 37px">
+                <h3>Special Events</h3>
+                <div class="club-events">
+                    <h6 class="club-events-title">Events</h6>
+                </div>
+            </div>
         </div>
 
 

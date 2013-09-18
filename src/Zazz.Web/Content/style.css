@@ -1165,6 +1165,20 @@ a.category {
         transform: rotate(270deg);
     }
 
+    .club-events {
+        margin-top: 28px;
+    }
+
+    .club-events-title {
+        border-bottom: 1px solid;
+    }
+
+    .club-events h6 {
+        margin: 0;
+        font-weight: 600;
+        margin: 5px 0;
+    }
+
 .pics-widget {
     padding: 5px;
     text-align: left;
