@@ -614,6 +614,7 @@
     <Content Include="Scripts\underscore.min.map" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_CategoryStatusItem.cshtml" />
+    <Content Include="Views\Shared\_EventPartialSmall.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

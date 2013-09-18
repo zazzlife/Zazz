@@ -1,0 +1,15 @@
+﻿@model EventViewModel
+@{
+    Layout = null;
+}
+
+<div class="row-fluid">
+    <div class="span12 border-2 color-white-bg margin-top-10"  style="padding:5px">
+        <div class="media">
+            <a href="#" class="pull-left"><img src="@Model.ImageUrl.SmallLink"></a>
+            <div class="media-body">
+                <p style="font-size:18px; margin-bottom:2px !important; color:#000;">@Model.Name</p>
+                <p style=" font-size:12px;">@Model.Description</p>
+            </div>
+        </div>
+    </div></div>
