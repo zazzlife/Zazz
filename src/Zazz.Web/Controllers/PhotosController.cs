@@ -142,7 +142,7 @@ namespace Zazz.Web.Controllers
                              UserDisplayName = UserService.GetUserDisplayName(id)
                          };
 
-            return View("MainView", fullVm);
+            return View(fullVm);
         }
 
         [Authorize]
