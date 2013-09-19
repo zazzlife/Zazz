@@ -1756,6 +1756,10 @@ a:hover, a:focus {
     font-size: 18px;
 }
 
+.list-header.not-active {
+    background-color: #E9E9E9;
+}
+
 .event-h {
     color: #000000;
     font-size: 20px;
