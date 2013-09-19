@@ -1743,7 +1743,7 @@ a:hover, a:focus {
     font-size: 14px;
 }
 
-.event-list-header {
+.list-header {
     font-family: 'Comfortaa';
     background-color: #FBCE0E;
     border-radius: 5px 5px 5px 5px;
