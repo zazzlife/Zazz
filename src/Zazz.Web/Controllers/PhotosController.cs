@@ -100,6 +100,7 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Albums(int id)
         {
+            return View(new AlbumsListViewModel());
             var albums = _albumService.GetUserAlbums(id, true);
 
             var currentUserId = 0;

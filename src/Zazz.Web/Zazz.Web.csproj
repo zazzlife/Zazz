@@ -311,6 +311,7 @@
     <Compile Include="Interfaces\IFeedHelper.cs" />
     <Compile Include="Interfaces\IImageValidator.cs" />
     <Compile Include="Interfaces\IObjectMapper.cs" />
+    <Compile Include="Models\AlbumsListViewModel.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
     <Compile Include="Models\Api\ApiRegister.cs" />
     <Compile Include="Models\Api\ApiUserReward.cs" />
