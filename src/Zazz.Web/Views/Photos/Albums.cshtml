@@ -1,6 +1,11 @@
 ﻿@model AlbumsListViewModel
 @{
     ViewBag.Title = "Albums";
+    var totalAlbums = Model.Albums.Count;
+    var counter = 0;
+
+    var totalPages = totalAlbums/8;
+    var totalRows = totalAlbums/4;
 }
 
 @section css
@@ -63,8 +68,38 @@
                 </ol>-->
             <!-- Carousel items -->
             <div class="carousel-inner">
+                
+                @for (int i = 0; i < totalPages; i++)
+                {
+                    <div class="item @(i == 0 ? "active" : String.Empty)">
+                        <div class="album-box">
+                            @for (int j = 0; j < 2; j++)
+                            {
+                                if (counter >= totalAlbums)
+                                {
+                                    break;
+                                }
+                                
+                                <div class="row-1">
+                                    @for (int k = 0; k < 4; k++)
+                                    {
+                                        if (counter >= totalAlbums)
+                                        {
+                                            break;
+                                        }
+                                        
+                                        @Html.Partial("_SingleAlbum", Model.Albums[counter])
 
-                <div class="item active">
+                                        counter++;
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                
+
+                @*<div class="item active">
                     <div class="album-box">
                         <div class="row-1">
                             <div class="img-box">
@@ -334,7 +369,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>*@
 
             </div>
             <!-- Carousel nav -->
