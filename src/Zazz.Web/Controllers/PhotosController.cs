@@ -100,50 +100,41 @@ namespace Zazz.Web.Controllers
 
         public ActionResult Albums(int id)
         {
-            return View(new AlbumsListViewModel());
-            //var albums = _albumService.GetUserAlbums(id, true);
+            var currentUserId = 0;
+            if (User.Identity.IsAuthenticated)
+                currentUserId = UserService.GetUserId(User.Identity.Name);
 
-            //var currentUserId = 0;
-            //if (User.Identity.IsAuthenticated)
-            //    currentUserId = UserService.GetUserId(User.Identity.Name);
+            var albums = _albumService.GetUserAlbums(id, true);
+            var vm = new AlbumsListViewModel
+                     {
+                         IsForCurrentUser = currentUserId == id,
+                         Albums = new List<AlbumViewModel>()
+                     };
 
-            //var albumsVm = new List<AlbumViewModel>();
-            //foreach (var a in albums)
-            //{
-            //    var album = new AlbumViewModel
-            //                {
-            //                    AlbumId = a.Id,
-            //                    AlbumName = a.Name,
-            //                    IsFromCurrentUser = currentUserId == id,
-            //                    UserId = a.UserId
-            //                };
+            foreach (var a in albums)
+            {
+                var album = new AlbumViewModel
+                            {
+                                AlbumId = a.Id,
+                                AlbumName = a.Name,
+                                IsFromCurrentUser = currentUserId == a.UserId,
+                                UserId = a.UserId,
+                                PhotosCount = a.Photos.Count,
+                                AlbumThumbnails = a.Photos.Count > 1
+                                                      ? a.Photos
+                                                         .Select(p => PhotoService.GeneratePhotoUrl(p.UserId, p.Id))
+                                                         .Take(3)
+                                                      : new List<PhotoLinks>(1)
+                                                        {
+                                                            DefaultImageHelper
+                                                                .GetDefaultAlbumImage()
+                                                        }
+                            };
 
-            //    var photo = a.Photos.FirstOrDefault(); //TODO: dont use this navigation property, it is getting all pictures.
-            //    if (photo == null)
-            //        album.AlbumThumbnails = DefaultImageHelper.GetDefaultAlbumImage();
-            //    else
-            //    {
-            //        album.AlbumThumbnails = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id);
-            //    }
+                vm.Albums.Add(album);
+            }
 
-            //    albumsVm.Add(album);
-            //}
-
-            //if (Request.IsAjaxRequest())
-            //{
-            //    return View("_AlbumList", albumsVm);
-            //}
-
-            //var fullVm = new MainPhotoPageViewModel
-            //             {
-            //                 IsForCurrentUser = currentUserId == id,
-            //                 Albums = albumsVm,
-            //                 UserId = id,
-            //                 ViewType = PhotoViewType.Albums,
-            //                 UserDisplayName = UserService.GetUserDisplayName(id)
-            //             };
-
-            //return View(fullVm);
+            return View(vm);
         }
 
         [Authorize]
