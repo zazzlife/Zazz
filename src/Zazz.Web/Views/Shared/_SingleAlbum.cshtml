@@ -2,6 +2,7 @@
 @{
     Layout = null;
     var counter = 1;
+}
 
 <div class="img-box">
     @foreach (var pic in Model.AlbumThumbnails)
@@ -20,12 +21,10 @@
     }
     <div class="clearfix"></div>
 
-    <div class="text-center">
-        <div class="album-name">
-            <p>@Model.AlbumName</p>
-        </div>
-        <a class="photo-num" href="#">@Model.PhotosCount photos</a>
+    <div class="album-name">
+        <p>@Model.AlbumName</p>
     </div>
+    <a class="photo-num" href="#">@Model.PhotosCount photos</a>
     <br class="clearfix" />
 
 </div>
