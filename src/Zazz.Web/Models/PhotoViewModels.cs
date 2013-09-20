@@ -40,7 +40,9 @@ namespace Zazz.Web.Models
 
         public string AlbumName { get; set; }
 
-        public PhotoLinks AlbumPicUrl { get; set; }
+        public int PhotosCount { get; set; }
+
+        public IEnumerable<PhotoLinks> AlbumThumbnails { get; set; }
     }
 
     public class PhotoViewModel

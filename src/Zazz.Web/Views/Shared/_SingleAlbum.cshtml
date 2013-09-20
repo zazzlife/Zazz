@@ -1,19 +1,23 @@
 ﻿@model AlbumViewModel
 @{
     Layout = null;
+    var counter = 1;
 }
 
-<div class="thumbnail album-thumbnail">
-    <div class="img">
-        @if (Model.IsFromCurrentUser)
-        {
-            <button data-id="@Model.AlbumId" class="btn btn-small remove-album icononly-btn" title="Remove album"><i class="icon-remove"></i></button>
-        }
-        <a href="/photos/list/@Model.UserId?albumId=@Model.AlbumId">
-            <img src="@Model.AlbumPicUrl.MediumLink" />
-        </a>
+<div class="img-box">
+    @foreach (var pic in Model.AlbumThumbnails)
+    {
+        <div class="image@counter">
+            <img src="@pic.SmallLink"/>
+        </div>
+
+        counter++;
+    }
+
+    <br class="clearfix" />
+    <div class="album-name">
+        <p>@Model.AlbumName</p>
     </div>
-
-    <p><strong>@Model.AlbumName</strong></p>
-
+    <a class="photo-num" href="#">@Model.PhotosCount photos</a>
+    <br class="clearfix" />
 </div>

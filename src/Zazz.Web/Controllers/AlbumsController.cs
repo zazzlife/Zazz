@@ -8,6 +8,7 @@ using PagedList;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
+using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure;
 using Zazz.Infrastructure.Helpers;
@@ -50,7 +51,7 @@ namespace Zazz.Web.Controllers
                          {
                              AlbumId = album.Id,
                              AlbumName = value,
-                             AlbumPicUrl = DefaultImageHelper.GetDefaultAlbumImage(),
+                             AlbumThumbnails = new List<PhotoLinks> {DefaultImageHelper.GetDefaultAlbumImage()},
                              IsFromCurrentUser = true,
                              UserId = userId
                          };
