@@ -4,7 +4,7 @@
     var totalAlbums = Model.Albums.Count;
     var counter = 0;
 
-    var totalPages = totalAlbums/8;
+    var totalPages = totalAlbums/8F;
     var totalRows = totalAlbums/4;
 }
 
@@ -69,7 +69,7 @@
             <!-- Carousel items -->
             <div class="carousel-inner">
                 
-                @for (int i = 0; i < totalPages; i++)
+                @for (float i = 0; i < totalPages; i++)
                 {
                     <div class="item @(i == 0 ? "active" : String.Empty)">
                         <div class="album-box">
