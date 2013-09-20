@@ -7,7 +7,13 @@
 <div class="img-box">
     @foreach (var pic in Model.AlbumThumbnails)
     {
-        <div class="image@counter">
+        var className = counter == 1
+                            ? "image1"
+                            : counter == 2
+                                  ? "image2"
+                                  : "image3";
+        
+        <div class="@className">
             <img src="@pic.SmallLink"/>
         </div>
 
