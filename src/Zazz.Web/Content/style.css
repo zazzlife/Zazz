@@ -1898,15 +1898,13 @@ a:hover, a:focus {
 
 .album-name {
     color: #AAAAAA;
-    float: left;
     font-size: 14px;
-    margin: 175px 0 0 -9px;
+    margin: 175px 0 0 0;
 }
 
 .photo-num {
     color: #000000;
-    float: left;
     font-size: 13px;
-    margin: 195px 0 0 -69px;
+    margin: 195px 0 0 0;
     text-decoration: none;
 }
