@@ -400,6 +400,7 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
     <Content Include="Content\jquery.atwho.css" />
+    <Content Include="Content\jquery.bxslider.css" />
     <Content Include="Content\jquery.Jcrop.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />

@@ -1816,3 +1816,88 @@ a:hover, a:focus {
             -o-transition: all .4s ease-in;
             transition: all .4s ease-in;
         }
+
+        .album-box{
+	 background: none repeat scroll 0 0 #303030;
+    border-left: 25px solid #000000;
+    border-radius: 5px 5px 5px 5px;
+    border-right: 25px solid #000000;
+    float: left;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 13px;
+    width: 93%;
+}
+
+.row-1{
+	clear:both;
+	height:auto;
+	width:auto;
+}
+.img-box {
+    float: left;
+    height: auto;
+    margin: 35px 0 0 64px;
+    width: auto;
+}
+
+.img-box-2 {
+    float: left;
+    height: auto;
+    margin: 35px 0 0 137px;
+    width: auto;
+}
+.image1 {
+    border: 2px solid #FFFFFF;
+    border-radius: 2px 2px 2px 2px;
+    padding: 2px;
+    position: absolute;
+    -ms-transform: rotate(16deg); /* IE 9 */
+    -webkit-transform: rotate(16deg);
+    -moz-transform: rotate(16deg);
+    -o-transform: rotate(16deg);
+    transform: rotate(16deg); /* Safari and Chrome */
+    z-index: 5555;
+}
+.image2 {
+    border: 2px solid #FFFFFF;
+    border-radius: 2px 2px 2px 2px;
+    margin: -4px 0 0 -24px;
+    padding: 0;
+    position: absolute;
+    -ms-transform: rotate(0deg); /* IE 9 */
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg); /* Safari and Chrome */
+    z-index: 9999;
+}
+.image3 {
+    border: 2px solid #FFFFFF;
+    border-radius: 2px 2px 2px 2px;
+    margin: 0px 0 0 -45px;
+    position: absolute;
+    -ms-transform: rotate(-15deg); /* IE 9 */
+    -webkit-transform: rotate(-15deg);
+    -moz-transform: rotate(-15deg);
+    -o-transform: rotate(-15deg);
+    transform: rotate(-15deg); /* Safari and Chrome */
+    z-index: 11111;
+}
+.album-name {
+    color: #AAAAAA;
+    float: left;
+    font-size: 14px;
+    margin: 110px 0 0 -9px;
+}
+.photo-num {
+    color: #000000;
+    float: left;
+    font-size: 13px;
+    margin: 130px 0 0 -69px;
+    text-decoration: none;
+}
