@@ -672,9 +672,9 @@ hr.gold-line {
     color: black;
 }
 
-.club-details li {
-    margin: 10px 0 0 10px;
-}
+    .club-details li {
+        margin: 10px 0 0 10px;
+    }
 
     .club-details i {
         margin-right: 5px;
@@ -686,18 +686,18 @@ hr.gold-line {
     font-size: 16px;
 }
 
-#addWeekly:hover {
-    text-decoration: none;
-}
+    #addWeekly:hover {
+        text-decoration: none;
+    }
 
 .club-profile-pic {
     margin-top: -88px;
 }
 
-.club-profile-pic img {
-    border: 4px solid #FBCE0E;
-    border-radius: 8px 8px 8px 8px;
-}
+    .club-profile-pic img {
+        border: 4px solid #FBCE0E;
+        border-radius: 8px 8px 8px 8px;
+    }
 
 .club-party-web-info {
     font-size: 22px;
@@ -721,9 +721,9 @@ hr.gold-line {
     margin: 25px;
 }
 
-.weeklies-items li {
-    margin: 8px 2px;
-}
+    .weeklies-items li {
+        margin: 8px 2px;
+    }
 
 .weekly {
     display: inline-block;
@@ -1165,19 +1165,19 @@ a.category {
         transform: rotate(270deg);
     }
 
-    .club-events {
-        margin-top: 53px;
-    }
+.club-events {
+    margin-top: 53px;
+}
 
-    .club-events-title {
-        border-bottom: 1px solid;
-    }
+.club-events-title {
+    border-bottom: 1px solid;
+}
 
-    .club-events h6 {
-        margin: 0;
-        font-weight: 600;
-        margin: 5px 0;
-    }
+.club-events h6 {
+    margin: 0;
+    font-weight: 600;
+    margin: 5px 0;
+}
 
 .pics-widget {
     padding: 5px;
@@ -1188,39 +1188,39 @@ a.category {
     border-bottom: 1px solid;
 }
 
-    .pics-widget .album-name {
-        color: black;
-        font-size: 14px;
+.pics-widget .album-name {
+    color: black;
+    font-size: 14px;
+}
+
+.pics-widget h6 {
+    margin: 0;
+    font-weight: 600;
+    margin: 5px 0;
+}
+
+.pics-widget ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pics-widget li {
+    float: left;
+    margin: 2px;
+}
+
+    .pics-widget li:first-child > a > img {
+        width: auto;
+        height: auto;
+        border-radius: 3px;
     }
 
-    .pics-widget h6 {
-        margin: 0;
-        font-weight: 600;
-        margin: 5px 0;
+    .pics-widget li > a > img {
+        width: 61px;
+        height: 61px;
+        border-radius: 3px;
     }
-
-    .pics-widget ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .pics-widget li {
-        float: left;
-        margin: 2px;
-    }
-
-        .pics-widget li:first-child > a > img {
-            width: auto;
-            height: auto;
-            border-radius: 3px;
-        }
-
-        .pics-widget li > a > img {
-            width: 61px;
-            height: 61px;
-            border-radius: 3px;
-        }
 
 .follow-img {
     color: #000000;
@@ -1756,9 +1756,9 @@ a:hover, a:focus {
     font-size: 18px;
 }
 
-.list-header.not-active {
-    background-color: #E9E9E9;
-}
+    .list-header.not-active {
+        background-color: #E9E9E9;
+    }
 
 .event-h {
     color: #000000;
@@ -1817,8 +1817,8 @@ a:hover, a:focus {
             transition: all .4s ease-in;
         }
 
-        .album-box{
-	 background: none repeat scroll 0 0 #303030;
+.album-box {
+    background: none repeat scroll 0 0 #303030;
     border-left: 25px solid #000000;
     border-radius: 5px 5px 5px 5px;
     border-right: 25px solid #000000;
@@ -1833,24 +1833,26 @@ a:hover, a:focus {
     width: 93%;
 }
 
-.row-1{
-	clear:both;
-	height:auto;
-	width:auto;
+.row-1 {
+    clear: both;
+    height: auto;
+    width: auto;
 }
+
 .img-box {
     float: left;
     height: auto;
-    margin: 35px 0 0 64px;
+    margin: 35px 115px 10px 64px;
     width: auto;
 }
 
 .img-box-2 {
     float: left;
     height: auto;
-    margin: 35px 0 0 137px;
+    margin: 35px 35px 10px 137px;
     width: auto;
 }
+
 .image1 {
     border: 2px solid #FFFFFF;
     border-radius: 2px 2px 2px 2px;
@@ -1862,7 +1864,9 @@ a:hover, a:focus {
     -o-transform: rotate(16deg);
     transform: rotate(16deg); /* Safari and Chrome */
     z-index: 5555;
+    width: 150px;
 }
+
 .image2 {
     border: 2px solid #FFFFFF;
     border-radius: 2px 2px 2px 2px;
@@ -1875,7 +1879,9 @@ a:hover, a:focus {
     -o-transform: rotate(0deg);
     transform: rotate(0deg); /* Safari and Chrome */
     z-index: 9999;
+    width: 150px;
 }
+
 .image3 {
     border: 2px solid #FFFFFF;
     border-radius: 2px 2px 2px 2px;
@@ -1887,17 +1893,20 @@ a:hover, a:focus {
     -o-transform: rotate(-15deg);
     transform: rotate(-15deg); /* Safari and Chrome */
     z-index: 11111;
+    width: 150px;
 }
+
 .album-name {
     color: #AAAAAA;
     float: left;
     font-size: 14px;
-    margin: 110px 0 0 -9px;
+    margin: 175px 0 0 -9px;
 }
+
 .photo-num {
     color: #000000;
     float: left;
     font-size: 13px;
-    margin: 130px 0 0 -69px;
+    margin: 195px 0 0 -69px;
     text-decoration: none;
 }
