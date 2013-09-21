@@ -108,7 +108,9 @@ namespace Zazz.Web.Controllers
             var vm = new AlbumsListViewModel
                      {
                          IsForCurrentUser = currentUserId == id,
-                         Albums = new List<AlbumViewModel>()
+                         Albums = new List<AlbumViewModel>(),
+                         UserId = id,
+                         CurrentUserId = currentUserId
                      };
 
             foreach (var a in albums)
