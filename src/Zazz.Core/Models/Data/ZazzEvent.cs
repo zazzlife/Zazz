@@ -16,7 +16,6 @@ namespace Zazz.Core.Models.Data
         [Required, MaxLength(4000)]
         public string Name { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         public bool IsDateOnly { get; set; }
