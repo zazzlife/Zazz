@@ -29,7 +29,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize, HttpPost]
-        public ActionResult CreateAlbum(string value)
+        public void CreateAlbum(string value)
         {
             if (value.Length > 50)
             {
@@ -47,16 +47,16 @@ namespace Zazz.Web.Controllers
 
                 _albumService.CreateAlbum(album);
 
-                var vm = new AlbumViewModel
-                         {
-                             AlbumId = album.Id,
-                             AlbumName = value,
-                             AlbumThumbnails = new List<PhotoLinks> {DefaultImageHelper.GetDefaultAlbumImage()},
-                             IsFromCurrentUser = true,
-                             UserId = userId
-                         };
+                //var vm = new AlbumViewModel
+                //         {
+                //             AlbumId = album.Id,
+                //             AlbumName = value,
+                //             AlbumThumbnails = new List<PhotoLinks> {DefaultImageHelper.GetDefaultAlbumImage()},
+                //             IsFromCurrentUser = true,
+                //             UserId = userId
+                //         };
 
-                return View("_SingleAlbum", vm);
+                //return View("_SingleAlbum", vm);
             }
         }
 

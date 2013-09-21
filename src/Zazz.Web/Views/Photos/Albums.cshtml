@@ -45,8 +45,6 @@
             </div>
         </div>
 
-
-
         <div class="span6">
             <div class="row-fluid padding-top-17 margin-bottam-20">
                 <div class="span12 text-center">
@@ -107,3 +105,40 @@
     </div>
 
 </div>
+
+@if (Model.IsForCurrentUser)
+{
+    @section Scripts
+    {
+        <script type="text/javascript">
+            $(function() {
+                $('#newAlbum').editable({
+                    type: 'text',
+                    placeholder: 'Album name',
+                    value: '',
+                    mode: 'popup',
+                    send: 'always',
+                    success: function(res) {
+                        //var album = $(res.trim());
+                        //album.hide().appendTo($('#album-list')).fadeIn();
+
+                        //applyPageStyles();
+
+                        toastr.success('Album has been created.');
+
+                        setTimeout(function() {
+                            $('#newAlbum').text('New album');
+                        }, 10);
+                    },
+                    url: '/albums/createalbum',
+                    validate: function (value) {
+                        if ($.trim(value) == '') {
+                            return 'Album name is required';
+                        }
+                    }
+                });
+                
+            })
+        </script>
+    }
+}
