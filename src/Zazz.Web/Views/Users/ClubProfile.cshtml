@@ -167,15 +167,18 @@
             </div>
             <div style="margin-top: 135px;">
                 <h2 style="font-weight: 600;">Special Events</h2>
-                <div class="club-events">
-                    <h6 class="club-events-title">Events</h6>
+                @if (Model.Events.Any())
+                {
+                    <div class="club-events">
+                        <h6 class="club-events-title">Events</h6>
                     
-                    @foreach (var e in Model.Events)
-                    {
-                        @Html.Partial("_EventPartialSmall", e)
-                    }
+                        @foreach (var e in Model.Events)
+                        {
+                            @Html.Partial("_EventPartialSmall", e)
+                        }
 
-                </div>
+                    </div>
+                }
             </div>
         </div>
 
