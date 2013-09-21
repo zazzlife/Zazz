@@ -195,9 +195,11 @@ namespace Zazz.Infrastructure.Services
                     continue;
 
                 var size = new Size(attr.Width, attr.Height);
-                var resizedImg = _imageProcessor.ResizeImage(img, size, attr.Quality);
-                var fileName = GenerateFileName(userId, photoId, attr.Suffix);
-                _storageService.SavePhotoBlob(fileName, resizedImg);
+                using (var resizedImg = _imageProcessor.ResizeImage(img, size, attr.Quality))
+                {
+                    var fileName = GenerateFileName(userId, photoId, attr.Suffix);
+                    _storageService.SavePhotoBlob(fileName, resizedImg);
+                }
             }
         }
 
