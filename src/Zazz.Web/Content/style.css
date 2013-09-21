@@ -714,6 +714,7 @@ hr.gold-line {
 
 .weeklies-container {
     margin-bottom: 35px;
+    min-height: 80px;
 }
 
 .weeklies-items {
