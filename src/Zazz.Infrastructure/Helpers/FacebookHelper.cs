@@ -176,15 +176,27 @@ namespace Zazz.Infrastructure.Helpers
             {
                 var ev = new FbEvent
                 {
-                    Description = e.description,
                     Id = e.eid,
-                    Location = e.location,
                     Name = e.name,
                     Pic = e.pic_square,
                     UpdatedTime = e.update_time,
                     IsDateOnly = e.is_date_only,
                     Venue = new FbVenue()
                 };
+
+                try
+                {
+                    ev.Description = e.description;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Location = e.location;
+                }
+                catch (RuntimeBinderException)
+                { }
 
                 var startTime = (string)e.start_time;
 
@@ -197,11 +209,40 @@ namespace Zazz.Infrastructure.Helpers
 
                 if (!(e.venue is IEnumerable<object>))
                 {
-                    ev.Venue.City = e.venue.city;
-                    ev.Venue.Country = e.venue.country;
-                    ev.Venue.Latitude = e.venue.latitude;
-                    ev.Venue.Longitude = e.venue.longitude;
-                    ev.Venue.Street = e.venue.street;
+                    try
+                    {
+                        ev.Venue.City = e.venue.city;
+                    }
+                    catch (RuntimeBinderException)
+                    {}
+
+                    try
+                    {
+                        ev.Venue.Country = e.venue.country;
+                    }
+                    catch (RuntimeBinderException)
+                    { }
+
+                    try
+                    {
+                        ev.Venue.Latitude = e.venue.latitude;
+                    }
+                    catch (RuntimeBinderException)
+                    { }
+
+                    try
+                    {
+                        ev.Venue.Longitude = e.venue.longitude;
+                    }
+                    catch (RuntimeBinderException)
+                    { }
+
+                    try
+                    {
+                        ev.Venue.Street = e.venue.street;
+                    }
+                    catch (RuntimeBinderException)
+                    { }
                 }
 
                 events.Add(ev);
