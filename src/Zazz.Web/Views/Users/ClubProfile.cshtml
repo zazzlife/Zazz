@@ -34,16 +34,18 @@
             </div>
 
 
-            <div style="margin-top: 165px;">
-                @if (Model.IsSelf)
-                {
-                    <button id="addWeekly" data-popover-holder="0" class="btn-link">
-                        <i class="icon-plus-sign" style="margin-right: 5px;"></i>New
-                    </button>
-                    <div id="addWeeklyContent" class="hidden">
-                        @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
-                    </div>
-                }
+            <div style="margin-top: 125px;">
+                <div style="height: 30px;">
+                    @if (Model.IsSelf)
+                    {
+                        <button id="addWeekly" data-popover-holder="0" class="btn-link">
+                            <i class="icon-plus-sign" style="margin-right: 5px;"></i>New
+                        </button>
+                        <div id="addWeeklyContent" class="hidden">
+                            @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
+                        </div>
+                    }
+                </div>
                 <h3>Weeklies</h3>
             </div>
 
