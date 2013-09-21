@@ -241,7 +241,13 @@ namespace Zazz.Infrastructure.Services
 
                     //TODO: use async/await
                     using (var photoStream = new HttpClient().GetStreamAsync(fbPhoto.Source).Result)
-                        _photoService.SavePhoto(photo, photoStream, true, Enumerable.Empty<int>());
+                    using (var ms = new MemoryStream())
+                    {
+                        //have to copy the http stream to a memory stream because it's not seek-able
+                        photoStream.CopyTo(ms); //TODO: user async
+                        _photoService.SavePhoto(photo, ms, true, Enumerable.Empty<int>());
+                    }
+                        
                 }
             }
 
