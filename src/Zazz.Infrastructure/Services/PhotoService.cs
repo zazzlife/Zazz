@@ -135,7 +135,9 @@ namespace Zazz.Infrastructure.Services
                 }
             }
 
-            photo.UploadDate = DateTime.UtcNow;
+            if (photo.UploadDate == default(DateTime))
+                photo.UploadDate = DateTime.UtcNow;
+
             _uow.PhotoRepository.InsertGraph(photo);
             _uow.SaveChanges();
 
