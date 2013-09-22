@@ -90,11 +90,12 @@ namespace Zazz.Web.Controllers
                          IsSelf = currentUserId == user.Id,
                          Address = user.ClubDetail.Address,
                          ClubType = user.ClubDetail.ClubType,
+                         FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
+                         FollowingsCount = _uow.FollowRepository.GetFollowsUserIds(user.Id).Count(),
+                         ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
                          CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                          ? PhotoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
                          : DefaultImageHelper.GetDefaultCoverImage().OriginalLink,
-
-                         FollowersCount = _uow.FollowRepository.GetFollowersCount(user.Id),
                          Events = _uow.EventRepository.GetUpcomingEvents(user.Id).ToList()
                             .Select(e => new EventViewModel
                                           {
