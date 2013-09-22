@@ -2,6 +2,13 @@ namespace Zazz.Core.Interfaces.Services
 {
     public interface ICryptoService
     {
+        /// <summary>
+        /// Returns hash of the password in base64 encoded format
+        /// </summary>
+        /// <param name="password">password in clear text</param>
+        /// <returns></returns>
+        string GeneratePasswordHash(string password);
+
         byte[] EncryptPassword(string password, out string iv);
 
         string DecryptPassword(byte[] cipherBytes, byte[] iv);

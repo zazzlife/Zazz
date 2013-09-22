@@ -126,7 +126,21 @@ namespace Zazz.UnitTests.Infrastructure.Services
             //Assert
             CollectionAssert.DoesNotContain(result, 0);
         }
-        
+
+        [TestCase("Soroush", "sm44MvGoV+uJ1H/tH231y8cVLfg=")]
+        [TestCase("soroush", "H9i/SSGhUPgg8gAVCC7kcvwUI3o=")]
+        [TestCase("Password32", "J5Szmc90RP8640sU05dHjLQMUsw=")]
+        [TestCase("P@$$wo0rd", "V6Vte/9cZMNRlz2KQqonUfYhcUc=")]
+        [TestCase("ALongPassword&*(^#! ALongPasswo41241rd", "HB94jpDc0Pg+nw56DCG8S5ltWII=")]
+        public void GenerateExpectedHash(string pass, string expected)
+        {
+            //Arrange
+            //Act & Assert
+
+            var hash = _sut.GeneratePasswordHash(pass);
+            Assert.AreEqual(expected, hash);
+        }
+
         [TestCase("Soroush")]
         [TestCase("Password")]
         [TestCase("P@$$wo0rd")]

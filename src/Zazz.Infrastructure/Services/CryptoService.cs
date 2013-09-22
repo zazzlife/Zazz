@@ -47,6 +47,19 @@ namespace Zazz.Infrastructure.Services
             return cipher;
         }
 
+        public string GeneratePasswordHash(string password)
+        {
+            using (var sha1 = new HMACSHA1(_passwordHashSecret))
+            {
+                var passBuffer = Encoding.UTF8.GetBytes(password);
+                var hash = sha1.ComputeHash(passBuffer);
+
+                var base64 = Convert.ToBase64String(hash);
+
+                return base64;
+            }
+        }
+
         public byte[] EncryptPassword(string password, out string iv)
         {
             using (var cipher = CreateCipher(_passwordCipherKeyBuffer))
