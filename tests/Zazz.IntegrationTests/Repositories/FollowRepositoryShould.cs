@@ -94,36 +94,6 @@ namespace Zazz.IntegrationTests.Repositories
         }
 
         [Test]
-        public void RetrunCorrectFollowCountNumber()
-        {
-            //Arrange
-            var userC = Mother.GetUser();
-
-            using (var ctx = new ZazzDbContext())
-            {
-                ctx.Users.Add(userC);
-                ctx.SaveChanges();
-
-                var followB = new Follow { FromUserId = _userB.Id, ToUserId = _userA.Id };
-                var followC = new Follow { FromUserId = userC.Id, ToUserId = _userA.Id };
-
-                ctx.Follows.Add(followB);
-                ctx.Follows.Add(followC);
-                ctx.SaveChanges();
-            }
-
-            //Act
-            var resultA = _repo.GetFollowersCount(_userA.Id);
-            var resultB = _repo.GetFollowersCount(_userB.Id);
-            var resultC = _repo.GetFollowersCount(userC.Id);
-
-            //Assert
-            Assert.AreEqual(2, resultA);
-            Assert.AreEqual(1, resultB);
-            Assert.AreEqual(0, resultC);
-        }
-
-        [Test]
         public void ReturnCorrectFollowUserIds_OnGetFollowsUserIds()
         {
             //Arrange

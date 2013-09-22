@@ -23,8 +23,6 @@ namespace Zazz.Core.Interfaces.Repositories
 
         IEnumerable<int> GetFollowsUserIds(int fromUserId);
 
-        int GetFollowersCount(int userId);
-
         bool Exists(int fromUserId, int toUserId);
 
         void Remove(int fromUserId, int toUserId);

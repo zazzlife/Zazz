@@ -117,7 +117,7 @@ namespace Zazz.Infrastructure.Services
 
         public int GetFollowersCount(int userId)
         {
-            return _uow.FollowRepository.GetFollowersCount(userId);
+            return _uow.FollowRepository.GetUserFollowers(userId).Count();
         }
 
         public IQueryable<FollowRequest> GetFollowRequests(int userId)

@@ -42,11 +42,6 @@ namespace Zazz.Data.Repositories
                         .Select(f => f.ToUserId);
         }
 
-        public int GetFollowersCount(int userId)
-        {
-            return _dbSet.Count(f => f.ToUserId == userId);
-        }
-
         public bool Exists(int fromUserId, int toUserId)
         {
             return _dbSet.Where(f => f.FromUserId == fromUserId)
