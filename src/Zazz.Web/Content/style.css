@@ -1197,9 +1197,8 @@ a.category {
 }
 
 .pics-widget h6 {
-    margin: 0;
+    margin: -8px 0;
     font-weight: 600;
-    margin: 5px 0;
 }
 
 .pics-widget ul {

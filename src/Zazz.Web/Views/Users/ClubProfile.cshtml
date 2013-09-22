@@ -58,18 +58,17 @@
 
                     @foreach (var a in Model.PartyAlbums)
                     {
-                        <div>
-                            @{
-                                var link = String.Empty;
-                                link = a.AlbumId == 0
-                                    ? Url.Action("List", "Photos", new {id = Model.UserId})
-                                    : Url.Action("List", "Photos", new {id = Model.UserId, albumId = a.AlbumId});
-                            }
+                        var link = String.Empty;
+                        link = a.AlbumId == 0
+                            ? Url.Action("List", "Photos", new { id = Model.UserId })
+                            : Url.Action("List", "Photos", new { id = Model.UserId, albumId = a.AlbumId });
 
+                        <div>
                             <a class="album-name" href="@link">
                                 <h6>@a.AlbumName</h6>
                             </a>
                         </div>
+                        
                         <ul>
                             @{
                         var i = 1;
@@ -130,7 +129,7 @@
             </div>
 
             <div style="margin-top: 100px;" class="visible-phone"></div>
-            
+
             <div class="weeklies-container">
                 <ul class="weeklies-items">
                     @foreach (var w in Model.Weeklies)
@@ -139,8 +138,8 @@
                     }
                 </ul>
             </div>
-            
-            
+
+
 
             <div class="padding-L-R-10">
                 @Html.Partial("_PostInputsPartial")
@@ -157,18 +156,18 @@
                 {
                     if (Model.IsCurrentUserFollowingTheClub)
                     {   
-                        <button data-btn-follow="1" data-id="@Model.UserId"
-                                data-url="@Url.Action("Unfollow", "Follow", new {id=Model.UserId})"
+                    <button data-btn-follow="1" data-id="@Model.UserId"
+                                data-url="@Url.Action("Unfollow", "Follow", new { id = Model.UserId })"
                                 data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
-                            <i class="icon-remove"></i> Unfollow
-                        </button>
+                        <i class="icon-remove"></i>Unfollow
+                    </button>
                     }
                     else
                     {
-                        <button data-btn-follow="1" data-id="@Model.UserId" data-url="@Url.Action("FollowUser", "Follow", new {id=Model.UserId})"
+                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="@Url.Action("FollowUser", "Follow", new { id = Model.UserId })"
                                 data-action="follow" class="btn btn-zazz btn-follow">
-                            <i class="icon-plus"></i> Follow
-                        </button>
+                        <i class="icon-plus"></i>Follow
+                    </button>
                     }
                 }
             </div>
@@ -178,7 +177,7 @@
                 {
                     <div class="club-events">
                         <h6 class="club-events-title">Events</h6>
-                    
+
                         @foreach (var e in Model.Events)
                         {
                             @Html.Partial("_EventPartialSmall", e)
