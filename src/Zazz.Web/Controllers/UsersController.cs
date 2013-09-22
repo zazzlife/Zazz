@@ -135,7 +135,7 @@ namespace Zazz.Web.Controllers
                              PhotoLinks = w.PhotoId.HasValue
                              ? PhotoService.GeneratePhotoUrl(user.Id, w.PhotoId.Value)
                              : DefaultImageHelper.GetDefaultWeeklyImage()
-                         }),
+                         }).OrderBy(w => w.DayOfTheWeek),
                          PartyAlbums = _uow.AlbumRepository.GetLatestAlbums(user.Id)
                            .Select(a => new PartyAlbumViewModel
                            {
