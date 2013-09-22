@@ -152,8 +152,33 @@ namespace Zazz.Web.Controllers
                                    PhotoId = p.Id,
                                    PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
                                })
-                           })
+                           }).ToList()
                      };
+
+            // getting pics that are not in albums
+
+            var pics = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, 10)
+                .Where(p => p.AlbumId == null)
+                .ToList()
+                .Select(p => new PhotoViewModel
+                             {
+                                 FromUserDisplayName = displayName,
+                                 FromUserId = user.Id,
+                                 FromUserPhotoUrl = profilePhotoUrl,
+                                 IsFromCurrentUser = currentUserId == user.Id,
+                                 Description = p.Description,
+                                 PhotoId = p.Id,
+                                 PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                             });
+
+            var otherPics = new PartyAlbumViewModel
+                            {
+                                AlbumId = 0,
+                                AlbumName = "Other pics",
+                                Photos = pics
+                            };
+            
+            vm.PartyAlbums.Add(otherPics);
 
             return View("ClubProfile", vm);
         }

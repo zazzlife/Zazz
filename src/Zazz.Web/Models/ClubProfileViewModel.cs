@@ -34,6 +34,6 @@ namespace Zazz.Web.Models
 
         public List<EventViewModel> Events { get; set; }
 
-        public IEnumerable<PartyAlbumViewModel> PartyAlbums { get; set; }
+        public List<PartyAlbumViewModel> PartyAlbums { get; set; }
     }
 }
