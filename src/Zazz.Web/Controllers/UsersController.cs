@@ -170,7 +170,7 @@ namespace Zazz.Web.Controllers
                                  Description = p.Description,
                                  PhotoId = p.Id,
                                  PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
-                             });
+                             }).ToList();
 
             var otherPics = new PartyAlbumViewModel
                             {
@@ -178,8 +178,9 @@ namespace Zazz.Web.Controllers
                                 AlbumName = "Other pics",
                                 Photos = pics
                             };
-            
-            vm.PartyAlbums.Add(otherPics);
+
+            if (otherPics.Photos.Any())
+                vm.PartyAlbums.Add(otherPics);
 
             return View("ClubProfile", vm);
         }
