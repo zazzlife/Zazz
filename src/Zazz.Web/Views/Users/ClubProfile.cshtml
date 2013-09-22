@@ -59,7 +59,14 @@
                     @foreach (var a in Model.PartyAlbums)
                     {
                         <div>
-                            <a class="album-name" href="@Url.Action("List", "Photos", new { id = Model.UserId, albumId = a.AlbumId })">
+                            @{
+                                var link = String.Empty;
+                                link = a.AlbumId == 0
+                                    ? Url.Action("List", "Photos", new {id = Model.UserId})
+                                    : Url.Action("List", "Photos", new {id = Model.UserId, albumId = a.AlbumId});
+                            }
+
+                            <a class="album-name" href="@link">
                                 <h6>@a.AlbumName</h6>
                             </a>
                         </div>
