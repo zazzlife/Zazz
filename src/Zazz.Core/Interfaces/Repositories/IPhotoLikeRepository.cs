@@ -5,8 +5,6 @@ namespace Zazz.Core.Interfaces.Repositories
 {
     public interface IPhotoLikeRepository
     {
-        IQueryable<PhotoLike> GetUserReceivedLikes(int userId);
-
         void InsertGraph(PhotoLike photoLike);
 
         bool Exists(int photoId, int userId);

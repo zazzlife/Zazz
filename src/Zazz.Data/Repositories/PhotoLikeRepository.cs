@@ -18,11 +18,6 @@ namespace Zazz.Data.Repositories
             _dbSet = _context.Set<PhotoLike>();
         }
 
-        public IQueryable<PhotoLike> GetUserReceivedLikes(int userId)
-        {
-            return _dbSet.Where(v => v.Photo.UserId == userId);
-        }
-
         public void InsertGraph(PhotoLike photoLike)
         {
             _dbSet.Add(photoLike);
