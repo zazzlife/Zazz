@@ -39,8 +39,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                         Id = 22,
                         Username = "username",
                         Email = "test@test.com",
-                        Password = _passBuffer,
-                        PasswordIV = _iv,
+                        Password = "Password",
                     };
 
 
@@ -73,14 +72,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ThrowInvalidPassword_WhenPasswordsDontMatch_OnLogin()
         {
             //Arrange
+            var pass = "invalidPassword";
             _uow.Setup(x => x.UserRepository.GetByUsername(_user.Username, false, false, false, false))
                     .Returns(_user);
 
-            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
+            _cryptoService.Setup(x => x.GeneratePasswordHash(pass))
                        .Returns("valid pass");
 
             //Act
-            Assert.Throws<InvalidPasswordException>(() => _sut.Login(_user.Username, "invalidPassword"));
+            Assert.Throws<InvalidPasswordException>(() => _sut.Login(_user.Username, pass));
 
             //Assert
             _mockRepo.VerifyAll();
@@ -95,8 +95,8 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.GetByUsername(_user.Username, false, false, false, false))
                     .Returns(_user);
 
-            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
-                       .Returns(_pass);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(_pass))
+                       .Returns(_user.Password);
 
             _uow.Setup(x => x.SaveChanges());
 
@@ -179,7 +179,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void EncryptThePassword_OnRegister()
+        public void HashThePassword_OnRegister()
         {
             //Arrange
             _uow.Setup(x => x.UserRepository.ExistsByUsername(_user.Username))
@@ -187,12 +187,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
 
-            var ivBuffer = new byte[] { 1, 2 };
-            var iv = Convert.ToBase64String(ivBuffer);
-            var encryptedPass = new byte[] { 7, 8, 9 };
+            var passwordHash = "something!";
 
-            _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
-                       .Returns(encryptedPass);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(_pass))
+                       .Returns(passwordHash);
 
             _uow.Setup(x => x.UserRepository.InsertGraph(It.IsAny<User>()));
             _uow.Setup(x => x.SaveChanges());
@@ -202,8 +200,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
             //Assert
             _mockRepo.VerifyAll();
-            CollectionAssert.AreEqual(encryptedPass, _user.Password);
-            CollectionAssert.AreEqual(Convert.FromBase64String(iv), _user.PasswordIV);
+            CollectionAssert.AreEqual(passwordHash, _user.Password);
         }
 
         [Test]
@@ -215,12 +212,9 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _uow.Setup(x => x.UserRepository.ExistsByEmail(_user.Email))
                     .Returns(false);
 
-            var ivBuffer = new byte[] { 1, 2 };
-            var iv = Convert.ToBase64String(ivBuffer);
-            var encryptedPass = new byte[] { 7, 8, 9 };
-
-            _cryptoService.Setup(x => x.EncryptPassword(_pass, out iv))
-                       .Returns(encryptedPass);
+            var passwordHash = "passwordHash";
+            _cryptoService.Setup(x => x.GeneratePasswordHash(_pass))
+                       .Returns(passwordHash);
 
             _cryptoService.Setup(x => x.GenerateKey(It.IsAny<int>(), It.IsAny<bool>()))
                           .Returns(_token);
@@ -430,18 +424,16 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void EncryptTheNewPassword_OnResetPassword()
+        public void HashTheNewPassword_OnResetPassword()
         {
             //Arrange
             var newPass = "newpass";
-            var newPassBuffer = new byte[] { 12, 34, 45 };
-            var iv = new byte[] { 67, 89 };
-            var ivText = Convert.ToBase64String(iv);
+            var newPassHash = "newPassHash";
 
             var token = new UserValidationToken { Id = _user.Id, Token = _token, ExpirationTime = DateTime.UtcNow.AddDays(1) };
             _user.UserValidationToken = token;
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
-                       .Returns(() => newPassBuffer);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(newPass))
+                       .Returns(newPassHash);
 
             _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
@@ -452,8 +444,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.ResetPassword(_user.Id, Base64Helper.Base64UrlEncode(_token), newPass);
 
             //Assert
-            CollectionAssert.AreEqual(newPassBuffer, _user.Password);
-            CollectionAssert.AreEqual(iv, _user.PasswordIV);
+            CollectionAssert.AreEqual(newPassHash, _user.Password);
             _mockRepo.VerifyAll();
         }
 
@@ -462,14 +453,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             //Arrange
             var newPass = "newpass";
-            var newPassBuffer = new byte[] { 12, 34, 45 };
-            var iv = new byte[] { 67, 89 };
-            var ivText = Convert.ToBase64String(iv);
+            var passwordHash = "passwordHash";
 
             var token = new UserValidationToken { Id = _user.Id, Token = _token, ExpirationTime = DateTime.UtcNow.AddDays(1) };
             _user.UserValidationToken = token;
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out ivText))
-                       .Returns(() => newPassBuffer);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(newPass))
+                       .Returns(passwordHash);
 
             _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
@@ -506,10 +495,12 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var pass = "pass";
             var newPass = "newPass";
             var invalidPass = "invalid";
+            var invalidHash = "invalidHash";
+
             _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
-            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
-                       .Returns(pass);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(invalidPass))
+                       .Returns(invalidHash);
 
             //Act
             Assert.Throws<InvalidPasswordException>(() => _sut.ChangePassword(_user.Id, invalidPass, newPass));
@@ -519,24 +510,20 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void EncryptTheNewPasswordIfEverythingIsFine_OnChangePassword()
+        public void HashTheNewPasswordIfEverythingIsFine_OnChangePassword()
         {
             //Arrange
-            var oldPassBuffer = _user.Password;
-            var oldPassIv = _user.PasswordIV;
-
             var pass = "pass";
+            var passHash = "passHash";
             var newPass = "newPass";
-            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
-            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
-            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
+            var newPassHash = newPass + "hash";
 
             _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
                     .Returns(_user);
-            _cryptoService.Setup(x => x.DecryptPassword(oldPassBuffer, oldPassIv))
-                       .Returns(pass);
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
-                       .Returns(newPassBuffer);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(pass))
+                       .Returns(_user.Password);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(newPass))
+                       .Returns(newPassHash);
 
             _uow.Setup(x => x.SaveChanges());
 
@@ -544,37 +531,10 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _sut.ChangePassword(_user.Id, pass, newPass);
 
             //Assert
-            _mockRepo.VerifyAll();
-
-        }
-
-        [Test]
-        public void SaveUserCorrectlyWhenEverythingIsFine_OnChangePassword()
-        {
-            //Arrange
-            var pass = "pass";
-            var newPass = "newPass";
-            var newPassIv = Convert.ToBase64String(Encoding.UTF8.GetBytes("iv"));
-            var newPassBuffer = Encoding.UTF8.GetBytes(newPass);
-            var newPassIvBuffer = Convert.FromBase64String(newPassIv);
-
-            _uow.Setup(x => x.UserRepository.GetById(_user.Id, false, false, false, false))
-                    .Returns(_user);
-            _cryptoService.Setup(x => x.DecryptPassword(_user.Password, _user.PasswordIV))
-                       .Returns(pass);
-            _cryptoService.Setup(x => x.EncryptPassword(newPass, out newPassIv))
-                       .Returns(newPassBuffer);
-
-            _uow.Setup(x => x.SaveChanges());
-
-            //Act
-            _sut.ChangePassword(_user.Id, pass, newPass);
-
-            //Assert
-            CollectionAssert.AreEqual(newPassBuffer, _user.Password);
-            CollectionAssert.AreEqual(newPassIvBuffer, _user.PasswordIV);
+            Assert.AreEqual(newPassHash, _user.Password);
             _mockRepo.VerifyAll();
         }
+
         #endregion
 
         #region Get/Link OAuth User

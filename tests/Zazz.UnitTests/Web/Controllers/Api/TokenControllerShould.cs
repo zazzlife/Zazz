@@ -353,12 +353,12 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             //Arrange
             var path = "/api/v1/token";
             var username = "usern";
-            var password = "pass";
+            var invalidPassword = "some random password";
 
             var values = new List<KeyValuePair<string, string>>
                          {
                              new KeyValuePair<string, string>("grant_type", "password"),
-                             new KeyValuePair<string, string>("password", "some random password"),
+                             new KeyValuePair<string, string>("password", invalidPassword),
                              new KeyValuePair<string, string>("username", username),
                              new KeyValuePair<string, string>("scope", "full")
                          };
@@ -374,8 +374,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
 
             var user = new User
                        {
-                           Password = new byte[] { 1, 2, 3 },
-                           PasswordIV = new byte[] { 4, 5 }
+                           Password = "password",
                        };
 
             _oauthClientRepo.Setup(x => x.GetById(oauthClient.ClientId))
@@ -384,8 +383,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _userService.Setup(x => x.GetUser(username, false, false, false, false))
                 .Returns(user);
 
-            _cryptoService.Setup(x => x.DecryptPassword(user.Password, user.PasswordIV))
-                          .Returns(password);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(invalidPassword))
+                          .Returns("invalidPasswordHash");
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
 
@@ -428,8 +427,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             var user = new User
             {
                 Id = 3232,
-                Password = new byte[] { 1, 2, 3 },
-                PasswordIV = new byte[] { 4, 5 }
+                Password = password,
             };
 
             var oauthCred = new OAuthCredentials
@@ -461,8 +459,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             _userService.Setup(x => x.GetUser(username, false, false, false, false))
                 .Returns(user);
 
-            _cryptoService.Setup(x => x.DecryptPassword(user.Password, user.PasswordIV))
-                          .Returns(password);
+            _cryptoService.Setup(x => x.GeneratePasswordHash(password))
+                          .Returns(user.Password);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", oauthClient.ClientId);
 

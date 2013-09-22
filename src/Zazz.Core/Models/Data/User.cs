@@ -20,9 +20,8 @@ namespace Zazz.Core.Models.Data
         [MaxLength(200), Required, DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        public byte[] Password { get; set; }
-
-        public byte[] PasswordIV { get; set; }
+        [MaxLength(50)]
+        public string Password { get; set; }
 
         public AccountType AccountType { get; set; }
 

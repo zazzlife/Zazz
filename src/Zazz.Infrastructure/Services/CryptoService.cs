@@ -13,12 +13,6 @@ namespace Zazz.Infrastructure.Services
         /// </summary>
         private const string PASSWORD_HASH_SECRET = "MbxTE7mlyrorVRZOI3G2wYX7fZqjCJnM7mDhfI6iqmQ9QOzAsvqe58uhYDlx20rG2XFfdcQ/Aa+yzPRZu7FR6A==";
         private readonly byte[] _passwordHashSecret;
-
-        /// <summary>
-        /// This key should be used to encrypt passwords in DB, RijndaelManaged (AES)
-        /// </summary>
-        private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
-        private readonly byte[] _passwordCipherKeyBuffer;
         
         /// <summary>
         /// This key should be used to sign a string to make sure it's not tampered with later.
@@ -29,7 +23,6 @@ namespace Zazz.Infrastructure.Services
         // this class is registered as a singleton, if later on you added a dependency remove the singleton flag.
         public CryptoService()
         {
-            _passwordCipherKeyBuffer = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
             _randomSignHashSecretBuffer = Convert.FromBase64String(RANDOM_SIGN_HASH_SECRET);
             _passwordHashSecret = Convert.FromBase64String(PASSWORD_HASH_SECRET);
         }
@@ -57,30 +50,6 @@ namespace Zazz.Infrastructure.Services
                 var base64 = Convert.ToBase64String(hash);
 
                 return base64;
-            }
-        }
-
-        public byte[] EncryptPassword(string password, out string iv)
-        {
-            using (var cipher = CreateCipher(_passwordCipherKeyBuffer))
-            using (var cryptoTransform = cipher.CreateEncryptor())
-            {
-                iv = Convert.ToBase64String(cipher.IV);
-                var textBytes = Encoding.UTF8.GetBytes(password);
-                return cryptoTransform.TransformFinalBlock(textBytes, 0, password.Length);
-            }
-        }
-
-        public string DecryptPassword(byte[] cipherBytes, byte[] iv)
-        {
-            using (var cipher = CreateCipher(_passwordCipherKeyBuffer))
-            {
-                cipher.IV = iv;
-                using (var cryptoTransform = cipher.CreateDecryptor())
-                {
-                    return Encoding.UTF8.GetString(cryptoTransform
-                        .TransformFinalBlock(cipherBytes, 0, cipherBytes.Length));
-                }
             }
         }
 

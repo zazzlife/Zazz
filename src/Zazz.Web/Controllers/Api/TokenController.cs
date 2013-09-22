@@ -99,8 +99,8 @@ namespace Zazz.Web.Controllers.Api
                 if (user == null)
                     throw new OAuthException(OAuthError.InvalidGrant);
 
-                var password = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
-                if (!password.Equals(request.password))
+                var passwordHash = _cryptoService.GeneratePasswordHash(request.password);
+                if (!passwordHash.Equals(user.Password))
                     throw new OAuthException(OAuthError.InvalidGrant);
 
                 var creds = _oauthService.CreateOAuthCredentials(user, client, scopes);

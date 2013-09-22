@@ -141,23 +141,6 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(expected, hash);
         }
 
-        [TestCase("Soroush")]
-        [TestCase("Password")]
-        [TestCase("P@$$wo0rd")]
-        [TestCase("ALongPassword ALongPassword")]
-        public void CorrectlyEncryptAndDecryptPasswords(string password)
-        {
-            //Arrange
-            //Act & Assert
-            var iv = String.Empty;
-            var cipher = _sut.EncryptPassword(password, out iv);
-
-            var ivBytes = Convert.FromBase64String(iv);
-            var decryptedPassword = _sut.DecryptPassword(cipher, ivBytes);
-
-            Assert.AreEqual(password, decryptedPassword);
-        }
-
         [Test]
         public void GenerateCorrectHash_OnGenerateHMACSHA512()
         {

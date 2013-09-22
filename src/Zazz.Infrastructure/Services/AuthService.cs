@@ -34,8 +34,8 @@ namespace Zazz.Infrastructure.Services
             if (user == null)
                 throw new NotFoundException();
 
-            var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
-            if (decryptedPassword != password)
+            var passwordHash = _cryptoService.GeneratePasswordHash(password);
+            if (passwordHash != user.Password)
                 throw new InvalidPasswordException();
 
             user.LastActivity = DateTime.UtcNow;
@@ -65,9 +65,7 @@ namespace Zazz.Infrastructure.Services
             if (emailExists)
                 throw new EmailExistsException();
 
-            var iv = String.Empty;
-            user.Password = _cryptoService.EncryptPassword(password, out iv);
-            user.PasswordIV = Convert.FromBase64String(iv);
+            user.Password = _cryptoService.GeneratePasswordHash(password);
 
             if (createToken)
             {
@@ -139,9 +137,7 @@ namespace Zazz.Infrastructure.Services
             if (!isTokenValid)
                 throw new InvalidTokenException();
 
-            string iv;
-            user.Password = _cryptoService.EncryptPassword(newPassword, out iv);
-            user.PasswordIV = Convert.FromBase64String(iv);
+            user.Password = _cryptoService.GeneratePasswordHash(newPassword);
 
             _uow.ValidationTokenRepository.Remove(user.Id);
             _uow.SaveChanges();
@@ -153,14 +149,14 @@ namespace Zazz.Infrastructure.Services
                 throw new PasswordTooLongException();
 
             var user = _uow.UserRepository.GetById(userId);
+            if (user == null)
+                throw new NotFoundException();
 
-            var decryptedPassword = _cryptoService.DecryptPassword(user.Password, user.PasswordIV);
-            if (currentPassword != decryptedPassword)
+            var currentPasswordHash = _cryptoService.GeneratePasswordHash(currentPassword);
+            if (currentPasswordHash != user.Password)
                 throw new InvalidPasswordException();
 
-            string iv;
-            user.Password = _cryptoService.EncryptPassword(newPassword, out iv);
-            user.PasswordIV = Convert.FromBase64String(iv);
+            user.Password = _cryptoService.GeneratePasswordHash(newPassword);
 
             _uow.SaveChanges();
         }

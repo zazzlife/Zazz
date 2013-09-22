@@ -9,10 +9,6 @@ namespace Zazz.Core.Interfaces.Services
         /// <returns></returns>
         string GeneratePasswordHash(string password);
 
-        byte[] EncryptPassword(string password, out string iv);
-
-        string DecryptPassword(byte[] cipherBytes, byte[] iv);
-
         string EncryptText(string text, byte[] key, out string iv);
 
         string DecryptText(string cipherText, string iv, byte[] key);
