@@ -169,7 +169,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         [Test, Explicit("This is not a test, using it only for generating keys")]
         public void ThisIsOnlyForGeneratingKeys()
         {
-            const int KEY_SIZE = 32*8;
+            const int KEY_SIZE = 64*8;
 
             var keyBuffer = _sut.GenerateKey(KEY_SIZE, generateNonZero: true);
             //var keyBuffer = _sut.GenerateKey(KEY_SIZE);

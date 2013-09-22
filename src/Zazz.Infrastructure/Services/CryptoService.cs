@@ -9,6 +9,12 @@ namespace Zazz.Infrastructure.Services
     public class CryptoService : ICryptoService
     {
         /// <summary>
+        /// This key should be used only for hashing passwords
+        /// </summary>
+        private const string PASSWORD_HASH_SECRET = "MbxTE7mlyrorVRZOI3G2wYX7fZqjCJnM7mDhfI6iqmQ9QOzAsvqe58uhYDlx20rG2XFfdcQ/Aa+yzPRZu7FR6A==";
+        private readonly byte[] _passwordHashSecret;
+
+        /// <summary>
         /// This key should be used to encrypt passwords in DB, RijndaelManaged (AES)
         /// </summary>
         private const string PASSWORD_CIPHER_KEY = "aRRuXfnGkKR8NTnco+Bu9ts3kLGUS4Jp3RUSsCe/pWk=";
@@ -25,6 +31,7 @@ namespace Zazz.Infrastructure.Services
         {
             _passwordCipherKeyBuffer = Convert.FromBase64String(PASSWORD_CIPHER_KEY);
             _randomSignHashSecretBuffer = Convert.FromBase64String(RANDOM_SIGN_HASH_SECRET);
+            _passwordHashSecret = Convert.FromBase64String(PASSWORD_HASH_SECRET);
         }
 
         private RijndaelManaged CreateCipher(byte[] key)
