@@ -42,7 +42,7 @@ namespace Zazz.Core.Models.Data
 
         public virtual ClubDetail ClubDetail { get; set; }
 
-        public virtual UserReceivedVotes ReceivedVotesCount { get; set; }
+        public virtual UserReceivedLikes ReceivedLikesCount { get; set; }
 
         public int? ProfilePhotoId { get; set; }
 

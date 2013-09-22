@@ -94,14 +94,14 @@ namespace Zazz.Data
             get { return new WeeklyRepository(GetContext()); }
         }
 
-        public IPhotoVoteRepository PhotoVoteRepository
+        public IPhotoLikeRepository PhotoLikeRepository
         {
-            get { return new PhotoVoteRepository(GetContext()); }
+            get { return new PhotoLikeRepository(GetContext()); }
         }
 
-        public IUserReceivedVotesRepository UserReceivedVotesRepository
+        public IUserReceivedLikesRepository UserReceivedLikesRepository
         {
-            get { return new UserReceivedVotesRepository(GetContext()); }
+            get { return new UserReceivedLikesRepository(GetContext()); }
         }
 
         public IOAuthRefreshTokenRepository OAuthRefreshTokenRepository

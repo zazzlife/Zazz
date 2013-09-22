@@ -8,10 +8,10 @@ using Zazz.Data.Repositories;
 namespace Zazz.IntegrationTests.Repositories
 {
     [TestFixture]
-    public class UserReceivedVotesRepositoryShould
+    public class UserReceivedLikesRepositoryShould
     {
         private ZazzDbContext _context;
-        private UserReceivedVotesRepository _repo;
+        private UserReceivedLikesRepository _repo;
         private User _user1;
         private User _user2;
 
@@ -19,7 +19,7 @@ namespace Zazz.IntegrationTests.Repositories
         public void Init()
         {
             _context = new ZazzDbContext(true);
-            _repo = new UserReceivedVotesRepository(_context);
+            _repo = new UserReceivedLikesRepository(_context);
 
             _user1 = Mother.GetUser();
             _user2 = Mother.GetUser();
@@ -36,14 +36,14 @@ namespace Zazz.IntegrationTests.Repositories
             var user1Count = 50;
             var user2Count = 49;
 
-            _context.UserReceivedVotes.Add(new UserReceivedVotes
+            _context.UserReceivedLikes.Add(new UserReceivedLikes
                                            {
                                                Count = user1Count,
                                                LastUpdate = DateTime.UtcNow,
                                                UserId = _user1.Id
                                            });
 
-            _context.UserReceivedVotes.Add(new UserReceivedVotes
+            _context.UserReceivedLikes.Add(new UserReceivedLikes
                                            {
                                                Count = user2Count,
                                                LastUpdate = DateTime.UtcNow,
@@ -69,7 +69,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Assert
-            var check = _context.UserReceivedVotes.Find(_user1.Id);
+            var check = _context.UserReceivedLikes.Find(_user1.Id);
             Assert.AreEqual(1, check.Count);
         }
 
@@ -80,7 +80,7 @@ namespace Zazz.IntegrationTests.Repositories
             var currentCount = 222;
             using (var ctx = new ZazzDbContext())
             {
-                ctx.UserReceivedVotes.Add(new UserReceivedVotes
+                ctx.UserReceivedLikes.Add(new UserReceivedLikes
                                           {
                                               Count = currentCount,
                                               LastUpdate = DateTime.UtcNow,
@@ -94,7 +94,7 @@ namespace Zazz.IntegrationTests.Repositories
             _repo.Increment(_user1.Id);
 
             //Assert
-            var check = _context.UserReceivedVotes.SingleOrDefault(u => u.UserId == _user1.Id);
+            var check = _context.UserReceivedLikes.SingleOrDefault(u => u.UserId == _user1.Id);
             Assert.AreEqual((currentCount + 1), check.Count);
         }
 
@@ -108,7 +108,7 @@ namespace Zazz.IntegrationTests.Repositories
             _context.SaveChanges();
 
             //Assert
-            var check = _context.UserReceivedVotes.Find(_user1.Id);
+            var check = _context.UserReceivedLikes.Find(_user1.Id);
             Assert.AreEqual(0, check.Count);
         }
 
@@ -119,7 +119,7 @@ namespace Zazz.IntegrationTests.Repositories
             var currentCount = 222;
             using (var ctx = new ZazzDbContext())
             {
-                ctx.UserReceivedVotes.Add(new UserReceivedVotes
+                ctx.UserReceivedLikes.Add(new UserReceivedLikes
                 {
                     Count = currentCount,
                     LastUpdate = DateTime.UtcNow,
@@ -133,7 +133,7 @@ namespace Zazz.IntegrationTests.Repositories
             _repo.Decrement(_user1.Id);
 
             //Assert
-            var check = _context.UserReceivedVotes.SingleOrDefault(u => u.UserId == _user1.Id);
+            var check = _context.UserReceivedLikes.SingleOrDefault(u => u.UserId == _user1.Id);
             Assert.AreEqual((currentCount - 1), check.Count);
         }
     }

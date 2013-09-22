@@ -1,8 +1,8 @@
-﻿function showVoteBtn($btn, id) {
+﻿function showLikeBtn($btn, id) {
     
-    var voteHtml = '<i class="icon-thumbs-up"></i> Vote';
-    var actionUrl = "/vote/add/" + id;
-    $btn.html(voteHtml);
+    var likeHtml = '<i class="icon-thumbs-up"></i> Like';
+    var actionUrl = "/like/add/" + id;
+    $btn.html(likeHtml);
 
     $btn.attr('data-url', actionUrl);
     $btn.removeClass('disabled');
@@ -12,12 +12,12 @@
     $btn.attr('data-action', 'add');
 }
 
-function showRemoveVoteBtn($btn, id) {
+function showRemoveLikeBtn($btn, id) {
 
-    var actionUrl = "/vote/remove/" + id;
-    var removeVoteHtml = '<i class="icon-thumbs-down"></i> Remove vote';
+    var actionUrl = "/like/remove/" + id;
+    var removeLikeHtml = '<i class="icon-thumbs-down"></i> Remove like';
 
-    $btn.html(removeVoteHtml);
+    $btn.html(removeLikeHtml);
     
     $btn.attr('data-url', actionUrl);
     $btn.removeClass('disabled');
@@ -27,7 +27,7 @@ function showRemoveVoteBtn($btn, id) {
     $btn.attr('data-action', 'remove');
 }
 
-$(document).on('click', 'button[data-vote-btn]', function () {
+$(document).on('click', 'button[data-like-btn]', function () {
 
     var $self = $(this);
     var isLoaded = $self.attr('data-isloaded');
@@ -49,28 +49,28 @@ $(document).on('click', 'button[data-vote-btn]', function () {
             $self.css('opacity', '1');
         },
         success: function () {
-            var votesContainer = $('#photoVotesCount-' + id);
-            var votesCount = parseInt(votesContainer.text()
+            var likesContainer = $('#photoLikesCount-' + id);
+            var likesCount = parseInt(likesContainer.text()
                 .replace(')', '')
                 .replace('(', ''));
 
             if (action == 'remove') {
-                showVoteBtn($self, id);
-                votesCount--;
+                showLikeBtn($self, id);
+                likesCount--;
             } else {
-                showRemoveVoteBtn($self, id);
-                votesCount++;
+                showRemoveLikeBtn($self, id);
+                likesCount++;
             }
 
-            votesContainer.text('(' + votesCount + ')');
+            likesContainer.text('(' + likesCount + ')');
         }
     });
 
 });
 
-function loadVoteAction(id, $btn) {
+function loadLikeAction(id, $btn) {
     
-    var url = "/vote/exists/" + id;
+    var url = "/like/exists/" + id;
 
     $.ajax({
         url: url,
@@ -78,38 +78,38 @@ function loadVoteAction(id, $btn) {
         success: function(res) {
             
             if (res.toLowerCase() == 'true') {
-                showRemoveVoteBtn($btn, id);
+                showRemoveLikeBtn($btn, id);
             } else {
-                showVoteBtn($btn, id);
+                showLikeBtn($btn, id);
             }
         }
     });
 
 }
 
-function getVotesCount(id) {
+function getLikesCount(id) {
 
-    var url = "/vote/count/" + id;
-    var votesContainer = $('#photoVotesCount-' + id);
+    var url = "/like/count/" + id;
+    var likesContainer = $('#photoLikesCount-' + id);
 
 
     $.ajax({
         url: url,
         cache: false,
         error: function() {
-            toastr.error("Failed to get the votes count");
-            votesContainer.fadeOut('slow');
+            toastr.error("Failed to get the likes count");
+            likesContainer.fadeOut('slow');
         },
         success: function(res) {
-            votesContainer.html();
-            votesContainer.text('(' + res + ')');
+            likesContainer.html();
+            likesContainer.text('(' + res + ')');
         }
     });
 }
 
-function loadVoteButtons() {
+function loadLikeButtons() {
 
-    $('button[data-vote-btn]').each(function() {
+    $('button[data-like-btn]').each(function() {
 
         var $self = $(this);
 
@@ -121,8 +121,8 @@ function loadVoteButtons() {
         $self.css('opacity', '0.4');
         var id = $self.attr('data-id');
 
-        getVotesCount(id);
-        loadVoteAction(id, $self);
+        getLikesCount(id);
+        loadLikeAction(id, $self);
 
     });
 }

@@ -18,7 +18,7 @@ namespace Zazz.Web.Models
 
         public int FollowingsCount { get; set; }
 
-        public int ReceivedVotesCount { get; set; }
+        public int ReceivedLikesCount { get; set; }
 
         public bool IsSelf { get; set; }
 

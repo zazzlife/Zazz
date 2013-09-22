@@ -7,25 +7,25 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class PhotoVoteRepository : IPhotoVoteRepository
+    public class PhotoLikeRepository : IPhotoLikeRepository
     {
         private readonly ZazzDbContext _context;
-        private readonly IDbSet<PhotoVote> _dbSet;
+        private readonly IDbSet<PhotoLike> _dbSet;
 
-        public PhotoVoteRepository(ZazzDbContext context)
+        public PhotoLikeRepository(ZazzDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<PhotoVote>();
+            _dbSet = _context.Set<PhotoLike>();
         }
 
-        public IQueryable<PhotoVote> GetReceivedVotes(int userId)
+        public IQueryable<PhotoLike> GetUserReceivedLikes(int userId)
         {
             return _dbSet.Where(v => v.Photo.UserId == userId);
         }
 
-        public void InsertGraph(PhotoVote vote)
+        public void InsertGraph(PhotoLike photoLike)
         {
-            _dbSet.Add(vote);
+            _dbSet.Add(photoLike);
         }
 
         public bool Exists(int photoId, int userId)
@@ -36,26 +36,26 @@ namespace Zazz.Data.Repositories
                 .Any();
         }
 
-        public int GetPhotoVotesCount(int photoId)
+        public int GetLikesCount(int photoId)
         {
             return _dbSet.Count(v => v.PhotoId == photoId);
         }
 
-        public void Remove(PhotoVote vote)
+        public void Remove(PhotoLike photoLike)
         {
-            _context.Entry(vote).State = EntityState.Deleted;
+            _context.Entry(photoLike).State = EntityState.Deleted;
         }
 
         public void Remove(int photoId, int userId)
         {
-            var vote = _dbSet.Where(v => v.PhotoId == photoId)
+            var like = _dbSet.Where(v => v.PhotoId == photoId)
                              .Where(v => v.UserId == userId)
                              .SingleOrDefault();
 
-            if (vote == null)
+            if (like == null)
                 return;
 
-            Remove(vote);
+            Remove(like);
         }
     }
 }

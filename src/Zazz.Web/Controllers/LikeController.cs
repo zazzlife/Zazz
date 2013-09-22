@@ -9,38 +9,38 @@ using Zazz.Core.Interfaces.Services;
 namespace Zazz.Web.Controllers
 {
     [Authorize]
-    public class VoteController : Controller
+    public class LikeController : Controller
     {
-        private readonly IVoteService _voteService;
+        private readonly ILikeService _likeService;
         private readonly IUserService _userService;
 
-        public VoteController(IVoteService voteService, IUserService userService)
+        public LikeController(ILikeService likeService, IUserService userService)
         {
-            _voteService = voteService;
+            _likeService = likeService;
             _userService = userService;
         }
 
         public void Add(int id)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
-            _voteService.AddPhotoVote(id, userId);
+            _likeService.AddPhotoLike(id, userId);
         }
 
         public void Remove(int id)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
-            _voteService.RemovePhotoVote(id, userId);
+            _likeService.RemovePhotoLike(id, userId);
         }
 
         public bool Exists(int id)
         {
             var userId = _userService.GetUserId(User.Identity.Name);
-            return _voteService.PhotoVoteExists(id, userId);
+            return _likeService.PhotoLikeExists(id, userId);
         }
 
         public int Count(int id)
         {
-            return _voteService.GetPhotoVotesCount(id);
+            return _likeService.GetPhotoLikesCount(id);
         }
     }
 }

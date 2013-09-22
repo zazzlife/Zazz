@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class PhotoVote
+    public class PhotoLike
     {
         [Key, Column(Order = 0), ForeignKey("Photo")]
         public int PhotoId { get; set; }

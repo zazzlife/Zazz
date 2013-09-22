@@ -105,7 +105,7 @@ namespace Zazz.Web.DependencyResolution
                             x.For<ICommentService>().Use<CommentService>();
                             x.For<ICategoryService>().Use<CategoryService>();
                             x.For<IWeeklyService>().Use<WeeklyService>();
-                            x.For<IVoteService>().Use<VoteService>();
+                            x.For<ILikeService>().Use<LikeService>();
                             x.For<IOAuthService>().Use<OAuthService>();
                             x.For<IClubRewardService>().Use<ClubRewardService>();
 

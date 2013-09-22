@@ -1,6 +1,6 @@
 namespace Zazz.Core.Interfaces.Repositories
 {
-    public interface IUserReceivedVotesRepository
+    public interface IUserReceivedLikesRepository
     {
         int GetCount(int userId);
 

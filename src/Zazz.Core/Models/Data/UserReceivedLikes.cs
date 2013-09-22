@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Zazz.Core.Models.Data
 {
-    public class UserReceivedVotes
+    public class UserReceivedLikes
     {
         [Key, ForeignKey("User")]
         public int UserId { get; set; }

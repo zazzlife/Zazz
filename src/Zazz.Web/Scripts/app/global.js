@@ -41,7 +41,7 @@ function applyPageStyles() {
     highlightTags();
 
     initWeeklies();
-    loadVoteButtons();
+    loadLikeButtons();
 }
 
 function showAjaxErrorMessage(res) {

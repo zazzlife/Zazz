@@ -76,7 +76,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             CreateValidAccessToken();
 
             User.AccountType = AccountType.User;
-            User.ReceivedVotesCount = new UserReceivedVotes { Count = 15, LastUpdate = DateTime.UtcNow };
+            User.ReceivedLikesCount = new UserReceivedLikes { Count = 15, LastUpdate = DateTime.UtcNow };
             User.UserDetail = new UserDetail();
 
             UserService.Setup(x => x.GetUser(User.Id, true, true, true, false))

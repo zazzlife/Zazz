@@ -112,7 +112,7 @@
     <Compile Include="Infrastructure\Services\PostServiceShould.cs" />
     <Compile Include="Infrastructure\Services\CategoryServiceShould.cs" />
     <Compile Include="Infrastructure\Services\UserServiceShould.cs" />
-    <Compile Include="Infrastructure\Services\VoteServiceShould.cs" />
+    <Compile Include="Infrastructure\Services\LikeServiceShould.cs" />
     <Compile Include="Infrastructure\Services\WeeklyServiceShould.cs" />
     <Compile Include="Mother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

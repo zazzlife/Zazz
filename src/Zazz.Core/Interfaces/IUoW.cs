@@ -23,8 +23,8 @@ namespace Zazz.Core.Interfaces
         INotificationRepository NotificationRepository { get; }
         ICategoryStatRepository CategoryStatRepository { get; }
         IWeeklyRepository WeeklyRepository { get; }
-        IPhotoVoteRepository PhotoVoteRepository { get; }
-        IUserReceivedVotesRepository UserReceivedVotesRepository { get; }
+        IPhotoLikeRepository PhotoLikeRepository { get; }
+        IUserReceivedLikesRepository UserReceivedLikesRepository { get; }
         IOAuthRefreshTokenRepository OAuthRefreshTokenRepository { get; }
         IClubPointRewardScenarioRepository ClubPointRewardScenarioRepository { get; }
         IClubRewardRepository ClubRewardRepository { get; }

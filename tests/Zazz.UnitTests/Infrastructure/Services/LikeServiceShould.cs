@@ -10,11 +10,11 @@ using Zazz.Infrastructure.Services;
 namespace Zazz.UnitTests.Infrastructure.Services
 {
     [TestFixture]
-    public class VoteServiceShould
+    public class LikeServiceShould
     {
         private MockRepository _mockRepo;
         private Mock<IUoW> _uow;
-        private VoteService _sut;
+        private LikeService _sut;
         private int _photoId;
         private int _currentUserId;
         private PhotoMinimalDTO _photo;
@@ -24,7 +24,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _uow = _mockRepo.Create<IUoW>();
-            _sut = new VoteService(_uow.Object);
+            _sut = new LikeService(_uow.Object);
 
             _photo = new PhotoMinimalDTO
                      {
@@ -36,70 +36,70 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _currentUserId = 13;
         }
 
-        #region GET_PHOTO_VOTES_COUNT
+        #region GET_PHOTO_LIKES_COUNT
 
         [Test]
-        public void ThrowIfPhotoIdIs0_OnGetPhotoVotesCount()
+        public void ThrowIfPhotoIdIs0_OnGetPhotoLikesCount()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.GetPhotoVotesCount(0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.GetPhotoLikesCount(0));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void GetValueFromRepository_OnGetPhotoVotesCount()
+        public void GetValueFromRepository_OnGetPhotoLikesCount()
         {
             //Arrange
-            var votesCount = 444;
-            _uow.Setup(x => x.PhotoVoteRepository.GetPhotoVotesCount(_photoId))
-                .Returns(votesCount);
+            var likesCount = 444;
+            _uow.Setup(x => x.PhotoLikeRepository.GetLikesCount(_photoId))
+                .Returns(likesCount);
 
             //Act
-            var result = _sut.GetPhotoVotesCount(_photoId);
+            var result = _sut.GetPhotoLikesCount(_photoId);
 
             //Assert
-            Assert.AreEqual(votesCount, result);
+            Assert.AreEqual(likesCount, result);
             _mockRepo.VerifyAll();
         }
 
         #endregion
 
-        #region PHOTO_VOTE_EXISTS
+        #region PHOTO_LIKE_EXISTS
 
         [Test]
-        public void ThrowIfPhotoIdIs0_OnPhotoVoteExists()
+        public void ThrowIfPhotoIdIs0_OnPhotoLikeExists()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoVoteExists(0, _currentUserId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoLikeExists(0, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserIdIs0_OnPhotoVoteExists()
+        public void ThrowIfUserIdIs0_OnPhotoLikeExists()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoVoteExists(_photoId, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.PhotoLikeExists(_photoId, 0));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ReturnValueFromRepository_OnPhotoVoteExists()
+        public void ReturnValueFromRepository_OnPhotoLikeExists()
         {
             //Arrange
-            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+            _uow.Setup(x => x.PhotoLikeRepository.Exists(_photoId, _currentUserId))
                 .Returns(true);
 
             //Act
-            var result = _sut.PhotoVoteExists(_photoId, _currentUserId);
+            var result = _sut.PhotoLikeExists(_photoId, _currentUserId);
 
             //Assert
             Assert.IsTrue(result);
@@ -108,80 +108,80 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #endregion
 
-        #region ADD_PHOTO_VOTE
+        #region ADD_PHOTO_LIKE
 
         [Test]
-        public void ThrowIfPhotoIdIs0_OnAddPhotoVote()
+        public void ThrowIfPhotoIdIs0_OnAddPhotoLike()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoVote(0, _currentUserId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoLike(0, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserIdIs0_OnAddPhotoVote()
+        public void ThrowIfUserIdIs0_OnAddPhotoLike()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoVote(_photoId, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.AddPhotoLike(_photoId, 0));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowNotFoundIfPhotoNotExists_OnAddPhotoVote()
+        public void ThrowNotFoundIfPhotoNotExists_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(() => null);
 
             //Act
-            Assert.Throws<NotFoundException>(() => _sut.AddPhotoVote(_photoId, _currentUserId));
+            Assert.Throws<NotFoundException>(() => _sut.AddPhotoLike(_photoId, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserHasAlreadyVoted_OnAddPhotoVote()
+        public void ThrowIfUserHasAlreadyLiked_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(_photo);
 
-            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+            _uow.Setup(x => x.PhotoLikeRepository.Exists(_photoId, _currentUserId))
                 .Returns(true);
 
             //Act
-            Assert.Throws<AlreadyVotedException>(() => _sut.AddPhotoVote(_photoId, _currentUserId));
+            Assert.Throws<AlreadyLikedException>(() => _sut.AddPhotoLike(_photoId, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void AddNewVoteRecordAndIncrementVoteCounts_OnAddPhotoVote()
+        public void AddNewLikeRecordAndIncrementLikeCounts_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(_photo);
 
-            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+            _uow.Setup(x => x.PhotoLikeRepository.Exists(_photoId, _currentUserId))
                 .Returns(false);
 
-            _uow.Setup(x => x.PhotoVoteRepository.InsertGraph(It.Is<PhotoVote>(p => p.PhotoId == _photoId &&
+            _uow.Setup(x => x.PhotoLikeRepository.InsertGraph(It.Is<PhotoLike>(p => p.PhotoId == _photoId &&
                                                                                     p.UserId == _currentUserId)));
             
-            _uow.Setup(x => x.UserReceivedVotesRepository.Increment(_photo.UserId));
+            _uow.Setup(x => x.UserReceivedLikesRepository.Increment(_photo.UserId));
 
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.AddPhotoVote(_photoId, _currentUserId);
+            _sut.AddPhotoLike(_photoId, _currentUserId);
 
             //Assert
             _mockRepo.VerifyAll();
@@ -189,77 +189,77 @@ namespace Zazz.UnitTests.Infrastructure.Services
 
         #endregion
 
-        #region REMOVE_PHOTO_VOTE
+        #region REMOVE_PHOTO_LIKE
 
         [Test]
-        public void ThrowIfPhotoIdIs0_OnRemovePhotoVote()
+        public void ThrowIfPhotoIdIs0_OnRemovePhotoLike()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoVote(0, _currentUserId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoLike(0, _currentUserId));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void ThrowIfUserIdIs0_OnRemovePhotoVote()
+        public void ThrowIfUserIdIs0_OnRemovePhotoLike()
         {
             //Arrange
             //Act
-            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoVote(_photoId, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => _sut.RemovePhotoLike(_photoId, 0));
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotDoAnythingIfPhotoNotExists_OnAddPhotoVote()
+        public void NotDoAnythingIfPhotoNotExists_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(() => null);
 
             //Act
-            _sut.RemovePhotoVote(_photoId, _currentUserId);
+            _sut.RemovePhotoLike(_photoId, _currentUserId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void NotDoAnythingIfUserHasntVoted_OnAddPhotoVote()
+        public void NotDoAnythingIfUserHasntLiked_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(_photo);
 
-            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+            _uow.Setup(x => x.PhotoLikeRepository.Exists(_photoId, _currentUserId))
                 .Returns(false);
 
             //Act
-            _sut.RemovePhotoVote(_photoId, _currentUserId);
+            _sut.RemovePhotoLike(_photoId, _currentUserId);
 
             //Assert
             _mockRepo.VerifyAll();
         }
 
         [Test]
-        public void RemoveVoteAndDecrementVoteCounts_OnAddPhotoVote()
+        public void RemoveLikeAndDecrementLikeCounts_OnAddPhotoLike()
         {
             //Arrange
             _uow.Setup(x => x.PhotoRepository.GetPhotoWithMinimalData(_photoId))
                 .Returns(_photo);
 
-            _uow.Setup(x => x.PhotoVoteRepository.Exists(_photoId, _currentUserId))
+            _uow.Setup(x => x.PhotoLikeRepository.Exists(_photoId, _currentUserId))
                 .Returns(true);
 
-            _uow.Setup(x => x.PhotoVoteRepository.Remove(_photoId, _currentUserId));
-            _uow.Setup(x => x.UserReceivedVotesRepository.Decrement(_photo.UserId));
+            _uow.Setup(x => x.PhotoLikeRepository.Remove(_photoId, _currentUserId));
+            _uow.Setup(x => x.UserReceivedLikesRepository.Decrement(_photo.UserId));
             _uow.Setup(x => x.SaveChanges());
 
             //Act
-            _sut.RemovePhotoVote(_photoId, _currentUserId);
+            _sut.RemovePhotoLike(_photoId, _currentUserId);
 
             //Assert
             _mockRepo.VerifyAll();

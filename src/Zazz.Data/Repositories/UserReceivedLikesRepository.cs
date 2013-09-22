@@ -9,15 +9,15 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Data.Repositories
 {
-    public class UserReceivedVotesRepository : IUserReceivedVotesRepository
+    public class UserReceivedLikesRepository : IUserReceivedLikesRepository
     {
         private readonly ZazzDbContext _context;
-        private readonly IDbSet<UserReceivedVotes> _dbSet;
+        private readonly IDbSet<UserReceivedLikes> _dbSet;
 
-        public UserReceivedVotesRepository(ZazzDbContext context)
+        public UserReceivedLikesRepository(ZazzDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<UserReceivedVotes>();
+            _dbSet = _context.Set<UserReceivedLikes>();
         }
 
         public int GetCount(int userId)
@@ -32,13 +32,13 @@ namespace Zazz.Data.Repositories
             var newLine = Environment.NewLine;
             var query =
                 "set nocount on" + newLine +
-                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedVotes WHERE UserId = @userId)" + newLine +
+                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedLikes WHERE UserId = @userId)" + newLine +
                     "BEGIN" + newLine +
-                        "UPDATE dbo.UserReceivedVotes SET Count = Count + 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
+                        "UPDATE dbo.UserReceivedLikes SET Count = Count + 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
                     "END" + newLine +
                 "ELSE" + newLine +
                     "BEGIN" + newLine +
-                        "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 1, GETUTCDATE())" + newLine +
+                        "INSERT INTO dbo.UserReceivedLikes (UserId, Count, LastUpdate) VALUES (@userId, 1, GETUTCDATE())" + newLine +
                     "END";
 
             var userIdParam = new SqlParameter("userId", SqlDbType.Int)
@@ -54,13 +54,13 @@ namespace Zazz.Data.Repositories
             var newLine = Environment.NewLine;
             var query =
                 "set nocount on" + newLine +
-                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedVotes WHERE UserId = @userId)" + newLine +
+                "IF EXISTS(SELECT 1 FROM dbo.UserReceivedLikes WHERE UserId = @userId)" + newLine +
                     "BEGIN" + newLine +
-                        "UPDATE dbo.UserReceivedVotes SET Count = Count - 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
+                        "UPDATE dbo.UserReceivedLikes SET Count = Count - 1, LastUpdate = GETUTCDATE() WHERE UserId = @userId" + newLine +
                     "END" + newLine +
                 "ELSE" + newLine +
                     "BEGIN" + newLine +
-                        "INSERT INTO dbo.UserReceivedVotes (UserId, Count, LastUpdate) VALUES (@userId, 0, GETUTCDATE())" + newLine +
+                        "INSERT INTO dbo.UserReceivedLikes (UserId, Count, LastUpdate) VALUES (@userId, 0, GETUTCDATE())" + newLine +
                     "END";
 
             var userIdParam = new SqlParameter("userId", SqlDbType.Int)
