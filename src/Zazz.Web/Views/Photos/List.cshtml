@@ -3,14 +3,14 @@
     ViewBag.Title = "List";
 }
 
-@*@section ScriptsTop
+@section ScriptsTop
 {
     <script id="img-wrapper-tmpl" type="text/x-jquery-tmpl">	
 			<div class="rg-image-wrapper">
 				{{if itemsCount > 1}}
 					<div class="rg-image-nav">
-						<a href="#" class="rg-image-nav-prev">Previous Image</a>
-						<a href="#" class="rg-image-nav-next">Next Image</a>
+						<a class="rg-image-nav-prev">Previous Image</a>
+						<a class="rg-image-nav-next">Next Image</a>
 					</div>
 				{{/if}}
 				<div class="rg-image"></div>
@@ -21,7 +21,7 @@
 					</div>
 				</div>
 			</div>
-		</script>}*@
+		</script>}
 
 <div class="container color-white-bg border-radius-5" style="padding: 0 20px 100px 20px;">
     <div class="row-fluid">
@@ -61,31 +61,20 @@
                 <div class="es-nav"> <span class="es-nav-prev">Previous</span> <span class="es-nav-next">Next</span> </div>
                 <div class="es-carousel">
                     <ul style="width: 1738px; display: block; margin-left: -829px;">
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class="selected"><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;"><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;"><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;"><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
-                        <li style="margin-right: 3px; width: 69px;" class=""><a href="#" style="border-width: 2px;"><img src="~/Images/logo.png" data-large="/Images/logo.png"></a></li>
-                        <li style="margin-right: 3px; width: 69px;"><a href="#" style="border-width: 2px;"><img src="/Images/placeholder.gif" data-large="/Images/placeholder.gif"></a></li>
+                        @{
+                            var counter = 1;
 
+                            foreach (var p in Model.Photos)
+                            {
+                                <li style="margin-right: 3px; width: 69px;" class="@(counter == 1 ? "selected" : null)">
+                                    <a href="#" style="border-width: 2px;">
+                                        <img src="@p.PhotoUrl.SmallLink" data-large="@p.PhotoUrl.OriginalLink">
+                                    </a>
+                                </li>
+
+                                counter++;
+                            }
+                        }
 
                     </ul>
                 </div>
@@ -93,7 +82,7 @@
             <!-- End Elastislide Carousel Thumbnail Viewer --> 
         </div>
         <!-- rg-thumbs --> 
-        <div class="rg-image-wrapper">
+        @*<div class="rg-image-wrapper">
             <div class="rg-image-nav">
                 <a href="#" class="rg-image-nav-prev">Previous Image</a>
                 <a href="#" class="rg-image-nav-next">Next Image</a>      
@@ -105,7 +94,7 @@
                            <p></p>      
                 </div>     
             </div>    
-        </div>
+        </div>*@
 
     </div>
 
