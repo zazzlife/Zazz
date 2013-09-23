@@ -591,7 +591,6 @@
     <Content Include="Views\Facebook\_FacebookPagesList.cshtml" />
     <Content Include="Views\Photos\Crop.cshtml" />
     <Content Include="Views\Photos\_PhotoList.cshtml" />
-    <Content Include="Views\Photos\MainView.cshtml" />
     <Content Include="Views\Photos\_AlbumList.cshtml" />
     <Content Include="Views\Shared\_SingleAlbum.cshtml" />
     <Content Include="Views\Shared\FeedItems\_PhotoFeedSinglePhoto.cshtml" />
