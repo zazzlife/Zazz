@@ -825,6 +825,10 @@ $(function () {
 			},
 			_addImageWrapper = function () {
 
+			    if (!$('#img-wrapper-tmpl').length) {
+			        return;
+			    }
+
 			    // adds the structure for the large image and the navigation buttons (if total items > 1)
 			    // also initializes the navigation events
 
