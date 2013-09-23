@@ -30,7 +30,10 @@
                     <h4><i class="icon-picture icon-2x pull-left"></i>Albums</h4>
                 </div>
                 <div class="offset6 span2 text-right" style="margin-top: 19px">
-                    <a href="#" data-autotext="never" id="newAlbum" class="btn">New album</a>
+                    @if (Model.IsForCurrentUser)
+                    {
+                        <a href="#" data-autotext="never" id="newAlbum" class="btn">New album</a>
+                    }
                 </div>
             </div>
         </div>
@@ -40,7 +43,7 @@
         <div class="span6">
             <div class="row-fluid padding-top-17 margin-bottam-20">
                 <div class="span12 text-center">
-                    <a class="list-header not-active" href="@Url.Action("List", "Photos", new {id=Model.UserId, page=1})">PHOTOS</a>
+                    <a class="list-header not-active" href="@Url.Action("List", "Photos", new { id = Model.UserId, page = 1 })">PHOTOS</a>
                 </div>
             </div>
         </div>
