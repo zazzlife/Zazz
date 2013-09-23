@@ -655,16 +655,16 @@ hr.gold-line {
 
 
 .banner {
-    border-bottom: 3px solid #FBCE0E;
-    border-left: 3px solid #FBCE0E;
-    border-radius: 0 0 10px 10px;
-    border-right: 3px solid #FBCE0E;
+    text-align: center;
 }
 
     .banner img {
+        border-bottom: 3px solid #FBCE0E;
+        border-left: 3px solid #FBCE0E;
+        border-right: 3px solid #FBCE0E;
         border-radius: 0 0 7px 7px;
-        width: 100%;
-        max-height: 325px;
+        width: 1050px;
+        height: 365px;
     }
 
 .club-details {
@@ -1848,10 +1848,10 @@ a:hover, a:focus {
     width: auto;
 }
 
-.img-box img {
-    width: 100%;
-    height: 100%;
-}
+    .img-box img {
+        width: 100%;
+        height: 100%;
+    }
 
 .img-box-2 {
     float: left;
