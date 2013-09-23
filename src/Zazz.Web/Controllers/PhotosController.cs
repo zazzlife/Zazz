@@ -95,7 +95,7 @@ namespace Zazz.Web.Controllers
                          UserDisplayName = UserService.GetUserDisplayName(id)
                      };
 
-            return View("MainView", vm);
+            return View(vm);
         }
 
         public ActionResult Albums(int id)

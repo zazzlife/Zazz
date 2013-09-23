@@ -617,6 +617,7 @@
     <Content Include="Views\Shared\_CategoryStatusItem.cshtml" />
     <Content Include="Views\Shared\_EventPartialSmall.cshtml" />
     <Content Include="Views\Photos\Albums.cshtml" />
+    <Content Include="Views\Photos\List.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
