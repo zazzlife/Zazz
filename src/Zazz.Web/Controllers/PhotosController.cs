@@ -43,11 +43,8 @@ namespace Zazz.Web.Controllers
             return RedirectToAction("List", new { id = userId, page = 1 });
         }
 
-        public ActionResult List(int id, int? albumId, int page = 1)
+        public ActionResult List(int id, int? albumId)
         {
-            const int PAGE_SIZE = 30;
-            var skip = (page - 1) * PAGE_SIZE;
-
             var currentUserId = 0;
             if (Request.IsAuthenticated)
                 currentUserId = UserService.GetUserId(User.Identity.Name);
@@ -58,8 +55,6 @@ namespace Zazz.Web.Controllers
 
             var photos = query
                 .OrderBy(p => p.Id)
-                .Skip(skip)
-                .Take(PAGE_SIZE)
                 .Select(p => new
                              {
                                  id = p.Id,
