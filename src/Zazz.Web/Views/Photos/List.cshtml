@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PhotoListViewModel
+@{
     ViewBag.Title = "List";
 }
 
@@ -25,8 +26,7 @@
         <div class="span6">
             <div class="row-fluid padding-top-17 margin-bottam-20">
                 <div class="span12 text-center">
-                    <span class="list-header not-active">ALBUMS
-                    </span>
+                    <a class="list-header not-active" href="@Url.Action("Albums", "Photos", new {id=Model.UserId})">ALBUMS</a>
                 </div>
             </div>
         </div>
