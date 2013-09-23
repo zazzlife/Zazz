@@ -3,6 +3,17 @@ using Zazz.Core.Models;
 
 namespace Zazz.Web.Models
 {
+    public class PhotoListViewModel
+    {
+        public int UserId { get; set; }
+
+        public int CurrentUserId { get; set; }
+
+        public bool IsForCurrentUser { get; set; }
+
+        public List<PhotoViewModel> Photos { get; set; }
+    }
+
     public class MainPhotoPageViewModel
     {
         public PhotoViewType ViewType { get; set; }

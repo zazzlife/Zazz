@@ -86,13 +86,12 @@ namespace Zazz.Web.Controllers
             }
 
 
-            var vm = new MainPhotoPageViewModel
+            var vm = new PhotoListViewModel
                      {
                          IsForCurrentUser = currentUserId == id,
-                         Photos = photosVm,
+                         CurrentUserId = currentUserId,
                          UserId = id,
-                         ViewType = PhotoViewType.Photos,
-                         UserDisplayName = UserService.GetUserDisplayName(id)
+                         Photos = photosVm
                      };
 
             return View(vm);
