@@ -391,6 +391,7 @@
     <Content Include="Content\bootstrap-overrides.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\elastislide.css" />
     <Content Include="Content\fineuploader.css" />
     <Content Include="Content\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome.css" />
@@ -406,6 +407,7 @@
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\Selectyze.jquery.css" />
+    <Content Include="Content\slider-style.css" />
     <Content Include="Content\social-buttons.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\themes\jqueryui-bootstrap\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -434,6 +436,8 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\black.png" />
     <Content Include="Images\home1.png" />
     <Content Include="Images\home2.png" />
     <Content Include="Images\home3.png" />
@@ -467,7 +471,10 @@
     <Content Include="Images\loading.gif" />
     <Content Include="Images\m.png" />
     <Content Include="Images\mcgill.png" />
+    <Content Include="Images\nav.png" />
+    <Content Include="Images\nav_thumbs.png" />
     <Content Include="Images\p.png" />
+    <Content Include="Images\pattern.png" />
     <Content Include="Images\Register-input.png" />
     <Content Include="Images\Register.png" />
     <Content Include="Images\select2-spinner.gif" />
@@ -478,6 +485,7 @@
     <Content Include="Images\ubc.png" />
     <Content Include="Images\victoria-uni.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\views.png" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\comments.js" />
@@ -491,6 +499,7 @@
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap.js" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Scripts\gallery.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery.caret.js" />
