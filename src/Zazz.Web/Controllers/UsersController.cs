@@ -247,21 +247,30 @@ namespace Zazz.Web.Controllers
             return user.AccountType == AccountType.User ? EditUser(user) : EditClub(user);
         }
 
-        private ActionResult EditUser(User user)
+        [HttpGet]
+        public ActionResult EditUser(User user)
         {
-            var vm = new EditUserProfileViewModel
-                     {
-                         Gender = user.UserDetail.Gender,
-                         FullName = user.UserDetail.FullName,
-                         CityId = user.UserDetail.CityId,
-                         Cities = StaticDataRepository.GetCities(),
-                         SchoolId = user.UserDetail.SchoolId,
-                         Schools = StaticDataRepository.GetSchools(),
-                         MajorId = user.UserDetail.MajorId,
-                         Majors = StaticDataRepository.GetMajors(),
-                         SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
-                         SyncFbEvents = user.Preferences.SyncFbEvents
-                     };
+            EditUserProfileViewModel vm;
+            if (user != null)
+            {
+                vm = new EditUserProfileViewModel
+                {
+                    Gender = user.UserDetail.Gender,
+                    FullName = user.UserDetail.FullName,
+                    CityId = user.UserDetail.CityId,
+                    Cities = StaticDataRepository.GetCities(),
+                    SchoolId = user.UserDetail.SchoolId,
+                    Schools = StaticDataRepository.GetSchools(),
+                    MajorId = user.UserDetail.MajorId,
+                    Majors = StaticDataRepository.GetMajors(),
+                    SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
+                    SyncFbEvents = user.Preferences.SyncFbEvents
+                };
+            }
+            else
+            {
+                vm = new EditUserProfileViewModel();
+            }
 
             return View("EditUser", vm);
         }
@@ -296,18 +305,28 @@ namespace Zazz.Web.Controllers
             return View("EditUser", vm);
         }
 
-        private ActionResult EditClub(User user)
+        [HttpGet]
+        public ActionResult EditClub(User user)
         {
-            var vm = new EditClubProfileViewModel
-                     {
-                         ClubAddress = user.ClubDetail.Address,
-                         ClubName = user.ClubDetail.ClubName,
-                         ClubType = user.ClubDetail.ClubType,
-                         SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
-                         SyncFbEvents = user.Preferences.SyncFbEvents,
-                         SyncFbImages = user.Preferences.SyncFbImages,
-                         SyncFbPosts = user.Preferences.SyncFbPosts
-                     };
+            EditClubProfileViewModel vm;
+
+            if (user != null)
+            {
+                vm = new EditClubProfileViewModel
+                {
+                    ClubAddress = user.ClubDetail.Address,
+                    ClubName = user.ClubDetail.ClubName,
+                    ClubType = user.ClubDetail.ClubType,
+                    SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
+                    SyncFbEvents = user.Preferences.SyncFbEvents,
+                    SyncFbImages = user.Preferences.SyncFbImages,
+                    SyncFbPosts = user.Preferences.SyncFbPosts
+                };
+            }
+            else
+            {
+                vm = new EditClubProfileViewModel();
+            }
 
             return View("EditClub", vm);
         }
