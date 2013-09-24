@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
@@ -349,6 +350,12 @@ namespace Zazz.Web.Controllers
                 user.Preferences.SyncFbPosts = vm.SyncFbPosts;
 
                 _uow.SaveChanges();
+
+                var displayName = String.IsNullOrWhiteSpace(vm.ClubName)
+                    ? user.Username
+                    : vm.ClubName;
+
+                UserService.ChangeCachedUserDisplayName(user.Id, displayName);
 
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
