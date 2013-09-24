@@ -351,12 +351,7 @@ namespace Zazz.Web.Controllers
 
                 _uow.SaveChanges();
 
-                var displayName = String.IsNullOrWhiteSpace(vm.ClubName)
-                    ? user.Username
-                    : vm.ClubName;
-
-                UserService.ChangeCachedUserDisplayName(user.Id, displayName);
-
+                _cacheService.RemoveUserDisplayName(user.Id);
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
 
