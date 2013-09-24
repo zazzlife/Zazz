@@ -23,8 +23,6 @@ namespace Zazz.Core.Interfaces.Services
 
         string GetUserDisplayName(string username);
 
-        void ChangeCachedUserDisplayName(int userId, string newName);
-
         string GetAccessToken(int userId, OAuthProvider provider);
 
         bool OAuthAccountExists(int userId, OAuthProvider provider);

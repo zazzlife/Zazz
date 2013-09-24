@@ -613,24 +613,5 @@ namespace Zazz.UnitTests.Infrastructure.Services
             Assert.AreEqual(photo.Id, user.ClubDetail.CoverPhotoId);
             _mockRepo.VerifyAll();
         }
-
-        [Test]
-        public void RemoveOldValueThenAddNewValueToCache_OnChangeCachedUserDisplayName()
-        {
-            //Arrange
-            var userId = 123123;
-            var newName = "Soroush";
-
-            _cacheService.Setup(x => x.RemoveUserDisplayName(userId));
-            _cacheService.Setup(x => x.AddUserDiplayName(userId, newName));
-
-            //Act
-            _sut.ChangeCachedUserDisplayName(userId, newName);
-
-            //Assert
-            _mockRepo.VerifyAll();
-        }
-
-
     }
 }

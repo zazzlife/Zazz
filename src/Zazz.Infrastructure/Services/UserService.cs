@@ -124,12 +124,6 @@ namespace Zazz.Infrastructure.Services
             return GetUserDisplayName(userId);
         }
 
-        public void ChangeCachedUserDisplayName(int userId, string newName)
-        {
-            _cacheService.RemoveUserDisplayName(userId);
-            _cacheService.AddUserDiplayName(userId, newName);
-        }
-
         public string GetAccessToken(int userId, OAuthProvider provider)
         {
             return _uoW.LinkedAccountRepository.GetAccessToken(userId, provider);
