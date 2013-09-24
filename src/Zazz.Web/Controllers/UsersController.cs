@@ -337,7 +337,7 @@ namespace Zazz.Web.Controllers
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true, false, true);
             if (user.AccountType != AccountType.Club)
                 throw new SecurityException();
-
+            
             if (ModelState.IsValid)
             {
                 user.ClubDetail.Address = vm.ClubAddress;
