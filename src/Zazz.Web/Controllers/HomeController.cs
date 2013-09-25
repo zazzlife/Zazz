@@ -54,7 +54,7 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Categories(string @select)
         {
-            var userId = UserService.GetUserId(User.Identity.Name);
+            var user = UserService.GetUser(User.Identity.Name);
             var availableCategories = StaticDataRepository.GetCategories().ToList();
             var selectedCategories = String.IsNullOrEmpty(@select)
                                    ? Enumerable.Empty<string>()
@@ -65,7 +65,7 @@ namespace Zazz.Web.Controllers
                                                                            StringComparer.InvariantCultureIgnoreCase))
                                    .Select(t => t.Id);
 
-            var feeds = _feedHelper.GetCategoryFeeds(userId, selectedCategoriesId.ToList());
+            var feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList());
 
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
@@ -74,7 +74,9 @@ namespace Zazz.Web.Controllers
                      {
                          AvailableCategories = availableCategories.Select(t => t.Name),
                          SelectedCategories = selectedCategories,
-                         Feeds = feeds
+                         Feeds = feeds,
+                         AccountType = user.AccountType,
+                         HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook)
                      };
 
             return View(vm);

@@ -1,9 +1,110 @@
-﻿@model CategoriesPageViewModel
+﻿@using Zazz.Core.Models.Data.Enums
+@using Zazz.Web.Controllers
+@model CategoriesPageViewModel
 @{
     ViewBag.Title = "Tags";
+
+    IEnumerable<CategoryStatViewModel> categoryStats = Enumerable.Empty<CategoryStatViewModel>();
+    var currentUserDisplayName = "Unknown user";
+    var currentUserId = 0;
+
+    var controller = ViewContext.Controller as BaseController;
+    if (controller != null)
+    {
+        categoryStats = controller.GetTagStats();
+        currentUserDisplayName = controller.GetCurrentUserDisplayName();
+        currentUserId = controller.GetCurrentUserId();
+    }
 }
-    
-<div>
+<div class="container" style="margin-top: -13px;">
+    <div class="row-fluid">
+
+        @*LEFT SIDE*@
+        <div class="span3 margin-top-15">
+            <div class="user">
+                <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
+                <a href="@Url.Action("Profile", "Users", new { id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString() })" class="username">@currentUserDisplayName</a>
+            </div>
+
+
+            <ul class="nav nav-stacked right-nav">
+                <li>
+                    <a href="#" id="notifications-link" data-toggle="popover" data-html="true" data-original-title="Notifications"
+                        data-title="Notifications"
+                        data-content="<div class='text-center'><i class='icon-spinner icon-spin' style='font-size:30px;'></i></div>">
+                        <i class="icon-exclamation-sign"></i>&nbsp; Notifications
+                        @Html.Action("GetNewNotificationsCount", "Notifications")
+                    </a>
+                </li>
+                <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>&nbsp; Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
+                <li><a href="@Url.Action("List", "Events")"><i class="icon-calendar"></i>&nbsp; Events</a></li>
+                <li><a href="@Url.Action("Index", "Photos")"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="#"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
+                @if (Model.HasFacebookAccount)
+                {
+                    if (Model.AccountType == AccountType.Club)
+                    {
+                    <li><a href="#manageFbPagesModal" data-toggle="modal" id="manageFbPages"><i class="icon-facebook"></i>&nbsp; Manage Facebook Pages</a></li>
+                    }
+                }
+                else
+                {
+                    <li><a href="@Url.Action("OAuth", "Account", new {id="facebook"})"><i class="icon-facebook"></i>&nbsp; Link facebook account</a></li>
+                }
+            </ul>
+            
+            @foreach (var c in categoryStats.Take(5))
+            {
+                Html.RenderPartial("_CategoryStatusItem", c);
+            }
+
+        </div>
+
+        @*CENTER*@
+
+        <div class="span6 color-white-bg box-shadow padding-L-R-10 padding-top-17 padding-bottom-100 margin-left-10">
+            <div style="margin: 15px 0 35px 18px;">
+                <select multiple="multiple" id="tagsSelect" style="width: 512px;">
+                    @foreach (var t in Model.AvailableCategories)
+                    {
+                        <option value="@t" @(Model.SelectedCategories.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
+                    }
+                </select>
+            </div>
+
+            @Html.Partial("_FeedsPartial", Model.Feeds)
+        </div>
+        
+        @*RIGHT*@
+        <div class="span3" style="margin-top: 253px;margin-left: 10px;">
+            @foreach (var c in categoryStats.Skip(5).Take(5))
+            {
+                Html.RenderPartial("_CategoryStatusItem", c);
+            }
+        </div>
+
+    </div>
+</div>
+
+@if (Model.AccountType == AccountType.Club && Model.HasFacebookAccount)
+{
+    <div class="modal hide fade" id="manageFbPagesModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Manage Facebook Pages</h3>
+        </div>
+
+        <div class="modal-body">
+            <i class="icon-refresh icon-spin icon-large"></i>
+        </div>
+
+        <div class="modal-footer">
+            <a href="#" data-dismiss="modal" class="btn">Close</a>
+        </div>
+    </div>
+}
+
+@*<div>
     <div class="page-header" style="margin-top: 43px; padding-left: 0;">
     
         <div class="margin-ten">
@@ -22,7 +123,7 @@
         @Html.Partial("_FeedsPartial", Model.Feeds)
 
     </div>
-</div>
+</div>*@
 
 @section Scripts
 {
