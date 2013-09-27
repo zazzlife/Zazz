@@ -1036,8 +1036,8 @@ li.new-notification {
     width: 260px;
     background-color: white;
     margin-bottom: 10px;
-    -ms-border-radius: 4px;
-    border-radius: 4px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
     -webkit-box-shadow: 0 0 3px #000000;
     -ms-box-shadow: 0 0 3px #000000;
     box-shadow: 0 0 3px #000000;
