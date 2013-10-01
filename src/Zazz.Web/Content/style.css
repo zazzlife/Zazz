@@ -523,6 +523,11 @@ hr.gold-line {
     font-weight: 600;
 }
 
+.event-description {
+    color: #000000;
+
+}
+
 /*.event-city-name {
     position: relative;
     top: 5px;
