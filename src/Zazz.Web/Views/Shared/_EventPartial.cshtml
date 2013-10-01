@@ -20,15 +20,18 @@
 
                         @if (Model.IsFacebookEvent)
                         {
-                            <li><a href="https://www.facebook.com/events/@Model.FacebookEventId.Value">
-                                <img src="~/Images/f.png" /></a></li>
+                            <li>
+                                <a href="https://www.facebook.com/events/@Model.FacebookEventId.Value">
+                                    <img src="~/Images/f.png" />
+                                </a>
+                            </li>
                         }
 
                         
                         
                     </ul>
                 </div>
-                <h3 class="event-date">Mon</h3>
+                <h3 class="event-date">@Model.FriendlyDate</h3>
             </div>
         </div>
     </div>

@@ -64,5 +64,8 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public int? PhotoId { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string FriendlyDate { get; set; }
     }
 }
