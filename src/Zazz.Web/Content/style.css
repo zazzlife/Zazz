@@ -513,8 +513,13 @@ hr.gold-line {
     margin-top: 10px;
 }
 
+.event .media {
+    margin: 0;
+}
+
 .event-img {
     width: 110px;
+    margin-right: 10px;
 }
 
 .event-title {
@@ -531,6 +536,7 @@ hr.gold-line {
 
 .event-description {
     color: #000000;
+    margin-bottom: 20px;
 }
 
 .event-socal {
