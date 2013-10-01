@@ -1034,8 +1034,8 @@ li.new-notification {
 ***************************************/
 
 .category {
-    height: 90px;
-    width: 260px;
+    height: 75px;
+    width: 220px;
     background-color: white;
     margin-bottom: 10px;
     -ms-border-radius: 2px;
@@ -1057,7 +1057,7 @@ li.new-notification {
 .category-img {
     float: left;
     background-color: #f0f0f0;
-    width: 85px;
+    width: 70px;
     height: 100%;
     border-right: 1px solid #c9c9c9;
 }
@@ -1069,6 +1069,7 @@ li.new-notification {
 
 .category-text-header {
     font-weight: 600;
+    margin: 0;
 }
 
 /***************************************
