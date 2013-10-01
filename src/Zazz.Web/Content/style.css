@@ -523,6 +523,13 @@ hr.gold-line {
     font-weight: 600;
 }
 
+    .event-title > small {
+        color: #e7c400;
+        -ms-text-shadow: 1px 1px 1px #524a1e;
+        -webkit-text-shadow: 1px 1px 1px #524a1e; 
+        text-shadow: 1px 1px 1px #524a1e;
+    }
+
 .event-description {
     color: #000000;
 }

@@ -129,6 +129,7 @@ namespace Zazz.Web.Controllers
                              .Take(PAGE_SIZE)
                              .Select(e => new EventViewModel
                                           {
+                                              UserId = e.UserId,
                                               City = e.City,
                                               Id = e.Id,
                                               CreatedDate = e.CreatedDate,
@@ -149,6 +150,8 @@ namespace Zazz.Web.Controllers
 
             foreach (var e in events)
             {
+                e.OwnerName = UserService.GetUserDisplayName(e.UserId);
+
                 if (e.IsFacebookEvent)
                 {
                     e.ImageUrl = new PhotoLinks(e.FacebookPhotoUrl);
