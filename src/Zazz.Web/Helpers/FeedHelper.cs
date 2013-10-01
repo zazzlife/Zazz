@@ -160,7 +160,8 @@ namespace Zazz.Web.Helpers
                                    ? new PhotoLinks(feed.EventFeed.Event.FacebookPhotoLink)
                                    : null,
                     IsDateOnly = feed.EventFeed.Event.IsDateOnly,
-                    FacebookEventId = feed.EventFeed.Event.FacebookEventId
+                    FacebookEventId = feed.EventFeed.Event.FacebookEventId,
+                    OwnerName = _userService.GetUserDisplayName(feed.EventFeed.Event.UserId)
                 };
 
                 feedVm.Comments.CommentType = CommentType.Event;
