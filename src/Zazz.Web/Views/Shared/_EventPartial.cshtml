@@ -3,7 +3,7 @@
     Layout = null;
 }
 
-<div class="border-2 color-white-bg margin-top-10 padding-5">
+<div class="event">
     <div class="media">
         <a href="@Url.Action("Show", "Events" , new {id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString()})" class="pull-left">
             <img src="@Model.ImageUrl.SmallLink"></a>

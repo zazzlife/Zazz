@@ -503,7 +503,17 @@ hr.gold-line {
 /***************************************
         Events
 ***************************************/
-.event-city-name {
+
+.event {
+    background-color: #d5d5d5;
+    border: 2px solid #FBCE0E;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+/*.event-city-name {
     position: relative;
     top: 5px;
     font-size: 14px;
@@ -555,10 +565,6 @@ hr.gold-line {
 
 .event-arrow-right {
     border-right: 10px solid #11aa7f;
-    /*-moz-transition: border-right 50ms;
-    -o-transition: border-right 50ms;
-    -webkit-transition: border-right 50ms;
-    transition: border-right 50ms;*/
 }
 
     .event-arrow-right:after {
@@ -581,10 +587,6 @@ hr.gold-line {
 
 .event-arrow-left {
     border-left: 10px solid #11aa7f;
-    /*-moz-transition: border-right 50ms;
-    -o-transition: border-right 50ms;
-    -webkit-transition: border-right 50ms;
-    transition: border-right 50ms;*/
 }
 
     .event-arrow-left:after {
@@ -603,7 +605,7 @@ hr.gold-line {
         transform: rotate(90deg);
         margin-top: -15.5px;
         margin-left: 10px;
-    }
+    }*/
 
 /***************************************
         Profile Page
