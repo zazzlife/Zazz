@@ -148,7 +148,7 @@ namespace Zazz.Infrastructure.Services
                 var lastFeed = _uow.FeedRepository.GetUserLastFeed(photo.UserId);
 
                 if (lastFeed != null && lastFeed.FeedType == FeedType.Photo && //last feed check
-                    lastFeed.Time >= DateTime.UtcNow.AddDays(-1) && //last upload date check
+                    lastFeed.Time >= DateTime.UtcNow.AddMinutes(-1) && //last upload date check
                     lastFeed.FeedPhotos.Count < 9 && //maximum number of photos check 
                     lastFeed.FeedPhotos.First().Photo.AlbumId == photo.AlbumId  //same album check
                     )

@@ -403,7 +403,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         }
 
         [Test]
-        public void CreateANewFeedIfLastFeedWasPhotoAndOverADayAgo_OnSavePhoto()
+        public void CreateANewFeedIfLastFeedWasPhotoAndOverAMinAgo_OnSavePhoto()
         {
             //Arrange
             var photo = new Photo
@@ -415,7 +415,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 Id = 444,
                 FeedType = FeedType.Photo,
-                Time = DateTime.UtcNow.AddDays(-1)
+                Time = DateTime.UtcNow.AddMinutes(-1)
             };
 
             var resizedImageStream = new MemoryStream(new byte[] { 4, 5, 6 });
