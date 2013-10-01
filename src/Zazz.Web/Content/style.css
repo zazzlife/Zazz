@@ -518,6 +518,11 @@ hr.gold-line {
     height: 110px;
 }
 
+.event-title {
+    margin-top: 0;
+    font-weight: 600;
+}
+
 /*.event-city-name {
     position: relative;
     top: 5px;

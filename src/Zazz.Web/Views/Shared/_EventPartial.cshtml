@@ -8,8 +8,8 @@
         <a href="@Url.Action("Show", "Events" , new {id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString()})" class="pull-left">
             <img class="event-img" src="@Model.ImageUrl.SmallLink"></a>
         <div class="media-body">
-            <h1 class="event-h">@Model.Name</h1>
-            <p class="event-p">
+            <h2 class="event-title">@Model.Name</h2>
+            <p class="event-description">
                 @Model.Description
             </p>
             <div class="row-fluid">
