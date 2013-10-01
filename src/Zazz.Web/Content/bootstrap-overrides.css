@@ -309,11 +309,6 @@ input, textarea, select {
 }
  
 
-.event-date {
-    display: block;
-    line-height: 25px;
-    padding-top: 9px;
-}
 .counter {
   display: block;  
   padding-top: 25px;

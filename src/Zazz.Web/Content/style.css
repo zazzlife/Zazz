@@ -525,7 +525,36 @@ hr.gold-line {
 
 .event-description {
     color: #000000;
+}
 
+.event-socal {
+    float: left;
+    height: 20px;
+}
+
+    .event-socal ul {
+        margin-left: 0;
+    }
+
+        .event-socal ul li {
+            display: inline;
+            text-decoration: none;
+            margin: 0;
+        }
+
+    .event-socal li a:hover {
+        -ms-opacity: 0.5;
+        opacity: 0.5;
+    }
+
+.event-date {
+    float: right;
+    padding: 1px 10px;
+    margin: -19px 5px 0 0;
+    background-color: white;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+    font-weight: 600;
 }
 
 /*.event-city-name {
@@ -1798,24 +1827,7 @@ a:hover, a:focus {
     text-align: justify;
 }
 
-.event-socal {
-    height: 20px;
-    width: auto;
-}
 
-    .event-socal ul {
-        margin-left: 0 !important;
-    }
-
-        .event-socal ul li {
-            display: inline;
-            text-decoration: none;
-            margin: 0;
-        }
-
-    .event-socal li a:hover {
-        opacity: 0.5;
-    }
 
 .event-read-more {
     color: #000000;

@@ -5,31 +5,30 @@
 
 <div class="event">
     <div class="media">
-        <a href="@Url.Action("Show", "Events" , new {id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString()})" class="pull-left">
+        <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })" class="pull-left">
             <img class="event-img" src="@Model.ImageUrl.SmallLink"></a>
         <div class="media-body">
             <h2 class="event-title">@Model.Name</h2>
             <p class="event-description">
                 @Model.Description
             </p>
-            <div class="row-fluid">
-                <div class="span6 event-socal">
+            <div>
+                <div class="event-socal">
                     <ul>
                         @*<li><a href="#"><img src="~/Images/p.png" /></a></li>*@
-                        
+                        @*<li><a href="#"><img src="~/Images/t.png" /></a></li>*@
+
                         @if (Model.IsFacebookEvent)
                         {
-                            <li><a href="https://www.facebook.com/events/@Model.FacebookEventId.Value"><img src="~/Images/f.png" /></a></li>
+                            <li><a href="https://www.facebook.com/events/@Model.FacebookEventId.Value">
+                                <img src="~/Images/f.png" /></a></li>
                         }
 
                         
-                        @*<li><a href="#"><img src="~/Images/t.png" /></a></li>*@
+                        
                     </ul>
                 </div>
-                <div class="span1"></div>
-                <div class="span5 event-read-more">
-                    <a href="#">READ MORE</a>
-                </div>
+                <h3 class="event-date">Mon</h3>
             </div>
         </div>
     </div>
