@@ -511,6 +511,11 @@ hr.gold-line {
     border-radius: 5px;
     padding: 5px;
     margin-top: 10px;
+    height: 110px;
+}
+
+.event-img {
+    height: 110px;
 }
 
 /*.event-city-name {
