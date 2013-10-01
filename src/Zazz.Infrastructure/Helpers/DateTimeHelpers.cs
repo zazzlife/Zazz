@@ -74,5 +74,35 @@ namespace Zazz.Infrastructure.Helpers
                 return years <= 1 ? "one year ago" : years + " years ago";
             }
         }
+
+        public static string GetEventFriendlyDate(this DateTime dateTime)
+        {
+            var now = DateTime.UtcNow;
+
+            if (dateTime > now.AddDays(7))
+            {
+                //show the day in month number
+                var day = dateTime.Day;
+                switch (day)
+                {
+                    case 1:
+                        return String.Format("{0}st", day);
+                        break;
+                    case 2:
+                        return String.Format("{0}nd", day);
+                        break;
+                    case 3:
+                        return String.Format("{0}rd", day);
+                        break;
+                    default:
+                        return String.Format("{0}th", day);
+                }
+            }
+            else
+            {
+                //show week day name
+                return dateTime.DayOfWeek.ToString().Substring(0, 3);
+            }
+        }
     }
 }
