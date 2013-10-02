@@ -1,25 +1,25 @@
 ﻿// ADD
-$(document).on('click', '#submitPostBtn', function () {
 
-    var $self = $(this);
-
-    showCategories($self, function($popover, $btn) {
+$(document).on('click', '#selectPostCategoriesBtn', function() {
+    var $btn = $(this);
+    var $modal = $('#selectPostCategoryModal');
         
-        var categories = [];
+    var categories = [];
 
-        $('.popover-content .category-select-btn.active').each(function () {
-            var id = $(this).data('id');
-            if (id) {
-                categories.push(id);
-            }
-
-        });
+    $('#selectPostCategoryModal .category-select-btn.active').each(function () {
+        var id = $(this).data('id');
+        if (id) {
+            categories.push(id);
+        }
+    });
+    
 
         var message = $('#postInput').val();
-        var toUser = $self.data('touser');
+        var toUser = $('#submitPostBtn').data('touser');
 
         if (!message) {
             toastr.error("Post message cannot be empty!");
+            $modal.modal('hide');
             return;
         }
 
@@ -35,13 +35,13 @@ $(document).on('click', '#submitPostBtn', function () {
                 categories: categories
             },
             traditional: true,
-            error: function () {
+            error: function() {
                 toastr.error('An error occured, Please try again later.');
                 hideBtnBusy($btn, "Submit");
-                
-                $self.popover('destroy');
+
+                $modal.modal('hide');
             },
-            success: function (res) {
+            success: function(res) {
                 var feed = $(res.trim());
                 feed.prependTo($('#feedsContainer')).hide().slideDown();
 
@@ -50,11 +50,10 @@ $(document).on('click', '#submitPostBtn', function () {
 
                 $('#postInput').val("");
 
-                $self.popover('destroy');
+                $modal.modal('hide');
             }
         });
 
-    })
 });
 
 

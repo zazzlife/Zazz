@@ -257,7 +257,7 @@ $(document).on('click', '#uploadImg', function () {
 
     var categories = [];
 
-    $('.category-select-btn.active').each(function () {
+    $('#uploadPicModal .category-select-btn.active').each(function () {
         var id = $(this).data('id');
         if (id) {
             categories.push(id);
@@ -485,45 +485,6 @@ function replaceLinksWithAnchorTags() {
         text = text.replace(exp, "<a href='$1'>$1</a>");
 
         $self.html(text);
-    });
-}
-
-/********************************
-    Open categories
-*********************************/
-
-function showCategories($elem, cb) {
-
-    if (!categoriesSelectHtml) {
-        return;
-    }
-
-    var $self = $elem;
-
-    $self.popover('destroy');
-
-    $self.popover({
-        html: true,
-        placement: 'bottom',
-        title: 'Select Categories',
-        content: categoriesSelectHtml
-    });
-
-    $self.popover('show');
-
-    var $popover = $self.next('.popover');
-    $popover.css('width', '535px');
-    $popover.css('max-width', '535px');
-
-    calculatePopoverPosition($self, $popover);
-
-    var $submitBtn = $popover.find('button[data-category-submit]');
-    $submitBtn.on('click', function () {
-
-        cb($popover, $submitBtn);
-
-        $submitBtn.off('click');
-
     });
 }
 
