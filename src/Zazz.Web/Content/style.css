@@ -1104,8 +1104,16 @@ li.new-notification {
 .category-text {
     z-index: 100;
     position: absolute;
-    left: 37%;
     top: 5px;
+}
+
+.category-left .category-text {
+    left: 37%;
+}
+
+.category-right .category-text {
+    left: 10px;
+    right: 37%;
 }
 
 .category-text-header {
