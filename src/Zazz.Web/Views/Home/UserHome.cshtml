@@ -55,7 +55,7 @@
                 }
             </ul>
             
-            @foreach (var c in categoryStats.Take(5))
+            @foreach (var c in categoryStats.Take(6))
             {
                 Html.RenderPartial("_CategoryStatusItem", c);
             }
@@ -72,7 +72,7 @@
         
         @*RIGHT*@
         <div class="span3" style="margin-top: 253px;margin-left: 10px;">
-            @foreach (var c in categoryStats.Skip(5).Take(5))
+            @foreach (var c in categoryStats.Skip(6))
             {
                 Html.RenderPartial("_CategoryStatusItem", c);
             }
