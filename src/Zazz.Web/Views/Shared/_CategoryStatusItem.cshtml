@@ -1,7 +1,7 @@
 ﻿@model CategoryStatViewModel
 
 <div class="category">
-    <img src="~/Images/category-boxes/01.png" class="category-img" />
+    <a href="@Url.Action("Categories", "Home", new { @select=Model.CategoryName })"><img src="@String.Format("/Images/category-boxes/{0}.png", Model.CategoryName)" class="category-img" /></a>
     <div class="category-text">
         <a href="@Url.Action("Categories", "Home", new { @select=Model.CategoryName })"><h5 class="category-text-header">@Model.CategoryName</h5></a>
         <p>@Model.UsersCount @(Model.UsersCount == 1 ? "person is" : "people are") talking about this.</p>
