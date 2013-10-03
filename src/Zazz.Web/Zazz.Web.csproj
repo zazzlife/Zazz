@@ -438,6 +438,7 @@
     <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\black.png" />
+    <Content Include="Images\category-boxes\01.png" />
     <Content Include="Images\home1.png" />
     <Content Include="Images\home2.png" />
     <Content Include="Images\home3.png" />
