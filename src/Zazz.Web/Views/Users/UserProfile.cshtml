@@ -133,6 +133,7 @@
         <div class="span3" style="padding-top: 22px;">
             @foreach (var c in Model.CategoriesStats)
             {
+                c.IsRightSide = true;
                 Html.RenderPartial("_CategoryStatusItem", c);
             }
         </div>

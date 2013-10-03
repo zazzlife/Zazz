@@ -74,6 +74,7 @@
         <div class="span3" style="margin-top: 253px;margin-left: 10px;">
             @foreach (var c in categoryStats.Skip(6))
             {
+                c.IsRightSide = true;
                 Html.RenderPartial("_CategoryStatusItem", c);
             }
         </div>
