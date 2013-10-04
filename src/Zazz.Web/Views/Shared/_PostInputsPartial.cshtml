@@ -46,7 +46,10 @@
                 @foreach (var c in categories)
                 {
                     <li>
-                        <button data-id="@c.Id" type="button" class="btn icon-beer category-select-btn" data-toggle="button"></button>
+                        <button data-id="@c.Id" type="button" class="btn category-select-btn " data-toggle="button">
+                            <img data-active-url="@String.Format("/Images/categories/{0}-active.png", c.Name)" data-default-url="@String.Format("/Images/categories/{0}.png", c.Name)"
+                                 src="@String.Format("/Images/categories/{0}.png", c.Name)"/>
+                        </button>
                         <div class="text-center">@c.Name</div>
                     </li>
                 }
