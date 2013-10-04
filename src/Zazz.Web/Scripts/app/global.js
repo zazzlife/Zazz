@@ -488,6 +488,20 @@ function replaceLinksWithAnchorTags() {
     });
 }
 
+/********************************
+    Showing active category icon for selected categories
+*********************************/
+
+$(document).on('click', '.category-select-btn', function () {
+    var $self = $(this);
+    var $img = $self.find('img');
+
+    var url = $self.hasClass('active') ? $img.attr('data-active-url') : $img.attr('data-default-url');
+
+    $img.attr('src', url);
+
+});
+
 $(function () {
 
     applyPageStyles();
