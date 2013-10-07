@@ -46,6 +46,15 @@
             @Model.Post.PostText
         </p>
         
+        @if (Model.Post.Categories != null)
+        {
+            foreach (var category in Model.Post.Categories)
+            {
+                <img class="category-post-img" src="@String.Format("/Images/categories/{0}.png", category)"/>
+            }
+        }
+        
+        <div class="clearfix"></div>
         <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Html.RelativeTime(Model.Time)</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 

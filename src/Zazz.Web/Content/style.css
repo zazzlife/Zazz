@@ -432,6 +432,7 @@ hr.gold-line {
     margin: -15px 10px 0 10px;
     font-size: 12px;
     white-space: pre-line;
+    float: left;
 }
 
 .feed-actions {
@@ -1119,6 +1120,13 @@ li.new-notification {
 .category-text-header {
     font-weight: 600;
     margin: 0;
+}
+
+.category-post-img {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    float: left;
 }
 
 /*.category {
