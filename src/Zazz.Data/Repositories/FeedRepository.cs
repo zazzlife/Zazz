@@ -45,6 +45,7 @@ namespace Zazz.Data.Repositories
                 .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
+                .Include(f => f.PostFeed.Post.Categories)
                 .Include(f => f.EventFeed.Event);
         }
 
@@ -57,6 +58,7 @@ namespace Zazz.Data.Repositories
                 .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
+                .Include(f => f.PostFeed.Post.Categories)
                 .Include(f => f.EventFeed.Event);
         }
 
