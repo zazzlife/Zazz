@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Zazz.Core.Interfaces;
+using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
@@ -20,15 +21,17 @@ namespace Zazz.Web.Helpers
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly IStaticDataRepository _staticDataRepository;
         public int PageSize { get; set; }
 
         public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper, IStaticDataRepository staticDataRepository)
         {
             _uow = uow;
             _userService = userService;
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
+            _staticDataRepository = staticDataRepository;
             PageSize = 10;
         }
 
@@ -243,6 +246,13 @@ namespace Zazz.Web.Helpers
                     feedVm.Post.ToUserDisplayName = _userService.GetUserDisplayName(toUserId);
                     feedVm.Post.ToUserDisplayPhoto = _photoService.GetUserDisplayPhoto(toUserId);
                     feedVm.CanCurrentUserRemoveFeed = post.ToUserId == currentUserId;
+                }
+
+                if (post.Categories.Any())
+                {
+                    feedVm.Post.Categories = _staticDataRepository.GetCategories()
+                        .Where(c => post.Categories.Any(pc => pc.CategoryId == c.Id))
+                        .Select(c => c.Name);
                 }
 
                 feedVm.Comments.CommentType = CommentType.Post;
