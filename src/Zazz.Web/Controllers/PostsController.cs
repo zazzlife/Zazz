@@ -63,7 +63,7 @@ namespace Zazz.Web.Controllers
                        };
 
             _postService.NewPost(post, categories);
-
+            
             var userPhotoUrl = PhotoService.GetUserDisplayPhoto(userId);
 
             var vm = new FeedViewModel
@@ -84,7 +84,11 @@ namespace Zazz.Web.Controllers
                                                                      : null,
                                              ToUserDisplayPhoto = toUser.HasValue
                                                                   ? PhotoService.GetUserDisplayPhoto(toUser.Value)
-                                                                  : null
+                                                                  : null,
+                                            Categories = StaticDataRepository.GetCategories()
+                                                        .Where(c => categories.Any(ca => ca == c.Id))
+                                                        .Select(c => c.Name)
+                                            
                                          },
                          Comments = new CommentsViewModel
                                              {
