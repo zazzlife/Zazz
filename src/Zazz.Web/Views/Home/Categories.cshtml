@@ -53,11 +53,12 @@
                 }
             </ul>
             
-            @foreach (var c in categoryStats.Take(5))
-            {
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
-
+            <div class="categories-stat-container">
+                @foreach (var c in categoryStats.Take(6))
+                {
+                    Html.RenderPartial("_CategoryStatusItem", c);
+                }
+            </div>
         </div>
 
         @*CENTER*@
@@ -76,11 +77,13 @@
         </div>
         
         @*RIGHT*@
-        <div class="span3" style="margin-top: 253px;margin-left: 10px;">
-            @foreach (var c in categoryStats.Skip(5).Take(5))
-            {
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
+        <div class="span3" style="margin-top: 263px;margin-left: 10px;">
+            <div class="categories-stat-container">
+                @foreach (var c in categoryStats.Skip(6))
+                {
+                    Html.RenderPartial("_CategoryStatusItem", c);
+                }
+            </div>
         </div>
 
     </div>
@@ -103,27 +106,6 @@
         </div>
     </div>
 }
-
-@*<div>
-    <div class="page-header" style="margin-top: 43px; padding-left: 0;">
-    
-        <div class="margin-ten">
-            <span style="margin-right: 10px;">Tags:</span>
-            <select multiple="multiple" id="tagsSelect" style="width: 512px;">
-                @foreach (var t in Model.AvailableCategories)
-                {
-                    <option value="@t" @(Model.SelectedCategories.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
-                }
-            </select>
-        </div>
-    </div>
-    <div class="margin-ten">
-    
-    
-        @Html.Partial("_FeedsPartial", Model.Feeds)
-
-    </div>
-</div>*@
 
 @section Scripts
 {
