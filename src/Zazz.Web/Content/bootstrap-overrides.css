@@ -1,4 +1,7 @@
-﻿.tooltip {
+﻿.container {
+    width: 970px;
+}
+.tooltip {
     white-space: pre-line;
 }
 
