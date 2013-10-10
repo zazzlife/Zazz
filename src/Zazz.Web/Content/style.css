@@ -45,6 +45,10 @@
         Global
 ***************************************/
 
+body {
+    padding-top: 52px;
+}
+
 .btn-zazz {
     background-color: #FBCE0E !important;
     background-repeat: repeat-x;
