@@ -1094,6 +1094,10 @@ li.new-notification {
     Categories
 ***************************************/
 
+.categories-stat-container {
+    position: fixed;
+}
+
 .category {
     position: relative;
     height: 72px;
@@ -1110,10 +1114,11 @@ li.new-notification {
     z-index: 100;
     position: absolute;
     top: 5px;
+    width: 130px
 }
 
 .category-left .category-text {
-    left: 37%;
+    margin-left: 80px;
 }
 
 .category-right .category-text {

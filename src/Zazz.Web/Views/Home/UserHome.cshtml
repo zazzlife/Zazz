@@ -29,7 +29,7 @@
             </div>
 
 
-            <ul class="nav nav-stacked right-nav">
+            <ul class="nav nav-stacked right-nav" style="margin-bottom: 0">
                 <li>
                     <a href="#" id="notifications-link" data-toggle="popover" data-html="true" data-original-title="Notifications"
                         data-title="Notifications"
@@ -55,11 +55,13 @@
                 }
             </ul>
             
-            @foreach (var c in categoryStats.Take(6))
-            {
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
-
+            <div class="categories-stat-container">
+                @foreach (var c in categoryStats.Take(6))
+                {
+                    Html.RenderPartial("_CategoryStatusItem", c);
+                }
+                
+            </div>
         </div>
 
         @*CENTER*@
@@ -71,12 +73,14 @@
         </div>
         
         @*RIGHT*@
-        <div class="span3" style="margin-top: 253px;margin-left: 10px;">
-            @foreach (var c in categoryStats.Skip(6))
-            {
-                c.IsRightSide = true;
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
+        <div class="span3" style="margin-top: 263px;margin-left: 10px;">
+            <div class="categories-stat-container">
+                @foreach (var c in categoryStats.Skip(6))
+                {
+                    c.IsRightSide = true;
+                    Html.RenderPartial("_CategoryStatusItem", c);
+                }
+            </div>
         </div>
 
     </div>
