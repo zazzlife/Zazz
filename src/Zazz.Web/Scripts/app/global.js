@@ -411,6 +411,26 @@ $(document).on('mouseleave', '.feed-content', function () {
     $(this).children('.feed-actions').fadeOut('fast');
 });
 
+$(document).on('mouseenter', '.category-post-img', function () {
+    var $self = $(this);
+    var name = $self.data('name');
+    
+    if (name) {
+        var url = '/Images/categories/32/' + name + '-active.png';
+        $self.attr('src', url);
+    }
+});
+
+$(document).on('mouseleave', '.category-post-img', function () {
+    var $self = $(this);
+    var name = $self.data('name');
+
+    if (name) {
+        var url = '/Images/categories/32/' + name + '.png';
+        $self.attr('src', url);
+    }
+});
+
 $(document).on('click', '.removeFeedBtn', function () {
 
     var self = $(this);

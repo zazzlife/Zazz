@@ -50,7 +50,7 @@
         {
             foreach (var category in Model.Post.Categories)
             {
-                <img class="category-post-img" src="@String.Format("/Images/categories/32/{0}.png", category)"/>
+                <img class="category-post-img" data-name="@category" src="@String.Format("/Images/categories/32/{0}.png", category)"/>
             }
         }
         
