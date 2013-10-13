@@ -529,21 +529,23 @@ $(document).on('click', '.category-select-btn', function () {
 
 //highlighting category box on hover
 
-$(document).on('mouseenter', '.category-img', function () {
+$(document).on('mouseenter', '.category', function () {
     var $self = $(this);
-    var url = $self.data('active');
+    var $img = $self.find('.category-img');
+    var url = $img.data('active');
 
     if (url) {
-        $self.attr('src', url);
+        $img.attr('src', url);
     }
 });
 
-$(document).on('mouseleave', '.category-img', function () {
+$(document).on('mouseleave', '.category', function () {
     var $self = $(this);
-    var url = $self.data('normal');
+    var $img = $self.find('.category-img');
+    var url = $img.data('normal');
 
     if (url) {
-        $self.attr('src', url);
+        $img.attr('src', url);
     }
 });
 
