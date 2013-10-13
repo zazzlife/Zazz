@@ -6,7 +6,7 @@
 
 <div class="category category-@side">
     <a href="@Url.Action("Categories", "Home", new { @select=Model.CategoryName })">
-        <img src="@String.Format("/Images/category-boxes/{0}/{1}.png", side, Model.CategoryName)" class="category-img" />
+        <img data-active="@String.Format("/Images/category-boxes/{0}/{1}-active.png", side, Model.CategoryName)" data-normal="@String.Format("/Images/category-boxes/{0}/{1}.png", side, Model.CategoryName)" src="@String.Format("/Images/category-boxes/{0}/{1}.png", side, Model.CategoryName)" class="category-img" />
     </a>
     <div class="category-text">
         <a href="@Url.Action("Categories", "Home", new { @select=Model.CategoryName })"><h5 class="category-text-header">@Model.CategoryName</h5></a>

@@ -411,6 +411,8 @@ $(document).on('mouseleave', '.feed-content', function () {
     $(this).children('.feed-actions').fadeOut('fast');
 });
 
+//highlighting categories
+
 $(document).on('mouseenter', '.category-post-img', function () {
     var $self = $(this);
     var name = $self.data('name');
@@ -430,6 +432,8 @@ $(document).on('mouseleave', '.category-post-img', function () {
         $self.attr('src', url);
     }
 });
+
+///////////////////
 
 $(document).on('click', '.removeFeedBtn', function () {
 
@@ -521,6 +525,8 @@ $(document).on('click', '.category-select-btn', function () {
     $img.attr('src', url);
 
 });
+
+
 
 $(function () {
 
