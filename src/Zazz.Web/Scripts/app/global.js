@@ -527,6 +527,26 @@ $(document).on('click', '.category-select-btn', function () {
 });
 
 
+//highlighting category box on hover
+
+$(document).on('mouseenter', '.category-img', function () {
+    var $self = $(this);
+    var url = $self.data('active');
+
+    if (url) {
+        $self.attr('src', url);
+    }
+});
+
+$(document).on('mouseleave', '.category-img', function () {
+    var $self = $(this);
+    var url = $self.data('normal');
+
+    if (url) {
+        $self.attr('src', url);
+    }
+});
+
 
 $(function () {
 
