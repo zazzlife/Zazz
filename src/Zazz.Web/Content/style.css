@@ -543,6 +543,7 @@ hr.gold-line {
 .event-description {
     color: #000000;
     margin-bottom: 20px;
+    white-space: nowrap;
 }
 
 .event-socal {
