@@ -1097,7 +1097,7 @@ li.new-notification {
 ***************************************/
 
 .categories-stat-container {
-    position: fixed;
+    margin-top: 35px;
 }
 
 .category {
