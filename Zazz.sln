@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{88F59B82-D409-49B5-A9FC-620F866D7CEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{82D0DB70-4A5D-49F3-B23E-99872F229B11}"
@@ -11,18 +13,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zazz.Data", "src\Zazz.Data\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zazz.Infrastructure", "src\Zazz.Infrastructure\Zazz.Infrastructure.csproj", "{C86D475A-5D4B-4D53-8067-7F534F18319F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B351DA2A-4021-41EE-8375-99B2EC174E3C}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zazz.IntegrationTests", "tests\Zazz.IntegrationTests\Zazz.IntegrationTests.csproj", "{83E5C255-2C2A-4DBF-82F9-3DFC00379025}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zazz.UnitTests", "tests\Zazz.UnitTests\Zazz.UnitTests.csproj", "{4F17A608-2614-4CAD-B92B-4833F1DC902E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zazz.Web", "src\Zazz.Web\Zazz.Web.csproj", "{AC297B3F-00C7-4826-8453-097A7950FC82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{669614BF-841A-48AF-9C78-F3A72E0CDBF4}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
