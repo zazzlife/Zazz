@@ -73,10 +73,10 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<User> GetClubsThatUserDoesNotFollow(int userId)
         {
-            //getting all club ids
             var context = _dbContext as ZazzDbContext;
 
-            var allClubIds = context.Users.Where(u => u.AccountType == AccountType.Club)
+            var allClubIds = context.Users
+                .Where(u => u.AccountType == AccountType.Club)
                 .Select(u => u.Id);
 
             var allFollows = _dbSet

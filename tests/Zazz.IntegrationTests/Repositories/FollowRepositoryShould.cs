@@ -114,7 +114,7 @@ namespace Zazz.IntegrationTests.Repositories
             club1.AccountType = AccountType.Club;
 
             var club2 = Mother.GetUser();
-            club1.AccountType = AccountType.Club;
+            club2.AccountType = AccountType.Club;
 
             _context.Users.Add(club1);
             _context.Users.Add(club2);
