@@ -1,4 +1,8 @@
-﻿.navbar-black {
+﻿.fixed-navbar-page {
+    padding-top: 50px;
+}
+
+.navbar-black {
     border: 0;
     background-image: none;
     background-color: black;
@@ -26,3 +30,8 @@
     .btn-dark.active {
         background-color: #212121
     }
+
+.cover-image {
+    background-color: black;
+    text-align: center;
+}

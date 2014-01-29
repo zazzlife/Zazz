@@ -579,6 +579,7 @@
     <Content Include="Images\mcgill.png" />
     <Content Include="Images\nav.png" />
     <Content Include="Images\nav_thumbs.png" />
+    <Content Include="Images\new\landing-page-cover.jpg" />
     <Content Include="Images\p.png" />
     <Content Include="Images\pattern.png" />
     <Content Include="Images\Register-input.png" />
