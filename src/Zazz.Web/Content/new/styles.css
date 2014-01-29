@@ -24,11 +24,13 @@
     .btn-dark:hover,
     .btn-dark:focus {
         background-color: #212121;
+        color: white;
     }
 
     .btn-dark:active,
     .btn-dark.active {
-        background-color: #212121
+        background-color: #212121;
+        color: white;
     }
 
 .cover-image {
