@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Data.Repositories
 {
@@ -59,6 +60,15 @@ namespace Zazz.Data.Repositories
                 return;
 
             _dbContext.Entry(item).State = EntityState.Deleted;
+        }
+
+        public IQueryable<User> GetClubsThatUserFollows(int userId)
+        {
+            return _dbSet
+                .Where(f => f.FromUserId == userId)
+                .Where(f => f.ToUser.AccountType == AccountType.Club)
+                .Select(f => f.ToUser)
+                .Include(f => f.ClubDetail);
         }
     }
 }

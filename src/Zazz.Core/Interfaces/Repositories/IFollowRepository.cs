@@ -26,5 +26,7 @@ namespace Zazz.Core.Interfaces.Repositories
         bool Exists(int fromUserId, int toUserId);
 
         void Remove(int fromUserId, int toUserId);
+
+        IQueryable<User> GetClubsThatUserFollows(int userId);
     }
 }

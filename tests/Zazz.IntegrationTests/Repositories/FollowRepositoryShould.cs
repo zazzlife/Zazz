@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Data;
 using Zazz.Data.Repositories;
 
@@ -105,6 +106,35 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.AreEqual(_userB.Id, result.First());
         }
 
+        [Test]
+        public void ReturnCorrectUsers_OnGetClubsThatUserFollows()
+        {
+            //Arrange
+            var club1 = Mother.GetUser();
+            club1.AccountType = AccountType.Club;
 
+            var club2 = Mother.GetUser();
+            club1.AccountType = AccountType.Club;
+
+            _context.Users.Add(club1);
+            _context.Users.Add(club2);
+            _context.SaveChanges();
+
+            var follow = new Follow
+            {
+                FromUserId = _userA.Id,
+                ToUserId = club1.Id
+            };
+
+            _context.Follows.Add(follow);
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetClubsThatUserFollows(_userA.Id);
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(club1.Id, result.First().Id);
+        }
     }
 }
