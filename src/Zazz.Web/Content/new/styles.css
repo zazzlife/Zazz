@@ -33,7 +33,17 @@
         color: white;
     }
 
+/**********************************
+ *   LANDING PAGE
+ *********************************/
+
 .cover-image {
     background-color: black;
     text-align: center;
+    margin-bottom: 50px;
+}
+
+.landing-page-category-img {
+    width: 150px;
+    height: 150px;    
 }
