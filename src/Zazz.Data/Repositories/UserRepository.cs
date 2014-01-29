@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -236,6 +237,14 @@ namespace Zazz.Data.Repositories
                             .Where(u => u.Id == userId)
                             .Select(u => u.SyncFbImages)
                             .SingleOrDefault();
+        }
+
+        public IQueryable<User> GetSchoolClubs()
+        {
+            return DbSet
+                .Where(u => u.AccountType == AccountType.Club)
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
+                .Include(u => u.ClubDetail);
         }
 
         public override void Remove(int id)

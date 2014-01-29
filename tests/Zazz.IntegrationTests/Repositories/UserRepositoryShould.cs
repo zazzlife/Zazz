@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Zazz.Core.Models.Data;
@@ -822,6 +823,55 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Assert
             Assert.AreEqual(user.Username, result);
+        }
+
+        [Test]
+        public void ReturnTheCorrectClubs_OnGetSchoolClubs()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var club1 = Mother.GetUser();
+            var club2 = Mother.GetUser();
+            var club3 = Mother.GetUser();
+            var club4 = Mother.GetUser();
+            club1.AccountType = AccountType.Club;
+            club2.AccountType = AccountType.Club;
+            club3.AccountType = AccountType.Club;
+            club4.AccountType = AccountType.Club;
+
+            club1.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.StudentAssociation
+            };
+
+            club2.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.StudentAssociation
+            };
+
+            club3.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.Bar
+            };
+
+            club4.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.ConcertVenue
+            };
+
+            _context.Users.Add(user);
+            _context.Users.Add(club1);
+            _context.Users.Add(club2);
+
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetSchoolClubs().ToList();
+
+            //Assert
+            Assert.AreEqual(2, result.Count());
+            Assert.IsTrue(result.Any(c => c.Id == club1.Id));
+            Assert.IsTrue(result.Any(c => c.Id == club2.Id));
         }
     }
 }

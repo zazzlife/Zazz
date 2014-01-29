@@ -1,3 +1,4 @@
+using System.Linq;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
@@ -46,5 +47,7 @@ namespace Zazz.Core.Interfaces.Repositories
         bool WantsFbPostsSynced(int userId);
 
         bool WantsFbImagesSynced(int userId);
+
+        IQueryable<User> GetSchoolClubs();
     }
 }
