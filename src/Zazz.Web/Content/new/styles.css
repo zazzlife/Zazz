@@ -41,11 +41,14 @@
     background-color: black;
     text-align: center;
     margin-bottom: 30px;
+    -webkit-box-shadow: 0 26px 100px 50px rgba(7, 7, 7, 0.21);
+    -ms-box-shadow: 0 26px 100px 50px rgba(7, 7, 7, 0.21);
+    box-shadow: 0 26px 100px 50px rgba(7, 7, 7, 0.21);
 }
 
 .landing-page-category-img-container {
     padding: 0 25px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
 }
 
 .landing-page-category-img {
@@ -73,6 +76,7 @@
     padding: 15px 0;
     background-color: black;
     color: white;
+    box-shadow: 0 -50px 50px rgba(7, 7, 7, 0.21);
 }
 
 ul.landing-page-footer-links {
