@@ -1,1 +1,28 @@
-﻿
+﻿.navbar-black {
+    border: 0;
+    background-image: none;
+    background-color: black;
+}
+
+.dark-input {
+    background-color: #333;
+    border: 0;
+    color: #FFF;
+}
+
+.btn-dark {
+    background-color: #333;
+    background-image: none;
+    border-color: #222;
+    color: white;
+}
+
+    .btn-dark:hover,
+    .btn-dark:focus {
+        background-color: #212121;
+    }
+
+    .btn-dark:active,
+    .btn-dark.active {
+        background-color: #212121
+    }
