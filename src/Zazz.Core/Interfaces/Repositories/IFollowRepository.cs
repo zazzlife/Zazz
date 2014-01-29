@@ -28,5 +28,7 @@ namespace Zazz.Core.Interfaces.Repositories
         void Remove(int fromUserId, int toUserId);
 
         IQueryable<User> GetClubsThatUserFollows(int userId);
+
+        IQueryable<User> GetClubsThatUserDoesNotFollow(int userId);
     }
 }

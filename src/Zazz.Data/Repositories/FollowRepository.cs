@@ -70,5 +70,24 @@ namespace Zazz.Data.Repositories
                 .Select(f => f.ToUser)
                 .Include(f => f.ClubDetail);
         }
+
+        public IQueryable<User> GetClubsThatUserDoesNotFollow(int userId)
+        {
+            //getting all club ids
+            var context = _dbContext as ZazzDbContext;
+
+            var allClubIds = context.Users.Where(u => u.AccountType == AccountType.Club)
+                .Select(u => u.Id);
+
+            var allFollows = _dbSet
+                .Where(f => f.FromUserId == userId)
+                .Select(f => f.ToUserId);
+
+            var remainingClubs = allClubIds.Where(id => !allFollows.Contains(id));
+
+            return context.Users
+                .Where(u => remainingClubs.Contains(u.Id))
+                .Include(u => u.ClubDetail);
+        }
     }
 }
