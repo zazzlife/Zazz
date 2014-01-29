@@ -76,6 +76,8 @@
     padding: 15px 0;
     background-color: black;
     color: white;
+    -webkit-box-shadow: 0 -50px 50px rgba(7, 7, 7, 0.21);
+    -ms-box-shadow: 0 -50px 50px rgba(7, 7, 7, 0.21);
     box-shadow: 0 -50px 50px rgba(7, 7, 7, 0.21);
 }
 
