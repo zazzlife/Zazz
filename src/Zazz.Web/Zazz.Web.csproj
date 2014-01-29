@@ -408,7 +408,10 @@
     <Content Include="Content\jquery.atwho.css" />
     <Content Include="Content\jquery.bxslider.css" />
     <Content Include="Content\jquery.Jcrop.css" />
-    <Content Include="Content\new-styles.css" />
+    <Content Include="Content\new\bootstrap.min.css" />
+    <Content Include="Content\new\styles.css" />
+    <Content Include="Content\new\bootstrap-theme.css" />
+    <Content Include="Content\new\bootstrap.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\select2-bootstrap.css" />
@@ -589,6 +592,7 @@
     <Content Include="Images\victoria-uni.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\views.png" />
+    <Content Include="NewScripts\bootstrap.min.js" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\comments.js" />

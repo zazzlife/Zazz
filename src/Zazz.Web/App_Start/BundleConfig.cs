@@ -33,9 +33,6 @@ namespace Zazz.Web
             cssOrder.Files.Add("bootstrap.css");
             cssOrder.Files.Add("bootstrap-lightbox.css");
             cssOrder.Files.Add("bootstrap-overrides.css");
-            cssOrder.Files.Add("style.css");
-            cssOrder.Files.Add("new-styles.css");
-
 
             var fineUploadOrder = new BundleFileSetOrdering("FineUploadOrder");
             fineUploadOrder.Files.Add("header.js");
