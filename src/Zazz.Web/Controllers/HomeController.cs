@@ -82,13 +82,19 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
+        [Authorize]
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
-
             var user = UserService.GetUser(User.Identity.Name);
             var feeds = _feedHelper.GetFeeds(user.Id, lastFeedId);
 
             return View("_FeedsPartial", feeds);
+        }
+
+        [Authorize]
+        public ActionResult Clubs()
+        {
+            return View();
         }
 
         public string GetAllCategories()
@@ -97,6 +103,7 @@ namespace Zazz.Web.Controllers
             return JsonConvert.SerializeObject(categories, Formatting.None);
         }
 
+        [Authorize]
         public JsonNetResult Search(string q)
         {
             var users = UserService.Search(q);

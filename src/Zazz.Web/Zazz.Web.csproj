@@ -734,6 +734,7 @@
     <Content Include="Views\Shared\_EventPartialSmall.cshtml" />
     <Content Include="Views\Photos\Albums.cshtml" />
     <Content Include="Views\Photos\List.cshtml" />
+    <Content Include="Views\Home\Clubs.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
