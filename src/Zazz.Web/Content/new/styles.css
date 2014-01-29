@@ -58,3 +58,13 @@
     height: 40px;
     font-size: 18px;
 }
+
+.landing-page-app-links {
+    margin-top: 35px;
+}
+
+.landing-page-app-links img{
+    float: left;
+    margin-left: 10px;
+    text-align: center;
+}
