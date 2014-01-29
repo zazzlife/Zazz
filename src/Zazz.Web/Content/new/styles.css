@@ -68,3 +68,24 @@
     margin-left: 10px;
     text-align: center;
 }
+
+.landing-page-footer {
+    padding: 15px 0;
+    background-color: black;
+    color: white;
+}
+
+ul.landing-page-footer-links {
+    list-style: none;
+    padding: 0;  
+}
+
+.landing-page-footer-links li {
+    padding: 0;
+    float: left;
+    margin-left: 25px;
+}
+
+.landing-page-footer-links li > a {
+    color: white;
+}
