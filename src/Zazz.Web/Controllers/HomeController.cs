@@ -20,13 +20,15 @@ namespace Zazz.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly IFeedHelper _feedHelper;
+        private readonly IUoW _uow;
 
         public HomeController(IPhotoService photoService, IUserService userService,
             IStaticDataRepository staticDataRepository, ICategoryService categoryService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper) :
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, IUoW uow) :
             base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _feedHelper = feedHelper;
+            _uow = uow;
         }
 
         public ActionResult Index()
@@ -92,9 +94,25 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Clubs()
+        public ActionResult Clubs(string type)
         {
-            return View();
+            var userId = GetCurrentUserId();
+            IQueryable<User> clubs = null;
+
+            if (String.IsNullOrEmpty(type) || type.Equals("clubs", StringComparison.InvariantCultureIgnoreCase))
+            {
+                clubs = _uow.FollowRepository.GetClubsThatUserDoesNotFollow(userId);
+            }
+            else if (type.Equals("myclubs", StringComparison.InvariantCultureIgnoreCase))
+            {
+                clubs = _uow.FollowRepository.GetClubsThatUserFollows(userId);
+            }
+            else if (type.Equals("schoolclubs", StringComparison.InvariantCultureIgnoreCase))
+            {
+                clubs = _uow.UserRepository.GetSchoolClubs();
+            }
+
+            return View(clubs);
         }
 
         public string GetAllCategories()
