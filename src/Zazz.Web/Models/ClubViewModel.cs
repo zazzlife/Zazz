@@ -10,5 +10,6 @@ namespace Zazz.Web.Models
 
         public PhotoLinks CoverImageLink { get; set; }
 
+        public bool IsCurrentUserFollowing { get; set; }
     }
 }

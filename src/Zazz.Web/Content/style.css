@@ -2021,4 +2021,25 @@ a:hover, a:focus {
 
 .club-cover {
     width: 99%;
+    position: relative;
+}
+
+.clubs-list-follow-img {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    bottom: 20px;
+    left: 45%;
+    
+    -webkit-transition: opacity linear 0.5s;
+    -moz-transition: opacity linear 0.5s;
+    -ms-transition: opacity linear 0.5s;
+    -o-transition: opacity linear 0.5s;
+    transition: opacity linear 0.5s;
+}
+
+.clubs-list-follow-img:hover {
+    -ms-opacity: 0.9;
+    opacity: 0.9;
+    cursor: pointer;
 }

@@ -50,10 +50,22 @@
                         <div class="tab-pane margin-ten active" id="clubsTab">
                             @foreach (var club in Model)
                             {
-                                <div class="club-cover">
+                                <div class="club-cover text-center">
                                     <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
-                                        <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" title="@club.ClubName" data-direction="right"/>
+                                        <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
                                     </a>
+                                    @if (club.IsCurrentUserFollowing)
+                                    {
+                                        <img class="clubs-list-follow-img" src="/Images/following-icon.png"
+                                          title="Click to unfollow" alt="Following" data-id="@club.ClubId" data-action="unfollow"/>
+                                    }
+                                    else
+                                    {
+                                        <img class="clubs-list-follow-img" src="/Images/follow-icon.png"
+                                          title="Follow" alt="Follow" data-id="@club.ClubId" data-action="follow"/>
+                                    }
+
+  
                                 </div>
                             }
                         </div>

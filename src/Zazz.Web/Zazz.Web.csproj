@@ -545,6 +545,8 @@
     <Content Include="Images\category-boxes\right\Skitrip.png" />
     <Content Include="Images\category-boxes\right\YOFO-active.png" />
     <Content Include="Images\category-boxes\right\YOFO.png" />
+    <Content Include="Images\follow-icon.png" />
+    <Content Include="Images\following-icon.png" />
     <Content Include="Images\home1.png" />
     <Content Include="Images\home2.png" />
     <Content Include="Images\home3.png" />
