@@ -2014,3 +2014,11 @@ a:hover, a:focus {
     margin: 195px 0 0 30px;
     text-decoration: none;
 }
+
+/***************************************
+    Clubs Page
+***************************************/
+
+.club-cover {
+    width: 99%;
+}

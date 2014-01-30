@@ -207,6 +207,15 @@ namespace Zazz.Data
                 .WithRequired(c => c.Notification)
                 .WillCascadeOnDelete();
 
+            modelBuilder.Entity<Follow>()
+                .HasRequired(f => f.FromUser)
+                .WithMany(f => f.Follows);
+
+            modelBuilder.Entity<Follow>()
+                .HasRequired(f => f.ToUser)
+                .WithMany(f => f.Followers);
+                
+
             base.OnModelCreating(modelBuilder);
         }
     }

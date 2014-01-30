@@ -50,9 +50,11 @@
                         <div class="tab-pane margin-ten active" id="clubsTab">
                             @foreach (var club in Model)
                             {
-                                <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
-                                    <img src="@club.CoverImageLink" alt="@club.ClubName" title="@club.ClubName"/>
-                                </a>
+                                <div class="club-cover">
+                                    <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
+                                        <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" title="@club.ClubName" data-direction="right"/>
+                                    </a>
+                                </div>
                             }
                         </div>
                         <div class="tab-pane margin-ten" id="myClubsTab">

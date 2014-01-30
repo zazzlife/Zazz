@@ -118,16 +118,19 @@ namespace Zazz.Web.Controllers
                 var items = clubs.Select(x => new
                 {
                     x.Id,
-                    CoverImage = x.ClubDetail.CoverPhotoId
+                    CoverImageId = x.ClubDetail.CoverPhotoId,
+                    IsFollowing = x.Follows.Any(f => f.ToUserId == x.Id)
                 }).ToList();
 
                 vm.AddRange(items.Select(x => new ClubViewModel
                 {
                     ClubId = x.Id,
                     ClubName = UserService.GetUserDisplayName(x.Id),
-                    CoverImageLink = x.CoverImage.HasValue
-                        ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImage.Value)
-                        : DefaultImageHelper.GetDefaultCoverImage()
+                    CoverImageLink = x.CoverImageId.HasValue
+                        ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImageId.Value)
+                        : DefaultImageHelper.GetDefaultCoverImage(),
+                    IsCurrentUserFollowing = x.IsFollowing
+
                 }));
             }
 

@@ -47,5 +47,9 @@ namespace Zazz.Core.Models.Data
         public int? ProfilePhotoId { get; set; }
 
         public virtual ICollection<Weekly> Weeklies { get; set; }
+
+        public virtual ICollection<Follow> Follows { get; set; }
+
+        public virtual ICollection<Follow> Followers { get; set; }
     }
 }
