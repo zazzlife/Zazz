@@ -119,7 +119,7 @@ namespace Zazz.Web.Controllers
                 {
                     x.Id,
                     CoverImageId = x.ClubDetail.CoverPhotoId,
-                    IsFollowing = x.Follows.Any(f => f.ToUserId == x.Id)
+                    IsFollowing = x.Followers.Any(f => f.FromUserId == userId)
                 }).ToList();
 
                 vm.AddRange(items.Select(x => new ClubViewModel

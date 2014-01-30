@@ -38,3 +38,25 @@
     });
 
 });
+
+$(document).on('click', 'a[data-load-clubs]', function() {
+
+    var $self = $(this);
+    var type = $self.attr('data-load-clubs');
+    var target = $self.attr('href');
+
+    var $target = $(target);
+
+    $target.html('<p><i class="icon-spin icon-refresh"></i> Loading...</p>');
+    $.ajax({
+        url: '/home/clubs',
+        data: { type: type },
+        success: function(res) {
+            $target.html(res);
+        },
+        error: function() {
+            toastr.error("Request Failed!");
+        }
+    });
+
+});
