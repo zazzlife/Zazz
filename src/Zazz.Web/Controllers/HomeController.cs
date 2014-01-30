@@ -112,7 +112,26 @@ namespace Zazz.Web.Controllers
                 clubs = _uow.UserRepository.GetSchoolClubs();
             }
 
-            return View(clubs);
+            var vm = new List<ClubViewModel>();
+            if (clubs != null)
+            {
+                var items = clubs.Select(x => new
+                {
+                    x.Id,
+                    CoverImage = x.ClubDetail.CoverPhotoId
+                }).ToList();
+
+                vm.AddRange(items.Select(x => new ClubViewModel
+                {
+                    ClubId = x.Id,
+                    ClubName = UserService.GetUserDisplayName(x.Id),
+                    CoverImageLink = x.CoverImage.HasValue
+                        ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImage.Value)
+                        : DefaultImageHelper.GetDefaultCoverImage()
+                }));
+            }
+
+            return View(vm);
         }
 
         public string GetAllCategories()

@@ -1,4 +1,5 @@
 ﻿@using Zazz.Web.Controllers
+@model IEnumerable<ClubViewModel>
 @{
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
@@ -47,6 +48,12 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane margin-ten active" id="clubsTab">
+                            @foreach (var club in Model)
+                            {
+                                <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
+                                    <img src="@club.CoverImageLink" alt="@club.ClubName" title="@club.ClubName"/>
+                                </a>
+                            }
                         </div>
                         <div class="tab-pane margin-ten" id="myClubsTab">
                         </div>

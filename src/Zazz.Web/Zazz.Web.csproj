@@ -324,6 +324,7 @@
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
     <Compile Include="Models\ClubRewardsIndexViewModel.cs" />
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
+    <Compile Include="Models\ClubViewModel.cs" />
     <Compile Include="Models\RecoverAccountViewModel.cs" />
     <Compile Include="Models\RegisterClubViewModel.cs" />
     <Compile Include="Models\RegisterUserViewModel.cs" />
