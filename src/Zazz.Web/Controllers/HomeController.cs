@@ -134,7 +134,7 @@ namespace Zazz.Web.Controllers
                 }));
             }
 
-            return View(vm);
+            return Request.IsAjaxRequest() ? View("_ClubsList", vm) : View(vm);
         }
 
         public string GetAllCategories()
