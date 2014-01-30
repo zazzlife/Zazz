@@ -599,6 +599,7 @@
     <Content Include="NewScripts\bootstrap.min.js" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
+    <Content Include="Scripts\app\clubs-search.js" />
     <Content Include="Scripts\app\comments.js" />
     <Content Include="Scripts\app\event.js" />
     <Content Include="Scripts\app\notification.js" />
