@@ -45,7 +45,6 @@
             {
                 <div class="pics-widget">
                     <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">
-                        <h6 class="pics-widget-title">Party pics</h6>
                     </a>
 
                     @foreach (var a in Model.PartyAlbums)
@@ -162,11 +161,14 @@
                 }
             </div>
             <div style="margin-top: 135px;">
-                <h2 style="font-weight: 600;">Special Events</h2>
+                <div>
+                    <h2 style="font-weight: 600; float: left; width:135px;">Special Events</h2>
+                    <img src="/Images/arrow-down.png" style="width: 85px; margin: 20px 0 0 -10px;"/>
+                </div>
+                <div class="clearfix"></div>
                 @if (Model.Events.Any())
                 {
                     <div class="club-events">
-                        <h6 class="club-events-title">Events</h6>
 
                         @foreach (var e in Model.Events)
                         {

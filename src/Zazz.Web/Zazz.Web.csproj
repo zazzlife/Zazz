@@ -448,6 +448,8 @@
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
     <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\albums.png" />
+    <Content Include="Images\arrow-down.png" />
     <Content Include="Images\black.png" />
     <Content Include="Images\categories\32\Allyoucandrink-active.png" />
     <Content Include="Images\categories\32\Allyoucandrink.png" />
@@ -577,6 +579,7 @@
     <Content Include="Images\home\Icon-png-11.png" />
     <Content Include="Images\home\Icon-png-12.png" />
     <Content Include="Images\home\Icon-png-13.png" />
+    <Content Include="Images\arrow-right.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\m.png" />
     <Content Include="Images\mcgill.png" />
