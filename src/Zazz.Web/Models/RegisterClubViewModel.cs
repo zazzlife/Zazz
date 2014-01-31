@@ -40,5 +40,15 @@ namespace Zazz.Web.Models
 
         [HiddenInput]
         public bool IsOAuth { get; set; }
+
+        [Display(Name = "School")]
+        public short? SchoolId { get; set; }
+
+        [Display(Name = "City")]
+        public short? CityId { get; set; }
+
+        public IEnumerable<School> Schools { get; set; }
+
+        public IEnumerable<City> Cities { get; set; }
     }
 }

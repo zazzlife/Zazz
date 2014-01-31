@@ -270,7 +270,11 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult RegisterClub()
         {
-            var vm = new RegisterClubViewModel();
+            var vm = new RegisterClubViewModel
+            {
+                Schools = StaticDataRepository.GetSchools(),
+                Cities = StaticDataRepository.GetCities()
+            };
 
             if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
@@ -308,6 +312,8 @@ namespace Zazz.Web.Controllers
                                      Address = vm.ClubAddress,
                                      ClubName = vm.ClubName,
                                      ClubType = vm.ClubType,
+                                     CityId = vm.CityId,
+                                     SchoolId = vm.SchoolId
                                  }
                 };
 
@@ -390,6 +396,9 @@ namespace Zazz.Web.Controllers
                     ModelState.AddModelError("Email", "Email address already registered");
                 }
             }
+
+            vm.Schools = StaticDataRepository.GetSchools();
+            vm.Cities = StaticDataRepository.GetCities();
 
             return View(vm);
         }
