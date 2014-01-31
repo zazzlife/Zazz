@@ -92,3 +92,9 @@ $(document).on('click', '.school-filter-img', function() {
     });
 
 });
+
+//clear school filters
+$(document).on('click', '#clearFilters', function() {
+    var $target = $('#schoolClubsTab');
+    updateTab($target, { type: 'schoolclubs' });
+})
