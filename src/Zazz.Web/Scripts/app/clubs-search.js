@@ -1,4 +1,6 @@
-﻿$(document).on('click', '.clubs-list-follow-img', function() {
+﻿
+//Follow / Unfollow
+$(document).on('click', '.clubs-list-follow-img', function () {
 
     var $self = $(this);
     var clubId = $self.data('id');
@@ -39,6 +41,7 @@
 
 });
 
+//Club Tabs
 $(document).on('click', 'a[data-load-clubs]', function() {
 
     var $self = $(this);
