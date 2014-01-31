@@ -41,6 +41,28 @@ $(document).on('click', '.clubs-list-follow-img', function () {
 
 });
 
+function updateTab($target, data, callback) {
+
+    $('.school-filter-img').each(function () {
+        $(this).removeClass('active');
+    });
+
+    $target.html('<p><i class="icon-spin icon-refresh"></i> Loading...</p>');
+    $.ajax({
+        url: '/home/clubs',
+        data: data,
+        success: function (res) {
+            $target.html(res);
+
+            if (callback)
+                callback();
+        },
+        error: function () {
+            toastr.error("Request Failed!");
+        }
+    });
+}
+
 //Club Tabs
 $(document).on('click', 'a[data-load-clubs]', function() {
 
@@ -48,18 +70,25 @@ $(document).on('click', 'a[data-load-clubs]', function() {
     var type = $self.attr('data-load-clubs');
     var target = $self.attr('href');
 
-    var $target = $(target);
-
-    $target.html('<p><i class="icon-spin icon-refresh"></i> Loading...</p>');
-    $.ajax({
-        url: '/home/clubs',
-        data: { type: type },
-        success: function(res) {
-            $target.html(res);
-        },
-        error: function() {
-            toastr.error("Request Failed!");
+    updateTab($(target), { type: type }, function() {
+        if (type == "schoolclubs") {
+            $('#schoolClubsFilter').fadeIn();
+        } else {
+            $('#schoolClubsFilter').fadeOut();
         }
+    });
+
+});
+
+//school filters
+$(document).on('click', '.school-filter-img', function() {
+
+    var $self = $(this);
+    var $target = $('#schoolClubsTab');
+    var schoolName = $self.data('name');
+
+    updateTab($target, { type: 'schoolclubs', schoolName: schoolName }, function() {
+        $self.addClass('active');
     });
 
 });
