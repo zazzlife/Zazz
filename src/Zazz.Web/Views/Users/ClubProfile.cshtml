@@ -25,7 +25,7 @@
             </div>
 
 
-            <div style="margin-top: 125px;">
+            <div style="margin-top: 110px;">
                 <div style="height: 30px;">
                     @if (Model.IsSelf)
                     {
@@ -38,6 +38,7 @@
                     }
                 </div>
                 <h2 style="font-weight: 600;">Weeklies</h2>
+                <img src="/Images/arrow-right.png" style="margin: -15px 0 0 75px;" />
             </div>
 
             @if (Model.PartyAlbums.Any())
@@ -118,8 +119,6 @@
                 <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
                 <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
             </div>
-
-            <div style="margin-top: 100px;" class="visible-phone"></div>
 
             <div class="weeklies-container">
                 <ul class="weeklies-items">
