@@ -49,5 +49,6 @@ namespace Zazz.Core.Interfaces.Repositories
         bool WantsFbImagesSynced(int userId);
 
         IQueryable<User> GetSchoolClubs();
+        IQueryable<User> GetSchoolClubs(int schoolId);
     }
 }

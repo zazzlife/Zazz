@@ -873,5 +873,55 @@ namespace Zazz.IntegrationTests.Repositories
             Assert.IsTrue(result.Any(c => c.Id == club1.Id));
             Assert.IsTrue(result.Any(c => c.Id == club2.Id));
         }
+
+        [Test]
+        public void ReturnTheCorrectClubs_OnGetSchoolClubs_WithSchoolId()
+        {
+            //Arrange
+            var user = Mother.GetUser();
+            var club1 = Mother.GetUser();
+            var club2 = Mother.GetUser();
+            var club3 = Mother.GetUser();
+            var club4 = Mother.GetUser();
+            club1.AccountType = AccountType.Club;
+            club2.AccountType = AccountType.Club;
+            club3.AccountType = AccountType.Club;
+            club4.AccountType = AccountType.Club;
+
+            club1.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.StudentAssociation
+            };
+
+            club2.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.StudentAssociation,
+                SchoolId = 1
+            };
+
+            club3.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.Bar,
+                SchoolId = 1
+            };
+
+            club4.ClubDetail = new ClubDetail
+            {
+                ClubType = ClubType.ConcertVenue
+            };
+
+            _context.Users.Add(user);
+            _context.Users.Add(club1);
+            _context.Users.Add(club2);
+
+            _context.SaveChanges();
+
+            //Act
+            var result = _repo.GetSchoolClubs(1).ToList();
+
+            //Assert
+            Assert.AreEqual(1, result.Count());
+            Assert.IsTrue(result.Any(c => c.Id == club2.Id));
+        }
     }
 }

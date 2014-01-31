@@ -247,6 +247,15 @@ namespace Zazz.Data.Repositories
                 .Include(u => u.ClubDetail);
         }
 
+        public IQueryable<User> GetSchoolClubs(int schoolId)
+        {
+            return DbSet
+                .Where(u => u.AccountType == AccountType.Club)
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
+                .Where(u => u.ClubDetail.SchoolId == schoolId)
+                .Include(u => u.ClubDetail);
+        }
+
         public override void Remove(int id)
         {
             var item = GetById(id);

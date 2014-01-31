@@ -94,7 +94,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Clubs(string type)
+        public ActionResult Clubs(string type, string schoolName)
         {
             var userId = GetCurrentUserId();
             IQueryable<User> clubs = null;
@@ -109,7 +109,25 @@ namespace Zazz.Web.Controllers
             }
             else if (type.Equals("schoolclubs", StringComparison.InvariantCultureIgnoreCase))
             {
-                clubs = _uow.UserRepository.GetSchoolClubs();
+                int? schoolId = null;
+
+                if (!String.IsNullOrWhiteSpace(schoolName))
+                {
+                    var school = StaticDataRepository.GetSchools()
+                            .FirstOrDefault(s => s.Name.Equals(schoolName, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (school != null)
+                        schoolId = school.Id;
+                }
+
+                if (schoolId.HasValue)
+                {
+                    clubs = _uow.UserRepository.GetSchoolClubs(schoolId.Value);
+                }
+                else
+                {
+                    clubs = _uow.UserRepository.GetSchoolClubs();
+                }
             }
 
             var vm = new List<ClubViewModel>();
