@@ -129,7 +129,8 @@ namespace Zazz.Web.Controllers
                     CoverImageLink = x.CoverImageId.HasValue
                         ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImageId.Value)
                         : DefaultImageHelper.GetDefaultCoverImage(),
-                    IsCurrentUserFollowing = x.IsFollowing
+                    IsCurrentUserFollowing = x.IsFollowing,
+                    CurrentUserId = userId
 
                 }));
             }

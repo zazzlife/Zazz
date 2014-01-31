@@ -10,17 +10,19 @@
         <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
             <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
         </a>
-        @if (club.IsCurrentUserFollowing)
+        @if (club.ClubId != club.CurrentUserId)
         {
-            <img class="clubs-list-follow-img" src="/Images/following-icon.png"
-                 title="Click to unfollow" alt="Following" data-id="@club.ClubId" data-action="unfollow" />
+            if (club.IsCurrentUserFollowing)
+            {
+                <img class="clubs-list-follow-img" src="/Images/following-icon.png"
+                     title="Click to unfollow" alt="Following" data-id="@club.ClubId" data-action="unfollow" />
+            }
+            else
+            {
+                <img class="clubs-list-follow-img" src="/Images/follow-icon.png"
+                     title="Follow" alt="Follow" data-id="@club.ClubId" data-action="follow" />
+            }
         }
-        else
-        {
-            <img class="clubs-list-follow-img" src="/Images/follow-icon.png"
-                 title="Follow" alt="Follow" data-id="@club.ClubId" data-action="follow" />
-        }
-
 
     </div>
 }
