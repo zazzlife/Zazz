@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Zazz.Core.Models.Data.Enums;
 
@@ -28,9 +27,5 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("CityId")]
         public virtual City City { get; set; }
 
-        public int? CityId { get; set; }
-
-        [MaxLength(200), DataType(DataType.EmailAddress)]
-        public string PublicEmail { get; set; }
-    }
+        public int? CityId { get; set; }}
 }

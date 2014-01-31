@@ -18,5 +18,15 @@ namespace Zazz.Core.Models.Data
         public string Address { get; set; }
 
         public int? CoverPhotoId { get; set; }
+
+        [ForeignKey("SchoolId")]
+        public virtual School School { get; set; }
+
+        public short? SchoolId { get; set; }
+
+        [ForeignKey("CityId")]
+        public virtual City City { get; set; }
+
+        public int? CityId { get; set; }
     }
 }
