@@ -85,9 +85,11 @@ namespace Zazz.Web.Controllers
                                              ToUserDisplayPhoto = toUser.HasValue
                                                                   ? PhotoService.GetUserDisplayPhoto(toUser.Value)
                                                                   : null,
-                                            Categories = StaticDataRepository.GetCategories()
+                                            Categories = categories != null 
+                                                ? StaticDataRepository.GetCategories()
                                                         .Where(c => categories.Any(ca => ca == c.Id))
                                                         .Select(c => c.Name)
+                                                : Enumerable.Empty<string>()
                                             
                                          },
                          Comments = new CommentsViewModel
