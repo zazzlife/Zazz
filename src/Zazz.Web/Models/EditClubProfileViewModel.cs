@@ -27,5 +27,15 @@ namespace Zazz.Web.Models
 
         [Display(Name = "Email Facebook Errors Notification")]
         public bool SendFbErrorNotification { get; set; }
+
+        [Display(Name = "School")]
+        public short? SchoolId { get; set; }
+
+        [Display(Name = "City")]
+        public int? CityId { get; set; }
+
+        public IEnumerable<School> Schools { get; set; }
+
+        public IEnumerable<City> Cities { get; set; }
     }
 }

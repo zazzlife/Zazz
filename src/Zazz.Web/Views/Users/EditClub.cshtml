@@ -61,6 +61,25 @@
                                     @Html.ValidationMessageFor(model => model.ClubType, null, new { @class = "help-inline" })
                                 </div>
                             </div>
+                            
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
+                                </div>
+                                <div class="editor-field">
+                                    @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City", new { @class = "span4" })
+                                    @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
+                                </div>
+                            </div>
 
 
                         </p>

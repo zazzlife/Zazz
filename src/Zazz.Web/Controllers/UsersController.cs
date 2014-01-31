@@ -318,6 +318,8 @@ namespace Zazz.Web.Controllers
                     ClubAddress = user.ClubDetail.Address,
                     ClubName = user.ClubDetail.ClubName,
                     ClubType = user.ClubDetail.ClubType,
+                    SchoolId = user.ClubDetail.SchoolId,
+                    CityId = user.ClubDetail.CityId,
                     SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
                     SyncFbEvents = user.Preferences.SyncFbEvents,
                     SyncFbImages = user.Preferences.SyncFbImages,
@@ -328,6 +330,9 @@ namespace Zazz.Web.Controllers
             {
                 vm = new EditClubProfileViewModel();
             }
+
+            vm.Cities = StaticDataRepository.GetCities();
+            vm.Schools = StaticDataRepository.GetSchools();
 
             return View("EditClub", vm);
         }
@@ -344,6 +349,8 @@ namespace Zazz.Web.Controllers
                 user.ClubDetail.Address = vm.ClubAddress;
                 user.ClubDetail.ClubName = vm.ClubName;
                 user.ClubDetail.ClubType = vm.ClubType;
+                user.ClubDetail.SchoolId = vm.SchoolId;
+                user.ClubDetail.CityId = vm.CityId;
                 user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
                 user.Preferences.SyncFbEvents = vm.SyncFbEvents;
                 user.Preferences.SyncFbImages = vm.SyncFbImages;
@@ -354,6 +361,9 @@ namespace Zazz.Web.Controllers
                 _cacheService.RemoveUserDisplayName(user.Id);
                 ShowAlert("Your preferences has been updated.", AlertType.Success);
             }
+
+            vm.Cities = StaticDataRepository.GetCities();
+            vm.Schools = StaticDataRepository.GetSchools();
 
             return View("EditClub", vm);
         }
