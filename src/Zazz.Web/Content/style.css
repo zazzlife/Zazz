@@ -683,14 +683,17 @@ hr.gold-line {
 
 .user-details {
     margin-top: 25px;
-    border-top: 2px solid #858585;
-    margin-right: -8px;
     text-align: left;
-    color: black;
-    font-size: 14px;
+    color: #000;
+    font-size: 12px;
+    background-color: #FFF;
+    padding: 15px;
+    margin-right: 10px;
+    -ms-border-radius: 8px;
+    border-radius: 8px;
 }
 
-    .user-details ul {
+.user-details ul {
         list-style: none;
         margin: 0;
         padding: 0;
