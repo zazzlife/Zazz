@@ -743,6 +743,7 @@
     <Content Include="Views\Photos\List.cshtml" />
     <Content Include="Views\Home\Clubs.cshtml" />
     <Content Include="Views\Home\_ClubsList.cshtml" />
+    <Content Include="Views\Photos\_ProfilePhotos.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

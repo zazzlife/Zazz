@@ -95,7 +95,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        private ActionResult ProfilePhotos(int id, int? lastPhotoId)
+        public ActionResult ProfilePhotos(int id, int? lastPhotoId)
         {
             var currentUserId = GetCurrentUserId();
 
@@ -117,7 +117,7 @@ namespace Zazz.Web.Controllers
                 PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
             });
 
-            return View(vm);
+            return View("_ProfilePhotos", vm);
         }
 
         public ActionResult Albums(int id)
