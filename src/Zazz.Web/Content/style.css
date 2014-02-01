@@ -1187,6 +1187,10 @@ li.new-notification {
     User Profile Page
 ***************************************/
 
+.user-profile-img {
+    width: 175px;
+}
+
 #user-profile-container {
     margin-top: 30px;
 }
