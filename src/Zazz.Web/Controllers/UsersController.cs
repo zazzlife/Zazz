@@ -265,7 +265,7 @@ namespace Zazz.Web.Controllers
                 currentUserId = UserService.GetUserId(User.Identity.Name);
             }
 
-            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 100).ToList();
+            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 500).ToList();
 
             var baseVm = LoadBaseProfileVm(user, currentUserId, displayName, profilePhotoUrl);
             var vm = new UserPhotosViewModel

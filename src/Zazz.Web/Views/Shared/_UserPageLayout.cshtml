@@ -65,7 +65,7 @@
                         </li>
                         <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                         <li><a href="~/events/list"><i class="icon-calendar"></i>Events</a></li>
-                        <li><a href="~/photos/"><i class="icon-camera"></i>Photos</a></li>
+                        <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>Photos</a></li>
                         <li><a href="#"><i class="icon-glass"></i>Clubs</a></li>
                     </ul>
                 </li>

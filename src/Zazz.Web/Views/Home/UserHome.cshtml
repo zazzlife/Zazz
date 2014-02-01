@@ -40,7 +40,7 @@
                 </li>
                 <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>&nbsp; Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                 <li><a href="@Url.Action("List", "Events")"><i class="icon-calendar"></i>&nbsp; Events</a></li>
-                <li><a href="@Url.Action("Index", "Photos")"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>&nbsp; Photo</a></li>
                 <li><a href="@Url.Action("Clubs", "Home")"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
                 @if (Model.HasFacebookAccount)
                 {
