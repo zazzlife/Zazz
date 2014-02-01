@@ -22,8 +22,8 @@
                 if (Model.IsCurrentUserFollowingTargetUser)
                 {   
                     <button data-btn-follow="1" data-id="@Model.UserId"
-                         data-url="@Url.Action("Unfollow", "Follow", new {id=Model.UserId})"
-                         data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
+                            data-url="@Url.Action("Unfollow", "Follow", new {id=Model.UserId})"
+                            data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
                         <i class="icon-remove"></i> Unfollow
                     </button>
                 }
@@ -109,7 +109,7 @@
 @*                </div>*@
 @*            }*@
 
-        </div>
+    </div>
 
         @*CENTER*@
         <div class="span6 color-white-bg box-shadow padding-top-17 padding-bottom-100 margin-left-10">
@@ -129,7 +129,7 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active row-fluid" id="newsFeedTab">
-@*                            @Html.Partial("_PostInputsPartial")*@
+                            @*                            @Html.Partial("_PostInputsPartial")*@
 
                             @Html.Partial("_FeedsPartial", Model.Feeds)
                         </div>
@@ -162,6 +162,7 @@
 @section Scripts
 {
     <script type="text/javascript">
+        var $res;
         $(document).on('click', '#photosTabLink', function() {
             var userId = @Model.UserId;
             var url = '/photos/ProfilePhotos/' + userId;
@@ -171,6 +172,17 @@
                 url: url,
                 success: function(res) {
                     $('#profilePhotosLoading').fadeOut();
+
+                    $res = $($.parseHTML(res));
+                    $res.find('.lightbox').each(function() {
+                        var $lb = $(this);
+                        var id = $lb.attr('id');
+
+                        var check = $('#' + id);
+                        if (check.length) {
+                            $lb.remove();
+                        }
+                    });
 
                     $('.profile-photos').hide().html(res).fadeIn();
 
