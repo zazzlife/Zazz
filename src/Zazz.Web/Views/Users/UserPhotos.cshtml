@@ -1,0 +1,30 @@
+﻿@model UserPhotosViewModel
+@{
+    ViewBag.Title = Model.UserName;
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+}
+
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="@Url.Action("Profile", "Users", new { id = Model.UserId })"><i class="icon-pencil"></i> News Feed</a></li>
+        <li class="active"><a id="photosTabLink" href="#photosTab" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane row-fluid" id="newsFeedTab">
+        </div>
+        <div class="tab-pane active margin-ten" id="photosTab">
+            <ul class="profile-photos">
+                @foreach (var p in Model.Photos)
+                {
+                    <li>
+                        <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
+                            <img class="profile-photos-img" src="@p.PhotoUrl.MediumLink" />
+                        </a>
+                        @Html.Partial("_LightBoxPartial", p)
+                    </li>
+
+                }
+            </ul>
+        </div>
+    </div>
+</div>

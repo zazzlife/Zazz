@@ -328,6 +328,8 @@
     <Compile Include="Models\RecoverAccountViewModel.cs" />
     <Compile Include="Models\RegisterClubViewModel.cs" />
     <Compile Include="Models\RegisterUserViewModel.cs" />
+    <Compile Include="Models\UserPhotosViewModel.cs" />
+    <Compile Include="Models\UserProfileViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\IOAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\JWT.cs" />
     <Compile Include="Models\Api\ApiAlbum.cs" />
@@ -372,7 +374,7 @@
     <Compile Include="Models\CategoryStatViewModel.cs" />
     <Compile Include="Models\UploadPicModalModel.cs" />
     <Compile Include="Models\UserHomeViewModel.cs" />
-    <Compile Include="Models\UserProfileViewModel.cs" />
+    <Compile Include="Models\UserProfileViewModelBase.cs" />
     <Compile Include="Models\WeeklyViewModel.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthService.cs" />
     <Compile Include="OAuthAuthorizationServer\OAuthCredentials.cs" />
@@ -743,7 +745,8 @@
     <Content Include="Views\Photos\List.cshtml" />
     <Content Include="Views\Home\Clubs.cshtml" />
     <Content Include="Views\Home\_ClubsList.cshtml" />
-    <Content Include="Views\Photos\_ProfilePhotos.cshtml" />
+    <Content Include="Views\Shared\_UserProfileLayout.cshtml" />
+    <Content Include="Views\Users\UserPhotos.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,196 +1,20 @@
 ﻿@model UserProfileViewModel
 @{
     ViewBag.Title = Model.UserName;
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    var photoLightboxes = String.Empty;
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
 }
 
-<div class="container" style="margin-top: -13px;">
-
-    @*LEFT*@
-
-    <div class="row-fluid">
-        <div class="span3 margin-top-15 text-center">
-
-            <div>
-                <img class="img-polaroid img-rounded" src="@Model.UserPhoto.SmallLink"/>
-                <p class="username-display">@Model.UserName</p>
-            </div>
-            
-            @if (!Model.IsSelf)
-            {
-                if (Model.IsCurrentUserFollowingTargetUser)
-                {   
-                    <button data-btn-follow="1" data-id="@Model.UserId"
-                            data-url="@Url.Action("Unfollow", "Follow", new {id=Model.UserId})"
-                            data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
-                        <i class="icon-remove"></i> Unfollow
-                    </button>
-                }
-                else if (Model.FollowRequestAlreadySent)
-                {
-                    <button data-btn-follow="1"
-                            title="Follow request has been sent before. You must wait for the user to accept your request."
-                            class="btn btn-follow btn-zazz disabled" disabled="disabled">
-                        <i class="icon-ok"></i> Follow
-                    </button>
-                }
-                else
-                {
-                    <button data-btn-follow="1" data-id="@Model.UserId" data-url="@Url.Action("FollowUser", "Follow", new {id=Model.UserId})"
-                            data-action="follow" class="btn btn-zazz btn-follow">
-                        <i class="icon-plus"></i> Follow
-                    </button>
-                }
-            }
-
-            @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
-            {
-                <div class="user-details">
-                    <ul>
-                        @if (!String.IsNullOrEmpty(Model.City))
-                        {
-                            <li><i class="icon-globe"></i>City: @Model.City</li>
-                        }
-
-                        @if (!String.IsNullOrEmpty(Model.School))
-                        {
-                            <li><i class="icon-building"></i>@Model.School</li>
-                        }
-
-                        @if (!String.IsNullOrEmpty(Model.Major))
-                        {
-                            <li><i class="icon-book"></i>@Model.Major</li>
-                        }
-                    </ul>
-                </div>
-            }
-            
-@*            PHOTOS*@
-
-@*            @if (Model.Photos.Any())*@
-@*            {*@
-@*                <div class="pics-widget">*@
-@*                    <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">*@
-@*                        <h6 class="pics-widget-title">Party pics</h6>*@
-@*                    </a>*@
-@*                    <ul>*@
-@*                        @{*@
-@*                        var i = 1;*@
-@**@
-@*                        foreach (var p in Model.Photos)*@
-@*                        {*@
-@*                            <li>*@
-@*                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">*@
-@*                                    @if (i == 1)*@
-@*                                    {*@
-@*                                        <img src="@p.PhotoUrl.MediumLink" />*@
-@*                                    }*@
-@*                                    else*@
-@*                                    {*@
-@*                                        <img src="@p.PhotoUrl.VerySmallLink" />*@
-@*                                    }*@
-@*                                </a>*@
-@**@
-@*                                @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }*@
-@*                            </li>*@
-@**@
-@*                                   i++;*@
-@*                            }*@
-@*                        }*@
-@**@
-@*                    </ul>*@
-@*                    <div class="clearfix"></div>*@
-@**@
-@*                    <div class="text-center" style="margin-top: 10px;">*@
-@*                        <a href="@Url.Action("List", "Photos", new { id = Model.UserId })">See more...</a>*@
-@*                    </div>*@
-@**@
-@*                </div>*@
-@*            }*@
-
-    </div>
-
-        @*CENTER*@
-        <div class="span6 color-white-bg box-shadow padding-top-17 padding-bottom-100 margin-left-10">
-            <div class="row-fluid margin-bottam-20 center-top-color follow-img margin-top-15 box-shadow-2">
-                <span class="arrow-left hidden-phone"></span>
-                <span class="arrow-right hidden-phone"></span>
-                <div class="span4 margin-top-10">Followers<span class="follow-no-bg margin-left-10">@Model.FollowersCount</span></div>
-                <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
-                <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
-            </div>
-
-            <div class="padding-L-R-10">
-                <div class="tabbable">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#newsFeedTab" data-toggle="tab"><i class="icon-pencil"></i> News Feed</a></li>
-                        <li><a id="photosTabLink" href="#photosTab" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active row-fluid" id="newsFeedTab">
-                            @*                            @Html.Partial("_PostInputsPartial")*@
-
-                            @Html.Partial("_FeedsPartial", Model.Feeds)
-                        </div>
-                        <div class="tab-pane margin-ten" id="photosTab">
-                            <span id="profilePhotosLoading"><i class="icon icon-spin icon-refresh"></i> loading...</span>
-                            <ul class="profile-photos">
-                                
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#newsFeedTab" data-toggle="tab"><i class="icon-pencil"></i> News Feed</a></li>
+        <li><a id="photosTabLink" href="@Url.Action("Photos", "Users", new {id=Model.UserId})"><i class="icon-camera"></i> Photos</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active row-fluid" id="newsFeedTab">
+            @Html.Partial("_FeedsPartial", Model.Feeds)
         </div>
-
-
-        @*RIGHT*@
-        <div class="span3" style="padding-top: 22px;">
-            @foreach (var c in Model.CategoriesStats)
-            {
-                c.IsRightSide = true;
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
+        <div class="tab-pane margin-ten" id="photosTab">
+            
         </div>
-
     </div>
-
 </div>
-
-@section Scripts
-{
-    <script type="text/javascript">
-        var $res;
-        $(document).on('click', '#photosTabLink', function() {
-            var userId = @Model.UserId;
-            var url = '/photos/ProfilePhotos/' + userId;
-
-
-            $.ajax({
-                url: url,
-                success: function(res) {
-                    $('#profilePhotosLoading').fadeOut();
-
-                    $res = $($.parseHTML(res));
-                    $res.find('.lightbox').each(function() {
-                        var $lb = $(this);
-                        var id = $lb.attr('id');
-
-                        var check = $('#' + id);
-                        if (check.length) {
-                            $lb.remove();
-                        }
-                    });
-
-                    $('.profile-photos').hide().html(res).fadeIn();
-
-                },
-                error: function() {
-                    toastr.error('Request Failed!');
-                }
-            });
-        });
-    </script>
-}

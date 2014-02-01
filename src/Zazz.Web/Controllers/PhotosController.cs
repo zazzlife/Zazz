@@ -94,32 +94,6 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        [Authorize]
-        public ActionResult ProfilePhotos(int id, int? lastPhotoId)
-        {
-            var currentUserId = GetCurrentUserId();
-
-            var query = _uow.PhotoRepository.GetLatestUserPhotos(id, 50);
-            if (lastPhotoId.HasValue)
-                query = query.Where(p => p.Id < lastPhotoId.Value);
-
-            var photos = query.ToList();
-
-            var vm = photos.Select(p => new PhotoViewModel
-            {
-                AlbumId = p.AlbumId,
-                Description = p.Description,
-                FromUserDisplayName = UserService.GetUserDisplayName(p.UserId),
-                FromUserId = p.UserId,
-                FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(p.UserId),
-                IsFromCurrentUser = p.UserId == currentUserId,
-                PhotoId = p.Id,
-                PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
-            });
-
-            return View("_ProfilePhotos", vm);
-        }
-
         public ActionResult Albums(int id)
         {
             var currentUserId = 0;

@@ -186,38 +186,35 @@ namespace Zazz.Web.Controllers
             return View("ClubProfile", vm);
         }
 
-        private ActionResult LoadUserProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
+        private UserProfileViewModelBase LoadBaseProfileVm(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
-//            const int PHOTOS_COUNT = 15;
-//            var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
+            //const int PHOTOS_COUNT = 15;
+            //            var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
 
             var vm = new UserProfileViewModel
-                     {
-                         UserId = user.Id,
-                         UserName = displayName,
-                         UserPhoto = profilePhotoUrl,
-                         IsSelf = currentUserId == user.Id,
-                         Feeds = _feedHelper
-                         .GetUserActivityFeed(user.Id,
-                         currentUserId),
-                         FollowersCount = _uow.FollowRepository.GetUserFollowers(user.Id).Count(),
-                         FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
-                         ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
-//                         Photos = photos.Select(p => new PhotoViewModel
-//                         {
-//                             FromUserDisplayName = displayName,
-//                             FromUserId = user.Id,
-//                             FromUserPhotoUrl = profilePhotoUrl,
-//                             IsFromCurrentUser = currentUserId == user.Id,
-//                             Description = p.Description,
-//                             PhotoId = p.Id,
-//                             PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
-//                         }),
-                         CategoriesStats = GetTagStats(),
-                         City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
-                         Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
-                         School = user.UserDetail.School == null ? null : user.UserDetail.School.Name
-                     };
+            {
+                UserId = user.Id,
+                UserName = displayName,
+                UserPhoto = profilePhotoUrl,
+                IsSelf = currentUserId == user.Id,
+                FollowersCount = _uow.FollowRepository.GetUserFollowers(user.Id).Count(),
+                FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
+                ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
+                //                         Photos = photos.Select(p => new PhotoViewModel
+                //                         {
+                //                             FromUserDisplayName = displayName,
+                //                             FromUserId = user.Id,
+                //                             FromUserPhotoUrl = profilePhotoUrl,
+                //                             IsFromCurrentUser = currentUserId == user.Id,
+                //                             Description = p.Description,
+                //                             PhotoId = p.Id,
+                //                             PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                //                         }),
+                CategoriesStats = GetTagStats(),
+                City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
+                Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
+                School = user.UserDetail.School == null ? null : user.UserDetail.School.Name
+            };
 
             if (!vm.IsSelf && currentUserId != 0)
             {
@@ -226,7 +223,81 @@ namespace Zazz.Web.Controllers
                 vm.FollowRequestAlreadySent = _uow.FollowRequestRepository.Exists(currentUserId, user.Id);
             }
 
+            return vm;
+        }
+
+        private ActionResult LoadUserProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
+        {
+            var baseVm = LoadBaseProfileVm(user, currentUserId, displayName, profilePhotoUrl);
+            var vm = new UserProfileViewModel
+            {
+                CategoriesStats = baseVm.CategoriesStats,
+                City = baseVm.City,
+                Feeds = _feedHelper
+                    .GetUserActivityFeed(user.Id, currentUserId),
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                IsSelf = baseVm.IsSelf,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                Major = baseVm.Major,
+                School = baseVm.School,
+                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
+                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser
+            };
+
             return View("UserProfile", vm);
+        }
+
+        public ActionResult Photos(int id)
+        {
+            var displayName = UserService.GetUserDisplayName(id);
+
+            var user = _uow.UserRepository.GetById(id, true, true, true);
+            var profilePhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id);
+
+            var currentUserId = 0;
+            if (User.Identity.IsAuthenticated)
+            {
+                currentUserId = UserService.GetUserId(User.Identity.Name);
+            }
+
+            var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 100).ToList();
+
+            var baseVm = LoadBaseProfileVm(user, currentUserId, displayName, profilePhotoUrl);
+            var vm = new UserPhotosViewModel
+            {
+                CategoriesStats = baseVm.CategoriesStats,
+                City = baseVm.City,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                IsSelf = baseVm.IsSelf,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                Major = baseVm.Major,
+                School = baseVm.School,
+                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
+                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
+                Photos = photos.Select(p => new PhotoViewModel
+                {
+                    AlbumId = p.AlbumId,
+                    Description = p.Description,
+                    FromUserDisplayName = UserService.GetUserDisplayName(p.UserId),
+                    FromUserId = p.UserId,
+                    FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(p.UserId),
+                    IsFromCurrentUser = p.UserId == currentUserId,
+                    PhotoId = p.Id,
+                    PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                })
+            };
+
+            return View("UserPhotos", vm);
         }
 
         public ActionResult LoadMoreFeeds(int lastFeedId)
