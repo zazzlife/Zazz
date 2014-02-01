@@ -25,15 +25,17 @@ namespace Zazz.Web.Controllers
     {
         private readonly IAlbumService _albumService;
         private readonly IImageValidator _imageValidator;
+        private readonly IUoW _uow;
 
         public PhotosController(IPhotoService photoService, IAlbumService albumService,
                                 IUserService userService, IDefaultImageHelper defaultImageHelper,
                                 IImageValidator imageValidator, IStaticDataRepository staticDataRepository,
-                                ICategoryService categoryService)
+                                ICategoryService categoryService, IUoW uow)
             : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _albumService = albumService;
             _imageValidator = imageValidator;
+            _uow = uow;
         }
 
         [Authorize]
@@ -88,6 +90,32 @@ namespace Zazz.Web.Controllers
                          UserId = id,
                          Photos = photosVm
                      };
+
+            return View(vm);
+        }
+
+        [Authorize]
+        private ActionResult ProfilePhotos(int id, int? lastPhotoId)
+        {
+            var currentUserId = GetCurrentUserId();
+
+            var query = _uow.PhotoRepository.GetLatestUserPhotos(id, 50);
+            if (lastPhotoId.HasValue)
+                query = query.Where(p => p.Id < lastPhotoId.Value);
+
+            var photos = query.ToList();
+
+            var vm = photos.Select(p => new PhotoViewModel
+            {
+                AlbumId = p.AlbumId,
+                Description = p.Description,
+                FromUserDisplayName = UserService.GetUserDisplayName(p.UserId),
+                FromUserId = p.UserId,
+                FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(p.UserId),
+                IsFromCurrentUser = p.UserId == currentUserId,
+                PhotoId = p.Id,
+                PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+            });
 
             return View(vm);
         }

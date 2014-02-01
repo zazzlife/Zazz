@@ -188,8 +188,8 @@ namespace Zazz.Web.Controllers
 
         private ActionResult LoadUserProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
-            const int PHOTOS_COUNT = 15;
-            var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
+//            const int PHOTOS_COUNT = 15;
+//            var photos = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, PHOTOS_COUNT).ToList();
 
             var vm = new UserProfileViewModel
                      {
@@ -203,16 +203,16 @@ namespace Zazz.Web.Controllers
                          FollowersCount = _uow.FollowRepository.GetUserFollowers(user.Id).Count(),
                          FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
                          ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
-                         Photos = photos.Select(p => new PhotoViewModel
-                         {
-                             FromUserDisplayName = displayName,
-                             FromUserId = user.Id,
-                             FromUserPhotoUrl = profilePhotoUrl,
-                             IsFromCurrentUser = currentUserId == user.Id,
-                             Description = p.Description,
-                             PhotoId = p.Id,
-                             PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
-                         }),
+//                         Photos = photos.Select(p => new PhotoViewModel
+//                         {
+//                             FromUserDisplayName = displayName,
+//                             FromUserId = user.Id,
+//                             FromUserPhotoUrl = profilePhotoUrl,
+//                             IsFromCurrentUser = currentUserId == user.Id,
+//                             Description = p.Description,
+//                             PhotoId = p.Id,
+//                             PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+//                         }),
                          CategoriesStats = GetTagStats(),
                          City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
                          Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,

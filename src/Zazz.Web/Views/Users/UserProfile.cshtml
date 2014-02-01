@@ -65,47 +65,49 @@
                     </ul>
                 </div>
             }
+            
+@*            PHOTOS*@
 
-            @if (Model.Photos.Any())
-            {
-                <div class="pics-widget">
-                    <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">
-                        <h6 class="pics-widget-title">Party pics</h6>
-                    </a>
-                    <ul>
-                        @{
-                        var i = 1;
-
-                        foreach (var p in Model.Photos)
-                        {
-                            <li>
-                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
-                                    @if (i == 1)
-                                    {
-                                        <img src="@p.PhotoUrl.MediumLink" />
-                                    }
-                                    else
-                                    {
-                                        <img src="@p.PhotoUrl.VerySmallLink" />
-                                    }
-                                </a>
-
-                                @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }
-                            </li>
-
-                                   i++;
-                            }
-                        }
-
-                    </ul>
-                    <div class="clearfix"></div>
-
-                    <div class="text-center" style="margin-top: 10px;">
-                        <a href="@Url.Action("List", "Photos", new { id = Model.UserId })">See more...</a>
-                    </div>
-
-                </div>
-            }
+@*            @if (Model.Photos.Any())*@
+@*            {*@
+@*                <div class="pics-widget">*@
+@*                    <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">*@
+@*                        <h6 class="pics-widget-title">Party pics</h6>*@
+@*                    </a>*@
+@*                    <ul>*@
+@*                        @{*@
+@*                        var i = 1;*@
+@**@
+@*                        foreach (var p in Model.Photos)*@
+@*                        {*@
+@*                            <li>*@
+@*                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">*@
+@*                                    @if (i == 1)*@
+@*                                    {*@
+@*                                        <img src="@p.PhotoUrl.MediumLink" />*@
+@*                                    }*@
+@*                                    else*@
+@*                                    {*@
+@*                                        <img src="@p.PhotoUrl.VerySmallLink" />*@
+@*                                    }*@
+@*                                </a>*@
+@**@
+@*                                @{ photoLightboxes += Html.Partial("_LightBoxPartial", p); }*@
+@*                            </li>*@
+@**@
+@*                                   i++;*@
+@*                            }*@
+@*                        }*@
+@**@
+@*                    </ul>*@
+@*                    <div class="clearfix"></div>*@
+@**@
+@*                    <div class="text-center" style="margin-top: 10px;">*@
+@*                        <a href="@Url.Action("List", "Photos", new { id = Model.UserId })">See more...</a>*@
+@*                    </div>*@
+@**@
+@*                </div>*@
+@*            }*@
 
         </div>
 
@@ -119,12 +121,23 @@
                 <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
             </div>
 
-            <div style="margin-top: 100px;" class="visible-phone"></div>
-
             <div class="padding-L-R-10">
-                @Html.Partial("_PostInputsPartial")
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#newsFeedTab" data-toggle="tab"><i class="icon-pencil"></i> News Feed</a></li>
+                        <li><a href="#photosTab" data-toggle="tab"><i class="icon-camera"></i> Photos</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active row-fluid" id="newsFeedTab">
+@*                            @Html.Partial("_PostInputsPartial")*@
 
-                @Html.Partial("_FeedsPartial", Model.Feeds)
+                            @Html.Partial("_FeedsPartial", Model.Feeds)
+                        </div>
+                        <div class="tab-pane margin-ten" id="photosTab">
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
 
