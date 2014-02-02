@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 
 namespace Zazz.Data.Migrations
@@ -53,7 +54,17 @@ namespace Zazz.Data.Migrations
 
             var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
             foreach (var sqlFile in sqlFiles)
-                context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));
+            {
+                try
+                {
+                    context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+            }
+                
         }
     }
 }
