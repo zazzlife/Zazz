@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Zazz.Data.Migrations
 {
     using System;
@@ -5,7 +7,7 @@ namespace Zazz.Data.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Zazz.Data.ZazzDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ZazzDbContext>
     {
         public Configuration()
         {
@@ -16,7 +18,7 @@ namespace Zazz.Data.Migrations
 #endif
         }
 
-        protected override void Seed(Zazz.Data.ZazzDbContext context)
+        protected override void Seed(ZazzDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -30,6 +32,28 @@ namespace Zazz.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            foreach (var city in StaticData.GetCities())
+                context.Cities.AddOrUpdate(c => c.Id, city);
+
+            foreach (var major in StaticData.GetMajors())
+                context.Majors.AddOrUpdate(m => m.Id, major);
+
+            foreach (var school in StaticData.GetSchools())
+                context.Schools.AddOrUpdate(s => s.Id, school);
+
+            foreach (var category in StaticData.GetCategories())
+                context.Categories.AddOrUpdate(c => c.Id, category);
+
+            foreach (var scope in StaticData.GetScopes())
+                context.OAuthScopes.AddOrUpdate(s => s.Id, scope);
+
+            foreach (var client in StaticData.GetOAuthClients())
+                context.OAuthClients.AddOrUpdate(x => x.Id, client);
+
+            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
+            foreach (var sqlFile in sqlFiles)
+                context.Database.ExecuteSqlCommand(File.ReadAllText(sqlFile));
         }
     }
 }

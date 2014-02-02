@@ -54,13 +54,13 @@ namespace Zazz.Data
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ZazzDbContext, Configuration>());
         }
 
-        public ZazzDbContext(bool dropDbOnInit = false)
+        public ZazzDbContext(bool dropDbOnInit)
             : base("DevConnectionString")
         {
             if (dropDbOnInit)
                 Database.SetInitializer(new DropCreateDatabaseAlwaysWithSeed());
             else
-                Database.SetInitializer(new DropCreateDatabaseIfModelChangesWithSeed());
+                Database.SetInitializer(new MigrateDatabaseToLatestVersion<ZazzDbContext, Configuration>());
 
             Database.Initialize(true);
         }
