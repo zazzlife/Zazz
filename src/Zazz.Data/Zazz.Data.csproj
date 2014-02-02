@@ -56,6 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InMemoryUserRoleRepository.cs" />
+    <Compile Include="Migrations\201401310529400_InitialCreate.cs" />
+    <Compile Include="Migrations\201401310529400_InitialCreate.Designer.cs">
+      <DependentUpon>201401310529400_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\ClubPointRewardScenarioRepository.cs" />
     <Compile Include="Repositories\ClubRewardRepository.cs" />
     <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />
@@ -102,6 +107,11 @@
       <Project>{a2879224-80d7-402d-a263-81b66b720f4c}</Project>
       <Name>Zazz.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201401310529400_InitialCreate.resx">
+      <DependentUpon>201401310529400_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

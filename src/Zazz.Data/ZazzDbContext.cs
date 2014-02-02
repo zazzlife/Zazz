@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using Zazz.Core.Models.Data;
+using Zazz.Data.Migrations;
 
 namespace Zazz.Data
 {
@@ -47,6 +48,12 @@ namespace Zazz.Data
         public IDbSet<UserRewardHistory> UserRewardsHistory { get; set; }
 
 #if DEBUG
+        public ZazzDbContext()
+            : base("DevConnectionString")
+        {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ZazzDbContext, Configuration>());
+        }
+
         public ZazzDbContext(bool dropDbOnInit = false)
             : base("DevConnectionString")
         {
