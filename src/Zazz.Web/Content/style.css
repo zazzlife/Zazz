@@ -2046,6 +2046,14 @@ a:hover, a:focus {
     position: relative;
 }
 
+.club-profile-img {
+    position: absolute;
+    top: 10px;
+    width: 100px;
+    height: 100px;
+    left: 36%;
+}
+
 .clubs-list-follow-img {
     position: absolute;
     width: 30px;

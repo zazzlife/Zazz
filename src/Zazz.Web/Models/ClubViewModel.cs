@@ -8,6 +8,8 @@ namespace Zazz.Web.Models
 
         public string ClubName { get; set; }
 
+        public PhotoLinks ProfileImageLink { get; set; }
+
         public PhotoLinks CoverImageLink { get; set; }
 
         public bool IsCurrentUserFollowing { get; set; }

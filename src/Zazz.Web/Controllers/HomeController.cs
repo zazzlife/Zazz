@@ -136,6 +136,7 @@ namespace Zazz.Web.Controllers
                 var items = clubs.Select(x => new
                 {
                     x.Id,
+                    ProfileImageId = x.ProfilePhotoId,
                     CoverImageId = x.ClubDetail.CoverPhotoId,
                     IsFollowing = x.Followers.Any(f => f.FromUserId == userId)
                 }).ToList();
@@ -144,6 +145,9 @@ namespace Zazz.Web.Controllers
                 {
                     ClubId = x.Id,
                     ClubName = UserService.GetUserDisplayName(x.Id),
+                    ProfileImageLink = x.ProfileImageId.HasValue
+                        ? PhotoService.GeneratePhotoUrl(x.Id, x.ProfileImageId.Value)
+                        : DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified),
                     CoverImageLink = x.CoverImageId.HasValue
                         ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImageId.Value)
                         : DefaultImageHelper.GetDefaultCoverImage(),
