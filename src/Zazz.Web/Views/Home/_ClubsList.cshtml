@@ -10,7 +10,7 @@
         <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
             <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
         </a>
-        
+        <span class="club-name">@club.ClubName</span>
         <img class="club-profile-img img-polaroid" src="@club.ProfileImageLink.SmallLink"/>
 
         @if (club.ClubId != club.CurrentUserId)

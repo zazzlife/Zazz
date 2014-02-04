@@ -2049,17 +2049,26 @@ a:hover, a:focus {
 .club-profile-img {
     position: absolute;
     top: 10px;
-    width: 100px;
-    height: 100px;
-    left: 36%;
+    width: 85px;
+    height: 85px;
+    left: 39%;
+}
+
+.club-name {
+    position: absolute;
+    bottom: 52px;
+    width: 100%;
+    left: 0;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .clubs-list-follow-img {
     position: absolute;
     width: 30px;
     height: 30px;
-    bottom: 20px;
-    left: 45%;
+    bottom: 15px;
+    left: 46%;
     
     -webkit-transition: opacity linear 0.5s;
     -moz-transition: opacity linear 0.5s;
