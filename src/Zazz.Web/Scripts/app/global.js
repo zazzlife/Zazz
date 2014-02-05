@@ -319,6 +319,25 @@ function uploadPicWithFeed(photoId) {
     });
 }
 
+function userProfilePhotoUpload(photoId, photoUrl) {
+    $.ajax({
+        url: '/users/RenderSingleProfilePhoto',
+        data: {
+            photoId: photoId
+        },
+        error: function() {
+            toastr.error('Image was uploaded but failed to load the image. Please refresh the page.');
+        },
+        success: function (res) {
+            //var $li = $.parseHTML(res.trim());
+            var $li = $(res.trim());
+            var $ul = $('ul.profile-photos');
+
+            $li.hide().appendTo($ul).fadeIn();
+        }
+    });
+}
+
 /********************************
     Search Autocomplete
 *********************************/

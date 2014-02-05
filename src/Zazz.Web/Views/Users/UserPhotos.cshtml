@@ -13,16 +13,20 @@
         <div class="tab-pane row-fluid" id="newsFeedTab">
         </div>
         <div class="tab-pane active margin-ten" id="photosTab">
+            
+            <p>
+                <button data-toggle="modal" data-target="#uploadPicModal" data-callback="userProfilePhotoUpload"
+                        class="btn btn-info">
+                    Upload Photo
+                </button>
+                
+                @Html.Partial("_UploadPicModal", true)
+            </p>
+
             <ul class="profile-photos">
                 @foreach (var p in Model.Photos)
                 {
-                    <li>
-                        <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
-                            <img class="profile-photos-img" src="@p.PhotoUrl.MediumLink" />
-                        </a>
-                        @Html.Partial("_LightBoxPartial", p)
-                    </li>
-
+                    @Html.Partial("_UserProfileSinglePhoto", p)
                 }
             </ul>
         </div>

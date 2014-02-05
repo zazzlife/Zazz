@@ -1,0 +1,12 @@
+﻿@model PhotoViewModel
+
+@{
+    Layout = null;
+}
+           
+<li>
+    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
+        <img class="profile-photos-img" src="@Model.PhotoUrl.MediumLink" />
+    </a>
+    @Html.Partial("_LightBoxPartial", Model)
+</li>

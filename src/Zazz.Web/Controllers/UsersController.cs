@@ -300,6 +300,26 @@ namespace Zazz.Web.Controllers
             return View("UserPhotos", vm);
         }
 
+        public ActionResult RenderSingleProfilePhoto(int photoId)
+        {
+            var photo = PhotoService.GetPhoto(photoId);
+            if (photo == null) throw new HttpException(404, "not found");
+
+            var vm = new PhotoViewModel
+            {
+                AlbumId = photo.AlbumId,
+                Description = photo.Description,
+                FromUserDisplayName = UserService.GetUserDisplayName(photo.UserId),
+                FromUserId = photo.UserId,
+                FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(photo.UserId),
+                IsFromCurrentUser = photo.UserId == GetCurrentUserId(),
+                PhotoId = photo.Id,
+                PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id)
+            };
+
+            return View("_UserProfileSinglePhoto", vm);
+        }
+
         public ActionResult LoadMoreFeeds(int lastFeedId)
         {
             var currentUserId = 0;
