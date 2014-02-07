@@ -26,15 +26,17 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly ICacheService _cacheService;
         private readonly IFeedHelper _feedHelper;
+        private readonly IFollowService _followService;
 
         public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ICategoryService categoryService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, IFollowService followService)
             : base(userService, photoService, defaultImageHelper, staticDataRepo, categoryService)
         {
             _uow = uow;
             _cacheService = cacheService;
             _feedHelper = feedHelper;
+            _followService = followService;
         }
 
         [Authorize]
@@ -513,7 +515,10 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult Followers(int id)
         {
-            throw new NotImplementedException();
+            var user = UserService.GetUser(id, true, true, true, true);
+            return user.AccountType == AccountType.User
+                ? UserFollowers(user)
+                : ClubFollowers(user);
         }
 
         [Authorize]
@@ -583,9 +588,84 @@ namespace Zazz.Web.Controllers
             return View("ClubFollowing", vm);
         }
 
+        private ActionResult UserFollowers(User user)
+        {
+            var baseVm = LoadBaseUserProfileVm(user);
+
+            var followRequests = _followService.GetFollowRequests(user.Id)
+                .Select(f => f.FromUserId).ToList();
+
+            var vm = new UserFollowersViewModel
+            {
+                CategoriesStats = baseVm.CategoriesStats,
+                City = baseVm.City,
+                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
+                IsSelf = baseVm.IsSelf,
+                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
+                Major = baseVm.Major,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                School = baseVm.School,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Followers = GetFollowers(user.Id),
+                FollowRequests = followRequests.Select(id => new UserViewModel
+                {
+                    Id = id,
+                    DisplayName = UserService.GetUserDisplayName(id),
+                    ProfileImage = PhotoService.GetUserDisplayPhoto(id)
+                })
+            };
+
+            return View("UserFollowers", vm);
+        }
+
+        private ActionResult ClubFollowers(User user)
+        {
+            var baseVm = LoadBaseClubProfileVm(user);
+            var vm = new ClubFollowersViewModel
+            {
+                Address = baseVm.Address,
+                ClubType = baseVm.ClubType,
+                CoverPhotoUrl = baseVm.CoverPhotoUrl,
+                Events = baseVm.Events,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTheClub = baseVm.IsCurrentUserFollowingTheClub,
+                IsSelf = baseVm.IsSelf,
+                PartyAlbums = baseVm.PartyAlbums,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Weeklies = baseVm.Weeklies,
+                Followers = GetFollowers(user.Id)
+            };
+
+            return View("ClubFollowers", vm);
+        }
+
         private IEnumerable<UserViewModel> GetFollowings(int userId)
         {
             var follows = _uow.FollowRepository.GetUserFollows(userId)
+                .Select(f => new
+                {
+                    id = f.ToUserId,
+                    f.ToUser.ProfilePhotoId
+                }).ToList();
+
+            return follows.Select(f => new UserViewModel
+            {
+                DisplayName = UserService.GetUserDisplayName(f.id)
+            });
+        }
+
+        private IEnumerable<UserViewModel> GetFollowers(int userId)
+        {
+            var follows = _uow.FollowRepository.GetUserFollowers(userId)
                 .Select(f => new
                 {
                     id = f.ToUserId,

@@ -116,10 +116,13 @@
                 <span class="arrow-left hidden-phone"></span>
                 <span class="arrow-right hidden-phone"></span>
                 <div class="span4 margin-top-10">
-                    <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Followers</a>
+                    <a class="black" href="@Url.Action("Followers", "Users", new { id = Model.UserId })">Followers</a>
                     <span class="follow-no-bg margin-left-10">@Model.FollowersCount</span>
                 </div>
-                <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
+                <div class="span4 margin-top-10">
+                    <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Following</a>
+                    <span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span>
+                </div>
                 <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
             </div>
 
