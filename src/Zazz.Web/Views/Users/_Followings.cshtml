@@ -5,17 +5,7 @@
 
 @if (Model.Users.Any())
 {
-    <ul class="users-list">
-        @foreach (var u in Model.Users)
-        {
-            <li class="text-center">
-                <a href="@Url.Action("Profile", "Users", new {id = u.Id })">
-                    <img class="user-list-img" src="@u.ProfileImage.SmallLink" />
-                </a>
-                <h4>@u.DisplayName</h4>
-            </li>
-        }
-    </ul>
+    @Html.Partial("_UserList", Model.Users)  
 }
 else
 {
