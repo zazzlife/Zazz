@@ -659,7 +659,9 @@ namespace Zazz.Web.Controllers
 
             return follows.Select(f => new UserViewModel
             {
-                DisplayName = UserService.GetUserDisplayName(f.id)
+                Id = f.id,
+                DisplayName = UserService.GetUserDisplayName(f.id),
+                ProfileImage = PhotoService.GetUserDisplayPhoto(f.id)
             });
         }
 
@@ -668,13 +670,15 @@ namespace Zazz.Web.Controllers
             var follows = _uow.FollowRepository.GetUserFollowers(userId)
                 .Select(f => new
                 {
-                    id = f.ToUserId,
-                    f.ToUser.ProfilePhotoId
+                    id = f.FromUserId,
+                    f.FromUser.ProfilePhotoId
                 }).ToList();
 
             return follows.Select(f => new UserViewModel
             {
-                DisplayName = UserService.GetUserDisplayName(f.id)
+                Id = f.id,
+                DisplayName = UserService.GetUserDisplayName(f.id),
+                ProfileImage = PhotoService.GetUserDisplayPhoto(f.id)
             });
         }
     }
