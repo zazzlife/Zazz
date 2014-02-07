@@ -18,10 +18,10 @@
                 </td>
                 <td style="padding-top: 29px; width: 230px;"><a href="@Url.Action("Profile", "Users", new {id = r.Id})" target="_blank"><strong>@r.DisplayName</strong></a></td>
                 <td style="padding-top: 22px;" class="text-right">
-                    <button data-url="@Url.Action("AcceptFollow", "Follow", new { id = r.Id })" class="btn btn-primary pull-right btn-followrequest-action">Accept</button>
+                    <a href="@Url.Action("AcceptFollow", "Follow", new { id = r.Id })" class="btn btn-primary pull-right">Accept</a>
                 </td>
                 <td style="padding-top: 22px;" class="text-right">
-                    <button data-url="@Url.Action("RejectFollow", "Follow", new { id = r.Id })" class="btn btn-followrequest-action">Reject</button>
+                    <a href="@Url.Action("RejectFollow", "Follow", new { id = r.Id })" class="btn">Reject</a>
                 </td>
             </tr>
         }
@@ -34,7 +34,7 @@
 }
 else
 {
-    <div class="text-center" style="margin-top: 100px;">
+    <div id="notFollowersText" class="text-center" style="margin-top: 100px;">
         <h3>This user does not have any followers yet!</h3>
     </div>
 }

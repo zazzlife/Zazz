@@ -55,16 +55,20 @@ namespace Zazz.Web.Controllers
             _followService.RemoveFollow(id, currentUserId);
         }
 
-        public void AcceptFollow(int id)
+        public ActionResult AcceptFollow(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.AcceptFollowRequest(id, currentUserId);
+
+            return RedirectToAction("Followers", "Users", new {id = currentUserId});
         }
 
-        public void RejectFollow(int id)
+        public ActionResult RejectFollow(int id)
         {
             var currentUserId = UserService.GetUserId(User.Identity.Name);
             _followService.RejectFollowRequest(id, currentUserId);
+
+            return RedirectToAction("Followers", "Users", new { id = currentUserId });
         }
 
         public ActionResult GetFollowRequests()
