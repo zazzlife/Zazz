@@ -1,0 +1,25 @@
+﻿@model FollowingViewModel
+@{
+    Layout = null;
+}
+
+@if (Model.Users.Any())
+{
+    <ul class="users-list">
+        @foreach (var u in Model.Users)
+        {
+            <li class="text-center">
+                <a href="@Url.Action("Profile", "Users", new {id = u.Id })">
+                    <img class="user-list-img" src="@u.ProfileImage.SmallLink" />
+                </a>
+                <h4>@u.DisplayName</h4>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div class="text-center" style="margin-top: 100px;">
+        <h3>This user is not following anyone yet!</h3>
+    </div>
+}

@@ -2108,3 +2108,23 @@ a:hover, a:focus {
     -ms-box-shadow: 0px 0px 2px 2px #FFD600;
     box-shadow: 0px 0px 2px 2px #FFD600;
 }
+
+/***************************************
+    Users List
+***************************************/
+
+.users-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.users-list li {
+    display: inline-block;
+}
+
+.user-list-img {
+    width: 135px;
+    height: 135px;
+    margin-left: 10px;
+}

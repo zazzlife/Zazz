@@ -72,12 +72,15 @@
             <div class="row-fluid margin-bottam-20 center-top-color follow-img margin-top-15 box-shadow-2">
                 <span class="arrow-left hidden-phone"></span>
                 <span class="arrow-right hidden-phone"></span>
-                <div class="span4 margin-top-10">Followers<span class="follow-no-bg margin-left-10">@Model.FollowersCount</span></div>
-                <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
-                <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
+                <div class="span4 margin-top-10">
+                    <a href="@Url.Action("Following", "Users", new { id = Model.UserId })" data-ajax="1" data-container="#middleSection">Followers</a>
+                    <span class="follow-no-bg margin-left-10">@Model.FollowersCount</span>
+                </div>
+                <div class="span4 margin-top-10"><a href="#">Following</a><span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
+                <div class="span3 margin-top-10"><a href="#">Likes</a><span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
             </div>
 
-            <div class="padding-L-R-10">
+            <div class="padding-L-R-10" id="middleSection">
                 @RenderBody()
             </div>
         </div>

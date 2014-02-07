@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Security;
 using System.Threading.Tasks;
@@ -487,9 +488,24 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Followings(int id)
+        public ActionResult Following(int id)
         {
-            throw new NotImplementedException();
+            var follows = _uow.FollowRepository.GetUserFollows(id)
+                .Select(f => new
+                {
+                    id = f.ToUserId,
+                    f.ToUser.ProfilePhotoId
+                }).ToList();
+
+            var vm = new FollowingViewModel
+            {
+                Users = follows.Select(f => new UserViewModel
+                {
+                    DisplayName = UserService.GetUserDisplayName(f.id)
+                })
+            };
+
+            return View("_Followings", vm);
         }
 
         [Authorize]
