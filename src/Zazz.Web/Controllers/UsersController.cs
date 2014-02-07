@@ -479,5 +479,23 @@ namespace Zazz.Web.Controllers
             user.ClubDetail.CoverPhotoId = id;
             _uow.SaveChanges();
         }
+
+        [Authorize]
+        public ActionResult Followers(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Authorize]
+        public ActionResult Followings(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Authorize]
+        public ActionResult LikedFeed(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
