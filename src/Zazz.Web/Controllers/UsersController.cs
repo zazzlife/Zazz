@@ -533,7 +533,41 @@ namespace Zazz.Web.Controllers
         [Authorize]
         public ActionResult LikedFeed(int id)
         {
+            var user = UserService.GetUser(id, true, true, true, true);
+            return user.AccountType == AccountType.User
+                ? UserLikedFeed(user)
+                : ClubLikedFeed(user);
+        }
+
+        private ActionResult ClubLikedFeed(User user)
+        {
             throw new NotImplementedException();
+        }
+
+        private ActionResult UserLikedFeed(User user)
+        {
+            var baseVm = LoadBaseUserProfileVm(user);
+            var currentUserId = GetCurrentUserId();
+            var vm = new UserProfileViewModel
+            {
+                CategoriesStats = baseVm.CategoriesStats,
+                City = baseVm.City,
+                Feeds = _feedHelper.GetUserLikedFeed(user.Id, currentUserId),
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                IsSelf = baseVm.IsSelf,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                Major = baseVm.Major,
+                School = baseVm.School,
+                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
+                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser
+            };
+
+            return View("UserProfile", vm);
         }
 
         private ActionResult UserFollowing(User user)

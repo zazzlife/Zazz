@@ -13,7 +13,7 @@
             <div style="position: fixed;">
                 <div>
                     <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.SmallLink" />
-                    <p class="username-display">@Model.UserName</p>
+                    <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
                 </div>
 
                 @if (!Model.IsSelf)
@@ -80,7 +80,10 @@
                     <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Following</a>
                     <span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span>
                 </div>
-                <div class="span3 margin-top-10"><a class="black" href="#">Likes</a><span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
+                <div class="span3 margin-top-10">
+                    <a class="black" href="@Url.Action("LikedFeed", "Users", new { id = Model.UserId })">Likes</a>
+                    <span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span>
+                </div>
             </div>
 
             <div class="padding-L-R-10">

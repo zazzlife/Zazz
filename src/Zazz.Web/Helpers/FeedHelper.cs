@@ -101,6 +101,19 @@ namespace Zazz.Web.Helpers
             return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
+        public List<FeedViewModel> GetUserLikedFeed(int userId, int currentUserId, int lastFeedId = 0)
+        {
+            var query = _uow.FeedRepository.GetUserLikedFeeds(userId);
+            if (lastFeedId != 0)
+                query = query.Where(f => f.Id < lastFeedId);
+
+            query = query.OrderByDescending(f => f.Time)
+                         .Take(PageSize);
+
+            var feeds = query.ToList();
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
+        }
+
         public FeedViewModel GetSinglePostFeed(int postId, int currentUserId)
         {
             var feed = _uow.FeedRepository.GetPostFeed(postId);

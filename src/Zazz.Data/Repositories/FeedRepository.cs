@@ -62,6 +62,22 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.EventFeed.Event);
         }
 
+        public IQueryable<Feed> GetUserLikedFeeds(int userId)
+        {
+            var likedPhotoIds = DbContext.PhotoLikes
+                .Where(l => l.Photo.UserId == userId)
+                .Select(l => l.PhotoId);
+
+            return (from feed in DbSet
+                    where feed.FeedPhotos.Any(p => likedPhotoIds.Contains(p.PhotoId))
+                    select feed)
+                .Distinct()
+                .Include(f => f.FeedPhotos)
+                .Include(f => f.PostFeed.Post)
+                .Include(f => f.PostFeed.Post.Categories)
+                .Include(f => f.EventFeed.Event);
+        }
+
         public Feed GetPhotoFeed(int photoId)
         {
             return DbSet.Include(f => f.FeedPhotos)

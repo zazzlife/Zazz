@@ -36,6 +36,16 @@ namespace Zazz.Web.Interfaces
         List<FeedViewModel> GetUserActivityFeed(int userId, int currentUserId,
                                                                 int lastFeedId = 0);
 
+        /// <summary>
+        /// Returns feeds of received likes
+        /// </summary>
+        /// <param name="userId">Id of the target user</param>
+        /// <param name="currentUserId">Id of the current user</param>
+        /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
+        /// <returns></returns>
+        List<FeedViewModel> GetUserLikedFeed(int userId, int currentUserId,
+                                                                int lastFeedId = 0);
+        
         FeedViewModel GetSinglePostFeed(int postId, int currentUserId);
 
         List<CommentViewModel> GetComments(int id, CommentType commentType, int currentUserId,

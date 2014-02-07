@@ -108,7 +108,7 @@
                     <img src="@Model.UserPhoto.SmallLink" />
                 </div>
 
-                <h3>@Model.UserName</h3>
+                <a href="@Url.Action("Profile", "Users", new {@Model.UserId})"><h3>@Model.UserName</h3></a>
 
             </div>
 
@@ -123,7 +123,10 @@
                     <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Following</a>
                     <span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span>
                 </div>
-                <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
+                <div class="span3 margin-top-10">
+                    <a class="black" href="@Url.Action("LikedFeed", "Users", new { id = Model.UserId })">Likes</a>
+                    <span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span>
+                </div>
             </div>
 
             <div class="weeklies-container">
