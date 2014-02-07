@@ -352,14 +352,17 @@ namespace Zazz.Web.Controllers
             return View("_UserProfileSinglePhoto", vm);
         }
 
-        public ActionResult LoadMoreFeeds(int lastFeedId)
+        public ActionResult LoadMoreFeeds(int lastFeedId, bool likedFeed = false)
         {
             var currentUserId = 0;
             if (Request.IsAuthenticated)
                 currentUserId = UserService.GetUserId(User.Identity.Name);
 
             var user = UserService.GetUser(User.Identity.Name);
-            var feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
+            
+            var feeds = likedFeed
+                ? _feedHelper.GetUserLikedFeed(user.Id, currentUserId, lastFeedId)
+                : _feedHelper.GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
 
             return View("_FeedsPartial", feeds);
         }
@@ -534,6 +537,7 @@ namespace Zazz.Web.Controllers
         public ActionResult LikedFeed(int id)
         {
             var user = UserService.GetUser(id, true, true, true, true);
+            ViewBag.LikedFeed = true;
             return user.AccountType == AccountType.User
                 ? UserLikedFeed(user)
                 : ClubLikedFeed(user);
