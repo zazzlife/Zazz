@@ -560,7 +560,27 @@ namespace Zazz.Web.Controllers
 
         private ActionResult ClubFollowing(User user)
         {
-            throw new NotImplementedException();
+            var baseVm = LoadBaseClubProfileVm(user);
+            var vm = new ClubFollowingViewModel
+            {
+                Address = baseVm.Address,
+                ClubType = baseVm.ClubType,
+                CoverPhotoUrl = baseVm.CoverPhotoUrl,
+                Events = baseVm.Events,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTheClub = baseVm.IsCurrentUserFollowingTheClub,
+                IsSelf = baseVm.IsSelf,
+                PartyAlbums = baseVm.PartyAlbums,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Weeklies = baseVm.Weeklies,
+                Follows = GetFollowings(user.Id)
+            };
+
+            return View("ClubFollowing", vm);
         }
 
         private IEnumerable<UserViewModel> GetFollowings(int userId)

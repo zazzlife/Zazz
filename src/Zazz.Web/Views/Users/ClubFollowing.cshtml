@@ -1,0 +1,16 @@
+﻿@model ClubFollowingViewModel
+@{
+    ViewBag.Title = Model.UserName;
+    Layout = "~/Views/Users/_ClubProfileLayout.cshtml";
+}
+
+@if (Model.Follows.Any())
+{
+    @Html.Partial("_UserList", Model.Follows)
+}
+else
+{
+    <div class="text-center" style="margin-top: 100px;">
+        <h3>This club is not following anyone yet!</h3>
+    </div>
+}

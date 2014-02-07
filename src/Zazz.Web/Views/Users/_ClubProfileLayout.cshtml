@@ -1,0 +1,190 @@
+﻿@model ClubProfileViewModelBase
+@{
+    ViewBag.Title = Model.UserName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="margin-top: -15px">
+    <div class="row-fluid">
+        <div class="banner span12">
+            <img src="@Model.CoverPhotoUrl" />
+        </div>
+    </div>
+
+    <div class="row-fluid">
+
+        @*LEFT SIDE*@
+        <div class="span3">
+            <div style="height: 50px">
+                <ul class="nav nav-stacked club-details">
+                    <li><i class="icon-glass"></i><strong>@Model.ClubType</strong></li>
+                    @if (!String.IsNullOrEmpty(Model.Address))
+                    {
+                        <li><i class="icon-map-marker"></i><strong>@Model.Address</strong></li>
+                    }
+                </ul>
+            </div>
+
+
+            <div style="margin-top: 110px;">
+                <div style="height: 30px;">
+                    @if (Model.IsSelf)
+                    {
+                        <button id="addWeekly" data-popover-holder="0" class="btn-link">
+                            <i class="icon-plus-sign" style="margin-right: 5px;"></i>New
+                        </button>
+                        <div id="addWeeklyContent" class="hidden">
+                            @Html.Partial("_WeeklyEditForm", new WeeklyViewModel())
+                        </div>
+                    }
+                </div>
+                <h2 style="font-weight: 600;">Weeklies</h2>
+                <img src="/Images/arrow-right.png" style="margin: -15px 0 0 75px;" />
+            </div>
+
+            @if (Model.PartyAlbums.Any())
+            {
+                <div class="pics-widget">
+                    <a class="black" href="@Url.Action("List", "Photos", new { id = Model.UserId })">
+                    </a>
+
+                    @foreach (var a in Model.PartyAlbums)
+                    {
+                        var link = String.Empty;
+                        link = a.AlbumId == 0
+                            ? Url.Action("List", "Photos", new { id = Model.UserId })
+                            : Url.Action("List", "Photos", new { id = Model.UserId, albumId = a.AlbumId });
+
+                        <div>
+                            <a class="album-name" href="@link">
+                                <h6 style="margin-bottom: -20px">@a.AlbumName</h6>
+                            </a>
+                        </div>
+
+                        <ul>
+                            @{
+                        var i = 1;
+
+                        foreach (var p in a.Photos)
+                        {
+                            <li>
+                                <a data-toggle="lightbox" data-target="#photo-@p.PhotoId"
+                                   href="@p.PhotoUrl.OriginalLink">
+
+                                    @if (i == 1)
+                                    {
+                                        <img src="@p.PhotoUrl.MediumLink" />
+                                    }
+                                    else
+                                    {
+                                        <img src="@p.PhotoUrl.VerySmallLink" />
+                                    }
+
+                                </a>
+                                @Html.Partial("_LightBoxPartial", p)
+                            </li>
+
+                                    i++;
+
+                        }
+                            }
+                        </ul>
+                        <div class="clearfix"></div>
+                    }
+
+                    <div class="text-center">
+                        <a href="@Url.Action("List", "Photos", new { id = Model.UserId })">See more...</a>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        @*CENTER*@
+        <div class="span6 color-white-bg box-shadow padding-bottom-100 margin-left-10">
+
+            <div class="text-center margin-bottam-20">
+                <div class="club-profile-pic">
+                    <img src="@Model.UserPhoto.SmallLink" />
+                </div>
+
+                <h3>@Model.UserName</h3>
+
+            </div>
+
+            <div class="row-fluid margin-bottam-20 center-top-color follow-img margin-top-15 box-shadow-2">
+                <span class="arrow-left hidden-phone"></span>
+                <span class="arrow-right hidden-phone"></span>
+                <div class="span4 margin-top-10">
+                    <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Followers</a>
+                    <span class="follow-no-bg margin-left-10">@Model.FollowersCount</span>
+                </div>
+                <div class="span4 margin-top-10">Following<span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span></div>
+                <div class="span3 margin-top-10">Likes<span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span></div>
+            </div>
+
+            <div class="weeklies-container">
+                <ul class="weeklies-items">
+                    @foreach (var w in Model.Weeklies)
+                    {
+                        @Html.Partial("_WeeklyItem", w)
+                    }
+                </ul>
+            </div>
+
+
+
+            <div class="padding-L-R-10">
+                @RenderBody()
+            </div>
+        </div>
+
+
+        @*RIGHT*@
+        <div class="span3 padding-top-17">
+            <div style="height: 69px;">
+                @if (!Model.IsSelf)
+                {
+                    if (Model.IsCurrentUserFollowingTheClub)
+                    {
+                        <button data-btn-follow="1" data-id="@Model.UserId"
+                                data-url="@Url.Action("Unfollow", "Follow", new { id = Model.UserId })"
+                                data-action="unfollow" data-placement="right" class="btn btn-zazz btn-follow">
+                            <i class="icon-remove"></i>Unfollow
+                        </button>
+                    }
+                    else
+                    {
+                        <button data-btn-follow="1" data-id="@Model.UserId" data-url="@Url.Action("FollowUser", "Follow", new { id = Model.UserId })"
+                                data-action="follow" class="btn btn-zazz btn-follow">
+                            <i class="icon-plus"></i>Follow
+                        </button>
+                    }
+                }
+            </div>
+            <div style="margin-top: 135px;">
+                <div>
+                    <h2 style="font-weight: 600; float: left; width:135px;">Special Events</h2>
+                    <img src="/Images/arrow-down.png" style="width: 85px; margin: 20px 0 0 -10px;" />
+                </div>
+                <div class="clearfix"></div>
+                @if (Model.Events.Any())
+                {
+                    <div class="club-events">
+
+                        @foreach (var e in Model.Events)
+                        {
+                            @Html.Partial("_EventPartialSmall", e)
+                        }
+
+                    </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@Html.Partial("_PhotoGalleryModal")
+

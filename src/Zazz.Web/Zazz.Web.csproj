@@ -757,6 +757,8 @@
     <Content Include="Views\Users\_UserProfileSinglePhoto.cshtml" />
     <Content Include="Views\Users\_UserList.cshtml" />
     <Content Include="Views\Users\UserFollowing.cshtml" />
+    <Content Include="Views\Users\_ClubProfileLayout.cshtml" />
+    <Content Include="Views\Users\ClubFollowing.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
