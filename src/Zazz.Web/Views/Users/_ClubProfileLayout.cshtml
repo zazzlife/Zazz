@@ -108,7 +108,7 @@
                     <img src="@Model.UserPhoto.SmallLink" />
                 </div>
 
-                <a href="@Url.Action("Profile", "Users", new {@Model.UserId})"><h3>@Model.UserName</h3></a>
+                <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><h3>@Model.UserName</h3></a>
 
             </div>
 

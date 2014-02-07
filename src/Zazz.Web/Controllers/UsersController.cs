@@ -541,7 +541,28 @@ namespace Zazz.Web.Controllers
 
         private ActionResult ClubLikedFeed(User user)
         {
-            throw new NotImplementedException();
+            var baseVm = LoadBaseClubProfileVm(user);
+            var currentUserId = GetCurrentUserId();
+            var vm = new ClubProfileViewModel
+            {
+                Address = baseVm.Address,
+                ClubType = baseVm.ClubType,
+                CoverPhotoUrl = baseVm.CoverPhotoUrl,
+                Events = baseVm.Events,
+                Feeds = _feedHelper.GetUserLikedFeed(user.Id, currentUserId),
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTheClub = baseVm.IsCurrentUserFollowingTheClub,
+                IsSelf = baseVm.IsSelf,
+                PartyAlbums = baseVm.PartyAlbums,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Weeklies = baseVm.Weeklies
+            };
+
+            return View("ClubProfile", vm);
         }
 
         private ActionResult UserLikedFeed(User user)
