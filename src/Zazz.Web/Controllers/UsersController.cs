@@ -592,8 +592,20 @@ namespace Zazz.Web.Controllers
         {
             var baseVm = LoadBaseUserProfileVm(user);
 
-            var followRequests = _followService.GetFollowRequests(user.Id)
-                .Select(f => f.FromUserId).ToList();
+            IEnumerable<UserViewModel> followRequests = null;
+            if (baseVm.IsSelf)
+            {
+                var requestIds = _followService
+                    .GetFollowRequests(user.Id)
+                    .Select(f => f.FromUserId).ToList();
+
+                followRequests = requestIds.Select(id => new UserViewModel
+                {
+                    Id = id,
+                    DisplayName = UserService.GetUserDisplayName(id),
+                    ProfileImage = PhotoService.GetUserDisplayPhoto(id)
+                });
+            }
 
             var vm = new UserFollowersViewModel
             {
@@ -612,12 +624,7 @@ namespace Zazz.Web.Controllers
                 UserName = baseVm.UserName,
                 UserPhoto = baseVm.UserPhoto,
                 Followers = GetFollowers(user.Id),
-                FollowRequests = followRequests.Select(id => new UserViewModel
-                {
-                    Id = id,
-                    DisplayName = UserService.GetUserDisplayName(id),
-                    ProfileImage = PhotoService.GetUserDisplayPhoto(id)
-                })
+                FollowRequests = followRequests
             };
 
             return View("UserFollowers", vm);

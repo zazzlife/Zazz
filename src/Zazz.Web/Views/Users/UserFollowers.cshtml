@@ -4,6 +4,30 @@
     Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
 }
 
+@if (Model.IsSelf)
+{
+    <table class="table table-striped">
+        @foreach (var r in Model.FollowRequests)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Profile", "Users", new {id = r.Id})" target="_blank">
+                        <img style="max-width: 60px;max-height: 60px;"
+                             src="@Html.Action("GetVerySmallDisplayPicture", new { userId = r.Id })" alt="@r.DisplayName" />
+                    </a>
+                </td>
+                <td style="padding-top: 29px; width: 230px;"><a href="@Url.Action("Profile", "Users", new {id = r.Id})" target="_blank"><strong>@r.DisplayName</strong></a></td>
+                <td style="padding-top: 22px;" class="text-right">
+                    <button data-url="@Url.Action("AcceptFollow", "Follow", new { id = r.Id })" class="btn btn-primary pull-right btn-followrequest-action">Accept</button>
+                </td>
+                <td style="padding-top: 22px;" class="text-right">
+                    <button data-url="@Url.Action("RejectFollow", "Follow", new { id = r.Id })" class="btn btn-followrequest-action">Reject</button>
+                </td>
+            </tr>
+        }
+    </table>   
+}
+
 @if (Model.Followers.Any())
 {
     @Html.Partial("_UserList", Model.Followers)
