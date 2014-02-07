@@ -2,7 +2,7 @@
 
 namespace Zazz.Web.Models
 {
-    public class FollowingViewModel
+    public class ClubFollowingViewModel : ClubProfileViewModelBase
     {
         public IEnumerable<UserViewModel> Users { get; set; }
     }

@@ -320,13 +320,16 @@
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
     <Compile Include="Models\Api\ApiRegister.cs" />
     <Compile Include="Models\Api\ApiUserReward.cs" />
+    <Compile Include="Models\ClubFollowersViewModel.cs" />
+    <Compile Include="Models\ClubFollowingViewModel.cs" />
+    <Compile Include="Models\ClubProfileViewModelBase.cs" />
     <Compile Include="Models\ClubRewardScenariosListViewModel.cs" />
     <Compile Include="Models\ClubRewardScenarioViewModel.cs" />
     <Compile Include="Models\ClubRewardsIndexViewModel.cs" />
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
     <Compile Include="Models\FollowersViewModel.cs" />
-    <Compile Include="Models\FollowingViewModel.cs" />
+    <Compile Include="Models\UserFollowingViewModel.cs" />
     <Compile Include="Models\LikedFeedViewModel.cs" />
     <Compile Include="Models\RecoverAccountViewModel.cs" />
     <Compile Include="Models\RegisterClubViewModel.cs" />
@@ -752,8 +755,8 @@
     <Content Include="Views\Shared\_UserProfileLayout.cshtml" />
     <Content Include="Views\Users\UserPhotos.cshtml" />
     <Content Include="Views\Users\_UserProfileSinglePhoto.cshtml" />
-    <Content Include="Views\Users\_Followings.cshtml" />
     <Content Include="Views\Users\_UserList.cshtml" />
+    <Content Include="Views\Users\UserFollowing.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

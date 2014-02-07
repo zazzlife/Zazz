@@ -486,9 +486,9 @@ namespace Zazz.Web.Controllers
         public ActionResult Following(int id)
         {
             var user = UserService.GetUser(id, true, true, true, true);
-            return user.AccountType == AccountType.User
-                ? UserFollowing(user)
-                : ClubFollowing(user);
+            return user.AccountType == AccountType.User 
+                ? ClubFollowing(user) 
+                : UserFollowing(user);
         }
 
         [Authorize]
@@ -501,27 +501,7 @@ namespace Zazz.Web.Controllers
         {
             var followings = GetFollowings(user.Id);
             var baseVm = LoadBaseUserProfileVm(user);
-
-            var vm = new UserFollowingViewModel
-            {
-                CategoriesStats = baseVm.CategoriesStats,
-                City = baseVm.City,
-                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
-                FollowersCount = baseVm.FollowersCount,
-                FollowingsCount = baseVm.FollowingsCount,
-                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
-                IsSelf = baseVm.IsSelf,
-                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
-                Major = baseVm.Major,
-                ReceivedLikesCount = baseVm.ReceivedLikesCount,
-                School = baseVm.School,
-                UserId = baseVm.UserId,
-                UserName = baseVm.UserName,
-                UserPhoto = baseVm.UserPhoto,
-                Follows = followings
-            };
-
-            return View("UserFollowing", vm);
+            throw new NotImplementedException();
         }
 
         private ActionResult ClubFollowing(User user)
