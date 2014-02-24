@@ -547,6 +547,9 @@ namespace Zazz.Web.Controllers
         public ActionResult FollowingClubs(int id)
         {
             var user = UserService.GetUser(id, true, false, false, true);
+            if (user.AccountType == AccountType.Club)
+                throw new HttpException(404, "not found");
+
             var baseVm = LoadBaseUserProfileVm(user);
             var currentUserId = GetCurrentUserId();
 
