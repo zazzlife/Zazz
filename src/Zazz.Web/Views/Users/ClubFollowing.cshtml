@@ -4,6 +4,13 @@
     Layout = "~/Views/Users/_ClubProfileLayout.cshtml";
 }
 
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="@Url.Action("Profile", "Users", new { id = Model.UserId })"><i class="icon-list-alt"></i> News Feed</a></li>
+        <li><a id="photosTabLink" href="@Url.Action("Photos", "Users", new {id=Model.UserId})"><i class="icon-th-large"></i> Photos</a></li>
+    </ul>
+</div>
+
 @if (Model.Follows.Any())
 {
     @Html.Partial("_UserList", Model.Follows)
