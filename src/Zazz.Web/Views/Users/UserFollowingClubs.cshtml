@@ -1,0 +1,31 @@
+﻿@model UserFollowingClubsViewModel
+@{
+    ViewBag.Title = Model.UserName;
+    Layout = "~/Views/Shared/_UserProfileLayout.cshtml";
+
+}
+
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li><a href="@Url.Action("Profile", "Users", new { id = Model.UserId })"><i class="icon-list-alt"></i> News Feed</a></li>
+        <li><a id="photosTabLink" href="@Url.Action("Photos", "Users", new {id=Model.UserId})"><i class="icon-th-large"></i> Photos</a></li>
+    </ul>
+</div>
+
+@if (Model.Clubs.Any())
+{
+    @Html.Partial("_ClubsList", Model.Clubs)
+}
+else
+{
+    <div class="text-center" style="margin-top: 100px;">
+        <h3>This user is not following any clubs yet!</h3>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $('#centerColumn').removeClass('padding-L-R-10');
+    </script>
+}

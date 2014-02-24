@@ -329,6 +329,7 @@
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
     <Compile Include="Models\FollowersViewModel.cs" />
+    <Compile Include="Models\UserFollowingClubsViewModel.cs" />
     <Compile Include="Models\UserFollowingViewModel.cs" />
     <Compile Include="Models\LikedFeedViewModel.cs" />
     <Compile Include="Models\RecoverAccountViewModel.cs" />
@@ -751,7 +752,7 @@
     <Content Include="Views\Photos\Albums.cshtml" />
     <Content Include="Views\Photos\List.cshtml" />
     <Content Include="Views\Home\Clubs.cshtml" />
-    <Content Include="Views\Home\_ClubsList.cshtml" />
+    <Content Include="Views\Shared\_ClubsList.cshtml" />
     <Content Include="Views\Shared\_UserProfileLayout.cshtml" />
     <Content Include="Views\Users\UserPhotos.cshtml" />
     <Content Include="Views\Users\_UserProfileSinglePhoto.cshtml" />
@@ -761,6 +762,7 @@
     <Content Include="Views\Users\ClubFollowing.cshtml" />
     <Content Include="Views\Users\UserFollowers.cshtml" />
     <Content Include="Views\Users\ClubFollowers.cshtml" />
+    <Content Include="Views\Users\UserFollowingClubs.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

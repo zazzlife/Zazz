@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="padding-L-R-10">
+            <div id="centerColumn" class="padding-L-R-10">
                 @RenderBody()
             </div>
         </div>
@@ -104,3 +104,7 @@
     </div>
 
 </div>
+@section Scripts
+{
+    @RenderSection("Scripts", false)
+}

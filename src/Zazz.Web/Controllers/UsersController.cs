@@ -543,6 +543,63 @@ namespace Zazz.Web.Controllers
                 : ClubLikedFeed(user);
         }
 
+        [Authorize]
+        public ActionResult FollowingClubs(int id)
+        {
+            var user = UserService.GetUser(id, true, false, false, true);
+            var baseVm = LoadBaseUserProfileVm(user);
+            var currentUserId = GetCurrentUserId();
+
+            var clubs = _uow.FollowRepository.GetClubsThatUserFollows(id);
+            var clubsVm = new List<ClubViewModel>();
+            if (clubs != null)
+            {
+                var items = clubs.Select(x => new
+                {
+                    x.Id,
+                    ProfileImageId = x.ProfilePhotoId,
+                    CoverImageId = x.ClubDetail.CoverPhotoId,
+                    IsFollowing = x.Followers.Any(f => f.FromUserId == currentUserId)
+                }).ToList();
+
+                clubsVm.AddRange(items.Select(x => new ClubViewModel
+                {
+                    ClubId = x.Id,
+                    ClubName = UserService.GetUserDisplayName(x.Id),
+                    ProfileImageLink = x.ProfileImageId.HasValue
+                        ? PhotoService.GeneratePhotoUrl(x.Id, x.ProfileImageId.Value)
+                        : DefaultImageHelper.GetUserDefaultImage(Gender.NotSpecified),
+                    CoverImageLink = x.CoverImageId.HasValue
+                        ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImageId.Value)
+                        : DefaultImageHelper.GetDefaultCoverImage(),
+                    IsCurrentUserFollowing = x.IsFollowing,
+                    CurrentUserId = currentUserId
+
+                }));
+            }
+
+            var vm = new UserFollowingClubsViewModel
+            {
+                CategoriesStats = baseVm.CategoriesStats,
+                City = baseVm.City,
+                FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
+                IsSelf = baseVm.IsSelf,
+                IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
+                Major = baseVm.Major,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                School = baseVm.School,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Clubs = clubsVm
+            };
+
+            return View("UserFollowingClubs", vm);
+        }
+
         private ActionResult ClubLikedFeed(User user)
         {
             var baseVm = LoadBaseClubProfileVm(user);
