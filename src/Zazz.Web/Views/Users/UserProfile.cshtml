@@ -17,6 +17,8 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#newsFeedTab" data-toggle="tab"><i class="icon-list-alt"></i> News Feed</a></li>
         <li><a id="photosTabLink" href="@Url.Action("Photos", "Users", new {id=Model.UserId})"><i class="icon-th-large"></i> Photos</a></li>
+        <li><a href="@Url.Action("FollowingClubs", "Users", new {id=Model.UserId})"><i class="icon-glass"></i> Clubs</a></li>
+
     </ul>
     <div class="tab-content">
         <div class="tab-pane active row-fluid" id="newsFeedTab">
