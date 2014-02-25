@@ -524,7 +524,7 @@ hr.gold-line {
 ***************************************/
 
 .event {
-    background-color: #d5d5d5;
+    background-color: rgba(213, 213, 213, 0.38);
     border: 2px solid #FBCE0E;
     -ms-border-radius: 5px;
     border-radius: 5px;
