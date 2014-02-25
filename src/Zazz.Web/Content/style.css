@@ -547,12 +547,15 @@ hr.gold-line {
     font-weight: 600;
 }
 
-    .event-title > small {
-        color: #e7c400;
-        -ms-text-shadow: 1px 1px 1px #524a1e;
-        -webkit-text-shadow: 1px 1px 1px #524a1e; 
-        text-shadow: 1px 1px 1px #524a1e;
-    }
+.event-title-small {
+    color: #e7c400;
+    -ms-text-shadow: 1px 1px 1px #524a1e;
+    -webkit-text-shadow: 1px 1px 1px #524a1e; 
+    text-shadow: 1px 1px 1px #524a1e;
+    font-size: 26px;
+    margin-top: -15px;
+    margin-left: 25px;
+}
 
 .event-description {
     color: #000000;
@@ -561,8 +564,9 @@ hr.gold-line {
 }
 
 .event-socal {
-    float: left;
+    float: right;
     height: 20px;
+    margin-right: 5px;
 }
 
     .event-socal ul {
