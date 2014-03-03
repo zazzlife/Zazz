@@ -12,7 +12,20 @@
         <div class="span3 margin-top-15 text-center">
             <div style="position: fixed;">
                 <div>
-                    <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.SmallLink" />
+                    @if (Model.UserPhoto.PhotoId == 0)
+                    {
+                        // it's the default image
+                        
+                        <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
+                    }
+                    else
+                    {
+                        <a data-toggle="lightbox" data-target="#photo-@Model.UserPhoto.PhotoId" href="@Model.UserPhoto.PhotoUrl.OriginalLink">
+                            <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
+                        </a>
+                    }
+                    
+
                     <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
                 </div>
 
@@ -107,4 +120,9 @@
 @section Scripts
 {
     @RenderSection("Scripts", false)
+
+    @if (Model.UserPhoto.PhotoId != 0)
+    {
+        @Html.Partial("_LightBoxPartial", Model.UserPhoto)
+    }
 }

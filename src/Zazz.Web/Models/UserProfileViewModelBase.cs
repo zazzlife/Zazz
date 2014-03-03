@@ -5,7 +5,7 @@ namespace Zazz.Web.Models
 {
     public class UserProfileViewModelBase
     {
-        public PhotoLinks UserPhoto { get; set; }
+        public PhotoViewModel UserPhoto { get; set; }
 
         public string Major { get; set; }
 

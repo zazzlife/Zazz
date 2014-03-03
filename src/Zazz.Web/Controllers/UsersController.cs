@@ -109,20 +109,39 @@ namespace Zazz.Web.Controllers
 
         private UserProfileViewModelBase LoadBaseUserProfileVm(User user)
         {
+            Photo photo = null;
+            if (user.ProfilePhotoId.HasValue)
+                photo = PhotoService.GetPhoto(user.ProfilePhotoId.Value);
+
             return LoadBaseUserProfileVm(user,
                 GetCurrentUserId(),
                 UserService.GetUserDisplayName(user.Id),
-                PhotoService.GetUserDisplayPhoto(user.Id));
+                photo);
         }
 
         private UserProfileViewModelBase LoadBaseUserProfileVm(User user, int currentUserId, string displayName,
-            PhotoLinks profilePhotoUrl)
+            Photo userPhoto)
         {
             var vm = new UserProfileViewModel
             {
                 UserId = user.Id,
                 UserName = displayName,
-                UserPhoto = profilePhotoUrl,
+                UserPhoto = userPhoto != null 
+                    ? new PhotoViewModel
+                        {
+                            AlbumId = userPhoto.AlbumId,
+                            Description = userPhoto.Description,
+                            FromUserDisplayName = UserService.GetUserDisplayName(userPhoto.UserId),
+                            FromUserId = userPhoto.UserId,
+                            FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id),
+                            IsFromCurrentUser = currentUserId == userPhoto.Id,
+                            PhotoId = userPhoto.Id,
+                            PhotoUrl = PhotoService.GeneratePhotoUrl(userPhoto.UserId, userPhoto.Id)
+                        }
+                    : new PhotoViewModel
+                    {
+                        PhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender)
+                    },
                 IsSelf = currentUserId == user.Id,
                 FollowersCount = _uow.FollowRepository.GetUserFollowers(user.Id).Count(),
                 FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
@@ -260,7 +279,11 @@ namespace Zazz.Web.Controllers
 
         private ActionResult LoadUserProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
-            var baseVm = LoadBaseUserProfileVm(user, currentUserId, displayName, profilePhotoUrl);
+            Photo photo = null;
+            if (user.ProfilePhotoId.HasValue)
+                photo = PhotoService.GetPhoto(user.ProfilePhotoId.Value);
+
+            var baseVm = LoadBaseUserProfileVm(user, currentUserId, displayName, photo);
             var vm = new UserProfileViewModel
             {
                 CategoriesStats = baseVm.CategoriesStats,
@@ -289,7 +312,6 @@ namespace Zazz.Web.Controllers
             var displayName = UserService.GetUserDisplayName(id);
 
             var user = _uow.UserRepository.GetById(id, true, true, true);
-            var profilePhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id);
 
             var currentUserId = 0;
             if (User.Identity.IsAuthenticated)
@@ -299,7 +321,11 @@ namespace Zazz.Web.Controllers
 
             var photos = _uow.PhotoRepository.GetLatestUserPhotos(id, 500).ToList();
 
-            var baseVm = LoadBaseUserProfileVm(user, currentUserId, displayName, profilePhotoUrl);
+            Photo photo = null;
+            if (user.ProfilePhotoId.HasValue)
+                photo = PhotoService.GetPhoto(user.ProfilePhotoId.Value);
+
+            var baseVm = LoadBaseUserProfileVm(user, currentUserId, displayName, photo);
             var vm = new UserPhotosViewModel
             {
                 CategoriesStats = baseVm.CategoriesStats,
