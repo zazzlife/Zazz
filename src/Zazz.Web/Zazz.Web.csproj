@@ -763,6 +763,7 @@
     <Content Include="Views\Users\UserFollowers.cshtml" />
     <Content Include="Views\Users\ClubFollowers.cshtml" />
     <Content Include="Views\Users\UserFollowingClubs.cshtml" />
+    <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
