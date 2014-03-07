@@ -24,6 +24,11 @@ function profilePhotoSelected(photoId, photoUrl) {
     var cropLink = '/photos/crop/' + photoId + '?for=' + photoType;
     $('#cropLink').attr('href', cropLink);
     $('#cropPromptModal').modal('show');
+
+    var $profilePic = $('.user-profile-img');
+    if ($profilePic.length) {
+        $profilePic.attr('src', photoUrl);
+    }
 }
 
 $(document).on('click', '#cropLink', function() {
