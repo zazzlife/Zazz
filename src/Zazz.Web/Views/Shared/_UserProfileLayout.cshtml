@@ -11,11 +11,11 @@
     <div class="row-fluid">
         <div class="span3 margin-top-15 text-center">
             <div style="position: fixed;">
-                <div>
+                <div id="changeProfilePicArea">
                     @if (Model.UserPhoto.PhotoId == 0)
                     {
                         // it's the default image
-                        
+
                         <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
                     }
                     else
@@ -25,8 +25,8 @@
                         </a>
                     }
                     <div class="clearfix"></div>
-                    
-                    <div class="selectProfilePic">
+
+                    <div id="changeProfilePicBtn" class="selectProfilePic" style="display: none;">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Change Picture</button>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -38,12 +38,11 @@
                             </ul>
                         </div>
                     </div>
-                    
-                    
-                    
-
-                    <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
                 </div>
+
+
+
+                <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
 
                 @if (!Model.IsSelf)
                 {

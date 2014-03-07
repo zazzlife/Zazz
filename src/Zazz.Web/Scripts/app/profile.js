@@ -287,3 +287,15 @@ function initWeeklies() {
 
     });
 }
+
+/********************************
+    Show/Hide change profile pic btn
+*********************************/
+$("#changeProfilePicArea").on({
+    mouseenter: function () {
+        $('#changeProfilePicBtn').slideDown();
+    },
+    mouseleave: function () {
+        $('#changeProfilePicBtn').slideUp();
+    }
+});
