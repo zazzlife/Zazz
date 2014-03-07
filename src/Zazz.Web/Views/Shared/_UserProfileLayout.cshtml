@@ -24,23 +24,27 @@
                             <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
                         </a>
                     }
-                    <div class="clearfix"></div>
 
-                    <div id="changeProfilePicBtn" class="selectProfilePic" style="display: none;">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Change Picture</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
-                            </ul>
+                    @if (Model.IsSelf)
+                    {
+                        <div class="clearfix"></div>
+
+                        <div id="changeProfilePicBtn" class="selectProfilePic" style="display: none;">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Change Picture</button>
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
+
+                    }
+
                 </div>
-
-
 
                 <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
 
@@ -133,11 +137,12 @@
 
 </div>
 
-@*  TODO: Only render these for the current user.*@
-
-@Html.Partial("_CropPromptModal")
-@Html.Partial("_PhotoGalleryModal")
-@Html.Partial("_UploadPicModal", true)
+@if (Model.IsSelf)
+{
+    @Html.Partial("_CropPromptModal")
+    @Html.Partial("_PhotoGalleryModal")
+    @Html.Partial("_UploadPicModal", true)   
+}
 
 @section Scripts
 {
