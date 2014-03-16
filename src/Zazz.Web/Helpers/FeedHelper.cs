@@ -177,7 +177,11 @@ namespace Zazz.Web.Helpers
                                    : null,
                     IsDateOnly = feed.EventFeed.Event.IsDateOnly,
                     FacebookEventId = feed.EventFeed.Event.FacebookEventId,
-                    OwnerName = _userService.GetUserDisplayName(feed.EventFeed.Event.UserId)
+                    OwnerName = _userService.GetUserDisplayName(feed.EventFeed.Event.UserId),
+                    ProfileImage = _photoService.GetUserDisplayPhoto(feed.EventFeed.Event.UserId),
+                    CoverImage = feed.EventFeed.Event.User.AccountType == AccountType.Club && feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.HasValue
+                        ? _photoService.GeneratePhotoUrl(feed.EventFeed.Event.UserId, feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.Value)
+                        : null
                 };
 
                 feedVm.Comments.CommentType = CommentType.Event;
