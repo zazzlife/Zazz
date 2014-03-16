@@ -93,6 +93,30 @@ namespace Zazz.Web.Models
         }
 
         [Display(AutoGenerateField = false)]
+        public string FormatLocation
+        {
+            get
+            {
+                if (!String.IsNullOrWhiteSpace(City) && !String.IsNullOrWhiteSpace(Street))
+                {
+                    return String.Format("{0}, {1}", Street, City);
+                }
+                else if (!String.IsNullOrWhiteSpace(City))
+                {
+                    return City;
+                }
+                else if (!String.IsNullOrWhiteSpace(Street))
+                {
+                    return Street;
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
+        }
+
+        [Display(AutoGenerateField = false)]
         public string FriendlyDate 
         {
             get

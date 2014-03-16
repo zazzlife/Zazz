@@ -748,7 +748,6 @@
     <Content Include="Scripts\underscore.min.map" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\Shared\_CategoryStatusItem.cshtml" />
-    <Content Include="Views\Shared\_EventPartialSmall.cshtml" />
     <Content Include="Views\Photos\Albums.cshtml" />
     <Content Include="Views\Photos\List.cshtml" />
     <Content Include="Views\Home\Clubs.cshtml" />
