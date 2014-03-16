@@ -6,17 +6,17 @@
 
 <div class="event">
     <div class="media">
-        <div class="pull-left">
-            <img class="event-img" src="@Model.ImageUrl.SmallLink">
-        </div>
         <div class="media-body">
             <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
                 <h2 class="event-title">@Model.Name</h2>
             </a>
-            <h2 class="event-title-small">- @Model.OwnerName</h2>
-@*            <p class="event-description"></p>*@
             <div>
-                <h3 class="event-date">@Model.FriendlyDate</h3>
+                @Model.Street, @Model.City
+            </div>
+            <div>
+                @Model.FormatDate
+            </div>
+            <div>
                 <div class="event-socal">
                     <ul>
                         @*<li><a href="#"><img src="~/Images/p.png" /></a></li>*@
@@ -30,9 +30,6 @@
                                 </a>
                             </li>
                         }
-
-
-
                     </ul>
                 </div>
             </div>

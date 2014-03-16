@@ -524,12 +524,13 @@ hr.gold-line {
 ***************************************/
 
 .event {
-    background-color: rgba(213, 213, 213, 0.38);
+    background-color: black;
     border: 2px solid #FBCE0E;
     -ms-border-radius: 5px;
     border-radius: 5px;
-    padding: 5px;
+    padding: 5px 20px;
     margin-top: 10px;
+    color: white;
 }
 
 .event .media {
@@ -545,6 +546,7 @@ hr.gold-line {
 .event-title {
     margin-top: 0;
     font-weight: 600;
+    color: white;
 }
 
 .event-title-small {

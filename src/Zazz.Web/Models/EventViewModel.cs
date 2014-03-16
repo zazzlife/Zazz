@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using Zazz.Core.Models;
+using Zazz.Infrastructure.Helpers;
 
 namespace Zazz.Web.Models
 {
@@ -70,6 +72,19 @@ namespace Zazz.Web.Models
 
         [Display(AutoGenerateField = false)]
         public string OwnerName { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public string FormatDate
+        {
+            get
+            {
+                var day = Time.Day;
+                var firstPart = Time.ToString("dddd, MMM");
+                var secondPart = Time.ToString("h:mm tt");
+
+                return String.Format("{0} {1} {2}", firstPart, day.Ordinal(), secondPart);
+            }
+        }
 
         [Display(AutoGenerateField = false)]
         public string FriendlyDate 
