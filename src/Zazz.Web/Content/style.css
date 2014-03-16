@@ -537,6 +537,18 @@ hr.gold-line {
     opacity: 0.7;
 }
 
+.event-profile-pic {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    right: 20px;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 1px;
+}
+
 .event .media {
     padding: 5px 20px;
     margin: 0;
