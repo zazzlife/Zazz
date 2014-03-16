@@ -5,8 +5,17 @@
 
 
 <div class="event">
-    <img class="event-cover" src="/Images/cover-image.gif" />
-    <img class="event-profile-pic img-polaroid" src="/picture/user/1/6-s.jpg" />
+    
+    @if (Model.CoverImage != null)
+    {
+        <img class="event-cover" src="@Model.CoverImage.MediumLink" />
+    }
+    
+    @if (Model.ProfileImage != null)
+    {
+        <img class="event-profile-pic img-polaroid" src="@Model.ProfileImage.SmallLink" />
+    }
+    
     <div class="media">
         <div class="media-body">
             <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">

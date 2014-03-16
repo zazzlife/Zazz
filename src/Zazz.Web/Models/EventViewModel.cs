@@ -74,6 +74,12 @@ namespace Zazz.Web.Models
         public string OwnerName { get; set; }
 
         [Display(AutoGenerateField = false)]
+        public PhotoLinks CoverImage { get; set; }
+
+        [Display(AutoGenerateField = false)]
+        public PhotoLinks ProfileImage { get; set; }
+
+        [Display(AutoGenerateField = false)]
         public string FormatDate
         {
             get

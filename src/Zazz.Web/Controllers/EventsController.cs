@@ -151,6 +151,7 @@ namespace Zazz.Web.Controllers
             foreach (var e in events)
             {
                 e.OwnerName = UserService.GetUserDisplayName(e.UserId);
+                e.ProfileImage = PhotoService.GetUserDisplayPhoto(e.UserId);
 
                 if (e.IsFacebookEvent)
                 {
