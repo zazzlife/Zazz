@@ -46,7 +46,9 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
                 .Include(f => f.PostFeed.Post.Categories)
-                .Include(f => f.EventFeed.Event);
+                .Include(f => f.EventFeed.Event)
+                .Include(f => f.EventFeed.Event.User)
+                .Include(f => f.EventFeed.Event.User.ClubDetail);
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
@@ -59,7 +61,9 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
                 .Include(f => f.PostFeed.Post.Categories)
-                .Include(f => f.EventFeed.Event);
+                .Include(f => f.EventFeed.Event)
+                .Include(f => f.EventFeed.Event.User)
+                .Include(f => f.EventFeed.Event.User.ClubDetail);
         }
 
         public IQueryable<Feed> GetUserLikedFeeds(int userId)
