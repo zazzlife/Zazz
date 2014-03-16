@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Security;
@@ -124,35 +125,41 @@ namespace Zazz.Web.Controllers
             var skip = (page - 1) * PAGE_SIZE;
 
             var events = _uow.EventRepository.GetEventRange(from, to, from2, to2)
-                             .OrderBy(e => e.TimeUtc)
-                             .Skip(skip)
-                             .Take(PAGE_SIZE)
-                             .Select(e => new EventViewModel
-                                          {
-                                              UserId = e.UserId,
-                                              City = e.City,
-                                              Id = e.Id,
-                                              CreatedDate = e.CreatedDate,
-                                              Description = e.Description,
-                                              Latitude = e.Latitude,
-                                              Longitude = e.Longitude,
-                                              Location = e.Location,
-                                              Name = e.Name,
-                                              Price = e.Price,
-                                              Street = e.Street,
-                                              Time = e.Time,
-                                              PhotoId = e.PhotoId,
-                                              IsFacebookEvent = e.IsFacebookEvent,
-                                              FacebookPhotoUrl = e.FacebookPhotoLink,
-                                              IsDateOnly = e.IsDateOnly,
-                                              FacebookEventId = e.FacebookEventId
-                                          }).ToList();
+                .Include(e => e.User)
+                .Include(e => e.User.ClubDetail)
+                .OrderBy(e => e.TimeUtc)
+                .Skip(skip)
+                .Take(PAGE_SIZE)
+                .ToList()
+                .Select(e => new EventViewModel
+                    {
+                        UserId = e.UserId,
+                        City = e.City,
+                        Id = e.Id,
+                        CreatedDate = e.CreatedDate,
+                        Description = e.Description,
+                        Latitude = e.Latitude,
+                        Longitude = e.Longitude,
+                        Location = e.Location,
+                        Name = e.Name,
+                        Price = e.Price,
+                        Street = e.Street,
+                        Time = e.Time,
+                        PhotoId = e.PhotoId,
+                        IsFacebookEvent = e.IsFacebookEvent,
+                        FacebookPhotoUrl = e.FacebookPhotoLink,
+                        IsDateOnly = e.IsDateOnly,
+                        FacebookEventId = e.FacebookEventId,
+                        OwnerName = UserService.GetUserDisplayName(e.UserId),
+                        ProfileImage = PhotoService.GetUserDisplayPhoto(e.UserId),
+                        CoverImage = e.User.AccountType == AccountType.Club && e.User.ClubDetail.CoverPhotoId.HasValue
+                            ? PhotoService.GeneratePhotoUrl(e.UserId, e.User.ClubDetail.CoverPhotoId.Value)
+                            : null
+                    })
+                .ToList();
 
             foreach (var e in events)
             {
-                e.OwnerName = UserService.GetUserDisplayName(e.UserId);
-                e.ProfileImage = PhotoService.GetUserDisplayPhoto(e.UserId);
-
                 if (e.IsFacebookEvent)
                 {
                     e.ImageUrl = new PhotoLinks(e.FacebookPhotoUrl);
