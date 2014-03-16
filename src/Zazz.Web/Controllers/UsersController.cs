@@ -189,7 +189,10 @@ namespace Zazz.Web.Controllers
                 CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                 ? PhotoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
                 : DefaultImageHelper.GetDefaultCoverImage().OriginalLink,
-                Events = _uow.EventRepository.GetUpcomingEvents(user.Id).ToList()
+                Events = _uow.EventRepository.GetUpcomingEvents(user.Id)
+//                .Include(e => e.User)
+//                .Include(e => e.User.ClubDetail)
+                .ToList()
                    .Select(e => new EventViewModel
                    {
                        City = e.City,
@@ -212,7 +215,10 @@ namespace Zazz.Web.Controllers
                          ? new PhotoLinks(e.FacebookPhotoLink)
                          : e.PhotoId.HasValue
                              ? PhotoService.GeneratePhotoUrl(e.UserId, e.PhotoId.Value)
-                             : DefaultImageHelper.GetDefaultEventImage()
+                             : DefaultImageHelper.GetDefaultEventImage(),
+//                       CoverImage = e.User.ClubDetail.CoverPhotoId.HasValue
+//                           ? PhotoService.GeneratePhotoUrl(e.UserId, e.User.ClubDetail.CoverPhotoId.Value)
+//                           : null
                    })
                     .ToList(),
                 IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
