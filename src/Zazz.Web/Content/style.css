@@ -528,13 +528,20 @@ hr.gold-line {
     border: 2px solid #FBCE0E;
     -ms-border-radius: 5px;
     border-radius: 5px;
-    padding: 5px 20px;
     margin-top: 10px;
     color: white;
+    position: relative;
+}
+
+.event-cover {
+    opacity: 0.7;
 }
 
 .event .media {
+    padding: 5px 20px;
     margin: 0;
+    position: absolute;
+    top: 0;
 }
 
 .event-img {
