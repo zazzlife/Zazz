@@ -16,5 +16,9 @@ namespace Zazz.Web.Models
         public PhotoLinks ToUserDisplayPhoto { get; set; }
 
         public IEnumerable<string> Categories { get; set; }
+
+        public static string GetImgName(string Name) {
+            return Name.ToLower().Replace(' ', '_').Replace('-', '_');
+        }
     }
 }

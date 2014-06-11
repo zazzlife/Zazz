@@ -12,6 +12,7 @@ using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
+using StructureMap.Pipeline;
 
 namespace Zazz.Web.Controllers
 {
@@ -19,15 +20,20 @@ namespace Zazz.Web.Controllers
     {
         private readonly IPostService _postService;
         private readonly IFeedHelper _feedHelper;
+        private readonly ICategoryService _categoryService;
+        private readonly ICategoryStatsCache _categoryStatsCache;
 
         public PostsController(IPostService postService, IUserService userService,
                                IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
                                IFeedHelper feedHelper, ICategoryService categoryService,
-                               IStaticDataRepository staticDataRepository)
+                               IStaticDataRepository staticDataRepository,
+                               ICategoryStatsCache categoryStatsCache)
             : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _postService = postService;
             _feedHelper = feedHelper;
+            _categoryService = categoryService;
+            _categoryStatsCache = categoryStatsCache;
         }
 
         [Authorize]
@@ -101,6 +107,8 @@ namespace Zazz.Web.Controllers
                                              }
                      };
 
+            _categoryService.UpdateStatistics();
+            _categoryStatsCache.LastUpdate = DateTime.UtcNow.AddMinutes(-6);
             return View("FeedItems/_PostFeedItem", vm);
         }
 

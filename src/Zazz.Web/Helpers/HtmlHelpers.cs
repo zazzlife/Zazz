@@ -85,6 +85,52 @@ namespace Zazz.Web.Helpers
             }
             return MvcHtmlString.Create(sb.ToString());
         }
+
+        public static MvcHtmlString RadioButtonForEnum2<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+        Expression<Func<TModel, TProperty>> expression)
+        {
+            var metaData = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            if (!metaData.ModelType.IsEnum)
+            {
+                throw new ArgumentException("This helper is intended to be used with enum types");
+            }
+
+            var names = Enum.GetNames(metaData.ModelType);
+            var sb = new StringBuilder();
+
+            var fields = metaData.ModelType.GetFields(
+                BindingFlags.Static | BindingFlags.GetField | BindingFlags.Public
+            );
+
+            foreach (var name in names)
+            {
+                var id = string.Format(
+                    "{0}_{1}_{2}",
+                    htmlHelper.ViewData.TemplateInfo.HtmlFieldPrefix,
+                    metaData.PropertyName,
+                    name
+                );
+                var radio = htmlHelper.RadioButtonFor(expression, name, new { id }).ToHtmlString();
+                var field = fields.Single(f => f.Name == name);
+                var label = name;
+                var display = field
+                    .GetCustomAttributes(typeof(DisplayAttribute), false)
+                    .OfType<DisplayAttribute>()
+                    .FirstOrDefault();
+                if (display != null)
+                {
+                    label = display.GetName();
+                }
+
+                sb.AppendFormat(
+                    "{1}<label class=\"radio\" for=\"{0}\">{2}</label>",
+                    id,
+                    radio,
+                    HttpUtility.HtmlEncode(label)
+                );
+            }
+            return MvcHtmlString.Create(sb.ToString());
+        }
  
         public static string GetEnumDisplay<TEnum>(this TEnum en)
         {

@@ -80,6 +80,7 @@
                             </div>
                         </div>
 
+                        @if (!Model.IsOAuth) {
                         <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
                         <hr style="margin-top: 0;" />
                         <div class="control-group">
@@ -117,7 +118,8 @@
                                 @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
                             </div>
                         </div>
-
+                        }
+                        
                         <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>

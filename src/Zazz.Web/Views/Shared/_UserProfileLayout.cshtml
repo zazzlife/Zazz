@@ -4,50 +4,52 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container" style="margin-top: -13px;">
+<div class="main-container">
 
     @*LEFT*@
 
     <div class="row-fluid">
-        <div class="span3 margin-top-15 text-center">
-            <div style="position: fixed;">
-                <div id="changeProfilePicArea">
-                    @if (Model.UserPhoto.PhotoId == 0)
-                    {
-                        // it's the default image
+        <div class="left-pane" style="text-align:center;width: 200px;">
+            <div id="changeProfilePicArea">
+                @if (Model.UserPhoto.PhotoId == 0)
+                {
+                    // it's the default image
 
+                    <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
+                }
+                else
+                {
+                    <a data-toggle="lightbox" data-target="#photo-@Model.UserPhoto.PhotoId" href="@Model.UserPhoto.PhotoUrl.OriginalLink">
                         <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
-                    }
-                    else
-                    {
-                        <a data-toggle="lightbox" data-target="#photo-@Model.UserPhoto.PhotoId" href="@Model.UserPhoto.PhotoUrl.OriginalLink">
-                            <img class="img-polaroid img-rounded user-profile-img" src="@Model.UserPhoto.PhotoUrl.SmallLink" />
-                        </a>
-                    }
+                    </a>
+                }
 
-                    @if (Model.IsSelf)
-                    {
-                        <div class="clearfix"></div>
+                @if (Model.IsSelf)
+                {
+                    <div class="clearfix"></div>
 
-                        <div id="changeProfilePicBtn" class="selectProfilePic" style="display: none;">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Change Picture</button>
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
-                                    <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
-                                </ul>
-                            </div>
+                    <div id="changeProfilePicBtn" class="selectProfilePic" style="display: none;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Change Picture</button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-toggle="modal" data-target="#pg-modal" data-callback="profilePhotoSelected">From gallery</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#uploadPicModal" data-callback="profilePhotoSelected">Upload picture</a></li>
+                            </ul>
                         </div>
+                    </div>
 
-                    }
+                }
 
-                </div>
+            </div>
 
+            <div class="name-container">
                 <a href="@Url.Action("Profile", "Users", new {id=Model.UserId})"><p class="username-display">@Model.UserName</p></a>
+            </div>
 
+            <div class="profile-box">
                 @if (!Model.IsSelf)
                 {
                     if (Model.IsCurrentUserFollowingTargetUser)
@@ -97,10 +99,25 @@
                     </div>
                 }
             </div>
+
+            @if(Model.PreviewPhotos != null)
+            {
+                <div class="preview-photos-container pane-box">
+                    <div class="pane-title">Photos</div>
+                    <div class="preview-box">
+                        @foreach (var p in Model.PreviewPhotos)
+                        {
+                            <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
+                                <img src="@p.PhotoUrl.MediumLink" />
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
         </div>
 
         @*CENTER*@
-        <div class="span6 color-white-bg box-shadow padding-top-17 padding-bottom-100 margin-left-10" style="min-height: 945px;">
+        <div class="center-panel color-white-bg box-shadow">
             <div class="row-fluid margin-bottam-20 center-top-color follow-img margin-top-15 box-shadow-2">
                 <span class="arrow-left hidden-phone"></span>
                 <span class="arrow-right hidden-phone"></span>
@@ -122,17 +139,27 @@
                 @RenderBody()
             </div>
         </div>
-
-
+        
         @*RIGHT*@
-        <div class="span3" style="padding-top: 22px;">
-            @foreach (var c in Model.CategoriesStats)
-            {
-                c.IsRightSide = true;
-                Html.RenderPartial("_CategoryStatusItem", c);
-            }
+        <div class="right-pane">
+            <div class="categories-stat-container pane-box">
+                <div class="pane-title">Categories</div>
+                <form id="cat-select" action="">
+                @foreach (var c in Model.CategoriesStats)
+                {
+                    <input type="checkbox" id="@c.CategoryName.ToFileName()" name="categories" value="@c.CategoryName">
+                    <label for="@c.CategoryName.ToFileName()" class="category">
+                        <img class="category-img" src="@String.Format("/Images/categories/{0}.png", c.CategoryName.ToFileName())" />
+                        <img class="category-img-active" src="@String.Format("/Images/categories/{0}-active.png", c.CategoryName.ToFileName())" />
+                        <span class="category-text">
+                            <span class="category-text-header">@c.CategoryName</span>
+                            <span>@c.UsersCount talking about this.</span>
+                        </span>
+                    </label>
+                }
+                </form>
+            </div>
         </div>
-
     </div>
 
 </div>

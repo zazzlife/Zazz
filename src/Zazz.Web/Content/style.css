@@ -45,12 +45,6 @@
         Global
 ***************************************/
 
-body {
-    padding-top: 52px;
-    background-color: #EEE;
-    color: black;
-}
-
 .btn-zazz {
     background-color: #FBCE0E !important;
     background-repeat: repeat-x;
@@ -293,40 +287,53 @@ hr.gold-line {
     text-align: center;
 }
 
-    .top-menu li.header {
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: gray;
-    }
+.top-menu li.header {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: gray;
+}
 
-    .top-menu .menu-items {
-        padding: 0;
-        margin: 0;
-    }
+.top-menu .menu-items {
+    padding: 0;
+    margin: 0;
+}
 
-        .top-menu .menu-items li {
-            display: inline-block;
-            margin-right: 20px;
-        }
+.top-menu .menu-items li {
+    display: inline-block;
+    margin-right: 20px;
+}
 
-            .top-menu .menu-items li:last-child {
-                margin-right: 0;
-            }
+.top-menu .menu-items li:last-child {
+    margin-right: 0;
+}
 
-            .top-menu .menu-items li > a, .top-menu .menu-items li > a:hover {
-                color: black;
-                text-decoration: none;
-            }
+.top-menu .menu-items li > a, .top-menu .menu-items li > a:hover {
+    color: black;
+    text-decoration: none;
+}
 
-            .top-menu .menu-items li a > i {
-                margin-right: 3px;
-            }
+.top-menu .menu-items li a > i {
+    margin-right: 3px;
+}
+
+.center-panel {
+    min-height: 760px;
+    width: 600px;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    padding-top: 17px;
+    padding-bottom: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 68px !important;
+}
 
 /**********RIGHT PANEL***********/
 
 .right-panel {
     float: right;
-    width: 215px;
+    width: 232px;
 }
 
     .right-panel a {
@@ -357,6 +364,17 @@ hr.gold-line {
 
     .feed-item .feed-content {
         margin-left: 55px;
+    }
+
+    .category-icon {
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .category-icon:focus {
+        outline: none;
     }
 
     .feed-item .img-caption {
@@ -1135,35 +1153,172 @@ li.new-notification {
     min-height: 15px;
 }
 
+.main-container {
+    margin-top: -13px;
+    width: 1130px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/***************************************
+    Left Pane
+***************************************/
+
+.left-pane {
+    width: 243px;
+    margin-top: 15px;
+    margin-left: 0;
+    box-sizing: border-box;
+    min-height: 31px;
+    float: left;
+    display: block;
+}
+
+.right-pane {
+    width: 232px;
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: 30px;
+    box-sizing: border-box;
+    min-height: 31px;
+    float: left;
+    display: block;
+}
+
+.pane-box {
+    background-color: #DDD;
+    border-radius: 10px;
+    padding: 2px;
+    margin-top: 35px;
+}
+
+.pane-title {
+    color: rgba(0, 157, 222, 255);
+    font-size: 23px;
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+.profile-box {
+    padding: 0;
+    background-color: white;
+    width: 165px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#changeProfilePicArea {
+    
+}
+
+.name-container {
+    
+}
+
+.preview-photos-container {
+    width: 180px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.preview-box {
+    background-color: white;
+}
+
+.preview-box img {
+    width: 53px;
+    height: 53px;
+    padding: 0;
+    margin: 1px;
+}
+
+.preview-box a {
+    padding: 0;
+    margin: 0;
+}
+
+/***************************************
+    Filter
+***************************************/
+
+.filter-container {
+
+}
+
+.filter-open {
+    border: none;
+    background-color: white;
+    border-radius: 8px;
+    text-align: left;
+    display: block;
+}
+
+.filters {
+    display: none;
+}
+
+.filters ul {
+    list-style-type: none;
+}
+
 /***************************************
     Categories
 ***************************************/
 
 .categories-stat-container {
-    margin-top: 35px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.categories-stat-container a {
+    color: inherit;
+}
+
+#cat-select input[type="checkbox"] {
+    display: none;
+}
+
+#cat-select input[type="checkbox"] + .category .category-img,
+#cat-select input[type="checkbox"]:checked + .category .category-img-active {
+    display: block;
+}
+
+#cat-select input[type="checkbox"]:checked + .category .category-img,
+#cat-select input[type="checkbox"] + .category .category-img-active {
+    display: none;
 }
 
 .category {
     position: relative;
-    height: 72px;
-    margin-bottom: 5px;
+    height: 64px;
+    margin-bottom: 1px;
+    padding: 3px;
+    background-color: white;
+    display: block;
 }
 
-.category-img {
+.category span {
+    display: block;
+}
+
+.category-img,
+.category-img-active {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 10px;
+    left: 10px;
+    width: 48px;
 }
 
 .category-text {
     z-index: 100;
     position: absolute;
     top: 5px;
-    width: 130px
-}
-
-.category-left .category-text {
-    margin-left: 80px;
+    width: 130px;
+    margin-left: 70px;
+    margin-top: 10px;
 }
 
 .category-right .category-text {
@@ -1389,8 +1544,8 @@ li.new-notification {
     color: #000000;
     font-weight: bold;
     height: 43px;
-    margin-left: -12px !important;
-    width: 105.1% !important;
+    margin-left: -22px !important;
+    width: 624px !important;
 }
 
 .center-top-color {
@@ -1493,6 +1648,9 @@ footer {
 body {
     font-family: 'Open Sans';
     font-weight: normal;
+    padding-top: 52px;
+    background-color: #EEE;
+    color: black;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -472,12 +472,22 @@ $(document).on('click', '.removeFeedBtn', function () {
 
 });
 
+function getCategories() {
+    var selectedItems = '';
+    $('#cat-select input[type="checkbox"]:checked').each(function () {
+        selectedItems += $(this).val() + ',';
+    });
+
+    return selectedItems;
+}
+
 // load more feeds
 $(document).on('click', '#load-feeds', function () {
 
     var self = $(this);
     var lastFeed = $('.feed-item:last');
-    var lastFeedId = lastFeed.data('id');
+    var lastFeedId = -1;
+    if (lastFeed.length > 0) lastFeedId = lastFeed.data('id');
     var url = self.data('url');
 
     showBtnBusy(self);
@@ -486,7 +496,8 @@ $(document).on('click', '#load-feeds', function () {
         url: url,
         cache: false,
         data: {
-            lastFeedId: lastFeedId
+            lastFeedId: lastFeedId,
+            select: getCategories()
         },
         error: function () {
             toastr.error('An error occured, please try again later.');
@@ -497,11 +508,17 @@ $(document).on('click', '#load-feeds', function () {
 
             if (data.find('.feed-item').length > 0) {
 
-                self.fadeOut(function () {
-                    data.appendTo(lastFeed).hide().slideDown();
+                if (lastFeed.length > 0) {
+                    self.fadeOut(function () {
+                        data.appendTo(lastFeed).hide().slideDown();
+                        self.remove();
+                        applyPageStyles();
+                    });
+                } else {
+                    $('#feedsContainer').html(data);
                     self.remove();
                     applyPageStyles();
-                });
+                }
 
             } else {
                 self.text("That's all!");
@@ -572,4 +589,30 @@ $(function () {
 
     applyPageStyles();
 
+});
+
+$(function () {
+    $('#cat-select').on('change', function (e) {
+
+        var url = "/home/categories";
+        var container = $('#feedsContainer');
+        container.css('opacity', '0.6');
+
+        $.ajax({
+            url: url,
+            data: {
+                select: getCategories()
+            },
+            error: function () {
+                toastr.error("Failed to load the feeds, please try again later.");
+                container.css('opacity', '1');
+            },
+            success: function (res) {
+                container.html(res);
+                container.css('opacity', '1');
+                applyPageStyles();
+            }
+        });
+
+    });
 });

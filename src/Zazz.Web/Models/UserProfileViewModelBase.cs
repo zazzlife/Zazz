@@ -32,6 +32,8 @@ namespace Zazz.Web.Models
         public bool FollowRequestAlreadySent { get; set; }
 
         public IEnumerable<CategoryStatViewModel> CategoriesStats { get; set; }
+
+        public IEnumerable<PhotoViewModel> PreviewPhotos { get; set; }
     }
 
 }

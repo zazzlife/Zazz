@@ -16,7 +16,7 @@ namespace Zazz.Web.Interfaces
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        List<FeedViewModel> GetCategoryFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0);
+        FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0);
 
         /// <summary>
         /// Returns a list of activities of people that the user follows and the user himself
@@ -24,7 +24,7 @@ namespace Zazz.Web.Interfaces
         /// <param name="currentUserId"></param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        List<FeedViewModel> GetFeeds(int currentUserId, int lastFeedId = 0);
+        FeedsViewModel GetFeeds(int currentUserId, int lastFeedId = 0);
 
         /// <summary>
         /// Returns a list of user activities
@@ -33,7 +33,7 @@ namespace Zazz.Web.Interfaces
         /// <param name="currentUserId">Id of the current user</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        List<FeedViewModel> GetUserActivityFeed(int userId, int currentUserId,
+        FeedsViewModel GetUserActivityFeed(int userId, int currentUserId,
                                                                 int lastFeedId = 0);
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Zazz.Web.Interfaces
         /// <param name="currentUserId">Id of the current user</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        List<FeedViewModel> GetUserLikedFeed(int userId, int currentUserId,
+        FeedsViewModel GetUserLikedFeed(int userId, int currentUserId,
                                                                 int lastFeedId = 0);
         
         FeedViewModel GetSinglePostFeed(int postId, int currentUserId);

@@ -17,23 +17,27 @@ namespace Zazz.Data.Repositories
         {
         }
 
-        public IQueryable<Feed> GetFeedsWithCategories(List<byte> categories)
+        public IQueryable<Feed> GetFeedsWithCategories(IEnumerable<int> userIds, IEnumerable<byte> categories)
         {
-            var query = (from feed in DbSet
+            return (from feed in DbSet
+                         from feedUserId in feed.FeedUsers
                          from photoCategory in feed.FeedPhotos.SelectMany(p => p.Photo.Categories).DefaultIfEmpty()
                          from postCategory in feed.PostFeed.Post.Categories.DefaultIfEmpty()
-                         orderby feed.Time descending
                          where
-                             categories.Contains(photoCategory.CategoryId) ||
-                             categories.Contains(postCategory.CategoryId)
+                             userIds.Contains(feedUserId.UserId) &&
+                             (
+                                categories.Contains(photoCategory.CategoryId) ||
+                                categories.Contains(postCategory.CategoryId)
+                             )
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)
                 .Include(f => f.PostFeed.Post)
-                .Include(f => f.EventFeed.Event);
-
-
-            return query;
+                .Include(f => f.PostFeed.Post.Categories)
+                .Include(f => f.EventFeed.Event)
+                .Include(f => f.EventFeed.Event.User)
+                .Include(f => f.EventFeed.Event.User.ClubDetail)
+                .OrderByDescending(f => f.Time);
         }
 
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
@@ -48,7 +52,13 @@ namespace Zazz.Data.Repositories
                 .Include(f => f.PostFeed.Post.Categories)
                 .Include(f => f.EventFeed.Event)
                 .Include(f => f.EventFeed.Event.User)
-                .Include(f => f.EventFeed.Event.User.ClubDetail);
+                .Include(f => f.EventFeed.Event.User.ClubDetail)
+                .OrderByDescending(f => f.Time);
+        }
+
+        public DateTime GetFeedDateTime(int feedId)
+        {
+            return DbSet.FirstOrDefault(f => f.Id == feedId).Time;
         }
 
         public IQueryable<Feed> GetUserFeeds(int userId)
@@ -100,10 +110,10 @@ namespace Zazz.Data.Repositories
         {
             return (from feed in DbSet
                     from feedUserId in feed.FeedUsers
-                    orderby feed.Time descending
                     where feedUserId.UserId == userId
                     select feed)
                 .Include(f => f.FeedPhotos)
+                .OrderByDescending(f => f.Time)
                 .FirstOrDefault();
         }
     }

@@ -256,6 +256,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\Api\AlbumsController.cs" />
+    <Compile Include="Controllers\Api\CategoriesStatController.cs" />
     <Compile Include="Controllers\Api\MeController.cs" />
     <Compile Include="Controllers\Api\RewardsController.cs" />
     <Compile Include="Controllers\Api\BaseApiController.cs" />
@@ -318,8 +319,10 @@
     <Compile Include="Interfaces\IObjectMapper.cs" />
     <Compile Include="Models\AlbumsListViewModel.cs" />
     <Compile Include="Models\Api\ApiBasicUserInfo.cs" />
+    <Compile Include="Models\Api\ApiCategoryStat.cs" />
     <Compile Include="Models\Api\ApiRegister.cs" />
     <Compile Include="Models\Api\ApiUserReward.cs" />
+    <Compile Include="Models\FeedsViewModel.cs" />
     <Compile Include="Models\ClubFollowersViewModel.cs" />
     <Compile Include="Models\ClubFollowingViewModel.cs" />
     <Compile Include="Models\ClubProfileViewModelBase.cs" />
@@ -329,6 +332,7 @@
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
     <Compile Include="Models\FollowersViewModel.cs" />
+    <Compile Include="Models\RegisterUserHomeViewModel.cs" />
     <Compile Include="Models\UserFollowingClubsViewModel.cs" />
     <Compile Include="Models\UserFollowingViewModel.cs" />
     <Compile Include="Models\LikedFeedViewModel.cs" />
@@ -413,6 +417,8 @@
     <Content Include="Content\font-awesome-ie7.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font\fontawesome-webfont.svg" />
+    <Content Include="Content\font\Roboto-Light-webfont.svg" />
+    <Content Include="Content\font\Roboto-Thin-webfont.svg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery-ui-timepicker-addon.css" />
@@ -425,6 +431,58 @@
     <Content Include="Content\new\bootstrap.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Images\categories\32\concert-active.png" />
+    <Content Include="Images\categories\32\concert.png" />
+    <Content Include="Images\categories\32\drink_special-active.png" />
+    <Content Include="Images\categories\32\drink_special.png" />
+    <Content Include="Images\categories\32\hip_hop_music-active.png" />
+    <Content Include="Images\categories\32\hip_hop_music.png" />
+    <Content Include="Images\categories\32\house_music-active.png" />
+    <Content Include="Images\categories\32\house_music.png" />
+    <Content Include="Images\categories\32\house_party-active.png" />
+    <Content Include="Images\categories\32\house_party.png" />
+    <Content Include="Images\categories\32\ladies_free-active.png" />
+    <Content Include="Images\categories\32\ladies_free.png" />
+    <Content Include="Images\categories\32\live_music-active.png" />
+    <Content Include="Images\categories\32\live_music.png" />
+    <Content Include="Images\categories\32\no_cover-active.png" />
+    <Content Include="Images\categories\32\no_cover.png" />
+    <Content Include="Images\categories\32\open_bar-active.png" />
+    <Content Include="Images\categories\32\open_bar.png" />
+    <Content Include="Images\categories\32\packed-active.png" />
+    <Content Include="Images\categories\32\packed.png" />
+    <Content Include="Images\categories\32\pre_drink-active.png" />
+    <Content Include="Images\categories\32\pre_drink.png" />
+    <Content Include="Images\categories\32\turning_up-active.png" />
+    <Content Include="Images\categories\32\turning_up.png" />
+    <Content Include="Images\categories\concert-active.png" />
+    <Content Include="Images\categories\concert.png" />
+    <Content Include="Images\categories\drink_special-active.png" />
+    <Content Include="Images\categories\drink_special.png" />
+    <Content Include="Images\categories\hip_hop_music-active.png" />
+    <Content Include="Images\categories\hip_hop_music.png" />
+    <Content Include="Images\categories\house_music-active.png" />
+    <Content Include="Images\categories\house_music.png" />
+    <Content Include="Images\categories\house_party-active.png" />
+    <Content Include="Images\categories\house_party.png" />
+    <Content Include="Images\categories\ladies_free-active.png" />
+    <Content Include="Images\categories\ladies_free.png" />
+    <Content Include="Images\categories\live_music-active.png" />
+    <Content Include="Images\categories\live_music.png" />
+    <Content Include="Images\categories\no_cover-active.png" />
+    <Content Include="Images\categories\no_cover.png" />
+    <Content Include="Images\categories\open_bar-active.png" />
+    <Content Include="Images\categories\open_bar.png" />
+    <Content Include="Images\categories\packed-active.png" />
+    <Content Include="Images\categories\packed.png" />
+    <Content Include="Images\categories\pre_drink-active.png" />
+    <Content Include="Images\categories\pre_drink.png" />
+    <Content Include="Images\categories\turning_up-active.png" />
+    <Content Include="Images\categories\turning_up.png" />
+    <Content Include="Images\new\facebook_icon.png" />
+    <Content Include="Images\new\fb-sign-up2.jpg" />
+    <Content Include="Scripts\jquery.mousewheel.js" />
+    <Content Include="Scripts\perfect-scrollbar-0.4.10.with-mousewheel.min.js" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\Selectyze.jquery.css" />
@@ -460,55 +518,8 @@
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\albums.png" />
     <Content Include="Images\arrow-down.png" />
+    <Content Include="Images\new\landing-page-background.png" />
     <Content Include="Images\black.png" />
-    <Content Include="Images\categories\32\Allyoucandrink-active.png" />
-    <Content Include="Images\categories\32\Allyoucandrink.png" />
-    <Content Include="Images\categories\32\Beerpong-active.png" />
-    <Content Include="Images\categories\32\Beerpong.png" />
-    <Content Include="Images\categories\32\Fratparty-active.png" />
-    <Content Include="Images\categories\32\Fratparty.png" />
-    <Content Include="Images\categories\32\Houseparty-active.png" />
-    <Content Include="Images\categories\32\Houseparty.png" />
-    <Content Include="Images\categories\32\Jampacked-active.png" />
-    <Content Include="Images\categories\32\Jampacked.png" />
-    <Content Include="Images\categories\32\Justchilling-active.png" />
-    <Content Include="Images\categories\32\Justchilling.png" />
-    <Content Include="Images\categories\32\Ladiesfree-active.png" />
-    <Content Include="Images\categories\32\Ladiesfree.png" />
-    <Content Include="Images\categories\32\Livemusic-active.png" />
-    <Content Include="Images\categories\32\Livemusic.png" />
-    <Content Include="Images\categories\32\Nocover-active.png" />
-    <Content Include="Images\categories\32\Nocover.png" />
-    <Content Include="Images\categories\32\Predrink-active.png" />
-    <Content Include="Images\categories\32\Predrink.png" />
-    <Content Include="Images\categories\32\Skitrip-active.png" />
-    <Content Include="Images\categories\32\Skitrip.png" />
-    <Content Include="Images\categories\32\YOFO-active.png" />
-    <Content Include="Images\categories\32\YOFO.png" />
-    <Content Include="Images\categories\Allyoucandrink-active.png" />
-    <Content Include="Images\categories\Allyoucandrink.png" />
-    <Content Include="Images\categories\Beerpong-active.png" />
-    <Content Include="Images\categories\Beerpong.png" />
-    <Content Include="Images\categories\Fratparty-active.png" />
-    <Content Include="Images\categories\Fratparty.png" />
-    <Content Include="Images\categories\Houseparty-active.png" />
-    <Content Include="Images\categories\Houseparty.png" />
-    <Content Include="Images\categories\Jampacked-active.png" />
-    <Content Include="Images\categories\Jampacked.png" />
-    <Content Include="Images\categories\Justchilling-active.png" />
-    <Content Include="Images\categories\Justchilling.png" />
-    <Content Include="Images\categories\Ladiesfree-active.png" />
-    <Content Include="Images\categories\Ladiesfree.png" />
-    <Content Include="Images\categories\Livemusic-active.png" />
-    <Content Include="Images\categories\Livemusic.png" />
-    <Content Include="Images\categories\Nocover-active.png" />
-    <Content Include="Images\categories\Nocover.png" />
-    <Content Include="Images\categories\Predrink-active.png" />
-    <Content Include="Images\categories\Predrink.png" />
-    <Content Include="Images\categories\Skitrip-active.png" />
-    <Content Include="Images\categories\Skitrip.png" />
-    <Content Include="Images\categories\YOFO-active.png" />
-    <Content Include="Images\categories\YOFO.png" />
     <Content Include="Images\category-boxes\left\Allyoucandrink-active.png" />
     <Content Include="Images\category-boxes\left\Allyoucandrink.png" />
     <Content Include="Images\category-boxes\left\Beerpong-active.png" />
@@ -564,6 +575,12 @@
     <Content Include="Images\home3.png" />
     <Content Include="Images\home4.png" />
     <Content Include="Images\home5.png" />
+    <Content Include="Content\font\Roboto-Thin-webfont.eot" />
+    <Content Include="Content\font\Roboto-Thin-webfont.ttf" />
+    <Content Include="Content\font\Roboto-Thin-webfont.woff" />
+    <Content Include="Content\font\Roboto-Light-webfont.eot" />
+    <Content Include="Content\font\Roboto-Light-webfont.ttf" />
+    <Content Include="Content\font\Roboto-Light-webfont.woff" />
     <None Include="Properties\PublishProfiles\Dev - debug %28no folder wipe%29.pubxml" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\3-vs.jpg" />
@@ -590,11 +607,15 @@
     <Content Include="Images\home\Icon-png-12.png" />
     <Content Include="Images\home\Icon-png-13.png" />
     <Content Include="Images\arrow-right.png" />
+    <Content Include="Images\new\landing-page-phones.png" />
     <Content Include="Images\loading.gif" />
     <Content Include="Images\m.png" />
     <Content Include="Images\mcgill.png" />
     <Content Include="Images\nav.png" />
     <Content Include="Images\nav_thumbs.png" />
+    <Content Include="Images\new\android.png" />
+    <Content Include="Images\new\apple1.png" />
+    <Content Include="Images\new\fb-sign-up.jpg" />
     <Content Include="Images\new\landing-page-cover.jpg" />
     <Content Include="Images\p.png" />
     <Content Include="Images\pattern.png" />
@@ -610,6 +631,7 @@
     <Content Include="Images\logo.png" />
     <Content Include="Images\views.png" />
     <Content Include="NewScripts\bootstrap.min.js" />
+    <Content Include="NewScripts\landing-page.js" />
     <Content Include="Scripts\app\ajax-link.js" />
     <Content Include="Scripts\app\ajax.js" />
     <Content Include="Scripts\app\clubs-search.js" />
@@ -671,11 +693,14 @@
     <Content Include="Scripts\livestamp.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\mvc-bootstrap-integration.js" />
+    <Content Include="Scripts\perfect-scrollbar.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\Selectyze.jquery.js" />
     <Content Include="Scripts\toastr.js" />
     <Content Include="Scripts\underscore.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -686,7 +711,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\LandingPage.cshtml" />
     <Content Include="Views\Shared\_EmptyLayout.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -765,6 +792,7 @@
     <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

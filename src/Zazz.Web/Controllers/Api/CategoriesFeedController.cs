@@ -55,7 +55,7 @@ namespace Zazz.Web.Controllers.Api
             if (validRequestedCategories.Count < 1)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return _feedHelper.GetCategoryFeeds(currentUserId, validRequestedCategories, lastFeed)
+            return _feedHelper.GetCategoryFeeds(currentUserId, validRequestedCategories, lastFeed).feeds
                              .Select(_objectMapper.FeedViewModelToApiModel);
 
         }

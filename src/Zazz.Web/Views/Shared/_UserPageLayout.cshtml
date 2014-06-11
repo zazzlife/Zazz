@@ -6,8 +6,8 @@
     IEnumerable<CategoryStatViewModel> tagStats = null;
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
-    
-    var controller = ViewContext.Controller as UserPageLayoutBaseController;
+
+    var controller = ViewContext.Controller as BaseController;
     if (controller != null)
     {
         tagStats = controller.GetTagStats();

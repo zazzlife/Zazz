@@ -284,6 +284,20 @@ namespace Zazz.Web.Controllers
             if (user.ProfilePhotoId.HasValue)
                 photo = PhotoService.GetPhoto(user.ProfilePhotoId.Value);
 
+            var pics = _uow.PhotoRepository.GetLatestUserPhotos(user.Id, 9)
+                .Where(p => p.AlbumId == null)
+                .ToList()
+                .Select(p => new PhotoViewModel
+                {
+                    FromUserDisplayName = displayName,
+                    FromUserId = user.Id,
+                    FromUserPhotoUrl = profilePhotoUrl,
+                    IsFromCurrentUser = currentUserId == user.Id,
+                    Description = p.Description,
+                    PhotoId = p.Id,
+                    PhotoUrl = PhotoService.GeneratePhotoUrl(p.UserId, p.Id)
+                }).ToList();
+
             var baseVm = LoadBaseUserProfileVm(user, currentUserId, displayName, photo);
             var vm = new UserProfileViewModel
             {
@@ -302,7 +316,8 @@ namespace Zazz.Web.Controllers
                 School = baseVm.School,
                 FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
                 IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
-                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser
+                IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
+                PreviewPhotos = pics
             };
 
             return View("UserProfile", vm);

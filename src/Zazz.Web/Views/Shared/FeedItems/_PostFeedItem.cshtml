@@ -50,7 +50,9 @@
         {
             foreach (var category in Model.Post.Categories)
             {
-                <a href="@Url.Action("Categories", "Home", new { @select=category })"><img class="category-post-img" data-name="@category" src="@String.Format("/Images/categories/32/{0}.png", category)"/></a>
+                <button class="category-icon" onclick="$('#@category.ToFileName()').click();">
+                    <img class="category-post-img" data-name="@category.ToFileName()" src="@String.Format("/Images/categories/32/{0}.png", @category.ToFileName())"/>
+                </button>
             }
         }
         

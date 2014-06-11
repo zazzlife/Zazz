@@ -1,19 +1,34 @@
-﻿using System;
+﻿using DotNetOpenAuth.AspNet;
+using Microsoft.Web.WebPages.OAuth;
+using Newtonsoft.Json;
+using PoliteCaptcha;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Security;
+using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json;
+using System.Web.Security;
+using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using Zazz.Core.Models.Facebook;
+using Zazz.Data;
 using Zazz.Infrastructure;
+using Zazz.Infrastructure.Helpers;
+using Zazz.Web.Filters;
 using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
+using Zazz.Web.OAuthAuthorizationServer;
 
 namespace Zazz.Web.Controllers
 {
@@ -21,14 +36,56 @@ namespace Zazz.Web.Controllers
     {
         private readonly IFeedHelper _feedHelper;
         private readonly IUoW _uow;
+        private readonly IAuthService _authService;
+        private readonly IFacebookService _facebookService;
+        private readonly IFollowService _followService;
+        private readonly IOAuthService _oAuthService;
+        private readonly IFacebookHelper _facebookHelper;
 
-        public HomeController(IPhotoService photoService, IUserService userService,
-            IStaticDataRepository staticDataRepository, ICategoryService categoryService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, IUoW uow) :
+        private const string IS_MOBILE_SESSION_KEY = "IsMobile";
+        private const string IS_OAUTH_KEY = "IsOAuth";
+        private const string OAUTH_PROVIDER_KEY = "OAUTH_Provider";
+        private const string OAUTH_FULLNAME_KEY = "OAUTH_FullName";
+        private const string OAUTH_PROVIDER_USERID_KEY = "OAUTH_ProviderUserId";
+        private const string OAUTH_EMAIL_KEY = "OAUTH_Email";
+        private const string OAUTH_ACCESS_TOKEN_KEY = "OAUTH_AccessToken";
+        private const string OAUTH_GENDER_KEY = "OAUTH_Gender";
+        private const string OAUTH_PROFILE_PIC_KEY = "OAUTH_ProfilePic";
+        private const string OAUTH_COVER_PIC_KEY = "OAUTH_CoverPic";
+
+        public HomeController(
+            IPhotoService photoService,
+            IUserService userService,
+            IStaticDataRepository staticDataRepository,
+            ICategoryService categoryService,
+            IDefaultImageHelper defaultImageHelper,
+            IFeedHelper feedHelper,
+            IUoW uow,
+            IStaticDataRepository staticData,
+            IAuthService authService,
+            IFacebookService facebookService,
+            IFollowService followService,
+            IOAuthService oAuthService,
+            IFacebookHelper facebookHelper
+            ) :
             base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _feedHelper = feedHelper;
             _uow = uow;
+            _authService = authService;
+            _facebookService = facebookService;
+            _followService = followService;
+            _oAuthService = oAuthService;
+            _facebookHelper = facebookHelper;
+        }
+
+        public JsonNetResult IsAvailable(string username)
+        {
+            if (String.IsNullOrWhiteSpace(username) || username.Length < 2 || username.Length > 20)
+                return new JsonNetResult(false);
+
+            var usernameExists = _uow.UserRepository.ExistsByUsername(username);
+            return usernameExists ? new JsonNetResult(false) : new JsonNetResult(true);
         }
 
         public ActionResult Index()
@@ -49,25 +106,197 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                return View("LandingPage");
+                var vm = new RegisterUserHomeViewModel
+                {
+                    Majors = StaticDataRepository.GetMajors(),
+                    PromoterTypes = (IEnumerable<PromoterType>)Enum.GetValues(typeof(PromoterType))
+                };
+
+                if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
+                {
+                    var email = (string)Session[OAUTH_EMAIL_KEY];
+                    var gender = (Gender)Session[OAUTH_GENDER_KEY];
+
+                    vm.IsOAuth = true;
+                    vm.Email = email;
+                    vm.Gender = gender;
+                }
+                return View("LandingPage", vm);
             }
+        }
+
+        private void ReleaseOAuthSessionValues()
+        {
+            Session.Remove(IS_MOBILE_SESSION_KEY);
+            Session.Remove(IS_OAUTH_KEY);
+            Session.Remove(OAUTH_PROVIDER_KEY);
+            Session.Remove(OAUTH_FULLNAME_KEY);
+            Session.Remove(OAUTH_PROVIDER_USERID_KEY);
+            Session.Remove(OAUTH_EMAIL_KEY);
+            Session.Remove(OAUTH_ACCESS_TOKEN_KEY);
+            Session.Remove(OAUTH_GENDER_KEY);
+            Session.Remove(OAUTH_PROFILE_PIC_KEY);
+            Session.Remove(OAUTH_COVER_PIC_KEY);
+        }
+
+        private ActionResult HandleMobileClientOAuthCallback(User user)
+        {
+            var scopes = StaticDataRepository.GetOAuthScopes()
+                .Where(s => s.Name.Equals("full", StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+
+            var client = StaticDataRepository.GetOAuthClients()
+                .Single(c => c.Name.Equals("Zazz", StringComparison.InvariantCultureIgnoreCase));
+
+            var creds = _oAuthService.CreateOAuthCredentials(user, client, scopes);
+
+            var queryString = HttpUtility.ParseQueryString(String.Empty);
+            queryString["access_token"] = creds.AccessToken.ToJWTString();
+            queryString["refresh_token"] = creds.RefreshToken.ToJWTString();
+
+            var url = "/loginSuccess#" + queryString.ToString();
+            return Redirect(url);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
+        public ActionResult Register(RegisterUserHomeViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User {
+                    Username = vm.UserName,
+                    AccountType = AccountType.User,
+                    Email = vm.Email,
+                    IsConfirmed = false,
+                    JoinedDate = DateTime.UtcNow,
+                    LastActivity = DateTime.UtcNow,
+                    Birth = vm.Birth,
+                    Preferences = new UserPreferences {
+                        SyncFbEvents = true,
+                        SyncFbImages = false,
+                        SyncFbPosts = false,
+                        SendSyncErrorNotifications = true
+                    },
+                    UserDetail = new UserDetail {
+                        Gender = vm.Gender
+                    }
+                };
+
+                if (vm.UserType == UserType.User) {
+                    user.UserDetail.IsPromoter = false;
+                    user.UserDetail.MajorId = vm.MajorId;
+                }
+                else {
+                    user.UserDetail.IsPromoter = true;
+                    user.UserDetail.PromoterType = vm.PromoterType;
+                }
+
+                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                var isOAuth = (bool?)Session[IS_OAUTH_KEY];
+                string profilePhotoUrl = null;
+
+                if (isOAuth.HasValue && isOAuth.Value)
+                {
+                    try
+                    {
+                        var provider = (OAuthProvider)Session[OAUTH_PROVIDER_KEY];
+                        var providerUserId = Int64.Parse((string)Session[OAUTH_PROVIDER_USERID_KEY]);
+                        var email = (string)Session[OAUTH_EMAIL_KEY];
+                        var accessToken = (string)Session[OAUTH_ACCESS_TOKEN_KEY];
+                        profilePhotoUrl = (string)Session[OAUTH_PROFILE_PIC_KEY];
+
+                        if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(accessToken))
+                            throw new ApplicationException("Session expired!");
+
+                        user.IsConfirmed = true;
+                        user.Email = email;
+
+                        user.LinkedAccounts.Add(new LinkedAccount
+                                                {
+                                                    AccessToken = accessToken,
+                                                    Provider = provider,
+                                                    ProviderUserId = providerUserId
+                                                });
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.IsMobile = (isMobile.HasValue && isMobile.Value);
+                        return RedirectToAction("SessionExpired");
+                    }
+                    finally
+                    {
+                        ReleaseOAuthSessionValues();
+                    }
+                }
+
+                try
+                {
+                    _authService.Register(user, vm.Password, !user.IsConfirmed);
+                    FormsAuthentication.SetAuthCookie(user.Username, true);
+
+                    if (isMobile.HasValue && isMobile.Value)
+                    {
+                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        return HandleMobileClientOAuthCallback(user);
+                    }
+                    else if (isOAuth.HasValue && isOAuth.Value)
+                    {
+                        return RedirectToAction("FindFriends");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                catch (InvalidEmailException)
+                {
+                    ModelState.AddModelError("Email", "Invalid email address");
+                }
+                catch (PasswordTooLongException)
+                {
+                    ModelState.AddModelError("Password", "Password too long");
+                }
+                catch (UsernameExistsException)
+                {
+                    ModelState.AddModelError("Username", "Username not available");
+                }
+                catch (EmailExistsException)
+                {
+                    ModelState.AddModelError("Email", "Email address already registered");
+                }
+            }
+
+            vm.Majors = StaticDataRepository.GetMajors();
+            vm.PromoterTypes = (IEnumerable<PromoterType>)Enum.GetValues(typeof(PromoterType));
+            
+            return View("LandingPage", vm);
         }
 
         [Authorize]
         public ActionResult Categories(string @select)
         {
             var user = UserService.GetUser(User.Identity.Name);
+
+            FeedsViewModel feeds;
+
             var availableCategories = StaticDataRepository.GetCategories().ToList();
             var selectedCategories = String.IsNullOrEmpty(@select)
-                                   ? Enumerable.Empty<string>()
-                                   : @select.Split(',');
+                                    ? Enumerable.Empty<string>()
+                                    : @select.Split(',');
 
-            var selectedCategoriesId =
-                availableCategories.Where(t => selectedCategories.Contains(t.Name,
-                                                                           StringComparer.InvariantCultureIgnoreCase))
-                                   .Select(t => t.Id);
+            if (!String.IsNullOrEmpty(@select))
+            {
+                var selectedCategoriesId =
+                    availableCategories.Where(t => selectedCategories.Contains(t.Name,
+                                                                               StringComparer.InvariantCultureIgnoreCase))
+                                       .Select(t => t.Id);
 
-            var feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList());
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList());
+            }
+            else
+            {
+                feeds = _feedHelper.GetFeeds(user.Id);
+            }
 
             if (Request.IsAjaxRequest())
                 return View("_FeedsPartial", feeds);
@@ -85,10 +314,28 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult LoadMoreFeeds(int lastFeedId)
+        public ActionResult LoadMoreFeeds(int lastFeedId, string @select, bool showPhotos = true)
         {
             var user = UserService.GetUser(User.Identity.Name);
-            var feeds = _feedHelper.GetFeeds(user.Id, lastFeedId);
+
+            FeedsViewModel feeds;
+
+            if (!String.IsNullOrEmpty(@select))
+            {
+                var availableCategories = StaticDataRepository.GetCategories().ToList();
+                var selectedCategories = @select.Split(',');
+
+                var selectedCategoriesId =
+                    availableCategories.Where(t => selectedCategories.Contains(t.Name,
+                                                                               StringComparer.InvariantCultureIgnoreCase))
+                                       .Select(t => t.Id);
+
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), lastFeedId);
+            }
+            else
+            {
+                feeds = _feedHelper.GetFeeds(user.Id, lastFeedId);
+            }
 
             return View("_FeedsPartial", feeds);
         }
@@ -197,4 +444,6 @@ namespace Zazz.Web.Controllers
             return String.Empty;
         }
     }
+
+
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
+using System;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 
@@ -46,6 +47,11 @@ namespace Zazz.Web.Models
         public IEnumerable<City> Cities { get; set; }
 
         public IEnumerable<Major> Majors { get; set; }
+
+        [Display(Name = "Date of Birth (MM/dd/yyyy)")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? Birth { get; set; }
 
         [HiddenInput]
         public bool IsOAuth { get; set; }

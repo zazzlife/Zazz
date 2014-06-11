@@ -98,3 +98,35 @@ $(document).on('click', '.syncPageBtn', function () {
     });
 
 });
+
+var filterMoving = false;
+var filterShouldShow = false;
+
+function showFilter() {
+    if (filterMoving) return;
+    filterMoving = true;
+    $('.filters').slideDown(400, function () {
+        filterMoving = false;
+        if (!filterShouldShow) hideFilter();
+    });
+}
+
+function hideFilter() {
+    if (filterMoving) return;
+    filterMoving = true;
+    $('.filters').slideUp(400, function () {
+        filterMoving = false;
+        if (filterShouldShow) showFilter();
+    });
+}
+
+$(".filter-container").on({
+    mouseenter: function () {
+        filterShouldShow = true;
+        showFilter();
+    },
+    mouseleave: function () {
+        filterShouldShow = false;
+        hideFilter();
+    }
+});

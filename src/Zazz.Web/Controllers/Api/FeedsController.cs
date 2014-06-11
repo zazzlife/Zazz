@@ -33,7 +33,7 @@ namespace Zazz.Web.Controllers.Api
             var userId = CurrentUserId;
             var feeds = _feedHelper.GetFeeds(userId, lastFeed);
 
-            return feeds.Select(_objectMapper.FeedViewModelToApiModel);
+            return feeds.feeds.Select(_objectMapper.FeedViewModelToApiModel);
         }
 
         // GET api/v1/feeds?id=&lastFeed=
@@ -42,7 +42,7 @@ namespace Zazz.Web.Controllers.Api
             var userId = CurrentUserId;
             var feeds = _feedHelper.GetUserActivityFeed(id, userId, lastFeed);
 
-            return feeds.Select(_objectMapper.FeedViewModelToApiModel);
+            return feeds.feeds.Select(_objectMapper.FeedViewModelToApiModel);
         }
 
         

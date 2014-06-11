@@ -30,6 +30,8 @@ namespace Zazz.Core.Models.Data
         [Column(TypeName = "Date")]
         public DateTime JoinedDate { get; set; }
 
+        public DateTime? Birth { get; set; }
+
         public bool IsConfirmed { get; set; }
 
         public virtual UserValidationToken UserValidationToken { get; set; }

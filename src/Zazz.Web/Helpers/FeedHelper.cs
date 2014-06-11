@@ -42,17 +42,41 @@ namespace Zazz.Web.Helpers
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public List<FeedViewModel> GetCategoryFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0)
+        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0)
         {
-            var query = _uow.FeedRepository.GetFeedsWithCategories(tagIds);
+            var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
+            followIds.Add(currentUserId);
 
-            if (lastFeedId != 0)
-                query = query.Where(f => f.Id < lastFeedId);
+            var query = _uow.FeedRepository.GetFeedsWithCategories(followIds, tagIds);
+            var remainingQuery = query;
 
+            if (lastFeedId > 0)
+            {
+                var maxDate = _uow.FeedRepository.GetFeedDateTime(lastFeedId);
+                query = query.Where(f => f.Time < maxDate);
+            }
+            else if(lastFeedId == 0)
+            {
+                var minDate = DateTime.UtcNow.AddDays(-7);
+                query = query.Where(f => f.Time >= minDate);
+            }
+            
             query = query.Take(PageSize);
 
             var feeds = query.ToList();
-            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
+
+            var remaining = 0;
+            if (feeds.Count > 0)
+            {
+                var maxDate = feeds.Last().Time;
+                remaining = remainingQuery.Where(f => f.Time < maxDate).Count();
+            }
+            else if (lastFeedId == 0)
+            {
+                remaining = remainingQuery.Count();
+            }
+
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId, remaining);
         }
 
         /// <summary>
@@ -61,23 +85,41 @@ namespace Zazz.Web.Helpers
         /// <param name="currentUserId"></param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public List<FeedViewModel> GetFeeds(int currentUserId, int lastFeedId = 0)
+        public FeedsViewModel GetFeeds(int currentUserId, int lastFeedId = 0)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
 
             var query = _uow.FeedRepository.GetFeeds(followIds);
+            var remainingQuery = query;
 
-            if (lastFeedId != 0)
-                query = query.Where(f => f.Id < lastFeedId);
-
-
-            query = query.OrderByDescending(f => f.Time)
-                         .Take(PageSize);
-
+            if (lastFeedId > 0)
+            {
+                var maxDate = _uow.FeedRepository.GetFeedDateTime(lastFeedId);
+                query = query.Where(f => f.Time < maxDate);
+            }
+            else if(lastFeedId == 0)
+            {
+                var minDate = DateTime.UtcNow.AddDays(-7);
+                query = query.Where(f => f.Time >= minDate);
+            }
+            
+            query = query.Take(PageSize);
 
             var feeds = query.ToList();
-            return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
+
+            var remaining = 0;
+            if (feeds.Count > 0)
+            {
+                var maxDate = feeds.Last().Time;
+                remaining = remainingQuery.Where(f => f.Time < maxDate).Count();
+            }
+            else if (lastFeedId == 0)
+            {
+                remaining = remainingQuery.Count();
+            }
+
+            return ConvertFeedsToFeedsViewModel(feeds, currentUserId, remaining);
         }
 
         /// <summary>
@@ -87,7 +129,7 @@ namespace Zazz.Web.Helpers
         /// <param name="currentUserId">Id of the current user</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public List<FeedViewModel> GetUserActivityFeed(int userId, int currentUserId,
+        public FeedsViewModel GetUserActivityFeed(int userId, int currentUserId,
                                                                         int lastFeedId = 0)
         {
             var query = _uow.FeedRepository.GetUserFeeds(userId);
@@ -101,7 +143,7 @@ namespace Zazz.Web.Helpers
             return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
         }
 
-        public List<FeedViewModel> GetUserLikedFeed(int userId, int currentUserId, int lastFeedId = 0)
+        public FeedsViewModel GetUserLikedFeed(int userId, int currentUserId, int lastFeedId = 0)
         {
             var query = _uow.FeedRepository.GetUserLikedFeeds(userId);
             if (lastFeedId != 0)
@@ -124,15 +166,19 @@ namespace Zazz.Web.Helpers
             return ConvertFeedToFeedViewModel(feed, currentUserId);
         }
 
-        private List<FeedViewModel> ConvertFeedsToFeedsViewModel(IEnumerable<Feed> feeds, int currentUserId)
+        private FeedsViewModel ConvertFeedsToFeedsViewModel(IEnumerable<Feed> feeds, int currentUserId, int remaining = 0)
         {
-            var vm = new List<FeedViewModel>();
+            var vm = new FeedsViewModel
+            {
+                feeds = new List<FeedViewModel>()
+            };
 
             foreach (var feed in feeds)
             {
-                vm.Add(ConvertFeedToFeedViewModel(feed, currentUserId));
+                vm.feeds.Add(ConvertFeedToFeedViewModel(feed, currentUserId));
             }
 
+            vm.remaining = remaining;
             return vm;
         }
 

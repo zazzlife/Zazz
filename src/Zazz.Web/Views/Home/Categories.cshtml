@@ -20,7 +20,7 @@
     <div class="row-fluid">
 
         @*LEFT SIDE*@
-        <div class="span3 margin-top-15">
+        <div class="left-pane">
             <div class="user">
                 <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
                 <a href="@Url.Action("Profile", "Users", new { id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString() })" class="username">@currentUserDisplayName</a>
@@ -36,10 +36,10 @@
                         @Html.Action("GetNewNotificationsCount", "Notifications")
                     </a>
                 </li>
-                <li><a href="#" id="party-web-link" data-toggle="modal" data-target="#party-web-requests"><i class="icon-beer"></i>&nbsp; Party Web @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
-                <li><a href="@Url.Action("List", "Events")"><i class="icon-calendar"></i>&nbsp; Events</a></li>
-                <li><a href="@Url.Action("Index", "Photos")"><i class="icon-camera"></i>&nbsp; Photo</a></li>
-                <li><a href="#"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
+                <li><a href="@Url.Action("Followers", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Followers @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
+                <li><a href="@Url.Action("Following", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Following</a></li>
+                <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="@Url.Action("Clubs", "Home")"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
                 @if (Model.HasFacebookAccount)
                 {
                     if (Model.AccountType == AccountType.Club)
@@ -53,39 +53,50 @@
                 }
             </ul>
             
-            <div class="categories-stat-container">
-                @foreach (var c in categoryStats.Take(6))
+            <div class="filter-container pane-box">
+                <div class="filter-open pane-title">Filter</div>
+                <div class="filters">
+                    <ul>
+                        <li>
+                            <input type="checkbox" name="filters" value="f-photos" checked/>
+                            Show Photos
+                        </li>
+                        <li>
+                            <input type="checkbox" name="filters" value="f-videos" checked/>
+                            Show Videos
+                        </li>
+                        <li>
+                            <input type="checkbox" name="filters" value="f-clubs" checked/>
+                            Show Club Posts
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="categories-stat-container pane-box">
+                <div class="pane-title">Categories</div>
+                <form id="cat-select" action="">
+                @foreach (var c in categoryStats)
                 {
-                    Html.RenderPartial("_CategoryStatusItem", c);
+                    <input type="checkbox" id="@c.CategoryName.ToFileName()" name="categories" value="@c.CategoryName" @(Model.SelectedCategories.Contains(c.CategoryName, StringComparer.InvariantCultureIgnoreCase) ? "checked" : String.Empty)>
+                    <label for="@c.CategoryName.ToFileName()" class="category">
+                        <img class="category-img" src="@String.Format("/Images/categories/{0}.png", c.CategoryName.ToFileName())" />
+                        <img class="category-img-active" src="@String.Format("/Images/categories/{0}-active.png", c.CategoryName.ToFileName())" />
+                        <span class="category-text">
+                            <span class="category-text-header">@c.CategoryName</span>
+                            <span>@c.UsersCount talking about this.</span>
+                        </span>
+                    </label>
                 }
+                </form>
             </div>
         </div>
 
         @*CENTER*@
 
-        <div class="span6 color-white-bg box-shadow padding-L-R-10 padding-top-17 padding-bottom-100 margin-left-10">
-            <div style="margin: 15px 0 35px 10px;">
-                <select multiple="multiple" id="tagsSelect" style="width: 430px;">
-                    @foreach (var t in Model.AvailableCategories)
-                    {
-                        <option value="@t" @(Model.SelectedCategories.Contains(t, StringComparer.InvariantCultureIgnoreCase) ? "selected='selected'" : String.Empty)>#@t</option>
-                    }
-                </select>
-            </div>
-
+        <div class="center-panel color-white-bg box-shadow">
             @Html.Partial("_FeedsPartial", Model.Feeds)
         </div>
-        
-        @*RIGHT*@
-        <div class="span3" style="margin-top: 263px;margin-left: 10px;">
-            <div class="categories-stat-container">
-                @foreach (var c in categoryStats.Skip(6))
-                {
-                    Html.RenderPartial("_CategoryStatusItem", c);
-                }
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -105,37 +116,4 @@
             <a href="#" data-dismiss="modal" class="btn">Close</a>
         </div>
     </div>
-}
-
-@section Scripts
-{
-    <script type="text/javascript">
-        $(function () {
-            $('#tagsSelect').select2();
-
-            $('#tagsSelect').on('change', function(e) {
-                
-                var url = "/home/categories";
-                var container = $('#feedsContainer');
-                container.css('opacity', '0.6');
-
-                $.ajax({
-                    url: url,
-                    data: {
-                        select: e.val.toString()
-                    },
-                    error: function() {
-                        toastr.error("Failed to load the feeds, please try again later.");
-                        container.css('opacity', '1');
-                    },
-                    success: function (res) {
-                        container.html(res);
-                        container.css('opacity', '1');
-                        applyPageStyles();
-                    }
-                });
-
-            });
-        });
-    </script>
 }

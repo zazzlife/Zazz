@@ -57,8 +57,8 @@
                 {
                     <li>
                         <button data-id="@c.Id" type="button" class="btn category-select-btn " data-toggle="button">
-                            <img data-active-url="@String.Format("/Images/categories/{0}-active.png", c.Name)" data-default-url="@String.Format("/Images/categories/{0}.png", c.Name)"
-                                 src="@String.Format("/Images/categories/{0}.png", c.Name)"/>
+                            <img data-active-url="@String.Format("/Images/categories/{0}-active.png", c.Name.ToFileName())" data-default-url="@String.Format("/Images/categories/{0}.png", c.Name.ToFileName())"
+                                 src="@String.Format("/Images/categories/{0}.png", c.Name.ToFileName())"/>
                         </button>
                         <div class="text-center">@c.Name</div>
                     </li>

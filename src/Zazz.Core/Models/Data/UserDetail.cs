@@ -14,6 +14,10 @@ namespace Zazz.Core.Models.Data
 
         public Gender Gender { get; set; }
 
+        public bool IsPromoter { get; set; }
+
+        public PromoterType? PromoterType { get; set; }
+
         [ForeignKey("SchoolId")]
         public virtual School School { get; set; }
 

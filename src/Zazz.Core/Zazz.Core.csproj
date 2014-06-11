@@ -140,7 +140,9 @@
     <Compile Include="Interfaces\Services\IWeeklyService.cs" />
     <Compile Include="Models\Data\ClubPointRewardScenario.cs" />
     <Compile Include="Models\Data\ClubReward.cs" />
+    <Compile Include="Models\Data\Enums\PromoterType.cs" />
     <Compile Include="Models\Data\Enums\PointRewardScenario.cs" />
+    <Compile Include="Models\Data\Enums\UserType.cs" />
     <Compile Include="Models\Data\OAuthClient.cs" />
     <Compile Include="Models\Data\BaseEntityLong.cs" />
     <Compile Include="Models\Data\City.cs" />

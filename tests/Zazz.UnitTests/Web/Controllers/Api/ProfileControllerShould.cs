@@ -92,7 +92,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
             PhotoService.Setup(x => x.GetLatestUserPhotos(User.Id, It.IsAny<int>()))
                         .Returns(new EnumerableQuery<Photo>(Enumerable.Empty<Photo>()));
 
-            _feedHelper.Setup(x => x.GetUserActivityFeed(User.Id, User.Id, 0))
+            _feedHelper.Setup(x => x.GetUserActivityFeed(User.Id, User.Id, 0).feeds)
                        .Returns(new List<FeedViewModel>());
 
             _followService.Setup(x => x.GetFollowersCount(User.Id))

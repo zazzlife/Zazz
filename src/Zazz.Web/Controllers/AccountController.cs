@@ -51,12 +51,19 @@ namespace Zazz.Web.Controllers
         private const string OAUTH_COVER_PIC_KEY = "OAUTH_CoverPic";
 
 
-        public AccountController(IStaticDataRepository staticData, IAuthService authService
-                                 , IUserService userService, IPhotoService photoService,
-                                 IDefaultImageHelper defaultImageHelper, IFacebookService facebookService,
-                                 IFollowService followService, IUoW uow, IOAuthService oAuthService,
-                                 IFacebookHelper facebookHelper, ICategoryService categoryService)
-            : base(userService, photoService, defaultImageHelper, staticData, categoryService)
+        public AccountController(
+            IStaticDataRepository staticData,
+            IAuthService authService,
+            IUserService userService,
+            IPhotoService photoService,
+            IDefaultImageHelper defaultImageHelper,
+            IFacebookService facebookService,
+            IFollowService followService,
+            IUoW uow,
+            IOAuthService oAuthService,
+            IFacebookHelper facebookHelper,
+            ICategoryService categoryService
+            ) : base(userService, photoService, defaultImageHelper, staticData, categoryService)
         {
             _authService = authService;
             _facebookService = facebookService;
@@ -166,6 +173,7 @@ namespace Zazz.Web.Controllers
                                IsConfirmed = false,
                                JoinedDate = DateTime.UtcNow,
                                LastActivity = DateTime.UtcNow,
+                               Birth = vm.Birth,
                                Preferences = new UserPreferences
                                              {
                                                  SyncFbEvents = true,

@@ -77,7 +77,7 @@ namespace Zazz.Web.Controllers.Api
                        IsSelf = isSelf,
                        IsCurrentUserFollowingTargetUser = isCurrentUserFollowingTargetUser,
                        IsTargetUserFollowingCurrentUser = isTargetUserFollowingCurrentUser,
-                       Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed)
+                       Feeds = _feedHelper.GetUserActivityFeed(id, currentUserId, lastFeed).feeds
                        .Select(_objectMapper.FeedViewModelToApiModel),
                        Photos = _photoService.GetLatestUserPhotos(id, 15)
                        .ToList().Select(_objectMapper.PhotoToApiPhoto),

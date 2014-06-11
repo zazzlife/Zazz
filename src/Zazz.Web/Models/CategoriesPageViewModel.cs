@@ -13,6 +13,6 @@ namespace Zazz.Web.Models
 
         public IEnumerable<string> SelectedCategories { get; set; }
 
-        public IEnumerable<FeedViewModel> Feeds { get; set; }
+        public FeedsViewModel Feeds { get; set; }
     }
 }

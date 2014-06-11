@@ -4,6 +4,6 @@ namespace Zazz.Web.Models
 {
     public class ClubProfileViewModel : ClubProfileViewModelBase
     {
-        public List<FeedViewModel> Feeds { get; set; }
+        public FeedsViewModel Feeds { get; set; }
     }
 }

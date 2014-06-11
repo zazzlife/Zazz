@@ -133,5 +133,9 @@ namespace Zazz.Web.Helpers
                 return "";
             }
         }
+
+        public static string ToFileName(this string str) {
+            return str.ToLower().Replace(' ', '_').Replace('-', '_');
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace Zazz.Web.Models
 
         public AccountType AccountType { get; set; }
         
-        public IEnumerable<FeedViewModel> Feeds { get; set; }
+        public FeedsViewModel Feeds { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using PoliteCaptcha
+@model RegisterUserHomeViewModel
+@{
     Layout = null;
     ViewBag.Title = "TODO: Add page title and description.";
 }
@@ -14,91 +16,362 @@
     <link href="/Content/new/bootstrap.min.css" rel="stylesheet" />
     <link href="/Content/new/bootstrap-theme.css" rel="stylesheet" />
     <link href="/Content/new/styles.css" rel="stylesheet" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="/Scripts/jquery.mousewheel.js"></script>
+    <script src="/Scripts/perfect-scrollbar.js"></script>
+
+    <script src="/Scripts/jquery-ui-1.10.3.js"></script>
+    <script src="/Scripts/jquery-ui-timepicker-addon.js"></script>
+    <script src="/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="/Scripts/jquery.validate.js"></script>
+    <script src="/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="/Scripts/bootstrap-lightbox.js"></script>
+    <script src="/Scripts/bootstrap-editable.js"></script>
+    <script src="/Scripts/moment.js"></script>
+    <script src="/Scripts/livestamp.js"></script>
+    <script src="/Scripts/css-transit.js"></script>
+    <script src="/Scripts/jquery.caret.js"></script>
+    <script src="/Scripts/jquery.color.js"></script>
+    <script src="/Scripts/jquery.extends.js"></script>
+    <script src="/Scripts/jquery.Jcrop.js"></script>
+    <script src="/Scripts/mvc-bootstrap-integration.js"></script>
+    <script src="/Scripts/select2.js"></script>
+    <script src="/Scripts/toastr.js"></script>
+    <script src="/Scripts/app/user-home-page.js"></script>
+
+    <script>
+        PageEnum = {
+            NONE: 0,
+            START: 1,
+            REG: 2,
+            CREATE: 3
+        }
+
+        PageClasses = [
+            '',
+            '.landing-page-start',
+            '.landing-page-register',
+            '.landing-page-create'
+        ]
+
+        var page = PageEnum.NONE;
+        var regFull = false;
+
+        function setCaptcha() {
+            $('input[name="nocaptcha_challenge"]').each(function () {
+                var response = this.value.split('').reverse().join('');
+                var form = this.form;
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'nocaptcha_response',
+                    value: response
+                }).appendTo(form);
+            });
+        }
+
+        function updateUserType() {
+            if ($(this).val() == 'Promoter') {
+                $('.lp-majors').fadeOut(200, function () {
+                    $('.lp-promoters').fadeIn(200);
+                });
+            } else {
+                $('.lp-promoters').fadeOut(200, function () {
+                    $('.lp-majors').fadeIn(200);
+                });
+            }
+        }
+
+        function updateBirth() {
+            var m = $('#Month').val();
+            var d = $('#Day').val();
+            var y = $('#Year').val();
+            $('#Birth').val(m + '/' + d + '/' + y);
+        }
+
+        function updateBirthVals() {
+            var date = $('#Birth').val().split('/');
+            if(date.length != 3) return;
+            $('#Month').val(date[0]);
+            $('#Day').val(date[1]);
+            $('#Year').val(date[2]);
+        }
+
+        function regFullSetup() {
+            $('input:radio[name="UserType"]').change(updateUserType);
+            $('.zazz-form').perfectScrollbar({
+                wheelSpeed: 5,
+                wheelPropagation: false
+            });
+        }
+
+        function toggleRegFull() {
+            regFull = !regFull;
+
+            var a = !regFull ? 'none' : 'block';
+            var b = regFull ? 'none' : 'block';
+
+            $('.zazz-form').css('display', a);
+            $('.zazz-form-min').css('display', b);
+            $('.fb-reg').css('display', a);
+            $('.fb-reg-hidden').css('display', b);
+
+            if(regFull) regFullSetup();
+        }
+
+        function toggleRegFullAnimFadeIn() {
+            if (regFull) {
+                $('.zazz-form').fadeIn(200);
+                $('.fb-reg-hidden').fadeIn(200);
+            } else {
+                $('.zazz-form-min').fadeIn(200);
+                $('.fb-reg').fadeIn(200);
+            }
+
+            if(regFull) regFullSetup();
+        }
+
+        function toggleRegFullAnim() {
+            regFull = !regFull;
+
+            if (!regFull) {
+                $('.zazz-form').fadeOut(200);
+                $('.fb-reg-hidden').fadeOut(200, toggleRegFullAnimFadeIn);
+            } else {
+                $('.zazz-form-min').fadeOut(200);
+                $('.fb-reg').fadeOut(200, toggleRegFullAnimFadeIn);
+            }
+        }
+
+        function pageSetup() {
+            switch(page) {
+                case PageEnum.REG:
+                    $('.zazz-form-min').focusin(function () {
+                        if (!regFull) toggleRegFullAnim();
+                    });
+                    if (regFull) {
+                        $('.zazz-form').perfectScrollbar({
+                            wheelSpeed: 5,
+                            wheelPropagation: false
+                        });
+                    }
+            }
+        }
+
+        function showPage(nPage) {
+            if(nPage == page) return;
+
+            $(PageClasses[page]).css('display', 'none');
+            $(PageClasses[nPage]).css('display', 'block');
+            page = nPage;
+            pageSetup();
+        }
+
+        function showPageAnimFadeIn() {
+            $(PageClasses[page]).fadeIn(200);
+            pageSetup();
+        }
+
+        function showPageAnim(nPage) {
+            if (nPage == page) return;
+
+            var pPage = page;
+            page = nPage;
+            $(PageClasses[pPage]).fadeOut(200, showPageAnimFadeIn);
+        }
+
+        function resetStart() {
+            showPageAnim(PageEnum.START);
+        }
+
+        window.onload = function () {
+            var url = window.location.href;
+            var lastPart = url.substr(url.lastIndexOf('/') + 1);
+
+            $('.landing-page-container').focus(resetStart);
+            $('.lp-phones').focus(resetStart);
+
+            setCaptcha();
+            updateBirthVals();
+
+            if (lastPart == "register") {
+                toggleRegFull();
+                showPage(PageEnum.REG);
+            } else {
+                $('#_UserType_User').prop('checked', true);
+                showPage(PageEnum.START);
+            }
+        };
+    </script>
 </head>
-<body class="fixed-navbar-page">
-
-    <nav class="navbar navbar-black navbar-fixed-top" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <div class="container">
-                <form action="@Url.Action("Login", "Account")" method="POST" class="navbar-form navbar-right" role="search">
+<body class="landing-page">
+    <div class="landing-page-container" tabindex="-1">
+        <div class="login-bar">
+            <img src="/Images/new/zazz_final_logo.png" width="140" class="logo">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="login-container">
+                <form action="@Url.Action("Login", "Account")" method="POST" class="login-form">
                     @Html.AntiForgeryToken()
-                    <div class="form-group">
-                        <input type="text" class="form-control dark-input" placeholder="Username" name="username">
+                    <div class="login-form-group">
+                        <input type="text" class="form-control dark-input login-form-input" placeholder="Username" name="username">
                     </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control dark-input" placeholder="Password" name="password">
+                    <div class="login-form-group">
+                        <input type="password" class="form-control dark-input login-form-input" placeholder="Password" name="password">
                     </div>
                     <button type="submit" class="btn btn-dark">Login</button>
                 </form>
             </div>
         </div>
-    </nav>
+        <div class="landing-page-main">
+            <div class="landing-page-start" tabindex="-1">
+                <div class="landing-page-tagline">
+                    Tag line is in the works.
+                </div>
+                <table>
+                    <tr>
+                        <td colspan="2"><button onclick="showPageAnim(PageEnum.REG);">Register</button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">
+                            Available on &nbsp;&nbsp;&nbsp;&nbsp;<img src="/Images/new/apple1.png">
+                        </a></td>
+                        <td><a href="#">
+                            Available on &nbsp;&nbsp;&nbsp;&nbsp;<img src="/Images/new/android.png">
+                        </a></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="landing-page-register" tabindex="-1">
+                <div class="fb-reg">
+                    <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
+                        <img src="/Images/new/fb-sign-up.jpg" />
+                    </a>
+                    <br><br>
+                    <div class="lp-divider">
+                        <table>
+                            <tr>
+                                <td class="line-left"></td>
+                                <td class="line-centre" rowspan="2">&nbsp;Or&nbsp;</td>
+                                <td class="line-right"></td>
+                            </tr>
+                            <tr><td></td><td></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="fb-reg-hidden">
+                    <div class="fb-reg-unhide">
+                        <button onclick="toggleRegFullAnim();">
+                            <table>
+                                <tr>
+                                    <td class="line-left"></td>
+                                    <td class="line-centre" rowspan="2">
+                                        <img src="/Images/new/facebook_icon.png" />
+                                    </td>
+                                    <td class="line-right"></td>
+                                </tr>
+                                <tr><td></td><td></td></tr>
+                            </table>
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <div class="zazz-form-min">
+                    @Html.TextBoxFor(model => model.UserName, new { @placeholder = "Username", @class = "register-input" })
+                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email", @class = "register-input" })
+                    @Html.PasswordFor(model => model.Password, new { @placeholder = "Password", @class = "register-input" })
+                </div>
+                <div class="zazz-form">
+                    <form action="@Url.Action("Register", "Home")" method="POST">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
 
-    <div class="cover-image">
-        <img src="/Images/new/landing-page-cover.jpg" />
-    </div>
+                        <fieldset>
+                            @if (TempData["alert"] != null && ((bool)TempData["alert"])) {
+                                <div class="alert alert-block @TempData["alertClass"]">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <p>@TempData["alertMessage"]</p>
+                                </div>
+                            }
 
-    <div class="container landing-page-category-img-container">
-        <div class="row">
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-01.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-02.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-03.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-04.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-05.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-07.png" /></div>
-        </div>
-        <div class="row">
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-08.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-09.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-10.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-11.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-12.png" /></div>
-            <div class="col-md-2"><img class="landing-page-category-img" src="/Images/home/Icon-png-13.png" /></div>
-        </div>
-    </div>
+                            @Html.TextBoxFor(model => model.UserName, new { @placeholder = "Username", @class = "register-input" })
+                            @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
 
-    <div class="text-center">
-        <a href="@Url.Action("SelectAccountType", "Account")" class="btn landing-page-join-btn">Join the Party!</a>
-    </div>
-    
-    <div class="landing-page-app-links">
-        <div class="container">
-            <div class="text-center">
-                <img src="/Images/home4.png" />
-                <img src="/Images/home5.png" />
+                            @if (!Model.IsOAuth) {
+                                @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email", @class = "register-input" })
+                                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
+                            } else {
+                                @Html.HiddenFor(m => m.Email)
+                            }
+
+                            @Html.PasswordFor(model => model.Password, new { @placeholder = "Password", @class = "register-input" })
+                            @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
+
+                            @Html.PasswordFor(model => model.ConfirmPassword, new { @placeholder = "Confirm Password", @class = "register-input" })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
+
+                            @Html.LabelFor(model => model.Birth, new { @class = "register-input-label" })
+                            @Html.TextBoxFor(model => model.Birth, new { @type = "hidden" })
+                            <table id="BirthInput" class="register-input">
+                                <tr>
+                                    <td><input class="DateFields" id="Month" placeholder="MM" maxlength="2" type="text" onchange="updateBirth();"></td>
+                                    <td><input class="DateFields" id="Day" placeholder="DD" maxlength="2" type="text" onchange="updateBirth();"></td>
+                                    <td><input class="DateFields" id="Year" placeholder="YYYY" maxlength="4" type="text" onchange="updateBirth();"></td>
+                                </tr>
+                            </table>
+                            @Html.ValidationMessageFor(model => model.Birth, null, new { @class = "help-inline" })
+                            
+                            @Html.LabelFor(model => model.Gender, new { @class = "register-input-label" })
+                            <div class="lp-radio">
+                                @Html.RadioButtonForEnum2(model => model.Gender)
+                                @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
+                            </div>
+
+                            @Html.LabelFor(model => model.UserType, new { @class = "register-input-label" })
+                            <div class="lp-radio">
+                                @Html.RadioButtonForEnum2(model => model.UserType)
+                                @Html.ValidationMessageFor(model => model.UserType, null, new { @class = "help-inline" })
+                            </div>
+
+                            <div class="lp-promoters">
+                                @Html.DropDownListFor(model => model.PromoterType, new SelectList(Model.PromoterTypes), "Select Promoter Type", new { @class = "lp-select" })
+                                @Html.ValidationMessageFor(model => model.PromoterType, null, new { @class = "help-inline" })
+                            </div>
+
+                            <div class="lp-majors">
+                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Tagline", new { @class = "lp-select" })
+                                @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                            </div>
+
+                            @Html.SpamPreventionFields()
+                            <br>
+
+                            <button type="submit">Register</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="landing-page-create" tabindex="-1">
+                <div class="lp-create-title">Create a Page</div>
+                <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
+                    <img src="/Images/new/fb-sign-up2.jpg" />
+                </a>
             </div>
         </div>
-    </div>
-    
-    <div class="clearfix"></div>
-    
-    <footer class="landing-page-footer">
-        <div class="container">
-            <div class="pull-left">
-                <div>&copy; @DateTime.UtcNow.Year Zazzlife.com</div>
-            </div>
-            <div class="pull-right">
-                <ul class="landing-page-footer-links">
-                    <li><a href="#">What is Zazz</a></li>
-                    <li><a href="#">Our Goal</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
+        <div class="lp-phones">
+            <img src="/Images/new/landing-page-phones.png" />
         </div>
-    </footer>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="/NewScripts/bootstrap.min.js"></script>
+        <div class="main-footer">
+            <table>
+                <tr>
+                    <td><button onclick="showPageAnim(PageEnum.CREATE);">Create a page</button></td>
+                    <td><a href="mailto:laurent@zazzlife.com">Contact us</a></td>
+                    <td><a href="#">Join our team</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="landing-page-hidden">
+        </div>
+    </div>
 </body>
 </html>

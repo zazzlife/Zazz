@@ -37,18 +37,18 @@ namespace Zazz.Data
 
         public static IEnumerable<Category> GetCategories()
         {
-            yield return new Category { Id = 1, Name = "Nocover" };
-            yield return new Category { Id = 2, Name = "Beerpong" };
-            yield return new Category { Id = 3, Name = "Livemusic" };
-            yield return new Category { Id = 4, Name = "YOFO" };
-            yield return new Category { Id = 5, Name = "Houseparty" };
-            yield return new Category { Id = 6, Name = "Allyoucandrink" };
-            yield return new Category { Id = 7, Name = "Skitrip" };
-            yield return new Category { Id = 8, Name = "Ladiesfree" };
-            yield return new Category { Id = 9, Name = "Predrink" };
-            yield return new Category { Id = 10, Name = "Fratparty" };
-            yield return new Category { Id = 11, Name = "Jampacked" };
-            yield return new Category { Id = 12, Name = "Justchilling" };
+            yield return new Category { Id = 1, Name = "Concert" };
+            yield return new Category { Id = 2, Name = "Drink Special" };
+            yield return new Category { Id = 3, Name = "Hip Hop Music" };
+            yield return new Category { Id = 4, Name = "Turning Up" };
+            yield return new Category { Id = 5, Name = "House Party" };
+            yield return new Category { Id = 6, Name = "Ladies Free" };
+            yield return new Category { Id = 7, Name = "Live Music" };
+            yield return new Category { Id = 8, Name = "No Cover" };
+            yield return new Category { Id = 9, Name = "Open Bar" };
+            yield return new Category { Id = 10, Name = "Packed" };
+            yield return new Category { Id = 11, Name = "Pre-Drink" };
+            yield return new Category { Id = 12, Name = "House Music" };
         }
 
         public static IEnumerable<OAuthScope> GetScopes()

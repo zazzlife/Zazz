@@ -4,7 +4,6 @@ namespace Zazz.Web.Models
 {
     public class UserProfileViewModel : UserProfileViewModelBase
     {
-        public List<FeedViewModel> Feeds { get; set; }
-         
+        public FeedsViewModel Feeds { get; set; }
     }
 }
