@@ -20,7 +20,7 @@
     <div class="row-fluid">
 
         @*LEFT SIDE*@
-        <div class="span3 margin-top-15">
+        <div class="left-pane">
             <div class="user">
                 <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
                 <a href="@Url.Action("Profile", "Users", new { id = currentUserId, friendlySeoName = currentUserDisplayName.ToUrlFriendlyString() })" class="username">@currentUserDisplayName</a>
@@ -46,7 +46,7 @@
 
         @*CENTER*@
 
-        <div class="span6 color-white-bg box-shadow padding-top-17 padding-bottom-100 margin-left-10">
+        <div class="center-panel color-white-bg box-shadow">
             <div id="profileTabs">
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
@@ -64,15 +64,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        @*RIGHT*@
-        <div class="span3" style="margin-top: 263px;margin-left: 10px;">
-            <div id="schoolClubsFilter" style="display: none;">
-                <button id="clearFilters" class="btn btn-link">Clear Filter</button>
-                <img class="school-filter-img" src="/Images/home5.png" alt="McGill" data-name="McGill University" />
-                <img class="school-filter-img" src="/Images/home4.png" alt="Concordia" data-name="Concordia University" />
             </div>
         </div>
     </div>

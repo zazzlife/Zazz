@@ -30,5 +30,7 @@ namespace Zazz.Core.Interfaces.Services
         void ChangeProfilePic(int userId, int? photoId);
 
         void ChangeCoverPic(int userId, int? photoId);
+
+        string GetClubUsernames();
     }
 }

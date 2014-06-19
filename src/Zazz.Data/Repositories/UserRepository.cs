@@ -239,6 +239,11 @@ namespace Zazz.Data.Repositories
                             .SingleOrDefault();
         }
 
+        public IQueryable<User> GetClubs()
+        {
+            return DbSet.Where(u => u.AccountType == AccountType.Club);
+        }
+
         public IQueryable<User> GetSchoolClubs()
         {
             return DbSet

@@ -9,7 +9,7 @@
 {
     <div class="club-cover text-center" data-toggle="popover" data-content="@club.ClubName" data-placement="top" data-trigger="hover">
         <a href="@Url.Action("Profile", "Users", new {id=club.ClubId})">
-            <img src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
+            <img class="clubs-list-img" src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
         </a>
         @*        <span class="club-name">@club.ClubName</span>*@
         <img class="club-profile-img img-polaroid" src="@club.ProfileImageLink.SmallLink" />

@@ -76,7 +76,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         public void ReturnCorrectUrl_OnGeneratePhotoUrl()
         {
             //Arrange
-            var baseUrl = "http://test.zazzlife.com/picture/user";
+            var baseUrl = "http://www.zazzlife.com/picture/user";
             var userId = 22;
             var photoId = 44;
 

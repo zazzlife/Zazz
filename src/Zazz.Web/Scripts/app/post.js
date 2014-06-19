@@ -149,3 +149,39 @@ $(document).on('click', '.cancelPostEdit', function () {
     });
 
 });
+
+$(function () {
+    if (typeof ClubUsernames === 'undefined') return;
+    $("#postInput")
+        .bind("keydown", function (event) {
+            if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active)
+                event.preventDefault();
+        })
+        .autocomplete({
+            minLength: 0,
+            source: function (request, response) {
+                var m = request.term.match(/(?:[^\w]|^)@(\w*)$/);
+                if (m == null || m.length != 2) {
+                    response(null);
+                    return;
+                }
+                var tag = m[1];
+
+                m = $.map(ClubUsernames, function (item) {
+                    if (item.substring(0, tag.length).toUpperCase() === tag.toUpperCase())
+                        return item;
+                });
+                response(m);
+            },
+            focus: function () {
+                return false;
+            },
+            select: function (event, ui) {
+                var i = this.value.lastIndexOf("@");
+                if (i == -1) return false;
+                this.value = this.value.substring(0, i + 1) + ui.item.value;
+
+                return false;
+            }
+        });
+});

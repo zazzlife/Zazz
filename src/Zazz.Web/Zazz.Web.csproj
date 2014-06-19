@@ -431,6 +431,7 @@
     <Content Include="Content\new\bootstrap.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="favicon.ico" />
     <Content Include="Images\categories\32\concert-active.png" />
     <Content Include="Images\categories\32\concert.png" />
     <Content Include="Images\categories\32\drink_special-active.png" />
@@ -508,7 +509,6 @@
     <Content Include="Content\themes\jqueryui-bootstrap\jquery.ui.1.10.0.ie.css" />
     <Content Include="Content\themes\jqueryui-bootstrap\jquery.ui.1.9.2.ie.css" />
     <Content Include="Content\toastr.css" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="App_Data\dbo.TRIGGER_CommentNotifications_DELETE.sql" />
     <Content Include="Content\font\fontawesome-webfont.woff" />

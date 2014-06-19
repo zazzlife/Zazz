@@ -71,7 +71,7 @@ namespace Zazz.Infrastructure.Services
 
         public PhotoLinks GeneratePhotoUrl(int userId, int photoId)
         {
-            var baseUrl = _storageService.BasePhotoUrl; //sample: http://test.zazzlife.com/picture/user
+            var baseUrl = _storageService.BasePhotoUrl; //sample: http://www.zazzlife.com/picture/user
 
             var links = new PhotoLinks();
             var type = typeof(PhotoLinks);

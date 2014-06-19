@@ -4,6 +4,25 @@
 @{
     Layout = null;
 }
+
+<script>
+    function getDocumentHeight() {
+        return Math.max(
+            Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
+            Math.max(document.body.offsetHeight, document.documentElement.offsetHeight),
+            Math.max(document.body.clientHeight, document.documentElement.clientHeight)
+        );
+    }
+    window.onload = function () {
+        $(window).scroll(function () {
+            var docHeight = getDocumentHeight();
+            if ($(window).scrollTop() + $(window).height() >= docHeight) {
+                $('#load-feeds').click();
+            }
+        });
+    }
+</script>
+
 <div id="feedsContainer">
     @if(Model.feeds.Count > 0)
     {

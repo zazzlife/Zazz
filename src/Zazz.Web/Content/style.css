@@ -317,7 +317,7 @@ hr.gold-line {
 }
 
 .center-panel {
-    min-height: 760px;
+    min-height: 1400px;
     width: 600px;
     display: block;
     float: left;
@@ -2250,7 +2250,7 @@ a:hover, a:focus {
     top: 10px;
     width: 85px;
     height: 85px;
-    left: 39%;
+    left: 42%;
 }
 
 .club-name {
@@ -2267,7 +2267,7 @@ a:hover, a:focus {
     width: 30px;
     height: 30px;
     bottom: 15px;
-    left: 46%;
+    left: 48%;
     
     -webkit-transition: opacity linear 0.5s;
     -moz-transition: opacity linear 0.5s;
@@ -2280,6 +2280,10 @@ a:hover, a:focus {
     -ms-opacity: 0.9;
     opacity: 0.9;
     cursor: pointer;
+}
+
+.clubs-list-img {
+    width: 100%;
 }
 
 .school-filter-img {

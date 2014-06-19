@@ -66,11 +66,11 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                 x.For<IFilterProvider>().Use<StructureMapFilterProvider>();
                 x.For<IObjectMapper>().Use<ObjectMapper>();
                 x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
-                    .Ctor<string>("baseAddress").Is("test.zazzlife.com");
+                    .Ctor<string>("baseAddress").Is("www.zazzlife.com");
                 x.For<IPhotoService>().Use(PhotoService.Object);
                 x.For<IUserService>().Use(UserService.Object);
                 x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
-                    .Ctor<string>("baseAddress").Is("test.zazzlife.com");
+                    .Ctor<string>("baseAddress").Is("www.zazzlife.com");
             });
         }
 

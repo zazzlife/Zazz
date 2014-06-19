@@ -188,5 +188,14 @@ namespace Zazz.Infrastructure.Services
 
             _uoW.SaveChanges();
         }
+
+        public string GetClubUsernames()
+        {
+            var clubs = _uoW.UserRepository.GetClubs()
+                .Select(c => c.Username)
+                .ToList()
+                .Aggregate((a, b) => a + "\",\"" + b);
+            return "\"" + clubs + "\"";
+        }
     }
 }

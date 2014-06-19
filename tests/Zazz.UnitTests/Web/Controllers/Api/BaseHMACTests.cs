@@ -83,7 +83,7 @@
 //                x.For<IPhotoService>().Use(PhotoService.Object);
 //                x.For<IObjectMapper>().Use<ObjectMapper>();
 //                x.For<IDefaultImageHelper>().Use<DefaultImageHelper>()
-//                    .Ctor<string>("baseAddress").Is("test.zazzlife.com");
+//                    .Ctor<string>("baseAddress").Is("www.zazzlife.com");
 //            });
 //        }
 

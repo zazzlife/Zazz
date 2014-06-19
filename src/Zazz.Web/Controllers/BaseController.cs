@@ -82,6 +82,11 @@ namespace Zazz.Web.Controllers
             return GetDisplayPicture(userId);
         }
 
+        public string GetClubUsernames()
+        {
+            return UserService.GetClubUsernames();
+        }
+
         private PhotoLinks GetDisplayPicture(int id)
         {
             return PhotoService.GetUserDisplayPhoto(id);

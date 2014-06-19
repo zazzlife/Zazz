@@ -5,12 +5,17 @@
 
     var categories = Enumerable.Empty<Category>();
     var controller = ViewContext.Controller as BaseController;
+    var clubs = "";
     if (controller != null)
     {
         categories = controller.StaticDataRepository.GetCategories();
+        clubs = controller.GetClubUsernames();
     }
-    
 }
+
+<script>
+    var ClubUsernames = [@Html.Raw(clubs)];
+</script>
 
 <div id="profileTabs">
     <div class="tabbable">
