@@ -185,3 +185,8 @@ $(function () {
             }
         });
 });
+
+function TagFilter(tag) {
+    $("#tag-filter").val(tag);
+    $("#cat-select").change();
+}

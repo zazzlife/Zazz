@@ -43,14 +43,14 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/posts
         public HttpResponseMessage Post([FromBody] ApiPost post)
         {
-            if (String.IsNullOrWhiteSpace(post.Message))
+            if (post.Message == null || post.Message.Count() != 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var p = new Post
                     {
                         CreatedTime = DateTime.UtcNow,
                         FromUserId = CurrentUserId,
-                        Message = post.Message,
+                        Message = post.Message.First().Text,
                         ToUserId = post.ToUserId
                     };
 
@@ -69,12 +69,12 @@ namespace Zazz.Web.Controllers.Api
             if (id == 0)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            if (String.IsNullOrWhiteSpace(post.Message))
+            if (post.Message == null || post.Message.Count() != 1)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             try
             {
-                _postService.EditPost(id, post.Message, post.Categories, CurrentUserId);
+                _postService.EditPost(id, post.Message.First().Text, post.Categories, CurrentUserId);
             }
             catch (NotFoundException)
             {

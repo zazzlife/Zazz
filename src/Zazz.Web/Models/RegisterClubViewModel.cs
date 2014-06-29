@@ -18,9 +18,6 @@ namespace Zazz.Web.Models
         [RegularExpression(@"^([a-zA-Z0-9._]+)$", ErrorMessage = "{0} contains invalid character(s)")]
         public string UserName { get; set; }
 
-        [StringLength(40), Required, DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-
         [StringLength(30, MinimumLength = 3), Required, DataType(DataType.Password), AllowHtml]
         public string Password { get; set; }
 
@@ -28,27 +25,7 @@ namespace Zazz.Web.Models
         [Required, DataType(DataType.Password), System.ComponentModel.DataAnnotations.Compare("Password"), AllowHtml]
         public string ConfirmPassword { get; set; }
 
-        [Required, StringLength(30), Display(Name = "Club Name")]
-        [RegularExpression(@"^([a-zA-Z0-9 ._']+)$", ErrorMessage = "{0} contains invalid character(s)")]
-        public string ClubName { get; set; }
-
-        [Display(Name = "Club Type")]
-        public ClubType ClubType { get; set; }
-
-        [Display(Name = "Club Address")]
-        public string ClubAddress { get; set; }
-
         [HiddenInput]
         public bool IsOAuth { get; set; }
-
-        [Display(Name = "School")]
-        public short? SchoolId { get; set; }
-
-        [Display(Name = "City")]
-        public short? CityId { get; set; }
-
-        public IEnumerable<School> Schools { get; set; }
-
-        public IEnumerable<City> Cities { get; set; }
     }
 }

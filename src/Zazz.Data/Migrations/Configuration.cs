@@ -14,6 +14,7 @@ namespace Zazz.Data.Migrations
         {
 #if DEBUG
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
 #else
             AutomaticMigrationsEnabled = false;
 #endif

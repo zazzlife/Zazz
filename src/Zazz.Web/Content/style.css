@@ -767,12 +767,12 @@ hr.gold-line {
 .btn-follow {
     padding: 8px 35px 8px 10px;
     font-size: 18px;
-    width: 200px;
+    width: 180px;
 }
 
     .btn-follow > i {
-        margin-right: 30px;
-        margin-left: -30px;
+        margin-right: 20px;
+        margin-left: -20px;
         background-color: #D59900;
         border-radius: 12px;
         padding: 4px 6px;
@@ -1202,7 +1202,7 @@ li.new-notification {
 .profile-box {
     padding: 0;
     background-color: white;
-    width: 165px;
+    width: 180px;
     border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -1625,6 +1625,28 @@ li.new-notification {
                 width: 75px;
                 font-size: 25px;
             }
+
+/***************************************
+    Tag select
+***************************************/
+
+.tag-filter-link {
+    background: none;
+    border: none;
+    color: #0099DD !important;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.tag-filter-link:hover {
+    color: #22BBFF !important;
+    outline-style: none;
+}
+
+.tag-filter-link:focus {
+    outline: none;
+}
 
 /***************************************
     Footer

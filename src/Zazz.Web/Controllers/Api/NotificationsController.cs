@@ -7,6 +7,7 @@ using System.Security;
 using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Services;
+using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
@@ -37,40 +38,43 @@ namespace Zazz.Web.Controllers.Api
             var userId = CurrentUserId;
             var notifications = _notificationService.GetUserNotifications(userId, lastNotification)
                                                     .Take(30);
+            
+            List<ApiNotification> list = new List<ApiNotification>();
+            foreach(Notification n in notifications.ToList())
+            {
+                list.Add(new ApiNotification{
+                    NotificationId = n.Id,
+                    IsRead = n.IsRead,
+                    NotificationType = n.NotificationType,
+                    Time = n.Time,
+                    UserId = n.UserBId,
+                    DisplayName = _userService.GetUserDisplayName(n.UserBId),
+                    DisplayPhoto = _photoService.GetUserDisplayPhoto(n.UserBId),
 
-            return notifications.Select(n => new ApiNotification
-                                             {
-                                                 NotificationId = n.Id,
-                                                 IsRead = n.IsRead,
-                                                 NotificationType = n.NotificationType,
-                                                 Time = n.Time,
-                                                 UserId = n.UserBId,
-                                                 DisplayName = _userService.GetUserDisplayName(n.UserBId),
-                                                 DisplayPhoto = _photoService.GetUserDisplayPhoto(n.UserBId),
+                    // PHOTO
+                    Photo = n.NotificationType == NotificationType.CommentOnPhoto
+                        ? _objectMapper.PhotoToApiPhoto(n.CommentNotification.Comment.PhotoComment.Photo)
+                        : null,
 
-                                                 // PHOTO
-                                                 Photo = n.NotificationType == NotificationType.CommentOnPhoto
-                                                             ? _objectMapper.PhotoToApiPhoto(
-                                                                 n.CommentNotification.Comment.PhotoComment.Photo)
-                                                             : null,
+                    // POST
+                    Post = n.NotificationType == NotificationType.WallPost
+                        ? _objectMapper.PostToApiPost(n.PostNotification.Post)
+                        : n.NotificationType == NotificationType.CommentOnPost
+                            ? _objectMapper.PostToApiPost(
+                            n.CommentNotification.Comment.PostComment.Post)
+                            : null,
 
-                                                 // POST
-                                                 Post = n.NotificationType == NotificationType.WallPost
-                                                            ? _objectMapper.PostToApiPost(n.PostNotification.Post)
+                    // EVENT
+                    Event = n.NotificationType == NotificationType.NewEvent
+                        ? _objectMapper.EventToApiEvent(n.EventNotification.Event)
+                        : n.NotificationType == NotificationType.CommentOnEvent
+                            ? _objectMapper.EventToApiEvent
+                            (n.CommentNotification.Comment.EventComment.Event)
+                            : null
+                });
+            }
 
-                                                            : n.NotificationType == NotificationType.CommentOnPost
-                                                                  ? _objectMapper.PostToApiPost(
-                                                                      n.CommentNotification.Comment.PostComment.Post)
-                                                                  : null,
-                                                 // EVENT
-                                                 Event = n.NotificationType == NotificationType.NewEvent
-                                                             ? _objectMapper.EventToApiEvent
-                                                                            (n.EventNotification.Event)
-                                                             : n.NotificationType == NotificationType.CommentOnEvent
-                                                                   ? _objectMapper.EventToApiEvent
-                                                                   (n.CommentNotification.Comment.EventComment.Event)
-                                                                   : null
-                                             });
+            return list;
         }
 
         // DELETE api/v1/notifications/5

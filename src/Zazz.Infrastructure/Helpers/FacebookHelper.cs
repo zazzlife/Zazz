@@ -36,7 +36,7 @@ namespace Zazz.Infrastructure.Helpers
             _client.AccessToken = accessToken;
             
             const string PROFILE_PIC_QUERY = "SELECT pic_crop FROM profile WHERE id = me()";
-            const string INFO_QUERY = "SELECT pic_cover, sex FROM user WHERE uid = me()";
+            const string INFO_QUERY = "SELECT pic_cover, sex, education FROM user WHERE uid = me()";
 
             dynamic result = _client.Get("fql",
                                          new

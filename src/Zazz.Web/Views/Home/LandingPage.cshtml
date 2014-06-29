@@ -244,7 +244,7 @@
             </div>
             <div class="landing-page-register" tabindex="-1">
                 <div class="fb-reg">
-                    <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
+                    <a href="@Url.Action("OAuth", "Account", new { id = "facebook", isClub = false })">
                         <img src="/Images/new/fb-sign-up.jpg" />
                     </a>
                     <br><br>
@@ -353,7 +353,7 @@
             </div>
             <div class="landing-page-create" tabindex="-1">
                 <div class="lp-create-title">Create a Page</div>
-                <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
+                <a href="@Url.Action("OAuth", "Account", new { id = "facebook", isClub = true })">
                     <img src="/Images/new/fb-sign-up2.jpg" />
                 </a>
             </div>

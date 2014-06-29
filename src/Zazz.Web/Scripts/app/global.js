@@ -601,7 +601,8 @@ $(function () {
         $.ajax({
             url: url,
             data: {
-                select: getCategories()
+                select: getCategories(),
+                tag: $("#tag-filter").val()
             },
             error: function () {
                 toastr.error("Failed to load the feeds, please try again later.");

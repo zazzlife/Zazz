@@ -321,6 +321,19 @@ namespace Zazz.Data.Migrations
                 .ForeignKey("dbo.Posts", t => t.PostId, cascadeDelete: true)
                 .Index(t => t.CategoryId)
                 .Index(t => t.PostId);
+
+            CreateTable(
+                "dbo.Post_Tags",
+                c => new
+                    {
+                        PostId = c.Int(nullable: false),
+                        ClubId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.PostId, t.ClubId })
+                .ForeignKey("dbo.Posts", t => t.PostId, cascadeDelete: true)
+                .ForeignKey("dbo.Users", t => t.ClubId, cascadeDelete: true)
+                .Index(t => t.PostId)
+                .Index(t => t.ClubId);
             
             CreateTable(
                 "dbo.Comments",
@@ -737,6 +750,8 @@ namespace Zazz.Data.Migrations
             DropIndex("dbo.Comments", new[] { "UserId" });
             DropIndex("dbo.Post_Categories", new[] { "PostId" });
             DropIndex("dbo.Post_Categories", new[] { "CategoryId" });
+            DropIndex("dbo.Post_Tags", new[] { "PostId" });
+            DropIndex("dbo.Post_Tags", new[] { "ClubId" });
             DropIndex("dbo.Posts", new[] { "PageId" });
             DropIndex("dbo.Posts", new[] { "ToUserId" });
             DropIndex("dbo.Posts", new[] { "FromUserId" });
@@ -811,6 +826,8 @@ namespace Zazz.Data.Migrations
             DropForeignKey("dbo.Comments", "UserId", "dbo.Users");
             DropForeignKey("dbo.Post_Categories", "PostId", "dbo.Posts");
             DropForeignKey("dbo.Post_Categories", "CategoryId", "dbo.Categories");
+            DropForeignKey("dbo.Post_Tags", "PostId", "dbo.Posts");
+            DropForeignKey("dbo.Post_Tags", "ClubId", "dbo.Users");
             DropForeignKey("dbo.Posts", "PageId", "dbo.FacebookPages");
             DropForeignKey("dbo.Posts", "ToUserId", "dbo.Users");
             DropForeignKey("dbo.Posts", "FromUserId", "dbo.Users");
@@ -866,6 +883,7 @@ namespace Zazz.Data.Migrations
             DropTable("dbo.PhotoComments");
             DropTable("dbo.Comments");
             DropTable("dbo.Post_Categories");
+            DropTable("dbo.Post_Tags");
             DropTable("dbo.Posts");
             DropTable("dbo.Events");
             DropTable("dbo.Follows");

@@ -8,6 +8,7 @@ using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
+using System.Text.RegularExpressions;
 
 namespace Zazz.Infrastructure.Services
 {
@@ -17,14 +18,18 @@ namespace Zazz.Infrastructure.Services
         private readonly INotificationService _notificationService;
         private readonly IStringHelper _stringHelper;
         private readonly IStaticDataRepository _staticDataRepository;
+        private readonly IUserService _userService;
+        public Regex _tagRegex;
 
         public PostService(IUoW uow, INotificationService notificationService, IStringHelper stringHelper,
-            IStaticDataRepository staticDataRepository)
+            IStaticDataRepository staticDataRepository, IUserService userService)
         {
             _uow = uow;
             _notificationService = notificationService;
             _stringHelper = stringHelper;
             _staticDataRepository = staticDataRepository;
+            _userService = userService;
+            _tagRegex = new Regex(@"(?:[^\w]|^)@(\w+)", RegexOptions.IgnoreCase);
         }
 
         public Post GetPost(int postId)
@@ -34,6 +39,28 @@ namespace Zazz.Infrastructure.Services
                 throw new NotFoundException();
             
             return post;
+        }
+
+        private void AddTags(ref Post post)
+        {
+            Match m = _tagRegex.Match(post.Message);
+            while (m.Success)
+            {
+                Capture c = m.Groups[1].Captures[0];
+                string tag = c.ToString();
+                int end = c.Index + tag.Length;
+
+                if (end == post.Message.Length || post.Message[end] != '@')
+                {
+                    User club = _userService.GetUser(tag);
+                    if (club != null && club.AccountType == AccountType.Club)
+                    {
+                        post.Tags.Add(new PostTag { PostId = post.Id, ClubId = club.Id });
+                    }
+                }
+
+                m = m.NextMatch();
+            }
         }
 
         public void NewPost(Post post, IEnumerable<int> categories)
@@ -48,6 +75,8 @@ namespace Zazz.Infrastructure.Services
                         post.Categories.Add(new PostCategory { CategoryId = (byte)c });
                 }
             }
+
+            AddTags(ref post);
 
             _uow.PostRepository.InsertGraph(post);
 
@@ -99,6 +128,10 @@ namespace Zazz.Infrastructure.Services
             }
 
             post.Message = newText;
+
+            post.Tags.Clear();
+            AddTags(ref post);
+
             _uow.SaveChanges();
         }
 

@@ -40,6 +40,51 @@ namespace Zazz.Data.Repositories
                 .OrderByDescending(f => f.Time);
         }
 
+        public IQueryable<Feed> GetFeedsWithCategoriesTag(IEnumerable<int> userIds, IEnumerable<byte> categories, int tag)
+        {
+            return (from feed in DbSet
+                         from feedUserId in feed.FeedUsers
+                         from photoCategory in feed.FeedPhotos.SelectMany(p => p.Photo.Categories).DefaultIfEmpty()
+                         from postCategory in feed.PostFeed.Post.Categories.DefaultIfEmpty()
+                         from postTag in feed.PostFeed.Post.Tags.DefaultIfEmpty()
+                         where
+                             userIds.Contains(feedUserId.UserId) &&
+                             (
+                                categories.Contains(photoCategory.CategoryId) ||
+                                categories.Contains(postCategory.CategoryId)
+                             ) &&
+                             postTag.ClubId.Equals(tag)
+                         select feed)
+                .Distinct()
+                .Include(f => f.FeedPhotos)
+                .Include(f => f.PostFeed.Post)
+                .Include(f => f.PostFeed.Post.Categories)
+                .Include(f => f.EventFeed.Event)
+                .Include(f => f.EventFeed.Event.User)
+                .Include(f => f.EventFeed.Event.User.ClubDetail)
+                .OrderByDescending(f => f.Time);
+        }
+
+        public IQueryable<Feed> GetFeedsWithTag(IEnumerable<int> userIds, int tag)
+        {
+            return (from feed in DbSet
+                         from feedUserId in feed.FeedUsers
+                         from photoCategory in feed.FeedPhotos.SelectMany(p => p.Photo.Categories).DefaultIfEmpty()
+                         from postTag in feed.PostFeed.Post.Tags.DefaultIfEmpty()
+                         where
+                             userIds.Contains(feedUserId.UserId) &&
+                             postTag.ClubId.Equals(tag)
+                         select feed)
+                .Distinct()
+                .Include(f => f.FeedPhotos)
+                .Include(f => f.PostFeed.Post)
+                .Include(f => f.PostFeed.Post.Categories)
+                .Include(f => f.EventFeed.Event)
+                .Include(f => f.EventFeed.Event.User)
+                .Include(f => f.EventFeed.Event.User.ClubDetail)
+                .OrderByDescending(f => f.Time);
+        }
+
         public IQueryable<Feed> GetFeeds(IEnumerable<int> userIds)
         {
             return (from feed in DbSet

@@ -24,6 +24,7 @@ namespace Zazz.Data
         public IDbSet<ZazzEvent> Events { get; set; }
         public IDbSet<Post> Posts { get; set; }
         public IDbSet<PostCategory> PostCategories { get; set; }
+        public IDbSet<PostTag> PostTags { get; set; }
         public IDbSet<Comment> Comments { get; set; }
         public IDbSet<Follow> Follows { get; set; }
         public IDbSet<FollowRequest> FollowRequests { get; set; }
@@ -111,6 +112,11 @@ namespace Zazz.Data
 
             modelBuilder.Entity<Post>()
                 .HasOptional(p => p.ToUser)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<PostTag>()
+                .HasRequired(t => t.Club)
                 .WithMany()
                 .WillCascadeOnDelete(false);
 

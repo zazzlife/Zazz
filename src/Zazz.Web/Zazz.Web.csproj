@@ -332,6 +332,7 @@
     <Compile Include="Models\ClubRewardsListViewModel.cs" />
     <Compile Include="Models\ClubViewModel.cs" />
     <Compile Include="Models\FollowersViewModel.cs" />
+    <Compile Include="Models\PostMsgItemViewModel.cs" />
     <Compile Include="Models\RegisterUserHomeViewModel.cs" />
     <Compile Include="Models\UserFollowingClubsViewModel.cs" />
     <Compile Include="Models\UserFollowingViewModel.cs" />

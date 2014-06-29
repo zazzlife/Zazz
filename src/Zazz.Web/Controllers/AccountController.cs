@@ -41,6 +41,7 @@ namespace Zazz.Web.Controllers
 
         private const string IS_MOBILE_SESSION_KEY = "IsMobile";
         private const string IS_OAUTH_KEY = "IsOAuth";
+        private const string IS_CLUB_KEY = "IsClub";
         private const string OAUTH_PROVIDER_KEY = "OAUTH_Provider";
         private const string OAUTH_FULLNAME_KEY = "OAUTH_FullName";
         private const string OAUTH_PROVIDER_USERID_KEY = "OAUTH_ProviderUserId";
@@ -137,24 +138,11 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult RegisterUser()
         {
-            var vm = new RegisterUserViewModel
-            {
-                Schools = StaticDataRepository.GetSchools(),
-                Majors = StaticDataRepository.GetMajors(),
-                Cities = StaticDataRepository.GetCities(),
-                Gender = Gender.NotSpecified
-            };
+            var vm = new RegisterUserViewModel();
 
             if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
-                var email = (string)Session[OAUTH_EMAIL_KEY];
-                var fullName = (string)Session[OAUTH_FULLNAME_KEY];
-                var gender = (Gender)Session[OAUTH_GENDER_KEY];
-
                 vm.IsOAuth = true;
-                vm.Email = email;
-                vm.FullName = fullName;
-                vm.Gender = gender;
             }
 
             return View(vm);
@@ -169,11 +157,9 @@ namespace Zazz.Web.Controllers
                            {
                                Username = vm.UserName,
                                AccountType = AccountType.User,
-                               Email = vm.Email,
                                IsConfirmed = false,
                                JoinedDate = DateTime.UtcNow,
                                LastActivity = DateTime.UtcNow,
-                               Birth = vm.Birth,
                                Preferences = new UserPreferences
                                              {
                                                  SyncFbEvents = true,
@@ -182,13 +168,9 @@ namespace Zazz.Web.Controllers
                                                  SendSyncErrorNotifications = true
                                              },
                                UserDetail = new UserDetail
-                                            {
-                                                CityId = vm.CityId,
-                                                FullName = vm.FullName,
-                                                Gender = vm.Gender,
-                                                MajorId = vm.MajorId,
-                                                SchoolId = vm.SchoolId
-                                            }
+                               {
+                                   IsPromoter = (vm.UserType == UserType.Promoter)
+                               }
                            };
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
@@ -268,28 +250,17 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            vm.Schools = StaticDataRepository.GetSchools();
-            vm.Majors = StaticDataRepository.GetMajors();
-            vm.Cities = StaticDataRepository.GetCities();
-
             return View(vm);
         }
 
         [HttpGet]
         public ActionResult RegisterClub()
         {
-            var vm = new RegisterClubViewModel
-            {
-                Schools = StaticDataRepository.GetSchools(),
-                Cities = StaticDataRepository.GetCities()
-            };
+            var vm = new RegisterClubViewModel();
 
             if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
-                var email = (string)Session[OAUTH_EMAIL_KEY];
-
                 vm.IsOAuth = true;
-                vm.Email = email;
             }
 
             return View(vm);
@@ -304,7 +275,6 @@ namespace Zazz.Web.Controllers
                 {
                     Username = vm.UserName,
                     AccountType = AccountType.Club,
-                    Email = vm.Email,
                     IsConfirmed = false,
                     JoinedDate = DateTime.UtcNow,
                     LastActivity = DateTime.UtcNow,
@@ -315,14 +285,7 @@ namespace Zazz.Web.Controllers
                         SyncFbPosts = true,
                         SendSyncErrorNotifications = true
                     },
-                    ClubDetail = new ClubDetail
-                                 {
-                                     Address = vm.ClubAddress,
-                                     ClubName = vm.ClubName,
-                                     ClubType = vm.ClubType,
-                                     CityId = vm.CityId,
-                                     SchoolId = vm.SchoolId
-                                 }
+                    ClubDetail = new ClubDetail()
                 };
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
@@ -405,9 +368,6 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            vm.Schools = StaticDataRepository.GetSchools();
-            vm.Cities = StaticDataRepository.GetCities();
-
             return View(vm);
         }
 
@@ -465,6 +425,7 @@ namespace Zazz.Web.Controllers
         {
             Session.Remove(IS_MOBILE_SESSION_KEY);
             Session.Remove(IS_OAUTH_KEY);
+            Session.Remove(IS_CLUB_KEY);
             Session.Remove(OAUTH_PROVIDER_KEY);
             Session.Remove(OAUTH_FULLNAME_KEY);
             Session.Remove(OAUTH_PROVIDER_USERID_KEY);
@@ -591,10 +552,14 @@ namespace Zazz.Web.Controllers
             }
         }
 
-        public ActionResult OAuth(string id, bool? isMobile)
+        public ActionResult OAuth(string id, bool? isMobile, bool? isClub)
         {
             if (isMobile.HasValue && isMobile.Value == true)
                 Session[IS_MOBILE_SESSION_KEY] = true;
+            if (isClub.HasValue && isClub.Value == true)
+                Session[IS_CLUB_KEY] = true;
+            else
+                Session[IS_CLUB_KEY] = false;
 
             return new OAuthLoginResult(id, "/account/oauthcallback");
         }
@@ -602,6 +567,7 @@ namespace Zazz.Web.Controllers
         public ActionResult OAuthCallback()
         {
             var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+            var isClub = (bool?)Session[IS_CLUB_KEY];
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
             {
@@ -673,7 +639,10 @@ namespace Zazz.Web.Controllers
                     Session[OAUTH_PROFILE_PIC_KEY] = fbBasicUserInfo.ProfilePicUrl;
                     Session[OAUTH_COVER_PIC_KEY] = fbBasicUserInfo.CoverPicUrl;
 
-                    return RedirectToAction("SelectAccountType");
+                    if (isClub.HasValue && isClub.Value == true)
+                        return RedirectToAction("RegisterClub");
+                    else
+                        return RedirectToAction("RegisterUser");
                 }
             }
 

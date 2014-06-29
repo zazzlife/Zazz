@@ -16,9 +16,6 @@ namespace Zazz.Web.Models
         [RegularExpression(@"^([a-zA-Z0-9._]+)$", ErrorMessage = "{0} contains invalid character(s)")]
         public string UserName { get; set; }
 
-        [StringLength(40), Required, DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
-
         [StringLength(30, MinimumLength = 3), Required, DataType(DataType.Password), AllowHtml]
         public string Password { get; set; }
 
@@ -27,31 +24,8 @@ namespace Zazz.Web.Models
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public Gender Gender { get; set; }
-
-        [StringLength(30), Display(Name = "Full name")]
-        [RegularExpression(@"^([a-zA-Z0-9 ._']+)$", ErrorMessage = "{0} contains invalid character(s)")]
-        public string FullName { get; set; }
-
-        [Display(Name = "School")]
-        public short? SchoolId { get; set; }
-
-        [Display(Name = "City")]
-        public short? CityId { get; set; }
-
-        [Display(Name = "Major")]
-        public byte? MajorId { get; set; }
-
-        public IEnumerable<School> Schools { get; set; }
-
-        public IEnumerable<City> Cities { get; set; }
-
-        public IEnumerable<Major> Majors { get; set; }
-
-        [Display(Name = "Date of Birth (MM/dd/yyyy)")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? Birth { get; set; }
+        [Display(Name = "User Type:")]
+        public UserType UserType { get; set; }
 
         [HiddenInput]
         public bool IsOAuth { get; set; }

@@ -10,6 +10,7 @@ namespace Zazz.Core.Models.Data
         public Post()
         {
             Categories = new HashSet<PostCategory>();
+            Tags = new HashSet<PostTag>();
         }
 
         [ForeignKey("FromUserId")]
@@ -34,5 +35,7 @@ namespace Zazz.Core.Models.Data
         public DateTime CreatedTime { get; set; }
 
         public ICollection<PostCategory> Categories { get; set; }
+
+        public ICollection<PostTag> Tags { get; set; }
     }
 }

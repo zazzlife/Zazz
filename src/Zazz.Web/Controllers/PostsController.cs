@@ -83,7 +83,7 @@ namespace Zazz.Web.Controllers
                          Post = new PostViewModel
                                          {
                                              PostId = post.Id,
-                                             PostText = message,
+                                             Message = _feedHelper.GetPostMsgItems(message),
                                              ToUserId = toUser,
                                              ToUserDisplayName = toUser.HasValue
                                                                      ? UserService.GetUserDisplayName(toUser.Value)

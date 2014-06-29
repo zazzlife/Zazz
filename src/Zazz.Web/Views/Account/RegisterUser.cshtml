@@ -42,20 +42,6 @@
                             </div>
                         </div>
 
-                        @if (!Model.IsOAuth)
-                        {
-                            <div class="control-group">
-                                <div class="editor-field">
-                                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email" })
-                                    @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            @Html.HiddenFor(m => m.Email)
-                        }
-
                         <div class="control-group">
                             <div class="editor-field">
                                 @Html.PasswordFor(model => model.Password, new { @placeholder = "Password" })
@@ -72,54 +58,14 @@
 
                         <div class="control-group">
                             <div class="editor-label">
-                                @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+                                @Html.LabelFor(model => model.UserType, new { @class = "control-label" })
                             </div>
                             <div class="editor-field">
-                                @Html.RadioButtonForEnum(model => model.Gender)
-                                @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
+                                @Html.RadioButtonForEnum(model => model.UserType)
+                                @Html.ValidationMessageFor(model => model.UserType, null, new { @class = "help-inline" })
                             </div>
                         </div>
 
-                        @if (!Model.IsOAuth) {
-                        <h6>THE FOLLOWING FIELDS ARE OPTIONAL</h6>
-                        <hr style="margin-top: 0;" />
-                        <div class="control-group">
-                            <div class="editor-field">
-                                @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Your name" })
-                                @Html.ValidationMessageFor(model => model.FullName, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
-                            </div>
-                            <div class="editor-field">
-                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new { @class = "selectyze1" })
-                                @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
-                            </div>
-                            <div class="editor-field">
-                                @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City", new { @class = "selectyze1" })
-                                @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
-                            </div>
-                            <div class="editor-field">
-                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Select Major", new { @class = "selectyze1" })
-                                @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-                        }
-                        
                         <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
@@ -130,18 +76,6 @@
                 }
             </div>
         </div>
-
-        <div class="span6">
-            @if (!Model.IsOAuth)
-            {
-                <div class="social-media-box">
-                    <h1>Login with social media</h1>
-                    <div class="span12"><a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
-                        <img src="~/Images/F-login.png"></a></div>
-                </div>
-            }
-        </div>
-
     </div>
 </div>
 

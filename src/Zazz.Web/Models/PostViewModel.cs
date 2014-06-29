@@ -7,7 +7,7 @@ namespace Zazz.Web.Models
     {
         public int PostId { get; set; }
 
-        public string PostText { get; set; }
+        public IEnumerable<PostMsgItemViewModel> Message { get; set; }
 
         public int? ToUserId { get; set; }
 

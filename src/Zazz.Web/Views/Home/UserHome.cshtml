@@ -78,6 +78,7 @@
             <div class="categories-stat-container pane-box">
                 <div class="pane-title">Categories</div>
                 <form id="cat-select" action="">
+                    <input type="hidden" id="tag-filter" name="tag" value="">
                 @foreach (var c in categoryStats)
                 {
                     <input type="checkbox" id="@c.CategoryName.ToFileName()" name="categories" value="@c.CategoryName">

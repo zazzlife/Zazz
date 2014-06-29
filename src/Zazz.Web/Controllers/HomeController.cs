@@ -273,7 +273,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Categories(string @select)
+        public ActionResult Categories(string @select, string @tag)
         {
             var user = UserService.GetUser(User.Identity.Name);
 
@@ -284,14 +284,14 @@ namespace Zazz.Web.Controllers
                                     ? Enumerable.Empty<string>()
                                     : @select.Split(',');
 
-            if (!String.IsNullOrEmpty(@select))
+            if (!String.IsNullOrEmpty(@select) || !String.IsNullOrEmpty(@tag))
             {
                 var selectedCategoriesId =
                     availableCategories.Where(t => selectedCategories.Contains(t.Name,
                                                                                StringComparer.InvariantCultureIgnoreCase))
                                        .Select(t => t.Id);
 
-                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList());
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), tag: @tag);
             }
             else
             {

@@ -42,20 +42,6 @@
                             </div>
                         </div>
 
-                        @if (!Model.IsOAuth)
-                        {
-                            <div class="control-group">
-                                <div class="editor-field">
-                                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email" })
-                                    @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            @Html.HiddenFor(m => m.Email)
-                        }
-
                         <div class="control-group">
                             <div class="editor-field">
                                 @Html.PasswordFor(model => model.Password, new { @placeholder = "Password" })
@@ -69,51 +55,6 @@
                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
                             </div>
                         </div>
-
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.ClubName, new { @class = "control-label required" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.ClubName, new { @placeholder = "Club Name" })
-                            @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
-                        </div>
-
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.ClubType, new { @class = "control-label required" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.DropDownListFor(model => model.ClubType, Model.ClubType.EnumToSelectList(), new { @class = "selectyze1" })
-                            @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
-                        </div>
-                        
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
-                            </div>
-                            <div class="editor-field">
-                                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new { @class = "selectyze1" })
-                                @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <div class="editor-label">
-                                @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
-                            </div>
-                            <div class="editor-field">
-                                @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City", new { @class = "selectyze1" })
-                                @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
-
-
-                        <div class="editor-label">
-                            @Html.LabelFor(model => model.ClubAddress, new { @class = "control-label" })
-                        </div>
-                        <div class="editor-field">
-                            @Html.TextBoxFor(model => model.ClubAddress, new {  @placeholder = "Address" })
-                            @Html.ValidationMessageFor(model => model.ClubAddress, null, new { @class = "help-inline" })
-                        </div>
-
                         <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
@@ -124,18 +65,6 @@
                 }
             </div>
         </div>
-
-        <div class="span6">
-            @if (!Model.IsOAuth)
-            {
-                <div class="social-media-box">
-                    <h1>Login with social media</h1>
-                    <div class="span12"><a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
-                        <img src="~/Images/F-login.png"></a></div>
-                </div>
-            }
-        </div>
-
     </div>
 </div>
 

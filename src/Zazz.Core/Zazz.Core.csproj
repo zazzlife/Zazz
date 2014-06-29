@@ -180,6 +180,7 @@
     <Compile Include="Models\Data\PostFeed.cs" />
     <Compile Include="Models\Data\PostNotification.cs" />
     <Compile Include="Models\Data\PostCategory.cs" />
+    <Compile Include="Models\Data\PostTag.cs" />
     <Compile Include="Models\Data\Role.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Category.cs" />

@@ -12,6 +12,7 @@ using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using Zazz.Web.Models.Api;
+using System.Text.RegularExpressions;
 
 namespace Zazz.Web.Helpers
 {
@@ -22,6 +23,7 @@ namespace Zazz.Web.Helpers
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IStaticDataRepository _staticDataRepository;
+        private Regex _tagRegex;
         public int PageSize { get; set; }
 
         public FeedHelper(IUoW uow, IUserService userService, IPhotoService photoService,
@@ -32,6 +34,7 @@ namespace Zazz.Web.Helpers
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
             _staticDataRepository = staticDataRepository;
+            _tagRegex = new Regex(@"(?:[^\w]|^)@(\w+)", RegexOptions.IgnoreCase);
             PageSize = 10;
         }
 
@@ -42,12 +45,30 @@ namespace Zazz.Web.Helpers
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> tagIds, int lastFeedId = 0)
+        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, string tag = "")
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
 
-            var query = _uow.FeedRepository.GetFeedsWithCategories(followIds, tagIds);
+            IQueryable<Feed> query;
+
+            if (!String.IsNullOrEmpty(tag))
+            {
+                int tagId = _uow.UserRepository.GetIdByUsername(tag);
+                if (catIds.Count > 0)
+                {
+                    query = _uow.FeedRepository.GetFeedsWithCategoriesTag(followIds, catIds, tagId);
+                }
+                else
+                {
+                    query = _uow.FeedRepository.GetFeedsWithTag(followIds, tagId);
+                }
+            }
+            else
+            {
+                query = _uow.FeedRepository.GetFeedsWithCategories(followIds, catIds);
+            }
+
             var remainingQuery = query;
 
             if (lastFeedId > 0)
@@ -60,7 +81,7 @@ namespace Zazz.Web.Helpers
                 var minDate = DateTime.UtcNow.AddDays(-7);
                 query = query.Where(f => f.Time >= minDate);
             }
-            
+
             query = query.Take(PageSize);
 
             var feeds = query.ToList();
@@ -181,6 +202,43 @@ namespace Zazz.Web.Helpers
             vm.remaining = remaining;
             return vm;
         }
+        
+        public IEnumerable<PostMsgItemViewModel> GetPostMsgItems(string message)
+        {
+            Match m = _tagRegex.Match(message);
+            int prev = 0;
+            List<PostMsgItemViewModel> items = new List<PostMsgItemViewModel>();
+
+            while (m.Success)
+            {
+                Capture c = m.Groups[1].Captures[0];
+                string s = c.ToString();
+                int end = c.Index + s.Length;
+
+                if(end == message.Length || message[end] != '@')
+                {
+                    items.Add(new PostMsgItemViewModel {
+                        ClubId = -1,
+                        Text = message.Substring(prev, c.Index - 1 - prev)
+                    });
+                    items.Add(new PostMsgItemViewModel {
+                        ClubId = _userService.GetUserId(s),
+                        Text = '@' + s
+                    });
+
+                    prev = end;
+                }
+
+                m = m.NextMatch();
+            }
+
+            items.Add(new PostMsgItemViewModel {
+                ClubId = -1,
+                Text = message.Substring(prev)
+            });
+            
+            return items;
+        }
 
         private FeedViewModel ConvertFeedToFeedViewModel(Feed feed, int currentUserId)
         {
@@ -299,7 +357,7 @@ namespace Zazz.Web.Helpers
                 feedVm.Post = new PostViewModel
                 {
                     PostId = post.Id,
-                    PostText = post.Message
+                    Message = GetPostMsgItems(post.Message)
                 };
 
                 if (post.ToUserId.HasValue)

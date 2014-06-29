@@ -16,13 +16,15 @@ namespace Zazz.Web
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly IFeedHelper _feedHelper;
 
         public ObjectMapper(IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
         {
             _userService = userService;
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
+            _feedHelper = feedHelper;
         }
 
         #region API
@@ -34,7 +36,7 @@ namespace Zazz.Web
                        FromUserDisplayName = _userService.GetUserDisplayName(post.FromUserId),
                        FromUserDisplayPhoto = _photoService.GetUserDisplayPhoto(post.FromUserId),
                        FromUserId = post.FromUserId,
-                       Message = post.Message,
+                       Message = _feedHelper.GetPostMsgItems(post.Message),
                        PostId = post.Id,
                        Time = post.CreatedTime,
                        ToUserId = post.ToUserId,
@@ -152,7 +154,7 @@ namespace Zazz.Web
                 Post = feed.FeedType == FeedType.Post
                 ? new ApiPost
                 {
-                    Message = feed.Post.PostText,
+                    Message = feed.Post.Message,
                     PostId = feed.Post.PostId,
                     FromUserId = feed.UserId,
                     FromUserDisplayName = feed.UserDisplayName,
