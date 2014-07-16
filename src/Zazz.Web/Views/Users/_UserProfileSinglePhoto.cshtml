@@ -6,7 +6,9 @@
            
 <li>
     <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
-        <img class="profile-photos-img" src="@Model.PhotoUrl.MediumLink" />
+        <div class="profile-photos-img-div" style="background-image: url(@Model.PhotoUrl.MediumLink)">
+            <!--<img class="profile-photos-img" src="@Model.PhotoUrl.MediumLink" />-->
+        </div>
     </a>
     @Html.Partial("_LightBoxPartial", Model)
 </li>

@@ -1615,10 +1615,21 @@ li.new-notification {
 }
 
 .profile-photos-img {
-    width: 149px;
-    height: 149px;
+    //width: 149px;
+    //height: 149px;
     margin-bottom: 3px;
 }
+
+.profile-photos-img-div {
+    width: 149px;
+    height: 149px;
+    float: left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin-bottom: 3px;
+}
+
 
 /***************************************
     Categories select
