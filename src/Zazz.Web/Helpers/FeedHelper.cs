@@ -45,23 +45,22 @@ namespace Zazz.Web.Helpers
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, string tag = "")
+        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, List<int> tags = null)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
 
             IQueryable<Feed> query;
 
-            if (!String.IsNullOrEmpty(tag))
+            if (tags != null)
             {
-                int tagId = _uow.UserRepository.GetIdByUsername(tag);
                 if (catIds.Count > 0)
                 {
-                    query = _uow.FeedRepository.GetFeedsWithCategoriesTag(followIds, catIds, tagId);
+                    query = _uow.FeedRepository.GetFeedsWithCategoriesTags(followIds, catIds, tags);
                 }
                 else
                 {
-                    query = _uow.FeedRepository.GetFeedsWithTag(followIds, tagId);
+                    query = _uow.FeedRepository.GetFeedsWithTags(followIds, tags);
                 }
             }
             else

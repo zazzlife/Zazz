@@ -41,6 +41,7 @@ namespace Zazz.Web.Controllers
         private readonly IFollowService _followService;
         private readonly IOAuthService _oAuthService;
         private readonly IFacebookHelper _facebookHelper;
+        private readonly IPhotoService _photoService;
 
         private const string IS_MOBILE_SESSION_KEY = "IsMobile";
         private const string IS_OAUTH_KEY = "IsOAuth";
@@ -77,6 +78,27 @@ namespace Zazz.Web.Controllers
             _followService = followService;
             _oAuthService = oAuthService;
             _facebookHelper = facebookHelper;
+            _photoService = photoService;
+        }
+
+        // TODO: rename
+        public IEnumerable<TagStatViewModel> GetRealTagStats()
+        {
+            var stats = _uow.TagRepository.GetClubTagStats()
+                .Select(t => new TagStatViewModel
+                {
+                    ClubId = t.ClubId,
+                    ClubUsername = t.Club.Username,
+                    Count = t.Count
+                })
+                .ToList();
+
+            for (var i = 0; i < stats.Count; i++)
+            {
+                stats[i].Photo = _photoService.GetUserDisplayPhoto(stats[i].ClubId).VerySmallLink;
+            }
+
+            return stats;
         }
 
         public JsonNetResult IsAvailable(string username)
@@ -280,9 +302,29 @@ namespace Zazz.Web.Controllers
             FeedsViewModel feeds;
 
             var availableCategories = StaticDataRepository.GetCategories().ToList();
+
             var selectedCategories = String.IsNullOrEmpty(@select)
                                     ? Enumerable.Empty<string>()
                                     : @select.Split(',');
+
+            List<int> selectedTags = null;
+            if(!String.IsNullOrEmpty(@tag))
+            {
+                var tags = @tag.Split(',');
+                selectedTags = new List<int>();
+                foreach (string s in tags)
+                {
+                    try
+                    {
+                        selectedTags.Add(int.Parse(s));
+                    }
+                    catch { }
+                }
+                if (selectedTags.Count == 0)
+                {
+                    selectedTags = null;
+                }
+            }
 
             if (!String.IsNullOrEmpty(@select) || !String.IsNullOrEmpty(@tag))
             {
@@ -291,7 +333,7 @@ namespace Zazz.Web.Controllers
                                                                                StringComparer.InvariantCultureIgnoreCase))
                                        .Select(t => t.Id);
 
-                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), tag: @tag);
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), tags: selectedTags);
             }
             else
             {
@@ -314,13 +356,32 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult LoadMoreFeeds(int lastFeedId, string @select, bool showPhotos = true)
+        public ActionResult LoadMoreFeeds(int lastFeedId, string @select, string @tag, bool showPhotos = true)
         {
             var user = UserService.GetUser(User.Identity.Name);
 
             FeedsViewModel feeds;
 
-            if (!String.IsNullOrEmpty(@select))
+            List<int> selectedTags = null;
+            if(!String.IsNullOrEmpty(@tag))
+            {
+                var tags = @tag.Split(',');
+                selectedTags = new List<int>();
+                foreach (string s in tags)
+                {
+                    try
+                    {
+                        selectedTags.Add(int.Parse(s));
+                    }
+                    catch { }
+                }
+                if (selectedTags.Count == 0)
+                {
+                    selectedTags = null;
+                }
+            }
+
+            if (!String.IsNullOrEmpty(@select) || selectedTags != null)
             {
                 var availableCategories = StaticDataRepository.GetCategories().ToList();
                 var selectedCategories = @select.Split(',');
@@ -330,7 +391,7 @@ namespace Zazz.Web.Controllers
                                                                                StringComparer.InvariantCultureIgnoreCase))
                                        .Select(t => t.Id);
 
-                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), lastFeedId);
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), lastFeedId, tags: selectedTags);
             }
             else
             {

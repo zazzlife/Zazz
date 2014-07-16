@@ -481,6 +481,15 @@ function getCategories() {
     return selectedItems;
 }
 
+function getTags() {
+    var selectedItems = '';
+    $('#tag-select input[type="checkbox"]:checked').each(function () {
+        selectedItems += $(this).val() + ',';
+    });
+
+    return selectedItems;
+}
+
 // load more feeds
 $(document).on('click', '#load-feeds', function () {
 
@@ -497,7 +506,8 @@ $(document).on('click', '#load-feeds', function () {
         cache: false,
         data: {
             lastFeedId: lastFeedId,
-            select: getCategories()
+            select: getCategories(),
+            tag: getTags()
         },
         error: function () {
             toastr.error('An error occured, please try again later.');
@@ -591,29 +601,30 @@ $(function () {
 
 });
 
-$(function () {
-    $('#cat-select').on('change', function (e) {
+function updateFeeds() {
+    var url = "/home/categories";
+    var container = $('#feedsContainer');
+    container.css('opacity', '0.6');
 
-        var url = "/home/categories";
-        var container = $('#feedsContainer');
-        container.css('opacity', '0.6');
-
-        $.ajax({
-            url: url,
-            data: {
-                select: getCategories(),
-                tag: $("#tag-filter").val()
-            },
-            error: function () {
-                toastr.error("Failed to load the feeds, please try again later.");
-                container.css('opacity', '1');
-            },
-            success: function (res) {
-                container.html(res);
-                container.css('opacity', '1');
-                applyPageStyles();
-            }
-        });
-
+    $.ajax({
+        url: url,
+        data: {
+            select: getCategories(),
+            tag: getTags()
+        },
+        error: function () {
+            toastr.error("Failed to load the feeds, please try again later.");
+            container.css('opacity', '1');
+        },
+        success: function (res) {
+            container.html(res);
+            container.css('opacity', '1');
+            applyPageStyles();
+        }
     });
+}
+
+$(function () {
+    $('#cat-select').on('change', updateFeeds);
+    $('#tag-select').on('change', updateFeeds);
 });

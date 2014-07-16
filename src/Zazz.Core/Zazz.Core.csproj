@@ -109,6 +109,7 @@
     <Compile Include="Interfaces\Repositories\IPostRepository.cs" />
     <Compile Include="Interfaces\Repositories\IRepository.cs" />
     <Compile Include="Interfaces\Repositories\IStaticDataRepository.cs" />
+    <Compile Include="Interfaces\Repositories\ITagRepository.cs" />
     <Compile Include="Interfaces\Repositories\IUserPointHistoryRepository.cs" />
     <Compile Include="Interfaces\Repositories\IUserPointRepository.cs" />
     <Compile Include="Interfaces\Repositories\IUserReceivedLikesRepository.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Models\Data\Role.cs" />
     <Compile Include="Models\Data\School.cs" />
     <Compile Include="Models\Data\Category.cs" />
+    <Compile Include="Models\Data\TagStat.cs" />
     <Compile Include="Models\Data\User.cs" />
     <Compile Include="Models\Data\LinkedAccount.cs" />
     <Compile Include="Models\Data\Album.cs" />

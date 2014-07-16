@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Zazz.Core.Models.Data
 {
     [Table("Post_Tags")]
-    public class PostTag
+    public class PostTag : BaseEntity
     {
         [Key, Column(Order = 0)]
         public int PostId { get; set; }

@@ -334,6 +334,7 @@
     <Compile Include="Models\FollowersViewModel.cs" />
     <Compile Include="Models\PostMsgItemViewModel.cs" />
     <Compile Include="Models\RegisterUserHomeViewModel.cs" />
+    <Compile Include="Models\TagStatViewModel.cs" />
     <Compile Include="Models\UserFollowingClubsViewModel.cs" />
     <Compile Include="Models\UserFollowingViewModel.cs" />
     <Compile Include="Models\LikedFeedViewModel.cs" />

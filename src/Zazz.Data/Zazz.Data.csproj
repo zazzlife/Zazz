@@ -85,6 +85,7 @@
     <Compile Include="Repositories\PhotoLikeRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\CategoryStatRepository.cs" />
+    <Compile Include="Repositories\TagRepository.cs" />
     <Compile Include="Repositories\UserPointHistoryRepository.cs" />
     <Compile Include="Repositories\UserPointRepository.cs" />
     <Compile Include="Repositories\UserReceivedLikesRepository.cs" />

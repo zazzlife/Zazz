@@ -138,6 +138,11 @@ namespace Zazz.Data
             get { return new UserRewardHistoryRepository(GetContext()); }
         }
 
+        public ITagRepository TagRepository
+        {
+            get { return new TagRepository(GetContext()); }
+        }
+
         private ZazzDbContext GetContext()
         {
             if (_dbContext == null || _isDisposed)

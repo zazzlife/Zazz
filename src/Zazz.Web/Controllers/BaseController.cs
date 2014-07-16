@@ -30,6 +30,7 @@ namespace Zazz.Web.Controllers
             CategoryService = categoryService;
         }
 
+        // TODO: rename
         public IEnumerable<CategoryStatViewModel> GetTagStats()
         {
             return CategoryService.GetAllStats()

@@ -40,7 +40,7 @@ namespace Zazz.Data.Repositories
                 .OrderByDescending(f => f.Time);
         }
 
-        public IQueryable<Feed> GetFeedsWithCategoriesTag(IEnumerable<int> userIds, IEnumerable<byte> categories, int tag)
+        public IQueryable<Feed> GetFeedsWithCategoriesTags(IEnumerable<int> userIds, IEnumerable<byte> categories, IEnumerable<int> tags)
         {
             return (from feed in DbSet
                          from feedUserId in feed.FeedUsers
@@ -53,7 +53,7 @@ namespace Zazz.Data.Repositories
                                 categories.Contains(photoCategory.CategoryId) ||
                                 categories.Contains(postCategory.CategoryId)
                              ) &&
-                             postTag.ClubId.Equals(tag)
+                             tags.Contains(postTag.ClubId)
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)
@@ -65,7 +65,7 @@ namespace Zazz.Data.Repositories
                 .OrderByDescending(f => f.Time);
         }
 
-        public IQueryable<Feed> GetFeedsWithTag(IEnumerable<int> userIds, int tag)
+        public IQueryable<Feed> GetFeedsWithTags(IEnumerable<int> userIds, IEnumerable<int> tags)
         {
             return (from feed in DbSet
                          from feedUserId in feed.FeedUsers
@@ -73,7 +73,7 @@ namespace Zazz.Data.Repositories
                          from postTag in feed.PostFeed.Post.Tags.DefaultIfEmpty()
                          where
                              userIds.Contains(feedUserId.UserId) &&
-                             postTag.ClubId.Equals(tag)
+                             tags.Contains(postTag.ClubId)
                          select feed)
                 .Distinct()
                 .Include(f => f.FeedPhotos)

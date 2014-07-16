@@ -9,9 +9,9 @@ namespace Zazz.Core.Interfaces.Repositories
     {
         IQueryable<Feed> GetFeedsWithCategories(IEnumerable<int> userIds, IEnumerable<byte> categories);
 
-        IQueryable<Feed> GetFeedsWithCategoriesTag(IEnumerable<int> userIds, IEnumerable<byte> categories, int tag);
+        IQueryable<Feed> GetFeedsWithCategoriesTags(IEnumerable<int> userIds, IEnumerable<byte> categories, IEnumerable<int> tags);
 
-        IQueryable<Feed> GetFeedsWithTag(IEnumerable<int> userIds, int tag);
+        IQueryable<Feed> GetFeedsWithTags(IEnumerable<int> userIds, IEnumerable<int> tags);
 
         IQueryable<Feed> GetFeeds(IEnumerable<int> userIds);
 

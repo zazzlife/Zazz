@@ -6,15 +6,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     IEnumerable<CategoryStatViewModel> categoryStats = Enumerable.Empty<CategoryStatViewModel>();
+    IEnumerable<TagStatViewModel> tagStats = Enumerable.Empty<TagStatViewModel>();
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
 
-    var controller = ViewContext.Controller as BaseController;
+    var controller = ViewContext.Controller as HomeController;
     if (controller != null)
     {
         categoryStats = controller.GetTagStats();
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
+        tagStats = controller.GetRealTagStats();
     }
 }
 
@@ -78,7 +80,6 @@
             <div class="categories-stat-container pane-box">
                 <div class="pane-title">Categories</div>
                 <form id="cat-select" action="">
-                    <input type="hidden" id="tag-filter" name="tag" value="">
                 @foreach (var c in categoryStats)
                 {
                     <input type="checkbox" id="@c.CategoryName.ToFileName()" name="categories" value="@c.CategoryName">
@@ -88,6 +89,23 @@
                         <span class="category-text">
                             <span class="category-text-header">@c.CategoryName</span>
                             <span>@c.UsersCount talking about this.</span>
+                        </span>
+                    </label>
+                }
+                </form>
+            </div>
+
+            <div class="tags-stat-container pane-box">
+                <div class="pane-title">Top Trending</div>
+                <form id="tag-select" action="">
+                @foreach (var t in tagStats)
+                {
+                    <input type="checkbox" id="@t.ClubId" name="tags" value="@t.ClubId">
+                    <label for="@t.ClubId" class="tag-filter">
+                        <img src="@t.Photo" class="tag-club-img" />
+                        <span class="tag-filter-text">
+                            <span class="tag-filter-text-header">@@@t.ClubUsername</span>
+                            <span>@t.Count posts about club.</span>
                         </span>
                     </label>
                 }

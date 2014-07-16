@@ -16,7 +16,7 @@ namespace Zazz.Web.Interfaces
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, string tag = "");
+        FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, List<int> tags = null);
 
         /// <summary>
         /// Returns a list of activities of people that the user follows and the user himself
