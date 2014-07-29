@@ -7,5 +7,6 @@ namespace Zazz.Core.Interfaces.Services
     {
         IEnumerable<CategoryStat> GetAllStats();
         void UpdateStatistics();
+        IEnumerable<int> GetCategoryIds(IEnumerable<string> categoryNames);
     }
 }

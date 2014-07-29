@@ -77,5 +77,20 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
             }
         }
+
+        public IEnumerable<int> GetCategoryIds(IEnumerable<string> categoryNames)
+        {
+            List<int> ids = new List<int>();
+
+            if (categoryNames != null)
+            {
+                foreach (string c in categoryNames)
+                {
+                    ids.Add(_staticDataRepository.GetCategoryIfExists(c).Id);
+                }
+            }
+
+            return ids;
+        }
     }
 }

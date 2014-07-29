@@ -17,14 +17,16 @@ namespace Zazz.Web
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IFeedHelper _feedHelper;
+        private readonly ICategoryService _categoryService;
 
         public ObjectMapper(IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, ICategoryService categoryService)
         {
             _userService = userService;
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
             _feedHelper = feedHelper;
+            _categoryService = categoryService;
         }
 
         #region API
@@ -162,7 +164,8 @@ namespace Zazz.Web
                     ToUserDisplayName = feed.Post.ToUserDisplayName,
                     ToUserId = feed.Post.ToUserId,
                     ToUserDisplayPhoto = feed.Post.ToUserDisplayPhoto,
-                    Time = feed.Time
+                    Time = feed.Time,
+                    Categories = _categoryService.GetCategoryIds(feed.Post.Categories)
                 }
                 : null,
 
