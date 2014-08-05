@@ -108,7 +108,7 @@
                         @foreach (var p in Model.PreviewPhotos)
                         {
                             <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
-                                <img src="@p.PhotoUrl.MediumLink" />
+                                <div class="preview-box-img-div" style="background-image: url(@p.PhotoUrl.MediumLink)"></div>
                             </a>
                         }
                     </div>

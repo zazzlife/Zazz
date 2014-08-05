@@ -43,7 +43,7 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/posts
         public HttpResponseMessage Post([FromBody] ApiPost post)
         {
-            if (post.Message == null || post.Message.Count() != 1)
+            if (post.Message == null || post.Message.Count() != 1 || post.Message.First().Text == null)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var p = new Post
@@ -80,7 +80,7 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-            catch (SecurityException)
+            catch (SecurityException) 
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }

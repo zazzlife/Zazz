@@ -341,6 +341,12 @@ namespace Zazz.Web.Helpers
                     feedVm.Comments.Comments = GetComments(photoId,
                                                                     feedVm.Comments.CommentType,
                                                                     currentUserId);
+                    feedVm.Post = new PostViewModel
+                    {
+                        Categories = _staticDataRepository.GetCategories()
+                            .Where(c => photos.First().Categories.Any(pc => pc.CategoryId == c.Id))
+                            .Select(c => c.Name)
+                    };
                 }
 
                 #endregion

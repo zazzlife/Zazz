@@ -31,7 +31,8 @@ namespace Zazz.Data.Repositories
 
         public IQueryable<Photo> GetPhotos(IEnumerable<int> photoIds)
         {
-            return DbSet.Where(p => photoIds.Contains(p.Id));
+            return DbSet.Where(p => photoIds.Contains(p.Id))
+                .Include(p => p.Categories);
         }
 
         public IQueryable<Photo> GetPagePhotos(int pageId)
