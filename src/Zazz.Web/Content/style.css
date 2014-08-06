@@ -1645,7 +1645,7 @@ li.new-notification {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    margin-bottom: 3px;
+    margin-bottom: 3px 1.5px 0px;
 }
 
 
