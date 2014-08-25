@@ -19,6 +19,7 @@ using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Infrastructure.Services;
 using Zazz.Web;
+using Zazz.Web.Models;
 using Zazz.Web.DependencyResolution;
 using Zazz.Web.Models.Api;
 
@@ -31,6 +32,8 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private Post _post;
         private int _postId;
         private ApiPost _apiPost;
+        private PostMsgItemViewModel _postMsgView;
+        private IEnumerable<PostMsgItemViewModel> _postMsgEnum;
 
         public override void Init()
         {
@@ -46,14 +49,16 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                         CreatedTime = DateTime.UtcNow,
                         Message = "Message"
                     };
-
+            _postMsgView.ClubId = User.Id;
+            _postMsgView.Text = _post.Message;
+            _postMsgEnum = new PostMsgItemViewModel[]{_postMsgView};
             _apiPost = new ApiPost
                        {
                            PostId = _postId,
                            FromUserId = User.Id,
                            Time = _post.CreatedTime,
                            Categories = new int[] { 1, 2, 3, 4 },
-                           Message = _post.Message
+                           Message = _postMsgEnum
                        };
 
             _postService = MockRepo.Create<IPostService>();
@@ -107,8 +112,11 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [TestCase(" ")]
         public async Task Return400IfPostMessageIsMissing_OnPost(string message)
         {
+
+            _postMsgView.Text = message;
+            _postMsgEnum = new PostMsgItemViewModel[] { _postMsgView };
             //Arrange
-            _apiPost.Message = message;
+            _apiPost.Message = _postMsgEnum;
             ControllerAddress = "/api/v1/posts";
 
             var json = JsonConvert.SerializeObject(_apiPost);
@@ -153,8 +161,10 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         [TestCase(" ")]
         public async Task Return400IfPostMessageIsEmpty_OnPut(string message)
         {
+            _postMsgView.Text = message;
+            _postMsgEnum = new PostMsgItemViewModel[] { _postMsgView };
             //Arrange
-            _apiPost.Message = message;
+            _apiPost.Message = _postMsgEnum;
             var json = JsonConvert.SerializeObject(_apiPost);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 

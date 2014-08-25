@@ -119,7 +119,6 @@ namespace Zazz.Infrastructure.Helpers
 
             while (true)
             {
-                if (path == null) break;
                 dynamic result = _client.Get(path, new { fields = FIELDS });
 
                 try

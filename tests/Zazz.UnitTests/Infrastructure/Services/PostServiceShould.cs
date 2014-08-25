@@ -39,7 +39,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _staticDataRepo = _mockRepo.Create<IStaticDataRepository>();
 
             _sut = new PostService(_uow.Object, _notificationService.Object,
-                _stringHelper.Object, _staticDataRepo.Object);
+                _stringHelper.Object, _staticDataRepo.Object, null);
 
             _uow.Setup(x => x.SaveChanges());
 

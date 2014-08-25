@@ -215,11 +215,17 @@
                     @Html.AntiForgeryToken()
                     <div class="login-form-group">
                         <input type="text" class="form-control dark-input login-form-input" placeholder="Username" name="username">
+                        <br /><br />                       
                     </div>
                     <div class="login-form-group">
                         <input type="password" class="form-control dark-input login-form-input" placeholder="Password" name="password">
+                        <br />
+                        <a href="@Url.Action("Recover","Account")">*Forgot Password</a>
                     </div>
-                    <button type="submit" class="btn btn-dark">Login</button>
+                    <div class="login-form-group">
+                         <button type="submit" class="btn btn-dark">Login</button>
+                        <br /><br />
+                    </div>
                 </form>
             </div>
         </div>

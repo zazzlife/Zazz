@@ -472,14 +472,6 @@ hr.gold-line {
     word-break: break-all;
 }
 
-.post-feed-picture-description {
-    margin: 10px 10px 0 10px;
-    font-size: 12px;
-    white-space: pre-line;
-    float: left;
-    word-break: break-all;
-}
-
 .feed-actions {
     float: right;
     display: none;
@@ -879,15 +871,12 @@ hr.gold-line {
         margin: 0;
     }
 
-.weekly-description-img-div {
-    width: 120px;
-    height: 120px;
-    -ms-border-radius: 4px;
-    border-radius: 4px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-}
+    .weekly img {
+        width: 120px;
+        height: 120px;
+        -ms-border-radius: 4px;
+        border-radius: 4px;
+    }
 
 .special-events {
     float: right;
@@ -1246,20 +1235,16 @@ li.new-notification {
     background-color: white;
 }
 
+.preview-box img {
+    width: 53px;
+    height: 53px;
+    padding: 0;
+    margin: 1px;
+}
+
 .preview-box a {
     padding: 0;
     margin: 0;
-}
-
-.preview-box-img-div {
-    display: inline-block;
-    width: 55px;
-    height: 55px;
-    padding: 0;
-    margin: 0;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
 }
 
 /***************************************
@@ -1574,15 +1559,6 @@ li.new-notification {
         border-radius: 3px;
     }
 
-.pics-widget-img-div {
-    width: 61px;
-    height: 61px;
-    border-radius: 3px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-}
-
 .follow-img {
     color: #000000;
     font-weight: bold;
@@ -1638,14 +1614,20 @@ li.new-notification {
     display: inline;
 }
 
+.profile-photos-img {
+    //width: 149px;
+    //height: 149px;
+    margin-bottom: 3px;
+}
+
 .profile-photos-img-div {
-    width: 184px;
-    height: 184px;
+    width: 149px;
+    height: 149px;
     float: left;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    margin-bottom: 3px 1.5px 0px;
+    margin-bottom: 3px;
 }
 
 
@@ -2398,13 +2380,4 @@ a:hover, a:focus {
     width: 135px;
     height: 135px;
     margin-left: 10px;
-}
-
-.user-list-img-div {
-    width: 135px;
-    height: 135px;
-    margin-left: 10px;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
 }
