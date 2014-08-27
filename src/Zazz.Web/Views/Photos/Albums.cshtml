@@ -4,7 +4,7 @@
     var totalAlbums = Model.Albums.Count;
     var counter = 0;
 
-    var totalPages = totalAlbums/8F;
+    var totalPages = totalAlbums / 8F;
 }
 
 @section css
@@ -60,6 +60,87 @@
     </div>
 
     <div class="row-fluid">
+
+        <ul class="thumbnails">
+            
+            @for (int i = 0; i < Model.Albums.Count; i++)
+            {
+
+                if (i == 0)
+                {
+
+                    var thumbs = Model.Albums[i].AlbumThumbnails;
+                    int j = 1;
+                    <li class="span4">
+                        <div class="thumbnail">
+                            @foreach (var thumb in thumbs)
+                            {
+                                if (j++ == 1)
+                                {
+                                    <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                        <img src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                    </a>
+                                }
+                            }
+                            <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                <h5>@Model.Albums[i].AlbumName</h5>
+                            </a>
+                                <small>@Model.Albums[i].PhotosCount photos</small>
+                            
+                        </div>
+                    </li>
+                }
+                else if (i % 3 == 0)
+                {
+                    var thumbs = Model.Albums[i].AlbumThumbnails;
+                    int j = 1;
+                    <li class="span4" style="margin-left:0px">
+                        <div class="thumbnail">
+                            @foreach (var thumb in thumbs)
+                            {
+                                if (j++ == 1)
+                                {
+                                    <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                        <img src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                    </a> 
+                                }
+                            }
+                            <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                <h5>@Model.Albums[i].AlbumName</h5>
+                            </a>
+                                <small>@Model.Albums[i].PhotosCount photos</small>
+                          
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    var thumbs = Model.Albums[i].AlbumThumbnails;
+                    int j = 1;
+                    <li class="span4">
+                        <div class="thumbnail">
+                            @foreach (var thumb in thumbs)
+                            {
+                                if (j++ == 1)
+                                {
+                                    <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                        <img class="m2main" src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                    </a>
+                                }
+                            }
+                            <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
+                                <h5>@Model.Albums[i].AlbumName</h5>
+                            </a>
+                                <small>@Model.Albums[i].PhotosCount photos</small>
+                            
+                        </div>
+                    </li>
+                }
+            }
+          
+        </ul>
+
+        <!--
         <div class="text-center">
             <div id="myCarousel" class="carousel slide">
                 <!--<ol class="carousel-indicators">
@@ -67,7 +148,7 @@
                         <li data-target="#myCarousel" data-slide-to="1"></li>
                         <li data-target="#myCarousel" data-slide-to="2"></li>
                     </ol>-->
-                <!-- Carousel items -->
+                <!-- Carousel items 
                 <div class="carousel-inner">
                 
                     @for (float i = 0; i < totalPages; i++)
@@ -100,11 +181,11 @@
                     }
 
                 </div>
-                <!-- Carousel nav -->
+                <!-- Carousel nav 
                 <a class="carousel-control left" href="#myCarousel" data-slide="prev" style="left: 0;">&lsaquo;</a>
                 <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>
-        </div>
+        </div>-->
     </div>
 
 </div>

@@ -114,7 +114,31 @@ namespace Zazz.Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = UserService.GetUser(User.Identity.Name);
+                 var userId = UserService.GetUserId(User.Identity.Name);
+                 var user = UserService.GetUser(User.Identity.Name);
+                 if (UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook))
+                 {
+                     if (user.AccountType == AccountType.Club)
+                     {
+                         var allPages = _facebookService.GetUserPages(userId);
+                         var existingPageIds = _uow.FacebookPageRepository.GetUserPages(userId)
+                                                   .Select(f => f.FacebookId)
+                                                   .ToList();
+
+
+                         foreach (var fbPage in allPages)
+                         {
+                             if (existingPageIds.Contains(fbPage.Id))
+                             {
+                                 _facebookService.SyncPageEvents(fbPage.Id);
+                                 _facebookService.SyncPagePhotos(fbPage.Id);
+                                 _facebookService.SyncPageStatuses(fbPage.Id);
+                             }
+                         }
+                     }
+                 }
+
+               
                 var feeds = _feedHelper.GetFeeds(user.Id);
                 
                 var vm = new UserHomeViewModel
@@ -124,6 +148,10 @@ namespace Zazz.Web.Controllers
                              HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook),
                              ShowSync = user.AccountType == AccountType.Club && user.ClubDetail.ShowSync
                          };
+
+
+
+
 
                 return View("UserHome", vm);
             }

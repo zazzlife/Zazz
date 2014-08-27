@@ -10,6 +10,7 @@ using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Net.Mail;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using Newtonsoft.Json;
@@ -479,13 +480,34 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     var token = _authService.GenerateResetPasswordToken(vm.Email);
-                    var tokenString = Base64Helper.Base64UrlEncode(token.Token);
+                    var userId = _uow.UserRepository.GetIdByEmail(vm.Email);
+                    User _userDetails = UserService.GetUser(userId, true);
+                    string userName = _userDetails.Username;
 
+                    var tokenString = Base64Helper.Base64UrlEncode(token.Token);
+                    
                     var resetLink = String.Format("/account/resetpassword/{0}/{1}", token.Id, tokenString);
                     var message = String.Format(
-                        "A recovery email has been sent to {0}. Please check your inbox.{1}{2}", vm.Email,
-                        Environment.NewLine, "test: " + resetLink);
+                        "A recovery email has been sent to {0}. Please check your inbox.{1}", vm.Email,
+                        Environment.NewLine);
+                    string body = "Dear "+UserService.GetUserDisplayName(userId)+" \n\n";
+                    body += "Your request to reset the password for your account has been processed.\n\n";
+                    body += "Please click the link below to reset your password:\n";
+                    body += "<a href='" + resetLink + "'>Reset Password</a>\n\nTeam Zazz";
 
+                    MailMessage mail = new MailMessage();
+                    mail.To.Add(vm.Email);
+                    mail.From = new MailAddress("team@zazzlife.com");
+                    mail.Subject = "Zazzlife - Password Reset";
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtpout.secureserver.net";
+                    smtp.Port = 465;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
                     ShowAlert(message, AlertType.Success);
 
                 }

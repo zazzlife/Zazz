@@ -5,7 +5,7 @@
     {
         <li class="text-center">
             <a href="@Url.Action("Profile", "Users", new {id = u.Id })">
-                <div class="user-list-img-div" style="background-image: url(@u.ProfileImage.SmallLink)"></div>
+                <img class="user-list-img" src="@u.ProfileImage.SmallLink" />
             </a>
             <h4>@u.DisplayName</h4>
         </li>

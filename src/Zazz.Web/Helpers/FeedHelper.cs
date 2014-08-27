@@ -193,7 +193,51 @@ namespace Zazz.Web.Helpers
                 feeds = new List<FeedViewModel>()
             };
 
+            foreach(var feed in feeds)
+            {
+                if (feed.FeedType == FeedType.Photo)
+                {
+                    foreach (var feed1 in feeds)
+                    {
+                        if (feed == feed1)
+                            continue;
+                        if (feed1.FeedType == FeedType.Photo)
+                        {
+                            if (feed1.Time == feed.Time)
+                            {
+                                foreach (var feedPhotos in feed1.FeedPhotos)
+                                {
+                                    feed.FeedPhotos.Add(feedPhotos);
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+
+            List<Feed> feeds2 = new List<Feed>();
+            List<DateTime> dt1 = new List<DateTime>();
+            
             foreach (var feed in feeds)
+            {
+                if (feed.FeedType == FeedType.Photo)
+                {
+                    if (!dt1.Contains(feed.Time))
+                    {
+                        dt1.Add(feed.Time);
+                        feeds2.Add(feed);
+                    }
+                }
+                else
+                {
+                    feeds2.Add(feed);
+                }
+                
+            }
+
+            
+            foreach (var feed in feeds2)
             {
                 vm.feeds.Add(ConvertFeedToFeedViewModel(feed, currentUserId));
             }
@@ -341,12 +385,6 @@ namespace Zazz.Web.Helpers
                     feedVm.Comments.Comments = GetComments(photoId,
                                                                     feedVm.Comments.CommentType,
                                                                     currentUserId);
-                    feedVm.Post = new PostViewModel
-                    {
-                        Categories = _staticDataRepository.GetCategories()
-                            .Where(c => photos.First().Categories.Any(pc => pc.CategoryId == c.Id))
-                            .Select(c => c.Name)
-                    };
                 }
 
                 #endregion
