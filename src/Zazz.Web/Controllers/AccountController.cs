@@ -285,7 +285,11 @@ namespace Zazz.Web.Controllers
                         SyncFbPosts = true,
                         SendSyncErrorNotifications = true
                     },
-                    ClubDetail = new ClubDetail()
+                    ClubDetail = new ClubDetail
+                    {
+                        ShowSync = true,
+                        ClubTypes = vm.ClubTypes
+                    }
                 };
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];

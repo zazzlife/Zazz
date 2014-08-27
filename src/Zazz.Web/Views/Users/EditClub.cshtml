@@ -1,5 +1,5 @@
 ﻿@model EditClubProfileViewModel
-
+@using Zazz.Core.Models.Data.Enums
 @{
     ViewBag.Title = "Edit Profile";
 }
@@ -53,15 +53,14 @@
 
                             <div class="control-group">
                                 <div class="editor-label">
-                                    @Html.LabelFor(model => model.ClubType, new { @class = "control-label" })
+                                    @Html.LabelFor(model => model.ClubTypes, new { @class = "control-label" })
                                 </div>
                                 <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.ClubType, Model.ClubType.EnumToSelectList(), new { @class = "span4" })
-
-                                    @Html.ValidationMessageFor(model => model.ClubType, null, new { @class = "help-inline" })
+                                    @Html.ListBoxFor(model => model.ClubTypes, new ClubType().EnumToSelectList())
+                                    @Html.ValidationMessageFor(model => model.ClubTypes, null, new { @class = "help-inline" })
                                 </div>
                             </div>
-                            
+
                             <div class="control-group">
                                 <div class="editor-label">
                                     @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })

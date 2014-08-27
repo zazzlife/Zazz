@@ -121,7 +121,8 @@ namespace Zazz.Web.Controllers
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook)
+                             HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook),
+                             ShowSync = user.AccountType == AccountType.Club && user.ClubDetail.ShowSync
                          };
 
                 return View("UserHome", vm);

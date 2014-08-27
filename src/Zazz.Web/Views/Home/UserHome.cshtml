@@ -126,6 +126,12 @@
 
 @if (Model.AccountType == AccountType.Club && Model.HasFacebookAccount)
 {
+    if(Model.ShowSync)
+    {
+        <script>
+            ShowSync = true;
+        </script>
+    }
     <div class="modal hide fade" id="manageFbPagesModal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

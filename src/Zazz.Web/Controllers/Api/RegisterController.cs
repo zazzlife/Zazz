@@ -96,7 +96,7 @@ namespace Zazz.Web.Controllers.Api
                                         {
                                             Address = request.ClubAddress,
                                             ClubName = request.ClubName,
-                                            ClubType = request.ClubType
+                                            ClubTypes = new List<ClubType>{request.ClubType}
                                         },
                            Preferences = new UserPreferences
                                          {

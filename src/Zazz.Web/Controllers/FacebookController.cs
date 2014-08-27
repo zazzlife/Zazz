@@ -14,6 +14,7 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
 using Zazz.Web.Models;
@@ -115,8 +116,8 @@ namespace Zazz.Web.Controllers
         {
             try
             {
-                var userId = _userService.GetUserId(User.Identity.Name);
-                var allPages = _facebookService.GetUserPages(userId);
+                var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+                var allPages = _facebookService.GetUserPages(user.Id);
 
                 var wantedPage = allPages.FirstOrDefault(p => p.Id.Equals(pageId));
                 if (wantedPage != null)
@@ -126,13 +127,18 @@ namespace Zazz.Web.Controllers
                                      AccessToken = wantedPage.AcessToken,
                                      FacebookId = wantedPage.Id,
                                      Name = wantedPage.Name,
-                                     UserId = userId
+                                     UserId = user.Id
                                  };
 
                     _facebookService.LinkPage(fbPage);
                     _facebookService.SyncPageEvents(fbPage.FacebookId);
                 }
 
+                if(user.AccountType == AccountType.Club && user.ClubDetail.ShowSync)
+                {
+                    user.ClubDetail.ShowSync = false;
+                    _uow.SaveChanges();
+                }
                 return new JsonNetResult("ok");
             }
             catch (FacebookPageExistsException)
@@ -159,6 +165,13 @@ namespace Zazz.Web.Controllers
             _facebookService.SyncPageEvents(pageId);
             _facebookService.SyncPagePhotos(pageId);
             _facebookService.SyncPageStatuses(pageId);
+
+            var user = _uow.UserRepository.GetByUsername(User.Identity.Name);
+            if(user.AccountType == AccountType.Club && user.ClubDetail.ShowSync)
+            {
+                user.ClubDetail.ShowSync = false;
+                _uow.SaveChanges();
+            }
         }
     }
 }

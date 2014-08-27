@@ -120,7 +120,15 @@ namespace Zazz.Infrastructure.Helpers
             while (true)
             {
                 if (path == null) break;
-                dynamic result = _client.Get(path, new { fields = FIELDS });
+                dynamic result;
+                try
+                {
+                    result = _client.Get(path, new { fields = FIELDS });
+                }
+                catch
+                {
+                    break;
+                }
 
                 try
                 {
@@ -323,7 +331,16 @@ namespace Zazz.Infrastructure.Helpers
 
             const string QUERY = "SELECT aid, caption, created, owner, pid, modified, images FROM photo WHERE owner = me() ORDER BY modified DESC";
 
-            dynamic result = _client.Get("fql", new { q = QUERY });
+            dynamic result;
+
+            try
+            {
+                result = _client.Get("fql", new { q = QUERY });
+            }
+            catch(FacebookOAuthException)
+            {
+                return null;
+            }
 
             var photos = new List<FbPhoto>();
 

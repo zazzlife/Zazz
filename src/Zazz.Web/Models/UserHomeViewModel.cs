@@ -12,5 +12,7 @@ namespace Zazz.Web.Models
         public AccountType AccountType { get; set; }
         
         public FeedsViewModel Feeds { get; set; }
+
+        public bool ShowSync { get; set; }
     }
 }

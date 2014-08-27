@@ -25,6 +25,9 @@ namespace Zazz.Web.Models
         [Required, DataType(DataType.Password), System.ComponentModel.DataAnnotations.Compare("Password"), AllowHtml]
         public string ConfirmPassword { get; set; }
 
+        [Display(Name = "Club Types")]
+        public IEnumerable<ClubType> ClubTypes { get; set; }
+
         [HiddenInput]
         public bool IsOAuth { get; set; }
     }

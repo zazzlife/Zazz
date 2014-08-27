@@ -96,7 +96,7 @@ namespace Zazz.Web.Controllers.Api
                          {
                              Address = user.ClubDetail.Address,
                              ClubName = user.ClubDetail.ClubName,
-                             ClubType = user.ClubDetail.ClubType,
+                             ClubType = user.ClubDetail.ClubTypes.FirstOrDefault(),
                              CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
                              ? _photoService.GeneratePhotoUrl(id, user.ClubDetail.CoverPhotoId.Value)
                              : _defaultImageHelper.GetDefaultCoverImage()

@@ -1,4 +1,5 @@
 ﻿@using PoliteCaptcha
+@using Zazz.Core.Models.Data.Enums
 @model RegisterClubViewModel
 @{
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
@@ -55,6 +56,17 @@
                                 @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
                             </div>
                         </div>
+
+                        <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubTypes, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field">
+                                @Html.ListBoxFor(model => model.ClubTypes, new ClubType().EnumToSelectList())
+                                @Html.ValidationMessageFor(model => model.ClubTypes, null, new { @class = "help-inline" })
+                            </div>
+                        </div>
+
                         <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
