@@ -24,7 +24,7 @@ namespace Zazz.Web.Models
 
         public bool IsCurrentUserFollowingTheClub { get; set; }
 
-        public IEnumerable<ClubType> ClubTypes { get; set; }
+        public ClubType ClubType { get; set; }
 
         public string Address { get; set; }
 

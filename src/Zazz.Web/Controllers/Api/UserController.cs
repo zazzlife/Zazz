@@ -77,7 +77,7 @@ namespace Zazz.Web.Controllers.Api
                                        {
                                            Address = user.ClubDetail.Address,
                                            ClubName = user.ClubDetail.ClubName,
-                                           ClubType = user.ClubDetail.ClubTypes.FirstOrDefault(),
+                                           ClubType = user.ClubDetail.ClubType,
                                            CoverPhotoId = user.ClubDetail.CoverPhotoId,
                                            CoverPhoto = user.ClubDetail.CoverPhotoId.HasValue
                                                ? _photoService
@@ -122,7 +122,7 @@ namespace Zazz.Web.Controllers.Api
             {
                 user.ClubDetail.Address = u.ClubDetails.Address;
                 user.ClubDetail.ClubName = u.ClubDetails.ClubName;
-                user.ClubDetail.ClubTypes = new List<ClubType>{u.ClubDetails.ClubType};
+                user.ClubDetail.ClubType = u.ClubDetails.ClubType;
                 user.ClubDetail.CoverPhotoId = u.ClubDetails.CoverPhotoId;
 
                 if (u.Preferences.SyncFbPhotos.HasValue)

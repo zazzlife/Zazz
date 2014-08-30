@@ -1,17 +1,17 @@
 ﻿@using PoliteCaptcha
-@model RegisterClubViewModel
+@model RecoverUserViewModel
+
 @{
+    ViewBag.Title = "Recover Username";
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
-    ViewBag.Title = "Register";
 }
 
 <div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
             <h4 class="lead-1">
-                <i>
-                    <img src="/Images/Register.png"></i>
-                Register
+                <i class="icon-lock icon-2x"></i>
+                Recover Username
             </h4>
         </div>
     </div>
@@ -29,37 +29,26 @@
                         @if (TempData["alert"] != null && ((bool)TempData["alert"]))
                         {
                             <div class="alert alert-block @TempData["alertClass"]">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
                                 <p>@TempData["alertMessage"]</p>
                             </div>
                         }
 
-
                         <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Email, new { @class = "control-label required" })
+                            </div>
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.UserName, new { @placeholder = "Username" })
-                                @Html.ValidationMessageFor(model => model.UserName, null, new { @class = "help-inline" })
+                                @Html.TextBoxFor(model => model.Email)
+                                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "help-inline" })
                             </div>
                         </div>
 
-                        <div class="control-group">
-                            <div class="editor-field">
-                                @Html.PasswordFor(model => model.Password, new { @placeholder = "Password" })
-                                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
-                            </div>
 
-                        </div>
-                        <div class="control-group">
-                            <div class="editor-field">
-                                @Html.PasswordFor(model => model.ConfirmPassword, new { @placeholder = "Confirm Password" })
-                                @Html.ValidationMessageFor(model => model.ConfirmPassword, null, new { @class = "help-inline" })
-                            </div>
-                        </div>
                         <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Register</button>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Send</button>
                     </fieldset>
             
                 }

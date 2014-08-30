@@ -286,11 +286,7 @@ namespace Zazz.Web.Controllers
                         SyncFbPosts = true,
                         SendSyncErrorNotifications = true
                     },
-                    ClubDetail = new ClubDetail
-                    {
-                        ShowSync = true,
-                        ClubTypes = vm.ClubTypes
-                    }
+                    ClubDetail = new ClubDetail()
                 };
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
@@ -468,6 +464,64 @@ namespace Zazz.Web.Controllers
 
             return View(new RecoverAccountViewModel());
         }
+
+        [HttpGet]
+        public ActionResult RecoverUser()
+        {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            return View(new RecoverUserViewModel());
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
+        public ActionResult RecoverUser(RecoverUserViewModel vm)
+        {
+            if (User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var token = _authService.GenerateResetPasswordToken(vm.Email);
+                    var userId = _uow.UserRepository.GetIdByEmail(vm.Email);
+                    User _userDetails = UserService.GetUser(userId, true);
+                    string userName = _userDetails.Username;
+
+                  
+                    var message = String.Format(
+                        "Your Username has been sent to {0}. Please check your inbox.{1}", vm.Email,
+                        Environment.NewLine);
+                    string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
+                    body += "Your Username is : "+userName+".\n\nTeam Zazz";
+
+                    MailMessage mail = new MailMessage();
+                    mail.To.Add(vm.Email);
+                    mail.From = new MailAddress("team@zazzlife.com");
+                    mail.Subject = "Zazzlife - Password Reset";
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtpout.secureserver.net";
+                    smtp.Port = 465;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                    ShowAlert(message, AlertType.Success);
+
+                }
+                catch (NotFoundException)
+                {
+                    ShowAlert("Email not found", AlertType.Warning);
+                }
+            }
+
+            return View(vm);
+        }
+
+
 
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public ActionResult Recover(RecoverAccountViewModel vm)

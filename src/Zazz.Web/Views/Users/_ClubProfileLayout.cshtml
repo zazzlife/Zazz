@@ -2,17 +2,6 @@
 @{
     ViewBag.Title = Model.UserName;
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    string ClubTypes = "";
-    
-    foreach(var ct in Model.ClubTypes)
-    {
-        if (ClubTypes.Length > 0)
-        {
-            ClubTypes += ", ";
-        }
-        ClubTypes += ct.ToString();
-    }
 }
 
 <div class="container" style="margin-top: -15px">
@@ -28,7 +17,7 @@
         <div class="span3">
             <div style="height: 50px">
                 <ul class="nav nav-stacked club-details">
-                    <li><i class="icon-glass"></i><strong>@ClubTypes</strong></li>
+                    <li><i class="icon-glass"></i><strong>@Model.ClubType</strong></li>
                     @if (!String.IsNullOrEmpty(Model.Address))
                     {
                         <li><i class="icon-map-marker"></i><strong>@Model.Address</strong></li>

@@ -130,9 +130,14 @@ namespace Zazz.Web.Controllers
                          {
                              if (existingPageIds.Contains(fbPage.Id))
                              {
-                                 _facebookService.SyncPageEvents(fbPage.Id);
-                                 _facebookService.SyncPagePhotos(fbPage.Id);
-                                 _facebookService.SyncPageStatuses(fbPage.Id);
+                                 try
+                                 {
+                                     _facebookService.SyncPageEvents(fbPage.Id);
+                                     _facebookService.SyncPagePhotos(fbPage.Id);
+                                     _facebookService.SyncPageStatuses(fbPage.Id);
+                                 }
+                                 catch (Exception e)
+                                 { }
                              }
                          }
                      }
@@ -145,8 +150,7 @@ namespace Zazz.Web.Controllers
                          {
                              AccountType = user.AccountType,
                              Feeds = feeds,
-                             HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook),
-                             ShowSync = user.AccountType == AccountType.Club && user.ClubDetail.ShowSync
+                             HasFacebookAccount = UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook)
                          };
 
 

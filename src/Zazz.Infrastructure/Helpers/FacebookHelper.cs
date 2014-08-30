@@ -119,7 +119,15 @@ namespace Zazz.Infrastructure.Helpers
 
             while (true)
             {
-                dynamic result = _client.Get(path, new { fields = FIELDS });
+                dynamic result;
+                try
+                {
+                    result = _client.Get(path, new { fields = FIELDS });
+                }
+                catch (Exception)
+                {
+                    break;
+                }
 
                 try
                 {

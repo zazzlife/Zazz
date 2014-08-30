@@ -60,8 +60,6 @@ namespace Zazz.Web.Controllers.Api
         // POST api/v1/photos
         public async Task<HttpResponseMessage> Post()
         {
-            var UserId = CurrentUserId;
-
             if (!Request.Content.IsMimeMultipartContent("form-data"))
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             
@@ -127,7 +125,7 @@ namespace Zazz.Web.Controllers.Api
             // parsin categories
             var providedCategories = bodyParts.Contents
                 .FirstOrDefault(c => c.Headers
-                .ContentDisposition.Name.Equals("categories", StringComparison.InvariantCultureIgnoreCase));
+                .ContentDisposition.Name.Equals("albumId", StringComparison.InvariantCultureIgnoreCase));
 
             var categories = Enumerable.Empty<int>();
 
@@ -143,7 +141,7 @@ namespace Zazz.Web.Controllers.Api
                         Description = description,
                         IsFacebookPhoto = false,
                         UploadDate = DateTime.UtcNow,
-                        UserId = UserId
+                        UserId = CurrentUserId
                     };
 
             try

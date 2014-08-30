@@ -14,7 +14,7 @@ namespace Zazz.Web.Models
         [Display(Name = "Club Address")]
         public string ClubAddress { get; set; }
 
-        public IEnumerable<ClubType> ClubTypes { get; set; }
+        public ClubType ClubType { get; set; }
 
         [Display(Name = "Sync Facebook Events")]
         public bool SyncFbEvents { get; set; }

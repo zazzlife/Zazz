@@ -137,12 +137,11 @@ namespace Zazz.Data.Migrations
                     {
                         Id = c.Int(nullable: false),
                         ClubName = c.String(maxLength: 500),
-                        ClubTypesBits = c.Int(nullable: false),
+                        ClubType = c.Byte(nullable: false),
                         Address = c.String(maxLength: 500),
                         CoverPhotoId = c.Int(),
                         SchoolId = c.Short(),
                         CityId = c.Int(),
-                        ShowSync = c.Boolean()
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Schools", t => t.SchoolId)

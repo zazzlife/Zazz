@@ -199,8 +199,6 @@ namespace Zazz.Infrastructure.Services
                 return;
 
             var fbPhotos = _facebookHelper.GetPhotos(page.AccessToken);
-            if (fbPhotos == null) return;
-
             var dbPhotos = _uow.PhotoRepository.GetPagePhotos(page.Id).ToList();
 
             foreach (var fbPhoto in fbPhotos)

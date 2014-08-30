@@ -6,14 +6,14 @@
 <div class="row-fluid">
     <div class="span6">
         <a data-toggle="lightbox" data-target="#photo-@Model[0].PhotoId" href="@Model[0].PhotoUrl.OriginalLink">
-            <img src="@Model[0].PhotoUrl.MediumLink" />
+            <img src="@Model[0].PhotoUrl.MediumLink"  style="width:256px;height:160px;" />
         </a>
 
     </div>
 
     <div class="span6" >
         <a data-toggle="lightbox" data-target="#photo-@Model[1].PhotoId" href="@Model[1].PhotoUrl.OriginalLink">
-            <img src="@Model[1].PhotoUrl.MediumLink" />
+            <img src="@Model[1].PhotoUrl.MediumLink"  style="width:256px;height:160px;"/>
         </a>
     </div>
 </div>

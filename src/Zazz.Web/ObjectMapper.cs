@@ -167,11 +167,6 @@ namespace Zazz.Web
                     Time = feed.Time,
                     Categories = _categoryService.GetCategoryIds(feed.Post.Categories)
                 }
-                : feed.Post != null
-                ? new ApiPost
-                {
-                    Categories = _categoryService.GetCategoryIds(feed.Post.Categories)
-                }
                 : null,
 
                 ApiEvent = feed.FeedType == FeedType.Event

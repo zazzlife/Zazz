@@ -88,7 +88,7 @@ namespace Zazz.Web.Controllers
             var vm = new ClubProfileViewModel
                      {
                          Address = baseVm.Address,
-                         ClubTypes = baseVm.ClubTypes,
+                         ClubType = baseVm.ClubType,
                          CoverPhotoUrl = baseVm.CoverPhotoUrl,
                          Events = baseVm.Events,
                          Feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId),
@@ -182,7 +182,7 @@ namespace Zazz.Web.Controllers
                 UserPhoto = profilePhotoUrl,
                 IsSelf = currentUserId == user.Id,
                 Address = user.ClubDetail.Address,
-                ClubTypes = user.ClubDetail.ClubTypes,
+                ClubType = user.ClubDetail.ClubType,
                 FollowersCount = _uow.FollowRepository.GetUserFollowers(user.Id).Count(),
                 FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
                 ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
@@ -485,7 +485,7 @@ namespace Zazz.Web.Controllers
                 {
                     ClubAddress = user.ClubDetail.Address,
                     ClubName = user.ClubDetail.ClubName,
-                    ClubTypes = user.ClubDetail.ClubTypes,
+                    ClubType = user.ClubDetail.ClubType,
                     SchoolId = user.ClubDetail.SchoolId,
                     CityId = user.ClubDetail.CityId,
                     SendFbErrorNotification = user.Preferences.SendSyncErrorNotifications,
@@ -516,15 +516,14 @@ namespace Zazz.Web.Controllers
             {
                 user.ClubDetail.Address = vm.ClubAddress;
                 user.ClubDetail.ClubName = vm.ClubName;
-                user.ClubDetail.ClubTypes = vm.ClubTypes;
+                user.ClubDetail.ClubType = vm.ClubType;
                 user.ClubDetail.SchoolId = vm.SchoolId;
                 user.ClubDetail.CityId = vm.CityId;
-                user.ClubDetail.ClubTypes = vm.ClubTypes;
                 user.Preferences.SendSyncErrorNotifications = vm.SendFbErrorNotification;
                 user.Preferences.SyncFbEvents = vm.SyncFbEvents;
                 user.Preferences.SyncFbImages = vm.SyncFbImages;
                 user.Preferences.SyncFbPosts = vm.SyncFbPosts;
-                
+
                 _uow.SaveChanges();
 
                 _cacheService.RemoveUserDisplayName(user.Id);
@@ -653,7 +652,7 @@ namespace Zazz.Web.Controllers
             var vm = new ClubProfileViewModel
             {
                 Address = baseVm.Address,
-                ClubTypes = baseVm.ClubTypes,
+                ClubType = baseVm.ClubType,
                 CoverPhotoUrl = baseVm.CoverPhotoUrl,
                 Events = baseVm.Events,
                 Feeds = _feedHelper.GetUserLikedFeed(user.Id, currentUserId),
@@ -731,7 +730,7 @@ namespace Zazz.Web.Controllers
             var vm = new ClubFollowingViewModel
             {
                 Address = baseVm.Address,
-                ClubTypes = baseVm.ClubTypes,
+                ClubType = baseVm.ClubType,
                 CoverPhotoUrl = baseVm.CoverPhotoUrl,
                 Events = baseVm.Events,
                 FollowersCount = baseVm.FollowersCount,
@@ -798,7 +797,7 @@ namespace Zazz.Web.Controllers
             var vm = new ClubFollowersViewModel
             {
                 Address = baseVm.Address,
-                ClubTypes = baseVm.ClubTypes,
+                ClubType = baseVm.ClubType,
                 CoverPhotoUrl = baseVm.CoverPhotoUrl,
                 Events = baseVm.Events,
                 FollowersCount = baseVm.FollowersCount,

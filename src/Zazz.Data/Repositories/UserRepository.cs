@@ -248,7 +248,7 @@ namespace Zazz.Data.Repositories
         {
             return DbSet
                 .Where(u => u.AccountType == AccountType.Club)
-                .Where(u => u.ClubDetail.ClubTypes.Contains(ClubType.StudentAssociation))
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
                 .Include(u => u.ClubDetail);
         }
 
@@ -256,7 +256,7 @@ namespace Zazz.Data.Repositories
         {
             return DbSet
                 .Where(u => u.AccountType == AccountType.Club)
-                .Where(u => u.ClubDetail.ClubTypes.Contains(ClubType.StudentAssociation))
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
                 .Where(u => u.ClubDetail.SchoolId == schoolId)
                 .Include(u => u.ClubDetail);
         }
