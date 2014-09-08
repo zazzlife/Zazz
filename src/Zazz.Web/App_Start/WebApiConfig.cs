@@ -34,6 +34,12 @@ namespace Zazz.Web
             );
 
             config.Routes.MapHttpRoute(
+                name: "ProfilePic",
+                routeTemplate: "api/v1/user/profilepic/{id}",
+                defaults: new { controller = "User", id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "Profile",
                 routeTemplate: "api/v1/users/{id}/profile",
                 defaults: new { controller = "Profile", id = RouteParameter.Optional }

@@ -23,11 +23,13 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
+        private readonly ICacheService _cacheService;
 
         public UserController(IUoW uow, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper)
+            IDefaultImageHelper defaultImageHelper, ICacheService cacheService)
         {
             _uow = uow;
+            _cacheService = cacheService;
             _userService = userService;
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
@@ -133,6 +135,17 @@ namespace Zazz.Web.Controllers.Api
             }
 
             _uow.SaveChanges();
+        }
+
+        // PUT /api/v1/user/profilepic
+        public void PutProfilePic(int id)
+        {
+            var user = _uow.UserRepository.GetById(CurrentUserId, true, true, false, true);
+
+            user.ProfilePhotoId = id;
+
+            _uow.SaveChanges();
+            _cacheService.RemoveUserPhotoUrl(user.Id);
         }
     }
 }
