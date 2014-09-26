@@ -415,6 +415,9 @@
     <Content Include="Content\bootstrap-overrides.css" />
     <Content Include="Content\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\chosen-sprite%402x.png" />
+    <Content Include="Content\chosen-sprite.png" />
+    <Content Include="Content\chosen.min.css" />
     <Content Include="Content\elastislide.css" />
     <Content Include="Content\fineuploader.css" />
     <Content Include="Content\font-awesome-ie7.css" />
@@ -485,6 +488,7 @@
     <Content Include="Images\categories\turning_up.png" />
     <Content Include="Images\new\facebook_icon.png" />
     <Content Include="Images\new\fb-sign-up2.jpg" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\perfect-scrollbar-0.4.10.with-mousewheel.min.js" />
     <Content Include="Content\select2-bootstrap.css" />

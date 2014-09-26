@@ -29,6 +29,8 @@ namespace Zazz.Infrastructure.Services
             _photoService = photoService;
         }
 
+       
+
         public AccountType GetAccountType(int userId)
         {
             return _uoW.UserRepository.GetUserAccountType(userId);
@@ -161,6 +163,13 @@ namespace Zazz.Infrastructure.Services
             _uoW.SaveChanges();
         }
 
+        public IQueryable<User> getAllUsers()
+        {
+            return _uoW.UserRepository.GetAll().Where<User>(
+                    f => f.AccountType == AccountType.User
+                );
+        }
+
         public void ChangeCoverPic(int userId, int? photoId)
         {
             var user = _uoW.UserRepository.GetById(userId, false, true);
@@ -187,6 +196,12 @@ namespace Zazz.Infrastructure.Services
             }
 
             _uoW.SaveChanges();
+        }
+
+
+        public IQueryable<User> getAllClubs()
+        {
+            return _uoW.UserRepository.GetClubs();
         }
 
         public string GetClubUsernames()

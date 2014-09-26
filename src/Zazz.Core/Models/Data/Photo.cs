@@ -38,5 +38,7 @@ namespace Zazz.Core.Models.Data
         public int? PageId { get; set; }
 
         public ICollection<PhotoCategory> Categories { get; set; }
+
+        public string TagUser { get; set; }
     }
 }

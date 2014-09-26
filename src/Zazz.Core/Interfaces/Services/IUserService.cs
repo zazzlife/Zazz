@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.Enums;
@@ -32,5 +33,9 @@ namespace Zazz.Core.Interfaces.Services
         void ChangeCoverPic(int userId, int? photoId);
 
         string GetClubUsernames();
+
+        IQueryable<User> getAllUsers();
+
+        IQueryable<User> getAllClubs();
     }
 }

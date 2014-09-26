@@ -24,11 +24,6 @@
 		</script>
 }
 
-@section Scripts
-{
-    <script type="text/javascript" src="~/OtherScripts/gallery.js"></script>
-}
-
 <div class="container color-white-bg border-radius-5" style="padding: 0 20px 100px 20px;">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
@@ -60,9 +55,63 @@
     
     
     
-    <div id="rg-gallery" class="rg-gallery  color-white-bg"><div class="rg-view"><a href="#" class="rg-view-full"></a><a href="#" class="rg-view-thumbs rg-view-selected"></a></div>
+
+        <div class="row">
+            <div class="span12">
+                <ul class="thumbnails">
+                    @{
+                         foreach (var p in Model.Photos)
+                         {
+                                
+                              <li class="span3">
+                                    <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink" class="thumbnail"><img src="@p.PhotoUrl.SmallLink" alt="" style="width:210px;height:180px;"></a>
+                                </li>
+                         }
+                    }
+                   
+                </ul>
+            </div>
+        </div>
+        @{
+        foreach (var p in Model.Photos)
+        {
+        <div id="photo-@p.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class='lightbox-header'>
+                <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+            </div>
+            <div class='lightbox-content'>
+                <img data-id="@p.PhotoId" src="@p.PhotoUrl.OriginalLink"/>
+                <div class="well pull-right no-padding lightbox-commentbox">
+            
+                    <div class="photo-details">
+                        <div style="margin-bottom: 15px;">
+                            <a target="_blank" href="~/users/profile/@p.FromUserId">
+                                <img src="@p.FromUserPhotoUrl.VerySmallLink" class="img-small-rounded lightbox-commentbox-user-img"/>
+                                <strong>@p.FromUserDisplayName</strong>
+                            </a>
+                        </div>
+                        <p data-containsTags="1" data-containsLinks="1">
+                            @p.Description
+                        </p>
+
+                    </div>
+            
+                    <div class="lightbox-commentsContainer" data-isLoaded="0" style="width: 350px;">
+                        <h5>
+                           Loading Comments...  <i style="margin-left: 5px;" class="icon-refresh icon-large icon-spin"></i>
+                        </h5>
+                    </div>
+
+            
+                </div>
+
+            </div>
+        </div>
+        }
+        }
+        <!--
         <div class="rg-thumbs"> 
-            <!-- Elastislide Carousel Thumbnail Viewer -->
+            <!-- Elastislide Carousel Thumbnail Viewer 
             <div class="es-carousel-wrapper">
                 <div class="es-nav"> <span class="es-nav-prev">Previous</span> <span class="es-nav-next">Next</span> </div>
                 <div class="es-carousel">
@@ -85,8 +134,8 @@
                     </ul>
                 </div>
                 <div class="es-nav"><span class="es-nav-prev" style="display: block;">Previous</span><span class="es-nav-next" style="display: none;">Next</span></div></div>
-            <!-- End Elastislide Carousel Thumbnail Viewer --> 
-        </div>
+            <!-- End Elastislide Carousel Thumbnail Viewer 
+        </div>-->
         <!-- rg-thumbs --> 
         @*<div class="rg-image-wrapper">
             <div class="rg-image-nav">
@@ -101,8 +150,4 @@
                 </div>     
             </div>    
         </div>*@
-
-    </div>
-
-
 </div>

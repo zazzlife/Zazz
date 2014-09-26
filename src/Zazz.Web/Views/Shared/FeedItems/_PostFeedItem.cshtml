@@ -42,7 +42,7 @@
             </div>
         }
 
-        <p class="post-feed-message" data-containsTags="1" data-containsLinks="1">
+        <p class="post-feed-message" data-containsTags="1" data-containsLinks="1">            
             @foreach (var item in Model.Post.Message)
             {
                 if (item.ClubId >= 0) {<a class="tag-filter-link" href="@Url.Action("Profile", "Users", new { id = item.ClubId })">@item.Text</a>}

@@ -49,6 +49,26 @@
 
         </div>
 
+         <div class="control-group">
+            <label class="control-label" for="upload-albumSelect">Tag Users</label>
+            <div class="controls">
+                <div class="tag_container" id="tags_photo_id">
+                        <select id="tag_photo_select" data-tagtype ="user" data-placeholder="Select user" style="width:350px;" multiple class="chosen-select span12">
+                            @{
+                                var users = controller.getUsers();
+
+                                foreach (User user in users)
+                                {
+                                     //<option value="[[:@user.Id]]|@user.Username|@user.Id">@user.Username</option>
+                                    <option value="@user.Id">@user.Username</option>
+                                    
+                                }
+                            }
+                        </select>
+                </div>
+            </div>
+        </div>
+
         <p>Select Categories:</p>
         <div class="categories-select">
             <ul>

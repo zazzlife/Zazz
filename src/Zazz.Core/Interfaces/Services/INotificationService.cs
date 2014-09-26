@@ -17,6 +17,10 @@ namespace Zazz.Core.Interfaces.Services
         /// <param name="save"></param>
         void CreateFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true);
 
+        void CreateTagPostNotification(int fromUserId, int toUserId, int postId, bool save = true);
+
+        void CreateTagPhotoPostNotification(int fromUserId, int toUserId, int photoId, bool save = true);
+
         void CreatePhotoCommentNotification(int commentId, int commenterId, int photoId, int userToBeNotified, bool save = true);
 
         void CreatePostCommentNotification(int commentId, int commenterId, int postId, int userToBeNotified, bool save = true);

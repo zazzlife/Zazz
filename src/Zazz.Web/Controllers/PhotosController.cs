@@ -61,7 +61,8 @@ namespace Zazz.Web.Controllers
                              {
                                  id = p.Id,
                                  userId = p.UserId,
-                                 description = p.Description
+                                 description = p.Description,
+                                 taguser = p.TagUser
                              })
                 .ToList();
 
@@ -73,7 +74,8 @@ namespace Zazz.Web.Controllers
                                                   FromUserId = id,
                                                   FromUserDisplayName = UserService.GetUserDisplayName(id),
                                                   Description = p.description,
-                                                  FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(id)
+                                                  FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(id),
+                                                  TagUser = p.taguser
                                               })
                                  .ToList();
 
@@ -156,7 +158,7 @@ namespace Zazz.Web.Controllers
                     return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
                 }
 
-                SaveImage(image.InputStream, description, albumId, showInFeed, Enumerable.Empty<int>());
+                SaveImage(image.InputStream, description, albumId, showInFeed, Enumerable.Empty<int>(),"");
                 return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
             }
         }
@@ -171,6 +173,8 @@ namespace Zazz.Web.Controllers
                 if (!String.IsNullOrWhiteSpace(c))
                     categories = c.Split(',').Select(Int32.Parse);
 
+                var tagusers = Request.Params["taguser"];
+
                 var response = new FineUploadResponse();
                 var errorMessage = "Image was not valid";
                 if (!_imageValidator.IsValid(image, out errorMessage))
@@ -180,7 +184,7 @@ namespace Zazz.Web.Controllers
                     return new JsonNetResult(response);
                 }
 
-                var photo = SaveImage(image.InputStream, description, albumId, showInFeed, categories);
+                var photo = SaveImage(image.InputStream, description, albumId, showInFeed, categories ,tagusers);
                 response.PhotoId = photo.Id;
                 response.Success = true;
                 response.PhotoUrl = PhotoService.GeneratePhotoUrl(photo.UserId, photo.Id).OriginalLink;
@@ -190,14 +194,15 @@ namespace Zazz.Web.Controllers
         }
 
         private Photo SaveImage(Stream image, string description, int? albumId, bool showInFeed,
-            IEnumerable<int> categories)
+            IEnumerable<int> categories, string tagusers)
         {
             var userId = UserService.GetUserId(User.Identity.Name);
             var photo = new Photo
                         {
                             AlbumId = albumId,
                             Description = description,
-                            UserId = userId
+                            UserId = userId,
+                            TagUser = tagusers
                         };
 
             PhotoService.SavePhoto(photo, image, showInFeed, categories);
@@ -230,7 +235,8 @@ namespace Zazz.Web.Controllers
                                                       IsFromCurrentUser = true,
                                                       FromUserDisplayName = userDisplayName,
                                                       FromUserId = userId,
-                                                      FromUserPhotoUrl = userPhoto
+                                                      FromUserPhotoUrl = userPhoto,
+                                                      TagUser = photo.TagUser
                                                   }
                                               },
                          Comments = new CommentsViewModel
@@ -315,6 +321,7 @@ namespace Zazz.Web.Controllers
                              {
                                  id = p.Id,
                                  userId = p.UserId,
+                                 taguser = p.TagUser
                              })
                 .ToList();
 
@@ -322,7 +329,8 @@ namespace Zazz.Web.Controllers
                                               {
                                                   IsFromCurrentUser = p.userId == currentUserId,
                                                   PhotoId = p.id,
-                                                  PhotoUrl = PhotoService.GeneratePhotoUrl(p.userId, p.id)
+                                                  PhotoUrl = PhotoService.GeneratePhotoUrl(p.userId, p.id),
+                                                  TagUser = p.taguser
                                               })
                                  .ToList();
 

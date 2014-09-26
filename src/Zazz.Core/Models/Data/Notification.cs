@@ -24,6 +24,8 @@ namespace Zazz.Core.Models.Data
 
         public CommentNotification CommentNotification { get; set; }
 
+        //public PhotoNotification PhotoNotification { get; set; }
+
         /// <summary>
         /// User that receives the notification.
         /// </summary>

@@ -73,5 +73,7 @@ namespace Zazz.Web.Models
         public string FromUserDisplayName { get; set; }
 
         public PhotoLinks FromUserPhotoUrl { get; set; }
+
+        public string TagUser { get; set; }
     }
 }

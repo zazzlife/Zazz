@@ -261,20 +261,26 @@ namespace Zazz.Infrastructure.Helpers
 
         public IEnumerable<FbPage> GetPages(string accessToken)
         {
-            _client.AccessToken = accessToken;
-            dynamic result = _client.Get("me/accounts", new { fields = "name,id,access_token" });
-
             var pages = new List<FbPage>();
-            foreach (var p in result.data)
+            _client.AccessToken = accessToken;
+            try
             {
-                pages.Add(new FbPage
-                          {
-                              AcessToken = p.access_token,
-                              Id = p.id,
-                              Name = p.name
-                          });
-            }
 
+                dynamic result = _client.Get("me/accounts", new { fields = "name,id,access_token" });
+
+
+                foreach (var p in result.data)
+                {
+                    pages.Add(new FbPage
+                              {
+                                  AcessToken = p.access_token,
+                                  Id = p.id,
+                                  Name = p.name
+                              });
+                }
+            }
+            catch (Exception)
+            { }
             return pages;
         }
 

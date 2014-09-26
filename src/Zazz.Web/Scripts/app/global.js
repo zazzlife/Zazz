@@ -252,7 +252,6 @@ function initImgUploader(onComplete) {
 }
 
 $(document).on('click', '#uploadImg', function () {
-
     var $self = $(this);
 
     var categories = [];
@@ -274,7 +273,8 @@ $(document).on('click', '#uploadImg', function () {
         albumId: albumId,
         description: description,
         showInFeed: showInFeed,
-        categories: categories
+        categories: categories,
+        taguser: $("#tag_photo_select").val()
     });
 
     imgUploader.uploadStoredFiles();

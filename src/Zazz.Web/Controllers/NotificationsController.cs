@@ -54,8 +54,7 @@ namespace Zazz.Web.Controllers
         {
             var notifications = _notificationService.GetUserNotifications(userId, lastNotificationId)
                 .Take(take)
-                .ToList();
-
+                .ToList();            
             var notificationsVm = notifications
                 .Select(n => new NotificationViewModel
                 {
@@ -73,6 +72,9 @@ namespace Zazz.Web.Controllers
                                 : String.Empty,
                     ItemId =
                                 n.NotificationType == NotificationType.WallPost
+                                ? n.PostNotification.PostId
+
+                                : n.NotificationType == NotificationType.TagNotification
                                 ? n.PostNotification.PostId
 
                                 : n.NotificationType == NotificationType.NewEvent

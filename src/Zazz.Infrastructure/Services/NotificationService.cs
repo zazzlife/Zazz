@@ -104,6 +104,36 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
+        public void CreateTagPostNotification(int fromUserId, int toUserId, int postId, bool save = true)
+        {
+            var notification = new Notification
+            {
+                UserId = toUserId,
+                UserBId = fromUserId,
+                PostNotification = new PostNotification { PostId = postId },
+                Time = DateTime.UtcNow,
+                IsRead = false,
+                NotificationType = NotificationType.TagNotification
+            };
+
+            CreateNotification(notification, save);
+        }
+
+        public void CreateTagPhotoPostNotification(int fromUserId, int toUserId, int photoId, bool save = true)
+        {
+            var notification = new Notification
+            {
+                UserId = toUserId,
+                UserBId = fromUserId,
+                Time = DateTime.UtcNow,
+                IsRead = false,
+                NotificationType = NotificationType.TagPhotoNotification
+            };
+
+            CreateNotification(notification, save);
+        }
+
+
         public void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true)
         {
             var followers = _uow.FollowRepository.GetUserFollowers(creatorUserId)

@@ -7,6 +7,8 @@ namespace Zazz.Core.Models.Data.Enums
         CommentOnPost = 3,
         CommentOnEvent = 4,
         NewEvent = 5,
-        WallPost = 6
+        WallPost = 6,
+        TagNotification = 7,
+        TagPhotoNotification = 8
     }
 }

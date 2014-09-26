@@ -15,6 +15,7 @@
     @Styles.Render("~/Content/themes/base/css")
     @Styles.Render("~/Content/css")
     @RenderSection("css", false)
+    <link href="/Content/chosen.min.css" rel="stylesheet"/>
     <script type="text/javascript" src="~/Content/modernizr-2.6.2.js"></script>
 </head>
 <body>
@@ -115,5 +116,44 @@
     @RenderSection("ScriptsTop", false)
     @Scripts.Render("~/js")
     @RenderSection("Scripts", false)
+<script src="/Scripts/chosen.jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#postInput1").html("<i style='color:#b1b1b1'>What's on your Mind?</i>");
+            $(".chosen-select").chosen({
+                no_results_text: "Oops, nothing found!",
+                width: "100%",
+                disable_search:true
+            });
+            $("#postInput1").focusin(function () {
+                if ($(this).html().trim() == '<i style="color:#b1b1b1">What\'s on your Mind?</i>')
+                    $(this).html("");
+            });
+            $("#postInput1").focusout(function () {
+
+                if ($(this).html().trim() == "")
+                    $(this).html("<i style='color:#b1b1b1'>What's on your Mind?</i>");
+            });
+            $(".tagbtn").each(function () {
+                $(this).click(function () {
+                    $(".tag_container").hide();
+                    if (!$(this).hasClass('active')) {
+                        $(".tagbtn").removeClass('active');
+                        $(".tagbtn").removeClass('yellow');
+                        $(this).addClass('active');
+                        $(this).addClass('yellow');
+                        $("#" + $(this).data('tagid')).show();
+                        $("#postInput1").css("border-bottom:none;");
+                    } else {
+                        $(this).removeClass('active');
+                        $(this).removeClass('yellow');
+                        $("#" + $(this).data('tagid')).hide();
+                        $("#postInput1").css("border-bottom:1px solid #a1a1a1;");
+                    }
+                });
+            });
+        });
+       
+    </script>
 </body>
 </html>

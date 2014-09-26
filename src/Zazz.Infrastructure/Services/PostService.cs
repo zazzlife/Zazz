@@ -76,9 +76,25 @@ namespace Zazz.Infrastructure.Services
                 }
             }
 
+            
+
             AddTags(ref post);
 
             _uow.PostRepository.InsertGraph(post);
+
+            if (post.TagUsers != null)
+            {
+                if (post.TagUsers != "")
+                {
+                    var userids = post.TagUsers.Split(',');
+                    foreach (var taguserids in userids)
+                    {
+                        int toId = int.Parse(taguserids.Trim());
+                        _notificationService.CreateTagPostNotification(post.FromUserId, toId, post.Id);
+                    }
+                }
+            }
+            
 
             var feed = new Feed
                        {

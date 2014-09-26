@@ -320,6 +320,44 @@ namespace Zazz.Web.Controllers
                 PreviewPhotos = pics
             };
 
+
+            List<FeedViewModel> tmpList = new List<FeedViewModel>();
+            if (currentUserId != vm.UserId)
+            {
+                foreach (var feedData in vm.Feeds.feeds)
+                {
+                    if (feedData.FeedType == FeedType.Post)
+                    {
+                        if (feedData.Post.LockUser != null)
+                        {
+                            if (feedData.Post.LockUser != "")
+                            {
+                                var lockusers = feedData.Post.LockUser.Split(',');
+                                var usr = false;
+                                foreach (var lockusr in lockusers)
+                                {
+                                    //ShowAlert(lockusr.Trim(), AlertType.Info);
+                                    if (currentUserId == int.Parse(lockusr))
+                                    {
+                                        usr = true;
+                                        break;
+                                    }
+                                }
+                                if (!usr)
+                                {
+                                    tmpList.Add(feedData);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach (var data in tmpList)
+                {
+                    vm.Feeds.feeds.Remove(data);
+                }
+
+            }
             return View("UserProfile", vm);
         }
 

@@ -29,10 +29,11 @@ namespace Zazz.Infrastructure.Services
         private readonly IDefaultImageHelper _defaultImageHelper;
         private readonly IImageProcessor _imageProcessor;
         private readonly IStorageService _storageService;
+        private readonly INotificationService _notificationService;
 
         public PhotoService(IUoW uow, ICacheService cacheService,
             IStringHelper stringHelper, IStaticDataRepository staticDataRepository,
-            IDefaultImageHelper defaultImageHelper, IImageProcessor imageProcessor, IStorageService storageService)
+            IDefaultImageHelper defaultImageHelper, IImageProcessor imageProcessor, IStorageService storageService, INotificationService notificationService)
         {
             _uow = uow;
             _cacheService = cacheService;
@@ -41,6 +42,7 @@ namespace Zazz.Infrastructure.Services
             _defaultImageHelper = defaultImageHelper;
             _imageProcessor = imageProcessor;
             _storageService = storageService;
+            _notificationService = notificationService;
         }
 
         public IQueryable<Photo> GetLatestUserPhotos(int userId, int count)
@@ -155,7 +157,8 @@ namespace Zazz.Infrastructure.Services
                 {
                     lastFeed.FeedPhotos.Add(new FeedPhoto
                     {
-                        PhotoId = photo.Id
+                        PhotoId = photo.Id,
+                        TagUser = photo.TagUser
                     });
                 }
                 else
@@ -170,7 +173,8 @@ namespace Zazz.Infrastructure.Services
 
                     feed.FeedPhotos.Add(new FeedPhoto
                     {
-                        PhotoId = photo.Id
+                        PhotoId = photo.Id,
+                        TagUser = photo.TagUser
                     });
 
                     _uow.FeedRepository.InsertGraph(feed);
@@ -179,7 +183,33 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
             }
 
+
+            if(photo.TagUser != null)
+            {
+                if(photo.TagUser != "")
+                {
+                    var users = photo.TagUser.Split(',');
+                    foreach(var user in users)
+                    {
+                        _notificationService.CreateTagPhotoPostNotification(photo.UserId, int.Parse(user.Trim()), photo.Id);
+                    }
+                }
+            }
+
+            
+            
+
+
             ResizeAndSaveImages(data, photo.UserId, photo.Id);
+
+            //var userids = photo.TagUser.Split(',');
+            //foreach (var taguserids in userids)
+            //{
+            //    int toId = int.Parse(taguserids.Trim());
+            //    //_notificationService.CreateTagPostNotification(post.FromUserId, toId, post.Id);
+            //}
+
+
 
             return photo.Id;
         }

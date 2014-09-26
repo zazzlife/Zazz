@@ -9,6 +9,8 @@ namespace Zazz.Web.Models
 
         public IEnumerable<PostMsgItemViewModel> Message { get; set; }
 
+        public string LockUser { get; set; }
+
         public int? ToUserId { get; set; }
 
         public string ToUserDisplayName { get; set; }

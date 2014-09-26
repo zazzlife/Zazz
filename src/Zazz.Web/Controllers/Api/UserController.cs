@@ -23,16 +23,63 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUserService _userService;
         private readonly IPhotoService _photoService;
         private readonly IDefaultImageHelper _defaultImageHelper;
-        private readonly ICacheService _cacheService;
 
         public UserController(IUoW uow, IUserService userService, IPhotoService photoService,
-            IDefaultImageHelper defaultImageHelper, ICacheService cacheService)
+            IDefaultImageHelper defaultImageHelper)
         {
             _uow = uow;
-            _cacheService = cacheService;
             _userService = userService;
             _photoService = photoService;
             _defaultImageHelper = defaultImageHelper;
+        }
+
+
+        public IEnumerable<ApiUser> GetAllUsers()
+        {
+            List<ApiUser> list = new List<ApiUser>();
+
+            var users = _userService.getAllUsers();
+
+            foreach (var user in users)
+            {
+                var response = new ApiUser
+                {
+                    AccountType = user.AccountType,
+                    Id = user.Id,
+                    Username = user.Username,
+                    ProfilePhotoId = user.ProfilePhotoId
+                };
+                list.Add(response);
+            }
+
+
+            IEnumerable<ApiUser> vm = list;
+
+            return vm;
+        }
+
+        public IEnumerable<ApiUser> GetAllClubs()
+        {
+            List<ApiUser> list = new List<ApiUser>();
+
+            var users = _userService.getAllClubs();
+
+            foreach (var user in users)
+            {
+                var response = new ApiUser
+                {
+                    AccountType = user.AccountType,
+                    Id = user.Id,
+                    Username = user.Username,
+                    ProfilePhotoId = user.ProfilePhotoId
+                };
+                list.Add(response);
+            }
+
+
+            IEnumerable<ApiUser> vm = list;
+
+            return vm;
         }
 
         // GET /api/v1/user
@@ -135,17 +182,6 @@ namespace Zazz.Web.Controllers.Api
             }
 
             _uow.SaveChanges();
-        }
-
-        // PUT /api/v1/user/profilepic
-        public void PutProfilePic(int id)
-        {
-            var user = _uow.UserRepository.GetById(CurrentUserId, true, true, false, true);
-
-            user.ProfilePhotoId = id;
-
-            _uow.SaveChanges();
-            _cacheService.RemoveUserPhotoUrl(user.Id);
         }
     }
 }

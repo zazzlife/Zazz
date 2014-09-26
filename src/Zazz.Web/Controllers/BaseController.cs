@@ -8,6 +8,7 @@ using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Models;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Controllers
 {
@@ -86,6 +87,19 @@ namespace Zazz.Web.Controllers
         public string GetClubUsernames()
         {
             return UserService.GetClubUsernames();
+
+            
+        }
+
+
+        public IQueryable<User> getUsers()
+        {
+            return UserService.getAllUsers();
+        }
+
+        public IQueryable<User> getAllClubs()
+        {
+            return UserService.getAllClubs();
         }
 
         private PhotoLinks GetDisplayPicture(int id)

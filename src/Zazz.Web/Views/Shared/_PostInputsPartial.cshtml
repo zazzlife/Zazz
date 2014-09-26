@@ -15,18 +15,73 @@
 
 <script>
     var ClubUsernames = [@Html.Raw(clubs)];
+
 </script>
 
 <div id="profileTabs">
-    <div class="tabbable">
+    <div class="tabbable" style="height:auto !important;overflow:visible;">
         <ul class="nav nav-tabs">
             <li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-pencil"></i> New Post</a></li>
             <li><a href="#tab2" data-toggle="tab"><i class="icon-camera"></i> Upload Photo</a></li>
         </ul>
         <div class="tab-content">
+            
             <div class="tab-pane active row-fluid" id="tab1">
-                <textarea data-tag="1" class="span12 blue-borders" placeholder="What's on your mind?" id="postInput"></textarea>
-                <button type="button" class="btn btn-primary " id="submitPostBtn" data-target="#selectPostCategoryModal" data-toggle="modal">Submit</button>
+                
+                <div class="span12" id="postInput1" contenteditable style="font-size:12px;padding:5px;border:1px solid #a1a1a1;height:70px;overflow:auto;"></div>
+                    
+                    <style type="text/css">
+                        .yellow
+                        {
+                            color:#fbcb0c !important;
+                        }
+                    </style>
+                    <div class="tag_container" id="tags_id" style="display:none;">
+                        <select id="tag_select" data-tagtype ="user" data-placeholder="Select user" style="width:350px;" multiple class="chosen-select tag_select_a span12">
+                            @{
+                                var users = controller.getUsers();
+
+                                foreach (User user in users)
+                                {
+                                     //<option value="[[:@user.Id]]|@user.Username|@user.Id">@user.Username</option>
+                                    <option value="@("@"+user.Username)|@user.Username|@user.Id">@user.Username</option>
+                                    
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="tag_container" id="club_id" style="display:none;">
+                         <select data-placeholder="Select Club" data-tagtype ="club" style="width:350px;" multiple class="chosen-select tag_select_a span12">
+                             @{
+                                var allClubs = controller.getAllClubs();
+
+                                foreach (User club in allClubs)
+                                {
+                                     <option value="@("@"+club.Username)|@club.Username|@club.Id">@club.Username</option>
+                                }
+                            }
+
+                        </select>
+                    </div>
+                    <div class="tag_container" id="lock_id" style="display:none;">
+                         <select data-placeholder="Select user" data-tagtype ="lock" style="width:350px;" multiple class="chosen-select tag_select_a1 span12">
+                             @{
+                                foreach (User user in users)
+                                {
+                                     <option value="@user.Id">@user.Username</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div>&nbsp;
+                    <div>
+                        <button type="button" data-tagid="tags_id" class="tagbtn btn"><i class="icon-user" title="Tag users"></i></button>
+                        <button type="button" data-tagid="club_id" class="tagbtn btn" style="font-size:18px;padding:4px 9px;"><b><strong>@("@")</strong></b></button>
+                        <button type="button" data-tagid="lock_id" class="tagbtn btn"><i class="icon-lock" title="Lock users"></i></button>
+                    
+                        <button type="button" class="btn btn-primary " id="submitPostBtn" data-target="#selectPostCategoryModal" data-toggle="modal">Submit</button>
+                    </div>
+                    </div>    
             </div>
             <div class="tab-pane margin-ten" id="tab2">
                 <p><button data-toggle="modal" data-target="#uploadPicModal" data-callback="uploadPicWithFeed"

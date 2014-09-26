@@ -145,7 +145,7 @@ namespace Zazz.Web.Helpers
         /// <summary>
         /// Returns a list of user activities
         /// </summary>
-        /// <param name="userId">Id of the target user</param>
+        /// <param name="userId">Id of the target user</param>ConvertFeedsToFeedsViewModel
         /// <param name="currentUserId">Id of the current user</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
@@ -264,9 +264,10 @@ namespace Zazz.Web.Helpers
                         ClubId = -1,
                         Text = message.Substring(prev, c.Index - 1 - prev)
                     });
+                    
                     items.Add(new PostMsgItemViewModel {
                         ClubId = _userService.GetUserId(s),
-                        Text = '@' + s
+                        Text = ((_userService.GetUser(s).AccountType == AccountType.Club)? '@' + s : s)
                     });
 
                     prev = end;
@@ -373,7 +374,8 @@ namespace Zazz.Web.Helpers
                         FromUserDisplayName = feedVm.UserDisplayName,
                         FromUserPhotoUrl = feedVm.UserDisplayPhoto,
                         FromUserId = p.UserId,
-                        PhotoUrl = _photoService.GeneratePhotoUrl(p.UserId, p.Id)
+                        PhotoUrl = _photoService.GeneratePhotoUrl(p.UserId, p.Id),
+                        TagUser = p.TagUser
                     }).ToList();
 
                 feedVm.Comments.CommentType = CommentType.Photo;
@@ -400,7 +402,8 @@ namespace Zazz.Web.Helpers
                 feedVm.Post = new PostViewModel
                 {
                     PostId = post.Id,
-                    Message = GetPostMsgItems(post.Message)
+                    Message = GetPostMsgItems(post.Message),
+                    LockUser = post.Lockusers
                 };
 
                 if (post.ToUserId.HasValue)

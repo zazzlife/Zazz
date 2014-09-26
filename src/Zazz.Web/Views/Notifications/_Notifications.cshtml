@@ -43,6 +43,15 @@
                 @:posted on your wall.
                 <a target="_blank" href="~/posts/show/@n.ItemId">view post</a>
             }
+            else if (n.NotificationType == NotificationType.TagNotification)
+            {
+                @: taged you in a 
+                <a target="_blank" href="~/posts/show/@n.ItemId">post</a>
+            }
+            else if (n.NotificationType == NotificationType.TagPhotoNotification)
+            {
+                @: taged you in a photo
+            } 
 
             <span title="@n.Time.ToLongDateString() - @n.Time.ToShortTimeString()"
                   class="font-verysmall pull-right time">@Html.RelativeTime(n.Time)</span>

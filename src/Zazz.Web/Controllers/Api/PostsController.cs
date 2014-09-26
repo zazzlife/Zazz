@@ -51,7 +51,9 @@ namespace Zazz.Web.Controllers.Api
                         CreatedTime = DateTime.UtcNow,
                         FromUserId = CurrentUserId,
                         Message = post.Message.First().Text,
-                        ToUserId = post.ToUserId
+                        ToUserId = post.ToUserId,
+                        TagUsers = post.TagUsers,
+                        Lockusers = post.Lockusers
                     };
 
             _postService.NewPost(p, post.Categories);

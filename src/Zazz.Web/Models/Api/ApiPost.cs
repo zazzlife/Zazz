@@ -25,5 +25,9 @@ namespace Zazz.Web.Models.Api
         public IEnumerable<int> Categories { get; set; }
 
         public DateTime Time { get; set; }
+
+        public string TagUsers { get; set; }
+
+        public string Lockusers { get; set; }
     }
 }

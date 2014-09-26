@@ -32,6 +32,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private Mock<IDefaultImageHelper> _defaultImageHelper;
         private Mock<IStorageService> _storageService;
         private Mock<IImageProcessor> _imageProcessor;
+        private Mock<INotificationService> _notificationService;
         private MockRepository _mockRepo;
         private MemoryStream _photoStream;
         private List<Category> _categories;
@@ -48,10 +49,11 @@ namespace Zazz.UnitTests.Infrastructure.Services
             _imageProcessor = _mockRepo.Create<IImageProcessor>();
             _storageService = _mockRepo.Create<IStorageService>();
             _defaultImageHelper = _mockRepo.Create<IDefaultImageHelper>();
+            _notificationService = _mockRepo.Create<INotificationService>();
 
             _sut = new PhotoService(_uow.Object, _cacheService.Object, _stringHelper.Object,
                                     _staticDataRepo.Object, _defaultImageHelper.Object, _imageProcessor.Object,
-                                    _storageService.Object);
+                                    _storageService.Object,_notificationService.Object);
 
             _photoStream = new MemoryStream(new byte[] { 1, 2, 3, 4 });
 

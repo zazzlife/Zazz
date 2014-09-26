@@ -136,7 +136,7 @@ namespace Zazz.Web.Controllers
                                      _facebookService.SyncPagePhotos(fbPage.Id);
                                      _facebookService.SyncPageStatuses(fbPage.Id);
                                  }
-                                 catch (Exception e)
+                                 catch(Exception)
                                  { }
                              }
                          }

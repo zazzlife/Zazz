@@ -18,6 +18,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("PhotoId")]
         public virtual Photo Photo { get; set; }
 
+        public string TagUser { get; set; }
         
     }
 }

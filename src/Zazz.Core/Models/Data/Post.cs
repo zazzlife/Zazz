@@ -26,7 +26,7 @@ namespace Zazz.Core.Models.Data
         public string Message { get; set; }
 
         public long FacebookId { get; set; }
-        
+
         [ForeignKey("PageId")]
         public FacebookPage Page { get; set; }
 
@@ -37,5 +37,9 @@ namespace Zazz.Core.Models.Data
         public ICollection<PostCategory> Categories { get; set; }
 
         public ICollection<PostTag> Tags { get; set; }
+
+        public string TagUsers { get; set; }
+
+        public string Lockusers { get; set; }
     }
 }

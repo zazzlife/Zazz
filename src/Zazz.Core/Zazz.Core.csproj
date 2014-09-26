@@ -176,6 +176,7 @@
     <Compile Include="Models\Data\PhotoComment.cs" />
     <Compile Include="Models\Data\PhotoCategory.cs" />
     <Compile Include="Models\Data\PhotoLike.cs" />
+    <Compile Include="Models\Data\PhotoNotification.cs" />
     <Compile Include="Models\Data\Post.cs" />
     <Compile Include="Models\Data\PostComment.cs" />
     <Compile Include="Models\Data\PostFeed.cs" />

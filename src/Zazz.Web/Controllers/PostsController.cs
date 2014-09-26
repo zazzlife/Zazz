@@ -13,6 +13,9 @@ using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using StructureMap.Pipeline;
+using System.Web.Script.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Zazz.Web.Controllers
 {
@@ -53,9 +56,30 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        [Authorize, HttpPost]
-        public ActionResult New(string message, int? toUser, IEnumerable<int> categories)
+        [Authorize,HttpPost]
+        public ActionResult New(string message, int? toUser, IEnumerable<int> categories, string metaData)
         {
+            string tagUsers = "";
+            string lockuser = "";
+            try
+            {
+                var result = new JsonResult
+                {
+                    Data = JsonConvert.DeserializeObject(metaData)
+                };
+
+                JObject jsonData = (JObject)result.Data;
+                JArray tagUser = (JArray)jsonData["taguser"];
+                JArray lockUser = (JArray)jsonData["lockuser"];
+                tagUsers = tagUser.ToString().Replace("[", "").Replace("]","").Trim();
+                lockuser = lockUser.ToString().Replace("[", "").Replace("]", "").Trim();
+            }
+            catch (Exception et)
+            {
+            }
+
+            message = message.Trim().Replace("&nbsp;","");
+
             if (String.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
@@ -65,7 +89,9 @@ namespace Zazz.Web.Controllers
                            CreatedTime = DateTime.UtcNow,
                            Message = message,
                            FromUserId = userId,
-                           ToUserId = toUser
+                           ToUserId = toUser,
+                           TagUsers = tagUsers,
+                           Lockusers = lockuser
                        };
 
             _postService.NewPost(post, categories);

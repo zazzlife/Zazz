@@ -1,5 +1,75 @@
 ﻿// ADD
+var selectData = [];
+var userTag = [];
+var clubTag = [];
+var lockUser = [];
+$(document).ready(function () {
+    $('.tag_select_a').on('change', function (evt, params) {
+        if (params.selected) {
+            //~/users/profile/4
+            var data = params.selected.split("|");
+            switch ($(this).data('tagtype')) {
+                case "user":
+                    userTag.push(data[2]);
+                    break;
+                case "club":
+                    clubTag.push(data[2]);
+                    break;
+                case "lock":
+                    lockUser.push(params.selected);
+                    break;
+            }
+            var value = $("#postInput1").html().trim();
+            if (value == '<i style="color:#b1b1b1">What\'s on your Mind?</i>')
+                value = "";
+            if (value == "")
+                value += "<a href='/users/profile/" + data[2] + "' style='cursor:pointer' id='" + data[0] + "'>" + data[1] + "</a> ";
+            else
+                value += " <a href='/users/profile/" + data[2] + "' style='cursor:pointer' id='" + data[0] + "'>" + data[1] + "</a> ";
+            $("#postInput1").html(value);
+            selectData.push(data[0]);
+        }
+        else if (params.deselected) {
+            switch ($(this).data('tagtype')) {
+                case "user":
+                    var data = params.deselected.split("|");
+                    var removeItem = data[2];
 
+                    userTag = jQuery.grep(userTag, function (value) {
+                        return value != removeItem;
+                    });
+
+                    break;
+                case "club":
+                    var data = params.deselected.split("|");
+                    var removeItem = data[2];
+
+                    clubTag = jQuery.grep(clubTag, function (value) {
+                        return value != removeItem;
+                    });
+                    break;
+                case "lock":
+                    var removeItem = params.deselected;
+                    lockUser = jQuery.grep(lockUser, function (value) {
+                        return value != removeItem;
+                    });
+                    break;
+            }
+        }
+    });
+    $('.tag_select_a1').on('change', function (evt, params) {
+        if (params.selected) {
+            lockUser.push(params.selected);
+        }
+        else if (params.deselected) {
+            var removeItem = params.deselected;
+
+            lockUser = jQuery.grep(lockUser, function (value) {
+                return value != removeItem;
+            });
+        }
+    });
+});
 $(document).on('click', '#selectPostCategoriesBtn', function() {
     var $btn = $(this);
     var $modal = $('#selectPostCategoryModal');
@@ -13,11 +83,21 @@ $(document).on('click', '#selectPostCategoriesBtn', function() {
         }
     });
     
-
-        var message = $('#postInput').val();
+    var oldmessage = $('#postInput1').html();
+    $.each(selectData, function (index, data) {
+        $("#postInput1 > a").each(function () {
+            var data_id = $(this).attr('id');
+            if (data_id == data) {
+                $(this).replaceWith(" "+data+" ");
+            }
+        });
+        
+            
+        });
+    var message = $('#postInput1').html();
+    message = message.replace("&nbsp;", "");
         var toUser = $('#submitPostBtn').data('touser');
-
-        if (!message) {
+        if (!message || message == '<i style="color:#b1b1b1">What\'s on your Mind?</i>') {
             toastr.error("Post message cannot be empty!");
             $modal.modal('hide');
             return;
@@ -25,20 +105,20 @@ $(document).on('click', '#selectPostCategoriesBtn', function() {
 
         showBtnBusy($btn);
         var url = '/posts/new';
-
         $.ajax({
             url: url,
             type: 'POST',
             data: {
                 message: message,
                 toUser: toUser ? toUser : null,
-                categories: categories
+                categories: categories,
+                metaData: '{ "taguser": ['+userTag+'], "tagclub": ['+clubTag+'], "lockuser": ['+lockUser+'] }'
             },
             traditional: true,
-            error: function() {
+            error: function () {
                 toastr.error('An error occured, Please try again later.');
                 hideBtnBusy($btn, "Submit");
-
+                $('#postInput1').html(oldmessage)
                 $modal.modal('hide');
             },
             success: function(res) {
@@ -48,9 +128,18 @@ $(document).on('click', '#selectPostCategoriesBtn', function() {
                 hideBtnBusy($btn, "Submit");
                 applyPageStyles();
 
-                $('#postInput').val("");
+                $('#postInput1').html("<i style='color:#b1b1b1'>What's on your Mind?</i>");
 
                 $modal.modal('hide');
+
+                $('.tag_select_a').val('').trigger('chosen:updated');
+                $('.tag_select_a1').val('').trigger('chosen:updated');
+
+                $(".tagbtn").each(function () {
+                    $(this).removeClass('active');
+                    $(this).removeClass('yellow');
+                    $("#" + $(this).data('tagid')).hide();
+                });
             }
         });
 
@@ -150,6 +239,10 @@ $(document).on('click', '.cancelPostEdit', function () {
 
 });
 
+
+
+
+
 $(function () {
     if (typeof ClubUsernames === 'undefined') return;
     $("#postInput")
@@ -177,10 +270,10 @@ $(function () {
                 return false;
             },
             select: function (event, ui) {
+                
                 var i = this.value.lastIndexOf("@");
                 if (i == -1) return false;
                 this.value = this.value.substring(0, i + 1) + ui.item.value;
-
                 return false;
             }
         });

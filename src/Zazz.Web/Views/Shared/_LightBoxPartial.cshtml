@@ -1,6 +1,8 @@
 ﻿@model PhotoViewModel
+@using Zazz.Web.Controllers
 @{
     Layout = null;
+    var controller = ViewContext.Controller as BaseController;
 }
 <div id="photo-@Model.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class='lightbox-header'>
@@ -19,6 +21,18 @@
                 </div>
                 <p data-containsTags="1" data-containsLinks="1">
                     @Model.Description
+                    @{
+                        if(Model.TagUser != null)
+                        {
+                            var users = Model.TagUser.Split(',');
+                            foreach(var user in users)
+                            {
+                                int userId = int.Parse(user.Trim());
+                                string uname = controller.GetDisplayName(userId);
+                                <a href="~/users/profile/@userId" style="color:#0094ff !important;" target="_blank">@uname</a>
+                            }
+                        }
+                    }
                 </p>
 
             </div>
