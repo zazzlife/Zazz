@@ -181,7 +181,7 @@ hr.gold-line {
 .img-small-rounded {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-    border-radius: 3px;
+    border-radius: 25px;
 }
 
 .icononly-btn {
