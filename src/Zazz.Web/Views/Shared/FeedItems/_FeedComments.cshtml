@@ -2,7 +2,26 @@
 @{
     Layout = null;
 }
-<div class="feed-comments-section">
+<style type="text/css">
+    .cmt_box
+    {
+        /*
+        -webkit-box-shadow: 0px 0px 7px 2px rgba(6,164,234,0.21);
+        -moz-box-shadow: 0px 0px 7px 2px rgba(6,164,234,0.21);
+        box-shadow: 0px 0px 7px 2px rgba(6,164,234,0.21);
+        */
+        -webkit-box-shadow: 0px 0px 5px 1px #90d4f2;
+        -moz-box-shadow: 0px 0px 5px 1px #90d4f2;
+        box-shadow: 0px 0px 5px 1px #90d4f2;
+        padding:5px;
+    }
+    .margin-cmt-btm
+    {
+        margin-bottom:5px;
+    }
+</style>
+<div class="feed-comments-section cmt_box margin-cmt-btm">
+    
     <div class="row-fluid">
             <img alt="You" title="You" src="@Model.CurrentUserDisplayPhoto.VerySmallLink" class="img-small-rounded"/>
             <input data-id="@Model.ItemId" data-commentType="@Model.CommentType" type="text" class="comment-textbox span10" placeholder="Write a comment..." />

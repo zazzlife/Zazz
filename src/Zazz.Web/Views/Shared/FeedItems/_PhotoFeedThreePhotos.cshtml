@@ -4,26 +4,26 @@
 }
 
 <div class="row-fluid">
-    <div class="span4">
+    <div class="span4" style="width:172px;">
         <a data-toggle="lightbox" data-target="#photo-@Model[0].PhotoId"
            href="@Model[0].PhotoUrl.OriginalLink">
-            <img src="@Model[0].PhotoUrl.MediumLink" style="width:180px;height:140px;" />
+            <img style="background-image:url('@Model[0].PhotoUrl.MediumLink')" class="profile-photos-img-div3" />
         </a>
 
     </div>
 
-    <div class="span4">
+    <div class="span4" style="margin-left:3px;width:172px;">
         <a data-toggle="lightbox" data-target="#photo-@Model[1].PhotoId"
            href="@Model[1].PhotoUrl.OriginalLink">
-            <img src="@Model[1].PhotoUrl.MediumLink" style="width:180px;height:140px;" />
+            <img style="background-image:url('@Model[1].PhotoUrl.MediumLink')" class="profile-photos-img-div3"  />
         </a>
 
     </div>
 
-    <div class="span4">
+    <div class="span4" style="margin-left:3px;width:173px;">
         <a data-toggle="lightbox" data-target="#photo-@Model[2].PhotoId"
            href="@Model[2].PhotoUrl.OriginalLink">
-            <img src="@Model[2].PhotoUrl.MediumLink" style="width:180px;height:140px;" />
+            <img style="background-image:url('@Model[2].PhotoUrl.MediumLink')" class="profile-photos-img-div3" />
         </a>
     </div>
 </div>

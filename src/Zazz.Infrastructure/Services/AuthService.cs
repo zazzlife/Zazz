@@ -109,11 +109,58 @@ namespace Zazz.Infrastructure.Services
             return token;
         }
 
+
+        public UserValidationToken GenerateUserValidationToken(string email)
+        {
+            var userId = _uow.UserRepository.GetIdByEmail(email);
+            if (userId == 0)
+                throw new NotFoundException();
+
+            var tokenExists = true;
+
+            var token = _uow.ValidationTokenRepository.GetById(userId);
+            if (token == null)
+            {
+                tokenExists = false;
+                token = new UserValidationToken { Id = userId };
+            }
+                
+
+            token.ExpirationTime = DateTime.UtcNow.AddYears(1);
+            token.Token = _cryptoService.GenerateKey(TOKEN_SIZE);
+
+            if (!tokenExists)
+                _uow.ValidationTokenRepository.InsertGraph(token);
+
+            _uow.SaveChanges();
+
+            return token;
+        }
+        
+
         public bool IsTokenValid(int userId, string token)
         {
             var userToken = _uow.ValidationTokenRepository.GetById(userId);
             return IsTokenValid(userToken, token);
         }
+        
+
+        public bool IsTokenValidForUser(int userId, string token)
+        {
+            var userToken = _uow.ValidationTokenRepository.GetById(userId);
+            return IsTokenValidForUser(userToken, token);
+        }
+
+        private bool IsTokenValidForUser(UserValidationToken userToken, string providedToken)
+        {
+            if (userToken == null)
+                return false;
+
+            var base64Token = Base64Helper.Base64UrlEncode(userToken.Token);
+            return providedToken.Equals(base64Token);
+        }
+
+
 
         private bool IsTokenValid(UserValidationToken userToken, string providedToken)
         {

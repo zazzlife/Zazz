@@ -24,12 +24,20 @@
                     @{
                         if(Model.TagUser != null)
                         {
-                            var users = Model.TagUser.Split(',');
-                            foreach(var user in users)
+                            if(Model.TagUser != "")
                             {
-                                int userId = int.Parse(user.Trim());
-                                string uname = controller.GetDisplayName(userId);
-                                <a href="~/users/profile/@userId" style="color:#0094ff !important;" target="_blank">@uname</a>
+                                var users = Model.TagUser.Split(',');
+                                foreach(var user in users)
+                                {
+                                    try
+                                    {
+                                        int userId = int.Parse(user.Trim());
+                                        string uname = controller.GetDisplayName(userId);
+                                        <a href="~/users/profile/@userId" style="color:#0094ff !important;" target="_blank">@uname</a>
+                                    }
+                                    catch(Exception)
+                                    { }
+                                }
                             }
                         }
                     }

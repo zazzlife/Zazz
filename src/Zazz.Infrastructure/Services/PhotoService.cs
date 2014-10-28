@@ -183,18 +183,26 @@ namespace Zazz.Infrastructure.Services
                 _uow.SaveChanges();
             }
 
-
-            if(photo.TagUser != null)
+            try
             {
-                if(photo.TagUser != "")
+                if (photo.TagUser != null)
                 {
-                    var users = photo.TagUser.Split(',');
-                    foreach(var user in users)
+                    if (photo.TagUser != "")
                     {
-                        _notificationService.CreateTagPhotoPostNotification(photo.UserId, int.Parse(user.Trim()), photo.Id);
+                        var users = photo.TagUser.Split(',');
+                        foreach (var user in users)
+                        {
+                            try
+                            {
+                                int temp_user = int.Parse(user.Trim());
+                                _notificationService.CreateTagPhotoPostNotification(photo.UserId, temp_user, photo.Id);
+                            }
+                            catch (Exception) { }
+                        }
                     }
                 }
             }
+            catch (Exception) { }
 
             
             

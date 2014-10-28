@@ -20,5 +20,7 @@ namespace Zazz.Web.Models.Api
         public PhotoLinks UserDisplayPhoto { get; set; }
 
         public IEnumerable<int> Categories { get; set; }
+
+        public string TagUser { get; set; }
     }
 }

@@ -29,6 +29,7 @@ using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using Zazz.Web.OAuthAuthorizationServer;
+using System.Net.Mail;
 
 namespace Zazz.Web.Controllers
 {
@@ -287,6 +288,42 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
+
+                    var message = "";
+
+                    try
+                    {
+
+                        var token = _authService.GenerateUserValidationToken(user.Email);
+                        var userId = _uow.UserRepository.GetIdByEmail(user.Email);
+                        User _userDetails = UserService.GetUser(userId, true);
+                        string userName = _userDetails.Username;
+
+                        var tokenString = Base64Helper.Base64UrlEncode(token.Token);
+
+                        var resetLink = String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
+                        message = String.Format(
+                            "A conformation email has been sent to {0}. Please check your inbox.{1}", user.Email,
+                            Environment.NewLine);
+                        string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
+                        body += "Please click the link below to confirm your Account:\n";
+                        body += "<a href='" + resetLink + "'>" + resetLink + "</a>\n\nTeam Zazz";
+
+                        MailMessage mail = new MailMessage("team@zazzlife.com", user.Email, "Zazzlife - Account Conformation", body);
+                        mail.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzxsw21q");// Enter seders User name and password  
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                        ShowAlert(message, AlertType.Info);
+                    }
+                    catch (Exception)
+                    {
+                        ShowAlert("Error for sending email.", AlertType.Warning);
+                    }
+
+
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
                     if (isMobile.HasValue && isMobile.Value)
@@ -300,7 +337,7 @@ namespace Zazz.Web.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home", new { validemail = "true" });
                     }
                 }
                 catch (InvalidEmailException)

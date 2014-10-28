@@ -215,6 +215,46 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
+
+                    var message = "";
+
+                    try
+                    {
+
+                        var token = _authService.GenerateResetPasswordToken(user.Email);
+                        var userId = _uow.UserRepository.GetIdByEmail(user.Email);
+                        User _userDetails = UserService.GetUser(userId, true);
+                        string userName = _userDetails.Username;
+
+                        var tokenString = Base64Helper.Base64UrlEncode(token.Token);
+
+                        var resetLink = String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
+                        message = String.Format(
+                            "A conformation email has been sent to {0}. Please check your inbox.{1}", user.Email,
+                            Environment.NewLine);
+                        string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
+                        body += "Please click the link below to confirm your Account:\n";
+                        body += "<a href='" + resetLink + "'>" + resetLink + "</a>\n\nTeam Zazz";
+
+                        MailMessage mail = new MailMessage("team@zazzlife.com", user.Email, "Zazzlife - Account Conformation", body);
+                        mail.IsBodyHtml = true;
+                        SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzxsw21q");// Enter seders User name and password  
+                        smtp.EnableSsl = true;
+                        smtp.ServicePoint.MaxIdleTime = 1;
+                        //smtp.Send(mail);
+                        ShowAlert(message + " => " + resetLink, AlertType.Success);
+
+
+
+                    }
+                    catch (Exception)
+                    {
+                        ShowAlert("Error for sending email. Pl. Try again", AlertType.Warning);
+                    }
+
+
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
                     await TryUpdateUserPic(user, profilePhotoUrl, null);
@@ -230,7 +270,7 @@ namespace Zazz.Web.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        //return RedirectToAction("Index", "Home");
                     }
                 }
                 catch (InvalidEmailException)
@@ -333,6 +373,10 @@ namespace Zazz.Web.Controllers
                 try
                 {
                     _authService.Register(user, vm.Password, !user.IsConfirmed);
+
+                    
+
+
                     FormsAuthentication.SetAuthCookie(user.Username, true);
 
                     await TryUpdateUserPic(user, profilePhotoUrl, coverPhotoUrl);
@@ -457,6 +501,34 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult ConfirmEmail(int? id, string token)
+        {
+            if (!id.HasValue || String.IsNullOrWhiteSpace(token))
+                throw new HttpException(404, "Requested url is not valid");
+
+            try
+            {
+                var isTokenValid = _authService.IsTokenValidForUser(id.Value, token);
+                if (!isTokenValid)
+                    throw new HttpException(404, "Requested url is not valid");
+
+
+                User confirmUser = _uow.UserRepository.GetById(id.Value);
+                confirmUser.IsConfirmed = true;
+                //_uow.UserRepository.Update(confirmUser);
+                _uow.SaveChanges();
+                ShowAlert("Your email successfully confirm.",AlertType.Success);
+                //return RedirectToAction("Index", "Home");
+            }
+            catch (Exception)
+            {
+                //ShowAlert("This token has been expired. Please request a new one.", AlertType.Warning);
+                //return RedirectToAction("Recover");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         public ActionResult Recover()
         {
             if (User.Identity.IsAuthenticated)
@@ -489,28 +561,21 @@ namespace Zazz.Web.Controllers
                     User _userDetails = UserService.GetUser(userId, true);
                     string userName = _userDetails.Username;
 
-                  
+
                     var message = String.Format(
                         "Your Username has been sent to {0}. Please check your inbox.{1}", vm.Email,
                         Environment.NewLine);
                     string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
-                    body += "Your Username is : "+userName+".\n\nTeam Zazz";
+                    body += "Your Username is : " + userName + ".\n\nTeam Zazz";
 
-                    MailMessage mail = new MailMessage();
-                    mail.To.Add(vm.Email);
-                    mail.From = new MailAddress("team@zazzlife.com");
-                    mail.Subject = "Zazzlife - Password Reset";
-                    mail.Body = body;
+                    MailMessage mail = new MailMessage("team@zazzlife.com", vm.Email, "Zazzlife - Username", body);
                     mail.IsBodyHtml = true;
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtpout.secureserver.net";
-                    smtp.Port = 465;
+                    SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzxsw21q");// Enter seders User name and password  
                     smtp.EnableSsl = true;
                     smtp.Send(mail);
                     ShowAlert(message, AlertType.Success);
-
                 }
                 catch (NotFoundException)
                 {
@@ -549,18 +614,13 @@ namespace Zazz.Web.Controllers
                     body += "Please click the link below to reset your password:\n";
                     body += "<a href='" + resetLink + "'>Reset Password</a>\n\nTeam Zazz";
 
-                    MailMessage mail = new MailMessage();
-                    mail.To.Add(vm.Email);
-                    mail.From = new MailAddress("team@zazzlife.com");
-                    mail.Subject = "Zazzlife - Password Reset";
-                    mail.Body = body;
+                    MailMessage mail = new MailMessage("team@zazzlife.com", vm.Email, "Zazzlife - Password Reset", body);
                     mail.IsBodyHtml = true;
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtpout.secureserver.net";
-                    smtp.Port = 465;
+                    SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
                     smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                    smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzxsw21q");// Enter seders User name and password  
                     smtp.EnableSsl = true;
+                    smtp.ServicePoint.MaxIdleTime = 1;
                     smtp.Send(mail);
                     ShowAlert(message, AlertType.Success);
 

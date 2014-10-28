@@ -13,6 +13,37 @@
     animation: spin 1.3s infinite linear;
 }
 
+/* 
+    other css
+     */
+.profile-photos-img {
+    /*width: 149px;
+    height: 149px;*/
+    margin-bottom: 3px;
+    overflow:hidden;
+}
+
+.profile-photos-img-div2 {
+    width: 260px;
+    height: 160px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin-bottom: 3px;
+    overflow:hidden;
+    display:inline-block;
+}
+.profile-photos-img-div3{
+    width: 175px;
+    height: 140px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin-bottom: 3px;
+    overflow:hidden;
+    display:inline-block;
+}
+
+
+
 /***************************************
     JQuery UI overrides
 ***************************************/
