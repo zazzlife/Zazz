@@ -2334,7 +2334,7 @@ a:hover, a:focus {
 
 .club-profile-img {
     position: absolute;
-    top: 10px;
+    top: 25px;
     width: 85px;
     height: 85px;
     left: 42%;
@@ -2353,7 +2353,7 @@ a:hover, a:focus {
     position: absolute;
     width: 30px;
     height: 30px;
-    bottom: 15px;
+    bottom: 33px;
     left: 48%;
     
     -webkit-transition: opacity linear 0.5s;
