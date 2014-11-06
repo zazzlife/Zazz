@@ -11,6 +11,8 @@ using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Filters;
 using Zazz.Web.OAuthAuthorizationServer;
+using Zazz.Web.Models.Api;
+using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Controllers.Api
 {
@@ -21,16 +23,20 @@ namespace Zazz.Web.Controllers.Api
         private readonly IFollowService _followService;
         private readonly IClubRewardService _rewardService;
         private readonly IUoW _uow;
+        private readonly IPhotoService _photoService;
 
         public FollowersController(IUserService userService, ICryptoService cryptoService,
-            IFollowService followService, IClubRewardService rewardService, IUoW uow)
+            IFollowService followService, IClubRewardService rewardService, IUoW uow,IPhotoService photoService)
         {
             _userService = userService;
             _cryptoService = cryptoService;
             _followService = followService;
             _rewardService = rewardService;
             _uow = uow;
+            _photoService = photoService;
         }
+
+        
 
         //POST /api/v1/followers/qrcode
         [OAuth2Authorize, HttpPost, ActionName("QRCodeFollow")]

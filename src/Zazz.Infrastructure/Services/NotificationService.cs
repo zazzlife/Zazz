@@ -134,6 +134,8 @@ namespace Zazz.Infrastructure.Services
         }
 
 
+
+
         public void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true)
         {
             var followers = _uow.FollowRepository.GetUserFollowers(creatorUserId)
@@ -151,6 +153,27 @@ namespace Zazz.Infrastructure.Services
                                        NotificationType = NotificationType.NewEvent
                                    };
 
+                _uow.NotificationRepository.InsertGraph(notification);
+            }
+
+            if (save)
+                _uow.SaveChanges();
+        }
+
+
+        public void CreateNewEventInvitationNotification(int creatorUserId,int eventId,int[] toUserId,bool save = true)
+        {
+            foreach(int i in toUserId)
+            {
+                var notification = new Notification
+                {
+                    UserId = i,
+                    UserBId = creatorUserId,
+                    IsRead = false,
+                    EventNotification = new EventNotification { EventId = eventId },
+                    Time = DateTime.UtcNow,
+                    NotificationType = NotificationType.EventInvitation
+                };
                 _uow.NotificationRepository.InsertGraph(notification);
             }
 

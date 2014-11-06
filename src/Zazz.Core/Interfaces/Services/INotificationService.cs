@@ -31,6 +31,8 @@ namespace Zazz.Core.Interfaces.Services
 
         void CreateNewEventNotification(int creatorUserId, int eventId, bool save = true);
 
+        void CreateNewEventInvitationNotification(int creatorUserId, int eventId, int[] toUserId, bool save = true);
+
         void RemoveFollowAcceptedNotification(int fromUserId, int toUserId, bool save = true);
 
         void Remove(long notificationId, int currentUserId);

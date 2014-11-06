@@ -65,7 +65,7 @@ namespace Zazz.Web.Controllers.Api
                             : null,
 
                     // EVENT
-                    Event = n.NotificationType == NotificationType.NewEvent
+                    Event = (n.NotificationType == NotificationType.NewEvent || n.NotificationType == NotificationType.EventInvitation)
                         ? _objectMapper.EventToApiEvent(n.EventNotification.Event)
                         : n.NotificationType == NotificationType.CommentOnEvent
                             ? _objectMapper.EventToApiEvent

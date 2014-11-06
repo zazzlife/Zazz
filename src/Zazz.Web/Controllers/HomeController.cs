@@ -313,7 +313,7 @@ namespace Zazz.Web.Controllers
                         mail.IsBodyHtml = true;
                         SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
                         smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzxsw21q");// Enter seders User name and password  
+                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
                         smtp.EnableSsl = true;
                         smtp.Send(mail);
                         ShowAlert(message, AlertType.Info);
