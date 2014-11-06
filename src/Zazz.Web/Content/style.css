@@ -467,7 +467,7 @@ hr.gold-line {
 
 .feed-comment {
     font-size: 12px;
-    border-bottom: #a5a5a5 dashed 1px;
+    border-bottom: 1px solid white;
     margin-bottom: 15px;
     padding-bottom: 5px;
 }
