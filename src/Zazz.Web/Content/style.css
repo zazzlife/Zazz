@@ -518,9 +518,12 @@ hr.gold-line {
     }
 
 .tag-club-img {
-    margin: 8px;
-    width: 50px;
-    height: 50px;
+    margin: 5px;
+	width: 48px;
+	height: 48px;
+	border-radius: 14px;
+	border: 1px solid rgb(190, 190, 190);
+	padding: 3px;
 }
 
 /**********Lightbox Comments**************/
@@ -2368,6 +2371,8 @@ a:hover, a:focus {
 
 .clubs-list-img {
     width: 100%;
+    max-height:215px;
+    border-radius:14px;
 }
 
 .school-filter-img {
