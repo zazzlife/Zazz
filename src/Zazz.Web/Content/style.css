@@ -2409,7 +2409,10 @@ a:hover, a:focus {
 }
 
 .user-list-img {
-    width: 135px;
-    height: 135px;
-    margin-left: 10px;
+    width: 95px;
+	height: 95px;
+	margin-left: 25px;
+	border-radius: 70px;
+	border: 2px solid;
+	padding: 2px;
 }
