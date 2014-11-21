@@ -119,6 +119,37 @@ namespace Zazz.Infrastructure.Services
             CreateNotification(notification, save);
         }
 
+        public void CreatelikePhotoNotification(int fromUserId, int toUserId, int photoId, bool save = true)
+        {
+            var notification = new Notification
+            {
+                UserId = toUserId,
+                UserBId = fromUserId,
+                Time = DateTime.UtcNow,
+                IsRead = false,
+                NotificationType = NotificationType.PhotoLike
+            };
+
+            CreateNotification(notification, save);
+        }
+
+        public void CreateLikePostNotification(int fromUserId, int toUserId, int postId, bool save = true)
+        {
+            
+            var notification = new Notification
+            {
+                UserId = toUserId,
+                UserBId = fromUserId,
+                PostNotification = new PostNotification { PostId = postId },
+                Time = DateTime.UtcNow,
+                IsRead = false,
+                NotificationType = NotificationType.PostLike
+            };
+
+            CreateNotification(notification, save);
+            
+        }
+
         public void CreateTagPhotoPostNotification(int fromUserId, int toUserId, int photoId, bool save = true)
         {
             var notification = new Notification

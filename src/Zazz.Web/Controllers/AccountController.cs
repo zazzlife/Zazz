@@ -28,6 +28,7 @@ using Zazz.Web.Filters;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using Zazz.Web.OAuthAuthorizationServer;
+using Facebook;
 
 namespace Zazz.Web.Controllers
 {
@@ -139,7 +140,10 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult RegisterUser()
         {
-            var vm = new RegisterUserViewModel();
+            var vm = new RegisterUserViewModel {
+                Majors = StaticDataRepository.GetMajors(),
+                PromoterTypes = (IEnumerable<PromoterType>)Enum.GetValues(typeof(PromoterType))
+            };
 
             if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
@@ -152,8 +156,34 @@ namespace Zazz.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
         public async Task<ActionResult> RegisterUser(RegisterUserViewModel vm)
         {
+
             if (ModelState.IsValid)
             {
+                City userCity = new City();
+                if (_uow.CityRepository.existCity(Session["city"].ToString()))
+                {
+                    userCity = _uow.CityRepository.getByName(Session["city"].ToString());
+                }
+                else
+                {
+                    userCity.Name = Session["city"].ToString();
+                    _uow.CityRepository.InsertGraph(userCity);
+                    _uow.SaveChanges();
+                }
+                /*
+                School userSchool = new School();
+                if (_uow.CityRepository.existCity(Session["school"].ToString()))
+                {
+                    userCity = _uow.CityRepository.getByName(Session["school"].ToString());
+                }
+                else
+                {
+                    userCity.Name = Session["school"].ToString();
+                    _uow.CityRepository.InsertGraph(userCity);
+                    _uow.SaveChanges();
+                }
+                int schoolId = userSchool.Id;
+                 */
                 var user = new User
                            {
                                Username = vm.UserName,
@@ -170,10 +200,23 @@ namespace Zazz.Web.Controllers
                                              },
                                UserDetail = new UserDetail
                                {
-                                   IsPromoter = (vm.UserType == UserType.Promoter)
-                               }
+                                    City = userCity,
+                                    CityId = userCity.Id
+                               },
+                               tagline = vm.TagLine
                            };
+                
 
+                if (vm.UserType == UserType.User)
+                {
+                    user.UserDetail.IsPromoter = false;
+                    user.UserDetail.MajorId = vm.MajorId;
+                }
+                else
+                {
+                    user.UserDetail.IsPromoter = true;
+                    user.UserDetail.PromoterType = vm.PromoterType;
+                }
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 string profilePhotoUrl = null;
@@ -193,6 +236,8 @@ namespace Zazz.Web.Controllers
 
                         user.IsConfirmed = true;
                         user.Email = email;
+
+                        user.UserDetail.FullName = (string)Session[OAUTH_FULLNAME_KEY];
 
                         user.LinkedAccounts.Add(new LinkedAccount
                                                 {
@@ -214,8 +259,7 @@ namespace Zazz.Web.Controllers
 
                 try
                 {
-                    _authService.Register(user, vm.Password, !user.IsConfirmed);
-
+                    _authService.Register(user, vm.Password, !user.IsConfirmed);                    
                     var message = "";
 
                     try
@@ -244,7 +288,7 @@ namespace Zazz.Web.Controllers
                         smtp.EnableSsl = true;
                         smtp.ServicePoint.MaxIdleTime = 1;
                         //smtp.Send(mail);
-                        ShowAlert(message + " => " + resetLink, AlertType.Success);
+                        ShowAlert(message, AlertType.Success);
 
 
 
@@ -297,7 +341,9 @@ namespace Zazz.Web.Controllers
         [HttpGet]
         public ActionResult RegisterClub()
         {
-            var vm = new RegisterClubViewModel();
+            var vm = new RegisterClubViewModel { 
+                ClubTypes = (IEnumerable<ClubType>)Enum.GetValues(typeof(ClubType))
+            };
 
             if (Session[IS_OAUTH_KEY] != null && ((bool)Session[IS_OAUTH_KEY]))
             {
@@ -307,7 +353,7 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
-        [HttpPost, ValidateAntiForgeryToken, ValidateSpamPrevention]
+        [HttpPost]
         public async Task<ActionResult> RegisterClub(RegisterClubViewModel vm)
         {
             if (ModelState.IsValid)
@@ -326,7 +372,10 @@ namespace Zazz.Web.Controllers
                         SyncFbPosts = true,
                         SendSyncErrorNotifications = true
                     },
-                    ClubDetail = new ClubDetail()
+                    ClubDetail = new ClubDetail
+                    {
+                        ClubTypes = vm.ClubType
+                    }
                 };
 
                 var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
@@ -351,6 +400,8 @@ namespace Zazz.Web.Controllers
 
                         user.IsConfirmed = true;
                         user.Email = email;
+
+                        user.ClubDetail.ClubName = (string)Session[OAUTH_FULLNAME_KEY];
 
                         user.LinkedAccounts.Add(new LinkedAccount
                         {
@@ -723,6 +774,8 @@ namespace Zazz.Web.Controllers
             var name = result.UserName;
             var email = result.ExtraData["email"];
             var accessToken = result.ExtraData["accesstoken"];
+            var school = result.ExtraData["school"];
+            var city = result.ExtraData["city"];
 
             var oauthAccount = new LinkedAccount
                                    {
@@ -778,6 +831,8 @@ namespace Zazz.Web.Controllers
                     Session[OAUTH_GENDER_KEY] = fbBasicUserInfo.Gender;
                     Session[OAUTH_PROFILE_PIC_KEY] = fbBasicUserInfo.ProfilePicUrl;
                     Session[OAUTH_COVER_PIC_KEY] = fbBasicUserInfo.CoverPicUrl;
+                    Session["city"] = city;
+                    Session["school"] = school;
 
                     if (isClub.HasValue && isClub.Value == true)
                         return RedirectToAction("RegisterClub");

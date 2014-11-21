@@ -143,6 +143,9 @@ namespace Zazz.Infrastructure.Services
             dbEvent.City = convertedEvent.City;
             dbEvent.Latitude = convertedEvent.Latitude;
             dbEvent.Longitude = convertedEvent.Longitude;
+            dbEvent.offsetX = convertedEvent.offsetX;
+            dbEvent.offsetY = convertedEvent.offsetY;
+            dbEvent.CoverPic = convertedEvent.CoverPic;
         }
 
         public void SyncPageStatuses(string pageFbId)

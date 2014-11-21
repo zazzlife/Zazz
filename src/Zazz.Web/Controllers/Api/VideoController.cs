@@ -32,6 +32,7 @@ namespace Zazz.Web.Controllers.Api
         // POST api/video
         public async Task<HttpResponseMessage> Post()
         {
+            /*
             if (!Request.Content.IsMimeMultipartContent("form-data"))
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
@@ -58,11 +59,14 @@ namespace Zazz.Web.Controllers.Api
 
             if (!exists)
                 System.IO.Directory.CreateDirectory("~/videos/" + CurrentUserId + "/");
+            */
 
+            //int userid = CurrentUserId;
+            String filename = "~/videos/1/1";
             String mime = getMimeFromFile(filename);
 
             String description = "";
-
+            /*
             // parsing description
             var providedDescription = bodyParts.Contents
                .FirstOrDefault(c => c.Headers
@@ -71,7 +75,7 @@ namespace Zazz.Web.Controllers.Api
             if (providedDescription != null)
                 description = await providedDescription.ReadAsStringAsync();
 
-
+            */
             var response = Request.CreateResponse(HttpStatusCode.Created, mime);
             return response;
         }

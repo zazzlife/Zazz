@@ -27,7 +27,22 @@ namespace Zazz.Web.Models
         [Display(Name = "User Type:")]
         public UserType UserType { get; set; }
 
+        [Display(Name = "Tag Line")]
+        public String TagLine { get; set; }
+
+        [Display(Name = "Major")]
+        public byte? MajorId { get; set; }
+
+        public IEnumerable<Major> Majors { get; set; }
+
+        [Display(Name = "Promoter Type")]
+        public PromoterType? PromoterType { get; set; }
+
+        public IEnumerable<PromoterType> PromoterTypes { get; set; }
+
         [HiddenInput]
         public bool IsOAuth { get; set; }
+
+        
     }
 }

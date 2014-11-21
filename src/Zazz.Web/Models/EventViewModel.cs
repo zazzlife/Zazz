@@ -79,6 +79,8 @@ namespace Zazz.Web.Models
         [Display(AutoGenerateField = false)]
         public PhotoLinks ProfileImage { get; set; }
 
+        public string CoverLink { get; set; }
+
         [Display(AutoGenerateField = false)]
         public string FormatDate
         {

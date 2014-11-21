@@ -1,41 +1,80 @@
 ﻿@model EventDetailsPageViewModel
 
-@{
+@{    
     ViewBag.Title = Model.EventViewModel.Name;
     var isMapAvailable = (Model != null && Model.EventViewModel.Latitude.HasValue && Model.EventViewModel.Longitude.HasValue);
 }
 
 <div class="container white-bg border-radius-5"  style="padding: 10px 20px 100px 20px;">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="page-header row-fluid">
-                <div class="span4">
-                    <h4>
-                        @Model.EventViewModel.Name
-                    </h4>
-                </div>
+     @if (Model.EventViewModel.IsOwner)
+     {
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="page-header row-fluid">
+                    <div class="span4">
+                        <h4>
+                        
+                        </h4>
+                    </div>
                 
-                @if (Model.EventViewModel.IsOwner)
-                {
+               
                     <div class="offset2 span6 text-right">
                         <a href="@Url.Action("Edit", "Events", new { id = Model.EventViewModel.Id })" class="btn"><i class="icon-pencil"></i> Edit</a>
                         <a href="@Url.Action("Remove", "Events", new { id = Model.EventViewModel.Id })" class="btn"><i class="icon-remove"></i> Remove</a>
                     </div>
-                }
                 
+                
+                </div>
+            </div>
+        </div>
+     }
+    <div class="row-fluid" style="margin-top:15px;">
+        
+        <div class="span8">
+            <img style="background:url('@Model.EventViewModel.CoverLink') no-repeat center center;width:100%;height:250px;border-radius:7px;" />
+            <!--<img src="@Model.EventViewModel.ImageUrl.MediumLink" class="img-polaroid border-radius-5"/> -->
+        </div>
+        
+        <div class="span4">
+            <div class="well">
+                <div>
+                    <h3 style="float:left;">@Model.EventViewModel.OwnerName</h3>
+                    <img src="@Model.EventViewModel.ImageUrl.MediumLink" style="float:right;border-radius:10px;width:50px;" class="img-polaroid"/>
+                </div>
+                <div style="clear:both;"></div>
+                <ul class="nav nav-stacked club-details" style="margin-left:0px;padding-left:0px;">
+                    <li><i class="icon-map-marker" style="font-size:25px;"></i><span style="color:#d16d6b;">@Model.EventViewModel.Location</span> <span style="color:#5a50e5;">, @Model.EventViewModel.City</span></li>
+                    <li><i class="icon-time" style="font-size:23px;"></i><span style="color:#d018c8;">@String.Format("{0:h:mm tt}", Model.EventViewModel.Time.DateTime)</span></</li>
+                    <li><i class="icon-calendar" style="font-size:21px;"></i><span style="color:#cb9863;">@Model.EventViewModel.Time.DateTime.DayOfWeek.ToString()</span>,<span style="color:#4dd84b;"> @String.Format("{0:MMM d, yyyy}", Model.EventViewModel.Time.DateTime)</span></li>
+                </ul>
             </div>
         </div>
     </div>
-    
     <div class="row-fluid">
-        
-        <div class="span4">
-            <img src="@Model.EventViewModel.ImageUrl.MediumLink" class="img-polaroid border-radius-5"/>
+        <div class="span8 offset4">
+            <img src="~/Images/round.png" style="margin-right: 25px;width:22px;vertical-align:baseline;" />
+            <h2 style="display:inline-block;">@Model.EventViewModel.Name</h2>
+            <img src="~/Images/round.png" style="margin-left: 25px;width:22px;vertical-align:baseline;" />
         </div>
-        
-        <div class="span8">
-            <div class="well">
+    </div>
+    <div class="row-fluid" style="margin-top:30px;">
+        <div class="span2 offset2">
+            <img src="~/Images/fbevent.png" style="vertical-align:baseline;width:100px;" />
+        </div>
+        <div class="span2 offset1">
+            <img src="~/Images/mailevent.png" style="vertical-align:baseline;width:90px;" />
+        </div>
+        <div class="span2 offset1">
+            <img src="~/Images/infoevent.png" style="vertical-align:baseline;width:100px;" />
+        </div>
+    </div>
+
+                <!---
                 <p>
+                    @Model.EventViewModel.UserId
+                    <br />
+                    @Model.EventViewModel.Name
+                    <br />
                     @Model.EventViewModel.Description
                 </p>
 
@@ -54,13 +93,19 @@
                 </address>
             
                 <div class="row-fluid">
-                    <div class="span2">
-                        @if (Model.EventViewModel.IsFacebookEvent)
-                        {
-                            <a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="btn"><i class="icon-facebook"></i>View this event on facebook</a>
-                        }
+
+                    <div class="span3">
+                        <button class="btn invite_btnm" data-model-id="@Model.EventViewModel.Id">Invite Users</button>
                     </div>
-                    <div class="span2 offset8 text-right">
+                    @if (Model.EventViewModel.IsFacebookEvent)
+                    {
+                        <div class="span2">
+                        
+                                <a href="https://www.facebook.com/events/@Model.EventViewModel.FacebookEventId.Value" class="btn"><i class="icon-facebook"></i>View this event on facebook</a>
+                        
+                        </div>
+                    }
+                    <div class="span2 offset6 text-right">
                         @if (Model.EventViewModel.Price.HasValue)
                         {
                             <h4>@Model.EventViewModel.Price.Value.ToString("C")</h4>
@@ -68,10 +113,126 @@
                     </div>
 
                 </div>
+                    
+                
+                <style type="text/css">
+                    .center_imgm
+                    {
+                        display:block;
+                        margin:auto;
+                    }
+                </style>
+                <div id="@Model.EventViewModel.Id" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">Invite Users</h3>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                        <img src="~/Images/ajax-loader.gif" style="" class="center_imgm" />
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <select data-placeholder="Select User" data-eventId="@Model.EventViewModel.Id" multiple style="width:100px;" class="chosen-select1 inviteUserEvent span5">
+                        
+                    </select>
 
-            </div>
-        </div>
-    </div>
+                    <button class="btn listInvitebtn" data-eventIdSelect="@Model.EventViewModel.Id">Invite Users</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary invitesbbmit_btn" data-click-id="@Model.EventViewModel.Id">Invite</button>
+                  </div>
+                </div>-->
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".invite_btnm").click(function(){
+                    $('#'+$(this).data('model-id')).modal('show');
+                    var self = $(this);
+                    $.ajax({
+                        url: "/users/ajaxfollowers/"+self.data('model-id'),
+                        cache: false,
+                        success: function(e)
+                        {
+                            $('#'+self.data('model-id')+' > .modal-body').html(e)
+                        }
+                    });
+                    return false;
+                });   
+                $(document).on('click','.invitesbbmit_btn',function() {
+                    var eventId = $(this).data('click-id');
+                    var data = $('.usercheck_invite_'+eventId).serialize();
+
+                    $.ajax({
+                        url: "/events/eventInvitation/",
+                        cache: false,
+                        type: "post",
+                        data: {
+                            "eventId" : eventId,
+                            "invitation" : data
+                        },
+                        error: function() {
+                            toastr.error("An error occured, please try again later");
+                        },
+                        success: function () {
+                            toastr.success("Envet Invitation Successfully.");
+                            $('#'+eventId).modal('hide'); 
+                        }
+                    });
+
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $.ajax({
+                url: "/users/AjaxInviteUserFollowers/@Model.EventViewModel.Id",
+                    cache: false,
+                    error: function() {
+                        toastr.error("An error occured, please try again later");
+                        $self.css('opacity', '1');
+                    },
+                    success: function (data) {
+                        $("select[data-eventId='@Model.EventViewModel.Id']").html(data);
+                        $(".chosen-select1").chosen({
+                            no_results_text: "Oops, nothing found!",
+                            width: "50%",
+                            disable_search:true
+                        });
+                    }
+                });
+                    var eventId;
+                    var selectEventId;
+                    var selectedValue;
+                    var chosenEle;
+                    $(document).ready(function(){
+                        $(document).on('click', '.listInvitebtn', function () {
+                            eventId = $(this).attr("data-eventIdSelect");
+                            $(".inviteUserEvent").each(function(){
+                                selectEventId = $(this).attr("data-eventId");
+                                if(eventId == selectEventId)
+                                {
+                                    selectedValue = $(this).chosen().val();
+                                    chosenEle = $(this);
+                                    $.ajax({
+                                        url: "/events/eventInvitationChosen/",
+                                        cache: false,
+                                        type: "post",
+                                        data: {
+                                            "eventId" : eventId,
+                                            "invitation" : selectedValue.toString()
+                                        },
+                                        error: function() {
+                                            toastr.error("An error occured, please try again later");
+                                        },
+                                        success: function (d) {
+                                            toastr.success("Envet Invitation Successfully.");
+                                            chosenEle.val('').trigger("chosen:updated");
+                                            $('#'+eventId).modal('hide');
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+            </script>
     
     @if (isMapAvailable)
     {

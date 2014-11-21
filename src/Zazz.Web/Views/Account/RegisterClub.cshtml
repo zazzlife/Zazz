@@ -9,9 +9,9 @@
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
             <h4 class="lead-1">
-                <i>
-                    <img src="/Images/Register.png"></i>
+                <i><img src="/Images/Register.png"></i>
                 Register
+                <span id="reg_loader" style="display:none;"><img src="~/Images/ajax-loader.gif" style="margin:0px auto;"/> Please Wait....</span>
             </h4>
         </div>
     </div>
@@ -56,11 +56,129 @@
                             </div>
                         </div>
                         <div class="control-group">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ClubType, new { @class = "control-label" })
+                            </div>
+                            <div class="editor-field lp-checkbox">
+                                @{
+                                    foreach(var data in Model.ClubTypes)
+                                    {
+                                        <label><input type="checkbox" name="chkbx[]" class="clubtypechk" value="@data.GetHashCode()" /> @data.GetEnumDisplay()</label>    
+                                    }
+                                }
+                                
+                            </div>
+
+                            <span style="color:#cc0000;display:none;" id="error1"><br />Pl. select atleast one club type</span>
+                            <span style="color:#cc0000;display:none;" id="error2"><br />you can select maximum 4 clubtype</span>
+                        </div>
+                        <div class="control-group">
                             @Html.SpamPreventionFields()
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Register</button>
                     </fieldset>
+                    <div class="modal hide fade" id="manageFbPagesModal">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3>Manage Facebook Pages</h3>
+                        </div>
+
+                        <div class="modal-body">
+                            <i class="icon-refresh icon-spin icon-large"></i>
+                        </div>
+
+                        <div class="modal-footer">
+                            <a href="#" data-dismiss="modal" id="model_close_btn" class="btn">Close</a>
+                        </div>
+                    </div>
+                    <script type="text/javascript">
+                        var selectedClubType = [];
+                        var linkedAccount = [];
+                        $("form").submit(function () {
+                            $("#error1").hide();
+                            $("#error2").hide();
+                            selectedClubType = [];
+                            var arr = $(".clubtypechk:input[type='checkbox']:checked").serializeArray();
+                            $.each(arr, function (index, data) {
+                                selectedClubType.push(data.value);
+                            });
+
+                            if (selectedClubType.length < 1) {
+                                //alert("Pl. select atleast one club type");
+                                $("#error1").show();
+                                return false;
+                            }
+                            else if (selectedClubType.length > 4) {
+                                //alert("you can select maximum 4 clubtype");
+                                $("#error2").show();
+                                return false;
+                            }
+                            $("#reg_loader").show();
+                            $.ajax({
+                                url: "/account/registerclub",
+                                cache: false,
+                                type: "Post",
+                                data: {
+                                    "UserName": $("#UserName").val(),
+                                    "Password": $("#Password").val(),
+                                    "ConfirmPassword": $("#ConfirmPassword").val(),
+                                    "ClubType": selectedClubType.toString()
+                                },
+                                error: function (s, t) {
+                                    $("#reg_loader").hide();
+                                    selectedClubType = [];
+                                    toastr.error('An error occured, Please try again later.');
+                                },
+                                success: function (data) {
+                                    $("#reg_loader").hide();
+                                    $("#manageFbPagesModal").modal('show');
+                                    //alert(data);
+                                    var url = "/facebook/getpages";
+
+                                    $.ajax({
+                                        url: url,
+                                        error: function () {
+                                            toastr.error('An error occured, Please try again later.');
+                                        },
+                                        success: function (res) {
+                                            var container = $('#manageFbPagesModal .modal-body');
+                                            container.fadeOut(function () {
+                                                container.html(res);
+                                                container.append('<span style="color:#cc0000;display:none;" id="error3"><br />Link atleast one facebook page</span>');
+                                                container.fadeIn();
+                                            });
+
+                                        }
+                                    });
+                                }
+                            });
+                            
+                            return false;
+                        });
+
+                        $(document).on("click", ".linkPageBtn", function () {
+                            $("#error3").hide();
+                            linkedAccount.push($(this).attr("data-id"));
+                        });
+
+                        $(document).on("click", ".unlinkPageBtn", function () {
+                            var index = linkedAccount.indexOf($(this).attr("data-id"));
+                            if (index > -1) {
+                                linkedAccount.splice(index, 1);
+                            }
+                        });
+
+                        $(document).on("click", "#model_close_btn", function () {
+                            if (linkedAccount.length > 0)
+                                window.location = "/home/index";
+                            else {
+                                $("#error3").show();
+                                return false;
+                            }
+                        });
+
+                    </script>
             
                 }
             </div>

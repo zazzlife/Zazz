@@ -15,5 +15,7 @@ namespace Zazz.Web.Models
         public bool IsCurrentUserFollowing { get; set; }
 
         public int CurrentUserId { get; set; }
+
+        public string clubtypes { get; set; }
     }
 }

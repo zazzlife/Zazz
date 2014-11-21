@@ -77,27 +77,29 @@
                     }
                 }
 
-                @if (!String.IsNullOrEmpty(Model.City) || !String.IsNullOrEmpty(Model.School) || !String.IsNullOrEmpty(Model.Major))
-                {
-                    <div class="user-details">
-                        <ul>
-                            @if (!String.IsNullOrEmpty(Model.City))
-                            {
-                                <li><i class="icon-globe"></i>City: @Model.City</li>
-                            }
+                <div class="user-details">
+                    <ul>
+                        @if (!String.IsNullOrEmpty(Model.City))
+                        {
+                            <li><i class="icon-globe"></i>City: @Model.City</li>
+                        }
 
-                            @if (!String.IsNullOrEmpty(Model.School))
-                            {
-                                <li><i class="icon-building"></i>@Model.School</li>
-                            }
+                        @if (!String.IsNullOrEmpty(Model.School))
+                        {
+                            <li><i class="icon-building"></i>@Model.School</li>
+                        }
 
-                            @if (!String.IsNullOrEmpty(Model.Major))
-                            {
-                                <li><i class="icon-book"></i>@Model.Major</li>
-                            }
-                        </ul>
-                    </div>
-                }
+                        @if (!String.IsNullOrEmpty(Model.tagline))
+                        {
+                            <li><i class="icon-book"></i>@Model.tagline</li>
+                        }
+                        else if (!String.IsNullOrEmpty(Model.Major))
+                        {
+                            <li><i class="icon-book"></i>@Model.Major</li>
+                        }
+                    </ul>
+                </div>
+  
             </div>
 
             @if(Model.PreviewPhotos != null)
@@ -108,7 +110,7 @@
                         @foreach (var p in Model.PreviewPhotos)
                         {
                             <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink">
-                                <img src="@p.PhotoUrl.MediumLink" />
+                                <img style="background: url('@p.PhotoUrl.MediumLink') no-repeat center center;" />
                             </a>
                         }
                     </div>
@@ -117,7 +119,7 @@
         </div>
 
         @*CENTER*@
-        <div class="center-panel color-white-bg box-shadow">
+        <div class="center-panel color-white-bg  box-shadow">
             <div class="row-fluid margin-bottam-20 center-top-color follow-img margin-top-15 box-shadow-2">
                 <span class="arrow-left hidden-phone"></span>
                 <span class="arrow-right hidden-phone"></span>

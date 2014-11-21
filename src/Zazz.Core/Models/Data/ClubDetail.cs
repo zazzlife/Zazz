@@ -28,5 +28,7 @@ namespace Zazz.Core.Models.Data
         public virtual City City { get; set; }
 
         public int? CityId { get; set; }
+
+        public string ClubTypes { get; set; }
     }
 }

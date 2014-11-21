@@ -56,5 +56,11 @@ namespace Zazz.Core.Models.Data
         public FacebookPage Page { get; set; }
 
         public int? PageId { get; set; }
+
+        public string CoverPic { get; set; }
+
+        public float offsetX { get; set; }
+
+        public float offsetY { get; set; }
     }
 }

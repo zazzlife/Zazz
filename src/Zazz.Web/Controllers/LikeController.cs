@@ -42,5 +42,28 @@ namespace Zazz.Web.Controllers
         {
             return _likeService.GetPhotoLikesCount(id);
         }
+
+        public int postCount(int id)
+        {
+            return _likeService.GetPostLikesCount(id);
+        }
+
+        public bool postexists(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            return _likeService.PostLikeExists(id, userId);
+        }
+
+        public void postAdd(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _likeService.AddPostLike(id, userId);
+        }
+
+        public void postRemove(int id)
+        {
+            var userId = _userService.GetUserId(User.Identity.Name);
+            _likeService.RemovePostLike(id, userId);
+        }
     }
 }

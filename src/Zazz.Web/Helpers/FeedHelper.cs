@@ -156,8 +156,7 @@ namespace Zazz.Web.Helpers
             if (lastFeedId != 0)
                 query = query.Where(f => f.Id < lastFeedId);
 
-            query = query.OrderByDescending(f => f.Time)
-                         .Take(PageSize);
+            query = query.OrderByDescending(f => f.Time);
 
             var feeds = query.ToList();
             return ConvertFeedsToFeedsViewModel(feeds, currentUserId);
@@ -329,7 +328,8 @@ namespace Zazz.Web.Helpers
                     ProfileImage = _photoService.GetUserDisplayPhoto(feed.EventFeed.Event.UserId),
                     CoverImage = feed.EventFeed.Event.User.AccountType == AccountType.Club && feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.HasValue
                         ? _photoService.GeneratePhotoUrl(feed.EventFeed.Event.UserId, feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.Value)
-                        : null
+                        : null,
+                    CoverLink = (!(String.IsNullOrEmpty(feed.EventFeed.Event.CoverPic)))? feed.EventFeed.Event.CoverPic : null
                 };
 
                 feedVm.Comments.CommentType = CommentType.Event;

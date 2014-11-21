@@ -34,6 +34,8 @@ namespace Zazz.Web.Models
         public IEnumerable<CategoryStatViewModel> CategoriesStats { get; set; }
 
         public IEnumerable<PhotoViewModel> PreviewPhotos { get; set; }
+
+        public string tagline { get; set; }
     }
 
 }

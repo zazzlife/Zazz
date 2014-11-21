@@ -31,5 +31,6 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("CityId")]
         public virtual City City { get; set; }
 
-        public int? CityId { get; set; }}
+        public int? CityId { get; set; }
+    }
 }

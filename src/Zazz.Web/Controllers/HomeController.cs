@@ -117,6 +117,7 @@ namespace Zazz.Web.Controllers
             {
                  var userId = UserService.GetUserId(User.Identity.Name);
                  var user = UserService.GetUser(User.Identity.Name);
+                
                  if (UserService.OAuthAccountExists(user.Id, OAuthProvider.Facebook))
                  {
                      if (user.AccountType == AccountType.Club)
@@ -141,6 +142,44 @@ namespace Zazz.Web.Controllers
                                  { }
                              }
                          }
+                     }
+                 }
+
+
+                 foreach (var follows in user.Follows)
+                 {
+                     try
+                     {
+                        User usr = UserService.GetUser(follows.ToUserId);
+                        if(usr.AccountType == AccountType.Club)
+                        {
+                            if (UserService.OAuthAccountExists(follows.ToUserId, OAuthProvider.Facebook))
+                            {
+                                var allPages = _facebookService.GetUserPages(follows.ToUserId);
+                                var existingPageIds = _uow.FacebookPageRepository.GetUserPages(follows.ToUserId)
+                                                          .Select(f => f.FacebookId)
+                                                          .ToList();
+
+
+                                foreach (var fbPage in allPages)
+                                {
+                                    if (existingPageIds.Contains(fbPage.Id))
+                                    {
+                                        try
+                                        {
+                                            _facebookService.SyncPageEvents(fbPage.Id);
+                                            _facebookService.SyncPagePhotos(fbPage.Id);
+                                            _facebookService.SyncPageStatuses(fbPage.Id);
+                                        }
+                                        catch (Exception)
+                                        { }
+                                    }
+                                }
+                            }
+                        }
+                     }
+                     catch(Exception)
+                     {
                      }
                  }
 
@@ -235,7 +274,8 @@ namespace Zazz.Web.Controllers
                     },
                     UserDetail = new UserDetail {
                         Gender = vm.Gender
-                    }
+                    },
+                    tagline = vm.TagLine
                 };
 
                 if (vm.UserType == UserType.User) {
@@ -516,7 +556,8 @@ namespace Zazz.Web.Controllers
                     x.Id,
                     ProfileImageId = x.ProfilePhotoId,
                     CoverImageId = x.ClubDetail.CoverPhotoId,
-                    IsFollowing = x.Followers.Any(f => f.FromUserId == userId)
+                    IsFollowing = x.Followers.Any(f => f.FromUserId == userId),
+                    ClubTypes = x.ClubDetail.ClubTypes
                 }).ToList();
 
                 vm.AddRange(items.Select(x => new ClubViewModel
@@ -530,8 +571,8 @@ namespace Zazz.Web.Controllers
                         ? PhotoService.GeneratePhotoUrl(x.Id, x.CoverImageId.Value)
                         : DefaultImageHelper.GetDefaultCoverImage(),
                     IsCurrentUserFollowing = x.IsFollowing,
-                    CurrentUserId = userId
-
+                    CurrentUserId = userId,
+                    clubtypes = x.ClubTypes
                 }));
             }
 

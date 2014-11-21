@@ -1,20 +1,30 @@
 ﻿@using Zazz.Web.Controllers
+@using Zazz.Core.Models.Data;
+@using Zazz.Core.Models.Data.Enums;
 @model IEnumerable<ClubViewModel>
 @{
     var currentUserDisplayName = "Unknown user";
     var currentUserId = 0;
+    var clubtypes = new List<ClubType>();
 
     var controller = ViewContext.Controller as BaseController;
     if (controller != null)
     {
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
+        clubtypes = controller.GetClubTypes().ToList<ClubType>();
     }
 }
 
 <script type="text/javascript">
     document.getElementsByTagName('body')[0].style['background-color'] = 'white';
 </script>
+<style type="text/css">
+    .mapLink
+    {
+        color:#000;
+    }
+</style>
 
 <div class="container" style="margin-top: -13px;">
     <div class="row-fluid">
@@ -37,30 +47,178 @@
                         @Html.Action("GetNewNotificationsCount", "Notifications")
                     </a>
                 </li>
-                <li><a href="@Url.Action("Followers", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Followers @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
-                <li><a href="@Url.Action("Following", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Following</a></li>
-                <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="@Url.Action("Followers", "Users", new { id = currentUserId })"><i class="icon-user"></i>&nbsp; Followers @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
+                <li><a href="@Url.Action("Following", "Users", new { id = currentUserId })"><i class="icon-user"></i>&nbsp; Following</a></li>
+                <li><a href="@Url.Action("Photos", "Users", new { id = currentUserId })"><i class="icon-camera"></i>&nbsp; Photo</a></li>
                 <li><a href="@Url.Action("Clubs", "Home")"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
             </ul>
+
+            <div class="filter-container pane-box" style="width:180px;">
+                <div class="filter-open pane-title" style="color:#000;background-color:#ebebeb;width:140px;"><a href="#" class="mapLink" id="mapshow">Show Map</a></div>
+            </div>
         </div>
+
+        
 
         @*CENTER*@
 
-        <div class="center-panel color-white-bg box-shadow">
+        <div class="center-panel color-white-bg box-shadow" id="mapViewcont">
             <div id="profileTabs">
                 <div class="tabbable">
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#clubsTab" data-toggle="tab" data-load-clubs="clubs">Clubs</a></li>
+                        @{
+                            int i = 0;
+                            foreach (var clubtype in clubtypes)
+                            {
+                                if (i++ == 0)
+                                {
+                                    <li class="active"><a href="#@clubtype" data-toggle="tab">@clubtype.GetEnumDisplay()</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="#@clubtype" data-toggle="tab">@clubtype.GetEnumDisplay()</a></li>
+                                }
+                            }
+                        }
+                       <!-- <li class="active"><a href="#clubsTab" data-toggle="tab" data-load-clubs="clubs">Clubs</a></li>
                         <li><a href="#myClubsTab" data-toggle="tab" data-load-clubs="myclubs">My Clubs</a></li>
                         <li><a href="#schoolClubsTab" data-toggle="tab" data-load-clubs="schoolclubs">School Clubs</a></li>
+                        <li><a href="#mapClubs" data-toggle="tab">Map</a></li> -->
                     </ul>
                     <div class="tab-content" style="overflow-y: hidden; overflow-x:hidden;">
-                        <div class="tab-pane active" id="clubsTab">
-                            @Html.Partial("_ClubsList", Model)
-                        </div>
+                        @{
+                            i = 0;
+                            foreach (var clubtype in clubtypes)
+                            {
+                                string str = "";
+                                if(i++ == 0)
+                                {
+                                    str = "active";
+                                }
+                                else
+                                {
+                                    str = "";
+                                }
+                                int id = clubtype.GetHashCode();
+                                <div class="tab-pane @str" id="@clubtype">
+                                    @foreach (var club in Model)
+                                    {
+                                        if (String.IsNullOrEmpty(club.clubtypes))
+                                        {
+                                            continue;
+                                        }
+                                        if(club.clubtypes.Contains(id.ToString()))
+                                        {
+                                            <div class="club-cover text-center" data-toggle="popover" data-content="@club.ClubName" data-placement="top" data-trigger="hover">
+                                                <a href="@Url.Action("Profile", "Users", new { id = club.ClubId })">
+                                                    <img class="clubs-list-img" src="@club.CoverImageLink.MediumLink" alt="@club.ClubName" />
+                                                </a>
+                                                @*        <span class="club-name">@club.ClubName</span>*@
+                                                <img class="club-profile-img img-polaroid" src="@club.ProfileImageLink.SmallLink" />
+
+                                                @if (club.ClubId != club.CurrentUserId)
+                                                {
+                                                    if (club.IsCurrentUserFollowing)
+                                                    {
+                                                        <img class="clubs-list-follow-img" src="/Images/following-icon.png"
+                                                                title="Click to unfollow" alt="Following" data-id="@club.ClubId" data-action="unfollow" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img class="clubs-list-follow-img" src="/Images/follow-icon.png"
+                                                                title="Follow" alt="Follow" data-id="@club.ClubId" data-action="follow" />
+                                                    }
+                                                }
+
+                                            </div>
+                                        }
+                                    }
+                           
+                                </div>
+                            }
+                        }
+                        
                         <div class="tab-pane margin-ten" id="myClubsTab">
                         </div>
                         <div class="tab-pane margin-ten" id="schoolClubsTab">
+                        </div>
+                        <div class="tab-pane margin-ten" id="mapClubs">
+                            
+                            <script type="text/javascript"
+                              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtsVyZ8TtICrDhxA4OzrUANySs8t1hHYk">
+                            </script>
+                            <script>
+
+                                $('#mapshow').on('click', function () {
+                                    $("#mapViewcont").html('<div id="map-canvas" style="height:500px;width:97%;padding:10px;"></div>');
+                                    initialize();
+                                    return false;
+                                });
+
+                                var map;
+                                function initialize() {
+                                    var mapOptions = {
+                                        zoom: 8,
+                                        center: { lat: 45.5000, lng: -73.5667 }
+                                    };
+                                    map = new google.maps.Map(document.getElementById('map-canvas'),
+                                        mapOptions);
+                                    
+                                    
+                                    $.ajax({
+                                        url: "/users/maplocations/",
+                                        success: function (data) {
+                                            var obj = data;
+                                            var address;
+                                            var name;
+
+                                            $.each(obj, function (idx, obj1) {
+                                                address = obj1.address;
+                                                name = obj1.name;
+                                                abcd(address, name);
+                                            });
+                                        }
+                                    });
+                                }
+
+                                function abcd(address1,name1)
+                                {
+                                    var geocoder = new google.maps.Geocoder();
+                                    geocoder.geocode({ address: address1 }, function (results, status) {
+                                        if (status == google.maps.GeocoderStatus.OK) {
+                                            var p = results[0].geometry.location;
+                                            var lat = p.lat();
+                                            var lng = p.lng();
+                                            var str = "<div><h3>" + name1 + "</h3><p>" + address1 + "</p></div>";
+                                            createMarker(name1, str, lat, lng);
+                                        }
+                                    });
+                                }
+
+
+                                var infowindow;
+
+                                function createMarker(name,add, lat, lng) {
+                                    var contentString = add;
+                                    var marker = new google.maps.Marker({
+                                        position: new google.maps.LatLng(lat, lng),
+                                        map: map,
+                                        title: name
+                                    });
+
+                                    infowindow = new google.maps.InfoWindow();
+
+                                    google.maps.event.addListener(marker, 'click', function () {                                        
+                                        infowindow.close();
+                                        infowindow.setContent(contentString);
+                                        infowindow.open(map, marker);
+                                    });
+                                }
+
+
+                                
+
+                            </script>
                         </div>
                     </div>
                 </div>

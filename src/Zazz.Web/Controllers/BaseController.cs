@@ -86,20 +86,49 @@ namespace Zazz.Web.Controllers
 
         public string GetClubUsernames()
         {
-            return UserService.GetClubUsernames();
+            return UserService.GetClubUsernames();   
+        }
 
-            
+        public IEnumerable<ClubType> GetClubTypes()
+        {
+            return (IEnumerable<ClubType>)Enum.GetValues(typeof(ClubType));
         }
 
 
-        public IQueryable<User> getUsers()
+        public IEnumerable<User> getUsers()
         {
-            return UserService.getAllUsers();
+            var user = UserService.GetUser(User.Identity.Name);
+
+            var follows = user.Follows;
+
+            List<User> users = new List<User>();
+
+            foreach (var follow in follows)
+            {
+                var usr = UserService.GetUser(follow.ToUserId);
+
+                if (usr.AccountType == AccountType.User)
+                    users.Add(usr);
+            }
+            return users;
         }
 
-        public IQueryable<User> getAllClubs()
+        public IEnumerable<User> getAllClubs()
         {
-            return UserService.getAllClubs();
+            var user = UserService.GetUser(User.Identity.Name);
+
+            var follows = user.Follows;
+
+            List<User> users = new List<User>();
+
+            foreach (var follow in follows)
+            {
+                var usr = UserService.GetUser(follow.ToUserId);
+
+                if (usr.AccountType == AccountType.Club)
+                    users.Add(usr);
+            }
+            return users;
         }
 
         private PhotoLinks GetDisplayPicture(int id)

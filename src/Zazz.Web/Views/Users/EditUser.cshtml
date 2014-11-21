@@ -25,8 +25,57 @@
                     <li><a href="#profilePicTab" data-toggle="tab">Profile Pictures</a></li>
                     <li><a href="#fbSyncTab" data-toggle="tab">Facebook Sync</a></li>
                     <li><a href="#notificationsTab" data-toggle="tab">Notifications</a></li>
+                    <li><a href="#deleteTab" data-toggle="tab">Delete Profile</a></li>
                 </ul>
                 <div class="tab-content margin-ten">
+                    <div class="tab-pane" id="deleteTab">
+                        <p style="margin-top: 30px;">
+                            <div class="control-group">
+                                <div class="editor-label">
+                                    <label class="control-label" for="DeletePassword">Password</label>
+                                </div>
+                                <div class="editor-field">
+                                    <input class="span4" id="DeletePassword" name="DeletePassword" type="text" placeholder="Enter Your Password" /><br />
+                                    <span style="color:#CC0000;display:none;" id="deleteError1">Please Enter Password<br /></span>
+                                    <span style="color:#CC0000;display:none;" id="deleteError2">Invalid Password<br /></span>
+                                    <input type="button" id="deleteProfileBtn" class="btn btn-danger" value="Delete Profile" />
+                                    <span id="loaderDelete" style="display:none;"> Please Wait....</span>
+                                </div>
+                                <script type="text/javascript">
+                                    var pwd = "";
+                                    $(document).on("click", "#deleteProfileBtn", function () {
+                                        $("#deleteError1").hide();
+                                        $("#deleteError2").hide();
+                                        pwd = $("#DeletePassword").val();
+                                        if (pwd == "") {
+                                            $("#deleteError1").show();
+                                            return false;
+                                        }
+                                        $("#loaderDelete").show();
+                                        $.ajax({
+                                            url: "/users/deleteAccount/",
+                                            data: {
+                                                "password" : pwd
+                                            },
+                                            cache: false,
+                                            error: function () {
+                                                toastr.error("An error occured, please try again later");
+                                            },
+                                            success: function (data) {
+                                                $("#loaderDelete").hide();
+                                                if (data == "invalid password") {
+                                                    $("#deleteError2").show();
+                                                } else if (data == "ok") {
+                                                    window.location = "/home/index/";
+                                                }
+                                            }
+                                        });
+                                        return false;
+                                    });
+                                </script>
+                            </div>
+                        </p>
+                    </div>
                     <div class="tab-pane active" id="aboutTab">
                         <a href="~/account/changepassword">Change Password</a>
                         <p style="margin-top: 30px;">

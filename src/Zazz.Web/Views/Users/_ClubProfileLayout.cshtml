@@ -17,10 +17,22 @@
         <div class="span3">
             <div style="height: 50px">
                 <ul class="nav nav-stacked club-details">
-                    <li><i class="icon-glass"></i><strong>@Model.ClubType</strong></li>
+                    @if (!String.IsNullOrEmpty(Model.clubtypes))
+                    {
+                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.clubtypes</strong></li>
+                    }
+                    else
+                    {
+                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.ClubType</strong></li>
+                    }
                     @if (!String.IsNullOrEmpty(Model.Address))
                     {
-                        <li><i class="icon-map-marker"></i><strong>@Model.Address</strong></li>
+                        <li><img src="~/Images/address.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.Address</strong></li>
+                    }
+
+                    @if (!String.IsNullOrEmpty(Model.city))
+                    {
+                        <li><img src="~/Images/city.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.city</strong></li>
                     }
                 </ul>
             </div>
@@ -73,11 +85,11 @@
 
                                     @if (i == 1)
                                     {
-                                        <img src="@p.PhotoUrl.MediumLink" />
+                                        <img style="background: url('@p.PhotoUrl.MediumLink') no-repeat center center; width:210px;height:140px;" />
                                     }
                                     else
                                     {
-                                        <img src="@p.PhotoUrl.VerySmallLink" />
+                                        <img style="background: url('@p.PhotoUrl.SmallLink') no-repeat center center; width:61px;height:61px;" />
                                     }
 
                                 </a>

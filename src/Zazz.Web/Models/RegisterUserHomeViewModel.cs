@@ -44,6 +44,9 @@ namespace Zazz.Web.Models
         [Display(Name = "Promoter Type")]
         public PromoterType? PromoterType { get; set; }
 
+        [Display(Name="Tag Line")]
+        public String TagLine { get; set; }
+
         public IEnumerable<PromoterType> PromoterTypes { get; set; }
 
         [Display(Name = "Date of Birth:")]

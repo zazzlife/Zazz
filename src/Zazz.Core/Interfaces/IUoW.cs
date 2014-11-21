@@ -24,6 +24,7 @@ namespace Zazz.Core.Interfaces
         ICategoryStatRepository CategoryStatRepository { get; }
         IWeeklyRepository WeeklyRepository { get; }
         IPhotoLikeRepository PhotoLikeRepository { get; }
+        IPostLikeRepository PostLikeRepository { get; }
         IUserReceivedLikesRepository UserReceivedLikesRepository { get; }
         IOAuthRefreshTokenRepository OAuthRefreshTokenRepository { get; }
         IClubPointRewardScenarioRepository ClubPointRewardScenarioRepository { get; }
@@ -33,6 +34,8 @@ namespace Zazz.Core.Interfaces
         IUserPointHistoryRepository UserPointHistoryRepository { get; }
         IUserRewardHistoryRepository UserRewardHistoryRepository { get; }
         ITagRepository TagRepository { get; }
+        ICityRepository CityRepository { get; }
+        //ISchoolRepository SchoolRepository { get; }
 
         void SaveChanges();
     }

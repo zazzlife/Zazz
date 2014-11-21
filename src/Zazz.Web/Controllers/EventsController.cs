@@ -24,16 +24,18 @@ namespace Zazz.Web.Controllers
     public class EventsController : BaseController
     {
         private readonly IEventService _eventService;
+        private readonly INotificationService _notificationService;
         private readonly IUoW _uow;
 
         private const int PAGE_SIZE = 10;
 
         public EventsController(IUserService userService, IEventService eventService,
                                 IUoW uow, IPhotoService photoService, IDefaultImageHelper defaultImageHelper,
-                                ICategoryService categoryService, IStaticDataRepository staticDataRepository)
+                                ICategoryService categoryService, IStaticDataRepository staticDataRepository, INotificationService notificationService)
             : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _eventService = eventService;
+            _notificationService = notificationService;
             _uow = uow;
         }
 
@@ -224,6 +226,44 @@ namespace Zazz.Web.Controllers
             return View("EditForm", vm);
         }
 
+        [HttpPost]
+        public void eventInvitation(EventInvitation vm)
+        {
+            List<int> ids = new List<int>();
+            string data = vm.invitation;
+            string[] values = data.Split('&');
+            foreach(string value in values)
+            {
+                try
+                {
+                    ids.Add(int.Parse(value.Split('=')[1]));
+                }
+                catch (Exception)
+                {
+                }
+            }
+            var userId = UserService.GetUserId(User.Identity.Name); 
+            _notificationService.CreateNewEventInvitationNotification(userId,vm.eventId, ids.ToArray());
+        }
+
+        [HttpPost]
+        public void eventInvitationChosen(EventInvitation vm)
+        {
+            List<int> ids = new List<int>();
+            string data = vm.invitation;
+            string[] values = data.Split(',');
+            foreach (string value in values)
+            {
+                try
+                {
+                    ids.Add(int.Parse(value));
+                }
+                catch (Exception) {}
+            }
+            var userId = UserService.GetUserId(User.Identity.Name);
+            _notificationService.CreateNewEventInvitationNotification(userId, vm.eventId, ids.ToArray());
+        }
+
         [HttpGet, Authorize]
         public ActionResult Show(int id, string friendlySeoName)
         {
@@ -333,11 +373,11 @@ namespace Zazz.Web.Controllers
                          Longitude = zazzEvent.Longitude,
                          PhotoId = zazzEvent.PhotoId,
                          IsFacebookEvent = zazzEvent.IsFacebookEvent,
-                         ImageUrl = zazzEvent.IsFacebookEvent
-                                        ? new PhotoLinks(zazzEvent.FacebookPhotoLink)
-                                        : DefaultImageHelper.GetDefaultAlbumImage(),
+                         ImageUrl = PhotoService.GetUserDisplayPhoto(userId),
                          IsDateOnly = zazzEvent.IsDateOnly,
-                         FacebookEventId = zazzEvent.FacebookEventId
+                         FacebookEventId = zazzEvent.FacebookEventId,
+                         CoverLink = zazzEvent.CoverPic,
+                         OwnerName = UserService.GetUserDisplayName(userId)
                      };
 
             if (zazzEvent.PhotoId.HasValue)

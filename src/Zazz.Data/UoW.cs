@@ -99,6 +99,11 @@ namespace Zazz.Data
             get { return new PhotoLikeRepository(GetContext()); }
         }
 
+        public IPostLikeRepository PostLikeRepository
+        {
+            get { return new PostLikeRepository(GetContext()); }
+        } 
+
         public IUserReceivedLikesRepository UserReceivedLikesRepository
         {
             get { return new UserReceivedLikesRepository(GetContext()); }
@@ -137,6 +142,17 @@ namespace Zazz.Data
         {
             get { return new UserRewardHistoryRepository(GetContext()); }
         }
+
+        public ICityRepository CityRepository
+        {
+            get { return new CityRepository(GetContext()); }
+        }
+        /*
+        public ISchoolRepository SchoolRepository
+        {
+            //get { return new SchoolRepository(GetContext()); }
+        }
+          */
 
         public ITagRepository TagRepository
         {

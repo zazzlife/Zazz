@@ -300,7 +300,7 @@
                     @Html.PasswordFor(model => model.Password, new { @placeholder = "Password", @class = "register-input" })
                 </div>
                 <div class="zazz-form">
-                    <form action="@Url.Action("Register", "Home")" method="POST">
+                    <form action="@Url.Action("Register", "Home")" method="POST" id="formRegistration">
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true)
 
@@ -357,14 +357,52 @@
                             </div>
 
                             <div class="lp-majors">
+                                <select class="lp-select" id="taglineselect">
+                                    @{
+                                        <option value="">Select TagLine</option>
+                                        foreach(var major in Model.Majors)
+                                        {
+                                            <option>@major.Name</option>
+                                        }
+                                        <option value="8">My Own Tagline</option>
+                                    }
+                                </select>
+                                @Html.TextBoxFor(model => model.TagLine, new { @placeholder = "Tag Line", @class = "register-input", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.TagLine, null, new { @class = "help-inline" })
+                                <!--
                                 @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Tagline", new { @class = "lp-select" })
                                 @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                                -->
                             </div>
 
                             @Html.SpamPreventionFields()
                             <br>
 
                             <button type="submit">Register</button>
+                            <script type="text/javascript">
+                                jQuery("label[for='_UserType_User']").html("I Like To Party");
+                                $(document).ready(function () {
+                                    $("#TagLine").hide();
+                                    $("#taglineselect").change(function () {
+                                        var val = $(this).val();
+                                        if (val == "8") {
+                                            $("#TagLine").val("");
+                                            $("#TagLine").show();
+                                        } else {
+                                            $("#TagLine").hide();
+                                            $("#TagLine").val(val);
+                                        }
+                                    });
+                                    $("#formRegistration").submit(function () {
+                                        if ($("#_UserType_User").is(":checked")) {
+                                            if ($("#taglineselect").val() == "") {
+                                                //alert("Please select tagline");
+                                                //return false;
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
                         </fieldset>
                     </form>
                 </div>

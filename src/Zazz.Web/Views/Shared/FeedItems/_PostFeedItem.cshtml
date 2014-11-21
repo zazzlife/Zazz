@@ -61,6 +61,16 @@
         }
         
         <div class="clearfix"></div>
+		<div class="pull-left">
+            <button data-postlike-btn="1" data-isloaded="0"
+                    class="btn-link disabled" data-id="@Model.Post.PostId" disabled="disabled">
+                        
+                <i class="icon-thumbs-up"></i> 
+                Like
+            </button>
+                    
+            <span style="margin-left: -6px;" id="postLikesCount-@Model.Post.PostId"><i class="icon-spin icon-spinner"></i></span>
+        </div>
         <div title="@Model.Time.ToLongDateString() - @Model.Time.ToShortTimeString()" data-placement="right" class="pull-right font-verysmall" style="margin: 5px 5px 0 0;">@Html.RelativeTime(Model.Time)</div>
         <div class="clearfix" style="margin-bottom: 10px;"></div>
 

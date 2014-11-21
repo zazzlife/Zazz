@@ -69,6 +69,9 @@ namespace Zazz.Web.Controllers
                                 : n.NotificationType == NotificationType.CommentOnEvent
                                 ? n.CommentNotification.Comment.EventComment.Event.Name
                                 
+                                :n.NotificationType == NotificationType.EventInvitation
+                                ?n.EventNotification.Event.Name
+
                                 : String.Empty,
                     ItemId =
                                 n.NotificationType == NotificationType.WallPost
@@ -88,6 +91,12 @@ namespace Zazz.Web.Controllers
 
                                 : n.NotificationType == NotificationType.CommentOnEvent
                                 ? n.CommentNotification.Comment.EventComment.EventId
+
+                                : n.NotificationType == NotificationType.EventInvitation
+                                ? n.EventNotification.EventId
+
+                                : n.NotificationType == NotificationType.PostLike
+                                ? n.PostNotification.PostId
 
                                 : 0,
 

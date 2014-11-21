@@ -51,7 +51,22 @@
             else if (n.NotificationType == NotificationType.TagPhotoNotification)
             {
                 @: taged you in a photo
-            } 
+            }
+            else if (n.NotificationType == NotificationType.EventInvitation)
+            {
+                @: invited you a event:
+                <a target="_blank" href="~/events/show/@n.ItemId"><strong>@n.EventName</strong></a>
+            }
+            else if (n.NotificationType == NotificationType.PostLike)
+            {
+                @: like your 
+                <a target="_blank" href="~/posts/show/@n.ItemId">post</a>
+            }
+            else if (n.NotificationType == NotificationType.PhotoLike)
+            {
+                @: like your photo
+            }
+             
 
             <span title="@n.Time.ToLongDateString() - @n.Time.ToShortTimeString()"
                   class="font-verysmall pull-right time">@Html.RelativeTime(n.Time)</span>

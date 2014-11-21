@@ -23,6 +23,9 @@ namespace Zazz.Core.Models.Data
         [MaxLength(50)]
         public string Password { get; set; }
 
+        [MaxLength(50)]
+        public string tagline { get; set; }
+
         public AccountType AccountType { get; set; }
 
         public DateTime LastActivity { get; set; }

@@ -60,9 +60,32 @@
                             <div class="editor-label">
                                 @Html.LabelFor(model => model.UserType, new { @class = "control-label" })
                             </div>
-                            <div class="editor-field">
+                            <div class="editor-field lp-radio">
                                 @Html.RadioButtonForEnum(model => model.UserType)
                                 @Html.ValidationMessageFor(model => model.UserType, null, new { @class = "help-inline" })
+                            </div>
+                             <div class="lp-promoters">
+                                @Html.DropDownListFor(model => model.PromoterType, new SelectList(Model.PromoterTypes), "Select Promoter Type", new { @class = "lp-select" })
+                                @Html.ValidationMessageFor(model => model.PromoterType, null, new { @class = "help-inline" })
+                            </div>
+
+                            <div class="lp-majors">
+                                <select id="taglineselect">
+                                    @{
+                                        <option value="">Select TagLine</option>
+                                        foreach(var major in Model.Majors)
+                                        {
+                                            <option>@major.Name</option>
+                                        }
+                                        <option value="8">My Own Tagline</option>
+                                    }
+                                </select>
+                                @Html.TextBoxFor(model => model.TagLine, new { @placeholder = "Tag Line", @class = "register-input", @maxlength = "50" })
+                                @Html.ValidationMessageFor(model => model.TagLine, null, new { @class = "help-inline" })
+                                <!--
+                                @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name"), "Tagline", new { @class = "lp-select" })
+                                @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
+                                -->
                             </div>
                         </div>
 
@@ -71,6 +94,53 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Register</button>
+                         <script type="text/javascript">
+                             jQuery("label[for='_UserType_User']").html('<input data-val="true" data-val-required="The User Type: field is required." id="_UserType_User" name="UserType" type="radio" value="User"> I Like To Party');
+                        </script>
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $("#TagLine").hide();
+                                checkUser();
+                                $("#_UserType_Promoter").click(function () {
+                                    checkUser();
+                                });
+                                $("#_UserType_User").click(function () {
+                                    checkUser();
+                                });
+                                $("#taglineselect").change(function () {
+                                    var val = $(this).val(); 
+                                    if (val == "8") {
+                                        $("#TagLine").val("");
+                                        $("#TagLine").show();
+                                    } else {
+                                        $("#TagLine").hide();
+                                        $("#TagLine").val(val);
+                                    }                                    
+                                });
+                                $("form").submit(function () {
+                                    if ($("#_UserType_User").is(":checked")) {
+                                        if ($("#taglineselect").val() == "") {
+                                            alert("Please select tagline");
+                                            return false;
+                                        }
+                                    }
+                                });
+                            });
+
+                            function checkUser() {
+                                if ($("#_UserType_Promoter").is(":checked")) {
+                                    $(".lp-promoters").show();
+                                } else {
+                                    $(".lp-promoters").hide();
+                                }
+                                if ($("#_UserType_User").is(":checked")) {
+                                    $(".lp-majors").show();
+                                } else {
+                                    $(".lp-majors").hide();
+                                }
+                            }
+
+                        </script>
                     </fieldset>
             
                 }

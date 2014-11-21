@@ -18,6 +18,8 @@ using Zazz.Infrastructure.Helpers;
 using Zazz.Web.Helpers;
 using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
+using Newtonsoft.Json;
+using System.Web.Security;
 
 namespace Zazz.Web.Controllers
 {
@@ -27,16 +29,20 @@ namespace Zazz.Web.Controllers
         private readonly ICacheService _cacheService;
         private readonly IFeedHelper _feedHelper;
         private readonly IFollowService _followService;
+        private readonly IFacebookService _facebookService;
+        private readonly ICryptoService _cryptoService;
 
         public UsersController(IStaticDataRepository staticDataRepo, IUoW uow, IPhotoService photoService,
             IUserService userService, ICacheService cacheService, ICategoryService categoryService,
-            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, IFollowService followService)
+            IDefaultImageHelper defaultImageHelper, IFeedHelper feedHelper, IFollowService followService, IFacebookService facebookService, ICryptoService cryptoService)
             : base(userService, photoService, defaultImageHelper, staticDataRepo, categoryService)
         {
             _uow = uow;
             _cacheService = cacheService;
             _feedHelper = feedHelper;
             _followService = followService;
+            _facebookService = facebookService;
+            _cryptoService = cryptoService;
         }
 
         [Authorize]
@@ -84,11 +90,29 @@ namespace Zazz.Web.Controllers
 
         private ActionResult LoadClubProfile(User user, int currentUserId, string displayName, PhotoLinks profilePhotoUrl)
         {
+            //var baseVm = LoadBaseClubProfileVm(user, currentUserId, displayName, profilePhotoUrl);
+
+            string clubtypess = "";
+            if (!String.IsNullOrEmpty(user.ClubDetail.ClubTypes))
+            {
+                var cts = user.ClubDetail.ClubTypes.Split(',');
+                
+                foreach(string s in cts)
+                {
+                    try
+                    {
+                        clubtypess += Enum.GetName(typeof(ClubType), int.Parse(s)) + " / ";
+                    }
+                    catch (Exception)
+                    { }
+                }
+                clubtypess = clubtypess.Substring(0,clubtypess.Length - 3);
+            }
             var baseVm = LoadBaseClubProfileVm(user, currentUserId, displayName, profilePhotoUrl);
             var vm = new ClubProfileViewModel
                      {
                          Address = baseVm.Address,
-                         ClubType = baseVm.ClubType,
+                         ClubType = (baseVm.ClubType != null)?baseVm.ClubType:ClubType.Bar,
                          CoverPhotoUrl = baseVm.CoverPhotoUrl,
                          Events = baseVm.Events,
                          Feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId),
@@ -101,7 +125,9 @@ namespace Zazz.Web.Controllers
                          UserId = baseVm.UserId,
                          UserName = baseVm.UserName,
                          UserPhoto = baseVm.UserPhoto,
-                         Weeklies = baseVm.Weeklies
+                         Weeklies = baseVm.Weeklies,
+                         clubtypes = clubtypess,
+                         city = (user.ClubDetail.City != null)?user.ClubDetail.City.Name:""
                      };
 
             return View("ClubProfile", vm);
@@ -317,7 +343,8 @@ namespace Zazz.Web.Controllers
                 FollowRequestAlreadySent = baseVm.FollowRequestAlreadySent,
                 IsTargetUserFollowingCurrentUser = baseVm.IsTargetUserFollowingCurrentUser,
                 IsCurrentUserFollowingTargetUser = baseVm.IsCurrentUserFollowingTargetUser,
-                PreviewPhotos = pics
+                PreviewPhotos = pics,
+                tagline = user.tagline
             };
 
 
@@ -447,6 +474,23 @@ namespace Zazz.Web.Controllers
             return View("_FeedsPartial", feeds);
         }
 
+        [HttpGet]
+        public string deleteAccount(string password)
+        {
+            string pwd = _cryptoService.GeneratePasswordHash(password);
+            User user = UserService.GetUser(User.Identity.Name);
+            if (user.Password != pwd)
+                return "invalid password";
+
+            _uow.UserRepository.Remove(user.Id);
+            _uow.SaveChanges();
+
+            if (User.Identity.IsAuthenticated)
+                FormsAuthentication.SignOut();
+
+            return "ok";
+        }
+
         [HttpGet, Authorize]
         public ActionResult Edit()
         {
@@ -465,7 +509,7 @@ namespace Zazz.Web.Controllers
                     Gender = user.UserDetail.Gender,
                     FullName = user.UserDetail.FullName,
                     CityId = user.UserDetail.CityId,
-                    Cities = StaticDataRepository.GetCities(),
+                    Cities = _uow.CityRepository.GetAll().ToList<City>(),
                     SchoolId = user.UserDetail.SchoolId,
                     Schools = StaticDataRepository.GetSchools(),
                     MajorId = user.UserDetail.MajorId,
@@ -489,7 +533,7 @@ namespace Zazz.Web.Controllers
             if (user.AccountType != AccountType.User)
                 throw new SecurityException();
 
-            vm.Cities = StaticDataRepository.GetCities();
+            vm.Cities = _uow.CityRepository.GetAll().ToList<City>();
             vm.Schools = StaticDataRepository.GetSchools();
             vm.Majors = StaticDataRepository.GetMajors();
 
@@ -682,6 +726,68 @@ namespace Zazz.Web.Controllers
 
             return View("UserFollowingClubs", vm);
         }
+
+        public string AjaxFollowers(int id)
+        {
+            var follows = _uow.FollowRepository.GetUserFollowers(UserService.GetUserId(User.Identity.Name)).ToList();
+
+            string items = "";
+            foreach (var follow in follows)
+            {
+                
+                items += "<li class='span3' style='margin-left:5px;margin-right:0px;'>";
+                items += "<a href='#' class='thumbnail'>";
+                items += "<img style=\"background-image:url('" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).SmallLink + "');height:80px;\" class='profile-photos-img-div3' alt=''>";
+                items += "<label> " + UserService.GetUserDisplayName(follow.FromUserId) + " <input type='checkbox' name='ckh"+id+"' value='" + follow.FromUserId + "' class='usercheck_invite_"+id+"' /></label>";
+                items += "</a>";
+            }
+            string arr = "<div><ul class='thumbnails'>"+items+"</ul></div>";
+
+            return arr;
+        }
+
+        public string AjaxInviteUserFollowers(int id)
+        {
+            var follows = _uow.FollowRepository.GetUserFollowers(UserService.GetUserId(User.Identity.Name)).ToList();
+
+            string items = "";
+            foreach (var follow in follows)
+            {
+                items += "<option value='" + follow.FromUserId + "'>" + UserService.GetUserDisplayName(follow.FromUserId) + "</option>";
+            }
+            return items;
+        }
+
+        public JsonNetResult Maplocations()
+        {
+            var clubs = UserService.getAllClubs().ToList();
+
+            List<MapLocaionJson> mp = new List<MapLocaionJson>();            
+            foreach (var club in clubs)
+            {
+                if (club.ClubDetail != null)
+                {
+                    if (club.ClubDetail.Address != null && club.ClubDetail.Address != "")
+                    {
+                        mp.Add(new MapLocaionJson
+                        {
+                            name = club.ClubDetail.ClubName,
+                            address = club.ClubDetail.Address
+                        });
+                    }
+                }
+            }
+
+            return new JsonNetResult(mp.ToArray());   
+        }
+
+        internal class MapLocaionJson
+        {
+            public string name { get; set;}
+
+            public string address { get; set; }
+        }
+
 
         private ActionResult ClubLikedFeed(User user)
         {

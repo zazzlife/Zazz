@@ -33,5 +33,9 @@ namespace Zazz.Web.Models
         public List<EventViewModel> Events { get; set; }
 
         public List<PartyAlbumViewModel> PartyAlbums { get; set; }
+
+        public string city { get; set; }
+
+        public string clubtypes { get; set; }
     }
 }

@@ -40,5 +40,9 @@ namespace Zazz.Core.Interfaces.Services
         void MarkUserNotificationsAsRead(int userId);
 
         int GetUnreadNotificationsCount(int userId);
+
+        void CreatelikePhotoNotification(int fromUserId, int toUserId, int photoId, bool save = true);
+
+        void CreateLikePostNotification(int fromUserId, int toUserId,int postId, bool save = true);
     }
 }

@@ -37,6 +37,7 @@ namespace Zazz.Data
         public IDbSet<CategoryStat> CateStats { get; set; }
         public IDbSet<Weekly> Weeklies { get; set; }
         public IDbSet<PhotoLike> PhotoLikes { get; set; }
+        public IDbSet<PostLike> PostLike1 { get; set; }
         public IDbSet<UserReceivedLikes> UserReceivedLikes { get; set; }
         public IDbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public IDbSet<OAuthRefreshTokenScope> OAuthRefreshTokenScopes { get; set; }
@@ -74,6 +75,17 @@ namespace Zazz.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<PostLike>()
+                .HasRequired(f => f.Post)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<PostLike>()
+                .HasRequired(f => f.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<UserPreferences>()
                         .HasRequired(p => p.User)
                         .WithRequiredPrincipal(u => u.Preferences);
@@ -227,7 +239,6 @@ namespace Zazz.Data
             modelBuilder.Entity<Follow>()
                 .HasRequired(f => f.ToUser)
                 .WithMany(f => f.Followers);
-                
 
             base.OnModelCreating(modelBuilder);
         }

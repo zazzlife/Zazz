@@ -6,9 +6,15 @@
 
 <div class="event">
     
-    @if (Model.CoverImage != null)
-    {
-        <img class="event-cover" src="@Model.CoverImage.MediumLink" />
+    @{
+        if (Model.CoverLink != null)
+        {
+            <img class="event-cover" src="@Model.CoverLink" />   
+        }
+        else if (Model.CoverImage != null)
+        {
+            <img class="event-cover" src="@Model.CoverImage.MediumLink" />
+        }
     }
     
     @if (Model.ProfileImage != null)

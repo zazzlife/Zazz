@@ -20,6 +20,13 @@
     }
 }
 
+@if (Model.AccountType == AccountType.User)
+{
+    <script type="text/javascript">
+        $("body").css("background-color","#FFFFFF");
+    </script>
+}
+
 <div class="container" style="margin-top: -13px;">
     <div class="row-fluid">
         @*LEFT SIDE*@
@@ -112,14 +119,27 @@
             </div>
         </div>
 
+
+
         @*CENTER*@
+        @{
+            if(Model.AccountType == AccountType.User)
+            {
+                <div class="center-panel color-white-bg">
+                     @Html.Partial("_PostInputsPartial")
 
-        <div class="center-panel color-white-bg box-shadow">
-            @Html.Partial("_PostInputsPartial")
+                    @Html.Partial("_FeedsPartial", Model.Feeds)
+                </div>
+            }
+            else
+            {
+                 <div class="center-panel color-white-bg box-shadow">
+                     @Html.Partial("_PostInputsPartial")
 
-            @Html.Partial("_FeedsPartial", Model.Feeds)
-        </div>
-        
+                    @Html.Partial("_FeedsPartial", Model.Feeds)
+                </div>
+            }
+        }
     </div>
 </div>
 

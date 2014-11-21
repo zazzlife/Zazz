@@ -38,6 +38,24 @@ namespace Zazz.Web.OAuthClients
                 "https://graph.facebook.com/me?access_token=" + accessToken
                 );
             dynamic data = Json.Decode(content);
+
+            var edu = data.education;
+            string schoolName = "" ;
+            if (edu != null)
+            {
+                int lastSchoolLenght = edu.Length;
+                var lastschool = edu[lastSchoolLenght - 1];
+                lastschool = lastschool["school"];
+                schoolName = lastschool["name"];
+            }
+
+
+            var location = data.location;
+            string city = "";
+            if (location != null)
+            {
+                city = location["name"];
+            }
             return new Dictionary<string, string> {
                 {
                     "id",
@@ -50,6 +68,14 @@ namespace Zazz.Web.OAuthClients
                 {
                     "email",
                     data.email
+                },
+                {
+                    "school",
+                    schoolName
+                },
+                {
+                    "city",
+                    city
                 }
             };
         }

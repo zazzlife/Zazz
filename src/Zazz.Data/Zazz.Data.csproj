@@ -61,6 +61,7 @@
       <DependentUpon>201401310529400_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Repositories\CityRepository.cs" />
     <Compile Include="Repositories\ClubPointRewardScenarioRepository.cs" />
     <Compile Include="Repositories\ClubRewardRepository.cs" />
     <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Repositories\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repositories\PhotoRepository.cs" />
     <Compile Include="Repositories\PhotoLikeRepository.cs" />
+    <Compile Include="Repositories\PostLikeRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\CategoryStatRepository.cs" />
     <Compile Include="Repositories\TagRepository.cs" />

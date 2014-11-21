@@ -10,6 +10,8 @@ namespace Zazz.Core.Models.Data.Enums
         WallPost = 6,
         TagNotification = 7,
         TagPhotoNotification = 8,
-        EventInvitation = 9
+        EventInvitation = 9,
+        PostLike = 10,
+        PhotoLike = 11
     }
 }

@@ -35,5 +35,8 @@ namespace Zazz.Core.Models.Facebook
 
         [DataMember(Name = "updated_time")]
         public long UpdatedTime { get; set; }
+
+        [DataMember(Name = "updated_time")]
+        public FbCover CoverPic { get; set; }
     }
 }

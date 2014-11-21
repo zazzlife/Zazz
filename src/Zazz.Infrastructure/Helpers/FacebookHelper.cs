@@ -16,7 +16,7 @@ namespace Zazz.Infrastructure.Helpers
     public class FacebookHelper : IFacebookHelper
     {
         private readonly IKeyChain _keyChain;
-        private const string EVENT_FIELDS = "description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only";
+        private const string EVENT_FIELDS = "description, eid, name, location, pic_square, pic_cover, start_time, end_time, update_time, venue, is_date_only";
         private const string EVENT_TABLE = "event";
         private readonly FacebookClient _client;
 
@@ -189,7 +189,8 @@ namespace Zazz.Infrastructure.Helpers
                     Pic = e.pic_square,
                     UpdatedTime = e.update_time,
                     IsDateOnly = e.is_date_only,
-                    Venue = new FbVenue()
+                    Venue = new FbVenue(),
+                    CoverPic = new FbCover()
                 };
 
                 try
@@ -198,6 +199,8 @@ namespace Zazz.Infrastructure.Helpers
                 }
                 catch (RuntimeBinderException)
                 { }
+
+
 
                 try
                 {
@@ -213,6 +216,39 @@ namespace Zazz.Infrastructure.Helpers
                                                           DateTimeStyles.AssumeUniversal)
                                    : DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
                                                           DateTimeStyles.RoundtripKind);
+
+
+
+                if (!(e.pic_cover is IEnumerable<object>))
+                {
+                    try
+                    {
+                        ev.CoverPic.coverid = e.pic_cover.cover_id;
+                    }
+                    catch (RuntimeBinderException)
+                    {}
+
+                    try
+                    {
+                        ev.CoverPic.coverlink = e.pic_cover.source;
+                    }
+                    catch (RuntimeBinderException)
+                    {}
+
+                    try
+                    {
+                        ev.CoverPic.offsetY = e.pic_cover.offset_y;
+                    }
+                    catch (RuntimeBinderException)
+                    {}
+
+                    try
+                    {
+                        ev.CoverPic.offsetX = e.pic_cover.offset_x;
+                    }
+                    catch (RuntimeBinderException)
+                    {}
+                }
 
 
                 if (!(e.venue is IEnumerable<object>))
@@ -432,6 +468,13 @@ namespace Zazz.Infrastructure.Helpers
                 e.Street = fbEvent.Venue.Street;
                 e.Latitude = fbEvent.Venue.Latitude;
                 e.Longitude = fbEvent.Venue.Longitude;
+            }
+
+            if (fbEvent.CoverPic != null)
+            {
+                e.CoverPic = fbEvent.CoverPic.coverlink;
+                e.offsetX = fbEvent.CoverPic.offsetX;
+                e.offsetY = fbEvent.CoverPic.offsetY;
             }
 
             return e;

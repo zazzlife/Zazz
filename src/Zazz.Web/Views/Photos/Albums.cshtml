@@ -78,7 +78,7 @@
                                 if (j++ == 1)
                                 {
                                     <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
-                                        <img src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                        <img style="background: url('@thumb.MediumLink') no-repeat center center; height:250px;" alt="">   
                                     </a>
                                 }
                             }
@@ -101,7 +101,7 @@
                                 if (j++ == 1)
                                 {
                                     <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
-                                        <img src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                        <img style="background: url('@thumb.MediumLink') no-repeat center center; height:250px;" alt="">   
                                     </a> 
                                 }
                             }
@@ -124,7 +124,7 @@
                                 if (j++ == 1)
                                 {
                                     <a href="@Url.Action("List","Photos", new {id=Model.UserId, albumId=Model.Albums[i].AlbumId, page=1})">
-                                        <img class="m2main" src="@thumb.OriginalLink" alt="" style="height:250px">   
+                                        <img class="m2main" style="background: url('@thumb.MediumLink') no-repeat center center; height:250px;" alt="">   
                                     </a>
                                 }
                             }

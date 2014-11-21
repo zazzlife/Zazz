@@ -57,7 +57,7 @@ namespace Zazz.Web.Models.Api
 
     public class ApiUserDetails
     {
-        public int? CityId { get; set; }
+        public int CityId { get; set; }
 
         public City City { get; set; }
 
@@ -65,7 +65,7 @@ namespace Zazz.Web.Models.Api
 
         public Major Major { get; set; }
 
-        public short? SchoolId { get; set; }
+        public short SchoolId { get; set; }
 
         public School School { get; set; }
 
