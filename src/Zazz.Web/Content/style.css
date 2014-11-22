@@ -789,6 +789,7 @@ hr.gold-line {
     margin-right: 10px;
     -ms-border-radius: 8px;
     border-radius: 8px;
+    box-shadow:0 0 10px 0 #666666;
 }
 
 .user-details ul {
@@ -1244,7 +1245,7 @@ li.new-notification {
 
 .profile-box {
     padding: 0;
-    width: 180px;
+    width: 206px;
     border-radius: 10px;
     margin-left: auto;
     margin-right: auto;
