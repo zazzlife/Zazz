@@ -591,10 +591,12 @@ hr.gold-line {
     color: white;
     position: relative;
     min-height: 140px;
+    border-radius: 7px;
 }
 
 .event-cover {
     opacity: 0.7;
+    border-radius: 5px;
 }
 
 .event-profile-pic {
