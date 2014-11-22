@@ -2339,6 +2339,7 @@ a:hover, a:focus {
 .club-cover {
     width: 100%;
     position: relative;
+    padding: 1px;
 }
 
 .club-profile-img {
