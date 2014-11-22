@@ -2348,6 +2348,7 @@ a:hover, a:focus {
     width: 85px;
     height: 85px;
     left: 42%;
+    border-radius: 7px;
 }
 
 .club-name {
