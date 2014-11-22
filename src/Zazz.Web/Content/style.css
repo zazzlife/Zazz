@@ -609,6 +609,7 @@ hr.gold-line {
     margin-top: auto;
     margin-bottom: auto;
     padding: 1px;
+    border-radius: 5px;
 }
 
 .event .media {
