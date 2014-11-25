@@ -77,6 +77,8 @@ namespace Zazz.Data.Repositories
                         .SingleOrDefault();
         }
 
+
+
         public bool ExistsByEmail(string email)
         {
             return DbSet.Any(u => u.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
@@ -248,7 +250,7 @@ namespace Zazz.Data.Repositories
         {
             return DbSet
                 .Where(u => u.AccountType == AccountType.Club)
-                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentClub)
                 .Include(u => u.ClubDetail);
         }
 
@@ -256,7 +258,7 @@ namespace Zazz.Data.Repositories
         {
             return DbSet
                 .Where(u => u.AccountType == AccountType.Club)
-                .Where(u => u.ClubDetail.ClubType == ClubType.StudentAssociation)
+                .Where(u => u.ClubDetail.ClubType == ClubType.StudentClub)
                 .Where(u => u.ClubDetail.SchoolId == schoolId)
                 .Include(u => u.ClubDetail);
         }

@@ -215,6 +215,7 @@ namespace Zazz.Web.Controllers
                 CoverPhotoUrl = user.ClubDetail.CoverPhotoId.HasValue
                 ? PhotoService.GeneratePhotoUrl(user.Id, user.ClubDetail.CoverPhotoId.Value).OriginalLink
                 : DefaultImageHelper.GetDefaultCoverImage().OriginalLink,
+                url = user.ClubDetail.url,
                 Events = _uow.EventRepository.GetUpcomingEvents(user.Id)
                 .ToList()
                    .Select(e => new EventViewModel
@@ -737,7 +738,7 @@ namespace Zazz.Web.Controllers
                 
                 items += "<li class='span3' style='margin-left:5px;margin-right:0px;'>";
                 items += "<a href='#' class='thumbnail'>";
-                items += "<img style=\"background-image:url('" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).SmallLink + "');height:80px;\" class='profile-photos-img-div3' alt=''>";
+                items += "<img style=\"background-image:url('" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).MediumLink + "');height:80px;\" class='profile-photos-img-div3' alt=''>";
                 items += "<label> " + UserService.GetUserDisplayName(follow.FromUserId) + " <input type='checkbox' name='ckh"+id+"' value='" + follow.FromUserId + "' class='usercheck_invite_"+id+"' /></label>";
                 items += "</a>";
             }

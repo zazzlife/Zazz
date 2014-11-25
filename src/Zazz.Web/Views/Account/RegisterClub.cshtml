@@ -20,7 +20,7 @@
 
         <div class="span6">
             <div class="zazz-form zazz-form2">
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("registerclub", "account", FormMethod.Post, new { @id = "registerId"}))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
@@ -76,11 +76,10 @@
                             @Html.SpamPreventionFields()
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Register</button>
+                        <button type="button" class="btn btn-primary" id="regButton" style="margin-top: 25px;">Register</button>
                     </fieldset>
                     <div class="modal hide fade" id="manageFbPagesModal">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h3>Manage Facebook Pages</h3>
                         </div>
 
@@ -89,13 +88,17 @@
                         </div>
 
                         <div class="modal-footer">
-                            <a href="#" data-dismiss="modal" id="model_close_btn" class="btn">Close</a>
+                            <form action="/facebook/setuserdetails" method="post" id="manageFbSubmit">
+                                <input type="hidden" name="pageid" id="pageidval" />
+                                <button type="submit" id="model_close_btn1" class="btn">Close</button>
+                            </form>
                         </div>
                     </div>
                     <script type="text/javascript">
+                        
                         var selectedClubType = [];
                         var linkedAccount = [];
-                        $("form").submit(function () {
+                        $("#regButton").click(function () {
                             $("#error1").hide();
                             $("#error2").hide();
                             selectedClubType = [];
@@ -104,13 +107,11 @@
                                 selectedClubType.push(data.value);
                             });
 
-                            if (selectedClubType.length < 1) {
-                                //alert("Pl. select atleast one club type");
+                            if (selectedClubType.length < 1) {                                
                                 $("#error1").show();
                                 return false;
                             }
                             else if (selectedClubType.length > 4) {
-                                //alert("you can select maximum 4 clubtype");
                                 $("#error2").show();
                                 return false;
                             }
@@ -132,8 +133,10 @@
                                 },
                                 success: function (data) {
                                     $("#reg_loader").hide();
+                                    $("#manageFbPagesModal").modal({
+                                        "backdrop": false
+                                    });
                                     $("#manageFbPagesModal").modal('show');
-                                    //alert(data);
                                     var url = "/facebook/getpages";
 
                                     $.ajax({
@@ -145,15 +148,13 @@
                                             var container = $('#manageFbPagesModal .modal-body');
                                             container.fadeOut(function () {
                                                 container.html(res);
-                                                container.append('<span style="color:#cc0000;display:none;" id="error3"><br />Link atleast one facebook page</span>');
+                                                container.append('<span style="color:#cc0000;display:none;" id="error3"><br />Link only one facebook page</span>');
                                                 container.fadeIn();
                                             });
-
                                         }
                                     });
                                 }
                             });
-                            
                             return false;
                         });
 
@@ -169,10 +170,37 @@
                             }
                         });
 
-                        $(document).on("click", "#model_close_btn", function () {
-                            if (linkedAccount.length > 0)
-                                window.location = "/home/index";
-                            else {
+                        /*$("#manageFbSubmit").submit(function () {
+                            alert("mihir123");
+                            //alert("close");
+                            if (linkedAccount.length == 1) {
+                                $("#pageidval").val(linkedAccount[0]);
+                                $("#manageFbSubmit").submit();
+                                //window.location = "/home/index";
+                            } else {
+                                $("#error3").show();
+                                return false;
+                            }
+                        });*/
+
+
+
+                       $(document).on("click", "#model_close_btn1", function () {
+                            if (linkedAccount.length == 1) {
+                                $.ajax({
+                                    url: "/facebook/setfbsession",
+                                    cache: false,
+                                    data: {
+                                        "pageid": linkedAccount[0]
+                                    },
+                                    error: function () {
+                                        toastr.error('An error occured, Please try again later.');
+                                    },
+                                    success: function (res) {
+                                        window.location = "/facebook/setUserDetails";
+                                    }
+                                });
+                            } else {
                                 $("#error3").show();
                                 return false;
                             }

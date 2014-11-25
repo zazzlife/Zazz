@@ -43,9 +43,9 @@
                 </div>
                 <div style="clear:both;"></div>
                 <ul class="nav nav-stacked club-details" style="margin-left:0px;padding-left:0px;">
-                    <li><i class="icon-map-marker" style="font-size:25px;"></i><span style="color:#d16d6b;">@Model.EventViewModel.Location</span> <span style="color:#5a50e5;">, @Model.EventViewModel.City</span></li>
-                    <li><i class="icon-time" style="font-size:23px;"></i><span style="color:#d018c8;">@String.Format("{0:h:mm tt}", Model.EventViewModel.Time.DateTime)</span></</li>
-                    <li><i class="icon-calendar" style="font-size:21px;"></i><span style="color:#cb9863;">@Model.EventViewModel.Time.DateTime.DayOfWeek.ToString()</span>,<span style="color:#4dd84b;"> @String.Format("{0:MMM d, yyyy}", Model.EventViewModel.Time.DateTime)</span></li>
+                    <li><img src="~/Images/eventcity.png" style="width:25px;vertical-align:text-top;" /> <span style="color:#000;">@Model.EventViewModel.Location</span> <span style="color:#000;">, @Model.EventViewModel.City</span></li>
+                    <li><img src="~/Images/eventlocation.png" style="width:22px;vertical-align:text-top;" /> <span style="color:#000;">@String.Format("{0:h:mm tt}", Model.EventViewModel.Time.DateTime)</span></</li>
+                    <li><img src="~/Images/eventdate.png" style="width:22px;vertical-align:text-top;" /> <span style="color:#000;">@Model.EventViewModel.Time.DateTime.DayOfWeek.ToString()</span>,<span style="color:#000;"> @String.Format("{0:MMM d, yyyy}", Model.EventViewModel.Time.DateTime)</span></li>
                 </ul>
             </div>
         </div>
@@ -59,13 +59,20 @@
     </div>
     <div class="row-fluid" style="margin-top:30px;">
         <div class="span2 offset2">
-            <img src="~/Images/fbevent.png" style="vertical-align:baseline;width:100px;" />
+            @{
+                string str = "";
+                if(Model.EventViewModel.IsFacebookEvent)
+                {
+                    str = "https://www.facebook.com/events/"+Model.EventViewModel.FacebookEventId;
+                }
+            }
+            <a href="@str" target="_blank"><img src="~/Images/fbevent.png" style="vertical-align:baseline;width:100px;cursor:pointer;" /></a>
         </div>
         <div class="span2 offset1">
-            <img src="~/Images/mailevent.png" style="vertical-align:baseline;width:90px;" />
+            <img src="~/Images/mailevent.png" id="inveteBtnClick" data-model-id="@Model.EventViewModel.Id" style="cursor:pointer;vertical-align:baseline;width:90px;" />
         </div>
         <div class="span2 offset1">
-            <img src="~/Images/infoevent.png" style="vertical-align:baseline;width:100px;" />
+            <img src="~/Images/infoevent.png" id="infobutton" style="vertical-align:baseline;width:100px;cursor:pointer;" />
         </div>
     </div>
 
@@ -114,7 +121,7 @@
 
                 </div>
                     
-                
+                -->
                 <style type="text/css">
                     .center_imgm
                     {
@@ -141,10 +148,24 @@
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
                     <button class="btn btn-primary invitesbbmit_btn" data-click-id="@Model.EventViewModel.Id">Invite</button>
                   </div>
-                </div>-->
+                </div>
+                <div id="infoModel" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>Event Details</h3>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                        @Model.EventViewModel.Description
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                  </div>
+                </div>
         <script type="text/javascript">
             $(document).ready(function(){
-                $(".invite_btnm").click(function(){
+                $("#inveteBtnClick").click(function(){
                     $('#'+$(this).data('model-id')).modal('show');
                     var self = $(this);
                     $.ajax({
@@ -157,6 +178,9 @@
                     });
                     return false;
                 });   
+                $(document).on('click','#infobutton',function(){
+                    $("#infoModel").modal('show');
+                });
                 $(document).on('click','.invitesbbmit_btn',function() {
                     var eventId = $(this).data('click-id');
                     var data = $('.usercheck_invite_'+eventId).serialize();

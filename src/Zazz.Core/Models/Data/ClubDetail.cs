@@ -30,5 +30,7 @@ namespace Zazz.Core.Models.Data
         public int? CityId { get; set; }
 
         public string ClubTypes { get; set; }
+
+        public string url { get; set; }
     }
 }

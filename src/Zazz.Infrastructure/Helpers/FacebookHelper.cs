@@ -96,6 +96,101 @@ namespace Zazz.Infrastructure.Helpers
                    };
         }
 
+        public FbPage GetpageDetails(string pageId, string accessToken)
+        {
+            _client.AccessToken = accessToken;
+            string q = "SELECT name,emails,location,pic_cover,pic,website,username FROM page WHERE page_id = " + pageId;
+            dynamic result = _client.Get("fql", new { q });
+
+            var e = result.data[0];
+
+            var page = new FbPage();
+
+            try
+            {
+                page.Name = e.name;
+            }
+            catch (Exception)
+            { }
+
+
+            try
+            {
+                page.email = e.emails[0];
+            }
+            catch(Exception)
+            {}
+
+            page.location = new FbLocation();
+
+            try
+            {
+                page.location.address = e.location.street;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.location.city = e.location.city;
+            }
+            catch (Exception)
+            { }
+
+            page.fbCover = new FbCover();
+
+            try
+            {
+                page.fbCover.coverlink = e.pic_cover.source;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.fbCover.coverid = e.pic_cover.cover_id;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.fbCover.offsetX = e.pic_cover.offset_x;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.fbCover.offsetY = e.pic_cover.offset_y;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.profilePic = e.pic;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.url = e.website;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.username = e.username;
+            }
+            catch (Exception)
+            { }
+
+            return page;
+        }
+
         public IEnumerable<FbEvent> GetEvents(long creatorId, string accessToken, int limit = 5)
         {
             _client.AccessToken = accessToken;

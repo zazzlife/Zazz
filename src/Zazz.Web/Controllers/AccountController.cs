@@ -777,6 +777,9 @@ namespace Zazz.Web.Controllers
             var school = result.ExtraData["school"];
             var city = result.ExtraData["city"];
 
+
+            Session["accesstoken_fb"] = accessToken;
+
             var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = accessToken,

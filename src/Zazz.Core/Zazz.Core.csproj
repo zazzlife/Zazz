@@ -214,6 +214,7 @@
     <Compile Include="Models\Facebook\FbCover.cs" />
     <Compile Include="Models\Facebook\FbEvent.cs" />
     <Compile Include="Models\Facebook\FbFriend.cs" />
+    <Compile Include="Models\Facebook\FbLocation.cs" />
     <Compile Include="Models\Facebook\FbPage.cs" />
     <Compile Include="Models\Facebook\FbPageChangedFields.cs" />
     <Compile Include="Models\Facebook\FbPageChangedFieldValue.cs" />

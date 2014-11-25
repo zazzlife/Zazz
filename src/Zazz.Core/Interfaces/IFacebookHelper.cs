@@ -41,5 +41,7 @@ namespace Zazz.Core.Interfaces
         Task SendAppInviteRequests(IEnumerable<long> users, string appId, string appSecret, string message);
 
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
+
+        FbPage GetpageDetails(string pageId, string accessToken);
     }
 }

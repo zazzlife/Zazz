@@ -11,6 +11,17 @@
         </a>
     </div>
 
+    <style type="text/css">
+        .outlineNone
+        {
+            outline:none;
+        }
+        .outlineNone:focus
+        {
+            outline:none;
+        }
+    </style>
+
     <div class="feed-content well well-small no-padding">
 
         @if (photosCount == 1)
@@ -20,15 +31,15 @@
 
             
             <div style="margin: 5px 5px 0 0;">
-                <div class="pull-left">
+                <div class="pull-left outlineNone">
                     <button data-like-btn="1" data-isloaded="0"
-                            class="btn-link disabled" data-id="@Model.Photos[0].PhotoId" disabled="disabled">
+                            class="btn-link disabled outlineNone" data-id="@Model.Photos[0].PhotoId" disabled="disabled">
                         
                         <i class="icon-thumbs-up"></i> 
                         Like
                     </button>
                     
-                    <span style="margin-left: -6px;" id="photoLikesCount-@Model.Photos[0].PhotoId"><i class="icon-spin icon-spinner"></i></span>
+                    <span style="margin-left: -6px;" class="outlineNone" id="photoLikesCount-@Model.Photos[0].PhotoId"><i class="icon-spin icon-spinner"></i></span>
                 </div>
                 
 

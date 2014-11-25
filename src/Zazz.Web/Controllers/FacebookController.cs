@@ -14,9 +14,12 @@ using Zazz.Core.Exceptions;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 using Zazz.Core.Models.Facebook;
 using Zazz.Infrastructure;
 using Zazz.Web.Models;
+using System.Net.Http;
+using System.Net;
 
 namespace Zazz.Web.Controllers
 {
@@ -27,15 +30,17 @@ namespace Zazz.Web.Controllers
         private readonly IUoW _uow;
         private readonly IUserService _userService;
         private readonly IKeyChain _keyChain;
+        private readonly IPhotoService _photoService;
 
         public FacebookController(ICryptoService cryptoService, IFacebookService facebookService,
-            IUoW uow, IUserService userService, IKeyChain keyChain)
+            IUoW uow, IUserService userService, IKeyChain keyChain, IPhotoService photoService)
         {
             _cryptoService = cryptoService;
             _facebookService = facebookService;
             _uow = uow;
             _userService = userService;
             _keyChain = keyChain;
+            _photoService = photoService;
         }
 
         public async Task<string> Update()
@@ -82,6 +87,123 @@ namespace Zazz.Web.Controllers
                 throw new SecurityException();
 
             return challenge;
+        }
+
+
+        public void setFbSession(string pageid)
+        {
+            Session["pageidsession"] = pageid;
+        }
+
+
+        public ActionResult setUserDetails()
+        {
+            string pageid = (string)Session["pageidsession"];
+            var accessToken = (string)Session["accesstoken_fb"];
+            var info = _facebookService.GetpageInfo(pageid,accessToken);
+
+            User user = _userService.GetUser(User.Identity.Name);
+            City city = new City();
+
+
+            if(user.AccountType == AccountType.Club)
+            {
+                user.ClubDetail.ClubName = info.Name;
+                user.ClubDetail.Address = info.location.address;
+
+                if (_uow.CityRepository.existCity(info.location.city))
+                {
+                    city = _uow.CityRepository.getByName(info.location.city);
+                }
+                else
+                {
+                    city.Name = info.location.city;
+                    _uow.CityRepository.InsertGraph(city);
+                }
+
+                user.ClubDetail.City = city;
+
+
+                if (!(String.IsNullOrEmpty(info.profilePic)) && !(String.IsNullOrEmpty(info.fbCover.coverlink)))
+                {
+                    TryUpdateUserPic(user, info.profilePic, info.fbCover.coverlink);
+                }
+
+                user.ClubDetail.url = info.url;
+            }
+
+            _uow.SaveChanges();
+
+            return RedirectToAction("index","home");
+        }
+
+        private void TryUpdateUserPic(User user, string profilePhotoUrl, string coverPhotoUrl)
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(profilePhotoUrl))
+                {
+                    using (var client = new WebClient())
+                    {
+                        byte[] inputBuffer = client.DownloadData(profilePhotoUrl);
+
+                        var photo = new Photo
+                        {
+                            UploadDate = DateTime.UtcNow,
+                            UserId = user.Id
+                        };
+
+                        using (var ms = new MemoryStream(inputBuffer))
+                        {
+                            var photoId = _photoService.SavePhoto(photo, ms, false, null);
+                            _userService.ChangeProfilePic(user.Id, photoId);
+                        }
+
+                    }
+                    /*using (var client = new HttpClient())
+                    {
+                        
+                        var photoData = await client.GetByteArrayAsync(profilePhotoUrl);
+
+
+                        var photo = new Photo
+                        {
+                            UploadDate = DateTime.UtcNow,
+                            UserId = user.Id
+                        };
+
+                        using (var ms = new MemoryStream(photoData))
+                        {
+                            var photoId = _photoService.SavePhoto(photo, ms, false, null);
+                            _userService.ChangeProfilePic(user.Id, photoId);
+                        }
+                    }*/
+                }
+
+                if (user.AccountType == AccountType.Club && !String.IsNullOrEmpty(coverPhotoUrl))
+                {
+                    using (var client = new WebClient())
+                    {
+                        byte[] inputBuffer = client.DownloadData(coverPhotoUrl);
+
+                        var photo = new Photo
+                        {
+                            UploadDate = DateTime.UtcNow,
+                            UserId = user.Id
+                        };
+
+                        using (var ms = new MemoryStream(inputBuffer))
+                        {
+                            var photoId = _photoService.SavePhoto(photo, ms, false, null);
+                            _userService.ChangeCoverPic(user.Id, photoId);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         [Authorize]

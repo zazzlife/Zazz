@@ -10,7 +10,7 @@ namespace Zazz.Core.Models.Data.Enums
         DJ = 2,
         [Display(Name = "Nightlife Promoter")]
         NightlifePromoter = 3,
-        [Display(Name = "Photographer")]
-        Photographer = 4
+        [Display(Name = "Bar Tender")]
+        BarTender = 4
     }
 }

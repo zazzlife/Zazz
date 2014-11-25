@@ -503,6 +503,9 @@
     <Content Include="Images\categories\turning_up-active.png" />
     <Content Include="Images\categories\turning_up.png" />
     <Content Include="Images\city.gif" />
+    <Content Include="Images\eventcity.png" />
+    <Content Include="Images\eventdate.png" />
+    <Content Include="Images\eventlocation.png" />
     <Content Include="Images\fbevent.png" />
     <Content Include="Images\infoevent.png" />
     <Content Include="Images\mailevent.png" />

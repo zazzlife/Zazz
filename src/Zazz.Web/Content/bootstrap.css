@@ -3132,7 +3132,7 @@ table th[class*="span"],
 }
 
 .well {
-  height: 210px;
+  min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
   background-color: #eeeeee;

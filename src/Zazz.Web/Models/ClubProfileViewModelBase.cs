@@ -37,5 +37,7 @@ namespace Zazz.Web.Models
         public string city { get; set; }
 
         public string clubtypes { get; set; }
+
+        public string url { get; set; }
     }
 }

@@ -281,6 +281,13 @@ namespace Zazz.Infrastructure.Services
             _uow.SaveChanges();
         }
 
+
+        public FbPage GetpageInfo(string pageId, string accessToken)
+        {
+            FbPage fb = _facebookHelper.GetpageDetails(pageId, accessToken);
+            return fb;
+        }
+
         public void UnlinkPage(string fbPageId, int currentUserId)
         {
             var page = _uow.FacebookPageRepository.GetByFacebookPageId(fbPageId);
@@ -322,6 +329,9 @@ namespace Zazz.Infrastructure.Services
             _uow.FacebookPageRepository.Remove(page);
             _uow.SaveChanges();
         }
+
+
+
 
         public void UpdatePagesAccessToken(int userId, string accessToken)
         {

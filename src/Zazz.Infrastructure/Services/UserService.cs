@@ -108,15 +108,10 @@ namespace Zazz.Infrastructure.Services
 
         public string GetUserDisplayName(int userId)
         {
-            var cache = _cacheService.GetUserDisplayName(userId);
-            if (!String.IsNullOrEmpty(cache))
-                return cache;
-
             var displayName = _uoW.UserRepository.GetDisplayName(userId);
             if (displayName == null)
                 throw new NotFoundException();
 
-            _cacheService.AddUserDiplayName(userId, displayName);
             return displayName;
         }
 

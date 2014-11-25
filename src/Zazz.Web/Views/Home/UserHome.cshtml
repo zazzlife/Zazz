@@ -20,12 +20,10 @@
     }
 }
 
-@if (Model.AccountType == AccountType.User)
-{
-    <script type="text/javascript">
-        $("body").css("background-color","#FFFFFF");
-    </script>
-}
+<script type="text/javascript">
+    $("body").css("background-color","#FFFFFF");
+</script>
+
 
 <div class="container" style="margin-top: -13px;">
     <div class="row-fluid">
@@ -133,7 +131,7 @@
             }
             else
             {
-                 <div class="center-panel color-white-bg box-shadow">
+                 <div class="center-panel color-white-bg">
                      @Html.Partial("_PostInputsPartial")
 
                     @Html.Partial("_FeedsPartial", Model.Feeds)

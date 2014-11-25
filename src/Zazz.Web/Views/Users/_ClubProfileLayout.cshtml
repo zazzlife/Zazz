@@ -34,6 +34,11 @@
                     {
                         <li><img src="~/Images/city.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.city</strong></li>
                     }
+
+                    @if (!String.IsNullOrEmpty(Model.url))
+                    {
+                        <li><img src="~/Images/url.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.url</strong></li>
+                    }
                 </ul>
             </div>
 
