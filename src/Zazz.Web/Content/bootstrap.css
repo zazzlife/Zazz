@@ -361,7 +361,7 @@ a:focus {
 }
 
 .span3 {
-  width: 130px;
+  width: 220px;
 }
 
 .span2 {
@@ -5551,7 +5551,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .thumbnails {
-  margin-left: -10px;
+  margin-left: -20px;
   list-style: none;
   *zoom: 1;
 }
