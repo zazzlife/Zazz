@@ -1765,8 +1765,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .white-bg {
     background-color: #fff;
-    margin-bottom: 35px;
-    margin-top:20px;
+    margin-bottom: 0;
     padding-top: 20px;
     padding-bottom: 20px;
 }
