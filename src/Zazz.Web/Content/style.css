@@ -831,7 +831,7 @@ hr.gold-line {
         border-right: 3px solid #FBCE0E;
         border-radius: 0 0 7px 7px;
         width: 1050px;
-        height: 365px;
+        height: 387px;
     }
 
 .club-details {
@@ -1765,7 +1765,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .white-bg {
     background-color: #fff;
-    margin-bottom: 0;
+    margin-bottom: 35px;
+    margin-top:20px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
