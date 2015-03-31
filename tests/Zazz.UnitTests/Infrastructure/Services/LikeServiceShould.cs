@@ -6,6 +6,7 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Models.Data;
 using Zazz.Core.Models.Data.DTOs;
 using Zazz.Infrastructure.Services;
+using Zazz.Core.Interfaces.Services;
 
 namespace Zazz.UnitTests.Infrastructure.Services
 {
@@ -18,13 +19,15 @@ namespace Zazz.UnitTests.Infrastructure.Services
         private int _photoId;
         private int _currentUserId;
         private PhotoMinimalDTO _photo;
+        private Mock<INotificationService> _notificationService;
 
         [SetUp]
         public void Init()
         {
             _mockRepo = new MockRepository(MockBehavior.Strict);
             _uow = _mockRepo.Create<IUoW>();
-            _sut = new LikeService(_uow.Object);
+            _notificationService = new Mock<INotificationService>();
+            _sut = new LikeService(_uow.Object, _notificationService.Object);
 
             _photo = new PhotoMinimalDTO
                      {

@@ -53,7 +53,7 @@ namespace Zazz.Data.Migrations
             foreach (var client in StaticData.GetOAuthClients())
                 context.OAuthClients.AddOrUpdate(x => x.Id, client);
 
-            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\App_Data", "*.sql");
+            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin", "") + @"\App_Data", "*.sql");
             foreach (var sqlFile in sqlFiles)
             {
                 try
@@ -65,7 +65,7 @@ namespace Zazz.Data.Migrations
                     Debug.WriteLine(e.Message);
                 }
             }
-                
+
         }
     }
 }

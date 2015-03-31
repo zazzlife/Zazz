@@ -56,9 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InMemoryUserRoleRepository.cs" />
-    <Compile Include="Migrations\201401310529400_InitialCreate.cs" />
-    <Compile Include="Migrations\201401310529400_InitialCreate.Designer.cs">
-      <DependentUpon>201401310529400_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201503182359483_Initial.cs" />
+    <Compile Include="Migrations\201503182359483_Initial.Designer.cs">
+      <DependentUpon>201503182359483_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\CityRepository.cs" />
@@ -102,7 +102,9 @@
     <Compile Include="ZazzDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -112,8 +114,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201401310529400_InitialCreate.resx">
-      <DependentUpon>201401310529400_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201503182359483_Initial.resx">
+      <DependentUpon>201503182359483_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

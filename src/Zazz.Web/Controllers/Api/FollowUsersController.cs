@@ -45,8 +45,6 @@ namespace Zazz.Web.Controllers.Api
 
         private IEnumerable<ApiUserProfile> UserFollowers(User user)
         {
-
-
             var follows = _uow.FollowRepository.GetUserFollowers(user.Id)
                 .Select(f => new
                 {

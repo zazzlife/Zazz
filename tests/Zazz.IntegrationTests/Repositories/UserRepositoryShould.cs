@@ -841,12 +841,12 @@ namespace Zazz.IntegrationTests.Repositories
 
             club1.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.StudentAssociation
+                ClubType = ClubType.StudentClub
             };
 
             club2.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.StudentAssociation
+                ClubType = ClubType.StudentClub
             };
 
             club3.ClubDetail = new ClubDetail
@@ -856,7 +856,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             club4.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.ConcertVenue
+                ClubType = ClubType.EventVenue
             };
 
             _context.Users.Add(user);
@@ -890,12 +890,12 @@ namespace Zazz.IntegrationTests.Repositories
 
             club1.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.StudentAssociation
+                ClubType = ClubType.StudentClub
             };
 
             club2.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.StudentAssociation,
+                ClubType = ClubType.StudentClub,
                 SchoolId = 1
             };
 
@@ -907,7 +907,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             club4.ClubDetail = new ClubDetail
             {
-                ClubType = ClubType.ConcertVenue
+                ClubType = ClubType.EventVenue
             };
 
             _context.Users.Add(user);

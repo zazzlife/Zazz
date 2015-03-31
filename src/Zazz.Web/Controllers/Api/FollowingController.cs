@@ -29,6 +29,8 @@ namespace Zazz.Web.Controllers.Api
         private readonly IUoW _uow;
         private readonly IPhotoService _photoService;
 
+
+
         public FollowingController(IUserService userService, IObjectMapper objectMapper, IUoW uow, IPhotoService photoService)
         {
             _objectMapper = objectMapper;

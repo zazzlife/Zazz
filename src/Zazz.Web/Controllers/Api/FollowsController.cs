@@ -31,7 +31,7 @@ namespace Zazz.Web.Controllers.Api
         {
             var userId = CurrentUserId;
             var followers = _followService.GetFollowers(userId)
-                .Select(f => f.FromUserId);
+                .Select(f => f.FromUserId).ToList();
 
             return followers.Select(x => new ApiFollow
                                          {
