@@ -15,6 +15,7 @@ using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class EventInvitationController : BaseApiController
     {
 

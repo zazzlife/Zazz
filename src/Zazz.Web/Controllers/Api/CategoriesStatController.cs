@@ -5,10 +5,12 @@ using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Interfaces.Services;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Filters;
 using Zazz.Web.Models.Api;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class CategoriesStatController : ApiController
     {
         protected readonly ICategoryService _categoryService;

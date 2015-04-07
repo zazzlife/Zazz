@@ -20,6 +20,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class FollowUsersController : BaseApiController
     {
         private readonly IObjectMapper _objectMapper;

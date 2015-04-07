@@ -16,6 +16,7 @@ using Zazz.Core.Models.Data;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class FollowersController : BaseApiController
     {
         private readonly IUserService _userService;

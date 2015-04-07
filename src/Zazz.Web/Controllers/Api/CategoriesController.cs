@@ -4,10 +4,12 @@ using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Filters;
 
 namespace Zazz.Web.Controllers.Api
 {
-    public class CategoriesController : ApiController
+    [OAuth2Authorize]
+    public class CategoriesController : BaseApiController
     {
         private readonly IStaticDataRepository _staticDataRepository;
 

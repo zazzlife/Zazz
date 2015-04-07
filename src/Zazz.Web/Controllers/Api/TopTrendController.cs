@@ -20,6 +20,7 @@ using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class TopTrendController : BaseApiController
     {
         private readonly IUoW _uow;

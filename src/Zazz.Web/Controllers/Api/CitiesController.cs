@@ -7,9 +7,11 @@ using System.Web.Http;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
 using Zazz.Core.Models.Data;
+using Zazz.Web.Filters;
 
 namespace Zazz.Web.Controllers.Api
 {
+    [OAuth2Authorize]
     public class CitiesController : ApiController
     {
         private readonly IStaticDataRepository _staticDataRepository;
