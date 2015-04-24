@@ -158,6 +158,7 @@
 
                                 var map;
                                 function initialize() {
+
                                     var mapOptions = {
                                         zoom: 12,
                                         center: { lat: 45.5000, lng: -73.5667 }
@@ -165,19 +166,30 @@
                                     map = new google.maps.Map(document.getElementById('map-canvas'),
                                         mapOptions);
                                     
-                                    
                                     $.ajax({
                                         url: "/users/maplocations/",
                                         success: function (data) {
                                             var obj = data;
                                             var address;
                                             var name;
+                                            var latitude = null;
+                                            var longitude = null;
 
                                             $.each(obj, function (idx, obj1) {
                                                 address = obj1.address;
                                                 name = obj1.name;
-                                                abcd(address, name);
+                                                latitude = obj1.latitude;
+                                                longitude = obj1.longitude;
+                                                if (latitude == null || longitude == null) {
+                                                    abcd(address, name);
+                                                } else {
+                                                    var str = "<div><h3>" + name + "</h3><p>" + address + "</p></div>";
+                                                    createMarker(name, str, latitude, longitude);
+                                                }
                                             });
+                                            if (latitude != null && longitude != null) {
+                                                map.setCenter(new google.maps.LatLng(latitude, longitude));
+                                            }
                                         }
                                     });
                                 }

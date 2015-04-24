@@ -78,8 +78,14 @@ namespace Zazz.Infrastructure.Services
             if (album.UserId != currentUserId)
                 throw new SecurityException();
 
-            foreach (var p in album.Photos)
-                _photoService.RemovePhoto(p.Id, currentUserId);
+            try
+            {
+                foreach (var p in album.Photos)
+                    _photoService.RemovePhoto(p.Id, currentUserId);
+            }
+            catch (Exception ex)
+            {
+            }
 
             _uow.AlbumRepository.Remove(album);
             _uow.SaveChanges();

@@ -110,6 +110,8 @@ namespace Zazz.Web.Controllers
             {
                 user.ClubDetail.ClubName = info.Name;
                 user.ClubDetail.Address = info.location.address;
+                user.ClubDetail.Latitude = Convert.ToDouble(info.location.latitude);
+                user.ClubDetail.Longitude = Convert.ToDouble(info.location.longitude);
 
                 if (_uow.CityRepository.existCity(info.location.city))
                 {

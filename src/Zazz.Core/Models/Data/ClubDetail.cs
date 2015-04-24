@@ -17,6 +17,10 @@ namespace Zazz.Core.Models.Data
         [MaxLength(500)]
         public string Address { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public int? CoverPhotoId { get; set; }
 
         [ForeignKey("SchoolId")]

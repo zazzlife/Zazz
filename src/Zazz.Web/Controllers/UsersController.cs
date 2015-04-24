@@ -773,7 +773,9 @@ namespace Zazz.Web.Controllers
                         mp.Add(new MapLocaionJson
                         {
                             name = club.ClubDetail.ClubName,
-                            address = club.ClubDetail.Address
+                            address = club.ClubDetail.Address,
+                            latitude = club.ClubDetail.Latitude,
+                            longitude = club.ClubDetail.Longitude
                         });
                     }
                 }
@@ -787,6 +789,10 @@ namespace Zazz.Web.Controllers
             public string name { get; set;}
 
             public string address { get; set; }
+
+            public double latitude { get; set; }
+
+            public double longitude { get; set; }
         }
 
 

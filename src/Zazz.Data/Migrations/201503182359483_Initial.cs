@@ -143,6 +143,8 @@ namespace Zazz.Data.Migrations
                     ClubName = c.String(maxLength: 500),
                     ClubType = c.Byte(nullable: false),
                     Address = c.String(maxLength: 500),
+                    Latitude = c.Double(),
+                    Longitude = c.Double(),
                     CoverPhotoId = c.Int(),
                     SchoolId = c.Short(),
                     CityId = c.Int(),

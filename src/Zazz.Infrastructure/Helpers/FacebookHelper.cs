@@ -100,12 +100,12 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
             string q = "SELECT name,emails,location,pic_cover,pic,website,username FROM page WHERE page_id = " + pageId;
+            System.Diagnostics.Debug.WriteLine(q);
             dynamic result = _client.Get("fql", new { q });
 
             var e = result.data[0];
 
             var page = new FbPage();
-
             try
             {
                 page.Name = e.name;
@@ -133,6 +133,20 @@ namespace Zazz.Infrastructure.Helpers
             try
             {
                 page.location.city = e.location.city;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.location.latitude = e.location.latitude;
+            }
+            catch (Exception)
+            { }
+
+            try
+            {
+                page.location.longitude = e.location.longitude;
             }
             catch (Exception)
             { }
