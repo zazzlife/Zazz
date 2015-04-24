@@ -34,6 +34,8 @@ namespace Zazz.Web.Controllers.Api
                 clubid = f.Id,
                 clubname = f.ClubDetail.ClubName,
                 address = f.ClubDetail.Address,
+                latitude = f.ClubDetail.Latitude,
+                longitude = f.ClubDetail.Longitude,
                 city = f.ClubDetail.City,
                 cityid = f.ClubDetail.CityId
             });

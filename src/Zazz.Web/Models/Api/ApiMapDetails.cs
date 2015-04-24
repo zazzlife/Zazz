@@ -13,6 +13,10 @@ namespace Zazz.Web.Models.Api
 
         public string address { get; set; }
 
+        public double latitude { get; set; }
+
+        public double longitude { get; set; }
+
         public City city { get; set; }
 
         public int? cityid { get; set; }
