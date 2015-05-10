@@ -1,4 +1,6 @@
-﻿using Zazz.Core.Models.Data.Enums;
+﻿using System;
+using Zazz.Core.Models.Data;
+using Zazz.Core.Models.Data.Enums;
 
 namespace Zazz.Web.Models.Api
 {
@@ -14,7 +16,15 @@ namespace Zazz.Web.Models.Api
 
         public string FullName { get; set; }
 
+        public DateTime Birthdate { get; set; }
+
         public AccountType AccountType { get; set; }
+
+        public UserType UserType { get; set; }
+
+        public byte? MajorId { get; set; }
+
+        public PromoterType? PromoterType { get; set; }
 
         public string ClubName { get; set; }
 

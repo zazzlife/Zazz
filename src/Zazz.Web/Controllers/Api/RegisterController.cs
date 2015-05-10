@@ -71,7 +71,11 @@ namespace Zazz.Web.Controllers.Api
                            UserDetail = new UserDetail
                                         {
                                             FullName = request.FullName,
-                                            Gender = request.Gender
+                                            Gender = request.Gender,
+                                            Birthdate = request.Birthdate,
+                                            UserType = request.UserType,
+                                            MajorId = request.MajorId,
+                                            PromoterType = request.PromoterType
                                         },
                            Preferences = new UserPreferences
                                          {

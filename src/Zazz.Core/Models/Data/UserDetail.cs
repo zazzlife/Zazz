@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Zazz.Core.Models.Data.Enums;
 
@@ -13,6 +14,10 @@ namespace Zazz.Core.Models.Data
         public string FullName { get; set; }
 
         public Gender Gender { get; set; }
+
+        public DateTime Birthdate { get; set; }
+
+        public UserType UserType { get; set; }
 
         public bool IsPromoter { get; set; }
 
