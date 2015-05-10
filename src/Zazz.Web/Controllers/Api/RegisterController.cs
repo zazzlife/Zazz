@@ -85,6 +85,10 @@ namespace Zazz.Web.Controllers.Api
                                              SyncFbPosts = false,
                                          }
                        };
+                if (user.UserDetail.UserType == UserType.Promoter)
+                {
+                    user.UserDetail.IsPromoter = true;
+                }
             }
             else
             {
