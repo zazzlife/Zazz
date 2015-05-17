@@ -147,6 +147,11 @@ namespace Zazz.Data
         {
             get { return new CityRepository(GetContext()); }
         }
+
+        public IMajorRepository MajorRepository
+        {
+            get { return new MajorRepository(GetContext()); }
+        }
         /*
         public ISchoolRepository SchoolRepository
         {

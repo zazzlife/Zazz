@@ -20,7 +20,7 @@ namespace Zazz.Data.Migrations
                 "dbo.Majors",
                 c => new
                 {
-                    Id = c.Byte(nullable: false),
+                    Id = c.Int(nullable: false, identity: true),
                     Name = c.String(maxLength: 500),
                 })
                 .PrimaryKey(t => t.Id);

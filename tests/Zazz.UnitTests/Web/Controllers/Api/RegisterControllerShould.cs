@@ -37,6 +37,7 @@ namespace Zazz.UnitTests.Web.Controllers.Api
         private MockRepository _mockRepo;
         private Mock<IAuthService> _authService;
         private ApiRegister _validUser;
+        private ApiRegister _validUserPromoter;
         private ApiRegister _validClub;
         private Mock<IOAuthClientRepository> _oauthClientRepo;
         private string _clientId;
@@ -75,8 +76,23 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                              Email = "abc@abc.com",
                              Password = "1234",
                              Username = "Soroush",
-                             Gender = Gender.Male
+                             Gender = Gender.Male,
+                             Birthdate = new DateTime(1987, 9, 22),
+                             UserType = UserType.User,
+                             MajorId = 1
                          };
+
+            _validUserPromoter = new ApiRegister
+            {
+                AccountType = AccountType.User,
+                Email = "abc@abc.com",
+                Password = "1234",
+                Username = "Soroush",
+                Gender = Gender.Male,
+                Birthdate = new DateTime(1987, 9, 22),
+                UserType = UserType.Promoter,
+                PromoterType = PromoterType.DJ
+            };
 
             _validClub = new ApiRegister
                          {
@@ -350,6 +366,170 @@ namespace Zazz.UnitTests.Web.Controllers.Api
                          u.Email.Equals(_validUser.Email) &&
                          u.Username.Equals(_validUser.Username)), _validUser.Password, true))
                         .Throws<EmailExistsException>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidUserTypeException_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username) &&
+                         u.UserDetail.UserType.Equals(_validUser.UserType)), _validUser.Password, true))
+                        .Throws<InvalidUserType>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidUserWithPromoterTypeException_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username) &&
+                         u.UserDetail.UserType.Equals(_validUser.UserType) &&
+                         u.UserDetail.PromoterType.Equals(_validUser.PromoterType)), _validUser.Password, true))
+                        .Throws<InvalidUserWithPromoterType>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidPromoterTypeException_OnPost()
+        {
+            //Arrange
+            var validUserPromoter = JsonConvert.SerializeObject(_validUserPromoter);
+            var content = new StringContent(validUserPromoter, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUserPromoter.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUserPromoter.Email) &&
+                         u.Username.Equals(_validUserPromoter.Username) &&
+                         u.UserDetail.UserType.Equals(_validUserPromoter.UserType) &&
+                         u.UserDetail.PromoterType.Equals(_validUserPromoter.PromoterType)), _validUserPromoter.Password, true))
+                        .Throws<InvalidUserWithPromoterType>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidPromoterWithMajorIdException_OnPost()
+        {
+            //Arrange
+            var validUserPromoter = JsonConvert.SerializeObject(_validUserPromoter);
+            var content = new StringContent(validUserPromoter, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUserPromoter.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUserPromoter.Email) &&
+                         u.Username.Equals(_validUserPromoter.Username) &&
+                         u.UserDetail.UserType.Equals(_validUserPromoter.UserType) &&
+                         u.UserDetail.PromoterType.Equals(_validUserPromoter.PromoterType) &&
+                         u.UserDetail.MajorId.Equals(_validUserPromoter.MajorId)), _validUserPromoter.Password, true))
+                        .Throws<InvalidPromoterWithMajorId>();
+
+            //Act
+            var response = await _client.PostAsync(_registerUrl, content);
+            var error = JsonConvert.DeserializeObject<OAuthErrorModel>(await response.Content.ReadAsStringAsync());
+
+            //Assert
+            Assert.AreEqual(OAuthError.InvalidRequest, error.Error);
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            _mockRepo.VerifyAll();
+        }
+
+        [Test]
+        public async Task ReturnInvalidRequestOnInvalidMajorIdException_OnPost()
+        {
+            //Arrange
+            var validUser = JsonConvert.SerializeObject(_validUser);
+            var content = new StringContent(validUser, Encoding.UTF8, "application/json");
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("basic", _clientId);
+
+            _oauthClientRepo.Setup(x => x.GetById(_clientId))
+                            .Returns(new OAuthClient());
+
+            _authService.Setup(x => x.Register(
+                It.Is<User>(
+                    u => u.Username.Equals(_validUser.Username) &&
+                         u.IsConfirmed == false &&
+                         u.AccountType == AccountType.User &&
+                         u.Email.Equals(_validUser.Email) &&
+                         u.Username.Equals(_validUser.Username) &&
+                         u.UserDetail.UserType.Equals(_validUser.UserType)), _validUser.Password, true))
+                        .Throws<InvalidMajorId>();
 
             //Act
             var response = await _client.PostAsync(_registerUrl, content);

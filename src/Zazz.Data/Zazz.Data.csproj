@@ -64,6 +64,7 @@
     <Compile Include="Repositories\CityRepository.cs" />
     <Compile Include="Repositories\ClubPointRewardScenarioRepository.cs" />
     <Compile Include="Repositories\ClubRewardRepository.cs" />
+    <Compile Include="Repositories\MajorRepository.cs" />
     <Compile Include="Repositories\InMemoryOAuthClientRepository.cs" />
     <Compile Include="DropCreateDatabaseAlwaysWithSeed.cs" />
     <Compile Include="DropCreateDatabaseIfModelChangesWithSeed.cs" />

@@ -2,10 +2,8 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class Major
+    public class Major : BaseEntity
     {
-        public byte Id { get; set; }
-
         [MaxLength(500)]
         public string Name { get; set; }
     }

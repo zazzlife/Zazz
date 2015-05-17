@@ -63,6 +63,12 @@
     <Compile Include="Attributes\PhotoAttribute.cs" />
     <Compile Include="Exceptions\AlreadyExistsException.cs" />
     <Compile Include="Exceptions\AlreadyLikedException.cs" />
+    <Compile Include="Exceptions\InvalidMajorId.cs" />
+    <Compile Include="Exceptions\InvalidPromoterType.cs" />
+    <Compile Include="Exceptions\InvalidUserType.cs" />
+    <Compile Include="Exceptions\InvalidPromoterWithMajorId.cs" />
+    <Compile Include="Exceptions\InvalidUserWithPromoterType.cs" />
+    <Compile Include="Exceptions\InvalidBirthdateException.cs" />
     <Compile Include="Exceptions\EmailExistsException.cs" />
     <Compile Include="Exceptions\FacebookPageExistsException.cs" />
     <Compile Include="Exceptions\InvalidEmailException.cs" />
@@ -87,6 +93,7 @@
     <Compile Include="Interfaces\IStringHelper.cs" />
     <Compile Include="Interfaces\ICategoryStatsCache.cs" />
     <Compile Include="Interfaces\IUoW.cs" />
+    <Compile Include="Interfaces\Repositories\IMajorRepository.cs" />
     <Compile Include="Interfaces\Repositories\IAlbumRepository.cs" />
     <Compile Include="Interfaces\Repositories\ICategoryStatRepository.cs" />
     <Compile Include="Interfaces\Repositories\ICityRepository.cs" />

@@ -21,7 +21,7 @@ namespace Zazz.Web.Models
 
         public IEnumerable<Major> Majors { get; set; }
 
-        public byte? MajorId { get; set; }
+        public int? MajorId { get; set; }
 
         public IEnumerable<City> Cities { get; set; }
 

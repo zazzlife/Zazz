@@ -15,9 +15,9 @@ namespace Zazz.Core.Models.Data
 
         public Gender Gender { get; set; }
 
-        public DateTime Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
 
-        public UserType UserType { get; set; }
+        public UserType? UserType { get; set; }
 
         public bool IsPromoter { get; set; }
 
@@ -31,7 +31,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("MajorId")]
         public virtual Major Major { get; set; }
 
-        public byte? MajorId { get; set; }
+        public int? MajorId { get; set; }
 
         [ForeignKey("CityId")]
         public virtual City City { get; set; }

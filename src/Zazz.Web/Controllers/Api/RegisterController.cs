@@ -151,6 +151,30 @@ namespace Zazz.Web.Controllers.Api
             {
                 throw new OAuthException(OAuthError.InvalidRequest, "email exists");
             }
+            catch (InvalidBirthdateException)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "invalid birthdate");
+            }
+            catch (InvalidUserWithPromoterType)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "if userType is 1 (User), request must not have promoterType");
+            }
+            catch (InvalidPromoterWithMajorId)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "if userType is 2 (Promoter), request must not have majorId");
+            }
+            catch (InvalidUserType)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "invalid userType");
+            }
+            catch (InvalidPromoterType)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "invalid promoterType");
+            }
+            catch (InvalidMajorId)
+            {
+                throw new OAuthException(OAuthError.InvalidRequest, "invalid majorId");
+            }
         }
     }
 }
