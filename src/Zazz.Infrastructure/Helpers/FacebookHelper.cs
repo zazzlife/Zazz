@@ -35,64 +35,21 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
             
-            const string PROFILE_PIC_QUERY = "SELECT pic_crop FROM profile WHERE id = me()";
-            const string INFO_QUERY = "SELECT pic_cover, sex, education FROM user WHERE uid = me()";
 
-            dynamic result = _client.Get("fql",
-                                         new
-                                         {
-                                             q = new
-                                                 {
-                                                     pic = PROFILE_PIC_QUERY,
-                                                     info = INFO_QUERY
-                                                 }
-                                         });
+            dynamic result_ = _client.Get("me", new { fields = "gender,cover,picture.width(600).height(600)" });
 
-            dynamic info = null;
-            dynamic pic = null;
-
-            if (result.data[0].name == "info")
-            {
-                info = result.data[0].fql_result_set[0];
-            }
-            else
-            {
-                pic = result.data[0].fql_result_set[0];
-            }
-
-            if (result.data[1].name == "info")
-            {
-                info = result.data[1].fql_result_set[0];
-            }
-            else
-            {
-                pic = result.data[1].fql_result_set[0];
-            }
-
-            if (info == null || pic == null)
-                return null;
-
-            string picUrl = null;
-            if (pic.pic_crop != null)
-            {
-                picUrl = pic.pic_crop.uri;
-            }
-
-            string coverUrl = null;
-            if (info.pic_cover != null)
-            {
-                coverUrl = info.pic_cover.source;
-            }
-
+            string _gender = result_.gender;
+            string _cover = result_.cover.source;
+            string _pic = result_.picture.data.url;
 
             Gender gender = Gender.NotSpecified;
-            Enum.TryParse((string) info.sex, true, out gender);
+            Enum.TryParse((string)_gender, true, out gender);
 
             return new FbBasicUserInfo
                    {
                        Gender = gender,
-                       CoverPicUrl = coverUrl,
-                       ProfilePicUrl = picUrl
+                       CoverPicUrl = _cover,
+                       ProfilePicUrl = _pic
                    };
         }
 

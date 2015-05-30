@@ -65,29 +65,29 @@ namespace Zazz.Infrastructure.Services
             if (emailExists)
                 throw new EmailExistsException();
 
-            if (user.UserDetail.Birthdate != null && user.UserDetail.Birthdate.GetValueOrDefault().Year < 1900)
-                throw new InvalidBirthdateException();
+            //if (user.UserDetail.Birthdate != null && user.UserDetail.Birthdate.GetValueOrDefault().Year < 1900)
+            //    throw new InvalidBirthdateException();
 
-            if (user.UserDetail.UserType != null && !Enum.IsDefined(typeof(UserType), user.UserDetail.UserType))
-                throw new InvalidUserType();
+            //if (user.UserDetail.UserType != null && !Enum.IsDefined(typeof(UserType), user.UserDetail.UserType))
+            //    throw new InvalidUserType();
 
-            if (user.UserDetail.UserType == UserType.User && user.UserDetail.PromoterType != null)
-                throw new InvalidUserWithPromoterType();
+            //if (user.UserDetail.UserType == UserType.User && user.UserDetail.PromoterType != null)
+            //   throw new InvalidUserWithPromoterType();
 
-            if (user.UserDetail.PromoterType != null && !Enum.IsDefined(typeof(PromoterType), user.UserDetail.PromoterType))
-                throw new InvalidPromoterType();
+            //if (user.UserDetail.PromoterType != null && !Enum.IsDefined(typeof(PromoterType), user.UserDetail.PromoterType))
+            //    throw new InvalidPromoterType();
 
-            if (user.UserDetail.UserType == UserType.Promoter && user.UserDetail.MajorId != null)
-                throw new InvalidPromoterWithMajorId();
+            //if (user.UserDetail.UserType == UserType.Promoter && user.UserDetail.MajorId != null)
+            //    throw new InvalidPromoterWithMajorId();
 
 
-            if (user.UserDetail.UserType == UserType.User && user.UserDetail.MajorId != null)
-            {
-                if (_uow.MajorRepository.GetById(user.UserDetail.MajorId.GetValueOrDefault()) == null)
-                {
-                    throw new InvalidMajorId();
-                }
-            }
+            //if (user.UserDetail.UserType == UserType.User && user.UserDetail.MajorId != null)
+            //{
+            //    if (_uow.MajorRepository.GetById(user.UserDetail.MajorId.GetValueOrDefault()) == null)
+            //    {
+            //        throw new InvalidMajorId();
+            //    }
+            //}
 
 
 

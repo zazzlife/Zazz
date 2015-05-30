@@ -780,6 +780,7 @@ namespace Zazz.Web.Controllers
 
             Session["accesstoken_fb"] = accessToken;
 
+
             var oauthAccount = new LinkedAccount
                                    {
                                        AccessToken = accessToken,
