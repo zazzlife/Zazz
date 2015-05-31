@@ -36,7 +36,7 @@ namespace Zazz.Infrastructure.Helpers
             _client.AccessToken = accessToken;
             
 
-            dynamic result_ = _client.Get("me", new { fields = "gender,cover,picture.width(600).height(600)" });
+            dynamic result_ = _client.Get("me", new { fields = "email,gender,cover,picture.width(600).height(600)" });
 
             string _gender = result_.gender;
             string _cover = result_.cover.source;
@@ -423,7 +423,7 @@ namespace Zazz.Infrastructure.Helpers
             {
                 statuses.Add(new FbStatus
                              {
-                                 Id = s.status_id,
+                                 Id = Convert.ToInt64(s.status_id),
                                  Message = s.message,
                                  Time = s.time
                              });
