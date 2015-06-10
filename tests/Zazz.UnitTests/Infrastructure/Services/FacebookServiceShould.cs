@@ -743,7 +743,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
                            {
                                Id = 1,
                                Message = "message",
-                               Time = DateTime.UtcNow.ToUnixTimestamp()
+                               Time = DateTime.UtcNow
                            };
 
             _uow.Setup(x => x.FacebookPageRepository.GetByFacebookPageId(page.FacebookId))
@@ -780,7 +780,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 Id = 1,
                 Message = "message",
-                Time = DateTime.UtcNow.ToUnixTimestamp()
+                Time = DateTime.UtcNow
             };
 
             var oldPost = new Post
@@ -826,7 +826,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             {
                 Id = 1,
                 Message = "message",
-                Time = DateTime.UtcNow.ToUnixTimestamp()
+                Time = DateTime.UtcNow
             };
 
             var oldPost = new Post
@@ -927,7 +927,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var fbPhoto = new FbPhoto
                           {
                               AlbumId = "albumId",
-                              CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                              CreatedTime = DateTime.UtcNow,
                               Description = "desc",
                               Source = "src",
                               Id = "id"
@@ -975,7 +975,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var fbPhoto = new FbPhoto
             {
                 AlbumId = "albumId",
-                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                CreatedTime = DateTime.UtcNow,
                 Description = "desc",
                 Source = "src",
                 Id = "id"
@@ -1032,7 +1032,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var fbPhoto = new FbPhoto
             {
                 AlbumId = "albumId",
-                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                CreatedTime = DateTime.UtcNow,
                 Description = "desc",
                 Source = "src",
                 Id = "id"
@@ -1075,7 +1075,7 @@ namespace Zazz.UnitTests.Infrastructure.Services
             var fbPhoto = new FbPhoto
             {
                 AlbumId = "albumId",
-                CreatedTime = DateTime.UtcNow.ToUnixTimestamp(),
+                CreatedTime = DateTime.UtcNow,
                 Description = "desc",
                 Source = "src",
                 Id = "id"

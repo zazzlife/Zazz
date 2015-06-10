@@ -34,7 +34,7 @@ namespace Zazz.Core.Models.Facebook
         public bool IsDateOnly { get; set; }
 
         [DataMember(Name = "updated_time")]
-        public long UpdatedTime { get; set; }
+        public DateTime? UpdatedTime { get; set; }
 
         [DataMember(Name = "updated_time")]
         public FbCover CoverPic { get; set; }

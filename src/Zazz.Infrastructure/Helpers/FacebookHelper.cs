@@ -56,16 +56,13 @@ namespace Zazz.Infrastructure.Helpers
         public FbPage GetpageDetails(string pageId, string accessToken)
         {
             _client.AccessToken = accessToken;
-            string q = "SELECT name,emails,location,pic_cover,pic,website,username FROM page WHERE page_id = " + pageId;
-            System.Diagnostics.Debug.WriteLine(q);
-            dynamic result = _client.Get("fql", new { q });
 
-            var e = result.data[0];
+            dynamic result = _client.Get(pageId, new { fields = "name,username,emails,location,cover,picture.width(600).height(600),website" });
 
             var page = new FbPage();
             try
             {
-                page.Name = e.name;
+                page.Name = result.name;
             }
             catch (Exception)
             { }
@@ -73,7 +70,7 @@ namespace Zazz.Infrastructure.Helpers
 
             try
             {
-                page.email = e.emails[0];
+                page.email = result.emails[0];
             }
             catch(Exception)
             {}
@@ -82,28 +79,28 @@ namespace Zazz.Infrastructure.Helpers
 
             try
             {
-                page.location.address = e.location.street;
+                page.location.address = result.location.street;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.location.city = e.location.city;
+                page.location.city = result.location.city;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.location.latitude = e.location.latitude;
+                page.location.latitude = result.location.latitude;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.location.longitude = e.location.longitude;
+                page.location.longitude = result.location.longitude;
             }
             catch (Exception)
             { }
@@ -112,49 +109,49 @@ namespace Zazz.Infrastructure.Helpers
 
             try
             {
-                page.fbCover.coverlink = e.pic_cover.source;
+                page.fbCover.coverlink = result.cover.source;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.fbCover.coverid = e.pic_cover.cover_id;
+                page.fbCover.coverid = result.cover.cover_id;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.fbCover.offsetX = e.pic_cover.offset_x;
+                page.fbCover.offsetX = result.cover.offset_x;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.fbCover.offsetY = e.pic_cover.offset_y;
+                page.fbCover.offsetY = result.cover.offset_y;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.profilePic = e.pic;
+                page.profilePic = result.picture.data.url;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.url = e.website;
+                page.url = result.website;
             }
             catch (Exception)
             { }
 
             try
             {
-                page.username = e.username;
+                page.username = result.username;
             }
             catch (Exception)
             { }
@@ -166,79 +163,314 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
 
-            var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT {1}",
-                                      creatorId, limit);
-            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
+            //string EVENT_FIELDS = "description, eid, name, location, pic_square, pic_cover, start_time, end_time, update_time, venue, is_date_only";
 
-            return QueryForEvents(query);
+            //var where = String.Format("creator = {0} AND start_time > now() ORDER BY update_time DESC LIMIT {1}",
+            //                         creatorId, limit);
+            //var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
+
+            dynamic result = _client.Get(creatorId.ToString() + "/events", new { fields = "id, name, description, venue, picture.type(large), start_time, end_time, updated_time, is_date_only", limit = 5 });
+
+            var events = new List<FbEvent>();
+
+            foreach (var e in result.data)
+            {
+                var ev = new FbEvent
+                {
+                    Id = Int64.Parse(e.id),
+                    Name = e.name,
+                    Pic = e.picture.data.url,
+                    IsDateOnly = e.is_date_only,
+                    Venue = new FbVenue(),
+                    CoverPic = new FbCover()
+                };
+
+                try
+                {
+                    ev.Description = e.description;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Location = e.venue.street;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                var startTime = (string)e.start_time;
+                var updatedTime = (string)e.updated_time;
+
+                ev.StartTime = ev.IsDateOnly
+                                   ? DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.AssumeUniversal)
+                                   : DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.RoundtripKind);
+
+                try
+                {
+                    ev.UpdatedTime = DateTime.Parse(updatedTime);
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Pic = e.picture.data.url;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+
+                try
+                {
+                    ev.Venue.City = e.venue.city;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Country = e.venue.country;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Latitude = e.venue.latitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Longitude = e.venue.longitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Street = e.venue.street;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                if (ev.StartTime != null && ev.StartTime > DateTime.UtcNow)
+                {
+                    events.Add(ev);
+                }
+            }
+
+            return events;
         }
 
         public IEnumerable<FbEvent> GetPageEvents(string pageId, string accessToken)
         {
             _client.AccessToken = accessToken;
 
-            // this is a temporary workaround since FQL is not working: (SELECT ... FROM event WHERE creator = pageId)
-            var allEvents = new Dictionary<DateTimeOffset, string>();
+            dynamic result = _client.Get(pageId + "/events", new { fields = "id, name, description, venue, picture.type(large), start_time, end_time, updated_time, is_date_only", limit = 100 });
 
-            var path = "me/events";
-            const string FIELDS = "id,updated_time";
+            var events = new List<FbEvent>();
 
-            while (true)
+            foreach (var e in result.data)
             {
-                dynamic result;
-                try
+                var ev = new FbEvent
                 {
-                    result = _client.Get(path, new { fields = FIELDS });
-                }
-                catch (Exception)
-                {
-                    break;
-                }
+                    Id = Int64.Parse(e.id),
+                    Name = e.name,
+                    Pic = e.picture.data.url,
+                    IsDateOnly = e.is_date_only,
+                    Venue = new FbVenue(),
+                    CoverPic = new FbCover()
+                };
 
                 try
                 {
-                    path = result.paging.next;
+                    ev.Description = e.description;
                 }
                 catch (RuntimeBinderException)
+                { }
+
+                try
                 {
-                    break;
+                    ev.Location = e.venue.street;
                 }
+                catch (RuntimeBinderException)
+                { }
 
-                var events = (IEnumerable<dynamic>)result.data;
+                var startTime = (string)e.start_time;
+                var updatedTime = (string)e.updated_time;
 
-                if (!events.Any())
-                    break;
+                ev.StartTime = ev.IsDateOnly
+                                   ? DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.AssumeUniversal)
+                                   : DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.RoundtripKind);
 
-                foreach (var e in events)
+                try
                 {
-                    DateTimeOffset dt;
-                    if (DateTimeOffset.TryParse(e.updated_time, CultureInfo.InvariantCulture,
-                                                DateTimeStyles.RoundtripKind, out dt))
-                    {
-                        var id = (string)e.id;
-                        if (!String.IsNullOrEmpty(id))
-                            allEvents.Add(dt, id);
-                    }
+                    ev.UpdatedTime = DateTime.Parse(updatedTime);
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Pic = e.picture.data.url;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+
+                try
+                {
+                    ev.Venue.City = e.venue.city;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Country = e.venue.country;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Latitude = e.venue.latitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Longitude = e.venue.longitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Street = e.venue.street;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                if (ev.StartTime != null && ev.StartTime > DateTime.UtcNow)
+                {
+                    events.Add(ev);
                 }
             }
 
-            if (!allEvents.Any())
-                return new List<FbEvent>();
-
-            var ids = String.Join(",", allEvents
-                                           .OrderByDescending(e => e.Key)
-                                           .Select(e => e.Value));
-
-            var where = String.Format("eid in ({0}) AND start_time > now() ORDER BY update_time DESC", ids);
-            var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
-            return QueryForEvents(query);
+            return events;
         }
 
         public IEnumerable<FbEvent> GetUserAttendingEvents(string accessToken)
         {
-            const string QUERY = "SELECT description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me() AND rsvp_status = \"attending\") AND privacy = \"OPEN\"";
+            //const string QUERY = "SELECT description, eid, name, location, pic_square, start_time, end_time, update_time, venue, is_date_only FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me() AND rsvp_status = \"attending\") AND privacy = \"OPEN\"";
 
-            var events = QueryForEvents(QUERY).Where(e => e.StartTime > DateTime.UtcNow);
+            //var events = QueryForEvents(QUERY).Where(e => e.StartTime > DateTime.UtcNow);
+
+            //_client.AccessToken = accessToken;
+            dynamic result = _client.Get("me/events", new { fields = "id, name, description, venue, picture.type(large), start_time, end_time, updated_time, is_date_only, rsvp_status, privacy" });
+
+            var events = new List<FbEvent>();
+
+            foreach (var e in result.data)
+            {
+                var ev = new FbEvent
+                {
+                    Id = Int64.Parse(e.id),
+                    Name = e.name,
+                    Pic = e.picture.data.url,
+                    IsDateOnly = e.is_date_only,
+                    Venue = new FbVenue(),
+                    CoverPic = new FbCover()
+                };
+
+                try
+                {
+                    ev.Description = e.description;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Location = e.venue.street;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                var startTime = (string)e.start_time;
+                var updatedTime = (string)e.updated_time;
+
+                ev.StartTime = ev.IsDateOnly
+                                   ? DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.AssumeUniversal)
+                                   : DateTimeOffset.Parse(startTime, CultureInfo.InvariantCulture,
+                                                          DateTimeStyles.RoundtripKind);
+
+                try
+                {
+                    ev.UpdatedTime = DateTime.Parse(updatedTime);
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Pic = e.picture.data.url;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+
+                try
+                {
+                    ev.Venue.City = e.venue.city;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Country = e.venue.country;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Latitude = e.venue.latitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Longitude = e.venue.longitude;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                try
+                {
+                    ev.Venue.Street = e.venue.street;
+                }
+                catch (RuntimeBinderException)
+                { }
+
+                if (ev.StartTime != null && ev.StartTime > DateTime.UtcNow && e.rsvp_status == "attending" && e.privacy == "OPEN")
+                {
+                    events.Add(ev);
+                }
+            }
+
             return events;
         }
 
@@ -401,31 +633,24 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
 
-            const string ALBUM_TABLE = "album";
-            const string FIELDS = "name";
-            var where = String.Format("aid = \"{0}\"", albumId);
-            var query = GenerateFql(FIELDS, ALBUM_TABLE, where);
-
-            dynamic result = _client.Get("fql", new { q = query });
-            return result.data[0].name;
+            dynamic result = _client.Get(albumId, new { fields = "id,name" });
+            return result.name;
         }
 
         public IEnumerable<FbStatus> GetStatuses(string accessToken)
         {
             _client.AccessToken = accessToken;
 
-            const string QUERY = "SELECT message, status_id, time FROM status WHERE uid = me() ORDER BY time DESC";
-
-            dynamic result = _client.Get("fql", new { q = QUERY });
+            dynamic result = _client.Get("me/statuses", new { fields = "id,message,updated_time" });
             var statuses = new List<FbStatus>();
 
             foreach (var s in result.data)
             {
                 statuses.Add(new FbStatus
                              {
-                                 Id = Convert.ToInt64(s.status_id),
+                                 Id = Convert.ToInt64(s.id),
                                  Message = s.message,
-                                 Time = s.time
+                                 Time = DateTime.Parse(s.updated_time)
                              });
             }
 
@@ -436,9 +661,7 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
 
-            const string QUERY = "SELECT aid, caption, created, owner, pid, modified, images FROM photo WHERE owner = me() ORDER BY modified DESC";
-
-            dynamic result = _client.Get("fql", new { q = QUERY });
+            dynamic result = _client.Get("me/photos", new { fields = "id,name,created_time,album,images", type = "uploaded" });
 
             var photos = new List<FbPhoto>();
 
@@ -446,10 +669,10 @@ namespace Zazz.Infrastructure.Helpers
             {
                 var photo = new FbPhoto
                             {
-                                CreatedTime = p.modified,
-                                AlbumId = p.aid,
-                                Description = p.caption,
-                                Id = p.pid,
+                                CreatedTime = DateTime.Parse(p.created_time),
+                                AlbumId = p.album.id,
+                                Description = p.name,
+                                Id = p.id,
                                 Source = p.images[0].source,
                                 Width = (int)p.images[0].width,
                                 Height = (int)p.images[0].height
@@ -465,12 +688,7 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
 
-            const string TABLE = "user";
-            const string FIELDS = "uid, name, pic";
-            const string WHERE = "uid in (SELECT uid2 FROM friend WHERE uid1 = me())";
-            var query = GenerateFql(FIELDS, TABLE, WHERE);
-
-            dynamic result = _client.Get("fql", new { q = query });
+            dynamic result = _client.Get("me/friends", new { fields = "id,name,picture.type(large)" });
 
             var friends = new List<FbFriend>();
 
@@ -478,9 +696,9 @@ namespace Zazz.Infrastructure.Helpers
             {
                 var friend = new FbFriend
                              {
-                                 Id = f.uid,
+                                 Id = Int64.Parse(f.id),
                                  Name = f.name,
-                                 Photo = f.pic
+                                 Photo = f.picture.data.url
                              };
 
                 friends.Add(friend);
@@ -516,7 +734,7 @@ namespace Zazz.Infrastructure.Helpers
         {
             var e = new ZazzEvent
                    {
-                       CreatedDate = fbEvent.UpdatedTime.UnixTimestampToDateTime(),
+                       CreatedDate = fbEvent.UpdatedTime.GetValueOrDefault(),
                        Description = fbEvent.Description,
                        FacebookEventId = fbEvent.Id,
                        FacebookPhotoLink = fbEvent.Pic,

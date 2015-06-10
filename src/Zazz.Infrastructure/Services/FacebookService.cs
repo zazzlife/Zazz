@@ -162,7 +162,7 @@ namespace Zazz.Infrastructure.Services
 
             foreach (var s in fbStatuses)
             {
-                var dbPost = dbPosts.SingleOrDefault(p => p.FacebookId == s.Id);
+                var dbPost = dbPosts.FirstOrDefault(p => p.FacebookId == s.Id);
 
                 if (dbPost != null)
                 {
@@ -177,7 +177,7 @@ namespace Zazz.Infrastructure.Services
                                    FacebookId = s.Id,
                                    Message = s.Message,
                                    FromUserId = page.UserId,
-                                   CreatedTime = s.Time.UnixTimestampToDateTime(),
+                                   CreatedTime = s.Time,
                                    PageId = page.Id
                                };
 
@@ -237,7 +237,7 @@ namespace Zazz.Infrastructure.Services
                                     Description = fbPhoto.Description,
                                     FacebookId = fbPhoto.Id,
                                     IsFacebookPhoto = true,
-                                    UploadDate = fbPhoto.CreatedTime.UnixTimestampToDateTime(),
+                                    UploadDate = fbPhoto.CreatedTime,
                                     UserId = page.UserId,
                                     PageId = page.Id
                                 };
@@ -276,7 +276,7 @@ namespace Zazz.Infrastructure.Services
             if (page != null)
                 throw new FacebookPageExistsException();
 
-            _facebookHelper.LinkPage(fbPage.FacebookId, fbPage.AccessToken);
+            //_facebookHelper.LinkPage(fbPage.FacebookId, fbPage.AccessToken);
             _uow.FacebookPageRepository.InsertGraph(fbPage);
             _uow.SaveChanges();
         }

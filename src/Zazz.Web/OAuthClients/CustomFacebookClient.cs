@@ -27,7 +27,7 @@ namespace Zazz.Web.OAuthClients
                 AuthorizationEP
                 + "?client_id=" + _appId
                 + "&redirect_uri=" + HttpUtility.UrlEncode(returnUrl.ToString())
-                + "&scope=public_profile,email,user_events,read_stream,manage_pages"
+                + "&scope=public_profile,email,user_events,read_stream,manage_pages,user_friends"
                 );
         }
 

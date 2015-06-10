@@ -19,6 +19,6 @@ namespace Zazz.Core.Models.Facebook
 
         public int Width { get; set; }
 
-        public long CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }
