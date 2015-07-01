@@ -54,5 +54,19 @@
             
         </div>
 
+        @{
+            if (Model.IsFromCurrentUser)
+            {
+                <script type="text/javascript">
+                    $(document).on('click', '#removePhoto', function () {
+                        $('#deletePicPromptModal').modal('hide');
+                        location.reload();
+                        removePhoto(@Model.PhotoId);
+                    });
+                </script>
+                <div id="promptDelete" class="btn btn-danger pull-left" style="margin-top: 650px;"
+                      data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto"><i class="icon-trash icon-white"></i>  Delete </div>
+            }
+        }
     </div>
 </div>
