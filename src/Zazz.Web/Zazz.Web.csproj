@@ -513,6 +513,8 @@
     <Content Include="Images\new\facebook_icon.png" />
     <Content Include="Images\new\fb-sign-up2.jpg" />
     <Content Include="Images\round.png" />
+    <Content Include="Images\Speedy_Delete_Cross.png" />
+    <Content Include="Images\Speedy_Delete_Trash.png" />
     <Content Include="Images\type.gif" />
     <Content Include="Images\url.gif" />
     <Content Include="Scripts\chosen.jquery.min.js" />
@@ -825,6 +827,7 @@
     <Content Include="Views\Users\UserFollowingClubs.cshtml" />
     <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <Content Include="Views\Account\RecoverUser.cshtml" />
+    <Content Include="Views\Shared\_DeletePicPromptModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

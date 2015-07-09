@@ -24,6 +24,15 @@
                 @Html.Partial("_UploadPicModal", true)
             </p>
 
+            @if (Model.Photos != null)
+            {
+                <script type="text/javascript">
+                    $(document).on('click', '#removePhoto', function () {
+                        $('#deletePicPromptModal').modal('hide');
+                        location.reload();
+                    });
+                </script>
+            }
             <ul class="profile-photos">
                 @foreach (var p in Model.Photos)
                 {

@@ -24,6 +24,8 @@
 
     <div class="feed-content well well-small no-padding">
 
+        @Html.Partial("_DeletePicPromptModal")
+
         @if (photosCount == 1)
         {
 
@@ -150,10 +152,26 @@
             <div class="clearfix"></div>
         }
 
+        @if (Model.Photos != null)
+        {
+            <script type="text/javascript">
+                $(".span12").css("position", "relative");
+                $(document).on('click', '#removePhoto', function () {
+                    $('#deletePicPromptModal').modal('hide');
+                    location.reload();
+                });
+            </script>
+        }
 
         @foreach (var p in Model.Photos)
         {
             Html.RenderPartial("_LightBoxPartial", p);
+            if (p.IsFromCurrentUser)
+            {
+                <a href="#" class="speedy-delete-feed" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@p.PhotoId)">
+                    <img src="~/Images/Speedy_Delete_Cross.png" class="speedy-delete-cross">
+                </a>
+            }
         }
 
     </div>
