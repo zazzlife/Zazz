@@ -58,17 +58,21 @@
             if (Model.IsFromCurrentUser)
             {
                 <script type="text/javascript">
-                    $(document).on('click', '#promptDelete', function () {
+                    var deletePhotoID = "";
+                    $(document).on('click', '[id^=promptDelete]', function () {
                         $(".close").click();
+                        var promptDeleteString = "" + this.id;
+                        deletePhotoID = promptDeleteString.substring(13);
                     });
                     $(document).on('click', '#removePhoto', function () {
                         $('#deletePicPromptModal').modal('hide');
+                        removePhoto(deletePhotoID);
                         location.reload();
                     });
-</script>
-                <div id="promptDelete" class="btn btn-danger" style="bottom: 25px; left: 25px; position: absolute;"
-                      data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@Model.PhotoId)"><i class="icon-trash icon-white"></i>  Delete </div>
+                </script>
+                <div id="promptDelete-@Model.PhotoId" class="btn btn-danger" style="bottom: 25px; left: 25px; position: absolute;"
+                     data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto"><i class="icon-trash icon-white"></i> Delete</div>
             }
-        }
+}
     </div>
 </div>

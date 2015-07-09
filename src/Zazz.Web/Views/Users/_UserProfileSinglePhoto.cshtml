@@ -13,7 +13,7 @@
         </a>
 
         @if (Model.IsFromCurrentUser) {
-            <a href="#" class="speedy-delete-gallery" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@Model.PhotoId)">
+            <a href="#" id="promptDelete-@Model.PhotoId" class="speedy-delete-gallery" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto">
                 <img src="~/Images/Speedy_Delete_Trash.png" class="speedy-delete-trash">
             </a>
         }
