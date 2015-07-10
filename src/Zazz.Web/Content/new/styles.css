@@ -267,7 +267,7 @@
 /* Start Buttons */
 
 .landing-page-tagline {
-    font-size: 4vw;
+    font-size: 3vw;
     line-height: 100%;
     padding-top: 3vw;
 }
@@ -603,7 +603,7 @@
     min-height: 32vw;
 }
 
-.landing-page-create img {
+.landing-page-create-fb img {
     margin-left: -1.5vw;
     margin-top: 2vw;
     width: 30vw;
@@ -612,6 +612,20 @@
 .lp-create-title {
     font-size: 2.5vw;
     text-align: center;
+}
+
+.lp-create-lock img {
+    width: 8vw;
+    height: 13vh;
+    margin-left: 9.5vw;
+    margin-top: 2vh;
+}
+
+.landing-page-create p {
+  margin-top: 1vh;
+  font-family: robotolight;
+  text-align: center;
+  font-size: 1.5vw;
 }
 
 /* Footer */
