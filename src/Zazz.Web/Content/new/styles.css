@@ -633,6 +633,8 @@
 .main-footer {
     float: left;
     margin-top: 1vw;
+    position: absolute;
+    bottom: 7%;
 }
 
 .main-footer table {
