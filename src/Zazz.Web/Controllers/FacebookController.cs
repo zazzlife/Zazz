@@ -255,6 +255,9 @@ namespace Zazz.Web.Controllers
 
                     _facebookService.LinkPage(fbPage);
                     _facebookService.SyncPageEvents(fbPage.FacebookId);
+
+                    _facebookService.SyncPagePhotos(fbPage.FacebookId);
+                    _facebookService.SyncPageStatuses(fbPage.FacebookId);
                 }
 
                 return new JsonNetResult("ok");

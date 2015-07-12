@@ -29,6 +29,7 @@ using Zazz.Web.Interfaces;
 using Zazz.Web.Models;
 using Zazz.Web.OAuthAuthorizationServer;
 using Facebook;
+using System.Web.Caching;
 
 namespace Zazz.Web.Controllers
 {
@@ -217,7 +218,8 @@ namespace Zazz.Web.Controllers
                     user.UserDetail.IsPromoter = true;
                     user.UserDetail.PromoterType = vm.PromoterType;
                 }
-                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                var isMobile = (bool?)System.Web.HttpContext.Current.Cache[IS_MOBILE_SESSION_KEY];
+
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 string profilePhotoUrl = null;
 
@@ -305,7 +307,7 @@ namespace Zazz.Web.Controllers
 
                     if (isMobile.HasValue && isMobile.Value)
                     {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
                         return HandleMobileClientOAuthCallback(user);
                     }
                     else if (isOAuth.HasValue && isOAuth.Value)
@@ -378,7 +380,7 @@ namespace Zazz.Web.Controllers
                     }
                 };
 
-                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                var isMobile = (bool?)System.Web.HttpContext.Current.Cache[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
 
                 string profilePhotoUrl = null;
@@ -434,7 +436,7 @@ namespace Zazz.Web.Controllers
 
                     if (isMobile.HasValue && isMobile.Value)
                     {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
                         return HandleMobileClientOAuthCallback(user);
                     }
                     else if (isOAuth.HasValue && isOAuth.Value)
@@ -519,9 +521,9 @@ namespace Zazz.Web.Controllers
 
         private void ReleaseOAuthSessionValues()
         {
-            Session.Remove(IS_MOBILE_SESSION_KEY);
+            System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
             Session.Remove(IS_OAUTH_KEY);
-            Session.Remove(IS_CLUB_KEY);
+            System.Web.HttpContext.Current.Cache.Remove(IS_CLUB_KEY);
             Session.Remove(OAUTH_PROVIDER_KEY);
             Session.Remove(OAUTH_FULLNAME_KEY);
             Session.Remove(OAUTH_PROVIDER_USERID_KEY);
@@ -746,19 +748,28 @@ namespace Zazz.Web.Controllers
         public ActionResult OAuth(string id, bool? isMobile, bool? isClub)
         {
             if (isMobile.HasValue && isMobile.Value == true)
-                Session[IS_MOBILE_SESSION_KEY] = true;
+            {
+                System.Web.HttpContext.Current.Cache[IS_MOBILE_SESSION_KEY] = true;
+            }
+
+
             if (isClub.HasValue && isClub.Value == true)
-                Session[IS_CLUB_KEY] = true;
+            {
+                System.Web.HttpContext.Current.Cache[IS_CLUB_KEY] = true;
+            }
             else
-                Session[IS_CLUB_KEY] = false;
+            {
+                System.Web.HttpContext.Current.Cache[IS_CLUB_KEY] = false;
+            }
 
             return new OAuthLoginResult(id, "/account/oauthcallback");
         }
 
         public ActionResult OAuthCallback()
         {
-            var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
-            var isClub = (bool?)Session[IS_CLUB_KEY];
+            var isMobile = (bool?)System.Web.HttpContext.Current.Cache[IS_MOBILE_SESSION_KEY];
+            var isClub = (bool?)System.Web.HttpContext.Current.Cache[IS_CLUB_KEY];
+
             var result = OAuthWebSecurity.VerifyAuthentication(Url.Action("OAuthCallback"));
             if (!result.IsSuccessful)
             {
@@ -849,7 +860,7 @@ namespace Zazz.Web.Controllers
             //user had an account, checking if it's mobile to redirect to the right place
             if (isMobile.HasValue && isMobile.Value)
             {
-                Session.Remove(IS_MOBILE_SESSION_KEY);
+                System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
                 return HandleMobileClientOAuthCallback(user);
             }
             else

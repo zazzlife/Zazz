@@ -222,7 +222,7 @@ namespace Zazz.Web.Controllers
 
         private void ReleaseOAuthSessionValues()
         {
-            Session.Remove(IS_MOBILE_SESSION_KEY);
+            System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
             Session.Remove(IS_OAUTH_KEY);
             Session.Remove(OAUTH_PROVIDER_KEY);
             Session.Remove(OAUTH_FULLNAME_KEY);
@@ -287,7 +287,7 @@ namespace Zazz.Web.Controllers
                     user.UserDetail.PromoterType = vm.PromoterType;
                 }
 
-                var isMobile = (bool?)Session[IS_MOBILE_SESSION_KEY];
+                var isMobile = (bool?)System.Web.HttpContext.Current.Cache[IS_MOBILE_SESSION_KEY];
                 var isOAuth = (bool?)Session[IS_OAUTH_KEY];
                 string profilePhotoUrl = null;
 
@@ -368,7 +368,7 @@ namespace Zazz.Web.Controllers
 
                     if (isMobile.HasValue && isMobile.Value)
                     {
-                        Session.Remove(IS_MOBILE_SESSION_KEY);
+                        System.Web.HttpContext.Current.Cache.Remove(IS_MOBILE_SESSION_KEY);
                         return HandleMobileClientOAuthCallback(user);
                     }
                     else if (isOAuth.HasValue && isOAuth.Value)

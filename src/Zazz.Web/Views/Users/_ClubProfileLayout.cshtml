@@ -17,14 +17,6 @@
         <div class="span3">
             <div style="height: 50px">
                 <ul class="nav nav-stacked club-details">
-                    @if (!String.IsNullOrEmpty(Model.clubtypes))
-                    {
-                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.clubtypes</strong></li>
-                    }
-                    else
-                    {
-                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.ClubType</strong></li>
-                    }
                     @if (!String.IsNullOrEmpty(Model.Address))
                     {
                         <li><img src="~/Images/address.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.Address</strong></li>
@@ -34,10 +26,18 @@
                     {
                         <li><img src="~/Images/city.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.city</strong></li>
                     }
+                    @if (!String.IsNullOrEmpty(Model.clubtypes))
+                    {
+                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.clubtypes</strong></li>
+                    }
+                    else
+                    {
+                        <li><img src="~/Images/type.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.ClubType</strong></li>
+                    }
 
                     @if (!String.IsNullOrEmpty(Model.url))
                     {
-                        <li><img src="~/Images/url.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080;">@Model.url</strong></li>
+                        <li><a href="@Model.url" target="_blank"><img src="~/Images/url.gif" style="width:25px;vertical-align:text-bottom;" /><strong style="color:#808080; font-size: small;">@Model.url.Replace("http://", "")</strong></a></li>
                     }
                 </ul>
             </div>

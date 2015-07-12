@@ -127,7 +127,8 @@ namespace Zazz.Web.Controllers
                          UserPhoto = baseVm.UserPhoto,
                          Weeklies = baseVm.Weeklies,
                          clubtypes = clubtypess,
-                         city = (user.ClubDetail.City != null)?user.ClubDetail.City.Name:""
+                         city = (user.ClubDetail.City != null)?user.ClubDetail.City.Name:"",
+                         url = (user.ClubDetail.url)
                      };
 
             return View("ClubProfile", vm);
