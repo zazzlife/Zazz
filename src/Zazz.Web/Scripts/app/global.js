@@ -289,6 +289,7 @@ $(document).on('show', '#uploadPicModal', function () {
     initImgUploader(function (id, name, response) {
 
         if (!response.success) {
+            hideBtnBusy(imgUploadBtn, "Submit");
             toastr.error(response.error);
         } else {
             window[uploadModalSuccessCallback](response.photoId, response.photoUrl);

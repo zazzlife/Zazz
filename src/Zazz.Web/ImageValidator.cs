@@ -9,7 +9,7 @@ namespace Zazz.Web
 {
     public class ImageValidator : IImageValidator
     {
-        private const int MAXIMUM_SIZE = 3 * 1024 * 1024;
+        private const int MAXIMUM_SIZE = 10 * 1024 * 1024;
 
         public bool IsValid(Stream imgStream)
         {
@@ -31,7 +31,7 @@ namespace Zazz.Web
         {
             if (uploadedImage.ContentLength > MAXIMUM_SIZE)
             {
-                errorMessage = "Image should not be larger than 3mb";
+                errorMessage = "Image should not be larger than 10MB";
                 return false;
             }
 
