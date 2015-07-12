@@ -235,7 +235,7 @@
             
                 <div class="landing-page-tagline">
             <div class="animated fadeInLeft">
-                    Party Smarter.
+                Discover new people & places to party. 
                 </div></div>
                 <table>
                  
@@ -409,9 +409,19 @@
             </div>
             <div class="landing-page-create" tabindex="-1">
                 <div class="lp-create-title">Create a Page</div>
-                <a href="@Url.Action("OAuth", "Account", new { id = "facebook", isClub = true })">
-                    <img src="/Images/new/fb-sign-up2.jpg" />
-                </a>
+                <div class="landing-page-create-fb">
+                    <a href="@Url.Action("OAuth", "Account", new { id = "facebook", isClub = true })">
+                        <img src="/Images/new/fb-sign-up2.jpg" />
+                    </a>
+                </div>
+                
+                <div class="lp-create-lock">
+                    <img src="~/Images/lock.png" />
+                </div>
+                <p>
+                    Zazz uses your Facebook's fan page to sync all your posts, photos, and events. 
+                    Our web app does not allow us to post on your behalf, it is against our Terms & Conditions and our Privacy Policy.  
+                </p>
             </div>
         </div>
         
