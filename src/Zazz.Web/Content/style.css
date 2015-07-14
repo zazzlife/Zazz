@@ -530,6 +530,8 @@ hr.gold-line {
 
 .lightbox-commentbox {
     overflow-y: auto;
+    max-width: 400px;
+    min-width: 400px;
 }
 
     .lightbox-commentbox a {
@@ -1689,6 +1691,7 @@ li.new-notification {
                 height: 75px;
                 width: 75px;
                 font-size: 25px;
+                border-radius: 38px
             }
 
 /***************************************
