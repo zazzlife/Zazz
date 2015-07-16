@@ -825,6 +825,7 @@
     <Content Include="Views\Users\UserFollowingClubs.cshtml" />
     <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <Content Include="Views\Account\RecoverUser.cshtml" />
+    <Content Include="Views\Notifications\_NotificationsPageLayout.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

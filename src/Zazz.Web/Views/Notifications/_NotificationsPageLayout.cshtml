@@ -1,0 +1,88 @@
+﻿@using Zazz.Web.Controllers
+@using System.Linq;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    IEnumerable<CategoryStatViewModel> tagStats = null;
+    var currentUserDisplayName = "Unknown user";
+    var currentUserId = 0;
+
+    var controller = ViewContext.Controller as BaseController;
+    if (controller != null)
+    {
+        tagStats = controller.GetTagStats();
+        currentUserDisplayName = controller.GetCurrentUserDisplayName();
+        currentUserId = controller.GetCurrentUserId();
+    }
+}
+
+<div id="user-home-page-content">
+    <div class="container">
+        @* LEFT PANEL *@
+        <section class="left-panel">
+            <div class="user">
+                <img class="user-img img-rounded img-polaroid" src="@Html.Action("GetCurrentUserVerySmallDisplayPicture")" />
+                <a href="~/users/profile/@currentUserId/@currentUserDisplayName.ToUrlFriendlyString()" class="username">@currentUserDisplayName</a>
+            </div>
+
+        </section>
+
+        @* MIDDLE PANEL *@
+
+        <section class="middle-panel">
+
+             @if (TempData["alert"] != null && ((bool)TempData["alert"]))
+             {
+                    <div class="alert alert-block @TempData["alertClass"] margin-ten" style="margin-bottom: 30px;">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <p>@TempData["alertMessage"]</p>
+                    </div>
+             }
+            
+
+            @RenderBody()
+        </section>
+
+        <div class="clearfix"></div>
+        
+        <div class="modal hide fade" id="party-web-requests">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Party web requests</h3>
+            </div>
+            
+            <div class="modal-body" id="party-web-requests-body">
+                <div class="text-center">
+                    <i class="icon-large icon-refresh icon-spin"></i>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn">Close</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    @RenderSection("Scripts", false)
+}
+
+@section ScriptsTop 
+{
+    <script type="text/javascript">
+
+        @{
+            var categorySelect = Html.Partial("_CategoriesSelect").ToString();
+            categorySelect = categorySelect.Replace(Environment.NewLine, "");
+        }
+
+        var categoriesSelectHtml = '@Html.Raw(categorySelect)';
+
+
+    </script>
+
+    @RenderSection("ScriptsTop", false)
+}
