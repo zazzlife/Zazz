@@ -469,6 +469,8 @@
     <Content Include="Images\categories\32\ladies_free.png" />
     <Content Include="Images\categories\32\live_music-active.png" />
     <Content Include="Images\categories\32\live_music.png" />
+    <Content Include="Images\categories\32\need_my_crew-active.png" />
+    <Content Include="Images\categories\32\need_my_crew.png" />
     <Content Include="Images\categories\32\no_cover-active.png" />
     <Content Include="Images\categories\32\no_cover.png" />
     <Content Include="Images\categories\32\open_bar-active.png" />
@@ -479,6 +481,8 @@
     <Content Include="Images\categories\32\pre_drink.png" />
     <Content Include="Images\categories\32\turning_up-active.png" />
     <Content Include="Images\categories\32\turning_up.png" />
+    <Content Include="Images\categories\32\what_to_do-active.png" />
+    <Content Include="Images\categories\32\what_to_do.png" />
     <Content Include="Images\categories\concert-active.png" />
     <Content Include="Images\categories\concert.png" />
     <Content Include="Images\categories\drink_special-active.png" />
@@ -493,6 +497,8 @@
     <Content Include="Images\categories\ladies_free.png" />
     <Content Include="Images\categories\live_music-active.png" />
     <Content Include="Images\categories\live_music.png" />
+    <Content Include="Images\categories\need_my_crew-active.png" />
+    <Content Include="Images\categories\need_my_crew.png" />
     <Content Include="Images\categories\no_cover-active.png" />
     <Content Include="Images\categories\no_cover.png" />
     <Content Include="Images\categories\open_bar-active.png" />
@@ -503,12 +509,16 @@
     <Content Include="Images\categories\pre_drink.png" />
     <Content Include="Images\categories\turning_up-active.png" />
     <Content Include="Images\categories\turning_up.png" />
+    <Content Include="Images\categories\what_to_do-active.png" />
+    <Content Include="Images\categories\what_to_do.png" />
     <Content Include="Images\city.gif" />
     <Content Include="Images\eventcity.png" />
     <Content Include="Images\eventdate.png" />
     <Content Include="Images\eventlocation.png" />
     <Content Include="Images\fbevent.png" />
     <Content Include="Images\infoevent.png" />
+    <Content Include="Images\landing-page-phones.png" />
+    <Content Include="Images\lock.png" />
     <Content Include="Images\mailevent.png" />
     <Content Include="Images\new\facebook_icon.png" />
     <Content Include="Images\new\fb-sign-up2.jpg" />
