@@ -5,6 +5,23 @@
 }
 
 <div class="tabbable">
+    <script type="text/javascript">
+            var viewablePhotoIDs = [];
+            $(document).on('click', 'a.lightbox-next', function () {
+                var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
+                var index = viewablePhotoIDs.indexOf(parseInt(id));
+                var next = 'a[data-target="#photo-' + viewablePhotoIDs[index+1] + '"]';
+                $('.close').click();
+                $(next).first().click();
+            });
+            $(document).on('click', 'a.lightbox-prev', function () {
+                var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
+                var index = viewablePhotoIDs.indexOf(parseInt(id));
+                var prev = 'a[data-target="#photo-' + viewablePhotoIDs[index - 1] + '"]';
+                $('.close').click();
+                $(prev).first().click();
+            });
+    </script>
     <ul class="nav nav-tabs">
         <li><a href="@Url.Action("Profile", "Users", new { id = Model.UserId })"><i class="icon-list-alt"></i> News Feed</a></li>
         <li class="active"><a id="photosTabLink" href="#photosTab" data-toggle="tab"><i class="icon-th-large"></i> Photos</a></li>
@@ -27,6 +44,9 @@
             <ul class="profile-photos">
                 @foreach (var p in Model.Photos)
                 {
+                    <script type="text/javascript">
+                        viewablePhotoIDs.push(@p.PhotoId);
+                    </script>
                     @Html.Partial("_UserProfileSinglePhoto", p)
                 }
             </ul>

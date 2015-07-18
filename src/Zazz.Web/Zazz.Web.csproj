@@ -522,9 +522,13 @@
     <Content Include="Images\mailevent.png" />
     <Content Include="Images\new\facebook_icon.png" />
     <Content Include="Images\new\fb-sign-up2.jpg" />
+    <Content Include="Images\next.png" />
+    <Content Include="Images\prev.png" />
     <Content Include="Images\round.png" />
     <Content Include="Images\type.gif" />
     <Content Include="Images\url.gif" />
+    <Content Include="Licenses\Lightbox\index.html" />
+    <Content Include="Licenses\Lightbox\Readme.txt" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\perfect-scrollbar-0.4.10.with-mousewheel.min.js" />
@@ -625,6 +629,7 @@
     <Content Include="Content\font\Roboto-Light-webfont.eot" />
     <Content Include="Content\font\Roboto-Light-webfont.ttf" />
     <Content Include="Content\font\Roboto-Light-webfont.woff" />
+    <Content Include="Licenses\Lightbox\README.markdown" />
     <None Include="Properties\PublishProfiles\Dev - debug %28no folder wipe%29.pubxml" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\3-vs.jpg" />

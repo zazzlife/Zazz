@@ -1,0 +1,1 @@
+﻿License attributed to Images/next.png, Images/prev.png and CSS code snippets in Content/Style.css
