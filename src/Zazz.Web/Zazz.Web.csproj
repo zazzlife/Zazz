@@ -525,6 +525,8 @@
     <Content Include="Images\next.png" />
     <Content Include="Images\prev.png" />
     <Content Include="Images\round.png" />
+    <Content Include="Images\Speedy_Delete_Cross.png" />
+    <Content Include="Images\Speedy_Delete_Trash.png" />
     <Content Include="Images\type.gif" />
     <Content Include="Images\url.gif" />
     <Content Include="Licenses\Lightbox\index.html" />
@@ -841,6 +843,7 @@
     <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <Content Include="Views\Account\RecoverUser.cshtml" />
     <Content Include="Views\Notifications\_NotificationsPageLayout.cshtml" />
+    <Content Include="Views\Shared\_DeletePicPromptModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -24,6 +24,8 @@
 
     <div class="feed-content well well-small no-padding">
 
+        @Html.Partial("_DeletePicPromptModal")
+
         @if (photosCount == 1)
         {
             Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.Photos[0]);
@@ -148,11 +150,20 @@
             }
             <div class="clearfix"></div>
         }
-
+            
+        <script type="text/javascript">
+            $(".span12").css("position", "relative");
+        </script>
 
         @foreach (var p in Model.Photos)
         {
             Html.RenderPartial("_LightBoxPartial", p);
+            if (p.IsFromCurrentUser)
+            {
+                <a href="#" id="promptDelete-@p.PhotoId" class="speedy-delete-feed" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@p.PhotoId)">
+                    <img src="~/Images/Speedy_Delete_Cross.png" class="speedy-delete-cross">
+                </a>
+            }
         }
 
     </div>
