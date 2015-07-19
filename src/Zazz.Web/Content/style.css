@@ -48,8 +48,8 @@
 
 .speedy-delete-feed {
     position: absolute; 
-    top: 0; 
-    right: 0; 
+    top: 7%; 
+    right: 1%; 
     text-align: right;
     opacity: 0;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
