@@ -9,7 +9,11 @@
         <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
     </div>
     <div class='lightbox-content'>
-        <img data-id="@Model.PhotoId" src="@Model.PhotoUrl.OriginalLink"/>
+        <img class="lightbox-img" data-id="@Model.PhotoId" src="@Model.PhotoUrl.OriginalLink"/>
+        <div class="lightbox-nav">
+            <a class="lightbox-prev">
+            <a class="lightbox-next"></a>
+        </div>
         <div class="well pull-right no-padding lightbox-commentbox">
             
             <div class="photo-details">
