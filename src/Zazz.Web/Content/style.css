@@ -52,6 +52,7 @@
     right: 1%; 
     text-align: right;
     opacity: 0;
+    outline: 0 !important;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     -webkit-transition: opacity 0.2s;
     -moz-transition: opacity 0.2s;
@@ -591,7 +592,6 @@ hr.gold-line {
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 10;
 }
 
 a.lightbox-prev, a.lightbox-next {
