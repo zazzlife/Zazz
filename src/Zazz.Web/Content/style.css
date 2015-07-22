@@ -46,9 +46,9 @@
     Image Deletion
 ***************************************/
 
-.speedy-delete-feed {
+a[class^="speedy-delete-feed"] {
     position: absolute; 
-    top: 7%; 
+    top: 1%; 
     right: 1%; 
     text-align: right;
     opacity: 0;
@@ -74,7 +74,7 @@
     height: 45px;
 }
 
-.span12:hover .speedy-delete-feed {
+.span12:hover a[class^="speedy-delete-feed"] {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 0.7;
 }
@@ -88,7 +88,7 @@
     margin-right: 5px;
 }
 
-.speedy-delete-feed:hover .speedy-delete-cross{
+a[class^="speedy-delete-feed"]:hover .speedy-delete-cross{
     opacity: 1.0;
 }
 
@@ -1472,7 +1472,8 @@ li.new-notification {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 48px;
+    margin-left: 18px;
+    margin-top: 15px;
 }
 
 .category-text,
