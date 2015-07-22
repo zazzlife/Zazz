@@ -152,7 +152,7 @@
         }
             
         <script type="text/javascript">
-            $(".span12").css("position", "relative");
+            $('div[id^="feed-image"').css("position", "relative");
         </script>
 
         @foreach (var p in Model.Photos)
@@ -160,9 +160,12 @@
             Html.RenderPartial("_LightBoxPartial", p);
             if (p.IsFromCurrentUser)
             {
-                <a href="#" id="promptDelete-@p.PhotoId" class="speedy-delete-feed" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@p.PhotoId)">
+                <a href="#" id="promptDelete-@p.PhotoId" class="speedy-delete-feed-@p.PhotoId" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@p.PhotoId)">
                     <img src="~/Images/Speedy_Delete_Cross.png" class="speedy-delete-cross">
                 </a>
+                <script type="text/javascript">
+                    $('#feed-image-@p.PhotoId').append(function () { return $('.speedy-delete-feed-@p.PhotoId'); });
+                </script>
             }
         }
 
