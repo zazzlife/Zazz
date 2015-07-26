@@ -339,6 +339,25 @@ function userProfilePhotoUpload(photoId, photoUrl) {
 }
 
 /********************************
+    Image Deletion
+*********************************/
+
+var deletePhotoID = "";
+$(document).on('click', '[id^=promptDelete]', function () {
+    $(".lightbox-header").find(".close").click();
+    var promptDeleteString = "" + this.id;
+    deletePhotoID = promptDeleteString.substring(13);
+});
+
+$(document).on('click', '#removePhoto', function () {
+    $('#deletePicPromptModal').modal('hide');
+    location.reload();
+    removePhoto(deletePhotoID);
+    deletePhotoID = "";
+});
+
+
+/********************************
     Search Autocomplete
 *********************************/
 

@@ -5,10 +5,19 @@
 }
            
 <li>
-    <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
-        <div class="profile-photos-img-div" style="background-image: url(@Model.PhotoUrl.MediumLink)">
-            <!--<img class="profile-photos-img" src="@Model.PhotoUrl.MediumLink" />-->
-        </div>
-    </a>
-    @Html.Partial("_LightBoxPartial", Model)
+    <div class="profile-photos-img-div">
+        <a data-toggle="lightbox" data-target="#photo-@Model.PhotoId" href="@Model.PhotoUrl.OriginalLink">
+            <div class="profile-photos-img-div" style="background-image: url(@Model.PhotoUrl.MediumLink)">
+                <!--<img class="profile-photos-img" src="@Model.PhotoUrl.MediumLink" />-->
+            </div>
+        </a>
+
+        @if (Model.IsFromCurrentUser) {
+            <a href="#" id="promptDelete-@Model.PhotoId" class="speedy-delete-gallery" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto">
+                <img src="~/Images/Speedy_Delete_Trash.png" class="speedy-delete-trash">
+            </a>
+        }
+    
+        @Html.Partial("_LightBoxPartial", Model)
+    </div>
 </li>

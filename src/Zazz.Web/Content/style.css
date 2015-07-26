@@ -42,6 +42,64 @@
     display:inline-block;
 }
 
+/***************************************
+    Image Deletion
+***************************************/
+
+a[class^="speedy-delete-feed"] {
+    position: absolute; 
+    top: 1%; 
+    right: 1%; 
+    text-align: right;
+    opacity: 0;
+    outline: 0 !important;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    -webkit-transition: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    width: 55px;
+    height: 50px;
+    margin-right: 15px; 
+    margin-top: 15px;
+}
+
+.speedy-delete-gallery {
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    text-align: right;
+    display: none;
+    width: 45px;
+    height: 45px;
+}
+
+.span12:hover a[class^="speedy-delete-feed"] {
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 0.7;
+}
+
+.profile-photos-img-div:hover .speedy-delete-gallery {
+    display: block;
+}
+
+.speedy-delete-cross {
+    opacity: 0.7; 
+    margin-right: 5px;
+}
+
+a[class^="speedy-delete-feed"]:hover .speedy-delete-cross{
+    opacity: 1.0;
+}
+
+.speedy-delete-trash {
+    opacity: 0.6;
+}
+
+.speedy-delete-gallery:hover .speedy-delete-trash{
+    opacity: 1.0;
+}
+
 
 
 /***************************************
@@ -526,10 +584,64 @@ hr.gold-line {
 	padding: 3px;
 }
 
-/**********Lightbox Comments**************/
+/**********Lightbox Content**************/
+
+.lightbox-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+a.lightbox-prev, a.lightbox-next {
+  height: 100%;
+  cursor: pointer;
+  display: block;
+}
+
+.lightbox-nav a.lightbox-prev {
+  width: 34%;
+  height: 100%;
+  left: 0;
+  float: left;
+  background: url(../Images/prev.png) left 48% no-repeat;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.6s;
+  -moz-transition: opacity 0.6s;
+  -o-transition: opacity 0.6s;
+  transition: opacity 0.6s;
+}
+
+.lightbox-nav a.lightbox-prev:hover {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
+.lightbox-nav a.lightbox-next {
+  width: 64%;
+  height: 100%;
+  right: 0;
+  float: right;
+  background: url(../Images/next.png) 55% 48% no-repeat;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.6s;
+  -moz-transition: opacity 0.6s;
+  -o-transition: opacity 0.6s;
+  transition: opacity 0.6s;
+}
+
+.lightbox-nav a.lightbox-next:hover {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
 
 .lightbox-commentbox {
     overflow-y: auto;
+    max-width: 400px;
+    min-width: 400px;
 }
 
     .lightbox-commentbox a {
@@ -1360,7 +1472,8 @@ li.new-notification {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 48px;
+    margin-left: 18px;
+    margin-top: 15px;
 }
 
 .category-text,
@@ -1661,6 +1774,7 @@ li.new-notification {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+    position: relative;
     margin-bottom: 3px;
     margin-left: 3px;
 }
@@ -1689,6 +1803,7 @@ li.new-notification {
                 height: 75px;
                 width: 75px;
                 font-size: 25px;
+                border-radius: 38px
             }
 
 /***************************************

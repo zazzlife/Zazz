@@ -375,7 +375,8 @@ namespace Zazz.Web.Helpers
                         FromUserPhotoUrl = feedVm.UserDisplayPhoto,
                         FromUserId = p.UserId,
                         PhotoUrl = _photoService.GeneratePhotoUrl(p.UserId, p.Id),
-                        TagUser = p.TagUser
+                        TagUser = p.TagUser,
+                        IsFromCurrentUser = currentUserId == p.UserId
                     }).ToList();
 
                 feedVm.Comments.CommentType = CommentType.Photo;

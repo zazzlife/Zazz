@@ -473,6 +473,8 @@
     <Content Include="Images\categories\32\ladies_free.png" />
     <Content Include="Images\categories\32\live_music-active.png" />
     <Content Include="Images\categories\32\live_music.png" />
+    <Content Include="Images\categories\32\need_my_crew-active.png" />
+    <Content Include="Images\categories\32\need_my_crew.png" />
     <Content Include="Images\categories\32\no_cover-active.png" />
     <Content Include="Images\categories\32\no_cover.png" />
     <Content Include="Images\categories\32\open_bar-active.png" />
@@ -483,6 +485,8 @@
     <Content Include="Images\categories\32\pre_drink.png" />
     <Content Include="Images\categories\32\turning_up-active.png" />
     <Content Include="Images\categories\32\turning_up.png" />
+    <Content Include="Images\categories\32\what_to_do-active.png" />
+    <Content Include="Images\categories\32\what_to_do.png" />
     <Content Include="Images\categories\concert-active.png" />
     <Content Include="Images\categories\concert.png" />
     <Content Include="Images\categories\drink_special-active.png" />
@@ -497,6 +501,8 @@
     <Content Include="Images\categories\ladies_free.png" />
     <Content Include="Images\categories\live_music-active.png" />
     <Content Include="Images\categories\live_music.png" />
+    <Content Include="Images\categories\need_my_crew-active.png" />
+    <Content Include="Images\categories\need_my_crew.png" />
     <Content Include="Images\categories\no_cover-active.png" />
     <Content Include="Images\categories\no_cover.png" />
     <Content Include="Images\categories\open_bar-active.png" />
@@ -507,18 +513,28 @@
     <Content Include="Images\categories\pre_drink.png" />
     <Content Include="Images\categories\turning_up-active.png" />
     <Content Include="Images\categories\turning_up.png" />
+    <Content Include="Images\categories\what_to_do-active.png" />
+    <Content Include="Images\categories\what_to_do.png" />
     <Content Include="Images\city.gif" />
     <Content Include="Images\eventcity.png" />
     <Content Include="Images\eventdate.png" />
     <Content Include="Images\eventlocation.png" />
     <Content Include="Images\fbevent.png" />
     <Content Include="Images\infoevent.png" />
+    <Content Include="Images\landing-page-phones.png" />
+    <Content Include="Images\lock.png" />
     <Content Include="Images\mailevent.png" />
     <Content Include="Images\new\facebook_icon.png" />
     <Content Include="Images\new\fb-sign-up2.jpg" />
+    <Content Include="Images\next.png" />
+    <Content Include="Images\prev.png" />
     <Content Include="Images\round.png" />
+    <Content Include="Images\Speedy_Delete_Cross.png" />
+    <Content Include="Images\Speedy_Delete_Trash.png" />
     <Content Include="Images\type.gif" />
     <Content Include="Images\url.gif" />
+    <Content Include="Licenses\Lightbox\index.html" />
+    <Content Include="Licenses\Lightbox\Readme.txt" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
     <Content Include="Scripts\jquery.placecomplete.js" />
@@ -620,6 +636,7 @@
     <Content Include="Content\font\Roboto-Light-webfont.eot" />
     <Content Include="Content\font\Roboto-Light-webfont.ttf" />
     <Content Include="Content\font\Roboto-Light-webfont.woff" />
+    <Content Include="Licenses\Lightbox\README.markdown" />
     <None Include="Properties\PublishProfiles\Dev - debug %28no folder wipe%29.pubxml" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\3-vs.jpg" />
@@ -832,6 +849,8 @@
     <Content Include="Views\Account\RecoverUser.cshtml" />
     <Content Include="Views\Shared\_SelectCityModal.cshtml" />
     <Content Include="Views\Shared\_SelectSchoolModal.cshtml" />
+    <Content Include="Views\Notifications\_NotificationsPageLayout.cshtml" />
+    <Content Include="Views\Shared\_DeletePicPromptModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
