@@ -287,5 +287,20 @@ namespace Zazz.Web.Controllers
             _facebookService.SyncPagePhotos(pageId);
             _facebookService.SyncPageStatuses(pageId);
         }
+
+        [HttpGet, Authorize]
+        public JsonResult FindPages(string q)
+        {
+            List<string> results = _facebookService.FindPages(q);
+
+            List<Object> jsonResult = new List<Object>();
+            int i = 1;
+            foreach(string result in results){
+                jsonResult.Add(new { id= i, text=result});
+                i++;
+            }
+
+            return Json(jsonResult, JsonRequestBehavior.AllowGet);
+        }
     }
 }

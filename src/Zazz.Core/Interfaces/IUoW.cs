@@ -36,7 +36,7 @@ namespace Zazz.Core.Interfaces
         ITagRepository TagRepository { get; }
         ICityRepository CityRepository { get; }
         IMajorRepository MajorRepository { get; }
-        //ISchoolRepository SchoolRepository { get; }
+        ISchoolRepository SchoolRepository { get; }
 
         void SaveChanges();
     }

@@ -395,5 +395,10 @@ namespace Zazz.Infrastructure.Services
             var u = _uow.LinkedAccountRepository.GetUsersByProviderId(fbFriends.Select(f => f.Id), OAuthProvider.Facebook);
             return u;
         }
+
+        public List<string> FindPages(string query)
+        {
+            return _facebookHelper.FindPages(query);
+        }
     }
 }

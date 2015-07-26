@@ -26,7 +26,7 @@ namespace Zazz.Core.Models.Data
         [ForeignKey("SchoolId")]
         public virtual School School { get; set; }
 
-        public short? SchoolId { get; set; }
+        public int? SchoolId { get; set; }
 
         [ForeignKey("CityId")]
         public virtual City City { get; set; }

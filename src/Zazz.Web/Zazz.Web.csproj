@@ -447,12 +447,16 @@
     <Content Include="Content\jquery.atwho.css" />
     <Content Include="Content\jquery.bxslider.css" />
     <Content Include="Content\jquery.Jcrop.css" />
+    <Content Include="Content\jquery.placecomplete.css" />
     <Content Include="Content\new\bootstrap.min.css" />
     <Content Include="Content\new\styles.css" />
     <Content Include="Content\new\bootstrap-theme.css" />
     <Content Include="Content\new\bootstrap.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\select2-spinner.gif" />
+    <Content Include="Content\select2.png" />
+    <Content Include="Content\select2x2.png" />
     <Content Include="favicon.ico" />
     <Content Include="Images\address.gif" />
     <Content Include="Images\categories\32\concert-active.png" />
@@ -517,6 +521,7 @@
     <Content Include="Images\url.gif" />
     <Content Include="Scripts\chosen.jquery.min.js" />
     <Content Include="Scripts\jquery.mousewheel.js" />
+    <Content Include="Scripts\jquery.placecomplete.js" />
     <Content Include="Scripts\perfect-scrollbar-0.4.10.with-mousewheel.min.js" />
     <Content Include="Content\select2-bootstrap.css" />
     <Content Include="Content\select2.css" />
@@ -825,6 +830,8 @@
     <Content Include="Views\Users\UserFollowingClubs.cshtml" />
     <Content Include="Views\Shared\_CropPromptModal.cshtml" />
     <Content Include="Views\Account\RecoverUser.cshtml" />
+    <Content Include="Views\Shared\_SelectCityModal.cshtml" />
+    <Content Include="Views\Shared\_SelectSchoolModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

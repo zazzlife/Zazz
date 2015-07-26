@@ -152,12 +152,12 @@ namespace Zazz.Data
         {
             get { return new MajorRepository(GetContext()); }
         }
-        /*
+        
         public ISchoolRepository SchoolRepository
         {
-            //get { return new SchoolRepository(GetContext()); }
+            get { return new SchoolRepository(GetContext()); }
         }
-          */
+         
 
         public ITagRepository TagRepository
         {

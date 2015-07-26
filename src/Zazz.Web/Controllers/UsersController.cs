@@ -528,6 +528,63 @@ namespace Zazz.Web.Controllers
             return View("EditUser", vm);
         }
 
+        [HttpGet, Authorize]
+        public ActionResult EditCity(int id, string city)
+        {
+            var user = _uow.UserRepository.GetById(id);
+            if (user.AccountType != AccountType.User)
+                throw new SecurityException();
+
+            if (city != null && city.Length > 0)
+            {
+                City city_ = new City();
+                if (!_uow.CityRepository.existCity(city))
+                {
+                    city_.Name = city;
+                    _uow.CityRepository.InsertGraph(city_);
+                    _uow.SaveChanges();
+                }
+                else
+                {
+                    city_ = _uow.CityRepository.getByName(city);
+                }
+
+                user.UserDetail.City = city_;
+                _uow.SaveChanges();
+            }
+
+            return RedirectToAction("Profile", "Users", new { id = id, friendlySeoName = user.Username });
+        }
+
+        [HttpGet, Authorize]
+        public ActionResult EditSchool(int id, string school)
+        {
+            var user = _uow.UserRepository.GetById(id);
+            if (user.AccountType != AccountType.User)
+                throw new SecurityException();
+
+            if (school != null && school.Length > 0)
+            {
+                School school_ = new School();
+                if (!_uow.SchoolRepository.existSchool(school))
+                {
+                    school_.Name = school;
+                    _uow.SchoolRepository.InsertGraph(school_);
+                    _uow.SaveChanges();
+                }
+                else
+                {
+                    school_ = _uow.SchoolRepository.getByName(school);
+                }
+
+                user.UserDetail.School = school_;
+                _uow.SaveChanges();
+            }
+
+            return RedirectToAction("Profile", "Users", new { id = id, friendlySeoName = user.Username });
+        }
+
+
         [HttpPost, Authorize, ValidateAntiForgeryToken]
         public ActionResult EditUser(EditUserProfileViewModel vm)
         {

@@ -95,27 +95,36 @@
                     }
                 }
 
-                <div class="user-details">
-                    <ul>
-                        @if (!String.IsNullOrEmpty(Model.City))
-                        {
-                            <li><i class="icon-globe"></i>City: @Model.City</li>
-                        }
-
-                        @if (!String.IsNullOrEmpty(Model.School))
-                        {
-                            <li><i class="icon-building"></i>@Model.School</li>
-                        }
-
-                        @if (!String.IsNullOrEmpty(Model.tagline))
-                        {
-                            <li><i class="icon-book"></i>@Model.tagline</li>
-                        }
-                        else if (!String.IsNullOrEmpty(Model.Major))
-                        {
-                            <li><i class="icon-book"></i>@Model.Major</li>
-                        }
-                    </ul>
+                <div class="preview-photos-container pane-box">
+                    <div class="pane-title">About</div>
+                    <div class="preview-box">
+                        <div class="about-item">
+                            @if (!String.IsNullOrEmpty(Model.City))
+                            {
+                                <span><i class="icon-globe"></i>&nbsp;<a href="#" data-toggle="modal" data-target="#selectCityModal">@Model.City</a></span>
+                            }else{
+                                <span><i class="icon-globe"></i>&nbsp;<a href="#" data-toggle="modal" data-target="#selectCityModal">Choose your city</a></span>
+                            }
+                        </div>
+                        <div class="about-item">
+                            @if (!String.IsNullOrEmpty(Model.School))
+                            {
+                                <span><i class="icon-building"></i>&nbsp;<a href="#" data-toggle="modal" data-target="#selectSchoolModal">@Model.School</a></span>
+                            }else{
+                                <span><i class="icon-building"></i>&nbsp;<a href="#" data-toggle="modal" data-target="#selectSchoolModal">Choose your school</a></span>
+                            }
+                        </div>
+                        <div class="about-item">
+                            @if (!String.IsNullOrEmpty(Model.tagline))
+                            {
+                                <span><i class="icon-book"></i>&nbsp;@Model.tagline</span>
+                            }
+                            else if (!String.IsNullOrEmpty(Model.Major))
+                            {
+                                <span><i class="icon-book"></i>&nbsp;@Model.Major</span>
+                            }
+                        </div>
+                    </div>
                 </div>
   
             </div>
@@ -131,6 +140,12 @@
                                 <img style="background: url('@p.PhotoUrl.MediumLink') no-repeat center center;" />
                             </a>
                         }
+
+                        <div class="addPhotoBtn">
+                            <a href="#" data-toggle="modal" data-target="#uploadPicModal"><i class="icon-plus-sign icon-4x"></i></a>
+                            <br />
+                            <span>Add Photos</span>
+                        </div>
                     </div>
                 </div>
             }
@@ -189,6 +204,8 @@
     @Html.Partial("_CropPromptModal")
     @Html.Partial("_PhotoGalleryModal")
     @Html.Partial("_UploadPicModal", true)   
+    @Html.Partial("_SelectCityModal")
+    @Html.Partial("_SelectSchoolModal")
 }
 
 @section Scripts

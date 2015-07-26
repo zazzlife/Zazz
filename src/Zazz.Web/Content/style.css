@@ -2426,3 +2426,21 @@ a:hover, a:focus {
 	border: 2px solid;
 	padding: 2px;
 }
+
+.about-item{
+    padding-top: 5px;
+}
+
+.addPhotoBtn {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    cursor: pointer;
+
+}
+    .addPhotoBtn a {
+         color: inherit;
+    }
+    .addPhotoBtn a:focus {
+         outline:0;
+    }
+

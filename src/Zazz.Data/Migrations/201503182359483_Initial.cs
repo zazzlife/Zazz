@@ -29,7 +29,7 @@ namespace Zazz.Data.Migrations
                 "dbo.Schools",
                 c => new
                 {
-                    Id = c.Short(nullable: false, identity: true),
+                    Id = c.Int(nullable: false, identity: true),
                     Name = c.String(maxLength: 1000),
                 })
                 .PrimaryKey(t => t.Id);
@@ -121,7 +121,7 @@ namespace Zazz.Data.Migrations
                     Gender = c.Byte(nullable: false),
                     IsPromoter = c.Boolean(nullable: false),
                     PromoterType = c.Byte(),
-                    SchoolId = c.Short(),
+                    SchoolId = c.Int(),
                     MajorId = c.Byte(),
                     CityId = c.Int(),
                 })
@@ -146,7 +146,7 @@ namespace Zazz.Data.Migrations
                     Latitude = c.Double(),
                     Longitude = c.Double(),
                     CoverPhotoId = c.Int(),
-                    SchoolId = c.Short(),
+                    SchoolId = c.Int(),
                     CityId = c.Int(),
                     ClubTypes = c.String(),
                     url = c.String(),

@@ -17,7 +17,7 @@ namespace Zazz.Web.Models
 
         public IEnumerable<School> Schools { get; set; }
 
-        public short? SchoolId { get; set; }
+        public int? SchoolId { get; set; }
 
         public IEnumerable<Major> Majors { get; set; }
 

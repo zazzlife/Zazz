@@ -1,0 +1,79 @@
+﻿@using Zazz.Core.Models.Data
+@using Zazz.Web.Controllers
+@{
+    Layout = null;
+
+    var controller = ViewContext.Controller as BaseController;
+    
+}
+<div class="modal hide fade" id="selectSchoolModal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Enter your school</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="control-group">
+            <div class="controls">
+                <div class="editor-field">
+                    <div class="row-fluid">
+                       <input class="schoolInput" type="hidden" data-init-text="@Model.School" value="@Model.School"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>
+            <button id="selectSchool" class="btn btn-primary" style="width:100%;">Submit</button>
+        </p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var selectedSchool = "";
+
+        $(".schoolInput").select2({
+            width: "100%",
+            placeholder: "School",
+            minimumInputLength: 4,
+            allowClear: true,
+            ajax: {
+                url: '@Url.Action("FindPages", "Facebook" )',
+                dataType: 'json',
+                delay: 250,
+                data: function (term, page) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function (data) {
+                    var myResults = [];
+                    $.each(data, function (index, item) {
+                        myResults.push({
+                            'id': item.text,
+                            'text': item.text
+                        });
+                    });
+                    return {
+                        results: myResults
+                    };
+                },
+                quietMillis: 500,
+                cache: true
+            },
+            initSelection: function (element, callback) {
+                var elementText = $(element).attr('data-init-text');
+                callback({ "text": elementText, "id": elementText });
+            }
+        });
+
+        $('#selectSchool').on('click', function (e) {
+            var url = '@Url.Action("EditSchool", "Users", new {id=@Model.UserId, school="__school__"})';
+            window.location.href = url.replace('__school__', $(".schoolInput").select2("val"));
+        });
+    });
+</script>

@@ -29,7 +29,7 @@ namespace Zazz.Web.Models
         public bool SendFbErrorNotification { get; set; }
 
         [Display(Name = "School")]
-        public short? SchoolId { get; set; }
+        public int? SchoolId { get; set; }
 
         [Display(Name = "City")]
         public int? CityId { get; set; }

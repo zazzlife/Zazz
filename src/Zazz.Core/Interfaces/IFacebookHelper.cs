@@ -43,5 +43,7 @@ namespace Zazz.Core.Interfaces
         ZazzEvent FbEventToZazzEvent(FbEvent fbEvent);
 
         FbPage GetpageDetails(string pageId, string accessToken);
+
+        List<string> FindPages(string q);
     }
 }

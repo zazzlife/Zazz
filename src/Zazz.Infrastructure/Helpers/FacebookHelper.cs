@@ -31,6 +31,32 @@ namespace Zazz.Infrastructure.Helpers
             return String.Format("SELECT {0} FROM {1} WHERE {2}", fields, table, where);
         }
 
+        public List<string> FindPages(string q)
+        {
+            dynamic result = _client.Get("oauth/access_token", new
+            {
+              client_id = "433721150040606",
+              client_secret = "56e97d3e73d03ac9be75d79d0d5e820d",
+              grant_type = "client_credentials"
+            } );
+
+            var apptoken = result.access_token;
+            _client.AccessToken = apptoken;
+
+            dynamic result_ = _client.Get("/search?q=" + q + "&type=page&fields=id,name,category");
+
+            List<string> results = new List<string>();
+            foreach (var page in result_.data)
+            {
+                string category = page.category;
+                if (category.ToLower().Contains("university") || category.ToLower().Contains("school")){
+                    results.Add(page.name);
+                }
+            }
+
+            return results;
+        }
+
         public FbBasicUserInfo GetBasicUserInfo(string accessToken)
         {
             _client.AccessToken = accessToken;

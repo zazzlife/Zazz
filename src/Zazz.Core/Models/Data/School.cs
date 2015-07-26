@@ -2,10 +2,8 @@
 
 namespace Zazz.Core.Models.Data
 {
-    public class School
+    public class School : BaseEntity
     {
-        public short Id { get; set; }
-
         [MaxLength(1000)]
         public string Name { get; set; }
     }

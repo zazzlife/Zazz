@@ -30,5 +30,7 @@ namespace Zazz.Core.Interfaces.Services
         IQueryable<User> FindZazzFbFriends(string accessToken);
 
         FbPage GetpageInfo(string pageId, string accessToken);
+
+        List<string> FindPages(string query);
     }
 }
