@@ -30,6 +30,15 @@
         {
             Html.RenderPartial("FeedItems/_PhotoFeedSinglePhoto", Model.Photos[0]);
 
+            if (Model.Post != null && Model.Post.Categories != null)
+            {
+                foreach (var category in Model.Post.Categories)
+                {
+                    <button class="category-icon" onclick="$('#@category.ToFileName()').click();">
+                        <img class="category-post-img" data-name="@category.ToFileName()" src="@String.Format("/Images/categories/32/{0}.png", @category.ToFileName())" />
+                    </button>
+                }
+            }
 
             <div style="margin: 5px 5px 0 0;">
                 <div class="pull-left outlineNone">
