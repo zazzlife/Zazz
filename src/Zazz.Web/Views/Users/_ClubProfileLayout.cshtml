@@ -90,11 +90,11 @@
 
                                     @if (i == 1)
                                     {
-                                        <img style="background: url('@p.PhotoUrl.MediumLink') no-repeat center center; width:210px;height:140px;" />
+                                        <div class="pics-widget-img-div" style="background-image: url(@p.PhotoUrl.MediumLink)"></div>
                                     }
                                     else
                                     {
-                                        <img style="background: url('@p.PhotoUrl.SmallLink') no-repeat center center; width:61px;height:61px;" />
+                                        <div class="pics-widget-img-div" style="background-image: url(@p.PhotoUrl.SmallLink)"></div>
                                     }
 
                                 </a>

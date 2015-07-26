@@ -1383,12 +1383,15 @@ li.new-notification {
 .preview-box {
     background-color: white;
 }
-
-.preview-box img {
-    width: 53px;
-    height: 53px;
+.preview-box-img-div {
+    display: inline-block;
+    width: 55px;
+    height: 55px;
     padding: 0;
-    margin: 1px;
+    margin: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
 .preview-box a {
@@ -1706,6 +1709,15 @@ li.new-notification {
         height: 61px;
         border-radius: 3px;
     }
+
+.pics-widget-img-div {
+    width: 61px;
+    height: 61px;
+    border-radius: 3px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
 
 .follow-img {
     color: #000000;
