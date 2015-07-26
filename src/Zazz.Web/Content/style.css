@@ -591,7 +591,7 @@ hr.gold-line {
   top: 0;
   left: 0;
   height: 100%;
-  width: 100%;
+  width: 70%;
 }
 
 a.lightbox-prev, a.lightbox-next {
@@ -624,7 +624,7 @@ a.lightbox-prev, a.lightbox-next {
   height: 100%;
   right: 0;
   float: right;
-  background: url(../Images/next.png) 55% 48% no-repeat;
+  background: url(../Images/next.png) right 48% no-repeat;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   -webkit-transition: opacity 0.6s;
@@ -1473,8 +1473,6 @@ li.new-notification {
 .category-img,
 .category-img-active {
     position: absolute;
-    top: 10px;
-    left: 10px;
     margin-left: 18px;
     margin-top: 15px;
 }
