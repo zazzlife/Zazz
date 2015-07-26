@@ -52,7 +52,7 @@
             }
         }).on({
             "placecomplete:selected": function (evt, placeResult) {
-                selectedCity = placeResult.formatted_address;
+                selectedCity = placeResult.display_text;
             }
         });
 
