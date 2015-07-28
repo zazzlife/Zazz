@@ -166,7 +166,7 @@
 
         @foreach (var p in Model.Photos)
         {
-            Html.RenderPartial("_LightBoxPartial", p);
+            Html.RenderPartial("_LightBoxPartialNoTraversal", p);
             if (p.IsFromCurrentUser)
             {
                 <a href="#" id="promptDelete-@p.PhotoId" class="speedy-delete-feed-@p.PhotoId" data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto(@p.PhotoId)">

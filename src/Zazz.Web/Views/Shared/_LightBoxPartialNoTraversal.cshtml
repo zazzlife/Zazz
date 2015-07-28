@@ -1,0 +1,65 @@
+﻿@model PhotoViewModel
+@using Zazz.Web.Controllers
+@{
+    Layout = null;
+    var controller = ViewContext.Controller as BaseController;
+}
+<div id="photo-@Model.PhotoId" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class='lightbox-header'>
+        <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+    </div>
+    <div class='lightbox-content' style="position: relative;">
+        <img class="lightbox-img" data-id="@Model.PhotoId" src="@Model.PhotoUrl.OriginalLink" />
+        <div class="well pull-right no-padding lightbox-commentbox">
+
+            <div class="photo-details">
+                <div style="margin-bottom: 15px;">
+                    <a target="_blank" href="~/users/profile/@Model.FromUserId">
+                        <img src="@Model.FromUserPhotoUrl.VerySmallLink" class="img-small-rounded lightbox-commentbox-user-img" />
+                        <strong>@Model.FromUserDisplayName</strong>
+                    </a>
+                </div>
+                <p data-containstags="1" data-containslinks="1">
+                    @Model.Description
+                    @{
+                        if (Model.TagUser != null)
+                        {
+                            if (Model.TagUser != "")
+                            {
+                                var users = Model.TagUser.Split(',');
+                                foreach (var user in users)
+                                {
+                                    try
+                                    {
+                                        int userId = int.Parse(user.Trim());
+                                        string uname = controller.GetDisplayName(userId);
+                                        <a href="~/users/profile/@userId" style="color:#0094ff !important;" target="_blank">@uname</a>
+                                    }
+                                    catch (Exception)
+                                    { }
+                                }
+                            }
+                        }
+                    }
+                </p>
+
+            </div>
+
+            <div class="lightbox-commentsContainer" data-isloaded="0" style="width: 350px;">
+                <h5>
+                    Loading Comments...  <i style="margin-left: 5px;" class="icon-refresh icon-large icon-spin"></i>
+                </h5>
+            </div>
+
+
+        </div>
+
+        @{
+            if (Model.IsFromCurrentUser)
+            {
+                <div id="promptDelete-@Model.PhotoId" class="btn btn-danger" style="bottom: 25px; left: 25px; position: absolute;"
+                     data-toggle="modal" data-target="#deletePicPromptModal" data-callback-success="removePhoto"><i class="icon-trash icon-white"></i>Delete</div>
+            }
+        }
+    </div>
+</div>

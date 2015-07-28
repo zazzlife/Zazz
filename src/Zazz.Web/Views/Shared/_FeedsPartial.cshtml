@@ -26,7 +26,7 @@
 <div id="feedsContainer">
     @if (Model.feeds.Count > 0)
     {
-        <script type="text/javascript">
+        @*<script type="text/javascript">
             var viewablePhotoIDs = [];
             $(document).on('click', 'a.lightbox-next', function () {
                 var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
@@ -42,7 +42,7 @@
                 $('.close').click();
                 $(prev).first().click();
             });
-        </script>
+        </script>*@
         foreach (var feed in Model.feeds)
         {
             <div class="row-fluid">
@@ -53,12 +53,12 @@
                     }
                     else if (feed.FeedType == FeedType.Photo)
                     {
-                        foreach (var p in feed.Photos)
+                        @*foreach (var p in feed.Photos)
                         {
                             <script type="text/javascript">
                                 viewablePhotoIDs.push(@p.PhotoId);
                             </script>
-                        }
+                        }*@
                         @Html.Partial("FeedItems/_PicturePostFeedItem", feed)
                     }
                     else if (feed.FeedType == FeedType.Post)
