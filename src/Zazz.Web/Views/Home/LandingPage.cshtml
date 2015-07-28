@@ -235,7 +235,7 @@
             
                 <div class="landing-page-tagline">
             <div class="animated fadeInLeft">
-                Discover new people & places to party. 
+                Discover new places & people to party with. 
                 </div></div>
                 <table>
                  
@@ -360,11 +360,12 @@
                                 <select class="lp-select" id="taglineselect">
                                     @{
                                         <option value="">Select TagLine</option>
+                                        <option value="8">Write Your Own Tagline</option>
                                         foreach(var major in Model.Majors)
                                         {
                                             <option>@major.Name</option>
                                         }
-                                        <option value="8">Write Your Own Tagline</option>
+                                        
                                     }
                                 </select>
                                 @Html.TextBoxFor(model => model.TagLine, new { @placeholder = "Tag Line", @class = "register-input", @maxlength = "50" })
@@ -386,6 +387,7 @@
                             <button type="submit">Register</button>
                             <script type="text/javascript">
                                 jQuery("label[for='_UserType_User']").html("I Like To Party");
+                                jQuery("label[for='_UserType_Promoter']").html("I Do It For A Living");
                                 $(document).ready(function () {
                                     $("#TagLine").hide();
                                     $("#taglineselect").change(function () {

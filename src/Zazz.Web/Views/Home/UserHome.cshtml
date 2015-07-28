@@ -46,7 +46,7 @@
                 </li>
                 <li><a href="@Url.Action("Followers", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Followers @Html.Action("GetFollowRequestsCount", "Follow")</a></li>
                 <li><a href="@Url.Action("Following", "Users", new {id=currentUserId})"><i class="icon-user"></i>&nbsp; Following</a></li>
-                <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>&nbsp; Photo</a></li>
+                <li><a href="@Url.Action("Photos", "Users", new {id=currentUserId})"><i class="icon-camera"></i>&nbsp; Photos</a></li>
                 <li><a href="@Url.Action("Clubs", "Home")"><i class="icon-glass"></i>&nbsp; Clubs</a></li>
                 @if (Model.HasFacebookAccount)
                 {

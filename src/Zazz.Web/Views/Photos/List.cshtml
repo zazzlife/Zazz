@@ -22,9 +22,26 @@
 				</div>
 			</div>
 		</script>
+        <script type="text/javascript">
+            var viewablePhotoIDs = [];
+            $(document).on('click', 'a.lightbox-next', function () {
+                var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
+                var index = viewablePhotoIDs.indexOf(parseInt(id));
+                var next = 'a[data-target="#photo-' + viewablePhotoIDs[index+1] + '"]';
+                $('.close').click();
+                $(next).first().click();
+            });
+            $(document).on('click', 'a.lightbox-prev', function () {
+                var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
+                var index = viewablePhotoIDs.indexOf(parseInt(id));
+                var prev = 'a[data-target="#photo-' + viewablePhotoIDs[index - 1] + '"]';
+                $('.close').click();
+                $(prev).first().click();
+            });
+        </script>
 }
 
-<div class="container color-white-bg border-radius-5" style="padding: 0 20px 100px 20px;">
+<div class="container color-white-bg border-radius-5" style="padding: 0 20px 33vh 20px;">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
             <div class="lead row-fluid">
@@ -58,14 +75,22 @@
 
         <div class="row">
             <div class="span12">
+                @foreach (var p in Model.Photos)
+                {
+                <script type="text/javascript">
+                    viewablePhotoIDs.push(@p.PhotoId);
+                </script>
+                }
                 <ul class="thumbnails">
+                    
+                    
                     @{
-                         foreach (var p in Model.Photos)
-                         {
-                                
+                        foreach (var p in Model.Photos)
+                        {
                               <li class="span3">
                                     <a data-toggle="lightbox" data-target="#photo-@p.PhotoId" href="@p.PhotoUrl.OriginalLink" class="thumbnail"><img style="background: url('@p.PhotoUrl.MediumLink') no-repeat center center; width:210px;height:180px;" alt=""></a>
                                 </li>
+
                          }
                     }
                    

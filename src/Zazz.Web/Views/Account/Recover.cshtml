@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
 
-<div class="container color-white-bg margin-top-15 padding-bottom-250 padding-L-R-20 border-radius-5">
+<div class="container color-white-bg margin-top-15 padding-bottom-250 padding-L-R-20 border-radius-5" style="margin-bottom: 4%;">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
             <h4 class="lead-1">
@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="row-fluid margin-top-10 margin-bottam-20">
+    <div class="row-fluid margin-top-10 margin-bottam-20" style="margin-bottom: 7%;">
 
         <div class="span6">
             <div class="zazz-form zazz-form2">
@@ -24,7 +24,7 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-            
+
                     <fieldset>
                         @if (TempData["alert"] != null && ((bool)TempData["alert"]))
                         {
@@ -50,7 +50,7 @@
 
                         <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Send</button>
                     </fieldset>
-            
+
                 }
             </div>
         </div>

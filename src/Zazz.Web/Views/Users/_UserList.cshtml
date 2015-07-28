@@ -7,7 +7,7 @@
             <a href="@Url.Action("Profile", "Users", new {id = u.Id })">
                 <div class="user-list-img-div" style="background-image: url(@u.ProfileImage.SmallLink)"></div>
             </a>
-            <h4>@u.DisplayName</h4>
+            <p>@u.DisplayName</p>
         </li>
     }
 </ul>

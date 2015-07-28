@@ -4,7 +4,7 @@
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_EmptyLayout.cshtml";
 }
-<div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5">
+<div class="container color-white-bg margin-top-15 padding-bottom-100 padding-L-R-20 border-radius-5" style="margin-bottom: 10.5%;">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
             <h4 class="lead-1">
@@ -22,7 +22,7 @@
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-            
+
                     <fieldset>
                         @if (TempData["alert"] != null && ((bool)TempData["alert"]))
                         {
@@ -34,24 +34,24 @@
 
                         <div class="control-group">
                             <div class="editor-field">
-                                @Html.TextBoxFor(model => model.Username, new { @class = "span4", @placeholder = "Username", @style="height:40px;" })
+                                @Html.TextBoxFor(model => model.Username, new { @class = "span4", @placeholder = "Username", @style = "height:40px;" })
                                 @Html.ValidationMessageFor(model => model.Username, null, new { @class = "help-inline" })
                             </div>
                         </div>
 
                         <div class="control-group">
                             <div class="editor-field">
-                                @Html.PasswordFor(model => model.Password, new { @class = "span4", @placeholder = "Password", @style="height:40px;" })
+                                @Html.PasswordFor(model => model.Password, new { @class = "span4", @placeholder = "Password", @style = "height:40px;" })
                                 @Html.ValidationMessageFor(model => model.Password, null, new { @class = "help-inline" })
                             </div>
                         </div>
-                        
+
                         <a href="@Url.Action("Recover")">Forgot Password</a>
                         <div class="clearfix"></div>
 
                         <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Login</button>
                     </fieldset>
-            
+
                 }
             </div>
         </div>
@@ -61,7 +61,8 @@
                 <h1>Login with social media</h1>
                 <div class="span12">
                     <a href="@Url.Action("OAuth", "Account", new { id = "facebook" })">
-                        <img src="~/Images/F-login.png"></a>
+                        <img src="~/Images/F-login.png">
+                    </a>
                 </div>
             </div>
         </div>
