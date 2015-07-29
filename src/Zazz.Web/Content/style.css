@@ -708,6 +708,9 @@ a.lightbox-prev, a.lightbox-next {
 
 .event-cover {
     opacity: 0.7;
+    max-height: 182px;
+    min-height: 182px;
+    border-radius: 8px;
 }
 
 .event-profile-pic {
