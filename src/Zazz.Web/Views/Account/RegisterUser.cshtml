@@ -73,11 +73,12 @@
                                 <select id="taglineselect">
                                     @{
                                         <option value="">Select TagLine</option>
+                                        <option value="8"><b><u>Create Your Own Tagline</u></b></option>
                                         foreach(var major in Model.Majors)
                                         {
                                             <option>@major.Name</option>
                                         }
-                                        <option value="8">Write Your Own Tagline</option>
+                                        
                                     }
                                 </select>
                                 @Html.TextBoxFor(model => model.TagLine, new { @placeholder = "Tag Line", @class = "register-input", @maxlength = "50" })
