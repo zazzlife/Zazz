@@ -195,7 +195,7 @@ namespace Zazz.Infrastructure.Helpers
             //                         creatorId, limit);
             //var query = GenerateFql(EVENT_FIELDS, EVENT_TABLE, where);
 
-            dynamic result = _client.Get(creatorId.ToString() + "/events", new { fields = "id, name, description, venue, picture.type(large), start_time, end_time, updated_time, is_date_only", limit = 5 });
+            dynamic result = _client.Get(creatorId.ToString() + "/events", new { fields = "id, name, description, venue, cover, start_time, end_time, updated_time, is_date_only", limit = 5 });
 
             var events = new List<FbEvent>();
 
@@ -205,7 +205,7 @@ namespace Zazz.Infrastructure.Helpers
                 {
                     Id = Int64.Parse(e.id),
                     Name = e.name,
-                    Pic = e.picture.data.url,
+                    Pic = e.cover.source,
                     IsDateOnly = e.is_date_only,
                     Venue = new FbVenue(),
                     CoverPic = new FbCover()
@@ -297,7 +297,7 @@ namespace Zazz.Infrastructure.Helpers
         {
             _client.AccessToken = accessToken;
 
-            dynamic result = _client.Get(pageId + "/events", new { fields = "id, name, description, venue, picture.type(large), start_time, end_time, updated_time, is_date_only", limit = 100 });
+            dynamic result = _client.Get(pageId + "/events", new { fields = "id, name, description, venue, cover, start_time, end_time, updated_time, is_date_only", limit = 100 });
 
             var events = new List<FbEvent>();
 
@@ -307,7 +307,7 @@ namespace Zazz.Infrastructure.Helpers
                 {
                     Id = Int64.Parse(e.id),
                     Name = e.name,
-                    Pic = e.picture.data.url,
+                    Pic = e.cover.source,
                     IsDateOnly = e.is_date_only,
                     Venue = new FbVenue(),
                     CoverPic = new FbCover()

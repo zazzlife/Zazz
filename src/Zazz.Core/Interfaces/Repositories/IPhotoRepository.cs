@@ -20,5 +20,7 @@ namespace Zazz.Core.Interfaces.Repositories
         int GetOwnerId(int photoId);
         
         Photo GetByFacebookId(string fbId);
+
+        void RemovePhotoFromUser(int userId);
     }
 }

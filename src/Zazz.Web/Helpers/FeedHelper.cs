@@ -45,10 +45,17 @@ namespace Zazz.Web.Helpers
         /// <param name="tagIds">List of tag ids to filter feeds.</param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, List<int> tags = null)
+        public FeedsViewModel GetCategoryFeeds(int currentUserId, List<byte> catIds, int lastFeedId = 0, List<int> tags = null, bool userFollow = true, bool inSameCity = true)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
+
+            var user = _uow.UserRepository.GetById(currentUserId);
+            int? cityId = null;
+            if (inSameCity)
+            {
+                cityId = user.UserDetail.CityId;
+            }
 
             IQueryable<Feed> query;
 
@@ -56,16 +63,16 @@ namespace Zazz.Web.Helpers
             {
                 if (catIds.Count > 0)
                 {
-                    query = _uow.FeedRepository.GetFeedsWithCategoriesTags(followIds, catIds, tags);
+                    query = _uow.FeedRepository.GetFeedsWithCategoriesTags(followIds, catIds, tags, userFollow, cityId);
                 }
                 else
                 {
-                    query = _uow.FeedRepository.GetFeedsWithTags(followIds, tags);
+                    query = _uow.FeedRepository.GetFeedsWithTags(followIds, tags, userFollow, cityId);
                 }
             }
             else
             {
-                query = _uow.FeedRepository.GetFeedsWithCategories(followIds, catIds);
+                query = _uow.FeedRepository.GetFeedsWithCategories(followIds, catIds, userFollow, cityId);
             }
 
             var remainingQuery = query;
@@ -105,12 +112,19 @@ namespace Zazz.Web.Helpers
         /// <param name="currentUserId"></param>
         /// <param name="lastFeedId">id of the last feed. if 0 it loads the most recent feeds else it loads the most recent feeds prior to the provided feed id</param>
         /// <returns></returns>
-        public FeedsViewModel GetFeeds(int currentUserId, int lastFeedId = 0)
+        public FeedsViewModel GetFeeds(int currentUserId, int lastFeedId = 0, bool userFollow = true, bool inSameCity = true)
         {
             var followIds = _uow.FollowRepository.GetFollowsUserIds(currentUserId).ToList();
             followIds.Add(currentUserId);
 
-            var query = _uow.FeedRepository.GetFeeds(followIds);
+            var user = _uow.UserRepository.GetById(currentUserId);
+            int? cityId = null;
+            if (inSameCity)
+            {
+                cityId = user.UserDetail.CityId;
+            }
+
+            var query = _uow.FeedRepository.GetFeeds(followIds, userFollow, cityId);
             var remainingQuery = query;
 
             if (lastFeedId > 0)
@@ -329,7 +343,7 @@ namespace Zazz.Web.Helpers
                     CoverImage = feed.EventFeed.Event.User.AccountType == AccountType.Club && feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.HasValue
                         ? _photoService.GeneratePhotoUrl(feed.EventFeed.Event.UserId, feed.EventFeed.Event.User.ClubDetail.CoverPhotoId.Value)
                         : null,
-                    CoverLink = (!(String.IsNullOrEmpty(feed.EventFeed.Event.CoverPic)))? feed.EventFeed.Event.CoverPic : null
+                    CoverLink = (!(String.IsNullOrEmpty(feed.EventFeed.Event.FacebookPhotoLink)))? feed.EventFeed.Event.FacebookPhotoLink : null
                 };
 
                 feedVm.Comments.CommentType = CommentType.Event;

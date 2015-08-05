@@ -7,13 +7,13 @@ namespace Zazz.Core.Interfaces.Repositories
 {
     public interface IFeedRepository : IRepository<Feed>
     {
-        IQueryable<Feed> GetFeedsWithCategories(IEnumerable<int> userIds, IEnumerable<byte> categories);
+        IQueryable<Feed> GetFeedsWithCategories(IEnumerable<int> userIds, IEnumerable<byte> categories, bool userFollow, int? cityId);
 
-        IQueryable<Feed> GetFeedsWithCategoriesTags(IEnumerable<int> userIds, IEnumerable<byte> categories, IEnumerable<int> tags);
+        IQueryable<Feed> GetFeedsWithCategoriesTags(IEnumerable<int> userIds, IEnumerable<byte> categories, IEnumerable<int> tags, bool userFollow, int? cityId);
 
-        IQueryable<Feed> GetFeedsWithTags(IEnumerable<int> userIds, IEnumerable<int> tags);
+        IQueryable<Feed> GetFeedsWithTags(IEnumerable<int> userIds, IEnumerable<int> tags, bool userFollow, int? cityId);
 
-        IQueryable<Feed> GetFeeds(IEnumerable<int> userIds);
+        IQueryable<Feed> GetFeeds(IEnumerable<int> userIds, bool userFollow, int? cityId);
 
         IQueryable<Feed> GetUserFeeds(int userId);
 
@@ -26,5 +26,7 @@ namespace Zazz.Core.Interfaces.Repositories
         Feed GetPostFeed(int postId);
 
         Feed GetUserLastFeed(int userId);
+
+        void RemoveFeedUser(int userId);
     }
 }

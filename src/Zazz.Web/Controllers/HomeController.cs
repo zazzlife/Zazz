@@ -111,8 +111,11 @@ namespace Zazz.Web.Controllers
             return usernameExists ? new JsonNetResult(false) : new JsonNetResult(true);
         }
 
-        public ActionResult Index()
+        public ActionResult Index(bool userFollow = false, bool inSameCity = false)
         {
+            ViewBag.userFollow = userFollow;
+            ViewBag.inSameCity = inSameCity;
+
             if (User.Identity.IsAuthenticated)
             {
                  var userId = UserService.GetUserId(User.Identity.Name);
@@ -183,8 +186,8 @@ namespace Zazz.Web.Controllers
                      }
                  }
 
-               
-                var feeds = _feedHelper.GetFeeds(user.Id);
+
+                var feeds = _feedHelper.GetFeeds(user.Id, 0, userFollow, inSameCity);
                 
                 var vm = new UserHomeViewModel
                          {
@@ -341,9 +344,13 @@ namespace Zazz.Web.Controllers
 
                         var tokenString = Base64Helper.Base64UrlEncode(token.Token);
 
-                        var resetLink = String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
+                        Uri currentUri = new Uri(System.Web.HttpContext.Current.Request.Url.AbsoluteUri);
+                        string pathQuery = currentUri.PathAndQuery;
+                        string hostName = currentUri.ToString().Replace(pathQuery, "");
+
+                        var resetLink = hostName + String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
                         message = String.Format(
-                            "A conformation email has been sent to {0}. Please check your inbox.{1}", user.Email,
+                            "A confirmation email has been sent to {0}. Please check your inbox.{1}", user.Email,
                             Environment.NewLine);
                         string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
                         body += "Please click the link below to confirm your Account:\n";
@@ -353,7 +360,7 @@ namespace Zazz.Web.Controllers
                         mail.IsBodyHtml = true;
                         SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
                         smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzq12wsx");// Enter seders User name and password  
                         smtp.EnableSsl = true;
                         smtp.Send(mail);
                         ShowAlert(message, AlertType.Info);
@@ -405,7 +412,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Categories(string @select, string @tag)
+        public ActionResult Categories(string @select, string @tag, bool userFollow = false, bool inSameCity = false)
         {
             var user = UserService.GetUser(User.Identity.Name);
 
@@ -443,11 +450,11 @@ namespace Zazz.Web.Controllers
                                                                                StringComparer.InvariantCultureIgnoreCase))
                                        .Select(t => t.Id);
 
-                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), tags: selectedTags);
+                feeds = _feedHelper.GetCategoryFeeds(user.Id, selectedCategoriesId.ToList(), 0, selectedTags, userFollow, inSameCity);
             }
             else
             {
-                feeds = _feedHelper.GetFeeds(user.Id);
+                feeds = _feedHelper.GetFeeds(user.Id, 0, userFollow, inSameCity);
             }
 
             if (Request.IsAjaxRequest())
@@ -466,7 +473,7 @@ namespace Zazz.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult LoadMoreFeeds(int lastFeedId, string @select, string @tag, bool showPhotos = true)
+        public ActionResult LoadMoreFeeds(int lastFeedId, string @select, string @tag, bool showPhotos = true, bool userFollow = false, bool inSameCity = false)
         {
             var user = UserService.GetUser(User.Identity.Name);
 
@@ -505,7 +512,7 @@ namespace Zazz.Web.Controllers
             }
             else
             {
-                feeds = _feedHelper.GetFeeds(user.Id, lastFeedId);
+                feeds = _feedHelper.GetFeeds(user.Id, lastFeedId, userFollow, inSameCity);
             }
 
             return View("_FeedsPartial", feeds);

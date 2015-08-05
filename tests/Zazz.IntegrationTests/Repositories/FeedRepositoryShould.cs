@@ -187,7 +187,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Act
 
-            var result = _repo.GetFeeds(userIds);
+            var result = _repo.GetFeeds(userIds, false, null);
 
             //Assert
             Assert.AreEqual(expectedCount, result.Count());
@@ -234,7 +234,7 @@ namespace Zazz.IntegrationTests.Repositories
 
             //Act
 
-            var result = _repo.GetFeeds(userIds);
+            var result = _repo.GetFeeds(userIds, false, null);
 
             //Assert
             Assert.AreEqual(expectedCount, result.Count());

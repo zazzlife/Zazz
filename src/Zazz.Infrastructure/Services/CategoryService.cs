@@ -24,11 +24,12 @@ namespace Zazz.Infrastructure.Services
         public IEnumerable<CategoryStat> GetAllStats()
         {
             if (_categoryStatsCache.LastUpdate > DateTime.UtcNow.AddMinutes(-5))
-                return _categoryStatsCache.CategoryStats;
+               return _categoryStatsCache.CategoryStats;
 
             var freshData = _uow.CategoryStatRepository.GetAll();
 
             _categoryStatsCache.CategoryStats = freshData.ToList();
+
             _categoryStatsCache.LastUpdate = DateTime.UtcNow;
 
             return freshData;

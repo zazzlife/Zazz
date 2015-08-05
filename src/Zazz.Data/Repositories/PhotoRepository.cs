@@ -69,5 +69,17 @@ namespace Zazz.Data.Repositories
         {
             return DbSet.SingleOrDefault(p => p.FacebookId.Equals(fbId, StringComparison.InvariantCultureIgnoreCase));
         }
+
+        public void RemovePhotoFromUser(int userId)
+        {
+            IEnumerable<Photo> xpto = (from photo in DbSet
+                                          where photo.UserId == userId
+                                          select photo);
+
+            foreach (Photo p in xpto)
+            {
+                DbContext.Entry(p).State = System.Data.EntityState.Deleted;
+            }
+        }
     }
 }

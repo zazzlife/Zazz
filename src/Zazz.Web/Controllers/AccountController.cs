@@ -274,9 +274,13 @@ namespace Zazz.Web.Controllers
 
                         var tokenString = Base64Helper.Base64UrlEncode(token.Token);
 
-                        var resetLink = String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
+                        Uri currentUri = new Uri(System.Web.HttpContext.Current.Request.Url.AbsoluteUri);
+                        string pathQuery = currentUri.PathAndQuery;
+                        string hostName = currentUri.ToString().Replace(pathQuery, "");
+
+                        var resetLink = hostName + String.Format("/account/ConfirmEmail/{0}/{1}", token.Id, tokenString);
                         message = String.Format(
-                            "A conformation email has been sent to {0}. Please check your inbox.{1}", user.Email,
+                            "A confirmation email has been sent to {0}. Please check your inbox.{1}", user.Email,
                             Environment.NewLine);
                         string body = "Dear " + UserService.GetUserDisplayName(userId) + " \n\n";
                         body += "Please click the link below to confirm your Account:\n";
@@ -286,7 +290,7 @@ namespace Zazz.Web.Controllers
                         mail.IsBodyHtml = true;
                         SmtpClient smtp = new SmtpClient("smtp.office365.com", 587);
                         smtp.UseDefaultCredentials = false;
-                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazz12wsx");// Enter seders User name and password  
+                        smtp.Credentials = new System.Net.NetworkCredential("team@zazzlife.com", "Zazzq12wsx");// Enter seders User name and password  
                         smtp.EnableSsl = true;
                         smtp.ServicePoint.MaxIdleTime = 1;
                         //smtp.Send(mail);

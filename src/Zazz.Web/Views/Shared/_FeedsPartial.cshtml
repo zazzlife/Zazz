@@ -80,7 +80,7 @@
 
     @if (Model.remaining > 0)
     {
-        <button data-url="@Url.Action("LoadMoreFeeds", new { ViewBag.LikedFeed })" class="btn btn-block btn-inverse" id="load-feeds">Load More (@Model.remaining left) ...</button>
+        <button data-url="@Url.Action("LoadMoreFeeds", new { likedFeed = ViewBag.LikedFeed, userFollow = ViewBag.userFollow, inSameCity = ViewBag.inSameCity })" class="btn btn-block btn-inverse" id="load-feeds">Load More (@Model.remaining left) ...</button>
     }
 
 </div>

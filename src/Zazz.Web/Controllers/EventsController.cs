@@ -156,7 +156,8 @@ namespace Zazz.Web.Controllers
                         ProfileImage = PhotoService.GetUserDisplayPhoto(e.UserId),
                         CoverImage = e.User.AccountType == AccountType.Club && e.User.ClubDetail.CoverPhotoId.HasValue
                             ? PhotoService.GeneratePhotoUrl(e.UserId, e.User.ClubDetail.CoverPhotoId.Value)
-                            : null
+                            : null,
+                        CoverLink = e.FacebookPhotoLink
                     })
                 .ToList();
 
@@ -376,7 +377,8 @@ namespace Zazz.Web.Controllers
                          ImageUrl = PhotoService.GetUserDisplayPhoto(userId),
                          IsDateOnly = zazzEvent.IsDateOnly,
                          FacebookEventId = zazzEvent.FacebookEventId,
-                         CoverLink = zazzEvent.CoverPic,
+                         //CoverLink = zazzEvent.CoverPic,
+                         CoverLink = zazzEvent.FacebookPhotoLink,
                          OwnerName = UserService.GetUserDisplayName(userId)
                      };
 

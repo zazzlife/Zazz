@@ -273,7 +273,15 @@ namespace Zazz.Data.Repositories
         public override void Remove(User item)
         {
             if (item.UserDetail != null)
+            {
                 DbContext.Entry(item.UserDetail).State = EntityState.Deleted;
+            }
+
+            if (item.UserValidationToken != null)
+            {
+                DbContext.Entry(item.UserValidationToken).State = EntityState.Deleted;
+            }
+
 
             DbContext.Entry(item).State = EntityState.Deleted;
         }

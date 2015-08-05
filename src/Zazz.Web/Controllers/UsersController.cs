@@ -241,7 +241,11 @@ namespace Zazz.Web.Controllers
                          ? new PhotoLinks(e.FacebookPhotoLink)
                          : e.PhotoId.HasValue
                              ? PhotoService.GeneratePhotoUrl(e.UserId, e.PhotoId.Value)
-                             : DefaultImageHelper.GetDefaultEventImage()
+                             : DefaultImageHelper.GetDefaultEventImage(),
+                       CoverImage = e.User.AccountType == AccountType.Club && e.User.ClubDetail.CoverPhotoId.HasValue
+                           ? PhotoService.GeneratePhotoUrl(e.UserId, e.User.ClubDetail.CoverPhotoId.Value)
+                           : null,
+                       CoverLink = e.FacebookPhotoLink
                    })
                     .ToList(),
                 IsCurrentUserFollowingTheClub = (currentUserId == user.Id) || currentUserId == 0 ? false : _uow.FollowRepository.Exists(currentUserId, user.Id),
@@ -484,7 +488,22 @@ namespace Zazz.Web.Controllers
             if (user.Password != pwd)
                 return "invalid password";
 
-            _uow.UserRepository.Remove(user.Id);
+            _uow.FeedRepository.RemoveFeedUser(user.Id);
+
+            foreach (Follow f in user.Followers)
+            {
+                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
+                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
+            }
+
+            foreach (Follow f in user.Follows)
+            {
+                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
+                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
+            }
+
+            _uow.PhotoRepository.RemovePhotoFromUser(user.Id);
+            _uow.UserRepository.Remove(user);
             _uow.SaveChanges();
 
             if (User.Identity.IsAuthenticated)

@@ -623,6 +623,10 @@ $(function () {
 
 function updateFeeds() {
     var url = "/home/categories";
+
+    var userFollow = $('#f-follow').prop('checked');
+    var inSameCity = $('#f-city').prop('checked');
+
     var container = $('#feedsContainer');
     container.css('opacity', '0.6');
 
@@ -630,7 +634,9 @@ function updateFeeds() {
         url: url,
         data: {
             select: getCategories(),
-            tag: getTags()
+            tag: getTags(),
+            userFollow: userFollow,
+            inSameCity: inSameCity
         },
         error: function () {
             toastr.error("Failed to load the feeds, please try again later.");

@@ -13,9 +13,10 @@
     var controller = ViewContext.Controller as HomeController;
     if (controller != null)
     {
-        categoryStats = controller.GetTagStats();
+        
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
+        categoryStats = controller.GetTagStats();
         tagStats = controller.GetRealTagStats();
     }
 }
@@ -66,20 +67,39 @@
                 <div class="filters">
                     <ul>
                         <li>
-                            <input type="checkbox" name="filters" value="f-photos" checked/>
-                            Show Photos
+                           
+
+                            @if(ViewBag.userFollow){
+                            <input id="f-follow" class="feed-filter" type="checkbox" name="filters" value="f-follow" checked />
+                            }else{
+                            <input id="f-follow" class="feed-filter" type="checkbox" name="filters" value="f-follow" />
+                            }
+                            Show Posts of people I follow
                         </li>
                         <li>
-                            <input type="checkbox" name="filters" value="f-videos" checked/>
-                            Show Videos
-                        </li>
-                        <li>
-                            <input type="checkbox" name="filters" value="f-clubs" checked/>
-                            Show Club Posts
+                            @if(ViewBag.inSameCity){
+                            <input id="f-city" class="feed-filter" type="checkbox" name="filters" value="f-city" checked />
+                            }else{
+                            <input id="f-city" class="feed-filter" type="checkbox" name="filters" value="f-city" />
+                            }
+                            Show Posts of people in my city
                         </li>
                     </ul>
                 </div>
             </div>
+
+            <script type="text/javascript">
+                $('.feed-filter').on('click', function (e) {
+                    var userFollow = $('#f-follow').prop('checked');
+                    var inSameCity = $('#f-city').prop('checked');
+                    var url = "@Url.Action("Index", "Home", new { userFollow = "__userFollow__", inSameCity = "__inSameCity__" })";
+                    url = url.replace('__userFollow__', userFollow).replace('__inSameCity__', inSameCity).replace(/&amp;/, "&");;
+
+                    window.location.href = url;
+
+                    return false;
+                });
+            </script>
 
             <div class="categories-stat-container pane-box">
                 <div class="pane-title">Categories</div>
@@ -121,7 +141,7 @@
 
         @*CENTER*@
         @{
-            if(Model.AccountType == AccountType.User)
+            if (Model.AccountType == AccountType.User)
             {
                 <div class="center-panel color-white-bg">
                      @Html.Partial("_PostInputsPartial")
