@@ -813,13 +813,13 @@ namespace Zazz.Web.Controllers
             foreach (var follow in follows)
             {
                 
-                items += "<li class='span3' style='margin-left:5px;margin-right:0px;'>";
-                items += "<a href='#' class='thumbnail'>";
-                items += "<img style=\"background-image:url('" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).MediumLink + "');height:80px;\" class='profile-photos-img-div3' alt=''>";
+                items += "<li class='text-center'>";
+                items += "<a href='#'>";
+                items += "<div class='user-list-img-div' style='background-image: url(" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).SmallLink + ")'></div>";
                 items += "<label> " + UserService.GetUserDisplayName(follow.FromUserId) + " <input type='checkbox' name='ckh"+id+"' value='" + follow.FromUserId + "' class='usercheck_invite_"+id+"' /></label>";
                 items += "</a>";
             }
-            string arr = "<div><ul class='thumbnails'>"+items+"</ul></div>";
+            string arr = "<div><ul class='users-list'>"+items+"</ul></div>";
 
             return arr;
         }
