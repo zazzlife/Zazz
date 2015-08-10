@@ -24,6 +24,8 @@ namespace Zazz.Web.Models.Api
 
         public byte? MajorId { get; set; }
 
+        public string TagLine { get; set; }
+
         public PromoterType? PromoterType { get; set; }
 
         public string ClubName { get; set; }

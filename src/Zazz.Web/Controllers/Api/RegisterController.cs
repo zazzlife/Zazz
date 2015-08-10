@@ -60,6 +60,7 @@ namespace Zazz.Web.Controllers.Api
             User user;
             if (request.AccountType == AccountType.User)
             {
+
                 user = new User
                        {
                            AccountType = AccountType.User,
@@ -68,6 +69,7 @@ namespace Zazz.Web.Controllers.Api
                            JoinedDate = DateTime.UtcNow,
                            LastActivity = DateTime.UtcNow,
                            Username = request.Username,
+                           tagline = request.TagLine,
                            UserDetail = new UserDetail
                                         {
                                             FullName = request.FullName,
@@ -126,6 +128,7 @@ namespace Zazz.Web.Controllers.Api
 
                 var token = new OAuthAccessTokenResponse
                        {
+                           UserId = user.Id,
                            AccessToken = oauthCreds.AccessToken.ToJWTString(),
                            ExpiresIn = 60*60,
                            RefreshToken = oauthCreds.RefreshToken.ToJWTString(),

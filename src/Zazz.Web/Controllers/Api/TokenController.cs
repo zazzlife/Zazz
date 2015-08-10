@@ -107,6 +107,7 @@ namespace Zazz.Web.Controllers.Api
 
                 return new OAuthAccessTokenResponse
                        {
+                           UserId = user.Id,
                            AccessToken = creds.AccessToken.ToJWTString(),
                            TokenType = "Bearer",
                            RefreshToken = creds.RefreshToken.ToJWTString(),
@@ -160,6 +161,9 @@ namespace Zazz.Web.Controllers.Api
 
     public class OAuthAccessTokenResponse
     {
+        [JsonProperty("userId")]
+        public int UserId { get; set; }
+
         [JsonProperty("access_token")]
         public string AccessToken { get; set; }
 
