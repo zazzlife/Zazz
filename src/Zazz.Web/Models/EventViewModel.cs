@@ -74,6 +74,9 @@ namespace Zazz.Web.Models
         public string OwnerName { get; set; }
 
         [Display(AutoGenerateField = false)]
+        public string ClubName { get; set; }
+
+        [Display(AutoGenerateField = false)]
         public PhotoLinks CoverImage { get; set; }
 
         [Display(AutoGenerateField = false)]
