@@ -351,6 +351,7 @@ namespace Zazz.Web.Controllers
             var userId = UserService.GetUserId(User.Identity.Name);
 
             var zazzEvent = _eventService.GetEvent(id);
+            var user = UserService.GetUser(zazzEvent.UserId);
             if (zazzEvent == null)
                 throw new HttpException(404, "The requested entry was not found");
 
@@ -379,7 +380,9 @@ namespace Zazz.Web.Controllers
                          FacebookEventId = zazzEvent.FacebookEventId,
                          //CoverLink = zazzEvent.CoverPic,
                          CoverLink = zazzEvent.FacebookPhotoLink,
-                         OwnerName = UserService.GetUserDisplayName(userId)
+                         OwnerName = UserService.GetUserDisplayName(userId),
+                         ClubName = user.ClubDetail.ClubName,
+                         ProfileImage = PhotoService.GetUserDisplayPhoto(zazzEvent.UserId)
                      };
 
             if (zazzEvent.PhotoId.HasValue)
