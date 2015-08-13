@@ -26,16 +26,20 @@ namespace Zazz.Web.Controllers
         private readonly IAlbumService _albumService;
         private readonly IImageValidator _imageValidator;
         private readonly IUoW _uow;
+        private readonly ICategoryService _categoryService;
+        private readonly ICategoryStatsCache _categoryStatsCache;
 
         public PhotosController(IPhotoService photoService, IAlbumService albumService,
                                 IUserService userService, IDefaultImageHelper defaultImageHelper,
                                 IImageValidator imageValidator, IStaticDataRepository staticDataRepository,
-                                ICategoryService categoryService, IUoW uow)
+                                ICategoryService categoryService, IUoW uow, ICategoryStatsCache categoryStatsCache)
             : base(userService, photoService, defaultImageHelper, staticDataRepository, categoryService)
         {
             _albumService = albumService;
             _imageValidator = imageValidator;
             _uow = uow;
+            _categoryService = categoryService;
+            _categoryStatsCache = categoryStatsCache;
         }
 
         [Authorize]
@@ -143,6 +147,19 @@ namespace Zazz.Web.Controllers
             var userId = UserService.GetUserId(User.Identity.Name);
             PhotoService.RemovePhoto(id, userId);
 
+            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+        }
+
+        [Authorize, HttpPost]
+        public ActionResult UpdateCategories(int id, IEnumerable<int> categories)
+        {
+            var photo = PhotoService.GetPhoto(id);
+            var userId = UserService.GetUserId(User.Identity.Name); 
+
+            PhotoService.UpdatePhoto(photo, userId, categories);
+
+            _categoryService.UpdateStatistics();
+            _categoryStatsCache.LastUpdate = DateTime.UtcNow.AddMinutes(-6);
             return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
         }
 

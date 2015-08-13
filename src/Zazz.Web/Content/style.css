@@ -713,6 +713,25 @@ a.lightbox-prev, a.lightbox-next {
     border-radius: 8px;
 }
 
+.event-club {
+    background-color: black;
+    border: 2px solid #FBCE0E;
+    -ms-border-radius: 5px;
+    border-radius: 8px;
+    margin-top: 10px;
+    color: white;
+    position: relative;
+    min-height: 105px;
+    max-height: 105px;
+}
+
+.event-cover-club {
+    opacity: 0.7;
+    max-height: 105px;
+    min-height: 105px;
+    border-radius: 8px;
+}
+
 .event-profile-pic {
     position: absolute;
     width: 80px;
@@ -950,6 +969,20 @@ a.lightbox-prev, a.lightbox-next {
         width: 1050px;
         height: 365px;
     }
+
+.banner-club {
+    text-align: center;
+    border-bottom: 3px solid #FBCE0E;
+    border-left: 3px solid #FBCE0E;
+    border-right: 3px solid #FBCE0E;
+    border-radius: 0 0 7px 7px;
+    width: 1050px;
+    height: 365px;
+    overflow: hidden;
+    background-size: 1050px;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
+}
 
 .club-details {
     font-size: 16px;

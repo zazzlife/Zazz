@@ -36,6 +36,7 @@
 
     </div>
     <div class="feed-content well well-small no-padding">
+        @Html.Partial("_CategoriesModal")
         @if (Model.IsFromCurrentUser || Model.CanCurrentUserRemoveFeed)
         {
             <div class="feed-actions btn-group">
@@ -46,6 +47,10 @@
                         <i class="icon-pencil"></i>
                     </button>
                 }
+                <button title="Tag Post" type="button" data-id="@Model.Post.PostId" data-type="posts"
+                        class="btn tagFeedBtn icononly-btn" data-toggle="modal" data-target="#categoriesModal">
+                    <i class="icon-tag"></i>
+                </button>
                 <button title="Remove Post" type="button" data-url="/posts/remove/@Model.Post.PostId"
                         class="btn removeFeedBtn icononly-btn">
                     <i class="icon-remove"></i>

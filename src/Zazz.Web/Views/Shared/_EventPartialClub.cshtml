@@ -1,0 +1,51 @@
+﻿@model EventViewModel
+@{
+    Layout = null;
+}
+
+
+<div class="event-club">
+
+    @{
+        if (Model.CoverLink != null)
+        {
+            <img class="event-cover-club" src="@Model.CoverLink" style="position:absolute; height:100%;" />
+        }
+        else if (Model.CoverImage != null)
+        {
+            <img class="event-cover-club" src="@Model.CoverImage.MediumLink" style="position:absolute; height:100%;" />
+        }
+    }
+
+    @if (Model.ProfileImage != null)
+    {
+        <img class="event-profile-pic img-polaroid" src="@Model.ProfileImage.SmallLink" />
+    }
+
+    <div class="media">
+        <div class="media-body">
+            <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
+            </a>
+            <div>
+                @Model.FormatDate
+            </div>
+            @*<div>
+                <div class="event-socal">
+                        <ul>
+                            <li><a href="#"><img src="~/Images/p.png" /></a></li>
+                            <li><a href="#"><img src="~/Images/t.png" /></a></li>
+
+                            @if (Model.IsFacebookEvent)
+                            {
+                                <li>
+                                    <a href="https://www.facebook.com/events/@Model.FacebookEventId.Value">
+                                        <img src="~/Images/f.png" />
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+            </div>*@
+        </div>
+    </div>
+</div>

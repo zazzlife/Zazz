@@ -595,6 +595,15 @@ namespace Zazz.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult ChangePassword()
+        {
+            if (User.Identity.IsAuthenticated)
+                FormsAuthentication.SignOut();
+
+            return RedirectToAction("Recover", "Account");
+        }
+
+        [HttpGet]
         public ActionResult RecoverUser()
         {
             if (User.Identity.IsAuthenticated)

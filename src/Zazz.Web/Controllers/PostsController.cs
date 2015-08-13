@@ -56,6 +56,19 @@ namespace Zazz.Web.Controllers
             return View(vm);
         }
 
+        [Authorize, HttpPost]
+        public ActionResult UpdateCategories(int id, IEnumerable<int> categories)
+        {
+            var post = _postService.GetPost(id);
+            var userId = UserService.GetUserId(User.Identity.Name);
+
+            _postService.EditPost(id, post.Message, categories, userId);
+
+            _categoryService.UpdateStatistics();
+            _categoryStatsCache.LastUpdate = DateTime.UtcNow.AddMinutes(-6);
+            return Redirect(HttpContext.Request.UrlReferrer.AbsolutePath);
+        }
+
         [Authorize,HttpPost]
         public ActionResult New(string message, int? toUser, IEnumerable<int> categories, string metaData)
         {

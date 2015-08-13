@@ -16,14 +16,10 @@ namespace Zazz.Data
 
         public static IEnumerable<Major> GetMajors()
         {
-            yield return new Major { Id = 1, Name = "Getting Blackout" };
-            yield return new Major { Id = 2, Name = "Beer Pong" };
-            yield return new Major { Id = 3, Name = "Tequila Shots" };
-            yield return new Major { Id = 4, Name = "Body Shots" };
-            yield return new Major { Id = 5, Name = "Being Raunchy" };
-            yield return new Major { Id = 6, Name = "Dancing my butt off" };
-            yield return new Major { Id = 7, Name = "Getting Krunk" };
-            yield return new Major { Id = 8, Name = "Chugging beer" };
+            yield return new Major { Id = 1, Name = "Dance till I drop" };
+            yield return new Major { Id = 2, Name = "Blackout King" };
+            yield return new Major { Id = 3, Name = "Beer Pong Champ" };
+            yield return new Major { Id = 4, Name = "Work hard play harder" };
         }
 
         public static IEnumerable<School> GetSchools()

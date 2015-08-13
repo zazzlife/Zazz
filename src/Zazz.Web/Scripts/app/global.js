@@ -339,6 +339,64 @@ function userProfilePhotoUpload(photoId, photoUrl) {
 }
 
 /********************************
+    Post Tagging
+*********************************/
+var tag_item_id, tag_item_type;
+$(document).on('click', '.tagFeedBtn', function() {
+    tag_item_id = $(this).data('id');
+    tag_item_type = $(this).data('type');
+});
+
+$(document).on('click', '#tagCategories', function () {
+    if (!tag_item_id) {
+        alert("Error. Please reload page.");
+        return;
+    }
+
+    var categories = [];
+    var $modal = $('#categoryModal')
+    var $btn = $(this);;
+
+    $('#categoriesModal .category-select-btn.active').each(function () {
+        var id = $(this).data('id');
+        if (id) {
+            categories.push(id);
+        }
+    });
+
+    if (categories.length == 0) {
+        toastr.error("Select a category before submission");
+        $modal.modal('hide');
+        return;
+    }
+
+    var url = "/" + tag_item_type + "/UpdateCategories"
+    showBtnBusy($btn);
+    $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        data: {
+            id: tag_item_id,
+            categories: categories
+        },
+        traditional: true,
+        beforeSend: function () {
+            setTimeout(function () {
+                toastr.error("Our servers are experiencing some slowdown. We appreciate your patience.")
+            }, 7000);
+        },
+        error: function () {
+            toastr.error('An error occured, Please try again later.');
+            hideBtnBusy($btn, "Submit");
+            $modal.modal('hide');
+        },
+        success: function () { location.reload();}
+    });
+
+});
+
+/********************************
     Image Deletion
 *********************************/
 

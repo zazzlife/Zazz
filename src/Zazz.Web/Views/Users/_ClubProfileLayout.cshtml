@@ -6,9 +6,7 @@
 
 <div class="container" style="margin-top: -15px">
     <div class="row-fluid">
-        <div class="banner span12">
-            <img src="@Model.CoverPhotoUrl" />
-        </div>
+        <div class="banner-club span12" style="background-image: url(@Model.CoverPhotoUrl);"></div>
     </div>
 
     <div class="row-fluid">
@@ -137,12 +135,12 @@
                     <span class="follow-no-bg margin-left-10">@Model.FollowersCount</span>
                 </div>
                 <div class="span4 margin-top-10">
-                    <a class="black" href="@Url.Action("Following", "Users", new { id = Model.UserId })">Following</a>
-                    <span class="follow-no-bg margin-left-10">@Model.FollowingsCount</span>
+                    <a class="black" >Weeklies</a>
+                    <span class="follow-no-bg margin-left-10">@Model.Weeklies.Count(); </span>
                 </div>
                 <div class="span3 margin-top-10">
-                    <a class="black" href="@Url.Action("LikedFeed", "Users", new { id = Model.UserId })">Likes</a>
-                    <span class="follow-no-bg margin-left-10">@Model.ReceivedLikesCount</span>
+                    <a class="black" >Events</a>
+                    <span class="follow-no-bg margin-left-10">@Model.Events.Count</span>
                 </div>
             </div>
 
@@ -197,7 +195,7 @@
 
                         @foreach (var e in Model.Events)
                         {
-                            @Html.Partial("_EventPartial", e)
+                            @Html.Partial("_EventPartialCLub", e)
                         }
 
                     </div>

@@ -854,6 +854,8 @@
     <Content Include="Views\Notifications\_NotificationsPageLayout.cshtml" />
     <Content Include="Views\Shared\_DeletePicPromptModal.cshtml" />
     <Content Include="Views\Shared\_LightBoxPartialNoTraversal.cshtml" />
+    <Content Include="Views\Shared\_EventPartialClub.cshtml" />
+    <Content Include="Views\Shared\_CategoriesModal.cshtml" />
     <None Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

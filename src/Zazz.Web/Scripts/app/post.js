@@ -220,6 +220,7 @@ $(document).on('click', '.submitPostEdit', function () {
             showNormalPost(text);
         }
     });
+    location.reload();
 
 });
 
@@ -237,6 +238,7 @@ $(document).on('click', '.cancelPostEdit', function () {
         isPostFeedEditBoxVisible = false;
     });
 
+    location.reload();
 });
 
 

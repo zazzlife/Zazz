@@ -2,9 +2,18 @@
 @{
     Layout = null;
 }
+@if (Model.IsFromCurrentUser)
+{
+    <div class="feed-actions btn-group">
+        <button title="Tag Post" type="button" data-id="@Model.PhotoId" data-type="photos"
+                class="btn tagFeedBtn icononly-btn" data-toggle="modal" data-target="#categoriesModal">
+            <i class="icon-tag"></i>
+        </button>
+    </div>
+}
 <div class="row-fluid">
     <div class="span12" style="margin-left: 5px; margin-top: 5px; margin-bottom: 5px; ">
-        <p style="margin-right: 5px;">@Model.Description</p>
+            <p style="margin-right: 5px;">@Model.Description</p>
     </div>
 </div>
 <div class="row-fluid">
