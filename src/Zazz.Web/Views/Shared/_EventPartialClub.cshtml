@@ -25,10 +25,8 @@
     <div class="media">
         <div class="media-body">
             <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
+                <h2 class="event-title">@Model.FormatDate</h2>
             </a>
-            <div>
-                @Model.FormatDate
-            </div>
             @*<div>
                 <div class="event-socal">
                         <ul>

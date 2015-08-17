@@ -24,6 +24,7 @@
 }
 
 .profile-photos-img-div2 {
+    min-height: 350px;
     width: 260px;
     height: 160px;
     background-repeat: no-repeat;
