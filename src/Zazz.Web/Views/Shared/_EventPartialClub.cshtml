@@ -3,17 +3,22 @@
     Layout = null;
 }
 
-
+<div class="event-title" style="color: black; font-weight: 500;">@Model.FormatDate</div>
 <div class="event-club">
 
     @{
         if (Model.CoverLink != null)
         {
-            <img class="event-cover-club" src="@Model.CoverLink" style="position:absolute; height:100%;" />
+            <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
+                <img class="event-cover-club" src="@Model.CoverLink" style="position:absolute; height:100%;" />
+            </a>
+
         }
         else if (Model.CoverImage != null)
         {
-            <img class="event-cover-club" src="@Model.CoverImage.MediumLink" style="position:absolute; height:100%;" />
+            <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
+                <img class="event-cover-club" src="@Model.CoverImage.MediumLink" style="position:absolute; height:100%;" />
+            </a>
         }
     }
 
@@ -24,9 +29,7 @@
 
     <div class="media">
         <div class="media-body">
-            <a href="@Url.Action("Show", "Events", new { id = Model.Id, friendlySeoName = Model.Name.ToUrlFriendlyString() })">
-                <h2 class="event-title">@Model.FormatDate</h2>
-            </a>
+
             @*<div>
                 <div class="event-socal">
                         <ul>
