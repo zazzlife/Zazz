@@ -161,6 +161,14 @@ namespace Zazz.Infrastructure.Services
                         TagUser = photo.TagUser
                     });
                 }
+                else if (lastFeed != null && lastFeed.FeedType == FeedType.Photo && //last feed check
+                    lastFeed.Time >= DateTime.UtcNow.AddMinutes(-1) && //last upload date check
+                    lastFeed.FeedPhotos.Count >= 9 && //maximum number of photos check 
+                    lastFeed.FeedPhotos.First().Photo.AlbumId == photo.AlbumId  //same album check
+                    )
+                {
+                    //do nothing
+                }
                 else
                 {
                     var feed = new Feed

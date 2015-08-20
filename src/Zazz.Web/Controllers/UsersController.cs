@@ -149,6 +149,26 @@ namespace Zazz.Web.Controllers
         private UserProfileViewModelBase LoadBaseUserProfileVm(User user, int currentUserId, string displayName,
             Photo userPhoto)
         {
+            string city = null;
+            string major = null;
+            string school = null;
+
+            if (user.AccountType == AccountType.User && user.UserDetail != null && user.UserDetail.City != null){
+                city = user.UserDetail.City.Name;
+            }
+            else if (user.AccountType == AccountType.Club && user.ClubDetail != null && user.ClubDetail.City != null)
+            {
+                city = user.ClubDetail.City.Name;
+            }
+            if (user.AccountType == AccountType.User && user.UserDetail != null && user.UserDetail.Major != null)
+            {
+                city = user.UserDetail.Major.Name;
+            }
+            if (user.AccountType == AccountType.User && user.UserDetail != null && user.UserDetail.School != null)
+            {
+                city = user.UserDetail.School.Name;
+            }
+
             var vm = new UserProfileViewModel
             {
                 UserId = user.Id,
@@ -174,9 +194,9 @@ namespace Zazz.Web.Controllers
                 FollowingsCount = _uow.FollowRepository.GetUserFollows(user.Id).Count(),
                 ReceivedLikesCount = _uow.UserReceivedLikesRepository.GetCount(user.Id),
                 CategoriesStats = GetTagStats(),
-                City = user.UserDetail.City == null ? null : user.UserDetail.City.Name,
-                Major = user.UserDetail.Major == null ? null : user.UserDetail.Major.Name,
-                School = user.UserDetail.School == null ? null : user.UserDetail.School.Name
+                City = city,
+                Major = major,
+                School = school
             };
 
             if (!vm.IsSelf && currentUserId != 0)
