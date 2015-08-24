@@ -45,6 +45,7 @@
         </script>*@
         foreach (var feed in Model.feeds)
         {
+            if (feed.FeedId != null){
             <div class="row-fluid">
                 <div class="span12">
                     @if (feed.FeedType == FeedType.Event)
@@ -67,6 +68,7 @@
                     }
                 </div>
             </div>
+            }
         }
     }
     else if (Model.remaining > 0)

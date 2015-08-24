@@ -508,22 +508,7 @@ namespace Zazz.Web.Controllers
             if (user.Password != pwd)
                 return "invalid password";
 
-            _uow.FeedRepository.RemoveFeedUser(user.Id);
-
-            foreach (Follow f in user.Followers)
-            {
-                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
-                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
-            }
-
-            foreach (Follow f in user.Follows)
-            {
-                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
-                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
-            }
-
-            _uow.PhotoRepository.RemovePhotoFromUser(user.Id);
-            _uow.UserRepository.Remove(user);
+            _uow.UserRepository.Remove(user.Id);
             _uow.SaveChanges();
 
             if (User.Identity.IsAuthenticated)

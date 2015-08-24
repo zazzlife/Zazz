@@ -3,6 +3,7 @@
     Layout = null;
     var photosCount = Model.Photos.Count;
 }
+@if (photosCount > 0){
 <div class="feed-item" data-id="@Model.FeedId">
     <div class="feed-userimg-container">
         <a href="~/users/profile/@Model.UserId">
@@ -181,3 +182,4 @@
     </div>
 </div>
 
+}
