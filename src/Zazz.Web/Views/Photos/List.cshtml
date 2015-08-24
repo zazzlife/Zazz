@@ -27,7 +27,7 @@
             $(document).on('click', 'a.lightbox-next', function () {
                 var id = $(this).parent().siblings('.lightbox-img').attr('data-id');
                 var index = viewablePhotoIDs.indexOf(parseInt(id));
-                var next = 'a[data-target="#photo-' + viewablePhotoIDs[index+1] + '"]';
+                var next = 'a[data-target="#photo-' + viewablePhotoIDs[index + 1] + '"]';
                 $('.close').click();
                 $(next).first().click();
             });
@@ -39,8 +39,13 @@
                 $(prev).first().click();
             });
         </script>
+        @foreach (var p in Model.Photos)
+        {
+            <script type="text/javascript">
+                viewablePhotoIDs.push(@p.PhotoId);
+            </script>
+        }
 }
-
 <div class="container color-white-bg border-radius-5" style="padding: 0 20px 33vh 20px;">
     <div class="row-fluid">
         <div class="span12 border-bottom-2">
@@ -75,12 +80,6 @@
 
         <div class="row">
             <div class="span12">
-                @foreach (var p in Model.Photos)
-                {
-                <script type="text/javascript">
-                    viewablePhotoIDs.push(@p.PhotoId);
-                </script>
-                }
                 <ul class="thumbnails">
                     
                     
@@ -105,7 +104,11 @@
                 <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
             </div>
             <div class='lightbox-content'>
-                <img data-id="@p.PhotoId" src="@p.PhotoUrl.OriginalLink"/>
+                <img class="lightbox-img" data-id="@p.PhotoId" src="@p.PhotoUrl.OriginalLink"/>
+                <div class="lightbox-nav">
+                    <a class="lightbox-prev"></a>
+                    <a class="lightbox-next"></a>
+                </div>
                 <div class="well pull-right no-padding lightbox-commentbox">
             
                     <div class="photo-details">
