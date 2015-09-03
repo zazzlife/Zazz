@@ -16,7 +16,7 @@
         
         currentUserDisplayName = controller.GetCurrentUserDisplayName();
         currentUserId = controller.GetCurrentUserId();
-        categoryStats = controller.GetTagStats();
+        categoryStats = controller.GetTagStats((int?)currentUserId, ViewBag.userFollow, ViewBag.inSameCity);
         tagStats = controller.GetRealTagStats();
     }
 }

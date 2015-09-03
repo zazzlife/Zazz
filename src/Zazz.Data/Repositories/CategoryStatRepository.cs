@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
@@ -15,12 +16,12 @@ namespace Zazz.Data.Repositories
 
         public override IQueryable<CategoryStat> GetAll()
         {
-            return DbSet.Include(t => t.Category);
+            return DbSet.Include(t => t.Category).Include(t => t.StatUsers);
         }
 
         public CategoryStat GetById(byte categoryId)
         {
-            return DbSet.SingleOrDefault(t => t.CategoryId == categoryId);
+            return DbSet.Include(t => t.StatUsers).SingleOrDefault(t => t.CategoryId == categoryId);
         }
 
         public int GetUsersCount(int categoryId)
@@ -31,4 +32,5 @@ namespace Zazz.Data.Repositories
                 .FirstOrDefault();
         }
     }
+
 }

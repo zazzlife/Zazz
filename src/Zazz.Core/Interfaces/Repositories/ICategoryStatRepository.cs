@@ -7,5 +7,6 @@ namespace Zazz.Core.Interfaces.Repositories
         CategoryStat GetById(byte categoryId);
 
         int GetUsersCount(int categoryId);
+
     }
 }

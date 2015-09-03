@@ -137,6 +137,11 @@ namespace Zazz.Data
                 .WithMany()
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<StatUser>()
+                .HasRequired(i => i.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Notification>()
                 .HasRequired(n => n.UserB)
                 .WithMany()

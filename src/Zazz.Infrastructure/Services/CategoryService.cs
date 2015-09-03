@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using Zazz.Core.Interfaces;
 using Zazz.Core.Interfaces.Repositories;
@@ -57,15 +60,26 @@ namespace Zazz.Infrastructure.Services
 
                 var uniqueUsers = Enumerable.Union(photoUsers, postUsers);
 
+                ICollection<StatUser> statusers = new Collection<StatUser>();
+                foreach (int userId in uniqueUsers)
+                {
+                    statusers.Add(new StatUser { UserId = userId });
+                }
+
                 var categoryStat = _uow.CategoryStatRepository.GetById(category.Id);
                 if (categoryStat == null)
                 {
                     categoryStat = new CategoryStat
-                              {
-                                  LastUpdate = DateTime.UtcNow,
-                                  CategoryId = category.Id,
-                                  UsersCount = uniqueUsers.Count()
-                              };
+                    {
+                        LastUpdate = DateTime.UtcNow,
+                        CategoryId = category.Id,
+                        UsersCount = uniqueUsers.Count()
+                    };
+
+                    foreach (int userId in uniqueUsers)
+                    {
+                        categoryStat.StatUsers.Add(new StatUser { UserId = userId });
+                    }
 
                     _uow.CategoryStatRepository.InsertGraph(categoryStat);
                 }
@@ -73,8 +87,30 @@ namespace Zazz.Infrastructure.Services
                 {
                     categoryStat.LastUpdate = DateTime.UtcNow;
                     categoryStat.UsersCount = uniqueUsers.Count();
-                }
 
+                    Collection<int> usersToInsert = new Collection<int>();
+
+                    foreach (int userId in uniqueUsers)
+                    {
+                        bool doInsert = true;
+                        foreach (StatUser su in categoryStat.StatUsers)
+                        {
+                            if (su.UserId == userId)
+                            {
+                                doInsert = false;
+                            }
+                        }
+                        if (doInsert && !usersToInsert.Contains(userId))
+                        {
+                            usersToInsert.Add(userId);
+                        }
+                    }
+
+                    foreach(int ui in usersToInsert)
+                    {
+                        categoryStat.StatUsers.Add(new StatUser { UserId = ui });
+                    }
+                }
                 _uow.SaveChanges();
             }
         }
