@@ -8,5 +8,6 @@ namespace Zazz.Core.Models.Data
 
         [MaxLength(100)]
         public string Name { get; set; }
+
     }
 }

@@ -9,6 +9,7 @@ using Zazz.Core.Models;
 using Zazz.Core.Models.Data.Enums;
 using Zazz.Web.Models;
 using Zazz.Core.Models.Data;
+using System.Collections.ObjectModel;
 
 namespace Zazz.Web.Controllers
 {
@@ -32,14 +33,52 @@ namespace Zazz.Web.Controllers
         }
 
         // TODO: rename
-        public IEnumerable<CategoryStatViewModel> GetTagStats()
+        public IEnumerable<CategoryStatViewModel> GetTagStats(int? currentUserId = null, bool userFollow = false, bool inSameCity = false)
         {
-            return CategoryService.GetAllStats()
-                             .Select(t => new CategoryStatViewModel
-                             {
-                                 CategoryName = t.Category.Name,
-                                 UsersCount = t.UsersCount
-                             });
+            if ((userFollow || inSameCity) && currentUserId != null){
+                User currentUser = UserService.GetUser(currentUserId.GetValueOrDefault());
+
+                ICollection<CategoryStatViewModel> tagStats = new Collection<CategoryStatViewModel>();
+
+                IEnumerable<CategoryStat> stats = CategoryService.GetAllStats().ToList();
+                
+
+                foreach (CategoryStat stat in CategoryService.GetAllStats())
+                {
+                    int usersCount = 0;
+                    foreach (StatUser statuser in stat.StatUsers)
+                    {
+                        User user = UserService.GetUser(currentUserId.GetValueOrDefault(), true, true, false, false);
+
+                        foreach (Follow follow in currentUser.Follows)
+                        {
+                            User followUser = UserService.GetUser(follow.ToUserId, true, true, false, false);
+
+                            if ((userFollow && inSameCity && follow.ToUserId == statuser.UserId
+                                && followUser.UserDetail.CityId == user.UserDetail.CityId)
+                                || (userFollow && follow.ToUserId == statuser.UserId)
+                                || (inSameCity && followUser.UserDetail.CityId == user.UserDetail.CityId))
+                            {
+                                usersCount++;
+                                break;
+                            }
+                        }
+                    }
+                    tagStats.Add(new CategoryStatViewModel
+                            {
+                                CategoryName = stat.Category.Name,
+                                UsersCount = usersCount
+                            });
+                }
+                return tagStats;
+            }else{
+                return CategoryService.GetAllStats()
+                                .Select(t => new CategoryStatViewModel
+                                {
+                                    CategoryName = t.Category.Name,
+                                    UsersCount = t.UsersCount
+                                });
+            }
         }
 
         public string GetCurrentUserDisplayName()

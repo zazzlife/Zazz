@@ -56,9 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InMemoryUserRoleRepository.cs" />
-    <Compile Include="Migrations\201503182359483_Initial.cs" />
-    <Compile Include="Migrations\201503182359483_Initial.Designer.cs">
-      <DependentUpon>201503182359483_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201508092013267_InitialCreate.cs" />
+    <Compile Include="Migrations\201508092013267_InitialCreate.Designer.cs">
+      <DependentUpon>201508092013267_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509022224179_1.cs" />
+    <Compile Include="Migrations\201509022224179_1.Designer.cs">
+      <DependentUpon>201509022224179_1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Repositories\CityRepository.cs" />
@@ -116,8 +120,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201503182359483_Initial.resx">
-      <DependentUpon>201503182359483_Initial.cs</DependentUpon>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201508092013267_InitialCreate.resx">
+      <DependentUpon>201508092013267_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509022224179_1.resx">
+      <DependentUpon>201509022224179_1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
