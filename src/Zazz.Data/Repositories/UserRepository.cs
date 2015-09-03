@@ -272,6 +272,13 @@ namespace Zazz.Data.Repositories
 
         public override void Remove(User item)
         {
+
+            IEnumerable<StatUser> statusers = DbContext.StatUsers.Where(s => s.UserId == item.Id);
+            foreach (StatUser su in statusers)
+            {
+                DbContext.StatUsers.Remove(su);
+            }
+
             if (item.UserDetail != null)
             {
                 DbContext.UserDetails.Remove(item.UserDetail);

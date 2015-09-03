@@ -32,6 +32,7 @@ namespace Zazz.Data
         public IDbSet<FacebookPage> FacebookPages { get; set; }
         public IDbSet<FeedPhoto> FeedPhotos { get; set; }
         public IDbSet<FeedUser> FeedUsers { get; set; }
+        public IDbSet<StatUser> StatUsers { get; set; }
         public IDbSet<FacebookSyncRetry> FacebookSyncRetries { get; set; }
         public IDbSet<Notification> Notifications { get; set; }
         public IDbSet<CategoryStat> CateStats { get; set; }
