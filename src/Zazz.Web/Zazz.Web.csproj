@@ -653,6 +653,9 @@
     <Content Include="Content\font\Roboto-Light-webfont.ttf" />
     <Content Include="Content\font\Roboto-Light-webfont.woff" />
     <Content Include="Licenses\Lightbox\README.markdown" />
+    <Content Include="Content\Privacy Policy.pdf" />
+    <Content Include="Content\Terms of Service.pdf" />
+    <Content Include="Content\Zazz press kit.pdf" />
     <None Include="Properties\PublishProfiles\Dev - debug %28no folder wipe%29.pubxml" />
     <None Include="Properties\PublishProfiles\Dev - debug.pubxml" />
     <Content Include="Images\3-vs.jpg" />

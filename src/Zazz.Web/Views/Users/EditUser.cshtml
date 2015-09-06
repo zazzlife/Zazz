@@ -82,16 +82,6 @@
 
                             <div class="control-group">
                                 <div class="editor-label">
-                                    @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.RadioButtonForEnum(model => model.Gender)
-                                    @Html.ValidationMessageFor(model => model.Gender, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="editor-label">
                                     @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
                                 </div>
                                 <div class="editor-field">
@@ -102,30 +92,21 @@
 
                             <div class="control-group">
                                 <div class="editor-label">
-                                    @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
+                                    <label class="control-label" for="MajorId">Tagline</label>
                                 </div>
                                 <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name", Model.CityId), "Select City", new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name", Model.SchoolId), "Select School", new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.MajorId, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.MajorId, new SelectList(Model.Majors, "Id", "Name", Model.MajorId), "Select Major", new { @class = "span4" })
+                                   <select class="span4" data-val="true" data-val-number="The field MajorId must be a number." id="MajorId" name="MajorId">
+                                        @{
+                                            <option value="">Select TagLine</option>
+                                            <option value="8">Create Your Own Tagline</option>
+                                            <option value="">examples:</option>
+                                            foreach(var major in Model.Majors)
+                                            {
+                                                <option>@major.Name</option>
+                                            }
+                                        
+                                        }
+                                   </select>
                                     @Html.ValidationMessageFor(model => model.MajorId, null, new { @class = "help-inline" })
                                 </div>
                             </div>

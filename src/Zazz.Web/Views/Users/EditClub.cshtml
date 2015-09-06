@@ -21,69 +21,11 @@
             @Html.AntiForgeryToken()
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#aboutTab" data-toggle="tab">About</a></li>
-                    <li><a href="#profilePicTab" data-toggle="tab">Profile Pictures</a></li>
+                    <li class="active"><a href="#profilePicTab" data-toggle="tab">Profile Pictures</a></li>
                     <li><a href="#fbSyncTab" data-toggle="tab">Facebook Sync</a></li>
                     <li><a href="#notificationsTab" data-toggle="tab">Notifications</a></li>
                 </ul>
                 <div class="tab-content margin-ten">
-                    <div class="tab-pane active" id="aboutTab">
-                        <a href="~/account/ChangePassword">Change Password</a>
-                        <p style="margin-top: 30px;">
-
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.ClubName, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.TextBoxFor(model => model.ClubName, new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.ClubName, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-                            
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.ClubAddress, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.TextBoxFor(model => model.ClubAddress, new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.ClubAddress, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.ClubType, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.ClubType, Model.ClubType.EnumToSelectList(), new { @class = "span4" })
-
-                                    @Html.ValidationMessageFor(model => model.ClubType, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-                            
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.SchoolId, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.Schools, "Id", "Name"), "Select School", new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.SchoolId, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="editor-label">
-                                    @Html.LabelFor(model => model.CityId, new { @class = "control-label" })
-                                </div>
-                                <div class="editor-field">
-                                    @Html.DropDownListFor(model => model.CityId, new SelectList(Model.Cities, "Id", "Name"), "Select City", new { @class = "span4" })
-                                    @Html.ValidationMessageFor(model => model.CityId, null, new { @class = "help-inline" })
-                                </div>
-                            </div>
-
-
-                        </p>
-                    </div>
                     <div class="tab-pane" id="profilePicTab">
                        
                             <div class="control-group">

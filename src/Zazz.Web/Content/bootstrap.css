@@ -3503,8 +3503,9 @@ input[type="button"].btn-block {
 .btn-success.disabled,
 .btn-success[disabled] {
   color: #ffffff;
-  background-color: #3cb521;
+  background-color: #272626;
   *background-color: #359f1d;
+  background-image: linear-gradient(to bottom, #484343, #545454)
 }
 
 .btn-success:active,
