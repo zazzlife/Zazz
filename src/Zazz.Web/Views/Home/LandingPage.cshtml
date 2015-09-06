@@ -46,14 +46,16 @@
             NONE: 0,
             START: 1,
             REG: 2,
-            CREATE: 3
+            CREATE: 3,
+            PROMPT: 4
         }
 
         PageClasses = [
             '',
             '.landing-page-start',
             '.landing-page-register',
-            '.landing-page-create'
+            '.landing-page-create',
+            '.landing-page-prompt'
         ]
 
         var page = PageEnum.NONE;
@@ -241,7 +243,7 @@
                  
                     <tr>
                    
-                        <td colspan="2"><div class="animated fadeInLeft"><button onclick="showPageAnim(PageEnum.REG);">Register</button></td>
+                        <td colspan="2"><div class="animated fadeInLeft"><button onclick="showPageAnim(PageEnum.PROMPT);">Register</button></td>
                     </div>
                     </tr>
                     <tr>
@@ -430,6 +432,20 @@
                     Zazz uses your Facebook's fan page to sync all your posts, photos, and events. 
                     Our web app does not allow us to post on your behalf, it is against our Terms & Conditions and our Privacy Policy.  
                 </p>
+            </div>
+            <div class="landing-page-prompt" tabindex="-1">
+                <div class="landing-page-user">
+                    <a href="#" onclick="showPageAnim(PageEnum.REG);">
+                        <img src="~/Images/user_landing.png" />
+                    </a>
+                    <p>Users</p>
+                </div>
+                <div class="landing-page-club">
+                    <a href="#" onclick="showPageAnim(PageEnum.CREATE);">
+                        <img src="~/Images/club_landing.png" style="margin-left: 20%;"/>
+                    </a>
+                    <p>Bars & Clubs</p>
+                </div>
             </div>
         </div>
         

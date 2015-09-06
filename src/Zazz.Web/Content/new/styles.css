@@ -275,7 +275,8 @@
 
 .landing-page-start,
 .landing-page-register,
-.landing-page-create {
+.landing-page-create,
+.landing-page-prompt {
     display: none;
 }
 
@@ -342,13 +343,47 @@
     display: none;
 }
 
-.landing-page-register {
+.landing-page-register, .landing-page-prompt {
     padding: 1.5vw;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 1vw;
     font-family: robotolight;
+    font-size: 2vw;
     color: white;
     min-height: 32vw;
+    position: relative;
+}
+
+.landing-page-user, .landing-page-club {
+    position: absolute;
+    opacity:0.5;
+}
+
+.landing-page-user:hover, .landing-page-club:hover {
+    opacity: 1;
+}
+
+.landing-page-user {
+    top: 14%;
+    left: 12%;
+}
+
+.landing-page-user p {
+    margin: 10% 0 0 10%;
+    display: inline-block;
+    opacity: 0.7;
+}
+
+.landing-page-club p {
+    margin: 10% 15% 0 0;
+    display: inline-block;
+    opacity: 0.7;
+}
+
+.landing-page-club {
+    bottom: 7%;
+    right: 5%;
+    width: 50%
 }
 
 .zazz-form button {
@@ -439,7 +474,8 @@
 
 .landing-page-start:focus,
 .landing-page-register:focus,
-.landing-page-create:focus {
+.landing-page-create:focus,
+.landing-page-prompt:focus {
     outline: none;
 }
 
