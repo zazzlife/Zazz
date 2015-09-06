@@ -52,7 +52,7 @@ namespace Zazz.Web.Controllers
             var displayName = GetCurrentUserDisplayName();
 
             return RedirectToAction("Profile", "Users",
-                                    new {id = userId, friendlySeoName = displayName.ToUrlFriendlyString()});
+                                    new { id = userId, friendlySeoName = displayName.ToUrlFriendlyString() });
         }
 
         [ActionName("Profile")]
@@ -96,8 +96,8 @@ namespace Zazz.Web.Controllers
             if (!String.IsNullOrEmpty(user.ClubDetail.ClubTypes))
             {
                 var cts = user.ClubDetail.ClubTypes.Split(',');
-                
-                foreach(string s in cts)
+
+                foreach (string s in cts)
                 {
                     try
                     {
@@ -106,30 +106,30 @@ namespace Zazz.Web.Controllers
                     catch (Exception)
                     { }
                 }
-                clubtypess = clubtypess.Substring(0,clubtypess.Length - 3);
+                clubtypess = clubtypess.Substring(0, clubtypess.Length - 3);
             }
             var baseVm = LoadBaseClubProfileVm(user, currentUserId, displayName, profilePhotoUrl);
             var vm = new ClubProfileViewModel
-                     {
-                         Address = baseVm.Address,
-                         ClubType = (baseVm.ClubType != null)?baseVm.ClubType:ClubType.Bar,
-                         CoverPhotoUrl = baseVm.CoverPhotoUrl,
-                         Events = baseVm.Events,
-                         Feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId),
-                         FollowersCount = baseVm.FollowersCount,
-                         FollowingsCount = baseVm.FollowingsCount,
-                         IsCurrentUserFollowingTheClub = baseVm.IsCurrentUserFollowingTheClub,
-                         IsSelf = baseVm.IsSelf,
-                         PartyAlbums = baseVm.PartyAlbums,
-                         ReceivedLikesCount = baseVm.ReceivedLikesCount,
-                         UserId = baseVm.UserId,
-                         UserName = baseVm.UserName,
-                         UserPhoto = baseVm.UserPhoto,
-                         Weeklies = baseVm.Weeklies,
-                         clubtypes = clubtypess,
-                         city = (user.ClubDetail.City != null)?user.ClubDetail.City.Name:"",
-                         url = (user.ClubDetail.url)
-                     };
+            {
+                Address = baseVm.Address,
+                ClubType = (baseVm.ClubType != null) ? baseVm.ClubType : ClubType.Bar,
+                CoverPhotoUrl = baseVm.CoverPhotoUrl,
+                Events = baseVm.Events,
+                Feeds = _feedHelper.GetUserActivityFeed(user.Id, currentUserId),
+                FollowersCount = baseVm.FollowersCount,
+                FollowingsCount = baseVm.FollowingsCount,
+                IsCurrentUserFollowingTheClub = baseVm.IsCurrentUserFollowingTheClub,
+                IsSelf = baseVm.IsSelf,
+                PartyAlbums = baseVm.PartyAlbums,
+                ReceivedLikesCount = baseVm.ReceivedLikesCount,
+                UserId = baseVm.UserId,
+                UserName = baseVm.UserName,
+                UserPhoto = baseVm.UserPhoto,
+                Weeklies = baseVm.Weeklies,
+                clubtypes = clubtypess,
+                city = (user.ClubDetail.City != null) ? user.ClubDetail.City.Name : "",
+                url = (user.ClubDetail.url)
+            };
 
             return View("ClubProfile", vm);
         }
@@ -153,7 +153,8 @@ namespace Zazz.Web.Controllers
             string major = null;
             string school = null;
 
-            if (user.AccountType == AccountType.User && user.UserDetail != null && user.UserDetail.City != null){
+            if (user.AccountType == AccountType.User && user.UserDetail != null && user.UserDetail.City != null)
+            {
                 city = user.UserDetail.City.Name;
             }
             else if (user.AccountType == AccountType.Club && user.ClubDetail != null && user.ClubDetail.City != null)
@@ -173,18 +174,18 @@ namespace Zazz.Web.Controllers
             {
                 UserId = user.Id,
                 UserName = displayName,
-                UserPhoto = userPhoto != null 
+                UserPhoto = userPhoto != null
                     ? new PhotoViewModel
-                        {
-                            AlbumId = userPhoto.AlbumId,
-                            Description = userPhoto.Description,
-                            FromUserDisplayName = UserService.GetUserDisplayName(userPhoto.UserId),
-                            FromUserId = userPhoto.UserId,
-                            FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id),
-                            IsFromCurrentUser = currentUserId == userPhoto.Id,
-                            PhotoId = userPhoto.Id,
-                            PhotoUrl = PhotoService.GeneratePhotoUrl(userPhoto.UserId, userPhoto.Id)
-                        }
+                    {
+                        AlbumId = userPhoto.AlbumId,
+                        Description = userPhoto.Description,
+                        FromUserDisplayName = UserService.GetUserDisplayName(userPhoto.UserId),
+                        FromUserId = userPhoto.UserId,
+                        FromUserPhotoUrl = PhotoService.GetUserDisplayPhoto(user.Id),
+                        IsFromCurrentUser = currentUserId == userPhoto.Id,
+                        PhotoId = userPhoto.Id,
+                        PhotoUrl = PhotoService.GeneratePhotoUrl(userPhoto.UserId, userPhoto.Id)
+                    }
                     : new PhotoViewModel
                     {
                         PhotoUrl = DefaultImageHelper.GetUserDefaultImage(user.UserDetail.Gender)
@@ -492,7 +493,7 @@ namespace Zazz.Web.Controllers
                 currentUserId = UserService.GetUserId(User.Identity.Name);
 
             var user = UserService.GetUser(User.Identity.Name);
-            
+
             var feeds = likedFeed
                 ? _feedHelper.GetUserLikedFeed(user.Id, currentUserId, lastFeedId)
                 : _feedHelper.GetUserActivityFeed(user.Id, currentUserId, lastFeedId);
@@ -508,22 +509,7 @@ namespace Zazz.Web.Controllers
             if (user.Password != pwd)
                 return "invalid password";
 
-            _uow.FeedRepository.RemoveFeedUser(user.Id);
-
-            foreach (Follow f in user.Followers)
-            {
-                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
-                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
-            }
-
-            foreach (Follow f in user.Follows)
-            {
-                _uow.FollowRepository.Remove(f.FromUserId, user.Id);
-                _uow.FollowRepository.Remove(user.Id, f.FromUserId);
-            }
-
-            _uow.PhotoRepository.RemovePhotoFromUser(user.Id);
-            _uow.UserRepository.Remove(user);
+            _uow.UserRepository.Remove(user.Id);
             _uow.SaveChanges();
 
             if (User.Identity.IsAuthenticated)
@@ -691,7 +677,7 @@ namespace Zazz.Web.Controllers
             var user = _uow.UserRepository.GetByUsername(User.Identity.Name, false, true, false, true);
             if (user.AccountType != AccountType.Club)
                 throw new SecurityException();
-            
+
             if (ModelState.IsValid)
             {
                 user.ClubDetail.Address = vm.ClubAddress;
@@ -832,14 +818,14 @@ namespace Zazz.Web.Controllers
             string items = "";
             foreach (var follow in follows)
             {
-                
+
                 items += "<li class='text-center'>";
                 items += "<a href='#'>";
                 items += "<div class='user-list-img-div' style='background-image: url(" + PhotoService.GetUserDisplayPhoto(follow.FromUserId).SmallLink + ")'></div>";
-                items += "<label> " + UserService.GetUserDisplayName(follow.FromUserId) + " <input type='checkbox' name='ckh"+id+"' value='" + follow.FromUserId + "' class='usercheck_invite_"+id+"' /></label>";
+                items += "<label> " + UserService.GetUserDisplayName(follow.FromUserId) + " <input type='checkbox' name='ckh" + id + "' value='" + follow.FromUserId + "' class='usercheck_invite_" + id + "' /></label>";
                 items += "</a>";
             }
-            string arr = "<div><ul class='users-list'>"+items+"</ul></div>";
+            string arr = "<div><ul class='users-list'>" + items + "</ul></div>";
 
             return arr;
         }
@@ -860,7 +846,7 @@ namespace Zazz.Web.Controllers
         {
             var clubs = UserService.getAllClubs().ToList();
 
-            List<MapLocaionJson> mp = new List<MapLocaionJson>();            
+            List<MapLocaionJson> mp = new List<MapLocaionJson>();
             foreach (var club in clubs)
             {
                 if (club.ClubDetail != null)
@@ -878,12 +864,12 @@ namespace Zazz.Web.Controllers
                 }
             }
 
-            return new JsonNetResult(mp.ToArray());   
+            return new JsonNetResult(mp.ToArray());
         }
 
         internal class MapLocaionJson
         {
-            public string name { get; set;}
+            public string name { get; set; }
 
             public string address { get; set; }
 

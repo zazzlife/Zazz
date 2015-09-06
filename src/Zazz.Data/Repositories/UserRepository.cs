@@ -13,7 +13,8 @@ namespace Zazz.Data.Repositories
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(DbContext dbContext) : base(dbContext)
+        public UserRepository(DbContext dbContext)
+            : base(dbContext)
         {
         }
 
@@ -129,12 +130,12 @@ namespace Zazz.Data.Repositories
         {
             var user = DbSet.Where(u => u.Id == userId)
                              .Select(u => new
-                                          {
-                                              u.AccountType,
-                                              u.Username,
-                                              u.UserDetail.FullName,
-                                              u.ClubDetail.ClubName
-                                          })
+                             {
+                                 u.AccountType,
+                                 u.Username,
+                                 u.UserDetail.FullName,
+                                 u.ClubDetail.ClubName
+                             })
                              .SingleOrDefault();
 
             if (user == null)
@@ -272,18 +273,184 @@ namespace Zazz.Data.Repositories
 
         public override void Remove(User item)
         {
+
+            //IEnumerable<StatUser> statusers = DbContext.StatUsers.Where(s => s.UserId == item.Id);
+            //foreach (StatUser su in statusers)
+            //{
+            //    DbContext.StatUsers.Remove(su);
+            //}
+
             if (item.UserDetail != null)
             {
-                DbContext.Entry(item.UserDetail).State = EntityState.Deleted;
+                DbContext.UserDetails.Remove(item.UserDetail);
+            }
+
+            if (item.Followers != null)
+            {
+                foreach (Follow follow in item.Followers)
+                {
+                    DbContext.Follows.Remove(follow);
+                }
+            }
+
+            if (item.Follows != null)
+            {
+                foreach (Follow follow in item.Followers)
+                {
+                    DbContext.Follows.Remove(follow);
+                }
+            }
+
+            if (item.LinkedAccounts != null)
+            {
+                foreach (LinkedAccount la in item.LinkedAccounts)
+                {
+                    DbContext.LinkedAccounts.Remove(la);
+                }
             }
 
             if (item.UserValidationToken != null)
             {
-                DbContext.Entry(item.UserValidationToken).State = EntityState.Deleted;
+                DbContext.ValidationTokens.Remove(item.UserValidationToken);
+            }
+
+            if (item.ReceivedLikesCount != null)
+            {
+                DbContext.UserReceivedLikes.Remove(item.ReceivedLikesCount);
+            }
+
+            if (item.Weeklies != null)
+            {
+                foreach (Weekly w in item.Weeklies)
+                {
+                    DbContext.Weeklies.Remove(w);
+                }
+            }
+
+            if (item.Preferences != null)
+            {
+                DbContext.UserPreferences.Remove(item.Preferences);
+            }
+
+            foreach (Album album in DbContext.Albums.Where(a => a.UserId == item.Id))
+            {
+                foreach (Photo photo in album.Photos)
+                {
+                    DbContext.Photos.Remove(photo);
+                }
+
+                DbContext.Albums.Remove(album);
             }
 
 
-            DbContext.Entry(item).State = EntityState.Deleted;
+            foreach (Photo photo in DbContext.Photos.Where(a => a.UserId == item.Id).ToList())
+            {
+                foreach (FeedPhoto fu in DbContext.FeedPhotos.Where(a => a.PhotoId == photo.Id))
+                {
+                    DbContext.FeedPhotos.Remove(fu);
+                }
+
+                DbContext.Photos.Remove(photo);
+            }
+
+            foreach (FacebookPage fbp in DbContext.FacebookPages.Where(a => a.UserId == item.Id))
+            {
+                DbContext.FacebookPages.Remove(fbp);
+            }
+
+            foreach (Post post in DbContext.Posts.Where(a => a.FromUserId == item.Id))
+            {
+                DbContext.Posts.Remove(post);
+            }
+
+            foreach (Post post in DbContext.Posts.Where(a => a.ToUserId == item.Id))
+            {
+                DbContext.Posts.Remove(post);
+            }
+
+            foreach (Comment comment in DbContext.Comments.Where(a => a.UserId == item.Id))
+            {
+                DbContext.Comments.Remove(comment);
+            }
+
+            foreach (FollowRequest fr in DbContext.FollowRequests.Where(a => a.ToUserId == item.Id))
+            {
+                DbContext.FollowRequests.Remove(fr);
+            }
+
+            foreach (FollowRequest fr in DbContext.FollowRequests.Where(a => a.FromUserId == item.Id))
+            {
+                DbContext.FollowRequests.Remove(fr);
+            }
+
+            foreach (FeedUser fu in DbContext.FeedUsers.Where(a => a.UserId == item.Id))
+            {
+                DbContext.FeedUsers.Remove(fu);
+            }
+
+            foreach (PostLike pl in DbContext.PostLike1.Where(a => a.UserId == item.Id))
+            {
+                DbContext.PostLike1.Remove(pl);
+            }
+
+            foreach (PhotoLike pl in DbContext.PhotoLikes.Where(a => a.UserId == item.Id))
+            {
+                DbContext.PhotoLikes.Remove(pl);
+            }
+
+            foreach (Notification n in DbContext.Notifications.Where(a => a.UserId == item.Id))
+            {
+                DbContext.Notifications.Remove(n);
+            }
+
+            foreach (Notification n in DbContext.Notifications.Where(a => a.UserBId == item.Id))
+            {
+                DbContext.Notifications.Remove(n);
+            }
+
+            foreach (OAuthRefreshToken rf in DbContext.OAuthRefreshTokens.Where(a => a.UserId == item.Id))
+            {
+                DbContext.OAuthRefreshTokens.Remove(rf);
+            }
+
+            foreach (UserReward ur in DbContext.UserRewards.Where(a => a.UserId == item.Id))
+            {
+                DbContext.UserRewards.Remove(ur);
+            }
+
+            foreach (UserPoint up in DbContext.UserPoints.Where(a => a.UserId == item.Id))
+            {
+                DbContext.UserPoints.Remove(up);
+            }
+
+            foreach (UserPoint up in DbContext.UserPoints.Where(a => a.ClubId == item.Id))
+            {
+                DbContext.UserPoints.Remove(up);
+            }
+
+            foreach (ClubPointRewardScenario up in DbContext.ClubPointRewardScenarios.Where(a => a.ClubId == item.Id))
+            {
+                DbContext.ClubPointRewardScenarios.Remove(up);
+            }
+
+            foreach (UserPointHistory up in DbContext.UserPointsHistory.Where(a => a.UserId == item.Id))
+            {
+                DbContext.UserPointsHistory.Remove(up);
+            }
+
+            foreach (UserRewardHistory up in DbContext.UserRewardsHistory.Where(a => a.UserId == item.Id))
+            {
+                DbContext.UserRewardsHistory.Remove(up);
+            }
+
+            foreach (UserRewardHistory up in DbContext.UserRewardsHistory.Where(a => a.EditorUserId == item.Id))
+            {
+                DbContext.UserRewardsHistory.Remove(up);
+            }
+
+
+            DbContext.Users.Remove(item);
+            //DbContext.Entry(item).State = EntityState.Deleted;
         }
     }
 }
